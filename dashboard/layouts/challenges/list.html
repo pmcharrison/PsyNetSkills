@@ -1,0 +1,25 @@
+{{ define "main" }}
+  <h1>{{ .Title }}</h1>
+  {{ .Content }}
+
+  <table>
+    <thead>
+      <tr>
+        <th>Challenge</th>
+        <th>Type</th>
+        <th>Difficulty</th>
+        <th>Latest score</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{ range site.Data.psynetsk.challenges }}
+        <tr>
+          <td><a href="{{ .url | relURL }}">{{ .title }}</a></td>
+          <td>{{ .type }}</td>
+          <td>{{ .difficulty }}</td>
+          <td>{{ with .latest_score }}{{ . }}{{ else }}Not scored{{ end }}</td>
+        </tr>
+      {{ end }}
+    </tbody>
+  </table>
+{{ end }}

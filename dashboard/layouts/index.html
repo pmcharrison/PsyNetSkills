@@ -1,0 +1,23 @@
+{{ define "main" }}
+  <h1>{{ .Title }}</h1>
+  {{ .Content }}
+
+  {{ $data := site.Data.psynetsk }}
+  <section class="cards" aria-label="Repository status">
+    <article>
+      <h2>Docs</h2>
+      <p>{{ $data.counts.docs }} pages</p>
+      <a href="{{ "docs/" | relURL }}">Read docs</a>
+    </article>
+    <article>
+      <h2>Skills</h2>
+      <p>{{ $data.counts.skills }} skills</p>
+      <a href="{{ "skills/" | relURL }}">Browse skills</a>
+    </article>
+    <article>
+      <h2>Challenges</h2>
+      <p>{{ $data.counts.challenges }} challenges</p>
+      <a href="{{ "challenges/" | relURL }}">View progress</a>
+    </article>
+  </section>
+{{ end }}

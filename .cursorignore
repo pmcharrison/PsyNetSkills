@@ -1,0 +1,4 @@
+# Do not let agents inspect hidden evaluation criteria or prior attempts before
+# attempting a challenge.
+challenges/*/CRITERIA.md
+challenges/*/attempts/

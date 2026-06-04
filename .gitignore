@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# Environments
+.venv/
+
+# Builds
+dist/
+build/
+*.egg-info/
+public/
+dashboard/public/
+dashboard/data/psynetsk.json
+dashboard/content/challenges/
+dashboard/content/skills/
+
+# Local files
+.DS_Store
+*.log
+tmp/

@@ -1,0 +1,11 @@
+{{ define "main" }}
+  {{ $skillName := .Params.skill }}
+  {{ $matches := where site.Data.psynetsk.skills "name" $skillName }}
+  {{ $skill := index $matches 0 }}
+
+  <article>
+    <h1>{{ $skill.name }}</h1>
+    <p>{{ $skill.description }}</p>
+    <p><strong>Source:</strong> <code>{{ $skill.path }}</code></p>
+  </article>
+{{ end }}

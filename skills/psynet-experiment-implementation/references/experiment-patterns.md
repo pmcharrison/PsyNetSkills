@@ -1,0 +1,26 @@
+# Experiment patterns
+
+Use local PsyNet demos as the source of truth. Good starting points include:
+
+- `~/PsyNet/demos/experiments/hello_world/experiment.py` for a minimal
+  experiment.
+- `~/PsyNet/demos/experiments/simple_audio_rating/experiment.py` for static
+  trials, audio prompts, and rating controls.
+- `~/PsyNet/demos/experiments/timeline/experiment.py` for timeline control flow,
+  modules, variables, conditional logic, and custom routes.
+- `~/PsyNet/demos/features/color_vocabulary/experiment.py` for prescreening and
+  bot checks.
+
+Common building blocks:
+
+- `psynet.experiment.Experiment` subclasses define the experiment.
+- `Timeline` sequences pages, modules, trial makers, and code blocks.
+- `InfoPage` presents static information.
+- `ModularPage` combines a prompt and response control.
+- `StaticTrialMaker` and `StaticTrial` are useful when participants respond to
+  a predefined stimulus set.
+- Assets should be declared through PsyNet asset helpers when files must be
+  served to participants.
+
+When adapting a demo, preserve the PsyNet idiom and simplify only after the
+experiment runs.

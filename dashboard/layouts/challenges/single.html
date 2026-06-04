@@ -1,0 +1,38 @@
+{{ define "main" }}
+  {{ $challengeSlug := .Params.challenge }}
+  {{ $matches := where site.Data.psynetsk.challenges "slug" $challengeSlug }}
+  {{ $challenge := index $matches 0 }}
+
+  <article class="prose">
+    <h1>{{ $challenge.title }}</h1>
+    <p><strong>Type:</strong> {{ $challenge.type }}</p>
+    <p><strong>Difficulty:</strong> {{ $challenge.difficulty }}</p>
+
+    <h2>Instructions</h2>
+    {{ $challenge.instructions | markdownify }}
+
+    <h2>Attempts</h2>
+    {{ if $challenge.attempts }}
+      <table>
+        <thead>
+          <tr>
+            <th>Attempt</th>
+            <th>Score</th>
+            <th>Path</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{ range $challenge.attempts }}
+            <tr>
+              <td>{{ .name }}</td>
+              <td>{{ with .score }}{{ . }}{{ else }}Not scored{{ end }}</td>
+              <td><code>{{ .path }}</code></td>
+            </tr>
+          {{ end }}
+        </tbody>
+      </table>
+    {{ else }}
+      <p>No attempts yet.</p>
+    {{ end }}
+  </article>
+{{ end }}

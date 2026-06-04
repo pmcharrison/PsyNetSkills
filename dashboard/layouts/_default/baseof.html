@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="{{ site.Language.Lang }}">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ if .Title }}{{ .Title }} | {{ end }}{{ site.Title }}</title>
+    <link rel="stylesheet" href="{{ "css/site.css" | relURL }}">
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="site-title" href="{{ site.Home.RelPermalink }}">{{ site.Title }}</a>
+      <nav aria-label="Main navigation">
+        <a href="{{ "docs/" | relURL }}">Docs</a>
+        <a href="{{ "skills/" | relURL }}">Skills</a>
+        <a href="{{ "challenges/" | relURL }}">Challenges</a>
+      </nav>
+    </header>
+    <main>
+      {{ block "main" . }}{{ end }}
+    </main>
+    <footer>
+      Generated from repository files. Configure Giscus here when discussions
+      are ready.
+    </footer>
+  </body>
+</html>
