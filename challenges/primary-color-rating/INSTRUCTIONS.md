@@ -1,6 +1,8 @@
-# Primary color rating experiment
-
+---
+title: Primary color rating experiment
+type: experiment implementation
 difficulty: 2
+---
 
 Implement a PsyNet experiment where the participant is shown each primary color
 in turn and rates it on a scale from 1 to 7.

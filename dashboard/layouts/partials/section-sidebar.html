@@ -15,7 +15,6 @@
 {{ end }}
 
 <aside class="section-sidebar" aria-label="{{ $title }} navigation">
-  <h2>{{ $title }}</h2>
   <nav>
     {{ range $items }}
       {{ $isCurrent := eq $page.RelPermalink (.url | relURL) }}

@@ -41,16 +41,23 @@ templates in `assets/`, and reusable code in `scripts/`.
 Create a folder under `challenges/` with:
 
 ```text
-TITLE
-TYPE
 INSTRUCTIONS.md
 CRITERIA.md
 references/
 attempts/.gitkeep
 ```
 
-`INSTRUCTIONS.md` must contain a parseable `difficulty:` line. `CRITERIA.md`
-is for evaluators and is hidden from agents by `.cursorignore`.
+`INSTRUCTIONS.md` must include YAML frontmatter:
+
+```markdown
+---
+title: Example challenge
+type: experiment implementation
+difficulty: 3
+---
+```
+
+`CRITERIA.md` is for evaluators and is hidden from agents by `.cursorignore`.
 
 ## Recording an attempt
 
@@ -68,7 +75,7 @@ EVALUATION.md
 
 The `challenge/` folder is a snapshot of the original challenge excluding
 previous attempts. The `EVALUATION.md` file should be human-written and include
-a `score:` field when the evaluation is complete.
+YAML frontmatter with a `score` field when the evaluation is complete.
 
 ## Large files
 

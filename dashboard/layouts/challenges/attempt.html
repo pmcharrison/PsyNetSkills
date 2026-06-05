@@ -1,0 +1,88 @@
+{{ define "main" }}
+  {{ $challengeSlug := .Params.challenge }}
+  {{ $attemptName := .Params.attempt }}
+  {{ $challenge := index (where site.Data.psynetsk.challenges "slug" $challengeSlug) 0 }}
+  {{ $attempt := index (where $challenge.attempts "name" $attemptName) 0 }}
+
+  <article class="prose attempt-detail">
+    <p><a href="{{ $challenge.url | relURL }}">Back to {{ $challenge.title }}</a></p>
+    <h1>{{ $attempt.name }}</h1>
+
+    <dl class="metadata-grid">
+      <div>
+        <dt>Challenge</dt>
+        <dd>{{ $challenge.title }}</dd>
+      </div>
+      <div>
+        <dt>Date/time</dt>
+        <dd>{{ $attempt.date_time }}</dd>
+      </div>
+      <div>
+        <dt>Model</dt>
+        <dd>{{ $attempt.model }}</dd>
+      </div>
+      <div>
+        <dt>Score</dt>
+        <dd>{{ with $attempt.score }}{{ . }}{{ else }}Not scored{{ end }}</dd>
+      </div>
+      <div>
+        <dt>Attempt path</dt>
+        <dd><code>{{ $attempt.path }}</code></dd>
+      </div>
+    </dl>
+
+    <h2>Evaluation</h2>
+    {{ with $attempt.evaluation }}
+      {{ . | markdownify }}
+    {{ else }}
+      <p>No evaluation file was found for this attempt.</p>
+    {{ end }}
+
+    <h2>Agent metadata</h2>
+    <pre><code>{{ $attempt.agent_json }}</code></pre>
+
+    <h2>Challenge snapshot</h2>
+    {{ with $attempt.challenge_files }}
+      {{ range . }}
+        <section class="attempt-file">
+          <h3><code>{{ .path }}</code></h3>
+          <pre><code>{{ .content }}</code></pre>
+        </section>
+      {{ end }}
+    {{ else }}
+      <p>No challenge snapshot files were found for this attempt.</p>
+    {{ end }}
+
+    <h2>Code</h2>
+    {{ with $attempt.code_files }}
+      {{ range . }}
+        <section class="attempt-file">
+          <h3><code>{{ .path }}</code></h3>
+          {{ if strings.HasSuffix .path ".md" }}
+            {{ .content | markdownify }}
+          {{ else }}
+            <pre><code>{{ .content }}</code></pre>
+          {{ end }}
+        </section>
+      {{ end }}
+    {{ else }}
+      <p>No code files were found for this attempt.</p>
+    {{ end }}
+
+    <h2>Evidence</h2>
+    {{ with $attempt.evidence_files }}
+      {{ range . }}
+        <section class="attempt-file">
+          <h3><code>{{ .path }}</code></h3>
+          {{ if strings.HasSuffix .path ".md" }}
+            {{ .content | markdownify }}
+          {{ else }}
+            <pre><code>{{ .content }}</code></pre>
+          {{ end }}
+        </section>
+      {{ end }}
+    {{ else }}
+      <p>No evidence files were found for this attempt.</p>
+    {{ end }}
+  </article>
+{{ end }}

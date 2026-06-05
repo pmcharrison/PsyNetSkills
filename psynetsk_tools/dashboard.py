@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import shutil
 from dataclasses import asdict, dataclass
 from pathlib import Path
@@ -11,6 +12,7 @@ from pathlib import Path
 from psynetsk_tools.validate import (
     parse_difficulty,
     parse_evaluation_score,
+    read_markdown_frontmatter,
     read_skill_frontmatter,
 )
 
@@ -53,12 +55,29 @@ class Skill:
 
 
 @dataclass(frozen=True)
+class AttemptFile:
+    """Text content from a file in an attempt folder."""
+
+    path: str
+    content: str
+    truncated: bool = False
+
+
+@dataclass(frozen=True)
 class Attempt:
     """A dashboard summary of a challenge attempt."""
 
     name: str
     score: int | None
     path: str
+    url: str
+    date_time: str
+    model: str
+    agent_json: str
+    evaluation: str
+    challenge_files: list[AttemptFile]
+    code_files: list[AttemptFile]
+    evidence_files: list[AttemptFile]
 
 
 @dataclass(frozen=True)
@@ -97,19 +116,16 @@ def doc_sort_key(path: Path) -> tuple[int, str]:
         "index": 10,
         "skills": 20,
         "challenges": 30,
-        "dashboard": 40,
-        "psynet-reference": 50,
+        "attempts": 40,
+        "dashboard": 50,
+        "psynet-reference": 60,
     }
     return (order.get(path.stem, 100), path.stem)
 
 
-def strip_challenge_metadata(markdown: str) -> str:
-    """Remove challenge title and metadata lines for dashboard display."""
-    lines = markdown.splitlines()
-    if lines and lines[0].startswith("# "):
-        lines = lines[1:]
-    lines = [line for line in lines if not line.strip().startswith("difficulty:")]
-    return "\n".join(lines).strip() + "\n"
+def strip_challenge_frontmatter(markdown: str) -> str:
+    """Remove challenge frontmatter and heading for dashboard display."""
+    return strip_first_heading(strip_frontmatter(markdown))
 
 
 def docs_url(slug: str) -> str:
@@ -227,6 +243,81 @@ def collect_skills(root: Path) -> list[Skill]:
     return skills
 
 
+def attempt_date_time(name: str, agent: dict[str, object]) -> str:
+    """Extract a display date/time from attempt metadata."""
+    match = re.search(r"(\d{4})-(\d{2})-(\d{2})(?:-(\d{2})-(\d{2}))?", name)
+    if match is not None:
+        _, month, day, hour, minute = match.groups()
+        if hour is not None and minute is not None:
+            return f"{month}/{day} {hour}:{minute}"
+
+    for key in ("started_at", "ended_at"):
+        value = agent.get(key)
+        if not isinstance(value, str):
+            continue
+        timestamp_match = re.search(
+            r"(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})",
+            value,
+        )
+        if timestamp_match is not None:
+            _, month, day, hour, minute = timestamp_match.groups()
+            return f"{month}/{day} {hour}:{minute}"
+
+    return name
+
+
+def read_agent_json(agent_file: Path) -> tuple[dict[str, object], str]:
+    """Read attempt agent metadata."""
+    if not agent_file.exists():
+        return {}, "{}"
+
+    try:
+        agent = json.loads(agent_file.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return {}, agent_file.read_text(encoding="utf-8")
+
+    return agent, json.dumps(agent, indent=2, sort_keys=True)
+
+
+def read_text_file(path: Path, max_bytes: int = 100_000) -> AttemptFile | None:
+    """Read a text file for dashboard display."""
+    data = path.read_bytes()
+    truncated = len(data) > max_bytes
+    if truncated:
+        data = data[:max_bytes]
+
+    try:
+        content = data.decode("utf-8")
+    except UnicodeDecodeError:
+        return None
+
+    if truncated:
+        content = content.rstrip() + "\n\n[File truncated for dashboard display.]\n"
+    return AttemptFile(path=path.name, content=content, truncated=truncated)
+
+
+def collect_attempt_files(directory: Path, max_files: int = 20) -> list[AttemptFile]:
+    """Collect text files from an attempt subdirectory."""
+    if not directory.exists():
+        return []
+
+    files: list[AttemptFile] = []
+    for path in sorted(path for path in directory.rglob("*") if path.is_file()):
+        if len(files) >= max_files:
+            break
+        attempt_file = read_text_file(path)
+        if attempt_file is None:
+            continue
+        files.append(
+            AttemptFile(
+                path=path.relative_to(directory).as_posix(),
+                content=attempt_file.content,
+                truncated=attempt_file.truncated,
+            )
+        )
+    return files
+
+
 def collect_attempts(challenge_dir: Path) -> list[Attempt]:
     """Collect attempts for a challenge."""
     attempts_dir = challenge_dir / "attempts"
@@ -237,11 +328,24 @@ def collect_attempts(challenge_dir: Path) -> list[Attempt]:
     for attempt_dir in sorted(path for path in attempts_dir.iterdir() if path.is_dir()):
         evaluation_file = attempt_dir / "EVALUATION.md"
         score = parse_evaluation_score(evaluation_file) if evaluation_file.exists() else None
+        agent, agent_json = read_agent_json(attempt_dir / "agent.json")
         attempts.append(
             Attempt(
                 name=attempt_dir.name,
                 score=score,
                 path=f"challenges/{challenge_dir.name}/attempts/{attempt_dir.name}",
+                url=f"challenges/{challenge_dir.name}/{attempt_dir.name}/",
+                date_time=attempt_date_time(attempt_dir.name, agent),
+                model=str(agent.get("model") or "Unknown model"),
+                agent_json=agent_json,
+                evaluation=(
+                    evaluation_file.read_text(encoding="utf-8")
+                    if evaluation_file.exists()
+                    else ""
+                ),
+                challenge_files=collect_attempt_files(attempt_dir / "challenge"),
+                code_files=collect_attempt_files(attempt_dir / "code"),
+                evidence_files=collect_attempt_files(attempt_dir / "evidence"),
             )
         )
     return attempts
@@ -254,15 +358,15 @@ def collect_challenges(root: Path) -> list[Challenge]:
         if not challenge_dir.is_dir():
             continue
         instructions_file = challenge_dir / "INSTRUCTIONS.md"
-        instructions = strip_challenge_metadata(
-            instructions_file.read_text(encoding="utf-8")
-        )
+        instructions_markdown = instructions_file.read_text(encoding="utf-8")
+        frontmatter, _ = read_markdown_frontmatter(instructions_file)
+        instructions = strip_challenge_frontmatter(instructions_markdown)
         slug = challenge_dir.name
         challenges.append(
             Challenge(
                 slug=slug,
-                title=(challenge_dir / "TITLE").read_text(encoding="utf-8").strip(),
-                type=(challenge_dir / "TYPE").read_text(encoding="utf-8").strip(),
+                title=frontmatter.get("title", title_from_markdown(instructions, slug)),
+                type=frontmatter.get("type", ""),
                 difficulty=parse_difficulty(instructions_file),
                 instructions=instructions,
                 path=f"challenges/{slug}",
@@ -357,14 +461,27 @@ def write_challenge_content(dashboard_dir: Path, challenges: list[Challenge]) ->
     (challenges_dir / "_index.md").write_text("---\ntitle: Challenges\n---\n", encoding="utf-8")
 
     for challenge in challenges:
-        (challenges_dir / challenge.slug).mkdir(parents=True, exist_ok=True)
-        (challenges_dir / challenge.slug / "index.md").write_text(
+        challenge_content_dir = challenges_dir / challenge.slug
+        challenge_content_dir.mkdir(parents=True, exist_ok=True)
+        (challenge_content_dir / "index.md").write_text(
             "---\n"
             f"title: {json.dumps(challenge.title)}\n"
             f"challenge: {json.dumps(challenge.slug)}\n"
             "---\n",
             encoding="utf-8",
         )
+        for attempt in challenge.attempts:
+            attempt_content_dir = challenge_content_dir / attempt.name
+            attempt_content_dir.mkdir(parents=True, exist_ok=True)
+            (attempt_content_dir / "index.md").write_text(
+                "---\n"
+                f"title: {json.dumps(attempt.name)}\n"
+                f"challenge: {json.dumps(challenge.slug)}\n"
+                f"attempt: {json.dumps(attempt.name)}\n"
+                'layout: "attempt"\n'
+                "---\n",
+                encoding="utf-8",
+            )
 
 
 def export_dashboard(root: Path, dashboard_dir: Path) -> None:

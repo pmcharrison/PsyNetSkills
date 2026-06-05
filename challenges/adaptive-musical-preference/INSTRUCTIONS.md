@@ -1,6 +1,8 @@
-# Adaptive musical preference experiment
-
+---
+title: Adaptive musical preference experiment
+type: experiment implementation
 difficulty: 8
+---
 
 Implement a PsyNet experiment that estimates a participant's preference over a
 small space of musical stimuli using adaptive pairwise choices.

@@ -16,17 +16,17 @@
       <table>
         <thead>
           <tr>
-            <th>Attempt</th>
+            <th>Date/time</th>
+            <th>Model</th>
             <th>Score</th>
-            <th>Path</th>
           </tr>
         </thead>
         <tbody>
           {{ range $challenge.attempts }}
-            <tr>
-              <td>{{ .name }}</td>
+            <tr class="clickable-row" onclick="window.location='{{ .url | relURL }}'">
+              <td><a href="{{ .url | relURL }}">{{ .date_time }}</a></td>
+              <td>{{ .model }}</td>
               <td>{{ with .score }}{{ . }}{{ else }}Not scored{{ end }}</td>
-              <td><code>{{ .path }}</code></td>
             </tr>
           {{ end }}
         </tbody>

@@ -5,40 +5,34 @@ Challenges live in `challenges/` and define tasks for agents to attempt.
 Each challenge folder contains:
 
 ```text
-TITLE
-TYPE
 INSTRUCTIONS.md
 CRITERIA.md
 references/
 attempts/
 ```
 
-`INSTRUCTIONS.md` is visible to agents and must include a `difficulty:` field.
-`CRITERIA.md` is hidden from agents and used during evaluation.
+`INSTRUCTIONS.md` is visible to agents and must include YAML frontmatter with
+the challenge title, type, and difficulty:
 
-## Attempt folders
-
-Attempts live under `challenges/<challenge>/attempts/<timestamp>/`.
-
-Each attempt should contain:
-
-```text
-challenge/
-agent.json
-code/
-evidence/
-EVALUATION.md
+```markdown
+---
+title: Primary color rating experiment
+type: experiment implementation
+difficulty: 2
+---
 ```
 
-The `challenge/` directory snapshots the challenge at the time of the attempt.
-The `code/` directory contains the generated implementation. The `evidence/`
-directory contains material used to judge success, such as recordings, data
-exports, or analysis outputs.
+`CRITERIA.md` is hidden from agents and used during evaluation.
 
-## Evaluation
+## Challenge instructions
 
-Evaluations should include a `score:` field on a 1 to 10 scale. The dashboard
-uses this field to show progress over time.
+`INSTRUCTIONS.md` should state the task in ordinary language, with enough detail
+for an agent to implement the experiment without reading hidden evaluation
+criteria. Keep the prompt focused on the intended behavior rather than the exact
+implementation strategy unless a specific PsyNet API is part of the challenge.
 
-Keep written feedback specific and actionable. Strong evaluations explain both
-what failed and which future skill change might prevent the same failure.
+For experiment implementation challenges, the instructions should normally
+describe the participant experience, the stimuli or inputs, the responses to
+collect, and any scientific checks that matter for success.
+
+Attempts and evaluations are documented separately in the Attempts section.

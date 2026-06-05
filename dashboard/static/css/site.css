@@ -42,6 +42,11 @@ nav {
   gap: 1rem;
 }
 
+.site-header nav a.current {
+  color: var(--foreground);
+  font-weight: 700;
+}
+
 .docs-pagination {
   border-top: 1px solid var(--border);
   display: grid;
@@ -75,11 +80,6 @@ nav {
   padding: 1rem;
   position: sticky;
   top: 1rem;
-}
-
-.section-sidebar h2 {
-  font-size: 1rem;
-  margin-top: 0;
 }
 
 .section-sidebar nav {
@@ -127,6 +127,39 @@ td {
   padding: 0.5rem;
   text-align: left;
   vertical-align: top;
+}
+
+.clickable-row {
+  cursor: pointer;
+}
+
+.clickable-row:hover {
+  background: var(--code-background);
+}
+
+.metadata-grid {
+  display: grid;
+  gap: 0.75rem 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+}
+
+.metadata-grid dt {
+  font-weight: 700;
+}
+
+.metadata-grid dd {
+  margin: 0.25rem 0 0;
+}
+
+.attempt-file {
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  margin: 1rem 0;
+  padding: 1rem;
+}
+
+.attempt-file h3 {
+  margin-top: 0;
 }
 
 code,

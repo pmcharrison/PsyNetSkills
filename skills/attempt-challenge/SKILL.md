@@ -10,7 +10,8 @@ PsyNetSkills repository.
 
 ## Workflow
 
-1. Read `TITLE`, `TYPE`, and `INSTRUCTIONS.md` from the target challenge.
+1. Read `INSTRUCTIONS.md` from the target challenge, including its YAML
+   frontmatter.
 2. Do not read `CRITERIA.md` or any existing `attempts/` folders.
 3. Create a new attempt folder named with the local timestamp:
    `challenges/<challenge>/attempts/YYYY-MM-DD-HH-MM/`.
