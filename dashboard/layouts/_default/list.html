@@ -1,7 +1,7 @@
 {{ define "main" }}
   {{ if eq .Section "docs" }}
-    <div class="docs-layout">
-      {{ partial "docs-sidebar.html" . }}
+    <div class="content-layout">
+      {{ partial "section-sidebar.html" (dict "page" . "section" "docs" "title" "Docs") }}
       <article class="prose">
         <h1>{{ .Title }}</h1>
         {{ .Content }}

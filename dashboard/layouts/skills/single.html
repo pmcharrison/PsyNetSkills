@@ -3,10 +3,13 @@
   {{ $matches := where site.Data.psynetsk.skills "name" $skillName }}
   {{ $skill := index $matches 0 }}
 
-  <article class="prose">
-    <h1>{{ .Title }}</h1>
-    <p>{{ $skill.description }}</p>
-    <p><strong>Source:</strong> <code>{{ $skill.path }}</code></p>
-    {{ .Content }}
-  </article>
+  <div class="content-layout">
+    {{ partial "section-sidebar.html" (dict "page" . "section" "skills" "title" "Skills") }}
+    <article class="prose">
+      <h1>{{ .Title }}</h1>
+      <p>{{ $skill.description }}</p>
+      <p><strong>Source:</strong> <code>{{ $skill.path }}</code></p>
+      {{ .Content }}
+    </article>
+  </div>
 {{ end }}

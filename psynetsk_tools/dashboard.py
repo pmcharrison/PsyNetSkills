@@ -46,6 +46,7 @@ class Skill:
     """A dashboard summary of an Agent Skill."""
 
     name: str
+    title: str
     description: str
     path: str
     url: str
@@ -210,11 +211,14 @@ def collect_skills(root: Path) -> list[Skill]:
     for skill_dir in sorted((root / "skills").iterdir()):
         if not skill_dir.is_dir():
             continue
-        frontmatter, _ = read_skill_frontmatter(skill_dir / "SKILL.md")
+        skill_file = skill_dir / "SKILL.md"
+        frontmatter, _ = read_skill_frontmatter(skill_file)
+        body = strip_frontmatter(skill_file.read_text(encoding="utf-8"))
         name = frontmatter.get("name", skill_dir.name)
         skills.append(
             Skill(
                 name=name,
+                title=title_from_markdown(body, name),
                 description=frontmatter.get("description", ""),
                 path=f"skills/{skill_dir.name}/SKILL.md",
                 url=f"skills/{name}/",
@@ -326,10 +330,6 @@ def write_skill_content(
     skills_dir = dashboard_dir / "content" / "skills"
     shutil.rmtree(skills_dir, ignore_errors=True)
     skills_dir.mkdir(parents=True, exist_ok=True)
-    (skills_dir / "_index.md").write_text(
-        "---\ntitle: Skills\n---\n",
-        encoding="utf-8",
-    )
 
     for skill in skills:
         source = root / skill.path

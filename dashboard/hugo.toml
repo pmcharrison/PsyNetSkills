@@ -4,6 +4,21 @@ title = "PsyNetSkills"
 disableKinds = ["taxonomy", "term", "RSS", "sitemap", "robotsTXT"]
 relativeURLs = true
 
+[params]
+  [params.giscus]
+    enabled = false
+    repo = ""
+    repo_id = ""
+    category = ""
+    category_id = ""
+    mapping = "pathname"
+    strict = "0"
+    reactions_enabled = "1"
+    emit_metadata = "0"
+    input_position = "bottom"
+    theme = "preferred_color_scheme"
+    lang = "en"
+
 [markup]
   [markup.goldmark]
     [markup.goldmark.renderer]

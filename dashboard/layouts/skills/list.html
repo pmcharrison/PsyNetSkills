@@ -1,14 +1,19 @@
 {{ define "main" }}
-  <h1>{{ .Title }}</h1>
-  {{ .Content }}
+  <div class="content-layout">
+    {{ partial "section-sidebar.html" (dict "page" . "section" "skills" "title" "Skills") }}
+    <article class="prose">
+      <h1>{{ .Title }}</h1>
+      {{ .Content }}
 
-  <div class="item-list">
-    {{ range site.Data.psynetsk.skills }}
-      <article>
-        <h2><a href="{{ .url | relURL }}">{{ .name }}</a></h2>
-        <p>{{ .description }}</p>
-        <p><code>{{ .path }}</code></p>
-      </article>
-    {{ end }}
+      <div class="item-list">
+        {{ range sort site.Data.psynetsk.skills "title" }}
+          <article>
+            <h2><a href="{{ .url | relURL }}">{{ .title }}</a></h2>
+            <p>{{ .description }}</p>
+            <p><code>{{ .path }}</code></p>
+          </article>
+        {{ end }}
+      </div>
+    </article>
   </div>
 {{ end }}

@@ -1,0 +1,23 @@
+{{ $giscus := site.Params.giscus }}
+{{ $repoID := index $giscus "repo_id" }}
+{{ $categoryID := index $giscus "category_id" }}
+{{ if and $giscus.enabled $giscus.repo $repoID $giscus.category $categoryID }}
+  <section class="comments" aria-label="Comments">
+    <script
+      src="https://giscus.app/client.js"
+      data-repo="{{ $giscus.repo }}"
+      data-repo-id="{{ $repoID }}"
+      data-category="{{ $giscus.category }}"
+      data-category-id="{{ $categoryID }}"
+      data-mapping="{{ default "pathname" $giscus.mapping }}"
+      data-strict="{{ default "0" $giscus.strict }}"
+      data-reactions-enabled="{{ default "1" (index $giscus "reactions_enabled") }}"
+      data-emit-metadata="{{ default "0" (index $giscus "emit_metadata") }}"
+      data-input-position="{{ default "bottom" (index $giscus "input_position") }}"
+      data-theme="{{ default "preferred_color_scheme" $giscus.theme }}"
+      data-lang="{{ default "en" $giscus.lang }}"
+      crossorigin="anonymous"
+      async
+    ></script>
+  </section>
+{{ end }}

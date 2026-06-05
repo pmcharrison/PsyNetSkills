@@ -3,6 +3,7 @@ from pathlib import Path
 from psynetsk_tools.dashboard import (
     collect_challenges,
     collect_docs,
+    collect_skills,
     dashboard_data,
     export_dashboard,
     strip_challenge_metadata,
@@ -39,6 +40,23 @@ def test_collect_challenges_reports_latest_score(tmp_path: Path) -> None:
 
     assert challenges[0].difficulty == 4
     assert challenges[0].latest_score == 8
+
+
+def test_collect_skills_uses_h1_title(tmp_path: Path) -> None:
+    write(
+        tmp_path / "skills/example-skill/SKILL.md",
+        "---\n"
+        "name: example-skill\n"
+        "description: Use when testing dashboard generation.\n"
+        "---\n\n"
+        "# Example skill\n\n"
+        "Use this skill when testing dashboard generation.\n",
+    )
+
+    skills = collect_skills(tmp_path)
+
+    assert skills[0].name == "example-skill"
+    assert skills[0].title == "Example skill"
 
 
 def test_strip_challenge_metadata_removes_title_and_difficulty() -> None:
@@ -99,10 +117,15 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
     assert "previous:" in (tmp_path / "dashboard/content/docs/skills.md").read_text(
         encoding="utf-8"
     )
+    assert not (tmp_path / "dashboard/content/skills/_index.md").exists()
     assert (tmp_path / "dashboard/content/skills/example-skill/index.md").exists()
     skill_page = (tmp_path / "dashboard/content/skills/example-skill/index.md").read_text(
         encoding="utf-8"
     )
     assert 'title: "Example skill"' in skill_page
     assert "Use this skill when testing dashboard generation." in skill_page
+    data = (tmp_path / "dashboard/data/psynetsk.json").read_text(
+        encoding="utf-8"
+    )
+    assert '"title": "Example skill"' in data
     assert (tmp_path / "dashboard/content/challenges/example/index.md").exists()

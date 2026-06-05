@@ -62,14 +62,14 @@ nav {
   text-align: right;
 }
 
-.docs-layout {
+.content-layout {
   align-items: start;
   display: grid;
   gap: 2rem;
   grid-template-columns: minmax(12rem, 16rem) 1fr;
 }
 
-.docs-sidebar {
+.section-sidebar {
   border: 1px solid var(--border);
   border-radius: 0.5rem;
   padding: 1rem;
@@ -77,23 +77,23 @@ nav {
   top: 1rem;
 }
 
-.docs-sidebar h2 {
+.section-sidebar h2 {
   font-size: 1rem;
   margin-top: 0;
 }
 
-.docs-sidebar nav {
+.section-sidebar nav {
   display: grid;
   gap: 0.5rem;
 }
 
-.docs-sidebar a {
+.section-sidebar a {
   border-radius: 0.25rem;
   padding: 0.25rem 0.4rem;
   text-decoration: none;
 }
 
-.docs-sidebar a.current {
+.section-sidebar a.current {
   background: var(--code-background);
   color: var(--foreground);
   font-weight: 700;
@@ -182,11 +182,11 @@ footer {
 }
 
 @media (max-width: 720px) {
-  .docs-layout {
+  .content-layout {
     grid-template-columns: 1fr;
   }
 
-  .docs-sidebar {
+  .section-sidebar {
     position: static;
   }
 }
