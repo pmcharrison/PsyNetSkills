@@ -124,6 +124,17 @@ def strip_first_heading(markdown: str) -> str:
     return "\n".join(lines).strip() + "\n"
 
 
+def strip_frontmatter(markdown: str) -> str:
+    """Remove YAML frontmatter from Markdown content."""
+    if not markdown.startswith("---\n"):
+        return markdown
+
+    parts = markdown.split("---\n", 2)
+    if len(parts) < 3:
+        return markdown
+    return parts[2].lstrip("\n")
+
+
 def collect_docs(root: Path) -> list[DocPage]:
     """Collect markdown docs for dashboard navigation."""
     docs_dir = root / "docs"
@@ -306,20 +317,34 @@ def dashboard_data(root: Path) -> dict[str, object]:
     }
 
 
-def write_skill_content(dashboard_dir: Path, skills: list[Skill]) -> None:
+def write_skill_content(
+    root: Path,
+    dashboard_dir: Path,
+    skills: list[Skill],
+) -> None:
     """Write generated Hugo content pages for skills."""
     skills_dir = dashboard_dir / "content" / "skills"
     shutil.rmtree(skills_dir, ignore_errors=True)
     skills_dir.mkdir(parents=True, exist_ok=True)
-    (skills_dir / "_index.md").write_text("---\ntitle: Skills\n---\n", encoding="utf-8")
+    (skills_dir / "_index.md").write_text(
+        "---\ntitle: Skills\n---\n",
+        encoding="utf-8",
+    )
 
     for skill in skills:
+        source = root / skill.path
+        body = strip_frontmatter(source.read_text(encoding="utf-8"))
+        page = write_frontmatter(
+            title_from_markdown(body, skill.name),
+            strip_first_heading(body),
+        ).replace(
+            "---\n",
+            f"---\nskill: {json.dumps(skill.name)}\n",
+            1,
+        )
         (skills_dir / skill.name).mkdir(parents=True, exist_ok=True)
         (skills_dir / skill.name / "index.md").write_text(
-            "---\n"
-            f"title: {json.dumps(skill.name)}\n"
-            f"skill: {json.dumps(skill.name)}\n"
-            "---\n",
+            page,
             encoding="utf-8",
         )
 
@@ -359,6 +384,7 @@ def export_dashboard(root: Path, dashboard_dir: Path) -> None:
         [DocPage(**doc) for doc in data["docs"]],  # type: ignore[arg-type]
     )
     write_skill_content(
+        root,
         dashboard_dir,
         [Skill(**skill) for skill in data["skills"]],  # type: ignore[arg-type]
     )

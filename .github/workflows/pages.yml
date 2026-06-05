@@ -1,4 +1,4 @@
-name: Pages
+name: Deploy dashboard to GitHub Pages
 
 on:
   push:
@@ -12,10 +12,11 @@ permissions:
 
 concurrency:
   group: pages
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   build:
+    name: Build dashboard
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -25,19 +26,23 @@ jobs:
         with:
           python-version-file: .python-version
       - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          cache-dependency-glob: uv.lock
       - uses: peaceiris/actions-hugo@v3
         with:
           hugo-version: latest
+      - uses: actions/configure-pages@v5
       - run: uv sync --group dev
       - run: uv run psynetsk-validate
       - run: uv run psynetsk-export-dashboard-data
       - run: hugo --source dashboard --destination ../public --cleanDestinationDir
-      - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
           path: public
 
   deploy:
+    name: Deploy dashboard
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

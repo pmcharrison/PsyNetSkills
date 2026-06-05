@@ -6,6 +6,7 @@ from psynetsk_tools.dashboard import (
     dashboard_data,
     export_dashboard,
     strip_challenge_metadata,
+    strip_frontmatter,
 )
 
 
@@ -46,6 +47,12 @@ def test_strip_challenge_metadata_removes_title_and_difficulty() -> None:
     assert strip_challenge_metadata(markdown) == "Implement the experiment.\n"
 
 
+def test_strip_frontmatter_removes_yaml_block() -> None:
+    markdown = "---\nname: example-skill\n---\n\n# Example skill\n\nUse this skill.\n"
+
+    assert strip_frontmatter(markdown) == "# Example skill\n\nUse this skill.\n"
+
+
 def test_dashboard_data_reports_counts(tmp_path: Path) -> None:
     write(tmp_path / "docs/index.md", "# Docs\n")
     write(
@@ -53,7 +60,9 @@ def test_dashboard_data_reports_counts(tmp_path: Path) -> None:
         "---\n"
         "name: example-skill\n"
         "description: Use when testing dashboard generation.\n"
-        "---\n",
+        "---\n\n"
+        "# Example skill\n\n"
+        "Use this skill when testing dashboard generation.\n",
     )
     write(tmp_path / "challenges/example/TITLE", "Example challenge\n")
     write(tmp_path / "challenges/example/TYPE", "experiment implementation\n")
@@ -72,7 +81,9 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
         "---\n"
         "name: example-skill\n"
         "description: Use when testing dashboard generation.\n"
-        "---\n",
+        "---\n\n"
+        "# Example skill\n\n"
+        "Use this skill when testing dashboard generation.\n",
     )
     write(tmp_path / "challenges/example/TITLE", "Example challenge\n")
     write(tmp_path / "challenges/example/TYPE", "experiment implementation\n")
@@ -89,4 +100,9 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
         encoding="utf-8"
     )
     assert (tmp_path / "dashboard/content/skills/example-skill/index.md").exists()
+    skill_page = (tmp_path / "dashboard/content/skills/example-skill/index.md").read_text(
+        encoding="utf-8"
+    )
+    assert 'title: "Example skill"' in skill_page
+    assert "Use this skill when testing dashboard generation." in skill_page
     assert (tmp_path / "dashboard/content/challenges/example/index.md").exists()

@@ -23,6 +23,13 @@ uv run psynetsk-export-dashboard-data
 hugo --source dashboard --destination ../public --cleanDestinationDir
 ```
 
+## GitHub Pages
+
+The dashboard is built and deployed automatically by the
+`Deploy dashboard to GitHub Pages` workflow when changes are pushed to `main`.
+In the GitHub repository settings, configure Pages to use `GitHub Actions` as
+the build and deployment source.
+
 The local PsyNet source checkout is expected at `~/PsyNet`. Skills and challenge
 instructions may tell agents to inspect that checkout for APIs, demos, and
 testing commands.
