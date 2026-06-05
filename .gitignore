@@ -20,6 +20,7 @@ dashboard/data/psynetsk.json
 dashboard/content/challenges/
 dashboard/content/docs/
 dashboard/content/skills/
+dashboard/static/artifacts/
 
 # Local files
 .DS_Store

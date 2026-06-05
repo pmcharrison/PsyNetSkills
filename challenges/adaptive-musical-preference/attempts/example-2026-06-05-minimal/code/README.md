@@ -1,5 +1,6 @@
-# Example code placeholder
+# Minimal example code directory
 
-This directory is intentionally marked as an example. In a real attempt it would contain the generated PsyNet experiment implementation, such as `experiment.py`, assets, analysis scripts, and any supporting files.
-
-No real challenge attempt was run for this folder.
+This directory is intentionally sparse. A real experiment challenge attempt
+would normally include a runnable PsyNet experiment here, especially an
+`experiment.py` file plus any assets or dependency notes needed to reproduce
+the run.

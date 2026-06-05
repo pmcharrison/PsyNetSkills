@@ -1,3 +1,4 @@
+import json
 from pathlib import Path
 
 from psynetsk_tools.dashboard import (
@@ -16,6 +17,11 @@ def write(path: Path, text: str = "") -> None:
     path.write_text(text, encoding="utf-8")
 
 
+def write_bytes(path: Path, data: bytes) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_bytes(data)
+
+
 def challenge_instructions(difficulty: int = 4) -> str:
     return (
         "---\n"
@@ -28,7 +34,7 @@ def challenge_instructions(difficulty: int = 4) -> str:
 
 
 def evaluation(score: int = 6) -> str:
-    return f"---\nscore: {score}\n---\n\n# Evaluation\n"
+    return f"---\nscore: {score}\n---\n\n# Evaluation\n\nAttempt body.\n"
 
 
 def test_collect_docs_uses_h1_title(tmp_path: Path) -> None:
@@ -88,9 +94,38 @@ def test_collect_challenges_reports_attempt_metadata(tmp_path: Path) -> None:
     assert attempt.date_time == "06/01 10:10"
     assert attempt.model == "test-model"
     assert attempt.url == "challenges/example/2026-06-01-10-10/"
-    assert attempt.evaluation == evaluation()
+    assert attempt.evaluation == "Attempt body.\n"
     assert attempt.code_files[0].path == "README.md"
     assert attempt.code_files[0].content == "# Code notes\n"
+    assert attempt.code_files[0].kind == "md"
+    assert attempt.code_files[0].size_bytes == len("# Code notes\n")
+
+
+def test_collect_challenges_reports_binary_and_nested_attempt_files(
+    tmp_path: Path,
+) -> None:
+    challenge_dir = tmp_path / "challenges/example"
+    write(challenge_dir / "INSTRUCTIONS.md", challenge_instructions())
+    attempt_dir = challenge_dir / "attempts/2026-06-01-10-10"
+    write(attempt_dir / "EVALUATION.md", evaluation())
+    write(attempt_dir / "evidence/analyses/summary.md", "# Summary\n")
+    mp4_data = b"\x00\x00\x00\x18ftypmp42"
+    write_bytes(attempt_dir / "evidence/participant.mp4", mp4_data)
+
+    attempt = collect_challenges(tmp_path)[0].attempts[0]
+
+    assert [file.path for file in attempt.evidence_files] == [
+        "analyses/summary.md",
+        "participant.mp4",
+    ]
+    assert attempt.evidence_files[0].content == "# Summary\n"
+    assert attempt.evidence_files[1].content is None
+    assert attempt.evidence_files[1].kind == "mp4"
+    assert attempt.evidence_files[1].size_bytes == len(mp4_data)
+    assert attempt.evidence_files[1].url == (
+        "artifacts/challenges/example/attempts/2026-06-01-10-10/"
+        "evidence/participant.mp4"
+    )
 
 
 def test_collect_challenges_uses_agent_timestamp_for_example_attempt(
@@ -138,7 +173,10 @@ def test_strip_challenge_frontmatter_removes_metadata() -> None:
         "Implement the experiment.\n"
     )
 
-    assert strip_challenge_frontmatter(markdown) == "Implement the experiment.\n"
+    assert (
+        strip_challenge_frontmatter(markdown)
+        == "Implement the experiment.\n"
+    )
 
 
 def test_strip_frontmatter_removes_yaml_block() -> None:
@@ -150,7 +188,10 @@ def test_strip_frontmatter_removes_yaml_block() -> None:
         "Use this skill.\n"
     )
 
-    assert strip_frontmatter(markdown) == "# Example skill\n\nUse this skill.\n"
+    assert (
+        strip_frontmatter(markdown)
+        == "# Example skill\n\nUse this skill.\n"
+    )
 
 
 def test_dashboard_data_reports_counts(tmp_path: Path) -> None:
@@ -209,34 +250,56 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
         / "challenges/example/attempts/2026-06-01-10-10/evidence/README.md",
         "# Evidence notes\n",
     )
+    write_bytes(
+        tmp_path
+        / "challenges/example/attempts/2026-06-01-10-10/evidence/participant.mp4",
+        b"example video bytes",
+    )
 
     export_dashboard(tmp_path, tmp_path / "dashboard")
 
     assert (tmp_path / "dashboard/data/psynetsk.json").exists()
     assert (tmp_path / "dashboard/content/docs/_index.md").exists()
-    assert "next:" in (tmp_path / "dashboard/content/docs/_index.md").read_text(
-        encoding="utf-8"
+    docs_index = (tmp_path / "dashboard/content/docs/_index.md").read_text(
+        encoding="utf-8",
     )
-    assert "previous:" in (tmp_path / "dashboard/content/docs/skills.md").read_text(
-        encoding="utf-8"
+    docs_skills = (tmp_path / "dashboard/content/docs/skills.md").read_text(
+        encoding="utf-8",
     )
+    assert "next:" in docs_index
+    assert "previous:" in docs_skills
     assert not (tmp_path / "dashboard/content/skills/_index.md").exists()
-    assert (tmp_path / "dashboard/content/skills/example-skill/index.md").exists()
+    assert (
+        tmp_path / "dashboard/content/skills/example-skill/index.md"
+    ).exists()
     skill_page = (
         tmp_path / "dashboard/content/skills/example-skill/index.md"
     ).read_text(encoding="utf-8")
     assert 'title: "Example skill"' in skill_page
     assert "Use this skill when testing dashboard generation." in skill_page
     data = (tmp_path / "dashboard/data/psynetsk.json").read_text(
-        encoding="utf-8"
+        encoding="utf-8",
     )
+    parsed_data = json.loads(data)
     assert '"title": "Example skill"' in data
-    assert (tmp_path / "dashboard/content/challenges/example/index.md").exists()
+    challenge_page = tmp_path / "dashboard/content/challenges/example/_index.md"
+    assert challenge_page.exists()
+    assert 'layout: "single"' in challenge_page.read_text(encoding="utf-8")
     attempt_page = (
         tmp_path
         / "dashboard/content/challenges/example/2026-06-01-10-10/index.md"
     )
     assert attempt_page.exists()
     assert 'layout: "attempt"' in attempt_page.read_text(encoding="utf-8")
+    assert (
+        tmp_path
+        / "dashboard/static/artifacts/challenges/example/attempts/"
+        "2026-06-01-10-10/evidence/participant.mp4"
+    ).exists()
     assert '"model": "test-model"' in data
     assert '"url": "challenges/example/2026-06-01-10-10/"' in data
+    exported_attempt = parsed_data["challenges"][0]["attempts"][0]
+    assert exported_attempt["evaluation"] == "Attempt body.\n"
+    assert exported_attempt["code_files"][0]["size_bytes"] == len(
+        "# Code notes\n",
+    )

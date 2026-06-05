@@ -1,5 +1,6 @@
-# Example evidence placeholder
+# Minimal example evidence directory
 
-This directory is intentionally marked as an example. In a real attempt it would contain evidence used during evaluation, such as logs, screenshots, exported data, recordings, or analysis outputs.
-
-No real evaluation evidence was collected for this folder.
+This directory exists to satisfy the required attempt structure, but it does
+not contain participant recordings, performance output, monitor snapshots,
+exported data, or analyses. See `EVALUATION.md` for the missing-artifact
+notes and the detailed example for the standard artifact names.

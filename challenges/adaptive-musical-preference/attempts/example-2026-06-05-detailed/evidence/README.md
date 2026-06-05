@@ -1,10 +1,5 @@
-# Example evidence placeholder
+# Detailed example evidence directory
 
-This example shows the kind of evidence that might be saved after running an attempt. A real attempt might include:
-
-- local test logs.
-- screenshots or recordings.
-- exported participant response data.
-- evaluator notes or analysis outputs.
-
-This folder is example-only and contains no real evidence.
+This directory uses the standard experiment challenge evidence names from
+`docs/attempts.md`. The files are example-only placeholders and should not
+be interpreted as evidence from a real participant run.

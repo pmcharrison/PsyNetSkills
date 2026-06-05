@@ -1,0 +1,3 @@
+# Example-only dependency note.
+# Real attempts should pin or inherit the PsyNet dependencies needed to run.
+psynet

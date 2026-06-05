@@ -16,6 +16,22 @@ from psynetsk_tools.validate import (
     read_skill_frontmatter,
 )
 
+TEXT_FILE_EXTENSIONS = {
+    "",
+    ".css",
+    ".csv",
+    ".html",
+    ".json",
+    ".md",
+    ".py",
+    ".sh",
+    ".txt",
+    ".xml",
+    ".yaml",
+    ".yml",
+}
+ATTEMPT_ARTIFACTS_DIR = "artifacts/challenges"
+
 
 @dataclass(frozen=True)
 class DocPage:
@@ -56,10 +72,13 @@ class Skill:
 
 @dataclass(frozen=True)
 class AttemptFile:
-    """Text content from a file in an attempt folder."""
+    """A file in an attempt folder."""
 
     path: str
-    content: str
+    url: str
+    content: str | None
+    size_bytes: int
+    kind: str
     truncated: bool = False
 
 
@@ -279,25 +298,51 @@ def read_agent_json(agent_file: Path) -> tuple[dict[str, object], str]:
     return agent, json.dumps(agent, indent=2, sort_keys=True)
 
 
-def read_text_file(path: Path, max_bytes: int = 100_000) -> AttemptFile | None:
-    """Read a text file for dashboard display."""
+def file_kind(path: Path) -> str:
+    """Return a display-oriented file type."""
+    suffix = path.suffix.lower().lstrip(".")
+    return suffix or "file"
+
+
+def read_attempt_file(
+    path: Path,
+    relative_to: Path,
+    url_prefix: str,
+    max_bytes: int = 100_000,
+) -> AttemptFile:
+    """Read display metadata and optional text content for an attempt file."""
+    relative_path = path.relative_to(relative_to).as_posix()
     data = path.read_bytes()
+    size_bytes = len(data)
     truncated = len(data) > max_bytes
-    if truncated:
-        data = data[:max_bytes]
+    display_data = data[:max_bytes] if truncated else data
 
-    try:
-        content = data.decode("utf-8")
-    except UnicodeDecodeError:
-        return None
+    if path.suffix.lower() not in TEXT_FILE_EXTENSIONS:
+        content = None
+    else:
+        try:
+            content = display_data.decode("utf-8")
+        except UnicodeDecodeError:
+            content = None
 
-    if truncated:
+    if truncated and content is not None:
         content = content.rstrip() + "\n\n[File truncated for dashboard display.]\n"
-    return AttemptFile(path=path.name, content=content, truncated=truncated)
+    return AttemptFile(
+        path=relative_path,
+        url=f"{url_prefix}/{relative_path}",
+        content=content,
+        size_bytes=size_bytes,
+        kind=file_kind(path),
+        truncated=truncated,
+    )
 
 
-def collect_attempt_files(directory: Path, max_files: int = 20) -> list[AttemptFile]:
-    """Collect text files from an attempt subdirectory."""
+def collect_attempt_files(
+    directory: Path,
+    url_prefix: str,
+    max_files: int = 50,
+) -> list[AttemptFile]:
+    """Collect files from an attempt subdirectory."""
     if not directory.exists():
         return []
 
@@ -305,16 +350,7 @@ def collect_attempt_files(directory: Path, max_files: int = 20) -> list[AttemptF
     for path in sorted(path for path in directory.rglob("*") if path.is_file()):
         if len(files) >= max_files:
             break
-        attempt_file = read_text_file(path)
-        if attempt_file is None:
-            continue
-        files.append(
-            AttemptFile(
-                path=path.relative_to(directory).as_posix(),
-                content=attempt_file.content,
-                truncated=attempt_file.truncated,
-            )
-        )
+        files.append(read_attempt_file(path, directory, url_prefix))
     return files
 
 
@@ -329,6 +365,9 @@ def collect_attempts(challenge_dir: Path) -> list[Attempt]:
         evaluation_file = attempt_dir / "EVALUATION.md"
         score = parse_evaluation_score(evaluation_file) if evaluation_file.exists() else None
         agent, agent_json = read_agent_json(attempt_dir / "agent.json")
+        artifact_prefix = (
+            f"{ATTEMPT_ARTIFACTS_DIR}/{challenge_dir.name}/attempts/{attempt_dir.name}"
+        )
         attempts.append(
             Attempt(
                 name=attempt_dir.name,
@@ -339,13 +378,24 @@ def collect_attempts(challenge_dir: Path) -> list[Attempt]:
                 model=str(agent.get("model") or "Unknown model"),
                 agent_json=agent_json,
                 evaluation=(
-                    evaluation_file.read_text(encoding="utf-8")
+                    strip_first_heading(
+                        strip_frontmatter(evaluation_file.read_text(encoding="utf-8"))
+                    )
                     if evaluation_file.exists()
                     else ""
                 ),
-                challenge_files=collect_attempt_files(attempt_dir / "challenge"),
-                code_files=collect_attempt_files(attempt_dir / "code"),
-                evidence_files=collect_attempt_files(attempt_dir / "evidence"),
+                challenge_files=collect_attempt_files(
+                    attempt_dir / "challenge",
+                    f"{artifact_prefix}/challenge",
+                ),
+                code_files=collect_attempt_files(
+                    attempt_dir / "code",
+                    f"{artifact_prefix}/code",
+                ),
+                evidence_files=collect_attempt_files(
+                    attempt_dir / "evidence",
+                    f"{artifact_prefix}/evidence",
+                ),
             )
         )
     return attempts
@@ -463,10 +513,11 @@ def write_challenge_content(dashboard_dir: Path, challenges: list[Challenge]) ->
     for challenge in challenges:
         challenge_content_dir = challenges_dir / challenge.slug
         challenge_content_dir.mkdir(parents=True, exist_ok=True)
-        (challenge_content_dir / "index.md").write_text(
+        (challenge_content_dir / "_index.md").write_text(
             "---\n"
             f"title: {json.dumps(challenge.title)}\n"
             f"challenge: {json.dumps(challenge.slug)}\n"
+            'layout: "single"\n'
             "---\n",
             encoding="utf-8",
         )
@@ -482,6 +533,29 @@ def write_challenge_content(dashboard_dir: Path, challenges: list[Challenge]) ->
                 "---\n",
                 encoding="utf-8",
             )
+
+
+def write_attempt_artifacts(root: Path, dashboard_dir: Path) -> None:
+    """Copy attempt artifacts into Hugo's static directory."""
+    target_root = dashboard_dir / "static" / ATTEMPT_ARTIFACTS_DIR
+    shutil.rmtree(target_root, ignore_errors=True)
+    target_root.mkdir(parents=True, exist_ok=True)
+
+    challenges_dir = root / "challenges"
+    if not challenges_dir.exists():
+        return
+
+    for challenge_dir in sorted(path for path in challenges_dir.iterdir() if path.is_dir()):
+        attempts_dir = challenge_dir / "attempts"
+        if not attempts_dir.exists():
+            continue
+        target_attempts_dir = target_root / challenge_dir.name / "attempts"
+        shutil.copytree(
+            attempts_dir,
+            target_attempts_dir,
+            dirs_exist_ok=True,
+            ignore=shutil.ignore_patterns(".gitkeep"),
+        )
 
 
 def export_dashboard(root: Path, dashboard_dir: Path) -> None:
@@ -521,6 +595,7 @@ def export_dashboard(root: Path, dashboard_dir: Path) -> None:
             for challenge in data["challenges"]  # type: ignore[union-attr]
         ],
     )
+    write_attempt_artifacts(root, dashboard_dir)
 
 
 def build_parser() -> argparse.ArgumentParser:

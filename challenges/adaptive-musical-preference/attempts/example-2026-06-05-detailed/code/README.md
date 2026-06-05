@@ -1,10 +1,6 @@
-# Example code placeholder
+# Detailed example code directory
 
-This example shows that an attempt can include implementation notes alongside generated code. A real attempt might include:
-
-- `experiment.py` for the PsyNet experiment.
-- generated stimulus assets.
-- an analysis script or notebook.
-- test or smoke-check notes.
-
-This folder is example-only and contains no real implementation.
+This directory mirrors the standard shape of code generated for an
+experiment implementation challenge. The files are example-only: they are
+small placeholders that document where generated experiment code, assets,
+and reproduction notes should go.
