@@ -15,12 +15,15 @@ def write(path: Path, text: str = "") -> None:
 
 
 def test_collect_docs_uses_h1_title(tmp_path: Path) -> None:
+    write(tmp_path / "docs/index.md", "# Introduction\n\nDetails.\n")
     write(tmp_path / "docs/skills.md", "# Skills\n\nDetails.\n")
 
     docs = collect_docs(tmp_path)
 
-    assert docs[0].slug == "skills"
-    assert docs[0].title == "Skills"
+    assert docs[0].slug == "index"
+    assert docs[0].title == "Introduction"
+    assert docs[1].slug == "skills"
+    assert docs[1].title == "Skills"
 
 
 def test_collect_challenges_reports_latest_score(tmp_path: Path) -> None:
@@ -62,7 +65,8 @@ def test_dashboard_data_reports_counts(tmp_path: Path) -> None:
 
 
 def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
-    write(tmp_path / "docs/index.md", "# Docs\n")
+    write(tmp_path / "docs/index.md", "# Introduction\n")
+    write(tmp_path / "docs/skills.md", "# Skills\n")
     write(
         tmp_path / "skills/example-skill/SKILL.md",
         "---\n"
@@ -77,5 +81,12 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
     export_dashboard(tmp_path, tmp_path / "dashboard")
 
     assert (tmp_path / "dashboard/data/psynetsk.json").exists()
+    assert (tmp_path / "dashboard/content/docs/_index.md").exists()
+    assert "next:" in (tmp_path / "dashboard/content/docs/_index.md").read_text(
+        encoding="utf-8"
+    )
+    assert "previous:" in (tmp_path / "dashboard/content/docs/skills.md").read_text(
+        encoding="utf-8"
+    )
     assert (tmp_path / "dashboard/content/skills/example-skill/index.md").exists()
     assert (tmp_path / "dashboard/content/challenges/example/index.md").exists()

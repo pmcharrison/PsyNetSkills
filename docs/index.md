@@ -1,4 +1,4 @@
-# PsyNetSkills workshop guide
+# Introduction
 
 PsyNetSkills collects skills, challenges, and evaluation evidence for improving
 how AI agents implement PsyNet experiments.

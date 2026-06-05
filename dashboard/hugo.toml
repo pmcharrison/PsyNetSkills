@@ -8,14 +8,17 @@ relativeURLs = true
   [markup.goldmark]
     [markup.goldmark.renderer]
       unsafe = false
+  [markup.highlight]
+    codeFences = true
+    guessSyntax = true
+    lineNos = false
+    noClasses = false
+    style = "github"
 
 [module]
   [[module.mounts]]
     source = "content"
     target = "content"
-  [[module.mounts]]
-    source = "../docs"
-    target = "content/docs"
   [[module.mounts]]
     source = "static"
     target = "static"

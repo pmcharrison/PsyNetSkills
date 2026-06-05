@@ -1,0 +1,15 @@
+{{ if eq .Section "docs" }}
+  <aside class="docs-sidebar" aria-label="Docs pages">
+    <h2>Docs</h2>
+    <nav>
+      {{ range sort site.Data.psynetsk.docs "weight" }}
+        {{ $href := cond (eq .slug "index") "docs/" (printf "docs/%s/" .slug) }}
+        {{ $isCurrent := eq $.RelPermalink ($href | relURL) }}
+        <a
+          {{ if $isCurrent }}aria-current="page" class="current"{{ end }}
+          href="{{ $href | relURL }}"
+        >{{ .title }}</a>
+      {{ end }}
+    </nav>
+  </aside>
+{{ end }}

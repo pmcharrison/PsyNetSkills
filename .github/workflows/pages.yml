@@ -31,7 +31,7 @@ jobs:
       - run: uv sync --group dev
       - run: uv run psynetsk-validate
       - run: uv run psynetsk-export-dashboard-data
-      - run: hugo --source dashboard --destination ../public
+      - run: hugo --source dashboard --destination ../public --cleanDestinationDir
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

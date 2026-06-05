@@ -11,7 +11,7 @@ Build it locally with:
 
 ```bash
 uv run psynetsk-export-dashboard-data
-hugo --source dashboard --destination ../public
+hugo --source dashboard --destination ../public --cleanDestinationDir
 ```
 
 The Python command exports structured repository data to

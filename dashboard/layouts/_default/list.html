@@ -1,14 +1,16 @@
 {{ define "main" }}
-  <h1>{{ .Title }}</h1>
-  {{ .Content }}
-
   {{ if eq .Section "docs" }}
-    <ul>
-      {{ range .Pages.ByTitle }}
-        <li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
-      {{ end }}
-    </ul>
+    <div class="docs-layout">
+      {{ partial "docs-sidebar.html" . }}
+      <article class="prose">
+        <h1>{{ .Title }}</h1>
+        {{ .Content }}
+        {{ partial "docs-pagination.html" . }}
+      </article>
+    </div>
   {{ else }}
+    <h1>{{ .Title }}</h1>
+    {{ .Content }}
     <ul>
       {{ range .Pages.ByTitle }}
         <li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>

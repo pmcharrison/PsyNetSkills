@@ -1,6 +1,17 @@
 {{ define "main" }}
-  <article class="prose">
-    <h1>{{ .Title }}</h1>
-    {{ .Content }}
-  </article>
+  {{ if eq .Section "docs" }}
+    <div class="docs-layout">
+      {{ partial "docs-sidebar.html" . }}
+      <article class="prose">
+        <h1>{{ .Title }}</h1>
+        {{ .Content }}
+        {{ partial "docs-pagination.html" . }}
+      </article>
+    </div>
+  {{ else }}
+    <article class="prose">
+      <h1>{{ .Title }}</h1>
+      {{ .Content }}
+    </article>
+  {{ end }}
 {{ end }}

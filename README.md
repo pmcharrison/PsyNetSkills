@@ -20,7 +20,7 @@ uv sync --group dev
 uv run psynetsk-validate
 uv run pytest
 uv run psynetsk-export-dashboard-data
-hugo --source dashboard --destination ../public
+hugo --source dashboard --destination ../public --cleanDestinationDir
 ```
 
 The local PsyNet source checkout is expected at `~/PsyNet`. Skills and challenge

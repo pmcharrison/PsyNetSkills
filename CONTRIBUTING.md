@@ -12,7 +12,7 @@ uv sync --group dev
 uv run psynetsk-validate
 uv run pytest
 uv run psynetsk-export-dashboard-data
-hugo --source dashboard --destination ../public
+hugo --source dashboard --destination ../public --cleanDestinationDir
 ```
 
 If you are working on PsyNet experiment code generated during a challenge,
@@ -83,7 +83,7 @@ Run:
 uv run psynetsk-validate
 uv run pytest
 uv run psynetsk-export-dashboard-data
-hugo --source dashboard --destination ../public
+hugo --source dashboard --destination ../public --cleanDestinationDir
 ```
 
 Do not commit generated `public/` output unless the repository policy changes.
