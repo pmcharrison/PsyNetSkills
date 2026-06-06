@@ -75,8 +75,8 @@ def test_validate_learnings_accepts_expected_format(tmp_path: Path) -> None:
         "## Useful finding\n\n"
         "This explains what happened.\n\n"
         "Actions:\n\n"
-        "- psynetskills: Document the workflow. Confidence: high. Status: pending.\n"
-        "- psynet: Improve the error message. Confidence: medium. Status: pending.\n",
+        "- psynetskills: Document the workflow. Confidence: high. Status: awaiting_review.\n"
+        "- psynet: Improve the error message. Confidence: medium. Status: awaiting_review.\n",
     )
 
     assert validate_learnings_file(learnings_file) == []

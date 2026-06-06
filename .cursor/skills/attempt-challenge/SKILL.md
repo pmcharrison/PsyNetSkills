@@ -67,11 +67,12 @@ agents. Use compact cards, one section per learning:
 
 Use confidence levels `high`, `medium`, or `low`. Generally propose a near-term
 PsyNetSkills change first, then a longer-term PsyNet change if the learning
-points to a framework issue. Use lowercase status values: `pending`, `accepted`,
-`implemented`, `declined`, or `superseded`. Include only concrete observations
-from the attempt, such as framework gotchas, missing instructions, evidence
-collection friction, or useful refactors. Do not repeat the evaluation score or
-hidden criteria.
+points to a framework issue. Use lowercase status values: `awaiting_review`,
+`planned`, `implemented`, `declined`, or `superseded`. New actions should default
+to `awaiting_review`; use `planned` once a maintainer agrees the action should be
+done. Include only concrete observations from the attempt, such as framework
+gotchas, missing instructions, evidence collection friction, or useful
+refactors. Do not repeat the evaluation score or hidden criteria.
 
 ## Notes
 

@@ -13,7 +13,7 @@ SKILL_NAME_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 LEARNING_ACTION_RE = re.compile(
     r"^- (?P<target>psynetskills|psynet): (?P<action>.+) "
     r"Confidence: (?P<confidence>high|medium|low)\. "
-    r"Status: (?P<status>pending|accepted|implemented|declined|superseded)\.$",
+    r"Status: (?P<status>awaiting_review|planned|implemented|declined|superseded)\.$",
 )
 
 

@@ -71,16 +71,16 @@ What happened during implementation or testing.
 Actions:
 
 - psynetskills: A repo, skill, docs, validation, dashboard, or evidence workflow
-  change. Confidence: high. Status: pending.
+  change. Confidence: high. Status: awaiting_review.
 - psynet: A PsyNet framework, documentation, or command-line change. Confidence:
-  medium. Status: pending.
+  medium. Status: awaiting_review.
 ```
 
 Keep learning notes concise and grounded in what happened. Useful topics include
 PsyNet or Dallinger API gotchas, ambiguous instructions, evidence collection
 friction, local testing friction, and candidate refactors. Maintainers can later
-update action statuses from `pending` to `accepted`, `implemented`, `declined`,
-or `superseded`.
+update action statuses from `awaiting_review` to `planned`, `implemented`,
+`declined`, or `superseded`.
 
 Do not use `LEARNINGS.md` for hidden evaluation criteria or scoring decisions.
 
