@@ -40,9 +40,10 @@ nav {
 }
 
 .site-header nav a {
-  border-bottom: 2px solid transparent;
-  font-size: 1.35rem;
-  padding-bottom: 0.1rem;
+  border-bottom: 3px solid transparent;
+  color: var(--muted);
+  font-size: 1.4rem;
+  padding-bottom: 0.15rem;
   text-decoration: none;
 }
 
