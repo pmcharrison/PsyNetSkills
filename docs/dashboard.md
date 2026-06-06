@@ -19,6 +19,26 @@ The Python command exports structured repository data to
 skills and challenges. Hugo then renders Markdown, layouts, and final HTML into
 `public/`. The GitHub Pages workflow builds the same output in CI.
 
+## Pull request previews
+
+The production dashboard is published from the `gh-pages` branch root. Pull
+requests from branches in this repository are built into subdirectories of the
+same branch:
+
+```text
+pr-preview/pr-<number>/
+```
+
+The resulting preview URL is:
+
+```text
+https://<owner>.github.io/<repository>/pr-preview/pr-<number>/
+```
+
+The preview workflow updates one pull request comment with the current preview
+URL whenever the PR branch changes. When the PR closes, the workflow removes the
+preview directory from `gh-pages`.
+
 ## Design principles
 
 The dashboard should stay simple and deterministic. It should not require a

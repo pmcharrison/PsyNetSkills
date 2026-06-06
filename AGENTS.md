@@ -114,3 +114,17 @@ PsyNet commands need sandboxing disabled in Cursor (`required_permissions: ["all
 
 - `dashboard/data/` and related Hugo inputs are written by `psynetsk-export-dashboard-data`.
 - `public/` is the Hugo build output; do not commit unless policy changes.
+
+### Dashboard preview links
+
+When a Cloud Agent opens or updates a pull request from a branch in this
+repository, include the dashboard preview link in the final response once the PR
+number is known:
+
+```text
+https://pmcharrison.github.io/PsyNetSkills/pr-preview/pr-<number>/
+```
+
+The preview workflow also posts this URL to the pull request. Forked pull
+requests do not publish previews because the workflow needs write access to the
+`gh-pages` branch.

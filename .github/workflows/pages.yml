@@ -6,17 +6,15 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: write
 
 concurrency:
-  group: pages
+  group: github-pages-branch
   cancel-in-progress: false
 
 jobs:
   build:
-    name: Build dashboard
+    name: Build and deploy dashboard
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -32,22 +30,54 @@ jobs:
       - uses: peaceiris/actions-hugo@v3
         with:
           hugo-version: latest
-      - uses: actions/configure-pages@v5
       - run: uv sync --group dev
       - run: uv run psynetsk-validate
       - run: uv run psynetsk-export-dashboard-data
       - run: hugo --source dashboard --destination ../public --cleanDestinationDir
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: public
+      - name: Deploy production site to gh-pages
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          PAGES_BRANCH: gh-pages
+        run: |
+          set -euo pipefail
 
-  deploy:
-    name: Deploy dashboard
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - id: deployment
-        uses: actions/deploy-pages@v4
+          pages_dir="$(mktemp -d)"
+          origin_url="https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git remote set-url origin "${origin_url}"
+
+          if git ls-remote --exit-code --heads origin "${PAGES_BRANCH}" >/dev/null 2>&1; then
+            git fetch origin "${PAGES_BRANCH}"
+            git worktree add --detach "${pages_dir}" "origin/${PAGES_BRANCH}"
+          else
+            git -c init.defaultBranch="${PAGES_BRANCH}" init "${pages_dir}"
+            git -C "${pages_dir}" remote add origin "${origin_url}"
+          fi
+
+          git -C "${pages_dir}" config user.name "github-actions[bot]"
+          git -C "${pages_dir}" config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          python - "${pages_dir}" <<'PY'
+          import shutil
+          import sys
+          from pathlib import Path
+
+          root = Path(sys.argv[1])
+          for child in root.iterdir():
+              if child.name in {".git", "pr-preview"}:
+                  continue
+              if child.is_dir():
+                  shutil.rmtree(child)
+              else:
+                  child.unlink()
+          PY
+
+          cp -a public/. "${pages_dir}/"
+          touch "${pages_dir}/.nojekyll"
+
+          git -C "${pages_dir}" add -A
+          if git -C "${pages_dir}" diff --cached --quiet; then
+            echo "No production dashboard changes to deploy."
+          else
+            git -C "${pages_dir}" commit -m "Deploy production dashboard"
+            git -C "${pages_dir}" push origin "HEAD:${PAGES_BRANCH}"
+          fi
