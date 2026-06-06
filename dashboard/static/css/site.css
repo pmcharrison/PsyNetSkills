@@ -49,7 +49,14 @@ nav {
   gap: 1rem;
 }
 
+.site-header nav a {
+  border-bottom: 2px solid transparent;
+  padding-bottom: 0.1rem;
+  text-decoration: none;
+}
+
 .site-header nav a.current {
+  border-bottom-color: currentColor;
   color: var(--foreground);
   font-weight: 700;
 }
