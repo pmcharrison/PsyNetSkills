@@ -79,7 +79,9 @@ previous attempts. The `EVALUATION.md` file should be human-written and include
 YAML frontmatter with a `score` field when the evaluation is complete.
 `LEARNINGS.md` should be written by the agent and summarize concrete
 implementation findings plus confidence-labelled actions targeting PsyNetSkills
-or PsyNet.
+or PsyNet. Agents should invite conversational review of these actions after an
+attempt is complete and update the file in follow-up commits when users revise
+or decide on actions.
 
 ## Large files
 

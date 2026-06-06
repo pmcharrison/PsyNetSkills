@@ -23,9 +23,12 @@ PsyNetSkills repository.
 7. Collect evidence in `evidence/`. Use the `record-participant-video` skill
    when creating `evidence/participant.mp4`.
 8. Write `LEARNINGS.md` with concise implementation notes and suggested
-   improvements to PsyNetSkills, PsyNet, or the original challenge.
+   actions for PsyNetSkills or PsyNet.
 9. Leave `EVALUATION.md` as a template for human evaluators unless explicitly
    asked to evaluate.
+10. In the final response, invite the user to review the drafted learning
+   actions conversationally. If the user comments on the learnings, update
+   `LEARNINGS.md` for them rather than expecting manual Markdown edits.
 
 ## Evidence expectations
 
@@ -73,6 +76,14 @@ to `awaiting_review`; use `planned` once a maintainer agrees the action should b
 done. Include only concrete observations from the attempt, such as framework
 gotchas, missing instructions, evidence collection friction, or useful
 refactors. Do not repeat the evaluation score or hidden criteria.
+
+Treat learning notes as a conversational artifact. Cloud users will often review
+them by chatting with the agent rather than editing Markdown directly. After an
+attempt is complete, briefly ask the user to comment on the drafted actions. On
+follow-up, update action text, confidence, or status according to the user's
+comments. For example, change `awaiting_review` to `planned` when the user agrees
+the action should be done, `declined` when they reject it, `implemented` when it
+has already been completed, or `superseded` when a better action replaces it.
 
 ## Notes
 

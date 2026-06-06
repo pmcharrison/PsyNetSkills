@@ -82,6 +82,12 @@ friction, local testing friction, and candidate refactors. Maintainers can later
 update action statuses from `awaiting_review` to `planned`, `implemented`,
 `declined`, or `superseded`.
 
+In Cursor Cloud workflows, users usually review attempts through conversation
+with an agent rather than by editing files directly. Agents should draft
+`LEARNINGS.md`, invite the user to comment on the proposed actions, and then
+update action text, confidence, or status in a follow-up commit based on that
+conversation.
+
 Do not use `LEARNINGS.md` for hidden evaluation criteria or scoring decisions.
 
 ## Evaluation frontmatter
