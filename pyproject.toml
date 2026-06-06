@@ -23,5 +23,8 @@ dev = [
 where = ["."]
 include = ["psynetsk_tools*"]
 
+[tool.setuptools.package-data]
+psynetsk_tools = ["assets/monitor-static/static/**/*"]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]

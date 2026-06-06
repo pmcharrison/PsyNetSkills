@@ -10,6 +10,14 @@ from pathlib import Path
 
 SKILLS_ROOT = Path(".cursor") / "skills"
 SKILL_NAME_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
+LEARNING_ACTION_RE = re.compile(
+    r"^- (?P<target>psynetskills|psynet): (?P<action>.+) "
+    r"Confidence: (?P<confidence>high|medium|low)\. "
+    r"Status: (?P<status>awaiting_review|planned|implemented|declined|superseded)\.$",
+)
+TIMELINE_ENTRY_RE = re.compile(
+    r"^- T\+\d{2}:\d{2}:\d{2} \[(agent-start|agent|agent-stop|manual|system)\] .+$"
+)
 
 
 def read_markdown_frontmatter(markdown_file: Path) -> tuple[dict[str, str], list[str]]:
@@ -65,6 +73,108 @@ def parse_evaluation_score(evaluation_file: Path) -> int | None:
         return None
 
 
+def iter_learning_sections(text: str) -> list[tuple[str, list[str]]]:
+    """Split LEARNINGS.md into second-level learning sections."""
+    sections: list[tuple[str, list[str]]] = []
+    current_title: str | None = None
+    current_lines: list[str] = []
+
+    for line in text.splitlines():
+        if line.startswith("## "):
+            if current_title is not None:
+                sections.append((current_title, current_lines))
+            current_title = line[3:].strip()
+            current_lines = []
+        elif current_title is not None:
+            current_lines.append(line)
+
+    if current_title is not None:
+        sections.append((current_title, current_lines))
+
+    return sections
+
+
+def learning_action_bullets(lines: list[str]) -> list[str]:
+    """Return action bullets, joining indented continuation lines."""
+    bullets: list[str] = []
+    current: list[str] | None = None
+
+    for line in lines:
+        if line.startswith("- "):
+            if current is not None:
+                bullets.append(" ".join(part.strip() for part in current))
+            current = [line]
+        elif current is not None and (line.startswith("  ") or not line.strip()):
+            if line.strip():
+                current.append(line)
+        elif current is not None:
+            bullets.append(" ".join(part.strip() for part in current))
+            current = None
+
+    if current is not None:
+        bullets.append(" ".join(part.strip() for part in current))
+
+    return bullets
+
+
+def validate_learnings_file(learnings_file: Path) -> list[str]:
+    """Validate the structured Markdown format for attempt learnings."""
+    problems: list[str] = []
+    text = learnings_file.read_text(encoding="utf-8")
+    lines = text.splitlines()
+
+    if not lines or lines[0].strip() != "# Learnings":
+        problems.append(f"{learnings_file}: first line must be '# Learnings'")
+
+    sections = iter_learning_sections(text)
+    if not sections:
+        problems.append(f"{learnings_file}: missing learning sections")
+        return problems
+
+    for title, section_lines in sections:
+        if not title:
+            problems.append(f"{learnings_file}: learning section has empty title")
+
+        try:
+            actions_index = section_lines.index("Actions:")
+        except ValueError:
+            problems.append(f"{learnings_file}: learning {title!r} missing Actions:")
+            continue
+
+        action_lines = section_lines[actions_index + 1 :]
+        bullets = learning_action_bullets(action_lines)
+        if not bullets:
+            problems.append(f"{learnings_file}: learning {title!r} has no actions")
+            continue
+
+        for bullet in bullets:
+            if LEARNING_ACTION_RE.fullmatch(bullet) is None:
+                problems.append(
+                    f"{learnings_file}: invalid learning action in {title!r}: {bullet!r}"
+                )
+
+    return problems
+
+
+def validate_timeline_file(timeline_file: Path) -> list[str]:
+    """Validate the structured Markdown format for attempt timelines."""
+    problems: list[str] = []
+    lines = timeline_file.read_text(encoding="utf-8").splitlines()
+
+    if not lines or lines[0].strip() != "# Timeline":
+        problems.append(f"{timeline_file}: first line must be '# Timeline'")
+
+    entries = [line for line in lines if line.startswith("- ")]
+    if not entries:
+        problems.append(f"{timeline_file}: missing timeline entries")
+
+    for line in entries:
+        if TIMELINE_ENTRY_RE.fullmatch(line) is None:
+            problems.append(f"{timeline_file}: invalid timeline entry: {line!r}")
+
+    return problems
+
+
 def validate_skills(root: Path) -> list[str]:
     """Validate all skill folders."""
     problems: list[str] = []
@@ -118,6 +228,18 @@ def validate_attempt(attempt_dir: Path) -> list[str]:
         score = parse_evaluation_score(evaluation_file)
         if score is not None and not 1 <= score <= 10:
             problems.append(f"{evaluation_file}: score must be between 1 and 10")
+
+    learnings_file = attempt_dir / "LEARNINGS.md"
+    if learnings_file.exists():
+        problems.extend(validate_learnings_file(learnings_file))
+    elif not attempt_dir.name.startswith("example-"):
+        problems.append(f"{attempt_dir}: missing LEARNINGS.md")
+
+    timeline_file = attempt_dir / "TIMELINE.md"
+    if timeline_file.exists():
+        problems.extend(validate_timeline_file(timeline_file))
+    elif not attempt_dir.name.startswith("example-"):
+        problems.append(f"{attempt_dir}: missing TIMELINE.md")
 
     return problems
 

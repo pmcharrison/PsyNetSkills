@@ -2,7 +2,6 @@ baseURL = "/"
 languageCode = "en-gb"
 title = "PsyNetSkills"
 disableKinds = ["taxonomy", "term", "RSS", "sitemap", "robotsTXT"]
-relativeURLs = true
 
 [params]
   [params.giscus]

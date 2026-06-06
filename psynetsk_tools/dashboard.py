@@ -32,6 +32,13 @@ TEXT_FILE_EXTENSIONS = {
     ".yml",
 }
 ATTEMPT_ARTIFACTS_DIR = "artifacts/challenges"
+MONITOR_STATIC_ROOT = Path(__file__).parent / "assets" / "monitor-static" / "static"
+STATIC_REF_RE = re.compile(r'(?:href|src)="/static/(?P<path>[^"]+)"')
+TIMELINE_ENTRY_RE = re.compile(
+    r"^- (?P<timestamp>T\+\d{2}:\d{2}:\d{2}) "
+    r"\[(?P<actor>agent-start|agent|agent-stop|manual|system)\] "
+    r"(?P<description>.+)$"
+)
 
 
 @dataclass(frozen=True)
@@ -84,6 +91,15 @@ class AttemptFile:
 
 
 @dataclass(frozen=True)
+class TimelineEntry:
+    """A structured attempt timeline entry."""
+
+    timestamp: str
+    actor: str
+    description: str
+
+
+@dataclass(frozen=True)
 class Attempt:
     """A dashboard summary of a challenge attempt."""
 
@@ -95,6 +111,9 @@ class Attempt:
     model: str
     agent_json: str
     evaluation: str
+    timeline: str
+    timeline_entries: list[TimelineEntry]
+    learnings: str
     evaluation_metadata: dict[str, str]
     challenge_files: list[AttemptFile]
     code_files: list[AttemptFile]
@@ -304,6 +323,23 @@ def read_agent_json(agent_file: Path) -> tuple[dict[str, object], str]:
     return agent, json.dumps(agent, indent=2, sort_keys=True)
 
 
+def parse_timeline_entries(markdown: str) -> list[TimelineEntry]:
+    """Parse structured entries from TIMELINE.md."""
+    entries: list[TimelineEntry] = []
+    for line in markdown.splitlines():
+        match = TIMELINE_ENTRY_RE.fullmatch(line)
+        if match is None:
+            continue
+        entries.append(
+            TimelineEntry(
+                timestamp=match.group("timestamp"),
+                actor=match.group("actor"),
+                description=match.group("description"),
+            )
+        )
+    return entries
+
+
 def file_kind(path: Path) -> str:
     """Return a display-oriented file type."""
     suffix = path.suffix.lower().lstrip(".")
@@ -365,6 +401,61 @@ def collect_attempt_files(
     return files
 
 
+def sanitize_html_artifact(path: Path) -> None:
+    """Make copied HTML evidence safer to view from static dashboard previews."""
+    html = path.read_text(encoding="utf-8")
+    static_refs = sorted(set(STATIC_REF_RE.findall(html)))
+    if "<head>" in html and "<base " not in html:
+        html = html.replace("<head>", '<head>\n        <base href="./">', 1)
+    html = re.sub(r'href="/dashboard/[^"]*"', 'href="#"', html)
+    html = re.sub(r'src="/dashboard/[^"]*"', 'src="#"', html)
+    html = html.replace('href="/static/', 'href="./static/')
+    html = html.replace('src="/static/', 'src="./static/')
+    html = re.sub(r'<script([^>]*)\s*/></script>', r'<script\1></script>', html)
+    html = html.replace(
+        "</head>",
+        """
+        <style>
+          body { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; margin: 1rem; }
+          .container { max-width: none; }
+          #dashboard-navigation, #logout { display: none; }
+          #monitor-wrapper { display: flex; gap: 1rem; align-items: flex-start; }
+          #sidebar { flex: 0 0 18rem; }
+          #timeline-wrapper, #timeline, main { flex: 1 1 auto; min-width: 0; }
+          table { border-collapse: collapse; width: 100%; }
+          th, td { border: 1px solid #d0d7de; padding: 0.4rem; text-align: left; vertical-align: top; }
+          button { border: 1px solid #d0d7de; border-radius: 0.35rem; background: #f6f8fa; padding: 0.3rem 0.6rem; }
+        </style>
+    </head>""",
+        1,
+    )
+    path.write_text(html, encoding="utf-8")
+    copy_monitor_static_assets(path.parent, static_refs)
+
+
+def copy_monitor_static_assets(html_dir: Path, static_refs: list[str]) -> None:
+    """Copy vendored Dallinger monitor assets next to a copied HTML artifact."""
+    for ref in static_refs:
+        source = MONITOR_STATIC_ROOT / ref
+        if not source.is_file():
+            continue
+        destination = html_dir / "static" / ref
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(source, destination)
+        if ref == "scripts/network-monitor.js":
+            disable_live_node_details(destination)
+
+
+def disable_live_node_details(script_path: Path) -> None:
+    """Avoid live dashboard fetches while preserving embedded JSON click details."""
+    text = script_path.read_text(encoding="utf-8")
+    text = text.replace(
+        "$(custom_node).load('/dashboard/node_details/' + node.options.data.object_type + '/' + String(node.options.data.id));",
+        "custom_node.textContent = 'Live dashboard node details are unavailable in this static snapshot.';",
+    )
+    script_path.write_text(text, encoding="utf-8")
+
+
 def collect_attempts(challenge_dir: Path) -> list[Attempt]:
     """Collect attempts for a challenge."""
     attempts_dir = challenge_dir / "attempts"
@@ -376,6 +467,8 @@ def collect_attempts(challenge_dir: Path) -> list[Attempt]:
         path for path in attempts_dir.iterdir() if path.is_dir()
     ):
         evaluation_file = attempt_dir / "EVALUATION.md"
+        learnings_file = attempt_dir / "LEARNINGS.md"
+        timeline_file = attempt_dir / "TIMELINE.md"
         score = (
             parse_evaluation_score(evaluation_file)
             if evaluation_file.exists()
@@ -390,6 +483,11 @@ def collect_attempts(challenge_dir: Path) -> list[Attempt]:
             key: value for key, value in evaluation_metadata.items() if key != "score"
         }
         agent, agent_json = read_agent_json(attempt_dir / "agent.json")
+        timeline = (
+            strip_first_heading(timeline_file.read_text(encoding="utf-8"))
+            if timeline_file.exists()
+            else ""
+        )
         artifact_prefix = (
             f"{ATTEMPT_ARTIFACTS_DIR}/{challenge_dir.name}/attempts/"
             f"{attempt_dir.name}"
@@ -413,6 +511,15 @@ def collect_attempts(challenge_dir: Path) -> list[Attempt]:
                         )
                     )
                     if evaluation_file.exists()
+                    else ""
+                ),
+                timeline=timeline,
+                timeline_entries=parse_timeline_entries(timeline),
+                learnings=(
+                    strip_first_heading(
+                        learnings_file.read_text(encoding="utf-8")
+                    )
+                    if learnings_file.exists()
                     else ""
                 ),
                 evaluation_metadata=evaluation_metadata,
@@ -603,6 +710,8 @@ def write_attempt_artifacts(root: Path, dashboard_dir: Path) -> None:
             dirs_exist_ok=True,
             ignore=shutil.ignore_patterns(".gitkeep"),
         )
+        for html_file in target_attempts_dir.rglob("*.html"):
+            sanitize_html_artifact(html_file)
 
 
 def export_dashboard(root: Path, dashboard_dir: Path) -> None:

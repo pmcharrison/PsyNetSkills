@@ -241,6 +241,70 @@ td {
   font-weight: 700;
 }
 
+.timeline-panel {
+  background: #f6fbff;
+  border-color: #8cc8ff;
+}
+
+.timeline-list {
+  border-left: 3px solid #8cc8ff;
+  display: grid;
+  gap: 0.75rem;
+  list-style: none;
+  margin-bottom: 0;
+  padding-left: 1rem;
+}
+
+.timeline-entry {
+  border-radius: 0.35rem;
+  display: grid;
+  gap: 0.25rem 0.75rem;
+  grid-template-columns: minmax(5.5rem, auto) minmax(6rem, auto) 1fr;
+  margin: 0;
+  padding: 0.45rem 0.6rem;
+}
+
+.timeline-entry:nth-child(odd) {
+  background: rgba(140, 200, 255, 0.16);
+}
+
+.timeline-time,
+.timeline-actor {
+  font-family: var(--monospace);
+  font-size: 0.85rem;
+}
+
+.timeline-time {
+  color: var(--foreground);
+  font-weight: 700;
+}
+
+.timeline-actor {
+  color: var(--muted);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.timeline-description > :first-child {
+  margin-top: 0;
+}
+
+.timeline-description > :last-child {
+  margin-bottom: 0;
+}
+
+.timeline-entry-manual .timeline-actor {
+  color: #9a6700;
+}
+
+.timeline-entry-agent-start .timeline-actor {
+  color: #1a7f37;
+}
+
+.timeline-entry-agent-stop .timeline-actor {
+  color: #cf222e;
+}
+
 .attempt-markdown > :first-child,
 .markdown-preview > :first-child {
   margin-top: 0;
@@ -441,5 +505,13 @@ footer {
 
   .section-sidebar {
     position: static;
+  }
+
+  .timeline-entry {
+    grid-template-columns: 1fr;
+  }
+
+  .timeline-actor {
+    justify-self: start;
   }
 }

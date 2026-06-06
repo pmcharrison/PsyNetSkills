@@ -92,6 +92,18 @@ def test_collect_challenges_reports_attempt_metadata(tmp_path: Path) -> None:
     attempt_dir = challenge_dir / "attempts/2026-06-01-10-10"
     write(attempt_dir / "agent.json", '{"model": "test-model"}\n')
     write(attempt_dir / "EVALUATION.md", evaluation())
+    write(
+        attempt_dir / "TIMELINE.md",
+        "# Timeline\n\n- T+00:00:00 [agent-start] Started.\n",
+    )
+    write(
+        attempt_dir / "LEARNINGS.md",
+        "# Learnings\n\n"
+        "## Useful finding\n\n"
+        "Useful finding.\n\n"
+        "Actions:\n\n"
+        "- psynetskills: Document it. Confidence: high. Status: awaiting_review.\n",
+    )
     write(attempt_dir / "challenge/INSTRUCTIONS.md", "# Example\n")
     write(attempt_dir / "code/README.md", "# Code notes\n")
     write(attempt_dir / "evidence/README.md", "# Evidence notes\n")
@@ -102,6 +114,13 @@ def test_collect_challenges_reports_attempt_metadata(tmp_path: Path) -> None:
     assert attempt.model == "test-model"
     assert attempt.url == "challenges/example/2026-06-01-10-10/"
     assert attempt.evaluation == "Attempt body.\n"
+    assert attempt.timeline == "- T+00:00:00 [agent-start] Started.\n"
+    assert len(attempt.timeline_entries) == 1
+    assert attempt.timeline_entries[0].timestamp == "T+00:00:00"
+    assert attempt.timeline_entries[0].actor == "agent-start"
+    assert attempt.timeline_entries[0].description == "Started."
+    assert "## Useful finding" in attempt.learnings
+    assert "Useful finding.\n" in attempt.learnings
     assert attempt.evaluation_metadata == {"example": "true"}
     assert attempt.code_files[0].path == "README.md"
     assert attempt.code_files[0].content == "# Code notes\n"
@@ -249,6 +268,19 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
         evaluation(),
     )
     write(
+        tmp_path / "challenges/example/attempts/2026-06-01-10-10/TIMELINE.md",
+        "# Timeline\n\n- T+00:00:00 [agent-start] Started.\n",
+    )
+    write(
+        tmp_path
+        / "challenges/example/attempts/2026-06-01-10-10/LEARNINGS.md",
+        "# Learnings\n\n"
+        "## Useful finding\n\n"
+        "Useful finding.\n\n"
+        "Actions:\n\n"
+        "- psynetskills: Document it. Confidence: high. Status: awaiting_review.\n",
+    )
+    write(
         tmp_path
         / "challenges/example/attempts/2026-06-01-10-10/code/README.md",
         "# Code notes\n",
@@ -257,6 +289,19 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
         tmp_path
         / "challenges/example/attempts/2026-06-01-10-10/evidence/README.md",
         "# Evidence notes\n",
+    )
+    write(
+        tmp_path
+        / "challenges/example/attempts/2026-06-01-10-10/evidence/monitor.html",
+        '<!doctype html><html><head><link href="/static/css/dashboard.css">'
+        '<link href="/static/vis@4.17.0/dist/vis-network.min.css"></head>'
+        '<body><a href="/dashboard/index">Dashboard</a><section id="mynetwork"></section>'
+        '<script>const network_structure = {"networks":[{"id":1,"failed":false}],'
+        "\"nodes\":[{\"id\":1,\"network_id\":1,\"definition\":\"{'color': 'red', 'hex': '#ff0000'}\"}],"
+        '"infos":[{"id":2,"network_id":1,"class":"ColorRatingTrial","answer":4}]};'
+        'const vis_options = {};</script>'
+        '<script src="/static/vis@4.17.0/dist/vis.min.js"></script>'
+        '<script src="/static/scripts/network-monitor.js"></script></body></html>',
     )
     write_bytes(
         tmp_path
@@ -310,10 +355,47 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
         / "dashboard/static/artifacts/challenges/example/attempts/"
         "2026-06-01-10-10/evidence/participant.mp4"
     ).exists()
+    exported_monitor = (
+        tmp_path
+        / "dashboard/static/artifacts/challenges/example/attempts/"
+        "2026-06-01-10-10/evidence/monitor.html"
+    ).read_text(encoding="utf-8")
+    assert '<base href="./">' in exported_monitor
+    assert 'href="./static/css/dashboard.css"' in exported_monitor
+    assert 'src="./static/scripts/network-monitor.js"' in exported_monitor
+    assert 'src="./static/vis@4.17.0/dist/vis.min.js"' in exported_monitor
+    assert 'href="#"' in exported_monitor
+    assert "/dashboard/index" not in exported_monitor
+    assert "const network_structure" in exported_monitor
+    assert "Network visualization snapshot" not in exported_monitor
+    network_monitor = (
+        tmp_path
+        / "dashboard/static/artifacts/challenges/example/attempts/"
+        "2026-06-01-10-10/evidence/static/scripts/network-monitor.js"
+    )
+    assert network_monitor.exists()
+    assert (
+        tmp_path
+        / "dashboard/static/artifacts/challenges/example/attempts/"
+        "2026-06-01-10-10/evidence/static/vis@4.17.0/dist/vis.min.js"
+    ).exists()
+    assert (
+        "Live dashboard node details are unavailable"
+        in network_monitor.read_text(encoding="utf-8")
+    )
     assert '"model": "test-model"' in data
     assert '"url": "challenges/example/2026-06-01-10-10/"' in data
     exported_attempt = parsed_data["challenges"][0]["attempts"][0]
     assert exported_attempt["evaluation"] == "Attempt body.\n"
+    assert exported_attempt["timeline"] == "- T+00:00:00 [agent-start] Started.\n"
+    assert exported_attempt["timeline_entries"] == [
+        {
+            "timestamp": "T+00:00:00",
+            "actor": "agent-start",
+            "description": "Started.",
+        },
+    ]
+    assert "## Useful finding" in exported_attempt["learnings"]
     assert exported_attempt["evaluation_metadata"] == {"example": "true"}
     assert exported_attempt["code_files"][0]["size_bytes"] == len(
         "# Code notes\n",
