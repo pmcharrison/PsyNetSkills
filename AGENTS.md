@@ -122,7 +122,8 @@ repository, regularly provide the dashboard preview link to the user once the PR
 number is known. Include it when first creating/updating the PR, after changes
 that affect dashboard rendering or challenge attempt pages, and in the final
 response. Write the generated URL as ordinary Markdown text so it is clickable;
-do not put it in a fenced code block or inline code.
+do not put it in a fenced code block or inline code. Provide only the preview
+index URL; do not also provide redundant subpage URLs such as `/docs/`.
 
 https://pmcharrison.github.io/PsyNetSkills/pr-preview/pr-<number>/
 
