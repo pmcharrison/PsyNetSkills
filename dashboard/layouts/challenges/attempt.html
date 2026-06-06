@@ -93,6 +93,12 @@
       {{ else }}
         <p>No rendered challenge instructions were found for this attempt.</p>
       {{ end }}
+      {{ with $attempt.challenge_criteria }}
+        <h2>Evaluation criteria</h2>
+        <div class="attempt-markdown">
+          {{ . | markdownify }}
+        </div>
+      {{ end }}
     </section>
 
     <section class="attempt-panel timeline-panel">

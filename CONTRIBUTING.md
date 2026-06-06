@@ -42,8 +42,6 @@ Create a folder under `challenges/` with:
 
 ```text
 INSTRUCTIONS.md
-CRITERIA.md
-references/
 attempts/.gitkeep
 ```
 
@@ -57,7 +55,10 @@ difficulty: 3
 ---
 ```
 
-`CRITERIA.md` is for evaluators and is hidden from agents by `.cursorignore`.
+Optionally add `CRITERIA.md` for evaluator-facing success criteria and
+`references/` for supporting material. Agents should not read `CRITERIA.md`
+before implementing a challenge, but should use it during conversational
+evaluation when it is present.
 
 ## Recording an attempt
 
@@ -79,7 +80,8 @@ The `challenge/` folder is a snapshot of the original challenge excluding
 previous attempts. The `EVALUATION.md` file should be human-written and include
 YAML frontmatter with a `score` field when the evaluation is complete. In Cursor
 Cloud workflows, agents should ask the user for a 1-10 score and concise
-feedback, then summarize the conversation in `EVALUATION.md`.
+feedback. If `CRITERIA.md` is present, agents should ask the user about each
+criterion and record the answers as a checklist in `EVALUATION.md`.
 `TIMELINE.md` should log major experiment implementation events with timestamps
 relative to the start of the attempt, including seconds and manual user
 interventions or corrective guidance. Stop the timeline when the experiment

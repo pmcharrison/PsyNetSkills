@@ -116,6 +116,7 @@ class Attempt:
     learnings: str
     evaluation_metadata: dict[str, str]
     challenge_instructions: str
+    challenge_criteria: str
     challenge_files: list[AttemptFile]
     code_files: list[AttemptFile]
     evidence_files: list[AttemptFile]
@@ -176,6 +177,18 @@ def read_challenge_snapshot_instructions(attempt_dir: Path) -> str:
         return ""
     return strip_challenge_frontmatter(
         instructions_file.read_text(encoding="utf-8"),
+    )
+
+
+def read_challenge_criteria(challenge_dir: Path, attempt_dir: Path) -> str:
+    """Read rendered criteria from an attempt snapshot or challenge folder."""
+    criteria_file = attempt_dir / "challenge" / "CRITERIA.md"
+    if not criteria_file.exists():
+        criteria_file = challenge_dir / "CRITERIA.md"
+    if not criteria_file.exists():
+        return ""
+    return strip_first_heading(
+        strip_frontmatter(criteria_file.read_text(encoding="utf-8")),
     )
 
 
@@ -535,6 +548,10 @@ def collect_attempts(challenge_dir: Path) -> list[Attempt]:
                 ),
                 evaluation_metadata=evaluation_metadata,
                 challenge_instructions=read_challenge_snapshot_instructions(
+                    attempt_dir,
+                ),
+                challenge_criteria=read_challenge_criteria(
+                    challenge_dir,
                     attempt_dir,
                 ),
                 challenge_files=collect_attempt_files(

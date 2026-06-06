@@ -31,7 +31,6 @@ def minimal_repo(root: Path) -> None:
         "---\n\n"
         "Implement the experiment.\n",
     )
-    write(root / "challenges/example/CRITERIA.md", "# Criteria\n")
     write(root / "challenges/example/attempts/.gitkeep", "")
 
 

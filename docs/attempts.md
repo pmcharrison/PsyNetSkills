@@ -20,7 +20,8 @@ LEARNINGS.md
 EVALUATION.md
 ```
 
-`challenge/` snapshots the original challenge at the time of the attempt.
+`challenge/` snapshots the original challenge at the time of the attempt,
+including optional `CRITERIA.md` when it exists.
 `agent.json` records the model, Cursor version, relevant skill commit, and
 attempt start time. `code/` contains the generated implementation. `evidence/`
 contains the materials used to evaluate whether the implementation worked.
@@ -102,6 +103,11 @@ In Cursor Cloud workflows, users usually review attempts through conversation
 with an agent rather than by editing files directly. Agents should ask the user
 for a 1-10 score and concise evaluation feedback, then summarize that feedback in
 `EVALUATION.md` and update the score field.
+
+If the challenge includes `CRITERIA.md`, agents should use those criteria during
+the conversational evaluation. Ask the user about each criterion, then record the
+results in `EVALUATION.md` as a Markdown checklist, for example `- [x] Criterion`
+or `- [ ] Criterion`, with concise notes for any failed or uncertain items.
 
 The dashboard uses this field to show progress over time. Keep written feedback
 specific and actionable. Strong evaluations explain both what failed and which
