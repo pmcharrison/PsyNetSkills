@@ -84,6 +84,18 @@
       </div>
     </dl>
 
+    <section class="attempt-panel challenge-brief">
+      <p class="eyebrow">Original challenge snapshot</p>
+      <h2>Challenge instructions</h2>
+      {{ with $attempt.challenge_instructions }}
+        <div class="attempt-markdown">
+          {{ . | markdownify }}
+        </div>
+      {{ else }}
+        <p>No rendered challenge instructions were found for this attempt.</p>
+      {{ end }}
+    </section>
+
     <section class="attempt-panel timeline-panel">
       <h2>Timeline</h2>
       {{ if $hasTimeline }}

@@ -115,6 +115,7 @@ class Attempt:
     timeline_entries: list[TimelineEntry]
     learnings: str
     evaluation_metadata: dict[str, str]
+    challenge_instructions: str
     challenge_files: list[AttemptFile]
     code_files: list[AttemptFile]
     evidence_files: list[AttemptFile]
@@ -166,6 +167,16 @@ def doc_sort_key(path: Path) -> tuple[int, str]:
 def strip_challenge_frontmatter(markdown: str) -> str:
     """Remove challenge frontmatter and heading for dashboard display."""
     return strip_first_heading(strip_frontmatter(markdown))
+
+
+def read_challenge_snapshot_instructions(attempt_dir: Path) -> str:
+    """Read rendered challenge instructions from an attempt snapshot."""
+    instructions_file = attempt_dir / "challenge" / "INSTRUCTIONS.md"
+    if not instructions_file.exists():
+        return ""
+    return strip_challenge_frontmatter(
+        instructions_file.read_text(encoding="utf-8"),
+    )
 
 
 def docs_url(slug: str) -> str:
@@ -523,6 +534,9 @@ def collect_attempts(challenge_dir: Path) -> list[Attempt]:
                     else ""
                 ),
                 evaluation_metadata=evaluation_metadata,
+                challenge_instructions=read_challenge_snapshot_instructions(
+                    attempt_dir,
+                ),
                 challenge_files=collect_attempt_files(
                     attempt_dir / "challenge",
                     f"{artifact_prefix}/challenge",

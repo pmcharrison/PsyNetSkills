@@ -104,7 +104,15 @@ def test_collect_challenges_reports_attempt_metadata(tmp_path: Path) -> None:
         "Actions:\n\n"
         "- psynetskills: Document it. Confidence: high. Status: awaiting_review.\n",
     )
-    write(attempt_dir / "challenge/INSTRUCTIONS.md", "# Example\n")
+    write(
+        attempt_dir / "challenge/INSTRUCTIONS.md",
+        "---\n"
+        "title: Example challenge\n"
+        "type: experiment implementation\n"
+        "difficulty: 4\n"
+        "---\n\n"
+        "Implement the snapshot experiment.\n",
+    )
     write(attempt_dir / "code/README.md", "# Code notes\n")
     write(attempt_dir / "evidence/README.md", "# Evidence notes\n")
 
@@ -122,6 +130,7 @@ def test_collect_challenges_reports_attempt_metadata(tmp_path: Path) -> None:
     assert "## Useful finding" in attempt.learnings
     assert "Useful finding.\n" in attempt.learnings
     assert attempt.evaluation_metadata == {"example": "true"}
+    assert attempt.challenge_instructions == "Implement the snapshot experiment.\n"
     assert attempt.code_files[0].path == "README.md"
     assert attempt.code_files[0].content == "# Code notes\n"
     assert attempt.code_files[0].kind == "md"
@@ -257,6 +266,16 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
     write(
         tmp_path / "challenges/example/INSTRUCTIONS.md",
         challenge_instructions(),
+    )
+    write(
+        tmp_path
+        / "challenges/example/attempts/2026-06-01-10-10/challenge/INSTRUCTIONS.md",
+        "---\n"
+        "title: Example challenge\n"
+        "type: experiment implementation\n"
+        "difficulty: 4\n"
+        "---\n\n"
+        "Implement the exported snapshot.\n",
     )
     write(
         tmp_path / "challenges/example/attempts/2026-06-01-10-10/agent.json",
@@ -397,6 +416,10 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
     ]
     assert "## Useful finding" in exported_attempt["learnings"]
     assert exported_attempt["evaluation_metadata"] == {"example": "true"}
+    assert (
+        exported_attempt["challenge_instructions"]
+        == "Implement the exported snapshot.\n"
+    )
     assert exported_attempt["code_files"][0]["size_bytes"] == len(
         "# Code notes\n",
     )
