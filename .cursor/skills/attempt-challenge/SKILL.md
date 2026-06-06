@@ -57,10 +57,24 @@ metadata and evaluation notes.
 ## Learning notes
 
 `LEARNINGS.md` should capture information that would help future maintainers and
-agents. Include only concrete observations from the attempt, such as framework
-gotchas, missing instructions, evidence collection friction, useful refactors,
-or challenge wording improvements. Do not repeat the evaluation score or hidden
-criteria.
+agents. Use one section per learning, with this structure:
+
+- `## Learning: <short title>`
+- `### Summary`
+- `### Suggested changes`
+  - `#### PsyNetSkills quick fix`
+  - `#### PsyNet long-term fix`
+- `### Decision`
+
+Label each suggested change with a confidence level, for example
+`[confidence: high]`, `[confidence: medium]`, or `[confidence: low]`.
+Generally propose a near-term PsyNetSkills change first, then a longer-term
+PsyNet change if the learning points to a framework issue. Use the `Decision`
+section for maintainer follow-up with `Status: Proposed`, `Accepted`,
+`Implemented in PsyNetSkills`, `Implemented in PsyNet`, `Declined`, or
+`Superseded`. Include only concrete observations from the attempt, such as
+framework gotchas, missing instructions, evidence collection friction, or useful
+refactors. Do not repeat the evaluation score or hidden criteria.
 
 ## Notes
 

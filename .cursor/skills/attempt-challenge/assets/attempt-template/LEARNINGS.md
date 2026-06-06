@@ -1,19 +1,25 @@
 # Learnings
 
-## Implementation notes
+## Learning: Short descriptive title
 
-- Note concrete implementation discoveries, framework gotchas, and testing
-  findings.
+### Summary
 
-## Suggested PsyNetSkills improvements
+Briefly describe the concrete implementation or testing discovery.
 
-- Note possible improvements to skills, docs, validation, dashboard rendering,
-  or challenge evidence expectations.
+### Suggested changes
 
-## Suggested PsyNet improvements
+#### PsyNetSkills quick fix
 
-- Note possible framework, documentation, or command-line improvements.
+- `[confidence: medium]` Describe the near-term repository, skill, docs,
+  validation, dashboard, or evidence workflow change.
 
-## Suggested challenge improvements
+#### PsyNet long-term fix
 
-- Note possible wording, scope, criteria, or reference material improvements.
+- `[confidence: medium]` Describe the longer-term PsyNet framework,
+  documentation, or command-line change. Use `None` if this learning does not
+  imply a PsyNet change.
+
+### Decision
+
+- Status: Proposed
+- Notes:

@@ -23,8 +23,9 @@ EVALUATION.md
 `agent.json` records the model, Cursor version, relevant skill commit, and
 attempt start time. `code/` contains the generated implementation. `evidence/`
 contains the materials used to evaluate whether the implementation worked.
-`LEARNINGS.md` records implementation findings and improvement ideas from the
-agent's perspective. `EVALUATION.md` is reserved for human evaluation.
+`LEARNINGS.md` records implementation findings and confidence-labelled
+improvement ideas from the agent's perspective. `EVALUATION.md` is reserved for
+human evaluation.
 
 ## Experiment challenge attempts
 
@@ -59,15 +60,38 @@ step.
 
 ## Learning notes
 
-Write `LEARNINGS.md` before closing an attempt. Keep it concise and grounded in
-what happened during implementation and testing. Useful topics include:
+Write `LEARNINGS.md` before closing an attempt. Use one section per learning:
 
-- PsyNet or Dallinger API gotchas that affected the implementation.
-- Missing or ambiguous challenge instructions.
-- Friction in evidence collection or local testing.
-- Candidate improvements to PsyNetSkills skills, docs, validation, or dashboard
-  rendering.
-- Candidate improvements to PsyNet itself.
+```markdown
+## Learning: Short descriptive title
+
+### Summary
+
+What happened during implementation or testing.
+
+### Suggested changes
+
+#### PsyNetSkills quick fix
+
+- `[confidence: high]` A near-term repo, skill, docs, validation, dashboard, or
+  evidence workflow change.
+
+#### PsyNet long-term fix
+
+- `[confidence: medium]` A longer-term PsyNet framework, documentation, or
+  command-line change. Use `None` if no PsyNet change is implied.
+
+### Decision
+
+- Status: Proposed
+- Notes:
+```
+
+Keep learning notes concise and grounded in what happened. Useful topics include
+PsyNet or Dallinger API gotchas, ambiguous instructions, evidence collection
+friction, local testing friction, and candidate refactors. Maintainers can later
+update `Decision` with statuses such as `Accepted`, `Implemented in
+PsyNetSkills`, `Implemented in PsyNet`, `Declined`, or `Superseded`.
 
 Do not use `LEARNINGS.md` for hidden evaluation criteria or scoring decisions.
 
