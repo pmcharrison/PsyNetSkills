@@ -216,6 +216,19 @@ def strip_frontmatter(markdown: str) -> str:
     return parts[2].lstrip("\n")
 
 
+def demote_markdown_headings(markdown: str, levels: int = 1) -> str:
+    """Increase Markdown heading depth without changing non-heading text."""
+    prefix = "#" * levels
+    lines: list[str] = []
+    for line in markdown.splitlines():
+        if line.startswith("#"):
+            heading_marks, separator, _ = line.partition(" ")
+            if separator and set(heading_marks) == {"#"}:
+                line = f"{prefix}{line}"
+        lines.append(line)
+    return "\n".join(lines).strip() + "\n" if lines else ""
+
+
 def collect_docs(root: Path) -> list[DocPage]:
     """Collect markdown docs for dashboard navigation."""
     docs_dir = root / "docs"
@@ -540,8 +553,10 @@ def collect_attempts(challenge_dir: Path) -> list[Attempt]:
                 timeline=timeline,
                 timeline_entries=parse_timeline_entries(timeline),
                 learnings=(
-                    strip_first_heading(
-                        learnings_file.read_text(encoding="utf-8")
+                    demote_markdown_headings(
+                        strip_first_heading(
+                            learnings_file.read_text(encoding="utf-8")
+                        )
                     )
                     if learnings_file.exists()
                     else ""

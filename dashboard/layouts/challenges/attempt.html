@@ -21,6 +21,15 @@
     {{ $performanceFile = index $performanceFiles 0 }}
   {{ end }}
   {{ $hasPerformance := gt (len $performanceFiles) 0 }}
+  {{ $performanceData := dict }}
+  {{ $performanceResults := slice }}
+  {{ if and $hasPerformance $performanceFile.content }}
+    {{ $performanceData = $performanceFile.content | transform.Unmarshal }}
+    {{ with $performanceData.results }}
+      {{ $performanceResults = . }}
+    {{ end }}
+  {{ end }}
+  {{ $hasPerformanceResults := gt (len $performanceResults) 0 }}
   {{ $monitorFiles := where $attempt.evidence_files "path" "monitor.html" }}
   {{ $monitorFile := dict }}
   {{ if gt (len $monitorFiles) 0 }}
@@ -136,8 +145,15 @@
     {{ with $attempt.learnings }}
       <section class="attempt-panel">
         <h2>Learnings</h2>
-        <div class="attempt-markdown">
-          {{ . | markdownify }}
+        <div class="attempt-markdown learning-markdown">
+          {{ $learningHtml := . | markdownify }}
+          {{ $learningHtml = replaceRE `Confidence:\s+(high|medium|low)\.` `<span class="learning-chip learning-chip-confidence learning-chip-confidence-$1"><span class="learning-chip-label">Confidence</span> $1</span>` $learningHtml }}
+          {{ $learningHtml = replaceRE `Status:\s+awaiting_review\.` `<span class="learning-chip learning-chip-status learning-chip-status-awaiting_review"><span class="learning-chip-label">Status</span> awaiting review</span>` $learningHtml }}
+          {{ $learningHtml = replaceRE `Status:\s+planned\.` `<span class="learning-chip learning-chip-status learning-chip-status-planned"><span class="learning-chip-label">Status</span> planned</span>` $learningHtml }}
+          {{ $learningHtml = replaceRE `Status:\s+implemented\.` `<span class="learning-chip learning-chip-status learning-chip-status-implemented"><span class="learning-chip-label">Status</span> implemented</span>` $learningHtml }}
+          {{ $learningHtml = replaceRE `Status:\s+declined\.` `<span class="learning-chip learning-chip-status learning-chip-status-declined"><span class="learning-chip-label">Status</span> declined</span>` $learningHtml }}
+          {{ $learningHtml = replaceRE `Status:\s+superseded\.` `<span class="learning-chip learning-chip-status learning-chip-status-superseded"><span class="learning-chip-label">Status</span> superseded</span>` $learningHtml }}
+          {{ $learningHtml | safeHTML }}
         </div>
       </section>
     {{ end }}
@@ -167,7 +183,7 @@
         </li>
         <li>
           {{ if $hasPerformance }}
-            <a href="{{ $performanceFile.url | relURL }}">View performance result</a>
+            <a href="{{ $performanceFile.url | relURL }}">View performance test result</a>
           {{ else }}
             <span class="missing-artifact">Performance result missing</span>
           {{ end }}
@@ -187,6 +203,73 @@
           {{ end }}
         </li>
       </ul>
+
+      {{ if $hasPerformance }}
+        <section class="performance-result">
+          <header class="performance-result-header">
+            <div>
+              <h3>Performance test result</h3>
+            </div>
+            <a href="{{ $performanceFile.url | relURL }}">Raw JSON</a>
+          </header>
+          {{ with $performanceData.options }}
+            <dl class="performance-options">
+              <div>
+                <dt>Target concurrent bots</dt>
+                <dd>{{ delimit .n_bots_sweep ", " }}</dd>
+              </div>
+              <div>
+                <dt>Duration</dt>
+                <dd>{{ printf "%.2f min" .duration_minutes }}</dd>
+              </div>
+              <div>
+                <dt>Start stagger</dt>
+                <dd>{{ printf "%.1fs" .stagger_interval_s }}</dd>
+              </div>
+              <div>
+                <dt>Time factor</dt>
+                <dd>{{ .time_factor }}</dd>
+              </div>
+            </dl>
+          {{ end }}
+          {{ if $hasPerformanceResults }}
+            <div class="performance-table-wrap">
+              <table class="performance-table">
+                <thead>
+                  <tr>
+                    <th>Concurrent target</th>
+                    <th>Bots started</th>
+                    <th>Succeeded</th>
+                    <th>Requests</th>
+                    <th>Req/s</th>
+                    <th>Resp P95 (s)</th>
+                    <th>Q P95 all (s)</th>
+                    <th>Errors</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {{ range $performanceResults }}
+                    <tr>
+                      <td>{{ .n_bots }}</td>
+                      <td>{{ .total_bots_started }}</td>
+                      <td>{{ .bots_succeeded }}</td>
+                      <td>{{ .total_requests }}</td>
+                      <td>{{ with .requests_per_sec }}{{ printf "%.1f" . }}{{ else }}N/A{{ end }}</td>
+                      <td>{{ with .p95_response_time }}{{ printf "%.3f" . }}{{ else }}N/A{{ end }}</td>
+                      <td>{{ with .q_delay_p95 }}{{ printf "%.3f" . }}{{ else }}N/A{{ end }}</td>
+                      <td>{{ add (or .request_errors 0) (or .bot_errors 0) }}</td>
+                    </tr>
+                  {{ end }}
+                </tbody>
+              </table>
+            </div>
+          {{ else }}
+            <p class="artifact-note">
+              This performance artifact does not contain tabular result rows.
+            </p>
+          {{ end }}
+        </section>
+      {{ end }}
     </section>
 
     <section class="attempt-panel">

@@ -29,8 +29,10 @@ The resulting preview URL is
 https://<owner>.github.io/<repository>/pr-preview/pr-<number>/.
 
 The preview workflow updates one pull request comment with the current preview
-URL whenever the PR branch changes. When the PR closes, the workflow removes the
-preview directory from `gh-pages`.
+URL whenever the PR branch changes. When the PR is merged, the workflow replaces
+the preview with static redirects to the production dashboard. When the PR is
+closed without merging, the workflow removes the preview directory from
+`gh-pages`.
 
 ## Design principles
 

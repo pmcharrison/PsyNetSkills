@@ -116,18 +116,20 @@ future skill change might prevent the same failure.
 ## Learning notes
 
 Write `LEARNINGS.md` after implementation and, when possible, after the human
-evaluation conversation. Use compact cards, one section per learning:
+evaluation conversation. Use compact cards, one second-level section per
+learning. The dashboard embeds these cards below its own Learnings heading, so it
+renders the card titles one level lower:
 
 ```markdown
 ## Short descriptive title
 
 What happened during implementation or testing.
 
-Actions:
+*Actions:*
 
-- psynetskills: A repo, skill, docs, validation, dashboard, or evidence workflow
+- **PsyNetSkills:** A repo, skill, docs, validation, dashboard, or evidence workflow
   change. Confidence: high. Status: awaiting_review.
-- psynet: A PsyNet framework, documentation, or command-line change. Confidence:
+- **PsyNet:** A PsyNet framework, documentation, or command-line change. Confidence:
   medium. Status: awaiting_review.
 ```
 

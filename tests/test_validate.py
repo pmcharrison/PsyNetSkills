@@ -74,9 +74,9 @@ def test_validate_learnings_accepts_expected_format(tmp_path: Path) -> None:
         "# Learnings\n\n"
         "## Useful finding\n\n"
         "This explains what happened.\n\n"
-        "Actions:\n\n"
-        "- psynetskills: Document the workflow. Confidence: high. Status: awaiting_review.\n"
-        "- psynet: Improve the error message. Confidence: medium. Status: awaiting_review.\n",
+        "*Actions:*\n\n"
+        "- **PsyNetSkills:** Document the workflow. Confidence: high. Status: awaiting_review.\n"
+        "- **PsyNet:** Improve the error message. Confidence: medium. Status: awaiting_review.\n",
     )
 
     assert validate_learnings_file(learnings_file) == []
@@ -88,7 +88,7 @@ def test_validate_learnings_rejects_missing_actions(tmp_path: Path) -> None:
 
     problems = validate_learnings_file(learnings_file)
 
-    assert any("missing Actions:" in problem for problem in problems)
+    assert any("missing *Actions:*" in problem for problem in problems)
 
 
 def test_validate_learnings_rejects_invalid_action(tmp_path: Path) -> None:
@@ -97,7 +97,7 @@ def test_validate_learnings_rejects_invalid_action(tmp_path: Path) -> None:
         learnings_file,
         "# Learnings\n\n"
         "## Useful finding\n\n"
-        "Actions:\n\n"
+        "*Actions:*\n\n"
         "- psynetsk: Document it. Confidence: certain. Status: maybe.\n",
     )
 
@@ -164,8 +164,8 @@ def test_validate_repository_requires_timeline_for_real_attempt(
         attempt_dir / "LEARNINGS.md",
         "# Learnings\n\n"
         "## Useful finding\n\n"
-        "Actions:\n\n"
-        "- psynetskills: Document it. Confidence: high. Status: awaiting_review.\n",
+        "*Actions:*\n\n"
+        "- **PsyNetSkills:** Document it. Confidence: high. Status: awaiting_review.\n",
     )
 
     problems = validate_repository(tmp_path)
