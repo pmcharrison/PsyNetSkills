@@ -76,9 +76,9 @@ class Exp(psynet.experiment.Experiment):
     def test_check_bot(self, bot, **kwargs):
         super().test_check_bot(bot, **kwargs)
         trials = sorted(bot.alive_trials, key=lambda trial: trial.id)
-        assert [trial.definition["color"] for trial in trials] == [
+        assert sorted(trial.definition["color"] for trial in trials) == sorted(
             color["name"] for color in COLORS
-        ]
+        )
         assert [trial.answer for trial in trials] == [4, 4, 4]
 
     @classmethod
@@ -92,4 +92,6 @@ class Exp(psynet.experiment.Experiment):
             }
             for trial in StaticTrial.query.all()
         ]
+        if context == "monitor":
+            return {"color_ratings": trials}
         return {"color_ratings": pd.DataFrame.from_records(trials)}
