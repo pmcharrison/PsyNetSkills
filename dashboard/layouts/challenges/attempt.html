@@ -195,7 +195,7 @@
           {{ with $performanceData.options }}
             <dl class="performance-options">
               <div>
-                <dt>Bot counts</dt>
+                <dt>Target concurrent bots</dt>
                 <dd>{{ delimit .n_bots_sweep ", " }}</dd>
               </div>
               <div>
@@ -217,7 +217,8 @@
               <table class="performance-table">
                 <thead>
                   <tr>
-                    <th>Bots</th>
+                    <th>Target concurrent bots</th>
+                    <th>Bots started</th>
                     <th>Succeeded</th>
                     <th>Requests</th>
                     <th>Req/s</th>
@@ -230,6 +231,7 @@
                   {{ range $performanceResults }}
                     <tr>
                       <td>{{ .n_bots }}</td>
+                      <td>{{ .total_bots_started }}</td>
                       <td>{{ .bots_succeeded }}</td>
                       <td>{{ .total_requests }}</td>
                       <td>{{ with .requests_per_sec }}{{ printf "%.1f" . }}{{ else }}N/A{{ end }}</td>
