@@ -70,12 +70,16 @@ challenge/
 agent.json
 code/
 evidence/
+LEARNINGS.md
 EVALUATION.md
 ```
 
 The `challenge/` folder is a snapshot of the original challenge excluding
 previous attempts. The `EVALUATION.md` file should be human-written and include
 YAML frontmatter with a `score` field when the evaluation is complete.
+`LEARNINGS.md` should be written by the agent and summarize concrete
+implementation findings plus possible improvements to PsyNetSkills, PsyNet, or
+the original challenge.
 
 ## Large files
 

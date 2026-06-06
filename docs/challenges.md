@@ -36,3 +36,10 @@ describe the participant experience, the stimuli or inputs, the responses to
 collect, and any scientific checks that matter for success.
 
 Attempts and evaluations are documented separately in the Attempts section.
+
+## Attempt learning notes
+
+Each new attempt should include `LEARNINGS.md` alongside `agent.json`,
+`code/`, `evidence/`, and `EVALUATION.md`. Agents use this file to record
+implementation findings and suggestions for improving PsyNetSkills, PsyNet, or
+the original challenge instructions.

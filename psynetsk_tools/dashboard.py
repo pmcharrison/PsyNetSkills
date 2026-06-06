@@ -95,6 +95,7 @@ class Attempt:
     model: str
     agent_json: str
     evaluation: str
+    learnings: str
     evaluation_metadata: dict[str, str]
     challenge_files: list[AttemptFile]
     code_files: list[AttemptFile]
@@ -376,6 +377,7 @@ def collect_attempts(challenge_dir: Path) -> list[Attempt]:
         path for path in attempts_dir.iterdir() if path.is_dir()
     ):
         evaluation_file = attempt_dir / "EVALUATION.md"
+        learnings_file = attempt_dir / "LEARNINGS.md"
         score = (
             parse_evaluation_score(evaluation_file)
             if evaluation_file.exists()
@@ -413,6 +415,13 @@ def collect_attempts(challenge_dir: Path) -> list[Attempt]:
                         )
                     )
                     if evaluation_file.exists()
+                    else ""
+                ),
+                learnings=(
+                    strip_first_heading(
+                        learnings_file.read_text(encoding="utf-8")
+                    )
+                    if learnings_file.exists()
                     else ""
                 ),
                 evaluation_metadata=evaluation_metadata,

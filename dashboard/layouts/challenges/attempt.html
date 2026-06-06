@@ -3,7 +3,12 @@
   {{ $attemptName := .Params.attempt }}
   {{ $challenge := index (where site.Data.psynetsk.challenges "slug" $challengeSlug) 0 }}
   {{ $attempt := index (where $challenge.attempts "name" $attemptName) 0 }}
-  {{ $hasExperiment := gt (len (where $attempt.code_files "path" "experiment.py")) 0 }}
+  {{ $hasExperiment := false }}
+  {{ range $attempt.code_files }}
+    {{ if or (eq .path "experiment.py") (strings.HasSuffix .path "/experiment.py") }}
+      {{ $hasExperiment = true }}
+    {{ end }}
+  {{ end }}
   {{ $participantVideos := where $attempt.evidence_files "path" "participant.mp4" }}
   {{ $hasParticipantVideo := gt (len $participantVideos) 0 }}
   {{ $participantVideo := dict }}
@@ -87,7 +92,16 @@
       {{ else }}
         <p>No evaluation file was found for this attempt.</p>
       {{ end }}
-    </details>
+    </section>
+
+    {{ with $attempt.learnings }}
+      <section class="attempt-panel">
+        <h2>Learnings</h2>
+        <div class="attempt-markdown">
+          {{ . | markdownify }}
+        </div>
+      </section>
+    {{ end }}
 
     <section class="attempt-panel">
       <h2>Review evidence</h2>

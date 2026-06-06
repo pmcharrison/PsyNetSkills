@@ -22,7 +22,9 @@ PsyNetSkills repository.
 6. Implement the challenge in `code/`.
 7. Collect evidence in `evidence/`. Use the `record-participant-video` skill
    when creating `evidence/participant.mp4`.
-8. Leave `EVALUATION.md` as a template for human evaluators unless explicitly
+8. Write `LEARNINGS.md` with concise implementation notes and suggested
+   improvements to PsyNetSkills, PsyNet, or the original challenge.
+9. Leave `EVALUATION.md` as a template for human evaluators unless explicitly
    asked to evaluate.
 
 ## Evidence expectations
@@ -51,6 +53,14 @@ happened, and why any required evidence is missing or blocked in
 
 Use the files in `assets/attempt-template/` as the starting point for attempt
 metadata and evaluation notes.
+
+## Learning notes
+
+`LEARNINGS.md` should capture information that would help future maintainers and
+agents. Include only concrete observations from the attempt, such as framework
+gotchas, missing instructions, evidence collection friction, useful refactors,
+or challenge wording improvements. Do not repeat the evaluation score or hidden
+criteria.
 
 ## Notes
 
