@@ -10,6 +10,7 @@ from dataclasses import asdict, dataclass
 from pathlib import Path
 
 from psynetsk_tools.validate import (
+    SKILLS_ROOT,
     parse_difficulty,
     parse_evaluation_score,
     read_markdown_frontmatter,
@@ -247,7 +248,8 @@ def docs_navigation(docs: list[DocPage]) -> dict[str, DocNavigation]:
 def collect_skills(root: Path) -> list[Skill]:
     """Collect skill summaries."""
     skills: list[Skill] = []
-    for skill_dir in sorted((root / "skills").iterdir()):
+    skills_root = root / SKILLS_ROOT
+    for skill_dir in sorted(skills_root.iterdir()):
         if not skill_dir.is_dir():
             continue
         skill_file = skill_dir / "SKILL.md"
@@ -259,7 +261,7 @@ def collect_skills(root: Path) -> list[Skill]:
                 name=name,
                 title=title_from_markdown(body, name),
                 description=frontmatter.get("description", ""),
-                path=f"skills/{skill_dir.name}/SKILL.md",
+                path=(SKILLS_ROOT / skill_dir.name / "SKILL.md").as_posix(),
                 url=f"skills/{name}/",
             )
         )

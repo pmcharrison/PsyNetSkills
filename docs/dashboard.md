@@ -3,7 +3,7 @@
 The dashboard is a Hugo static site generated from repository files. It renders:
 
 - Markdown pages from `docs/`.
-- Skill summaries from `skills/*/SKILL.md`.
+- Skill summaries from `.agents/skills/*/SKILL.md`.
 - Challenge summaries from `challenges/*`.
 - Attempt histories and latest scores when evaluations exist.
 

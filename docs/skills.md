@@ -1,6 +1,6 @@
 # Skills
 
-Skills live in `skills/`. Each skill is a folder containing a `SKILL.md` file
+Skills live in `.agents/skills/`. Each skill is a folder containing a `SKILL.md` file
 with Agent Skills-compatible YAML frontmatter.
 
 ## Required frontmatter
