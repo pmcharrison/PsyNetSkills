@@ -11,7 +11,7 @@ def write(path: Path, text: str = "") -> None:
 def minimal_repo(root: Path) -> None:
     write(root / "docs/index.md", "# Docs\n")
     write(
-        root / ".agents/skills/example-skill/SKILL.md",
+        root / ".cursor/skills/example-skill/SKILL.md",
         "---\n"
         "name: example-skill\n"
         "description: Use when testing repository validation.\n"
@@ -41,7 +41,7 @@ def test_validate_repository_rejects_skill_name_mismatch(
 ) -> None:
     minimal_repo(tmp_path)
     write(
-        tmp_path / ".agents/skills/example-skill/SKILL.md",
+        tmp_path / ".cursor/skills/example-skill/SKILL.md",
         "---\n"
         "name: other-skill\n"
         "description: Use when testing repository validation.\n"

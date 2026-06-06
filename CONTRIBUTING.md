@@ -21,7 +21,7 @@ instructions.
 
 ## Adding a skill
 
-Create a folder under `.agents/skills/` with a `SKILL.md` file. The folder name and
+Create a folder under `.cursor/skills/` with a `SKILL.md` file. The folder name and
 frontmatter `name` must match and use lowercase letters, numbers, and hyphens.
 
 Each `SKILL.md` must include YAML frontmatter:

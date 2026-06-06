@@ -6,6 +6,14 @@
 
 PsyNetSkills is a workshop repository (not a multi-service app). Local development centers on Python tooling (`psynetsk_tools/`) and a Hugo static dashboard (`dashboard/`). See `README.md` and `CONTRIBUTING.md` for the canonical workflow.
 
+### Skill registration
+
+Repository skills live in `.cursor/skills/`. Before starting challenge or
+PsyNet experiment work, verify that the runtime has registered these skills and
+that they were attached to your session. If they are not registered, symlink or
+copy `.cursor/skills/` into the skills directory required by your agent runtime
+before proceeding. Do not maintain a second editable copy of the skills.
+
 ### System dependencies (not managed by `uv sync`)
 
 - **uv** — Python env and package management (`~/.local/bin` should be on `PATH`).
