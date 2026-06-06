@@ -3,6 +3,8 @@
   --border: #d0d7de;
   --code-background: #f6f8fa;
   --code-inline-background: rgba(175, 184, 193, 0.2);
+  --danger-background: #ffebe9;
+  --danger-border: #ff8182;
   --foreground: #1f2328;
   --link: #0969da;
   --muted: #57606a;
@@ -113,6 +115,31 @@ td {
   padding: 0.5rem;
   text-align: left;
   vertical-align: top;
+}
+
+.open-actions-count {
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  display: inline-block;
+  font-weight: 700;
+  min-width: 1.5rem;
+  padding: 0.1rem 0.45rem;
+  text-align: center;
+}
+
+.open-actions-success {
+  background: var(--success-background);
+  border-color: var(--success-border);
+}
+
+.open-actions-warning {
+  background: var(--warning-background);
+  border-color: var(--warning-border);
+}
+
+.open-actions-danger {
+  background: var(--danger-background);
+  border-color: var(--danger-border);
 }
 
 .clickable-row {
@@ -317,13 +344,15 @@ td {
 }
 
 .learning-chip-confidence-high,
+.learning-chip-status-completed,
 .learning-chip-status-implemented {
   background: var(--success-background);
   border-color: var(--success-border);
 }
 
 .learning-chip-confidence-medium,
-.learning-chip-status-awaiting_review,
+.learning-chip-status-considering,
+.learning-chip-status-in-progress,
 .learning-chip-status-planned {
   background: var(--warning-background);
   border-color: var(--warning-border);
@@ -331,6 +360,7 @@ td {
 
 .learning-chip-confidence-low,
 .learning-chip-status-declined,
+.learning-chip-status-dismissed,
 .learning-chip-status-superseded {
   background: var(--code-background);
 }
