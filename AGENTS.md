@@ -4,7 +4,34 @@
 
 ### What this repo is
 
-PsyNetSkills is a workshop repository (not a multi-service app). Local development centers on Python tooling (`psynetsk_tools/`) and a Hugo static dashboard (`dashboard/`). See `README.md` and `CONTRIBUTING.md` for the canonical workflow.
+PsyNetSkills is a workshop repository (not a multi-service app). Local development centers on Python tooling (`psynetsk_tools/`), a Hugo static dashboard (`dashboard/`), and a **local PsyNet checkout** at `~/PsyNet` for experiment APIs, demos, and challenge work. See `README.md` and `CONTRIBUTING.md` for the canonical workflow.
+
+### Required development environment
+
+A complete Cursor Cloud (or local) setup for this repository includes **both** the PsyNetSkills repo **and** the PsyNet stack below. Challenge skills and experiment implementation assume PsyNet is installed and verified — not only the Hugo dashboard and `psynetsk_tools` CLI.
+
+| Component | Location / command | Purpose |
+|-----------|-------------------|---------|
+| PsyNetSkills Python env | `uv sync --group dev` (repo root) | Validation, tests, dashboard export |
+| Hugo extended | `hugo --source dashboard ...` | Static dashboard build/preview |
+| **PsyNet checkout** | `~/PsyNet` | Experiment APIs, demos, `psynet test local` |
+| PostgreSQL + `dallinger` DB | `psql -h localhost -U dallinger -d dallinger` | PsyNet local runtime |
+| Redis | `redis-cli ping` → `PONG` | PsyNet local runtime |
+| Heroku CLI | `heroku --version` | `psynet debug local` / `psynet test local` |
+
+**Verify the full environment** (run after initial setup and when debugging PsyNet issues):
+
+```bash
+# PsyNetSkills (repo root)
+uv run psynetsk-validate && uv run pytest
+
+# PsyNet (separate venv at ~/PsyNet/.venv)
+sudo service postgresql start && sudo service redis-server start
+cd ~/PsyNet && source .venv/bin/activate
+cd demos/experiments/hello_world && psynet test local
+```
+
+`psynet test local` on the `hello_world` demo must pass before attempting challenges or implementing experiments.
 
 ### Skill registration
 
@@ -38,9 +65,9 @@ There is no separate linter; `psynetsk-validate` is the structural check used in
 
 `uv sync --group dev` creates `.venv/`. Activate with `source .venv/bin/activate` when running tools outside `uv run`.
 
-### External PsyNet checkout (`~/PsyNet`)
+### PsyNet checkout (`~/PsyNet`) — required
 
-Challenge experiment E2E testing uses a separate PsyNet clone at `~/PsyNet` (not part of this repo).
+Clone and install PsyNet on every new machine. It is **not** vendored in this repo but is a **necessary** part of the development environment for skills, challenges, and experiment work.
 
 **Clone** (if missing):
 
