@@ -45,7 +45,8 @@ PsyNetSkills repository.
 
    Set `dirty` from `git status --short`; it should normally be `false`.
 7. Start `TIMELINE.md` and append relative-timestamped entries as the attempt
-   progresses.
+   progresses. Close every active implementation segment with `[agent-stop]` so
+   the dashboard can derive implementation time while excluding manual gaps.
 8. Implement the challenge in `code/`.
 9. Collect evidence in `evidence/`. Use the `record-participant-video` skill
    when creating `evidence/participant.mp4`.
@@ -116,6 +117,10 @@ milestones, `[manual]` for user interventions or corrective guidance, and
 experiment implementation and first-pass evidence collection are complete. Do
 not include later repository-process discussions unless they directly change the
 experiment implementation.
+
+The dashboard derives implementation time from completed `[agent-start]` to
+`[agent-stop]` intervals. If the final active segment is left open, the
+implementation time is reported as `Not recorded`.
 
 ## Learning notes
 
