@@ -256,10 +256,16 @@ td {
 }
 
 .timeline-entry {
+  border-radius: 0.35rem;
   display: grid;
   gap: 0.25rem 0.75rem;
   grid-template-columns: minmax(5.5rem, auto) minmax(6rem, auto) 1fr;
   margin: 0;
+  padding: 0.45rem 0.6rem;
+}
+
+.timeline-entry:nth-child(odd) {
+  background: rgba(140, 200, 255, 0.16);
 }
 
 .timeline-time,
@@ -274,16 +280,8 @@ td {
 }
 
 .timeline-actor {
-  align-items: center;
-  background: var(--code-inline-background);
-  border-radius: 999px;
   color: var(--muted);
-  display: inline-flex;
-  justify-content: center;
-  line-height: 1;
-  min-height: 1.6rem;
-  padding: 0 0.55rem;
-  text-align: center;
+  font-weight: 700;
   white-space: nowrap;
 }
 
@@ -296,18 +294,15 @@ td {
 }
 
 .timeline-entry-manual .timeline-actor {
-  background: var(--warning-background);
-  color: var(--foreground);
+  color: #9a6700;
 }
 
 .timeline-entry-agent-start .timeline-actor {
-  background: var(--success-background);
-  color: var(--foreground);
+  color: #1a7f37;
 }
 
 .timeline-entry-agent-stop .timeline-actor {
-  background: #ffebe9;
-  color: var(--foreground);
+  color: #cf222e;
 }
 
 .attempt-markdown > :first-child,
