@@ -274,10 +274,15 @@ td {
 }
 
 .timeline-actor {
+  align-items: center;
   background: var(--code-inline-background);
   border-radius: 999px;
   color: var(--muted);
-  padding: 0.05rem 0.45rem;
+  display: inline-flex;
+  justify-content: center;
+  line-height: 1;
+  min-height: 1.6rem;
+  padding: 0 0.55rem;
   text-align: center;
   white-space: nowrap;
 }
