@@ -13,10 +13,6 @@ specification.
 It is essential that you have access to the local PsyNet source code and demos.
 Ensure you have a source code repository available at `~/PsyNet`
 (if necessary, clone it from `https://gitlab.com/PsyNetDev/PsyNet`).
-Before implementing against the checkout, refresh it with
-`cd ~/PsyNet && git checkout master && git pull --ff-only origin master`. If the
-checkout cannot be updated cleanly, record the blocker instead of assuming the
-local revision is current.
 
 Useful starting points:
 
