@@ -1,22 +1,18 @@
 ---
 score:
+example: true
 ---
 
 # Example evaluation
-
-example: true
 
 This is an intentionally sparse example attempt. It demonstrates the
 required top-level attempt structure without pretending that a real PsyNet
 experiment was run.
 
-## Checklist
+## Result
 
-- [x] `challenge/` snapshot is present.
-- [x] `agent.json` metadata is present.
-- [x] `code/` directory is present.
-- [x] `evidence/` directory is present.
-- [x] `EVALUATION.md` uses score frontmatter.
+No score is assigned. The missing standard experiment artifacts are expected
+for this minimal example and should not be interpreted as attempt failures.
 
 ## Missing standard experiment evidence
 

@@ -8,24 +8,34 @@
     <link rel="stylesheet" href="{{ "css/site.css" | relURL }}">
   </head>
   <body>
+    {{ $isDashboardSection := in (slice "skills" "challenges") .Section }}
+    {{ $firstSkill := index (sort site.Data.psynetsk.skills "title") 0 }}
     <header class="site-header">
       <span class="site-title">{{ site.Title }}</span>
-      <nav aria-label="Main navigation">
+      <nav class="primary-nav" aria-label="Main navigation">
         <a
           {{ if eq .Section "docs" }}aria-current="page" class="current"{{ end }}
           href="{{ "docs/" | relURL }}"
         >Docs</a>
-        {{ with index (sort site.Data.psynetsk.skills "title") 0 }}
-          <a
-            {{ if eq $.Section "skills" }}aria-current="page" class="current"{{ end }}
-            href="{{ .url | relURL }}"
-          >Skills</a>
-        {{ end }}
         <a
-          {{ if eq .Section "challenges" }}aria-current="page" class="current"{{ end }}
-          href="{{ "challenges/" | relURL }}"
-        >Challenges</a>
+          {{ if $isDashboardSection }}aria-current="page" class="current"{{ end }}
+          href="{{ $firstSkill.url | relURL }}"
+        >Dashboard</a>
       </nav>
+      {{ if $isDashboardSection }}
+        <nav class="dashboard-nav" aria-label="Dashboard navigation">
+          {{ with $firstSkill }}
+            <a
+              {{ if eq $.Section "skills" }}aria-current="page" class="current"{{ end }}
+              href="{{ .url | relURL }}"
+            >Skills</a>
+          {{ end }}
+          <a
+            {{ if eq .Section "challenges" }}aria-current="page" class="current"{{ end }}
+            href="{{ "challenges/" | relURL }}"
+          >Challenges</a>
+        </nav>
+      {{ end }}
     </header>
     <main>
       {{ block "main" . }}{{ end }}

@@ -94,6 +94,7 @@ class Attempt:
     model: str
     agent_json: str
     evaluation: str
+    evaluation_metadata: dict[str, str]
     challenge_files: list[AttemptFile]
     code_files: list[AttemptFile]
     evidence_files: list[AttemptFile]
@@ -175,7 +176,10 @@ def collect_docs(root: Path) -> list[DocPage]:
     """Collect markdown docs for dashboard navigation."""
     docs_dir = root / "docs"
     pages: list[DocPage] = []
-    for index, path in enumerate(sorted(docs_dir.glob("*.md"), key=doc_sort_key), start=1):
+    for index, path in enumerate(
+        sorted(docs_dir.glob("*.md"), key=doc_sort_key),
+        start=1,
+    ):
         markdown = path.read_text(encoding="utf-8")
         pages.append(
             DocPage(
@@ -326,7 +330,10 @@ def read_attempt_file(
             content = None
 
     if truncated and content is not None:
-        content = content.rstrip() + "\n\n[File truncated for dashboard display.]\n"
+        content = (
+            content.rstrip()
+            + "\n\n[File truncated for dashboard display.]\n"
+        )
     return AttemptFile(
         path=relative_path,
         url=f"{url_prefix}/{relative_path}",
@@ -347,7 +354,9 @@ def collect_attempt_files(
         return []
 
     files: list[AttemptFile] = []
-    for path in sorted(path for path in directory.rglob("*") if path.is_file()):
+    for path in sorted(
+        path for path in directory.rglob("*") if path.is_file()
+    ):
         if len(files) >= max_files:
             break
         files.append(read_attempt_file(path, directory, url_prefix))
@@ -361,29 +370,50 @@ def collect_attempts(challenge_dir: Path) -> list[Attempt]:
         return []
 
     attempts: list[Attempt] = []
-    for attempt_dir in sorted(path for path in attempts_dir.iterdir() if path.is_dir()):
+    for attempt_dir in sorted(
+        path for path in attempts_dir.iterdir() if path.is_dir()
+    ):
         evaluation_file = attempt_dir / "EVALUATION.md"
-        score = parse_evaluation_score(evaluation_file) if evaluation_file.exists() else None
+        score = (
+            parse_evaluation_score(evaluation_file)
+            if evaluation_file.exists()
+            else None
+        )
+        evaluation_metadata, _ = (
+            read_markdown_frontmatter(evaluation_file)
+            if evaluation_file.exists()
+            else ({}, [])
+        )
+        evaluation_metadata = {
+            key: value for key, value in evaluation_metadata.items() if key != "score"
+        }
         agent, agent_json = read_agent_json(attempt_dir / "agent.json")
         artifact_prefix = (
-            f"{ATTEMPT_ARTIFACTS_DIR}/{challenge_dir.name}/attempts/{attempt_dir.name}"
+            f"{ATTEMPT_ARTIFACTS_DIR}/{challenge_dir.name}/attempts/"
+            f"{attempt_dir.name}"
         )
         attempts.append(
             Attempt(
                 name=attempt_dir.name,
                 score=score,
-                path=f"challenges/{challenge_dir.name}/attempts/{attempt_dir.name}",
+                path=(
+                    f"challenges/{challenge_dir.name}/attempts/"
+                    f"{attempt_dir.name}"
+                ),
                 url=f"challenges/{challenge_dir.name}/{attempt_dir.name}/",
                 date_time=attempt_date_time(attempt_dir.name, agent),
                 model=str(agent.get("model") or "Unknown model"),
                 agent_json=agent_json,
                 evaluation=(
                     strip_first_heading(
-                        strip_frontmatter(evaluation_file.read_text(encoding="utf-8"))
+                        strip_frontmatter(
+                            evaluation_file.read_text(encoding="utf-8")
+                        )
                     )
                     if evaluation_file.exists()
                     else ""
                 ),
+                evaluation_metadata=evaluation_metadata,
                 challenge_files=collect_attempt_files(
                     attempt_dir / "challenge",
                     f"{artifact_prefix}/challenge",
@@ -415,7 +445,10 @@ def collect_challenges(root: Path) -> list[Challenge]:
         challenges.append(
             Challenge(
                 slug=slug,
-                title=frontmatter.get("title", title_from_markdown(instructions, slug)),
+                title=frontmatter.get(
+                    "title",
+                    title_from_markdown(instructions, slug),
+                ),
                 type=frontmatter.get("type", ""),
                 difficulty=parse_difficulty(instructions_file),
                 instructions=instructions,
@@ -427,7 +460,11 @@ def collect_challenges(root: Path) -> list[Challenge]:
     return challenges
 
 
-def write_docs_content(root: Path, dashboard_dir: Path, docs: list[DocPage]) -> None:
+def write_docs_content(
+    root: Path,
+    dashboard_dir: Path,
+    docs: list[DocPage],
+) -> None:
     """Write generated Hugo content pages for docs."""
     source_docs_dir = root / "docs"
     docs_dir = dashboard_dir / "content" / "docs"
@@ -503,12 +540,18 @@ def write_skill_content(
         )
 
 
-def write_challenge_content(dashboard_dir: Path, challenges: list[Challenge]) -> None:
+def write_challenge_content(
+    dashboard_dir: Path,
+    challenges: list[Challenge],
+) -> None:
     """Write generated Hugo content pages for challenges."""
     challenges_dir = dashboard_dir / "content" / "challenges"
     shutil.rmtree(challenges_dir, ignore_errors=True)
     challenges_dir.mkdir(parents=True, exist_ok=True)
-    (challenges_dir / "_index.md").write_text("---\ntitle: Challenges\n---\n", encoding="utf-8")
+    (challenges_dir / "_index.md").write_text(
+        "---\ntitle: Challenges\n---\n",
+        encoding="utf-8",
+    )
 
     for challenge in challenges:
         challenge_content_dir = challenges_dir / challenge.slug
@@ -545,7 +588,9 @@ def write_attempt_artifacts(root: Path, dashboard_dir: Path) -> None:
     if not challenges_dir.exists():
         return
 
-    for challenge_dir in sorted(path for path in challenges_dir.iterdir() if path.is_dir()):
+    for challenge_dir in sorted(
+        path for path in challenges_dir.iterdir() if path.is_dir()
+    ):
         attempts_dir = challenge_dir / "attempts"
         if not attempts_dir.exists():
             continue
@@ -590,7 +635,9 @@ def export_dashboard(root: Path, dashboard_dir: Path) -> None:
                 instructions=challenge["instructions"],
                 path=challenge["path"],
                 url=challenge["url"],
-                attempts=[Attempt(**attempt) for attempt in challenge["attempts"]],
+                attempts=[
+                    Attempt(**attempt) for attempt in challenge["attempts"]
+                ],
             )
             for challenge in data["challenges"]  # type: ignore[union-attr]
         ],
@@ -601,7 +648,12 @@ def export_dashboard(root: Path, dashboard_dir: Path) -> None:
 def build_parser() -> argparse.ArgumentParser:
     """Build the command-line parser."""
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--root", type=Path, default=Path.cwd(), help="Repository root.")
+    parser.add_argument(
+        "--root",
+        type=Path,
+        default=Path.cwd(),
+        help="Repository root.",
+    )
     parser.add_argument(
         "--dashboard-dir",
         type=Path,

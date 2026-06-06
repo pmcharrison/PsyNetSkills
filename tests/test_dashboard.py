@@ -34,7 +34,14 @@ def challenge_instructions(difficulty: int = 4) -> str:
 
 
 def evaluation(score: int = 6) -> str:
-    return f"---\nscore: {score}\n---\n\n# Evaluation\n\nAttempt body.\n"
+    return (
+        "---\n"
+        f"score: {score}\n"
+        "example: true\n"
+        "---\n\n"
+        "# Evaluation\n\n"
+        "Attempt body.\n"
+    )
 
 
 def test_collect_docs_uses_h1_title(tmp_path: Path) -> None:
@@ -95,6 +102,7 @@ def test_collect_challenges_reports_attempt_metadata(tmp_path: Path) -> None:
     assert attempt.model == "test-model"
     assert attempt.url == "challenges/example/2026-06-01-10-10/"
     assert attempt.evaluation == "Attempt body.\n"
+    assert attempt.evaluation_metadata == {"example": "true"}
     assert attempt.code_files[0].path == "README.md"
     assert attempt.code_files[0].content == "# Code notes\n"
     assert attempt.code_files[0].kind == "md"
@@ -252,7 +260,10 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
     )
     write_bytes(
         tmp_path
-        / "challenges/example/attempts/2026-06-01-10-10/evidence/participant.mp4",
+        / (
+            "challenges/example/attempts/2026-06-01-10-10/"
+            "evidence/participant.mp4"
+        ),
         b"example video bytes",
     )
 
@@ -282,7 +293,9 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
     )
     parsed_data = json.loads(data)
     assert '"title": "Example skill"' in data
-    challenge_page = tmp_path / "dashboard/content/challenges/example/_index.md"
+    challenge_page = (
+        tmp_path / "dashboard/content/challenges/example/_index.md"
+    )
     assert challenge_page.exists()
     assert 'layout: "single"' in challenge_page.read_text(encoding="utf-8")
     attempt_page = (
@@ -290,7 +303,8 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
         / "dashboard/content/challenges/example/2026-06-01-10-10/index.md"
     )
     assert attempt_page.exists()
-    assert 'layout: "attempt"' in attempt_page.read_text(encoding="utf-8")
+    attempt_page_text = attempt_page.read_text(encoding="utf-8")
+    assert 'layout: "attempt"' in attempt_page_text
     assert (
         tmp_path
         / "dashboard/static/artifacts/challenges/example/attempts/"
@@ -300,6 +314,7 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
     assert '"url": "challenges/example/2026-06-01-10-10/"' in data
     exported_attempt = parsed_data["challenges"][0]["attempts"][0]
     assert exported_attempt["evaluation"] == "Attempt body.\n"
+    assert exported_attempt["evaluation_metadata"] == {"example": "true"}
     assert exported_attempt["code_files"][0]["size_bytes"] == len(
         "# Code notes\n",
     )
