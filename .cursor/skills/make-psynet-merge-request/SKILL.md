@@ -66,9 +66,10 @@ before it is ready.
 
 ## Poll CI
 
-After creating the MR, poll GitLab until the latest branch pipeline reaches a
-terminal status. This is useful because a merge request is only actionable once
-CI has reported success or a concrete failure.
+After creating the MR, tell the user before starting any CI poll that PsyNet CI
+typically takes at least 15 minutes. Then poll GitLab until the latest branch
+pipeline reaches a terminal status. This is useful because a merge request is
+only actionable once CI has reported success or a concrete failure.
 
 ```bash
 python - <<'PY'
