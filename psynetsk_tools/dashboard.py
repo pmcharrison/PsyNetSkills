@@ -496,7 +496,12 @@ def write_skill_content(
     shutil.rmtree(skills_dir, ignore_errors=True)
     skills_dir.mkdir(parents=True, exist_ok=True)
     (skills_dir / "_index.md").write_text(
-        write_frontmatter("Skills", ""),
+        write_frontmatter(
+            "Skills",
+            "Skills are reusable Agent Skills that guide agents through PsyNet "
+            "experiment implementation, challenge attempts, and evidence "
+            "collection.\n",
+        ),
         encoding="utf-8",
     )
 

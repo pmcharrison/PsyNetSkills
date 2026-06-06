@@ -3,18 +3,11 @@
   {{ $matches := where site.Data.psynetsk.skills "name" $skillName }}
   {{ $skill := index $matches 0 }}
 
-  <div class="content-layout">
-    {{ partial "section-sidebar.html" (dict "page" . "section" "skills" "title" "Skills") }}
-    <article class="prose">
-      <h1>Skills</h1>
-      <p>
-        Skills are reusable Agent Skills that guide agents through PsyNet
-        experiment implementation, challenge attempts, and evidence collection.
-      </p>
-      <h2>{{ .Title }}</h2>
-      <p>{{ $skill.description }}</p>
-      <p><strong>Source:</strong> <code>{{ $skill.path }}</code></p>
-      {{ .Content }}
-    </article>
-  </div>
+  <article class="prose">
+    <p><a class="back-link" href="{{ "skills/" | relURL }}">All skills</a></p>
+    <h1>{{ .Title }}</h1>
+    <p>{{ $skill.description }}</p>
+    <p><strong>Source:</strong> <code>{{ $skill.path }}</code></p>
+    {{ .Content }}
+  </article>
 {{ end }}
