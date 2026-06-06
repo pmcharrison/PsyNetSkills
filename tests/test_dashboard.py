@@ -92,6 +92,7 @@ def test_collect_challenges_reports_attempt_metadata(tmp_path: Path) -> None:
     attempt_dir = challenge_dir / "attempts/2026-06-01-10-10"
     write(attempt_dir / "agent.json", '{"model": "test-model"}\n')
     write(attempt_dir / "EVALUATION.md", evaluation())
+    write(attempt_dir / "TIMELINE.md", "# Timeline\n\n- T+00:00 [agent] Started.\n")
     write(
         attempt_dir / "LEARNINGS.md",
         "# Learnings\n\n"
@@ -257,6 +258,10 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
         tmp_path
         / "challenges/example/attempts/2026-06-01-10-10/EVALUATION.md",
         evaluation(),
+    )
+    write(
+        tmp_path / "challenges/example/attempts/2026-06-01-10-10/TIMELINE.md",
+        "# Timeline\n\n- T+00:00 [agent] Started.\n",
     )
     write(
         tmp_path

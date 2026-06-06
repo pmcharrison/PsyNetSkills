@@ -15,6 +15,9 @@ LEARNING_ACTION_RE = re.compile(
     r"Confidence: (?P<confidence>high|medium|low)\. "
     r"Status: (?P<status>awaiting_review|planned|implemented|declined|superseded)\.$",
 )
+TIMELINE_ENTRY_RE = re.compile(
+    r"^- T\+\d{2}:\d{2} \[(agent|manual|system)\] .+$"
+)
 
 
 def read_markdown_frontmatter(markdown_file: Path) -> tuple[dict[str, str], list[str]]:
@@ -153,6 +156,25 @@ def validate_learnings_file(learnings_file: Path) -> list[str]:
     return problems
 
 
+def validate_timeline_file(timeline_file: Path) -> list[str]:
+    """Validate the structured Markdown format for attempt timelines."""
+    problems: list[str] = []
+    lines = timeline_file.read_text(encoding="utf-8").splitlines()
+
+    if not lines or lines[0].strip() != "# Timeline":
+        problems.append(f"{timeline_file}: first line must be '# Timeline'")
+
+    entries = [line for line in lines if line.startswith("- ")]
+    if not entries:
+        problems.append(f"{timeline_file}: missing timeline entries")
+
+    for line in entries:
+        if TIMELINE_ENTRY_RE.fullmatch(line) is None:
+            problems.append(f"{timeline_file}: invalid timeline entry: {line!r}")
+
+    return problems
+
+
 def validate_skills(root: Path) -> list[str]:
     """Validate all skill folders."""
     problems: list[str] = []
@@ -212,6 +234,12 @@ def validate_attempt(attempt_dir: Path) -> list[str]:
         problems.extend(validate_learnings_file(learnings_file))
     elif not attempt_dir.name.startswith("example-"):
         problems.append(f"{attempt_dir}: missing LEARNINGS.md")
+
+    timeline_file = attempt_dir / "TIMELINE.md"
+    if timeline_file.exists():
+        problems.extend(validate_timeline_file(timeline_file))
+    elif not attempt_dir.name.startswith("example-"):
+        problems.append(f"{attempt_dir}: missing TIMELINE.md")
 
     return problems
 

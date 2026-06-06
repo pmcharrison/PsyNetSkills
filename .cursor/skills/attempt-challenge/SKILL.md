@@ -19,14 +19,16 @@ PsyNetSkills repository.
    `CRITERIA.md` and previous attempts.
 5. Write `agent.json` with the model/client details you know and the current
    commit hash of the PsyNetSkills repository.
-6. Implement the challenge in `code/`.
-7. Collect evidence in `evidence/`. Use the `record-participant-video` skill
+6. Start `TIMELINE.md` and append relative-timestamped entries as the attempt
+   progresses.
+7. Implement the challenge in `code/`.
+8. Collect evidence in `evidence/`. Use the `record-participant-video` skill
    when creating `evidence/participant.mp4`.
-8. Write `LEARNINGS.md` with concise implementation notes and suggested
+9. Write `LEARNINGS.md` with concise implementation notes and suggested
    actions for PsyNetSkills or PsyNet.
-9. Leave `EVALUATION.md` as a template for human evaluators unless explicitly
+10. Leave `EVALUATION.md` as a template for human evaluators unless explicitly
    asked to evaluate.
-10. In the final response, invite the user to review the drafted learning
+11. In the final response, invite the user to review the drafted learning
    actions conversationally. If the user comments on the learnings, update
    `LEARNINGS.md` for them rather than expecting manual Markdown edits.
 
@@ -56,6 +58,23 @@ happened, and why any required evidence is missing or blocked in
 
 Use the files in `assets/attempt-template/` as the starting point for attempt
 metadata and evaluation notes.
+
+## Timeline notes
+
+`TIMELINE.md` should help reviewers understand how the attempt progressed. Start
+it early, keep entries concise, and use relative timestamps from the beginning of
+the attempt. Use this format:
+
+```markdown
+# Timeline
+
+- T+00:00 [agent] Started attempt and read public challenge instructions.
+- T+00:12 [agent] Implemented initial experiment scaffold.
+- T+00:25 [manual] User interrupted an interactive command and clarified the next step.
+```
+
+Use `[agent]` for autonomous work, `[manual]` for user interventions or
+corrective guidance, and `[system]` for notable environment/tool events.
 
 ## Learning notes
 

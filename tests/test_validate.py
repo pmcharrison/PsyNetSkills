@@ -4,6 +4,7 @@ from psynetsk_tools.validate import (
     parse_evaluation_score,
     validate_learnings_file,
     validate_repository,
+    validate_timeline_file,
 )
 
 
@@ -120,3 +121,52 @@ def test_validate_repository_requires_learnings_for_real_attempt(
     problems = validate_repository(tmp_path)
 
     assert any("missing LEARNINGS.md" in problem for problem in problems)
+
+
+def test_validate_timeline_accepts_expected_format(tmp_path: Path) -> None:
+    timeline_file = tmp_path / "TIMELINE.md"
+    write(
+        timeline_file,
+        "# Timeline\n\n"
+        "- T+00:00 [agent] Started attempt.\n"
+        "- T+00:12 [manual] User corrected the workflow.\n"
+        "- T+00:20 [system] Tool returned an environment warning.\n",
+    )
+
+    assert validate_timeline_file(timeline_file) == []
+
+
+def test_validate_timeline_rejects_invalid_entry(tmp_path: Path) -> None:
+    timeline_file = tmp_path / "TIMELINE.md"
+    write(
+        timeline_file,
+        "# Timeline\n\n"
+        "- 00:00 agent Started attempt.\n",
+    )
+
+    problems = validate_timeline_file(timeline_file)
+
+    assert any("invalid timeline entry" in problem for problem in problems)
+
+
+def test_validate_repository_requires_timeline_for_real_attempt(
+    tmp_path: Path,
+) -> None:
+    minimal_repo(tmp_path)
+    attempt_dir = tmp_path / "challenges/example/attempts/2026-06-01-10-10"
+    write(attempt_dir / "challenge/INSTRUCTIONS.md", "# Snapshot\n")
+    write(attempt_dir / "agent.json", "{}\n")
+    write(attempt_dir / "code/README.md", "# Code\n")
+    write(attempt_dir / "evidence/README.md", "# Evidence\n")
+    write(attempt_dir / "EVALUATION.md", "---\nscore:\n---\n")
+    write(
+        attempt_dir / "LEARNINGS.md",
+        "# Learnings\n\n"
+        "## Useful finding\n\n"
+        "Actions:\n\n"
+        "- psynetskills: Document it. Confidence: high. Status: awaiting_review.\n",
+    )
+
+    problems = validate_repository(tmp_path)
+
+    assert any("missing TIMELINE.md" in problem for problem in problems)

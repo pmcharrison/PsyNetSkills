@@ -15,6 +15,7 @@ challenge/
 agent.json
 code/
 evidence/
+TIMELINE.md
 LEARNINGS.md
 EVALUATION.md
 ```
@@ -23,6 +24,8 @@ EVALUATION.md
 `agent.json` records the model, Cursor version, relevant skill commit, and
 attempt start time. `code/` contains the generated implementation. `evidence/`
 contains the materials used to evaluate whether the implementation worked.
+`TIMELINE.md` records major attempt events with timestamps relative to the start
+of the attempt, including manual user interventions or corrective guidance.
 `LEARNINGS.md` records implementation findings and confidence-labelled
 improvement ideas from the agent's perspective. `EVALUATION.md` is reserved for
 human evaluation.
@@ -57,6 +60,22 @@ Not every early attempt will have every evidence artifact. When something is
 missing, explain why in `EVALUATION.md` so later contributors know whether the
 gap reflects an implementation problem, tooling limitation, or skipped manual
 step.
+
+## Timeline notes
+
+Write `TIMELINE.md` as the attempt progresses. Use concise entries with relative
+timestamps:
+
+```markdown
+# Timeline
+
+- T+00:00 [agent] Started attempt and read public challenge instructions.
+- T+00:12 [agent] Implemented initial experiment scaffold.
+- T+00:25 [manual] User interrupted an interactive command and clarified the next step.
+```
+
+Use `[agent]` for autonomous work, `[manual]` for user interventions or
+corrective guidance, and `[system]` for notable environment/tool events.
 
 ## Learning notes
 
