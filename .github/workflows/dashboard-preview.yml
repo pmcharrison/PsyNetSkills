@@ -138,7 +138,7 @@ jobs:
             }
 
   cleanup-preview:
-    name: Remove closed PR preview
+    name: Finalize closed PR preview
     if: >
       github.event.action == 'closed' &&
       github.event.pull_request.head.repo.full_name == github.repository
@@ -146,20 +146,24 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - id: preview
-        name: Define preview URL
+        name: Define preview URLs
         run: |
           set -euo pipefail
 
           preview_path="pr-preview/pr-${{ github.event.pull_request.number }}"
           preview_url="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/${preview_path}/"
+          production_url="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/"
 
           echo "path=${preview_path}" >> "${GITHUB_OUTPUT}"
           echo "url=${preview_url}" >> "${GITHUB_OUTPUT}"
-      - name: Delete preview from gh-pages
+          echo "production_url=${production_url}" >> "${GITHUB_OUTPUT}"
+      - name: Finalize preview on gh-pages
         env:
           GITHUB_TOKEN: ${{ github.token }}
+          MERGED: ${{ github.event.pull_request.merged }}
           PAGES_BRANCH: gh-pages
           PREVIEW_PATH: ${{ steps.preview.outputs.path }}
+          PRODUCTION_URL: ${{ steps.preview.outputs.production_url }}
         run: |
           set -euo pipefail
 
@@ -178,7 +182,10 @@ jobs:
           git -C "${pages_dir}" config user.name "github-actions[bot]"
           git -C "${pages_dir}" config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          python - "${pages_dir}/${PREVIEW_PATH}" <<'PY'
+          if [ "${MERGED}" = "true" ]; then
+            python -m psynetsk_tools.pr_preview_redirect "${pages_dir}/${PREVIEW_PATH}" "${PRODUCTION_URL}"
+          else
+            python - "${pages_dir}/${PREVIEW_PATH}" <<'PY'
           import shutil
           import sys
           from pathlib import Path
@@ -187,12 +194,21 @@ jobs:
           if target.exists():
               shutil.rmtree(target)
           PY
+          fi
 
           git -C "${pages_dir}" add -A
           if git -C "${pages_dir}" diff --cached --quiet; then
-            echo "No dashboard preview exists for this PR."
+            if [ "${MERGED}" = "true" ]; then
+              echo "Dashboard preview redirect is already up to date."
+            else
+              echo "No dashboard preview exists for this PR."
+            fi
           else
-            git -C "${pages_dir}" commit -m "Remove dashboard preview for PR #${{ github.event.pull_request.number }}"
+            if [ "${MERGED}" = "true" ]; then
+              git -C "${pages_dir}" commit -m "Redirect dashboard preview for PR #${{ github.event.pull_request.number }}"
+            else
+              git -C "${pages_dir}" commit -m "Remove dashboard preview for PR #${{ github.event.pull_request.number }}"
+            fi
             git -C "${pages_dir}" push origin "HEAD:${PAGES_BRANCH}"
           fi
       - name: Comment preview cleanup
@@ -200,11 +216,15 @@ jobs:
         with:
           script: |
             const marker = '<!-- psynetsk-dashboard-preview -->';
+            const merged = ${{ github.event.pull_request.merged }};
             const body = [
               marker,
-              'Dashboard preview removed because this PR is closed.',
+              merged
+                ? 'Dashboard preview now redirects to the production dashboard because this PR was merged.'
+                : 'Dashboard preview removed because this PR is closed.',
               '',
-              `Previous preview URL: ${{ steps.preview.outputs.url }}`
+              `Previous preview URL: ${{ steps.preview.outputs.url }}`,
+              ...(merged ? ['', `Production dashboard: ${{ steps.preview.outputs.production_url }}`] : [])
             ].join('\n');
 
             const comments = await github.paginate(github.rest.issues.listComments, {

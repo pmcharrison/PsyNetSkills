@@ -33,7 +33,8 @@ In the GitHub repository settings, configure Pages to deploy from the
 Pull requests from branches in this repository get dashboard previews at
 https://<owner>.github.io/<repository>/pr-preview/pr-<number>/.
 
-The preview workflow posts the concrete URL to the pull request.
+The preview workflow posts the concrete URL to the pull request. Merged preview
+URLs redirect to the production dashboard after the PR lands.
 
 The local PsyNet source checkout is expected at `~/PsyNet`. Skills and challenge
 instructions may tell agents to inspect that checkout for APIs, demos, and
