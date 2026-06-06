@@ -19,14 +19,23 @@
             <th>Date/time</th>
             <th>Model</th>
             <th>Score</th>
+            <th>Open actions</th>
           </tr>
         </thead>
         <tbody>
           {{ range $challenge.attempts }}
+            {{ $openActions := int .open_actions }}
+            {{ $openActionsClass := "open-actions-danger" }}
+            {{ if eq $openActions 0 }}
+              {{ $openActionsClass = "open-actions-success" }}
+            {{ else if le $openActions 3 }}
+              {{ $openActionsClass = "open-actions-warning" }}
+            {{ end }}
             <tr class="clickable-row" onclick="window.location='{{ .url | relURL }}'">
               <td><a href="{{ .url | relURL }}">{{ .date_time }}</a></td>
               <td>{{ .model }}</td>
               <td>{{ with .score }}{{ . }}{{ else }}Not scored{{ end }}</td>
+              <td><span class="open-actions-count {{ $openActionsClass }}">{{ $openActions }}</span></td>
             </tr>
           {{ end }}
         </tbody>
