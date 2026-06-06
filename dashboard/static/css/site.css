@@ -326,6 +326,7 @@ td {
 
 .learning-markdown p > strong:only-child {
   display: inline-block;
+  font-size: 1rem;
   font-weight: 800;
 }
 
