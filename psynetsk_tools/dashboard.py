@@ -95,6 +95,7 @@ class Attempt:
     model: str
     agent_json: str
     evaluation: str
+    timeline: str
     learnings: str
     evaluation_metadata: dict[str, str]
     challenge_files: list[AttemptFile]
@@ -378,6 +379,7 @@ def collect_attempts(challenge_dir: Path) -> list[Attempt]:
     ):
         evaluation_file = attempt_dir / "EVALUATION.md"
         learnings_file = attempt_dir / "LEARNINGS.md"
+        timeline_file = attempt_dir / "TIMELINE.md"
         score = (
             parse_evaluation_score(evaluation_file)
             if evaluation_file.exists()
@@ -415,6 +417,13 @@ def collect_attempts(challenge_dir: Path) -> list[Attempt]:
                         )
                     )
                     if evaluation_file.exists()
+                    else ""
+                ),
+                timeline=(
+                    strip_first_heading(
+                        timeline_file.read_text(encoding="utf-8")
+                    )
+                    if timeline_file.exists()
                     else ""
                 ),
                 learnings=(

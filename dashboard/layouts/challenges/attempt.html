@@ -50,6 +50,7 @@
       {{ $visibleEvidenceFiles = $visibleEvidenceFiles | append . }}
     {{ end }}
   {{ end }}
+  {{ $hasTimeline := ne $attempt.timeline "" }}
 
   <article class="prose attempt-detail">
     <p class="back-link"><a href="{{ $challenge.url | relURL }}">Back to {{ $challenge.title }}</a></p>
@@ -82,6 +83,17 @@
         <dd><code>{{ $attempt.path }}</code></dd>
       </div>
     </dl>
+
+    <section class="attempt-panel timeline-panel">
+      <h2>Timeline</h2>
+      {{ with $attempt.timeline }}
+        <div class="attempt-markdown timeline-markdown">
+          {{ . | markdownify }}
+        </div>
+      {{ else }}
+        <p>No timeline was found for this attempt.</p>
+      {{ end }}
+    </section>
 
     <section class="attempt-panel">
       <h2>Evaluation</h2>
@@ -155,6 +167,7 @@
       <ul class="artifact-checklist">
         <li class="present">challenge/ <span>{{ len $attempt.challenge_files }} file{{ if ne (len $attempt.challenge_files) 1 }}s{{ end }}</span></li>
         <li class="present">agent.json <span>metadata captured</span></li>
+        <li class="{{ if $hasTimeline }}present{{ else }}missing{{ end }}">TIMELINE.md <span>{{ if $hasTimeline }}present{{ else }}missing{{ end }}</span></li>
         <li class="{{ if $hasExperiment }}present{{ else }}missing{{ end }}">code/experiment.py <span>{{ if $hasExperiment }}present{{ else }}missing{{ end }}</span></li>
         <li class="{{ if $hasParticipantVideo }}present{{ else }}missing{{ end }}">evidence/participant.mp4 <span>{{ if $hasParticipantVideo }}present{{ else }}missing{{ end }}</span></li>
         <li class="{{ if $hasPerformance }}present{{ else }}missing{{ end }}">evidence/performance.json <span>{{ if $hasPerformance }}present{{ else }}missing{{ end }}</span></li>

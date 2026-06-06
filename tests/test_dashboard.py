@@ -114,6 +114,7 @@ def test_collect_challenges_reports_attempt_metadata(tmp_path: Path) -> None:
     assert attempt.model == "test-model"
     assert attempt.url == "challenges/example/2026-06-01-10-10/"
     assert attempt.evaluation == "Attempt body.\n"
+    assert attempt.timeline == "- T+00:00:00 [agent-start] Started.\n"
     assert "## Useful finding" in attempt.learnings
     assert "Useful finding.\n" in attempt.learnings
     assert attempt.evaluation_metadata == {"example": "true"}
@@ -341,6 +342,7 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
     assert '"url": "challenges/example/2026-06-01-10-10/"' in data
     exported_attempt = parsed_data["challenges"][0]["attempts"][0]
     assert exported_attempt["evaluation"] == "Attempt body.\n"
+    assert exported_attempt["timeline"] == "- T+00:00:00 [agent-start] Started.\n"
     assert "## Useful finding" in exported_attempt["learnings"]
     assert exported_attempt["evaluation_metadata"] == {"example": "true"}
     assert exported_attempt["code_files"][0]["size_bytes"] == len(

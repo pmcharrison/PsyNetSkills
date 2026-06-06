@@ -241,6 +241,26 @@ td {
   font-weight: 700;
 }
 
+.timeline-panel {
+  background: #f6fbff;
+  border-color: #8cc8ff;
+}
+
+.timeline-markdown ul {
+  border-left: 3px solid #8cc8ff;
+  list-style: none;
+  margin-bottom: 0;
+  padding-left: 1rem;
+}
+
+.timeline-markdown li {
+  margin: 0.7rem 0;
+}
+
+.timeline-markdown li::marker {
+  content: "";
+}
+
 .attempt-markdown > :first-child,
 .markdown-preview > :first-child {
   margin-top: 0;
