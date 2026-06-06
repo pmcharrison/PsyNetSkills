@@ -120,7 +120,14 @@
       <section class="attempt-panel">
         <h2>Learnings</h2>
         <div class="attempt-markdown learning-markdown">
-          {{ . | markdownify }}
+          {{ $learningHtml := . | markdownify }}
+          {{ $learningHtml = replaceRE `Confidence: (high|medium|low)\.` `<span class="learning-chip learning-chip-confidence learning-chip-confidence-$1"><span class="learning-chip-label">Confidence</span> $1</span>` $learningHtml }}
+          {{ $learningHtml = replaceRE `Status: awaiting_review\.` `<span class="learning-chip learning-chip-status learning-chip-status-awaiting_review"><span class="learning-chip-label">Status</span> awaiting review</span>` $learningHtml }}
+          {{ $learningHtml = replaceRE `Status: planned\.` `<span class="learning-chip learning-chip-status learning-chip-status-planned"><span class="learning-chip-label">Status</span> planned</span>` $learningHtml }}
+          {{ $learningHtml = replaceRE `Status: implemented\.` `<span class="learning-chip learning-chip-status learning-chip-status-implemented"><span class="learning-chip-label">Status</span> implemented</span>` $learningHtml }}
+          {{ $learningHtml = replaceRE `Status: declined\.` `<span class="learning-chip learning-chip-status learning-chip-status-declined"><span class="learning-chip-label">Status</span> declined</span>` $learningHtml }}
+          {{ $learningHtml = replaceRE `Status: superseded\.` `<span class="learning-chip learning-chip-status learning-chip-status-superseded"><span class="learning-chip-label">Status</span> superseded</span>` $learningHtml }}
+          {{ $learningHtml | safeHTML }}
         </div>
       </section>
     {{ end }}

@@ -4,7 +4,7 @@
 
 Briefly describe the concrete implementation or testing discovery.
 
-**Actions:**
+*Actions:*
 
 - **PsyNetSkills:** Describe the repository, skill, docs, validation, dashboard, or
   evidence workflow change. Confidence: medium. Status: awaiting_review.

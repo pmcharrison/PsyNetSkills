@@ -119,7 +119,7 @@ renders the card titles one level lower:
 
 What happened during implementation or testing.
 
-**Actions:**
+*Actions:*
 
 - **PsyNetSkills:** A repo, skill, docs, validation, dashboard, or evidence workflow
   change. Confidence: high. Status: awaiting_review.

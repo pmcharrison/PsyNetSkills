@@ -8,7 +8,7 @@ basename and resolved Python's standard-library `code` module instead of the
 attempt package. Nesting the runnable experiment in `code/primary_color_rating/`
 avoided the collision while keeping the implementation self-contained.
 
-**Actions:**
+*Actions:*
 
 - **PsyNetSkills:** Clarify in the attempt instructions that generated PsyNet
   experiments may need a runnable subdirectory under `code/` when the framework's
@@ -25,7 +25,7 @@ avoided the collision while keeping the implementation self-contained.
 The implementation test now checks that one trial exists for each target color
 rather than assuming a fixed presentation order.
 
-**Actions:**
+*Actions:*
 
 - **PsyNetSkills:** Encourage challenge implementations and tests to assert
   scientifically relevant invariants unless the public instructions explicitly
@@ -40,7 +40,7 @@ rather than assuming a fixed presentation order.
 dashboard. The export path can still return a DataFrame, but the monitor path
 should return plain records.
 
-**Actions:**
+*Actions:*
 
 - **PsyNetSkills:** Mention in experiment attempt guidance that dashboard data
   checks should exercise `context="monitor"` if `get_basic_data` returns pandas
@@ -55,7 +55,7 @@ should return plain records.
 source code. Passing `--no-source` made the data export noninteractive and
 better suited to automated challenge evidence collection.
 
-**Actions:**
+*Actions:*
 
 - **PsyNetSkills:** Use `psynet export local --no-source` in challenge evidence
   instructions when only `evidence/data.zip` is required. Confidence: high.

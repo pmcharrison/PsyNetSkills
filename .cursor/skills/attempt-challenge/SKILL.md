@@ -97,7 +97,7 @@ agents. Use compact cards, one section per learning:
 
 - `## <short title>`
 - Optional prose describing what happened.
-- `**Actions:**`
+- `*Actions:*`
   - `**PsyNetSkills:** <repo/skill/docs change>. Confidence: <level>. Status: <status>.`
   - `**PsyNet:** <framework/docs/CLI change>. Confidence: <level>. Status: <status>.`
 

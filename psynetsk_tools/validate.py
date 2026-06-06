@@ -119,7 +119,7 @@ def learning_action_bullets(lines: list[str]) -> list[str]:
 
 def is_learning_actions_heading(line: str) -> bool:
     """Return whether a line is the Actions heading for a learning card."""
-    return line.strip() == "**Actions:**"
+    return line.strip() == "*Actions:*"
 
 
 def validate_learnings_file(learnings_file: Path) -> list[str]:
@@ -149,7 +149,7 @@ def validate_learnings_file(learnings_file: Path) -> list[str]:
             None,
         )
         if actions_index is None:
-            problems.append(f"{learnings_file}: learning {title!r} missing **Actions:**")
+            problems.append(f"{learnings_file}: learning {title!r} missing *Actions:*")
             continue
 
         action_lines = section_lines[actions_index + 1 :]
