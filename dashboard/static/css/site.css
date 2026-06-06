@@ -324,6 +324,11 @@ td {
   color: var(--foreground);
 }
 
+.learning-markdown p > strong:only-child {
+  display: inline-block;
+  font-weight: 800;
+}
+
 .file-grid {
   display: grid;
   gap: 0.75rem;
