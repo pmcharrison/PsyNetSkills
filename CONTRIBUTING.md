@@ -91,7 +91,9 @@ the user about each criterion and record the answers as a checklist in
 `TIMELINE.md` should log major experiment implementation events with timestamps
 relative to the start of the attempt, including seconds and manual user
 interventions or corrective guidance. Stop the timeline when the experiment
-implementation and first-pass evidence collection are complete.
+implementation and first-pass evidence collection are complete. The dashboard
+derives implementation time from completed `[agent-start]` to `[agent-stop]`
+intervals and excludes manual gaps between those intervals.
 `LEARNINGS.md` should be written by the agent and summarize concrete
 implementation findings plus confidence-labelled actions targeting PsyNetSkills
 or PsyNet after implementation and, when possible, after evaluation feedback has

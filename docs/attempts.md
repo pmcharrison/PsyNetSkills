@@ -27,7 +27,9 @@ start time, and PsyNet checkout metadata. `code/` contains the generated
 implementation. `evidence/` contains the materials used to evaluate whether the
 implementation worked.
 `TIMELINE.md` records major attempt events with timestamps relative to the start
-of the attempt, including manual user interventions or corrective guidance.
+of the attempt, including manual user interventions or corrective guidance. The
+dashboard derives implementation time from completed `[agent-start]` to
+`[agent-stop]` intervals and excludes manual gaps between those intervals.
 `EVALUATION.md` records human evaluation feedback and the score.
 `LEARNINGS.md` records implementation findings and confidence-labelled
 improvement ideas from the agent's perspective, ideally after evaluation
@@ -119,6 +121,10 @@ milestones, `[manual]` for user interventions or corrective guidance, and
 experiment implementation and first-pass evidence collection are complete. Do
 not include later repository-process discussions unless they directly change the
 experiment implementation.
+
+Close every active implementation segment with `[agent-stop]`. If a timeline has
+no completed start/stop segment, or if the final segment is left open, the
+dashboard reports implementation time as `Not recorded`.
 
 ## Evaluation frontmatter
 

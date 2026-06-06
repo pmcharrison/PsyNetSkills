@@ -8,15 +8,14 @@ import re
 import sys
 from pathlib import Path
 
+from psynetsk_tools.timeline import TIMELINE_ENTRY_RE
+
 SKILLS_ROOT = Path(".cursor") / "skills"
 SKILL_NAME_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 LEARNING_ACTION_RE = re.compile(
     r"^- (?P<target>\*\*(?:PsyNetSkills|PsyNet):\*\*) (?P<action>.+) "
     r"Confidence: (?P<confidence>high|medium|low)\. "
     r"Status: (?P<status>awaiting_review|planned|implemented|declined|superseded)\.$",
-)
-TIMELINE_ENTRY_RE = re.compile(
-    r"^- T\+\d{2}:\d{2}:\d{2} \[(agent-start|agent|agent-stop|manual|system)\] .+$"
 )
 PSYNET_AGENT_REQUIRED_FIELDS = {
     "checkout_path": str,

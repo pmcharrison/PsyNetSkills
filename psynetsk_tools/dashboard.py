@@ -16,6 +16,12 @@ from psynetsk_tools.validate import (
     read_markdown_frontmatter,
     read_skill_frontmatter,
 )
+from psynetsk_tools.timeline import (
+    TimelineEntry,
+    format_duration,
+    implementation_time_seconds,
+    parse_timeline_entries,
+)
 
 TEXT_FILE_EXTENSIONS = {
     "",
@@ -34,11 +40,6 @@ TEXT_FILE_EXTENSIONS = {
 ATTEMPT_ARTIFACTS_DIR = "artifacts/challenges"
 MONITOR_STATIC_ROOT = Path(__file__).parent / "assets" / "monitor-static" / "static"
 STATIC_REF_RE = re.compile(r'(?:href|src)="/static/(?P<path>[^"]+)"')
-TIMELINE_ENTRY_RE = re.compile(
-    r"^- (?P<timestamp>T\+\d{2}:\d{2}:\d{2}) "
-    r"\[(?P<actor>agent-start|agent|agent-stop|manual|system)\] "
-    r"(?P<description>.+)$"
-)
 
 
 @dataclass(frozen=True)
@@ -65,15 +66,6 @@ class AttemptFile:
 
 
 @dataclass(frozen=True)
-class TimelineEntry:
-    """A structured attempt timeline entry."""
-
-    timestamp: str
-    actor: str
-    description: str
-
-
-@dataclass(frozen=True)
 class Attempt:
     """A dashboard summary of a challenge attempt."""
 
@@ -87,6 +79,8 @@ class Attempt:
     evaluation: str
     timeline: str
     timeline_entries: list[TimelineEntry]
+    implementation_time_seconds: int | None
+    implementation_time_display: str
     learnings: str
     evaluation_metadata: dict[str, str]
     challenge_instructions: str
@@ -257,23 +251,6 @@ def read_agent_json(agent_file: Path) -> tuple[dict[str, object], str]:
     return agent, json.dumps(agent, indent=2, sort_keys=True)
 
 
-def parse_timeline_entries(markdown: str) -> list[TimelineEntry]:
-    """Parse structured entries from TIMELINE.md."""
-    entries: list[TimelineEntry] = []
-    for line in markdown.splitlines():
-        match = TIMELINE_ENTRY_RE.fullmatch(line)
-        if match is None:
-            continue
-        entries.append(
-            TimelineEntry(
-                timestamp=match.group("timestamp"),
-                actor=match.group("actor"),
-                description=match.group("description"),
-            )
-        )
-    return entries
-
-
 def file_kind(path: Path) -> str:
     """Return a display-oriented file type."""
     suffix = path.suffix.lower().lstrip(".")
@@ -422,6 +399,8 @@ def collect_attempts(challenge_dir: Path) -> list[Attempt]:
             if timeline_file.exists()
             else ""
         )
+        timeline_entries = parse_timeline_entries(timeline)
+        implementation_seconds = implementation_time_seconds(timeline_entries)
         artifact_prefix = (
             f"{ATTEMPT_ARTIFACTS_DIR}/{challenge_dir.name}/attempts/"
             f"{attempt_dir.name}"
@@ -448,7 +427,9 @@ def collect_attempts(challenge_dir: Path) -> list[Attempt]:
                     else ""
                 ),
                 timeline=timeline,
-                timeline_entries=parse_timeline_entries(timeline),
+                timeline_entries=timeline_entries,
+                implementation_time_seconds=implementation_seconds,
+                implementation_time_display=format_duration(implementation_seconds),
                 learnings=(
                     demote_markdown_headings(
                         strip_first_heading(

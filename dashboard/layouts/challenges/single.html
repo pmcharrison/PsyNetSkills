@@ -19,6 +19,7 @@
             <th>Date/time</th>
             <th>Model</th>
             <th>Score</th>
+            <th>Implementation time</th>
           </tr>
         </thead>
         <tbody>
@@ -27,6 +28,7 @@
               <td><a href="{{ .url | relURL }}">{{ .date_time }}</a></td>
               <td>{{ .model }}</td>
               <td>{{ with .score }}{{ . }}{{ else }}Not scored{{ end }}</td>
+              <td>{{ .implementation_time_display }}</td>
             </tr>
           {{ end }}
         </tbody>
