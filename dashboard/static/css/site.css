@@ -357,13 +357,8 @@ td {
   justify-content: space-between;
 }
 
-.performance-result-header h3,
-.performance-result-header p {
+.performance-result-header h3 {
   margin: 0;
-}
-
-.performance-result-header p {
-  color: var(--muted);
 }
 
 .performance-options {

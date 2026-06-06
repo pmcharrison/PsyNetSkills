@@ -185,10 +185,6 @@
           <header class="performance-result-header">
             <div>
               <h3>Performance test result</h3>
-              <p>
-                {{ with $performanceData.experiment_label }}{{ . }}{{ else }}Experiment{{ end }}
-                {{ with $performanceData.psynet_version }} · PsyNet {{ . }}{{ end }}
-              </p>
             </div>
             <a href="{{ $performanceFile.url | relURL }}">Raw JSON</a>
           </header>
