@@ -122,10 +122,14 @@ repository, regularly provide the dashboard preview link to the user once the PR
 number is known. Include it when first creating/updating the PR, after changes
 that affect dashboard rendering or challenge attempt pages, and in the final
 response. Write the generated URL as ordinary Markdown text so it is clickable;
-do not put it in a fenced code block or inline code. Provide only the preview
-index URL; do not also provide redundant subpage URLs such as `/docs/`.
+do not put it in a fenced code block or inline code. When the work is a general
+dashboard or docs change, provide only the preview index URL. When the work
+completes a challenge attempt, provide the direct challenge attempt page URL
+instead.
 
 https://pmcharrison.github.io/PsyNetSkills/pr-preview/pr-<number>/
+
+https://pmcharrison.github.io/PsyNetSkills/pr-preview/pr-<number>/challenges/<challenge-slug>/<attempt-name>/
 
 The preview workflow also posts this URL to the pull request. Forked pull
 requests do not publish previews because the workflow needs write access to the
