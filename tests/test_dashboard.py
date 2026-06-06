@@ -73,7 +73,9 @@ def test_collect_challenges_reports_attempt_metadata(tmp_path: Path) -> None:
     write(attempt_dir / "EVALUATION.md", evaluation())
     write(
         attempt_dir / "TIMELINE.md",
-        "# Timeline\n\n- T+00:00:00 [agent-start] Started.\n",
+        "# Timeline\n\n"
+        "- T+00:00:00 [agent-start] Started.\n"
+        "- T+00:12:05 [agent-stop] Finished.\n",
     )
     write(
         attempt_dir / "LEARNINGS.md",
@@ -101,11 +103,16 @@ def test_collect_challenges_reports_attempt_metadata(tmp_path: Path) -> None:
     assert attempt.model == "test-model"
     assert attempt.url == "challenges/example/2026-06-01-10-10/"
     assert attempt.evaluation == "Attempt body.\n"
-    assert attempt.timeline == "- T+00:00:00 [agent-start] Started.\n"
-    assert len(attempt.timeline_entries) == 1
+    assert attempt.timeline == (
+        "- T+00:00:00 [agent-start] Started.\n"
+        "- T+00:12:05 [agent-stop] Finished.\n"
+    )
+    assert len(attempt.timeline_entries) == 2
     assert attempt.timeline_entries[0].timestamp == "T+00:00:00"
     assert attempt.timeline_entries[0].actor == "agent-start"
     assert attempt.timeline_entries[0].description == "Started."
+    assert attempt.implementation_time_seconds == 725
+    assert attempt.implementation_time_display == "12m 5s"
     assert "### Useful finding" in attempt.learnings
     assert "Useful finding.\n" in attempt.learnings
     assert attempt.evaluation_metadata == {"example": "true"}
@@ -336,7 +343,9 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
     )
     write(
         tmp_path / "challenges/example/attempts/2026-06-01-10-10/TIMELINE.md",
-        "# Timeline\n\n- T+00:00:00 [agent-start] Started.\n",
+        "# Timeline\n\n"
+        "- T+00:00:00 [agent-start] Started.\n"
+        "- T+00:12:05 [agent-stop] Finished.\n",
     )
     write(
         tmp_path
@@ -448,14 +457,24 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
     assert parsed_data["challenges"][0]["open_actions"] == 1
     exported_attempt = parsed_data["challenges"][0]["attempts"][0]
     assert exported_attempt["evaluation"] == "Attempt body.\n"
-    assert exported_attempt["timeline"] == "- T+00:00:00 [agent-start] Started.\n"
+    assert exported_attempt["timeline"] == (
+        "- T+00:00:00 [agent-start] Started.\n"
+        "- T+00:12:05 [agent-stop] Finished.\n"
+    )
     assert exported_attempt["timeline_entries"] == [
         {
             "timestamp": "T+00:00:00",
             "actor": "agent-start",
             "description": "Started.",
         },
+        {
+            "timestamp": "T+00:12:05",
+            "actor": "agent-stop",
+            "description": "Finished.",
+        },
     ]
+    assert exported_attempt["implementation_time_seconds"] == 725
+    assert exported_attempt["implementation_time_display"] == "12m 5s"
     assert "### Useful finding" in exported_attempt["learnings"]
     assert exported_attempt["evaluation_metadata"] == {"example": "true"}
     assert (
