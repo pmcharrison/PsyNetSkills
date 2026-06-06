@@ -185,6 +185,7 @@ def test_dashboard_data_reports_open_learning_actions(tmp_path: Path) -> None:
     data = dashboard_data(tmp_path)
 
     assert data["challenges"][0]["open_actions"] == 3
+    assert data["challenges"][0]["attempts"][0]["open_actions"] == 3
 
 
 def test_collect_challenges_reports_binary_and_nested_attempt_files(
@@ -456,6 +457,7 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
     assert '"url": "challenges/example/2026-06-01-10-10/"' in data
     assert parsed_data["challenges"][0]["open_actions"] == 1
     exported_attempt = parsed_data["challenges"][0]["attempts"][0]
+    assert exported_attempt["open_actions"] == 1
     assert exported_attempt["evaluation"] == "Attempt body.\n"
     assert exported_attempt["timeline"] == (
         "- T+00:00:00 [agent-start] Started.\n"

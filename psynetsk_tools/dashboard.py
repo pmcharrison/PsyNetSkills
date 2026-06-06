@@ -94,6 +94,7 @@ class Attempt:
     implementation_time_seconds: int | None
     implementation_time_display: str
     learnings: str
+    open_actions: int
     evaluation_metadata: dict[str, str]
     challenge_instructions: str
     challenge_criteria: str
@@ -126,12 +127,7 @@ class Challenge:
     @property
     def open_actions(self) -> int:
         """Return the number of unresolved learning actions."""
-        return sum(
-            1
-            for attempt in self.attempts
-            for _, _, _, status in parse_learning_actions(attempt.learnings)
-            if status not in COMPLETED_LEARNING_STATUSES
-        )
+        return sum(attempt.open_actions for attempt in self.attempts)
 
 
 def title_from_markdown(markdown: str, fallback: str) -> str:
@@ -464,6 +460,20 @@ def collect_attempts(challenge_dir: Path) -> list[Attempt]:
         )
         timeline_entries = parse_timeline_entries(timeline)
         implementation_seconds = implementation_time_seconds(timeline_entries)
+        learnings = (
+            demote_markdown_headings(
+                strip_first_heading(
+                    learnings_file.read_text(encoding="utf-8")
+                )
+            )
+            if learnings_file.exists()
+            else ""
+        )
+        open_actions = sum(
+            1
+            for _, _, _, status in parse_learning_actions(learnings)
+            if status not in COMPLETED_LEARNING_STATUSES
+        )
         artifact_prefix = (
             f"{ATTEMPT_ARTIFACTS_DIR}/{challenge_dir.name}/attempts/"
             f"{attempt_dir.name}"
@@ -493,15 +503,8 @@ def collect_attempts(challenge_dir: Path) -> list[Attempt]:
                 timeline_entries=timeline_entries,
                 implementation_time_seconds=implementation_seconds,
                 implementation_time_display=format_duration(implementation_seconds),
-                learnings=(
-                    demote_markdown_headings(
-                        strip_first_heading(
-                            learnings_file.read_text(encoding="utf-8")
-                        )
-                    )
-                    if learnings_file.exists()
-                    else ""
-                ),
+                learnings=learnings,
+                open_actions=open_actions,
                 evaluation_metadata=evaluation_metadata,
                 challenge_instructions=read_challenge_snapshot_instructions(
                     attempt_dir,
