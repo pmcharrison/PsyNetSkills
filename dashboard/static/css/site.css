@@ -37,25 +37,16 @@ a {
 }
 
 .site-title {
+  color: var(--foreground);
   font-size: 1.25rem;
   font-weight: 700;
+  text-decoration: none;
 }
 
 nav {
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
-}
-
-.dashboard-nav {
-  border-top: 1px solid var(--border);
-  font-size: 0.95rem;
-  grid-column: 2;
-  padding-top: 0.5rem;
-}
-
-.dashboard-nav a {
-  color: var(--muted);
 }
 
 .site-header nav a.current {
@@ -68,29 +59,6 @@ nav {
     grid-template-columns: 1fr;
   }
 
-  .dashboard-nav {
-    grid-column: 1;
-  }
-}
-
-.docs-pagination {
-  border-top: 1px solid var(--border);
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: 1fr 1fr;
-  margin-top: 2rem;
-  padding-top: 1rem;
-}
-
-.docs-pagination a {
-  border: 1px solid var(--border);
-  border-radius: 0.5rem;
-  padding: 0.75rem;
-  text-decoration: none;
-}
-
-.docs-pagination .next {
-  text-align: right;
 }
 
 .content-layout {

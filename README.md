@@ -8,7 +8,8 @@ The repository has three main jobs:
 
 - Store reusable Agent Skills in `.cursor/skills/`.
 - Store challenge definitions and attempt histories in `challenges/`.
-- Build a static dashboard from skills, challenges, attempts, and docs.
+- Build a static dashboard from the workflow overview, skills, challenges, and
+  attempts.
 
 ## Quickstart
 
@@ -45,8 +46,8 @@ testing commands.
 ```text
 .cursor/skills/ Agent Skills-compatible folders, each with a SKILL.md file.
 challenges/    Challenge definitions, private criteria, and attempt histories.
-docs/          Markdown pages mounted into the Hugo dashboard.
-dashboard/     Hugo site that renders docs, skills, challenges, and attempts.
+docs/          Contributor notes retained in the repository, not public site pages.
+dashboard/     Hugo site that renders workflow, skills, challenges, and attempts.
 psynetsk_tools/ Python tooling for validation and dashboard data export.
 tests/         Pytest coverage for repository tooling.
 public/        Generated dashboard output, not committed by default.
@@ -70,5 +71,5 @@ attempting a challenge. The repository therefore hides `CRITERIA.md` and
 
 ## More documentation
 
-See `docs/` for contributor-facing pages about skills, challenges, dashboard
+See `docs/` for contributor-facing notes about skills, challenges, dashboard
 generation, and the local PsyNet source checkout.

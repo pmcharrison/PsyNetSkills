@@ -20,8 +20,8 @@ def test_redirect_destination_preserves_dashboard_paths() -> None:
         == "https://example.github.io/PsyNetSkills/challenges/example/"
     )
     assert (
-        redirect_destination(base_url, Path("docs/dashboard.html"))
-        == "https://example.github.io/PsyNetSkills/docs/dashboard.html"
+        redirect_destination(base_url, Path("workflow/index.html"))
+        == "https://example.github.io/PsyNetSkills/workflow/"
     )
 
 
@@ -31,7 +31,7 @@ def test_write_redirect_preview_replaces_html_pages_and_removes_assets(
     target = tmp_path / "pr-preview/pr-12"
     write(target / "index.html", "<h1>Preview</h1>")
     write(target / "challenges/example/index.html", "<h1>Challenge</h1>")
-    write(target / "docs/dashboard.html", "<h1>Docs</h1>")
+    write(target / "workflow/index.html", "<h1>Workflow</h1>")
     write(target / "css/site.css", "body {}")
 
     write_redirect_preview(target, "https://example.github.io/PsyNetSkills")
@@ -46,8 +46,8 @@ def test_write_redirect_preview_replaces_html_pages_and_removes_assets(
         in (target / "challenges/example/index.html").read_text(encoding="utf-8")
     )
     assert (
-        'url=https://example.github.io/PsyNetSkills/docs/dashboard.html"'
-        in (target / "docs/dashboard.html").read_text(encoding="utf-8")
+        'url=https://example.github.io/PsyNetSkills/workflow/"'
+        in (target / "workflow/index.html").read_text(encoding="utf-8")
     )
 
 

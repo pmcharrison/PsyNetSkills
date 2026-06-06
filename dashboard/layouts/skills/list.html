@@ -1,6 +1,14 @@
 {{ define "main" }}
-  {{ with index (sort site.Data.psynetsk.skills "title") 0 }}
-    <p>Redirecting to <a href="{{ .url | relURL }}">{{ .title }}</a>.</p>
-    <script>window.location.replace({{ (.url | relURL) | jsonify | safeJS }});</script>
-  {{ end }}
+  <h1>{{ .Title }}</h1>
+  {{ .Content }}
+
+  <div class="cards">
+    {{ range sort site.Data.psynetsk.skills "title" }}
+      <article>
+        <h2><a href="{{ .url | relURL }}">{{ .title }}</a></h2>
+        <p>{{ .description }}</p>
+        <p><strong>Source:</strong> <code>{{ .path }}</code></p>
+      </article>
+    {{ end }}
+  </div>
 {{ end }}

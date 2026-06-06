@@ -1,20 +1,9 @@
 {{ define "main" }}
-  {{ if eq .Section "docs" }}
-    <div class="content-layout">
-      {{ partial "section-sidebar.html" (dict "page" . "section" "docs" "title" "Docs") }}
-      <article class="prose">
-        <h1>{{ .Title }}</h1>
-        {{ .Content }}
-        {{ partial "docs-pagination.html" . }}
-      </article>
-    </div>
-  {{ else }}
-    <h1>{{ .Title }}</h1>
-    {{ .Content }}
-    <ul>
-      {{ range .Pages.ByTitle }}
-        <li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
-      {{ end }}
-    </ul>
-  {{ end }}
+  <h1>{{ .Title }}</h1>
+  {{ .Content }}
+  <ul>
+    {{ range .Pages.ByTitle }}
+      <li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
+    {{ end }}
+  </ul>
 {{ end }}
