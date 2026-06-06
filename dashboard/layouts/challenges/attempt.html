@@ -93,6 +93,23 @@
       </div>
     </dl>
 
+    <section class="attempt-panel challenge-brief">
+      <h2>Challenge instructions</h2>
+      {{ with $attempt.challenge_instructions }}
+        <div class="attempt-markdown">
+          {{ . | markdownify }}
+        </div>
+      {{ else }}
+        <p>No rendered challenge instructions were found for this attempt.</p>
+      {{ end }}
+      {{ with $attempt.challenge_criteria }}
+        <h2>Evaluation criteria</h2>
+        <div class="attempt-markdown">
+          {{ . | markdownify }}
+        </div>
+      {{ end }}
+    </section>
+
     <section class="attempt-panel timeline-panel">
       <h2>Timeline</h2>
       {{ if $hasTimeline }}

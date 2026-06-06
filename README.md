@@ -64,9 +64,9 @@ git lfs install
 
 ## Agent visibility
 
-Agents should not read hidden evaluation criteria or previous attempts before
-attempting a challenge. The repository therefore hides `CRITERIA.md` and
-`attempts/` paths through `.cursorignore`.
+Agents should not read hidden evaluation criteria, when present, or previous
+attempts before attempting a challenge. The repository therefore hides
+`CRITERIA.md` and `attempts/` paths through `.cursorignore`.
 
 ## More documentation
 

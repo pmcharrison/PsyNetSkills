@@ -230,6 +230,11 @@ td {
   padding: 1rem;
 }
 
+.challenge-brief {
+  background: #fffdf5;
+  border-color: #d4a72c;
+}
+
 .attempt-panel > h2:first-child,
 .attempt-panel > summary {
   margin-top: 0;

@@ -12,11 +12,13 @@ PsyNetSkills repository.
 
 1. Read `INSTRUCTIONS.md` from the target challenge, including its YAML
    frontmatter.
-2. Do not read `CRITERIA.md` or any existing `attempts/` folders.
+2. Do not read `CRITERIA.md` or any existing `attempts/` folders before
+   implementation and evidence collection are complete.
 3. Create a new attempt folder named with the local timestamp:
    `challenges/<challenge>/attempts/YYYY-MM-DD-HH-MM/`.
 4. Snapshot the challenge into `attempts/<timestamp>/challenge/`, excluding
-   `CRITERIA.md` and previous attempts.
+   previous attempts. Keep optional `CRITERIA.md` in the snapshot if it exists,
+   but do not open it during implementation.
 5. Write `agent.json` with the model/client details you know and the current
    commit hash of the PsyNetSkills repository.
 6. Start `TIMELINE.md` and append relative-timestamped entries as the attempt
@@ -27,8 +29,10 @@ PsyNetSkills repository.
 9. Leave `EVALUATION.md` as a template for human evaluators unless the user
    provides evaluation feedback.
 10. In the final response, invite the user to evaluate the attempt
-   conversationally, including a 1-10 score and concise feedback. If the user
-   provides evaluation feedback, summarize it in `EVALUATION.md` and enter the
+   conversationally, including a 1-10 score and concise feedback. If optional
+   `CRITERIA.md` is present, ask the user about each criterion during this
+   evaluation conversation. If the user provides evaluation feedback, summarize
+   it in `EVALUATION.md`, check off each criterion as met or unmet, and enter the
    score in YAML frontmatter.
 11. After evaluation feedback is captured, write or update `LEARNINGS.md` with
    concise implementation notes and suggested actions for PsyNetSkills or

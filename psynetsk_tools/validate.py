@@ -263,9 +263,8 @@ def validate_challenges(root: Path) -> list[str]:
         return [f"{challenges_dir}: missing challenges directory"]
 
     for challenge_dir in sorted(path for path in challenges_dir.iterdir() if path.is_dir()):
-        for filename in ["INSTRUCTIONS.md", "CRITERIA.md"]:
-            if not (challenge_dir / filename).exists():
-                problems.append(f"{challenge_dir}: missing {filename}")
+        if not (challenge_dir / "INSTRUCTIONS.md").exists():
+            problems.append(f"{challenge_dir}: missing INSTRUCTIONS.md")
 
         instructions_file = challenge_dir / "INSTRUCTIONS.md"
         if instructions_file.exists():
