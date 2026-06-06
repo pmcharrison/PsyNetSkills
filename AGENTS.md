@@ -123,18 +123,26 @@ PsyNet commands need sandboxing disabled in Cursor (`required_permissions: ["all
 ### Dashboard preview links
 
 When a Cloud Agent opens or updates a pull request from a branch in this
-repository, regularly provide the dashboard preview link to the user once the PR
-number is known. Include it when first creating/updating the PR, after changes
-that affect dashboard rendering or challenge attempt pages, and in the final
-response. Write the generated URL as ordinary Markdown text so it is clickable;
-do not put it in a fenced code block or inline code. When the work is a general
-dashboard or docs change, provide only the preview index URL. When the work
-completes a challenge attempt, provide the direct challenge attempt page URL
-instead.
+repository, use the `dashboard-preview-polling` skill before sharing dashboard
+preview links. Wait up to 75 seconds for the `Deploy dashboard PR preview`
+workflow to appear and complete successfully for the current head commit. If it
+completes, tell the user the dashboard preview has been rebuilt and provide the
+preview URL only. If no matching run appears, or if it does not complete
+successfully within 75 seconds, tell the user the preview may not contain the
+latest changes yet and provide the branch-filtered workflow-runs link instead.
+
+Include these links when first creating/updating the PR, after changes that
+affect dashboard rendering or challenge attempt pages, and in the final response.
+Write generated URLs as ordinary Markdown text so they are clickable; do not put
+them in fenced code blocks or inline code. When the work is a general dashboard
+or docs change, provide only the preview index URL. When the work completes a
+challenge attempt, provide the direct challenge attempt page URL instead.
 
 https://pmcharrison.github.io/PsyNetSkills/pr-preview/pr-<number>/
 
 https://pmcharrison.github.io/PsyNetSkills/pr-preview/pr-<number>/challenges/<challenge-slug>/<attempt-name>/
+
+https://github.com/pmcharrison/PsyNetSkills/actions/workflows/dashboard-preview.yml?query=branch%3A<branch-name>
 
 The preview workflow also posts this URL to the pull request. Forked pull
 requests do not publish previews because the workflow needs write access to the

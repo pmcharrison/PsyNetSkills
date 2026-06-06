@@ -77,8 +77,8 @@ def test_validate_learnings_accepts_expected_format(tmp_path: Path) -> None:
         "## Useful finding\n\n"
         "This explains what happened.\n\n"
         "*Actions:*\n\n"
-        "- **PsyNetSkills:** Document the workflow. Confidence: high. Status: awaiting_review.\n"
-        "- **PsyNet:** Improve the error message. Confidence: medium. Status: awaiting_review.\n",
+        "- **PsyNetSkills:** Document the workflow. Confidence: high. Status: considering.\n"
+        "- **PsyNet:** Improve the error message. Confidence: medium. Status: in_progress.\n",
     )
 
     assert validate_learnings_file(learnings_file) == []
@@ -167,7 +167,7 @@ def test_validate_repository_requires_timeline_for_real_attempt(
         "# Learnings\n\n"
         "## Useful finding\n\n"
         "*Actions:*\n\n"
-        "- **PsyNetSkills:** Document it. Confidence: high. Status: awaiting_review.\n",
+        "- **PsyNetSkills:** Document it. Confidence: high. Status: considering.\n",
     )
 
     problems = validate_repository(tmp_path)

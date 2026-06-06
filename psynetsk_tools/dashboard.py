@@ -39,6 +39,18 @@ TIMELINE_ENTRY_RE = re.compile(
     r"\[(?P<actor>agent-start|agent|agent-stop|manual|system)\] "
     r"(?P<description>.+)$"
 )
+LEARNING_ACTION_RE = re.compile(
+    r"^(?:\*\*)?(?P<repository>PsyNetSkills|PsyNet|psynetskills|psynet):"
+    r"(?:\*\*)? (?P<proposal>.+?) Confidence: "
+    r"(?P<confidence>[^.]+)\. Status: (?P<status>[^.]+)\.?$"
+)
+COMPLETED_LEARNING_STATUSES = {
+    "completed",
+    "declined",
+    "dismissed",
+    "implemented",
+    "superseded",
+}
 
 
 @dataclass(frozen=True)
@@ -116,6 +128,16 @@ class Challenge:
             if attempt.score is not None:
                 return attempt.score
         return None
+
+    @property
+    def open_actions(self) -> int:
+        """Return the number of unresolved learning actions."""
+        return sum(
+            1
+            for attempt in self.attempts
+            for _, _, _, status in parse_learning_actions(attempt.learnings)
+            if status not in COMPLETED_LEARNING_STATUSES
+        )
 
 
 def title_from_markdown(markdown: str, fallback: str) -> str:
@@ -272,6 +294,47 @@ def parse_timeline_entries(markdown: str) -> list[TimelineEntry]:
             )
         )
     return entries
+
+
+def parse_learning_action_text(text: str) -> tuple[str, str, str, str] | None:
+    """Parse one normalized LEARNINGS.md action bullet."""
+    normalized = re.sub(r"\s+", " ", text).strip()
+    match = LEARNING_ACTION_RE.fullmatch(normalized)
+    if match is None:
+        return None
+    return (
+        match.group("repository").strip().lower(),
+        match.group("confidence").strip().lower(),
+        match.group("proposal").strip(),
+        match.group("status").strip().lower(),
+    )
+
+
+def parse_learning_actions(markdown: str) -> list[tuple[str, str, str, str]]:
+    """Parse action bullets from a LEARNINGS.md body."""
+    actions: list[tuple[str, str, str, str]] = []
+    current: list[str] = []
+
+    def flush_current() -> None:
+        if not current:
+            return
+        action = parse_learning_action_text(" ".join(current))
+        if action is not None:
+            actions.append(action)
+        current.clear()
+
+    for line in markdown.splitlines():
+        stripped = line.strip()
+        if stripped.startswith("- "):
+            flush_current()
+            current.append(stripped[2:])
+        elif current and line.startswith((" ", "\t")):
+            current.append(stripped)
+        else:
+            flush_current()
+
+    flush_current()
+    return actions
 
 
 def file_kind(path: Path) -> str:
@@ -522,6 +585,7 @@ def dashboard_data(root: Path) -> dict[str, object]:
             {
                 **asdict(challenge),
                 "latest_score": challenge.latest_score,
+                "open_actions": challenge.open_actions,
             }
             for challenge in challenges
         ],

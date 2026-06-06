@@ -13,11 +13,11 @@ avoided the collision while keeping the implementation self-contained.
 - **PsyNetSkills:** Clarify in the attempt instructions that generated PsyNet
   experiments may need a runnable subdirectory under `code/` when the framework's
   package import rules conflict with the attempt folder name. Confidence: high.
-  Status: implemented.
+  Status: completed.
 - **PsyNet:** Avoid importing an experiment package solely by current directory
   basename, or raise a targeted error when the current directory name resolves to
   a non-package module such as Python's standard-library `code`. Confidence:
-  high. Status: awaiting_review.
+  high. Status: considering.
 
 ## Static trials may run in framework-selected order
 
@@ -29,10 +29,10 @@ rather than assuming a fixed presentation order.
 
 - **PsyNetSkills:** Encourage challenge implementations and tests to assert
   scientifically relevant invariants unless the public instructions explicitly
-  require a presentation order. Confidence: medium. Status: awaiting_review.
+  require a presentation order. Confidence: medium. Status: considering.
 - **PsyNet:** Document the default static-trial ordering behavior more prominently in
   `StaticTrialMaker` docs, including how to force a fixed order when an
-  experiment requires one. Confidence: low. Status: awaiting_review.
+  experiment requires one. Confidence: low. Status: considering.
 
 ## Dashboard basic data needs JSON-friendly values
 
@@ -44,10 +44,10 @@ should return plain records.
 
 - **PsyNetSkills:** Mention in experiment attempt guidance that dashboard data
   checks should exercise `context="monitor"` if `get_basic_data` returns pandas
-  objects for export. Confidence: medium. Status: awaiting_review.
+  objects for export. Confidence: medium. Status: considering.
 - **PsyNet:** Make dashboard basic-data rendering convert pandas DataFrames to
   records automatically, matching the exporter's behavior. Confidence: medium.
-  Status: awaiting_review.
+  Status: considering.
 
 ## Local export can prompt for source download credentials
 
@@ -59,7 +59,7 @@ better suited to automated challenge evidence collection.
 
 - **PsyNetSkills:** Use `psynet export local --no-source` in challenge evidence
   instructions when only `evidence/data.zip` is required. Confidence: high.
-  Status: awaiting_review.
+  Status: considering.
 - **PsyNet:** Add a noninteractive export preset for local evidence collection that
   implies `--no-source` when source artifacts are not requested. Confidence:
-  medium. Status: awaiting_review.
+  medium. Status: considering.

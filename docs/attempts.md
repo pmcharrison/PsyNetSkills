@@ -160,16 +160,18 @@ What happened during implementation or testing.
 *Actions:*
 
 - **PsyNetSkills:** A repo, skill, docs, validation, dashboard, or evidence workflow
-  change. Confidence: high. Status: awaiting_review.
+  change. Confidence: high. Status: considering.
 - **PsyNet:** A PsyNet framework, documentation, or command-line change. Confidence:
-  medium. Status: awaiting_review.
+  medium. Status: considering.
 ```
 
 Keep learning notes concise and grounded in what happened. Useful topics include
 PsyNet or Dallinger API gotchas, ambiguous instructions, evidence collection
 friction, local testing friction, and candidate refactors. Maintainers can later
-update action statuses from `awaiting_review` to `planned`, `implemented`,
-`declined`, or `superseded`.
+update action statuses from `considering` to `planned`, `in_progress`,
+`completed`, `dismissed`, or `superseded`. Cloud agents should set a relevant
+action to `in_progress` when they start working on it and update it again when
+the work is completed, dismissed, or superseded.
 
 In Cursor Cloud workflows, users usually review attempts through conversation
 with an agent rather than by editing files directly. Agents should draft

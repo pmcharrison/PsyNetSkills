@@ -13,7 +13,7 @@ SKILL_NAME_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 LEARNING_ACTION_RE = re.compile(
     r"^- (?P<target>\*\*(?:PsyNetSkills|PsyNet):\*\*) (?P<action>.+) "
     r"Confidence: (?P<confidence>high|medium|low)\. "
-    r"Status: (?P<status>awaiting_review|planned|implemented|declined|superseded)\.$",
+    r"Status: (?P<status>considering|in_progress|planned|completed|dismissed|superseded|implemented|declined)\.$",
 )
 TIMELINE_ENTRY_RE = re.compile(
     r"^- T\+\d{2}:\d{2}:\d{2} \[(agent-start|agent|agent-stop|manual|system)\] .+$"
