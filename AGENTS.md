@@ -19,7 +19,7 @@ experiment work, confirm these skills are attached to your session:
 
 - **uv** — Python env and package management (`~/.local/bin` should be on `PATH`).
 - **Hugo** — Dashboard build/preview (`hugo --source dashboard ...`). CI uses the latest extended Hugo release.
-- **Git LFS** — Required when working with large attempt evidence (videos, zips). Run `git lfs install` once per machine; CI checks out with `lfs: true`.
+- **Git LFS** — Required when working with large attempt evidence (videos, zips). Run `git lfs install` once per machine; CI checks out with `lfs: true`. On Cursor Cloud VMs, `git lfs install` may fail because Git hooks are managed by the environment; run `git lfs update --force` instead.
 
 ### Standard commands
 
