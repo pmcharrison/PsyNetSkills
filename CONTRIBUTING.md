@@ -78,8 +78,10 @@ EVALUATION.md
 The `challenge/` folder is a snapshot of the original challenge excluding
 previous attempts. The `EVALUATION.md` file should be human-written and include
 YAML frontmatter with a `score` field when the evaluation is complete.
-`TIMELINE.md` should log major attempt events with timestamps relative to the
-start of the attempt, including manual user interventions or corrective guidance.
+`TIMELINE.md` should log major experiment implementation events with timestamps
+relative to the start of the attempt, including seconds and manual user
+interventions or corrective guidance. Stop the timeline when the experiment
+implementation and first-pass evidence collection are complete.
 `LEARNINGS.md` should be written by the agent and summarize concrete
 implementation findings plus confidence-labelled actions targeting PsyNetSkills
 or PsyNet. Agents should invite conversational review of these actions after an

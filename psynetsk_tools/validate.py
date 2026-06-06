@@ -16,7 +16,7 @@ LEARNING_ACTION_RE = re.compile(
     r"Status: (?P<status>awaiting_review|planned|implemented|declined|superseded)\.$",
 )
 TIMELINE_ENTRY_RE = re.compile(
-    r"^- T\+\d{2}:\d{2} \[(agent|manual|system)\] .+$"
+    r"^- T\+\d{2}:\d{2}:\d{2} \[(agent-start|agent|agent-stop|manual|system)\] .+$"
 )
 
 

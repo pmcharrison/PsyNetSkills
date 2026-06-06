@@ -128,9 +128,11 @@ def test_validate_timeline_accepts_expected_format(tmp_path: Path) -> None:
     write(
         timeline_file,
         "# Timeline\n\n"
-        "- T+00:00 [agent] Started attempt.\n"
-        "- T+00:12 [manual] User corrected the workflow.\n"
-        "- T+00:20 [system] Tool returned an environment warning.\n",
+        "- T+00:00:00 [agent-start] Started attempt.\n"
+        "- T+00:00:30 [agent] Read instructions.\n"
+        "- T+00:12:05 [agent-stop] Work paused for user input.\n"
+        "- T+00:12:10 [manual] User corrected the workflow.\n"
+        "- T+00:20:00 [system] Tool returned an environment warning.\n",
     )
 
     assert validate_timeline_file(timeline_file) == []
@@ -141,7 +143,7 @@ def test_validate_timeline_rejects_invalid_entry(tmp_path: Path) -> None:
     write(
         timeline_file,
         "# Timeline\n\n"
-        "- 00:00 agent Started attempt.\n",
+        "- T+00:00 [agent] Started attempt.\n",
     )
 
     problems = validate_timeline_file(timeline_file)

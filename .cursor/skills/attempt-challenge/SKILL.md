@@ -61,20 +61,29 @@ metadata and evaluation notes.
 
 ## Timeline notes
 
-`TIMELINE.md` should help reviewers understand how the attempt progressed. Start
-it early, keep entries concise, and use relative timestamps from the beginning of
-the attempt. Use this format:
+`TIMELINE.md` should help reviewers understand how the experiment implementation
+progressed. Start it early, keep entries concise, and use relative timestamps
+with seconds from the beginning of the attempt. Use this format:
 
 ```markdown
 # Timeline
 
-- T+00:00 [agent] Started attempt and read public challenge instructions.
-- T+00:12 [agent] Implemented initial experiment scaffold.
-- T+00:25 [manual] User interrupted an interactive command and clarified the next step.
+- T+00:00:00 [agent-start] Started autonomous implementation work.
+- T+00:00:30 [agent] Read public challenge instructions.
+- T+00:12:10 [agent] Implemented initial experiment scaffold.
+- T+00:25:45 [agent-stop] Work paused while an interactive command waited for input.
+- T+00:26:05 [manual] User interrupted the command and clarified the next step.
+- T+00:27:20 [agent-start] Resumed autonomous implementation work.
+- T+00:45:00 [agent-stop] Experiment implementation and first-pass evidence collection complete.
 ```
 
-Use `[agent]` for autonomous work, `[manual]` for user interventions or
-corrective guidance, and `[system]` for notable environment/tool events.
+Use `[agent-start]` and `[agent-stop]` to show when the agent is actively
+working, especially around manual interruptions. Use `[agent]` for autonomous
+milestones, `[manual]` for user interventions or corrective guidance, and
+`[system]` for notable environment/tool events. Stop the timeline when the
+experiment implementation and first-pass evidence collection are complete. Do
+not include later repository-process discussions unless they directly change the
+experiment implementation.
 
 ## Learning notes
 

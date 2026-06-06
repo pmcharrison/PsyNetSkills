@@ -1,23 +1,16 @@
 # Timeline
 
-- T+00:00 [agent] Started the primary color rating challenge attempt and read the public challenge instructions.
-- T+00:05 [agent] Created the timestamped attempt folder, challenge snapshot, metadata, evaluator template, and initial PsyNet experiment scaffold.
-- T+00:12 [agent] Set up the local PsyNet environment and verified PostgreSQL, Redis, and Heroku CLI.
-- T+00:16 [agent] Ran the first `psynet test local` attempt and found that running directly from a folder named `code` collided with Python's standard-library `code` module.
-- T+00:21 [agent] Moved the runnable experiment into `code/primary_color_rating/` and generated `constraints.txt`.
-- T+00:26 [agent] Reran `psynet test local`, observed a brittle fixed-order trial assertion, and changed the test to assert one rating per color independent of order.
-- T+00:30 [agent] Confirmed `psynet test local` passed with one serial bot completing all three color trials.
-- T+00:35 [agent] Ran a manual participant flow, recorded `evidence/participant.mp4`, saved a dashboard monitor snapshot, exported data, and captured performance evidence.
-- T+00:38 [manual] User interrupted an interactive export command that was waiting for credential input and pointed out the prompt.
-- T+00:40 [agent] Reran export noninteractively with `--no-source`, packaged `evidence/data.zip`, and completed repository validation and dashboard build checks.
-- T+00:48 [agent] Added `LEARNINGS.md` to the attempt and documented learning notes in the attempt workflow.
-- T+01:06 [manual] User requested a more structured learning format with confidence-labelled suggestions and decision tracking.
-- T+01:13 [agent] Added dashboard support, docs, templates, and validation for parseable learning notes.
-- T+01:20 [manual] User found the heading-heavy learning format hard to read and guided a simpler action-bullet format.
-- T+01:38 [agent] Converted learning notes to compact Markdown cards with `Actions:` bullets and validator coverage.
-- T+01:45 [manual] User refined action statuses from `pending` to `awaiting_review`, `planned`, `implemented`, `declined`, and `superseded`.
-- T+01:47 [agent] Updated the template, docs, validator, tests, and current learnings to use the revised status vocabulary.
-- T+01:56 [manual] User proposed treating learning-note review as a conversational workflow for Cursor Cloud agents.
-- T+01:58 [agent] Documented the conversational review workflow in the attempt skill and contributor docs.
-- T+02:04 [manual] User requested a timeline artifact to log attempt progress and manual interventions.
-- T+02:07 [agent] Added `TIMELINE.md`, timeline docs, a template, and validation for relative-timestamped timeline entries.
+- T+00:00:00 [agent-start] Started autonomous implementation work on the primary color rating challenge.
+- T+00:00:30 [agent] Read the public challenge instructions and confirmed the task: red, green, and blue pleasantness ratings on a 1-7 scale.
+- T+00:05:00 [agent] Created the timestamped attempt folder, challenge snapshot, metadata, evaluator template, and initial PsyNet experiment scaffold.
+- T+00:12:00 [agent] Set up the local PsyNet environment and verified PostgreSQL, Redis, and Heroku CLI.
+- T+00:16:00 [agent] Ran the first `psynet test local` attempt and found that running directly from a folder named `code` collided with Python's standard-library `code` module.
+- T+00:21:00 [agent] Moved the runnable experiment into `code/primary_color_rating/` and generated `constraints.txt`.
+- T+00:26:00 [agent] Reran `psynet test local`, observed a brittle fixed-order trial assertion, and changed the test to assert one rating per color independent of order.
+- T+00:30:00 [agent] Confirmed `psynet test local` passed with one serial bot completing all three color trials.
+- T+00:35:00 [agent] Ran a manual participant flow, recorded `evidence/participant.mp4`, saved a dashboard monitor snapshot, exported data, and captured performance evidence.
+- T+00:38:00 [agent-stop] Work paused while an interactive export command waited for dashboard credential input.
+- T+00:38:30 [manual] User interrupted the interactive command and pointed out that it was waiting for yes/no input.
+- T+00:40:00 [agent-start] Resumed autonomous implementation work using noninteractive export options.
+- T+00:42:00 [agent] Reran export with `--no-source`, packaged `evidence/data.zip`, and completed repository validation and dashboard build checks.
+- T+00:45:00 [agent-stop] Experiment implementation and first-pass evidence collection were complete; subsequent discussion concerned PsyNetSkills process improvements rather than the experiment implementation.
