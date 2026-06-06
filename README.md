@@ -27,8 +27,13 @@ hugo --source dashboard --destination ../public --cleanDestinationDir
 
 The dashboard is built and deployed automatically by the
 `Deploy dashboard to GitHub Pages` workflow when changes are pushed to `main`.
-In the GitHub repository settings, configure Pages to use `GitHub Actions` as
-the build and deployment source.
+In the GitHub repository settings, configure Pages to deploy from the
+`gh-pages` branch root.
+
+Pull requests from branches in this repository get dashboard previews at
+https://<owner>.github.io/<repository>/pr-preview/pr-<number>/.
+
+The preview workflow posts the concrete URL to the pull request.
 
 The local PsyNet source checkout is expected at `~/PsyNet`. Skills and challenge
 instructions may tell agents to inspect that checkout for APIs, demos, and
