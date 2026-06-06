@@ -32,6 +32,11 @@ cd demos/experiments/hello_world && psynet test local
 ```
 
 `psynet test local` on the `hello_world` demo must pass before attempting challenges or implementing experiments.
+Before starting a challenge attempt or generated experiment implementation,
+refresh the local PsyNet checkout with
+`cd ~/PsyNet && git checkout master && git pull --ff-only origin master`, then
+record the resulting checkout under the standard `psynet` object in the
+attempt's `agent.json`.
 
 ### Skill registration
 

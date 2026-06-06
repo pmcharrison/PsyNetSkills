@@ -14,30 +14,53 @@ PsyNetSkills repository.
    frontmatter.
 2. Do not read `CRITERIA.md` or any existing `attempts/` folders before
    implementation and evidence collection are complete.
-3. Create a new attempt folder named with the local timestamp:
+3. Refresh the local PsyNet checkout before implementing experiment code:
+   `cd ~/PsyNet && git checkout master && git pull --ff-only origin master`.
+   If the checkout is missing, clone it first. If local changes or a
+   non-fast-forward state prevent updating, record the blocker in `TIMELINE.md` and
+   `EVALUATION.md` rather than silently using an unknown revision.
+4. Create a new attempt folder named with the local timestamp:
    `challenges/<challenge>/attempts/YYYY-MM-DD-HH-MM/`.
-4. Snapshot the challenge into `attempts/<timestamp>/challenge/`, excluding
+5. Snapshot the challenge into `attempts/<timestamp>/challenge/`, excluding
    previous attempts. Keep optional `CRITERIA.md` in the snapshot if it exists,
    but do not open it during implementation.
-5. Write `agent.json` with the model/client details you know and the current
-   commit hash of the PsyNetSkills repository.
-6. Start `TIMELINE.md` and append relative-timestamped entries as the attempt
+6. Write `agent.json` with the model/client details you know, the current commit
+   hash of the PsyNetSkills repository, and a `psynet` object recording the
+   refreshed PsyNet checkout. Use this standard shape:
+
+   ```json
+   {
+     "psynet": {
+       "checkout_path": "~/PsyNet",
+       "branch": "master",
+       "commit": "<git rev-parse HEAD>",
+       "version": "<python -c 'from importlib.metadata import version; print(version(\"psynet\"))'>",
+       "updated_from": "origin/master",
+       "updated_at": "<UTC ISO 8601 timestamp after pulling>",
+       "update_command": "git pull --ff-only origin master",
+       "dirty": false
+     }
+   }
+   ```
+
+   Set `dirty` from `git status --short`; it should normally be `false`.
+7. Start `TIMELINE.md` and append relative-timestamped entries as the attempt
    progresses.
-7. Implement the challenge in `code/`.
-8. Collect evidence in `evidence/`. Use the `record-participant-video` skill
+8. Implement the challenge in `code/`.
+9. Collect evidence in `evidence/`. Use the `record-participant-video` skill
    when creating `evidence/participant.mp4`.
-9. Leave `EVALUATION.md` as a template for human evaluators unless the user
+10. Leave `EVALUATION.md` as a template for human evaluators unless the user
    provides evaluation feedback.
-10. In the final response, invite the user to evaluate the attempt
+11. In the final response, invite the user to evaluate the attempt
    conversationally, including a 1-10 score and concise feedback. If optional
    `CRITERIA.md` is present, ask the user about each criterion during this
    evaluation conversation. If the user provides evaluation feedback, summarize
    it in `EVALUATION.md`, check off each criterion as met or unmet, and enter the
    score in YAML frontmatter.
-11. After evaluation feedback is captured, write or update `LEARNINGS.md` with
+12. After evaluation feedback is captured, write or update `LEARNINGS.md` with
    concise implementation notes and suggested actions for PsyNetSkills or
    PsyNet. Learnings may depend on the human evaluation.
-12. Invite the user to review the drafted learning actions conversationally. If
+13. Invite the user to review the drafted learning actions conversationally. If
    the user comments on the learnings, update `LEARNINGS.md` for them rather
    than expecting manual Markdown edits.
 

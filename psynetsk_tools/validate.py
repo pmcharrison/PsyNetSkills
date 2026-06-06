@@ -18,6 +18,16 @@ LEARNING_ACTION_RE = re.compile(
 TIMELINE_ENTRY_RE = re.compile(
     r"^- T\+\d{2}:\d{2}:\d{2} \[(agent-start|agent|agent-stop|manual|system)\] .+$"
 )
+PSYNET_AGENT_REQUIRED_FIELDS = {
+    "checkout_path": str,
+    "branch": str,
+    "commit": str,
+    "version": str,
+    "updated_from": str,
+    "updated_at": str,
+    "update_command": str,
+    "dirty": bool,
+}
 
 
 def read_markdown_frontmatter(markdown_file: Path) -> tuple[dict[str, str], list[str]]:
@@ -186,6 +196,34 @@ def validate_timeline_file(timeline_file: Path) -> list[str]:
     return problems
 
 
+def validate_agent_metadata(agent_file: Path) -> list[str]:
+    """Validate attempt agent metadata."""
+    try:
+        agent = json.loads(agent_file.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        return [f"{agent_file}: invalid JSON: {exc}"]
+
+    if not isinstance(agent, dict):
+        return [f"{agent_file}: metadata must be a JSON object"]
+
+    problems: list[str] = []
+    psynet = agent.get("psynet")
+    if psynet is None:
+        return problems
+    if not isinstance(psynet, dict):
+        return [f"{agent_file}: psynet must be a JSON object"]
+
+    for field, expected_type in PSYNET_AGENT_REQUIRED_FIELDS.items():
+        value = psynet.get(field)
+        if not isinstance(value, expected_type):
+            expected_name = "boolean" if expected_type is bool else "string"
+            problems.append(f"{agent_file}: psynet.{field} must be a {expected_name}")
+        elif expected_type is str and not value.strip():
+            problems.append(f"{agent_file}: psynet.{field} must not be empty")
+
+    return problems
+
+
 def validate_skills(root: Path) -> list[str]:
     """Validate all skill folders."""
     problems: list[str] = []
@@ -229,10 +267,7 @@ def validate_attempt(attempt_dir: Path) -> list[str]:
 
     agent_file = attempt_dir / "agent.json"
     if agent_file.exists():
-        try:
-            json.loads(agent_file.read_text(encoding="utf-8"))
-        except json.JSONDecodeError as exc:
-            problems.append(f"{agent_file}: invalid JSON: {exc}")
+        problems.extend(validate_agent_metadata(agent_file))
 
     evaluation_file = attempt_dir / "EVALUATION.md"
     if evaluation_file.exists():

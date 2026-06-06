@@ -22,9 +22,10 @@ EVALUATION.md
 
 `challenge/` snapshots the original challenge at the time of the attempt,
 including optional `CRITERIA.md` when it exists.
-`agent.json` records the model, Cursor version, relevant skill commit, and
-attempt start time. `code/` contains the generated implementation. `evidence/`
-contains the materials used to evaluate whether the implementation worked.
+`agent.json` records the model, Cursor version, relevant skill commit, attempt
+start time, and PsyNet checkout metadata. `code/` contains the generated
+implementation. `evidence/` contains the materials used to evaluate whether the
+implementation worked.
 `TIMELINE.md` records major attempt events with timestamps relative to the start
 of the attempt, including manual user interventions or corrective guidance.
 `EVALUATION.md` records human evaluation feedback and the score.
@@ -62,6 +63,37 @@ Not every early attempt will have every evidence artifact. When something is
 missing, explain why in `EVALUATION.md` so later contributors know whether the
 gap reflects an implementation problem, tooling limitation, or skipped manual
 step.
+
+## PsyNet version metadata
+
+Before implementing an experiment challenge, refresh the local PsyNet checkout:
+
+```bash
+cd ~/PsyNet
+git checkout master
+git pull --ff-only origin master
+```
+
+Record the refreshed checkout in `agent.json` under the standard `psynet` key:
+
+```json
+{
+  "psynet": {
+    "checkout_path": "~/PsyNet",
+    "branch": "master",
+    "commit": "<git rev-parse HEAD>",
+    "version": "<python -c 'from importlib.metadata import version; print(version(\"psynet\"))'>",
+    "updated_from": "origin/master",
+    "updated_at": "<UTC ISO 8601 timestamp after pulling>",
+    "update_command": "git pull --ff-only origin master",
+    "dirty": false
+  }
+}
+```
+
+`dirty` should normally be `false` and comes from `git status --short`. If the
+PsyNet checkout cannot be updated to the latest `origin/master`, record the
+blocker in `TIMELINE.md` and `EVALUATION.md`.
 
 ## Timeline notes
 
