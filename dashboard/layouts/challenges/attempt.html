@@ -108,7 +108,7 @@
     <section class="attempt-panel">
       <h2>Evaluation</h2>
       {{ with $attempt.evaluation }}
-        <div class="attempt-markdown learning-markdown">
+        <div class="attempt-markdown">
           {{ . | markdownify }}
         </div>
       {{ else }}
@@ -119,7 +119,7 @@
     {{ with $attempt.learnings }}
       <section class="attempt-panel">
         <h2>Learnings</h2>
-        <div class="attempt-markdown">
+        <div class="attempt-markdown learning-markdown">
           {{ . | markdownify }}
         </div>
       </section>
