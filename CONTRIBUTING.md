@@ -77,11 +77,17 @@ EVALUATION.md
 ```
 
 The `challenge/` folder is a snapshot of the original challenge excluding
-previous attempts. The `EVALUATION.md` file should be human-written and include
-YAML frontmatter with a `score` field when the evaluation is complete. In Cursor
-Cloud workflows, agents should ask the user for a 1-10 score and concise
-feedback. If `CRITERIA.md` is present, agents should ask the user about each
-criterion and record the answers as a checklist in `EVALUATION.md`.
+previous attempts. Before implementing a PsyNet experiment attempt, update the
+local framework checkout with
+`cd ~/PsyNet && git checkout master && git pull --ff-only origin master`. Record
+the resulting PsyNet checkout in `agent.json` under a `psynet` object with
+`checkout_path`, `branch`, `commit`, `version`, `updated_from`, `updated_at`,
+`update_command`, and `dirty` fields. The `EVALUATION.md` file should be
+human-written and include YAML frontmatter with a `score` field when the
+evaluation is complete. In Cursor Cloud workflows, agents should ask the user for
+a 1-10 score and concise feedback. If `CRITERIA.md` is present, agents should ask
+the user about each criterion and record the answers as a checklist in
+`EVALUATION.md`.
 `TIMELINE.md` should log major experiment implementation events with timestamps
 relative to the start of the attempt, including seconds and manual user
 interventions or corrective guidance. Stop the timeline when the experiment

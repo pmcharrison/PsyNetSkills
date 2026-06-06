@@ -1,7 +1,9 @@
+import json
 from pathlib import Path
 
 from psynetsk_tools.validate import (
     parse_evaluation_score,
+    validate_agent_metadata,
     validate_learnings_file,
     validate_repository,
     validate_timeline_file,
@@ -171,3 +173,58 @@ def test_validate_repository_requires_timeline_for_real_attempt(
     problems = validate_repository(tmp_path)
 
     assert any("missing TIMELINE.md" in problem for problem in problems)
+
+
+def test_validate_agent_metadata_accepts_psynet_block(tmp_path: Path) -> None:
+    agent_file = tmp_path / "agent.json"
+    write(
+        agent_file,
+        json.dumps(
+            {
+                "model": "test-model",
+                "psynet": {
+                    "checkout_path": "~/PsyNet",
+                    "branch": "master",
+                    "commit": "abc123",
+                    "version": "12.3.0",
+                    "updated_from": "origin/master",
+                    "updated_at": "2026-06-06T20:21:00Z",
+                    "update_command": "git pull --ff-only origin master",
+                    "dirty": False,
+                },
+            },
+        )
+        + "\n",
+    )
+
+    assert validate_agent_metadata(agent_file) == []
+
+
+def test_validate_agent_metadata_rejects_incomplete_psynet_block(
+    tmp_path: Path,
+) -> None:
+    agent_file = tmp_path / "agent.json"
+    write(
+        agent_file,
+        json.dumps(
+            {
+                "model": "test-model",
+                "psynet": {
+                    "checkout_path": "~/PsyNet",
+                    "branch": "master",
+                    "commit": "",
+                    "version": "12.3.0",
+                    "updated_from": "origin/master",
+                    "updated_at": "2026-06-06T20:21:00Z",
+                    "update_command": "git pull --ff-only origin master",
+                    "dirty": "false",
+                },
+            },
+        )
+        + "\n",
+    )
+
+    problems = validate_agent_metadata(agent_file)
+
+    assert any("psynet.commit must not be empty" in problem for problem in problems)
+    assert any("psynet.dirty must be a boolean" in problem for problem in problems)
