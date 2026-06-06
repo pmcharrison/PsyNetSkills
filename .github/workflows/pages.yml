@@ -33,7 +33,12 @@ jobs:
       - run: uv sync --group dev
       - run: uv run psynetsk-validate
       - run: uv run psynetsk-export-dashboard-data
-      - run: hugo --source dashboard --destination ../public --cleanDestinationDir
+      - run: >
+          hugo
+          --source dashboard
+          --destination ../public
+          --cleanDestinationDir
+          --baseURL "https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/"
       - name: Deploy production site to gh-pages
         env:
           GITHUB_TOKEN: ${{ github.token }}
