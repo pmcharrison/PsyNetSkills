@@ -8,6 +8,7 @@ import re
 import sys
 from pathlib import Path
 
+SKILLS_ROOT = Path(".agents") / "skills"
 SKILL_NAME_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 
 
@@ -67,7 +68,7 @@ def parse_evaluation_score(evaluation_file: Path) -> int | None:
 def validate_skills(root: Path) -> list[str]:
     """Validate all skill folders."""
     problems: list[str] = []
-    skills_dir = root / "skills"
+    skills_dir = root / SKILLS_ROOT
     if not skills_dir.exists():
         return [f"{skills_dir}: missing skills directory"]
 
