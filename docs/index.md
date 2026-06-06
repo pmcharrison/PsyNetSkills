@@ -12,6 +12,7 @@ The workshop loop is:
 4. Evaluate the attempt against hidden criteria.
 5. Improve skills based on recurring failures.
 
-The dashboard renders this documentation together with live repository data, so
-contributors can browse skills, challenges, scores, and attempt histories in one
-place.
+The public dashboard renders a concise workflow overview together with live
+repository data, so contributors can browse skills, challenges, scores, and
+attempt histories in one place. These source documentation files remain in the
+repository for contributor reference, but they are not exposed as website pages.

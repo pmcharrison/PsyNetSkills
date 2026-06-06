@@ -2,4 +2,4 @@
 title: PsyNetSkills dashboard
 ---
 
-Browse workshop documentation, Agent Skills, and challenge progress.
+Browse the workshop workflow, Agent Skills, and challenge progress.

@@ -42,32 +42,6 @@ TIMELINE_ENTRY_RE = re.compile(
 
 
 @dataclass(frozen=True)
-class DocPage:
-    """A markdown documentation page."""
-
-    slug: str
-    title: str
-    path: str
-    weight: int
-
-
-@dataclass(frozen=True)
-class DocNavItem:
-    """Adjacent docs page metadata."""
-
-    title: str
-    url: str
-
-
-@dataclass(frozen=True)
-class DocNavigation:
-    """Previous and next links for a docs page."""
-
-    previous: DocNavItem | None
-    next: DocNavItem | None
-
-
-@dataclass(frozen=True)
 class Skill:
     """A dashboard summary of an Agent Skill."""
 
@@ -152,19 +126,6 @@ def title_from_markdown(markdown: str, fallback: str) -> str:
     return fallback.replace("-", " ").title()
 
 
-def doc_sort_key(path: Path) -> tuple[int, str]:
-    """Return the intended docs navigation order."""
-    order = {
-        "index": 10,
-        "skills": 20,
-        "challenges": 30,
-        "attempts": 40,
-        "dashboard": 50,
-        "psynet-reference": 60,
-    }
-    return (order.get(path.stem, 100), path.stem)
-
-
 def strip_challenge_frontmatter(markdown: str) -> str:
     """Remove challenge frontmatter and heading for dashboard display."""
     return strip_first_heading(strip_frontmatter(markdown))
@@ -190,11 +151,6 @@ def read_challenge_criteria(challenge_dir: Path, attempt_dir: Path) -> str:
     return strip_first_heading(
         strip_frontmatter(criteria_file.read_text(encoding="utf-8")),
     )
-
-
-def docs_url(slug: str) -> str:
-    """Return the Hugo URL for a docs page."""
-    return "docs/" if slug == "index" else f"docs/{slug}/"
 
 
 def strip_first_heading(markdown: str) -> str:
@@ -229,76 +185,17 @@ def demote_markdown_headings(markdown: str, levels: int = 1) -> str:
     return "\n".join(lines).strip() + "\n" if lines else ""
 
 
-def collect_docs(root: Path) -> list[DocPage]:
-    """Collect markdown docs for dashboard navigation."""
-    docs_dir = root / "docs"
-    pages: list[DocPage] = []
-    for index, path in enumerate(
-        sorted(docs_dir.glob("*.md"), key=doc_sort_key),
-        start=1,
-    ):
-        markdown = path.read_text(encoding="utf-8")
-        pages.append(
-            DocPage(
-                slug=path.stem,
-                title=title_from_markdown(markdown, path.stem),
-                path=f"docs/{path.name}",
-                weight=index * 10,
-            )
-        )
-    return pages
-
-
 def write_frontmatter(
     title: str,
     body: str,
     weight: int | None = None,
-    previous: DocNavItem | None = None,
-    next_: DocNavItem | None = None,
 ) -> str:
     """Write simple Hugo frontmatter plus Markdown body."""
     lines = ["---", f"title: {json.dumps(title)}"]
     if weight is not None:
         lines.append(f"weight: {weight}")
-    if previous is not None:
-        lines.extend(
-            [
-                "previous:",
-                f"  title: {json.dumps(previous.title)}",
-                f"  url: {json.dumps(previous.url)}",
-            ]
-        )
-    if next_ is not None:
-        lines.extend(
-            [
-                "next:",
-                f"  title: {json.dumps(next_.title)}",
-                f"  url: {json.dumps(next_.url)}",
-            ]
-        )
     lines.extend(["---", "", body])
     return "\n".join(lines)
-
-
-def docs_navigation(docs: list[DocPage]) -> dict[str, DocNavigation]:
-    """Build previous/next navigation for docs pages."""
-    navigation: dict[str, DocNavigation] = {}
-    for index, doc in enumerate(docs):
-        previous_doc = docs[index - 1] if index > 0 else None
-        next_doc = docs[index + 1] if index < len(docs) - 1 else None
-        navigation[doc.slug] = DocNavigation(
-            previous=(
-                DocNavItem(previous_doc.title, docs_url(previous_doc.slug))
-                if previous_doc is not None
-                else None
-            ),
-            next=(
-                DocNavItem(next_doc.title, docs_url(next_doc.slug))
-                if next_doc is not None
-                else None
-            ),
-        )
-    return navigation
 
 
 def collect_skills(root: Path) -> list[Skill]:
@@ -615,42 +512,11 @@ def collect_challenges(root: Path) -> list[Challenge]:
     return challenges
 
 
-def write_docs_content(
-    root: Path,
-    dashboard_dir: Path,
-    docs: list[DocPage],
-) -> None:
-    """Write generated Hugo content pages for docs."""
-    source_docs_dir = root / "docs"
-    docs_dir = dashboard_dir / "content" / "docs"
-    shutil.rmtree(docs_dir, ignore_errors=True)
-    docs_dir.mkdir(parents=True, exist_ok=True)
-    navigation = docs_navigation(docs)
-
-    for doc in docs:
-        source = source_docs_dir / f"{doc.slug}.md"
-        body = strip_first_heading(source.read_text(encoding="utf-8"))
-        target_name = "_index.md" if doc.slug == "index" else f"{doc.slug}.md"
-        page_navigation = navigation[doc.slug]
-        (docs_dir / target_name).write_text(
-            write_frontmatter(
-                doc.title,
-                body,
-                weight=doc.weight,
-                previous=page_navigation.previous,
-                next_=page_navigation.next,
-            ),
-            encoding="utf-8",
-        )
-
-
 def dashboard_data(root: Path) -> dict[str, object]:
     """Return all structured data needed by the dashboard."""
-    docs = collect_docs(root)
     skills = collect_skills(root)
     challenges = collect_challenges(root)
     return {
-        "docs": [asdict(doc) for doc in docs],
         "skills": [asdict(skill) for skill in skills],
         "challenges": [
             {
@@ -660,7 +526,6 @@ def dashboard_data(root: Path) -> dict[str, object]:
             for challenge in challenges
         ],
         "counts": {
-            "docs": len(docs),
             "skills": len(skills),
             "challenges": len(challenges),
         },
@@ -676,6 +541,15 @@ def write_skill_content(
     skills_dir = dashboard_dir / "content" / "skills"
     shutil.rmtree(skills_dir, ignore_errors=True)
     skills_dir.mkdir(parents=True, exist_ok=True)
+    (skills_dir / "_index.md").write_text(
+        write_frontmatter(
+            "Skills",
+            "Skills are reusable Agent Skills that guide agents through PsyNet "
+            "experiment implementation, challenge attempts, and evidence "
+            "collection.\n",
+        ),
+        encoding="utf-8",
+    )
 
     for skill in skills:
         source = root / skill.path
@@ -771,11 +645,7 @@ def export_dashboard(root: Path, dashboard_dir: Path) -> None:
         encoding="utf-8",
     )
 
-    write_docs_content(
-        root,
-        dashboard_dir,
-        [DocPage(**doc) for doc in data["docs"]],  # type: ignore[arg-type]
-    )
+    shutil.rmtree(dashboard_dir / "content" / "docs", ignore_errors=True)
     write_skill_content(
         root,
         dashboard_dir,

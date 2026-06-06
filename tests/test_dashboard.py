@@ -3,7 +3,6 @@ from pathlib import Path
 
 from psynetsk_tools.dashboard import (
     collect_challenges,
-    collect_docs,
     collect_skills,
     dashboard_data,
     demote_markdown_headings,
@@ -43,28 +42,6 @@ def evaluation(score: int = 6) -> str:
         "# Evaluation\n\n"
         "Attempt body.\n"
     )
-
-
-def test_collect_docs_uses_h1_title(tmp_path: Path) -> None:
-    write(tmp_path / "docs/index.md", "# Introduction\n\nDetails.\n")
-    write(tmp_path / "docs/skills.md", "# Skills\n\nDetails.\n")
-    write(tmp_path / "docs/challenges.md", "# Challenges\n\nDetails.\n")
-    write(tmp_path / "docs/attempts.md", "# Attempts\n\nDetails.\n")
-    write(tmp_path / "docs/dashboard.md", "# Dashboard\n\nDetails.\n")
-
-    docs = collect_docs(tmp_path)
-
-    assert docs[0].slug == "index"
-    assert docs[0].title == "Introduction"
-    assert docs[1].slug == "skills"
-    assert docs[1].title == "Skills"
-    assert [doc.slug for doc in docs] == [
-        "index",
-        "skills",
-        "challenges",
-        "attempts",
-        "dashboard",
-    ]
 
 
 def test_collect_challenges_reports_latest_score(tmp_path: Path) -> None:
@@ -274,7 +251,8 @@ def test_dashboard_data_reports_counts(tmp_path: Path) -> None:
 
     data = dashboard_data(tmp_path)
 
-    assert data["counts"] == {"docs": 1, "skills": 1, "challenges": 1}
+    assert data["counts"] == {"skills": 1, "challenges": 1}
+    assert "docs" not in data
 
 
 def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
@@ -364,16 +342,8 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
     export_dashboard(tmp_path, tmp_path / "dashboard")
 
     assert (tmp_path / "dashboard/data/psynetsk.json").exists()
-    assert (tmp_path / "dashboard/content/docs/_index.md").exists()
-    docs_index = (tmp_path / "dashboard/content/docs/_index.md").read_text(
-        encoding="utf-8",
-    )
-    docs_skills = (tmp_path / "dashboard/content/docs/skills.md").read_text(
-        encoding="utf-8",
-    )
-    assert "next:" in docs_index
-    assert "previous:" in docs_skills
-    assert not (tmp_path / "dashboard/content/skills/_index.md").exists()
+    assert not (tmp_path / "dashboard/content/docs").exists()
+    assert (tmp_path / "dashboard/content/skills/_index.md").exists()
     assert (
         tmp_path / "dashboard/content/skills/example-skill/index.md"
     ).exists()
@@ -386,6 +356,7 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
         encoding="utf-8",
     )
     parsed_data = json.loads(data)
+    assert "docs" not in parsed_data
     assert '"title": "Example skill"' in data
     challenge_page = (
         tmp_path / "dashboard/content/challenges/example/_index.md"

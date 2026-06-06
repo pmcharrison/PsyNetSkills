@@ -2,7 +2,7 @@
 
 The dashboard is a Hugo static site generated from repository files. It renders:
 
-- Markdown pages from `docs/`.
+- The public workflow overview from `dashboard/content/workflow/`.
 - Skill summaries from `.cursor/skills/*/SKILL.md`.
 - Challenge summaries from `challenges/*`.
 - Attempt histories and latest scores when evaluations exist.
@@ -16,8 +16,9 @@ hugo --source dashboard --destination ../public --cleanDestinationDir
 
 The Python command exports structured repository data to
 `dashboard/data/psynetsk.json` and creates lightweight Hugo content stubs for
-skills and challenges. Hugo then renders Markdown, layouts, and final HTML into
-`public/`. The GitHub Pages workflow builds the same output in CI.
+skills and challenges. Hugo then renders the workflow page, generated content,
+layouts, and final HTML into `public/`. The GitHub Pages workflow builds the
+same output in CI.
 
 ## Pull request previews
 

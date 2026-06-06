@@ -8,39 +8,26 @@
     <link rel="stylesheet" href="{{ "css/site.css" | relURL }}">
   </head>
   <body>
-    {{ $isDashboardSection := in (slice "skills" "challenges") .Section }}
-    {{ $firstSkill := index (sort site.Data.psynetsk.skills "title") 0 }}
     <header class="site-header">
-      <span class="site-title">{{ site.Title }}</span>
       <nav class="primary-nav" aria-label="Main navigation">
         <a
-          {{ if eq .Section "docs" }}aria-current="page" class="current"{{ end }}
-          href="{{ "docs/" | relURL }}"
-        >Docs</a>
+          {{ if eq .Section "workflow" }}aria-current="page" class="current"{{ end }}
+          href="{{ "workflow/" | relURL }}"
+        >PsyNetSkills</a>
         <a
-          {{ if $isDashboardSection }}aria-current="page" class="current"{{ end }}
-          href="{{ $firstSkill.url | relURL }}"
-        >Dashboard</a>
+          {{ if eq .Section "skills" }}aria-current="page" class="current"{{ end }}
+          href="{{ "skills/" | relURL }}"
+        >Skills</a>
+        <a
+          {{ if eq .Section "challenges" }}aria-current="page" class="current"{{ end }}
+          href="{{ "challenges/" | relURL }}"
+        >Challenges</a>
       </nav>
-      {{ if $isDashboardSection }}
-        <nav class="dashboard-nav" aria-label="Dashboard navigation">
-          {{ with $firstSkill }}
-            <a
-              {{ if eq $.Section "skills" }}aria-current="page" class="current"{{ end }}
-              href="{{ .url | relURL }}"
-            >Skills</a>
-          {{ end }}
-          <a
-            {{ if eq .Section "challenges" }}aria-current="page" class="current"{{ end }}
-            href="{{ "challenges/" | relURL }}"
-          >Challenges</a>
-        </nav>
-      {{ end }}
     </header>
     <main>
       {{ block "main" . }}{{ end }}
     </main>
-    {{ if and .IsPage (in (slice "docs" "skills" "challenges") .Section) }}
+    {{ if and .IsPage (in (slice "skills" "challenges") .Section) }}
       {{ partial "giscus.html" . }}
     {{ end }}
     <footer>
