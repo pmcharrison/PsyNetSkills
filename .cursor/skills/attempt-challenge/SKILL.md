@@ -97,9 +97,9 @@ agents. Use compact cards, one section per learning:
 
 - `## <short title>`
 - Optional prose describing what happened.
-- `Actions:`
-  - `psynetskills: <repo/skill/docs change>. Confidence: <level>. Status: <status>.`
-  - `psynet: <framework/docs/CLI change>. Confidence: <level>. Status: <status>.`
+- `*Actions:*`
+  - `**PsyNetSkills:** <repo/skill/docs change>. Confidence: <level>. Status: <status>.`
+  - `**PsyNet:** <framework/docs/CLI change>. Confidence: <level>. Status: <status>.`
 
 Use confidence levels `high`, `medium`, or `low`. Generally propose a near-term
 PsyNetSkills change first, then a longer-term PsyNet change if the learning
