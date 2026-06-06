@@ -392,7 +392,13 @@ td {
 }
 
 .performance-table {
-  min-width: 44rem;
+  font-size: 0.95rem;
+}
+
+.performance-table th,
+.performance-table td {
+  padding: 0.45rem 0.35rem;
+  white-space: nowrap;
 }
 
 .missing-artifact {
