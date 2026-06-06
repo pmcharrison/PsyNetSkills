@@ -399,6 +399,35 @@ def collect_attempt_files(
     return files
 
 
+def sanitize_html_artifact(path: Path) -> None:
+    """Make copied HTML evidence safer to view from static dashboard previews."""
+    html = path.read_text(encoding="utf-8")
+    if "<head>" in html and "<base " not in html:
+        html = html.replace("<head>", '<head>\n        <base href="./">', 1)
+    html = re.sub(r'href="/dashboard/[^"]*"', 'href="#"', html)
+    html = re.sub(r'src="/dashboard/[^"]*"', 'src="#"', html)
+    html = html.replace('href="/static/', 'href="./static/')
+    html = html.replace('src="/static/', 'src="./static/')
+    html = html.replace(
+        "</head>",
+        """
+        <style>
+          body { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; margin: 1rem; }
+          .container { max-width: none; }
+          #dashboard-navigation, #logout { display: none; }
+          #monitor-wrapper { display: flex; gap: 1rem; align-items: flex-start; }
+          #sidebar { flex: 0 0 18rem; }
+          #timeline-wrapper, #timeline, main { flex: 1 1 auto; min-width: 0; }
+          table { border-collapse: collapse; width: 100%; }
+          th, td { border: 1px solid #d0d7de; padding: 0.4rem; text-align: left; vertical-align: top; }
+          button { border: 1px solid #d0d7de; border-radius: 0.35rem; background: #f6f8fa; padding: 0.3rem 0.6rem; }
+        </style>
+    </head>""",
+        1,
+    )
+    path.write_text(html, encoding="utf-8")
+
+
 def collect_attempts(challenge_dir: Path) -> list[Attempt]:
     """Collect attempts for a challenge."""
     attempts_dir = challenge_dir / "attempts"
@@ -653,6 +682,8 @@ def write_attempt_artifacts(root: Path, dashboard_dir: Path) -> None:
             dirs_exist_ok=True,
             ignore=shutil.ignore_patterns(".gitkeep"),
         )
+        for html_file in target_attempts_dir.rglob("*.html"):
+            sanitize_html_artifact(html_file)
 
 
 def export_dashboard(root: Path, dashboard_dir: Path) -> None:

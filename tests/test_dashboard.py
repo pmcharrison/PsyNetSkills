@@ -290,6 +290,13 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
         / "challenges/example/attempts/2026-06-01-10-10/evidence/README.md",
         "# Evidence notes\n",
     )
+    write(
+        tmp_path
+        / "challenges/example/attempts/2026-06-01-10-10/evidence/monitor.html",
+        '<!doctype html><html><head><link href="/static/css/dashboard.css"></head>'
+        '<body><a href="/dashboard/index">Dashboard</a>'
+        '<script src="/static/scripts/dashboard_timeline.js"></script></body></html>',
+    )
     write_bytes(
         tmp_path
         / (
@@ -342,6 +349,16 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
         / "dashboard/static/artifacts/challenges/example/attempts/"
         "2026-06-01-10-10/evidence/participant.mp4"
     ).exists()
+    exported_monitor = (
+        tmp_path
+        / "dashboard/static/artifacts/challenges/example/attempts/"
+        "2026-06-01-10-10/evidence/monitor.html"
+    ).read_text(encoding="utf-8")
+    assert '<base href="./">' in exported_monitor
+    assert 'href="./static/css/dashboard.css"' in exported_monitor
+    assert 'src="./static/scripts/dashboard_timeline.js"' in exported_monitor
+    assert 'href="#"' in exported_monitor
+    assert "/dashboard/index" not in exported_monitor
     assert '"model": "test-model"' in data
     assert '"url": "challenges/example/2026-06-01-10-10/"' in data
     exported_attempt = parsed_data["challenges"][0]["attempts"][0]
