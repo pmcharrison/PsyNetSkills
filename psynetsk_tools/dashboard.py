@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import argparse
-import html
 import json
 import re
 import shutil
@@ -33,6 +32,8 @@ TEXT_FILE_EXTENSIONS = {
     ".yml",
 }
 ATTEMPT_ARTIFACTS_DIR = "artifacts/challenges"
+MONITOR_STATIC_ROOT = Path(__file__).parent / "assets" / "monitor-static" / "static"
+STATIC_REF_RE = re.compile(r'(?:href|src)="/static/(?P<path>[^"]+)"')
 TIMELINE_ENTRY_RE = re.compile(
     r"^- (?P<timestamp>T\+\d{2}:\d{2}:\d{2}) "
     r"\[(?P<actor>agent-start|agent|agent-stop|manual|system)\] "
@@ -403,13 +404,14 @@ def collect_attempt_files(
 def sanitize_html_artifact(path: Path) -> None:
     """Make copied HTML evidence safer to view from static dashboard previews."""
     html = path.read_text(encoding="utf-8")
-    html = inject_static_network_monitor(html)
+    static_refs = sorted(set(STATIC_REF_RE.findall(html)))
     if "<head>" in html and "<base " not in html:
         html = html.replace("<head>", '<head>\n        <base href="./">', 1)
     html = re.sub(r'href="/dashboard/[^"]*"', 'href="#"', html)
     html = re.sub(r'src="/dashboard/[^"]*"', 'src="#"', html)
     html = html.replace('href="/static/', 'href="./static/')
     html = html.replace('src="/static/', 'src="./static/')
+    html = re.sub(r'<script([^>]*)\s*/></script>', r'<script\1></script>', html)
     html = html.replace(
         "</head>",
         """
@@ -423,129 +425,35 @@ def sanitize_html_artifact(path: Path) -> None:
           table { border-collapse: collapse; width: 100%; }
           th, td { border: 1px solid #d0d7de; padding: 0.4rem; text-align: left; vertical-align: top; }
           button { border: 1px solid #d0d7de; border-radius: 0.35rem; background: #f6f8fa; padding: 0.3rem 0.6rem; }
-          .static-network-monitor { display: grid; gap: 1rem; margin: 1rem 0; }
-          .static-network-grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); }
-          .static-network-card { border: 1px solid #d0d7de; border-radius: 0.5rem; padding: 1rem; background: #ffffff; }
-          .static-network-card h3 { margin-top: 0; }
-          .static-network-card svg { display: block; height: auto; max-width: 100%; }
-          .static-network-meta { color: #57606a; font-size: 0.9rem; }
-          .static-trial-list { margin-bottom: 0; padding-left: 1.1rem; }
         </style>
     </head>""",
         1,
     )
     path.write_text(html, encoding="utf-8")
+    copy_monitor_static_assets(path.parent, static_refs)
 
 
-def inject_static_network_monitor(page_html: str) -> str:
-    """Inject a static fallback visualization for PsyNet monitoring snapshots."""
-    if 'id="mynetwork"' not in page_html or "const network_structure =" not in page_html:
-        return page_html
-
-    match = re.search(
-        r"const network_structure\s*=\s*(?P<data>\{.*\})\s*;\s*const vis_options",
-        page_html,
-        re.DOTALL,
-    )
-    if match is None:
-        return page_html
-
-    try:
-        network_structure = json.loads(match.group("data"))
-    except json.JSONDecodeError:
-        return page_html
-
-    static_html = static_network_monitor_html(network_structure)
-    if not static_html:
-        return page_html
-
-    return re.sub(
-        r'(<section id="mynetwork"[^>]*>)(.*?)(</section>)',
-        rf"\1{static_html}\3",
-        page_html,
-        count=1,
-        flags=re.DOTALL,
-    )
-
-
-def static_network_monitor_html(network_structure: dict[str, object]) -> str:
-    """Render a simple static network visualization from embedded monitor data."""
-    networks = network_structure.get("networks")
-    nodes = network_structure.get("nodes")
-    infos = network_structure.get("infos")
-    if not isinstance(networks, list) or not isinstance(nodes, list):
-        return ""
-    if not isinstance(infos, list):
-        infos = []
-
-    cards = []
-    for network in networks:
-        if not isinstance(network, dict):
+def copy_monitor_static_assets(html_dir: Path, static_refs: list[str]) -> None:
+    """Copy vendored Dallinger monitor assets next to a copied HTML artifact."""
+    for ref in static_refs:
+        source = MONITOR_STATIC_ROOT / ref
+        if not source.is_file():
             continue
-        network_id = network.get("id")
-        network_nodes = [
-            node for node in nodes
-            if isinstance(node, dict) and node.get("network_id") == network_id
-        ]
-        network_infos = [
-            info for info in infos
-            if isinstance(info, dict) and info.get("network_id") == network_id
-        ]
-        node = network_nodes[0] if network_nodes else {}
-        color_name, hex_color = node_color(node if isinstance(node, dict) else {})
-        trials = "\n".join(
-            f"<li>{html.escape(str(info.get('class', 'Trial')))}"
-            f" #{html.escape(str(info.get('id', '')))}"
-            f" - answer {html.escape(str(info.get('answer', 'n/a')))}</li>"
-            for info in network_infos
-            if isinstance(info, dict)
-        ) or "<li>No completed trials in snapshot.</li>"
-        cards.append(
-            f"""
-            <article class="static-network-card">
-              <h3>Network {html.escape(str(network_id))}</h3>
-              <svg viewBox="0 0 240 140" role="img" aria-label="Network {html.escape(str(network_id))} visualization">
-                <line x1="70" y1="70" x2="170" y2="45" stroke="#8c959f" stroke-width="2" />
-                <line x1="70" y1="70" x2="170" y2="95" stroke="#8c959f" stroke-width="2" />
-                <circle cx="70" cy="70" r="28" fill="{html.escape(hex_color)}" stroke="#24292f" stroke-width="2" />
-                <circle cx="170" cy="45" r="20" fill="#dbeafe" stroke="#0969da" stroke-width="2" />
-                <circle cx="170" cy="95" r="20" fill="#dbeafe" stroke="#0969da" stroke-width="2" />
-                <text x="70" y="74" text-anchor="middle" fill="#ffffff" font-size="12" font-family="sans-serif">node</text>
-                <text x="170" y="49" text-anchor="middle" fill="#0969da" font-size="11" font-family="sans-serif">trial</text>
-                <text x="170" y="99" text-anchor="middle" fill="#0969da" font-size="11" font-family="sans-serif">trial</text>
-              </svg>
-              <p class="static-network-meta">
-                Node {html.escape(str(node.get('id', 'n/a') if isinstance(node, dict) else 'n/a'))};
-                color {html.escape(color_name)};
-                {len(network_infos)} trial(s);
-                failed: {html.escape(str(network.get('failed', 'n/a')).lower())}
-              </p>
-              <ul class="static-trial-list">{trials}</ul>
-            </article>
-            """
-        )
+        destination = html_dir / "static" / ref
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(source, destination)
+        if ref == "scripts/network-monitor.js":
+            disable_live_node_details(destination)
 
-    if not cards:
-        return ""
 
-    return (
-        '<div class="static-network-monitor">'
-        '<h2>Network visualization snapshot</h2>'
-        '<p>This static fallback is rendered from the embedded PsyNet monitor data.</p>'
-        '<div class="static-network-grid">'
-        + "\n".join(cards)
-        + "</div></div>"
+def disable_live_node_details(script_path: Path) -> None:
+    """Avoid live dashboard fetches while preserving embedded JSON click details."""
+    text = script_path.read_text(encoding="utf-8")
+    text = text.replace(
+        "$(custom_node).load('/dashboard/node_details/' + node.options.data.object_type + '/' + String(node.options.data.id));",
+        "custom_node.textContent = 'Live dashboard node details are unavailable in this static snapshot.';",
     )
-
-
-def node_color(node: dict[str, object]) -> tuple[str, str]:
-    """Extract a display color from a static node definition."""
-    definition = str(node.get("definition", ""))
-    color_match = re.search(r"'color': '([^']+)'", definition)
-    hex_match = re.search(r"'hex': '(#[0-9a-fA-F]{6})'", definition)
-    color_name = color_match.group(1) if color_match else "unknown"
-    hex_color = hex_match.group(1) if hex_match else "#6e7781"
-    return color_name, hex_color
+    script_path.write_text(text, encoding="utf-8")
 
 
 def collect_attempts(challenge_dir: Path) -> list[Attempt]:

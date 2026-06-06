@@ -293,13 +293,15 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
     write(
         tmp_path
         / "challenges/example/attempts/2026-06-01-10-10/evidence/monitor.html",
-        '<!doctype html><html><head><link href="/static/css/dashboard.css"></head>'
+        '<!doctype html><html><head><link href="/static/css/dashboard.css">'
+        '<link href="/static/vis@4.17.0/dist/vis-network.min.css"></head>'
         '<body><a href="/dashboard/index">Dashboard</a><section id="mynetwork"></section>'
         '<script>const network_structure = {"networks":[{"id":1,"failed":false}],'
         "\"nodes\":[{\"id\":1,\"network_id\":1,\"definition\":\"{'color': 'red', 'hex': '#ff0000'}\"}],"
         '"infos":[{"id":2,"network_id":1,"class":"ColorRatingTrial","answer":4}]};'
         'const vis_options = {};</script>'
-        '<script src="/static/scripts/dashboard_timeline.js"></script></body></html>',
+        '<script src="/static/vis@4.17.0/dist/vis.min.js"></script>'
+        '<script src="/static/scripts/network-monitor.js"></script></body></html>',
     )
     write_bytes(
         tmp_path
@@ -360,13 +362,27 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
     ).read_text(encoding="utf-8")
     assert '<base href="./">' in exported_monitor
     assert 'href="./static/css/dashboard.css"' in exported_monitor
-    assert 'src="./static/scripts/dashboard_timeline.js"' in exported_monitor
+    assert 'src="./static/scripts/network-monitor.js"' in exported_monitor
+    assert 'src="./static/vis@4.17.0/dist/vis.min.js"' in exported_monitor
     assert 'href="#"' in exported_monitor
     assert "/dashboard/index" not in exported_monitor
-    assert "Network visualization snapshot" in exported_monitor
-    assert "Network 1" in exported_monitor
-    assert "color red" in exported_monitor
-    assert "#ff0000" in exported_monitor
+    assert "const network_structure" in exported_monitor
+    assert "Network visualization snapshot" not in exported_monitor
+    network_monitor = (
+        tmp_path
+        / "dashboard/static/artifacts/challenges/example/attempts/"
+        "2026-06-01-10-10/evidence/static/scripts/network-monitor.js"
+    )
+    assert network_monitor.exists()
+    assert (
+        tmp_path
+        / "dashboard/static/artifacts/challenges/example/attempts/"
+        "2026-06-01-10-10/evidence/static/vis@4.17.0/dist/vis.min.js"
+    ).exists()
+    assert (
+        "Live dashboard node details are unavailable"
+        in network_monitor.read_text(encoding="utf-8")
+    )
     assert '"model": "test-model"' in data
     assert '"url": "challenges/example/2026-06-01-10-10/"' in data
     exported_attempt = parsed_data["challenges"][0]["attempts"][0]
