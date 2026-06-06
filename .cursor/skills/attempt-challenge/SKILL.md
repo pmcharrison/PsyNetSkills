@@ -24,13 +24,18 @@ PsyNetSkills repository.
 7. Implement the challenge in `code/`.
 8. Collect evidence in `evidence/`. Use the `record-participant-video` skill
    when creating `evidence/participant.mp4`.
-9. Write `LEARNINGS.md` with concise implementation notes and suggested
-   actions for PsyNetSkills or PsyNet.
-10. Leave `EVALUATION.md` as a template for human evaluators unless explicitly
-   asked to evaluate.
-11. In the final response, invite the user to review the drafted learning
-   actions conversationally. If the user comments on the learnings, update
-   `LEARNINGS.md` for them rather than expecting manual Markdown edits.
+9. Leave `EVALUATION.md` as a template for human evaluators unless the user
+   provides evaluation feedback.
+10. In the final response, invite the user to evaluate the attempt
+   conversationally, including a 1-10 score and concise feedback. If the user
+   provides evaluation feedback, summarize it in `EVALUATION.md` and enter the
+   score in YAML frontmatter.
+11. After evaluation feedback is captured, write or update `LEARNINGS.md` with
+   concise implementation notes and suggested actions for PsyNetSkills or
+   PsyNet. Learnings may depend on the human evaluation.
+12. Invite the user to review the drafted learning actions conversationally. If
+   the user comments on the learnings, update `LEARNINGS.md` for them rather
+   than expecting manual Markdown edits.
 
 ## Evidence expectations
 
@@ -104,6 +109,10 @@ to `awaiting_review`; use `planned` once a maintainer agrees the action should b
 done. Include only concrete observations from the attempt, such as framework
 gotchas, missing instructions, evidence collection friction, or useful
 refactors. Do not repeat the evaluation score or hidden criteria.
+
+Develop learning notes after the human evaluation conversation whenever
+possible. The evaluator's score and feedback may reveal different process
+lessons than the implementation alone.
 
 Treat learning notes as a conversational artifact. Cloud users will often review
 them by chatting with the agent rather than editing Markdown directly. After an

@@ -77,16 +77,18 @@ EVALUATION.md
 
 The `challenge/` folder is a snapshot of the original challenge excluding
 previous attempts. The `EVALUATION.md` file should be human-written and include
-YAML frontmatter with a `score` field when the evaluation is complete.
+YAML frontmatter with a `score` field when the evaluation is complete. In Cursor
+Cloud workflows, agents should ask the user for a 1-10 score and concise
+feedback, then summarize the conversation in `EVALUATION.md`.
 `TIMELINE.md` should log major experiment implementation events with timestamps
 relative to the start of the attempt, including seconds and manual user
 interventions or corrective guidance. Stop the timeline when the experiment
 implementation and first-pass evidence collection are complete.
 `LEARNINGS.md` should be written by the agent and summarize concrete
 implementation findings plus confidence-labelled actions targeting PsyNetSkills
-or PsyNet. Agents should invite conversational review of these actions after an
-attempt is complete and update the file in follow-up commits when users revise
-or decide on actions.
+or PsyNet after implementation and, when possible, after evaluation feedback has
+been captured. Agents should invite conversational review of these actions and
+update the file in follow-up commits when users revise or decide on actions.
 
 ## Large files
 

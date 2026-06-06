@@ -4,20 +4,19 @@ score:
 
 # Evaluation
 
-## Checklist
+## Summary
 
-- [ ] Criteria reviewed by a human evaluator.
+Summarize the human evaluator's overall judgment.
 
-## Result
+## Strengths
 
-Describe the outcome of the attempt.
+- 
 
-## Process
+## Weaknesses
 
-Note anything important about how the agent worked, including blockers and
-unproductive detours.
+- 
 
-## Action points
+## Notes
 
-List reusable improvements that should be folded back into skills, docs, or
-challenge design.
+- Score and feedback should come from a human evaluator, captured
+  conversationally when working with Cursor Cloud agents.
