@@ -96,10 +96,7 @@ hugo --source dashboard --destination ../public --cleanDestinationDir
 Do not commit generated `public/` output unless the repository policy changes.
 
 For pull requests from branches in this repository, GitHub Actions publishes a
-dashboard preview at:
-
-```text
-https://<owner>.github.io/<repository>/pr-preview/pr-<number>/
-```
+dashboard preview at
+https://<owner>.github.io/<repository>/pr-preview/pr-<number>/.
 
 The preview workflow posts the concrete URL to the pull request.

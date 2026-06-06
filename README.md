@@ -30,11 +30,8 @@ The dashboard is built and deployed automatically by the
 In the GitHub repository settings, configure Pages to deploy from the
 `gh-pages` branch root.
 
-Pull requests from branches in this repository get dashboard previews at:
-
-```text
-https://<owner>.github.io/<repository>/pr-preview/pr-<number>/
-```
+Pull requests from branches in this repository get dashboard previews at
+https://<owner>.github.io/<repository>/pr-preview/pr-<number>/.
 
 The preview workflow posts the concrete URL to the pull request.
 
