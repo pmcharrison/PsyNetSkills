@@ -4,7 +4,6 @@
   {{ $skill := index $matches 0 }}
 
   <article class="prose">
-    <p><a class="back-link" href="{{ "skills/" | relURL }}">All skills</a></p>
     <h1>{{ .Title }}</h1>
     <p>{{ $skill.description }}</p>
     <p><strong>Source:</strong> <code>{{ $skill.path }}</code></p>

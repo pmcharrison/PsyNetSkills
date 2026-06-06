@@ -1,5 +1,5 @@
 ---
-title: "Workflow"
+title: "PsyNetSkills"
 ---
 
 PsyNetSkills is a workshop loop for teaching agents to implement PsyNet

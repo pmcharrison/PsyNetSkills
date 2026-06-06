@@ -9,12 +9,11 @@
   </head>
   <body>
     <header class="site-header">
-      <a class="site-title" href="{{ "workflow/" | relURL }}">{{ site.Title }}</a>
       <nav class="primary-nav" aria-label="Main navigation">
         <a
           {{ if eq .Section "workflow" }}aria-current="page" class="current"{{ end }}
           href="{{ "workflow/" | relURL }}"
-        >Workflow</a>
+        >PsyNetSkills</a>
         <a
           {{ if eq .Section "skills" }}aria-current="page" class="current"{{ end }}
           href="{{ "skills/" | relURL }}"

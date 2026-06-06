@@ -30,27 +30,18 @@ a {
 
 .site-header {
   align-items: baseline;
-  display: grid;
-  gap: 0.5rem 2rem;
-  grid-template-columns: auto 1fr;
   margin-bottom: 2rem;
-}
-
-.site-title {
-  color: var(--foreground);
-  font-size: 1.25rem;
-  font-weight: 700;
-  text-decoration: none;
 }
 
 nav {
   display: flex;
   flex-wrap: wrap;
-  gap: 1rem;
+  gap: 1.25rem;
 }
 
 .site-header nav a {
   border-bottom: 2px solid transparent;
+  font-size: 1.35rem;
   padding-bottom: 0.1rem;
   text-decoration: none;
 }
@@ -59,13 +50,6 @@ nav {
   border-bottom-color: currentColor;
   color: var(--foreground);
   font-weight: 700;
-}
-
-@media (max-width: 640px) {
-  .site-header {
-    grid-template-columns: 1fr;
-  }
-
 }
 
 .content-layout {
