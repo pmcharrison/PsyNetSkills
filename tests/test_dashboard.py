@@ -155,7 +155,7 @@ def test_collect_challenges_uses_agent_timestamp_for_example_attempt(
 
 def test_collect_skills_uses_h1_title(tmp_path: Path) -> None:
     write(
-        tmp_path / ".cursor/skills/example-skill/SKILL.md",
+        tmp_path / ".agents/skills/example-skill/SKILL.md",
         "---\n"
         "name: example-skill\n"
         "description: Use when testing dashboard generation.\n"
@@ -205,7 +205,7 @@ def test_strip_frontmatter_removes_yaml_block() -> None:
 def test_dashboard_data_reports_counts(tmp_path: Path) -> None:
     write(tmp_path / "docs/index.md", "# Docs\n")
     write(
-        tmp_path / ".cursor/skills/example-skill/SKILL.md",
+        tmp_path / ".agents/skills/example-skill/SKILL.md",
         "---\n"
         "name: example-skill\n"
         "description: Use when testing dashboard generation.\n"
@@ -227,7 +227,7 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
     write(tmp_path / "docs/index.md", "# Introduction\n")
     write(tmp_path / "docs/skills.md", "# Skills\n")
     write(
-        tmp_path / ".cursor/skills/example-skill/SKILL.md",
+        tmp_path / ".agents/skills/example-skill/SKILL.md",
         "---\n"
         "name: example-skill\n"
         "description: Use when testing dashboard generation.\n"

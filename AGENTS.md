@@ -8,11 +8,12 @@ PsyNetSkills is a workshop repository (not a multi-service app). Local developme
 
 ### Skill registration
 
-Repository skills live in `.cursor/skills/`. Before starting challenge or
-PsyNet experiment work, verify that the runtime has registered these skills and
-that they were attached to your session. If they are not registered, symlink or
-copy `.cursor/skills/` into the skills directory required by your agent runtime
-before proceeding. Do not maintain a second editable copy of the skills.
+Repository skills live in `.agents/skills/` (Agent Skills standard path). Cursor
+and Cloud Agents discover them automatically from that directory at workspace
+open — no symlink or copy step is required. Before challenge or PsyNet
+experiment work, confirm these skills are attached to your session:
+`attempt-challenge`, `psynet-experiment-implementation`, and
+`record-participant-video`.
 
 ### System dependencies (not managed by `uv sync`)
 

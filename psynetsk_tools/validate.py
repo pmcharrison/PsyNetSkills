@@ -8,7 +8,7 @@ import re
 import sys
 from pathlib import Path
 
-SKILLS_ROOT = Path(".cursor") / "skills"
+SKILLS_ROOT = Path(".agents") / "skills"
 SKILL_NAME_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 
 
