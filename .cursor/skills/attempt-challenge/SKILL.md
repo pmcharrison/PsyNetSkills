@@ -130,12 +130,14 @@ agents. Use compact cards, one section per learning:
 
 Use confidence levels `high`, `medium`, or `low`. Generally propose a near-term
 PsyNetSkills change first, then a longer-term PsyNet change if the learning
-points to a framework issue. Use lowercase status values: `awaiting_review`,
-`planned`, `implemented`, `declined`, or `superseded`. New actions should default
-to `awaiting_review`; use `planned` once a maintainer agrees the action should be
-done. Include only concrete observations from the attempt, such as framework
-gotchas, missing instructions, evidence collection friction, or useful
-refactors. Do not repeat the evaluation score or hidden criteria.
+points to a framework issue. Use lowercase status values: `considering`,
+`planned`, `in_progress`, `completed`, `dismissed`, or `superseded`. New actions
+should default to `considering`; use `planned` once a maintainer agrees the
+action should be done. When you actively work on an action from `LEARNINGS.md`,
+set that action to `in_progress` and update it again when the work is completed,
+dismissed, or superseded. Include only concrete observations from the attempt,
+such as framework gotchas, missing instructions, evidence collection friction,
+or useful refactors. Do not repeat the evaluation score or hidden criteria.
 
 Develop learning notes after the human evaluation conversation whenever
 possible. The evaluator's score and feedback may reveal different process
@@ -145,9 +147,10 @@ Treat learning notes as a conversational artifact. Cloud users will often review
 them by chatting with the agent rather than editing Markdown directly. After an
 attempt is complete, briefly ask the user to comment on the drafted actions. On
 follow-up, update action text, confidence, or status according to the user's
-comments. For example, change `awaiting_review` to `planned` when the user agrees
-the action should be done, `declined` when they reject it, `implemented` when it
-has already been completed, or `superseded` when a better action replaces it.
+comments. For example, change `considering` to `planned` when the user agrees
+the action should be done, `in_progress` while an agent is actively working on
+it, `dismissed` when they reject it, `completed` when it has been finished, or
+`superseded` when a better action replaces it.
 
 ## Notes
 

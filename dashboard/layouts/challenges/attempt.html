@@ -148,8 +148,11 @@
         <div class="attempt-markdown learning-markdown">
           {{ $learningHtml := . | markdownify }}
           {{ $learningHtml = replaceRE `Confidence:\s+(high|medium|low)\.` `<span class="learning-chip learning-chip-confidence learning-chip-confidence-$1"><span class="learning-chip-label">Confidence</span> $1</span>` $learningHtml }}
-          {{ $learningHtml = replaceRE `Status:\s+awaiting_review\.` `<span class="learning-chip learning-chip-status learning-chip-status-awaiting_review"><span class="learning-chip-label">Status</span> awaiting review</span>` $learningHtml }}
+          {{ $learningHtml = replaceRE `Status:\s+considering\.` `<span class="learning-chip learning-chip-status learning-chip-status-considering"><span class="learning-chip-label">Status</span> considering</span>` $learningHtml }}
+          {{ $learningHtml = replaceRE `Status:\s+in_progress\.` `<span class="learning-chip learning-chip-status learning-chip-status-in-progress"><span class="learning-chip-label">Status</span> in progress</span>` $learningHtml }}
           {{ $learningHtml = replaceRE `Status:\s+planned\.` `<span class="learning-chip learning-chip-status learning-chip-status-planned"><span class="learning-chip-label">Status</span> planned</span>` $learningHtml }}
+          {{ $learningHtml = replaceRE `Status:\s+completed\.` `<span class="learning-chip learning-chip-status learning-chip-status-completed"><span class="learning-chip-label">Status</span> completed</span>` $learningHtml }}
+          {{ $learningHtml = replaceRE `Status:\s+dismissed\.` `<span class="learning-chip learning-chip-status learning-chip-status-dismissed"><span class="learning-chip-label">Status</span> dismissed</span>` $learningHtml }}
           {{ $learningHtml = replaceRE `Status:\s+implemented\.` `<span class="learning-chip learning-chip-status learning-chip-status-implemented"><span class="learning-chip-label">Status</span> implemented</span>` $learningHtml }}
           {{ $learningHtml = replaceRE `Status:\s+declined\.` `<span class="learning-chip learning-chip-status learning-chip-status-declined"><span class="learning-chip-label">Status</span> declined</span>` $learningHtml }}
           {{ $learningHtml = replaceRE `Status:\s+superseded\.` `<span class="learning-chip learning-chip-status learning-chip-status-superseded"><span class="learning-chip-label">Status</span> superseded</span>` $learningHtml }}

@@ -81,7 +81,7 @@ def test_collect_challenges_reports_attempt_metadata(tmp_path: Path) -> None:
         "## Useful finding\n\n"
         "Useful finding.\n\n"
         "*Actions:*\n\n"
-        "- **PsyNetSkills:** Document it. Confidence: high. Status: awaiting_review.\n",
+        "- **PsyNetSkills:** Document it. Confidence: high. Status: considering.\n",
     )
     write(
         attempt_dir / "challenge/INSTRUCTIONS.md",
@@ -138,6 +138,46 @@ def test_demote_markdown_headings_lowers_embedded_heading_hierarchy() -> None:
     assert demote_markdown_headings(markdown) == (
         "### Useful finding\n\nText.\n\n- # Not a heading\n"
     )
+
+
+def test_dashboard_data_reports_open_learning_actions(tmp_path: Path) -> None:
+    write(
+        tmp_path / ".cursor/skills/example-skill/SKILL.md",
+        "---\n"
+        "name: example-skill\n"
+        "description: Use when testing dashboard generation.\n"
+        "---\n\n"
+        "# Example skill\n",
+    )
+    challenge_dir = tmp_path / "challenges/example"
+    write(challenge_dir / "INSTRUCTIONS.md", challenge_instructions())
+    attempt_dir = challenge_dir / "attempts/2026-06-01-10-10"
+    write(attempt_dir / "EVALUATION.md", evaluation())
+    write(
+        attempt_dir / "LEARNINGS.md",
+        "# Learnings\n\n"
+        "## Useful finding\n\n"
+        "*Actions:*\n\n"
+        "- **PsyNetSkills:** Document the behavior in the attempt guide. "
+        "Confidence: high. Status: completed.\n"
+        "- **PsyNet:** Clarify the underlying framework behavior across\n"
+        "  the relevant API docs. Confidence: medium.\n"
+        "  Status: considering.\n"
+        "- **PsyNetSkills:** Work on the active repository update. "
+        "Confidence: high. Status: in_progress.\n"
+        "- **PsyNetSkills:** Plan the repository update. "
+        "Confidence: low. Status: planned.\n"
+        "- **PsyNet:** Mark the framework follow-up completed. "
+        "Confidence: high. Status: completed.\n"
+        "- **PsyNetSkills:** Dismiss the duplicate proposal. "
+        "Confidence: medium. Status: dismissed.\n"
+        "- **PsyNet:** Supersede the old framework proposal. "
+        "Confidence: medium. Status: superseded.\n",
+    )
+
+    data = dashboard_data(tmp_path)
+
+    assert data["challenges"][0]["open_actions"] == 3
 
 
 def test_collect_challenges_reports_binary_and_nested_attempt_files(
@@ -305,7 +345,7 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
         "## Useful finding\n\n"
         "Useful finding.\n\n"
         "*Actions:*\n\n"
-        "- **PsyNetSkills:** Document it. Confidence: high. Status: awaiting_review.\n",
+        "- **PsyNetSkills:** Document it. Confidence: high. Status: considering.\n",
     )
     write(
         tmp_path
@@ -405,6 +445,7 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
     )
     assert '"model": "test-model"' in data
     assert '"url": "challenges/example/2026-06-01-10-10/"' in data
+    assert parsed_data["challenges"][0]["open_actions"] == 1
     exported_attempt = parsed_data["challenges"][0]["attempts"][0]
     assert exported_attempt["evaluation"] == "Attempt body.\n"
     assert exported_attempt["timeline"] == "- T+00:00:00 [agent-start] Started.\n"
