@@ -50,7 +50,7 @@
       {{ $visibleEvidenceFiles = $visibleEvidenceFiles | append . }}
     {{ end }}
   {{ end }}
-  {{ $hasTimeline := ne $attempt.timeline "" }}
+  {{ $hasTimeline := gt (len $attempt.timeline_entries) 0 }}
 
   <article class="prose attempt-detail">
     <p class="back-link"><a href="{{ $challenge.url | relURL }}">Back to {{ $challenge.title }}</a></p>
@@ -86,9 +86,19 @@
 
     <section class="attempt-panel timeline-panel">
       <h2>Timeline</h2>
-      {{ with $attempt.timeline }}
+      {{ if $hasTimeline }}
+        <ol class="timeline-list">
+          {{ range $attempt.timeline_entries }}
+            <li class="timeline-entry timeline-entry-{{ .actor }}">
+              <span class="timeline-time">{{ .timestamp }}</span>
+              <span class="timeline-actor">{{ replace .actor "-" " " }}</span>
+              <span class="timeline-description">{{ .description | markdownify }}</span>
+            </li>
+          {{ end }}
+        </ol>
+      {{ else if $attempt.timeline }}
         <div class="attempt-markdown timeline-markdown">
-          {{ . | markdownify }}
+          {{ $attempt.timeline | markdownify }}
         </div>
       {{ else }}
         <p>No timeline was found for this attempt.</p>
