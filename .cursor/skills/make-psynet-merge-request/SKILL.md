@@ -73,28 +73,39 @@ only actionable once CI has reported success or a concrete failure.
 
 ```bash
 python - <<'PY'
-import json, os, time, urllib.parse, urllib.request
+import itertools, json, os, time, urllib.parse, urllib.request
 
 project = urllib.parse.quote("PsyNetDev/PsyNet", safe="")
 branch = os.environ["PSYNET_BRANCH"]
 headers = {"PRIVATE-TOKEN": os.environ["GITLAB_TOKEN"]}
+interval = int(os.environ.get("PSYNET_POLL_INTERVAL_SECONDS", "30"))
+max_polls = os.environ.get("PSYNET_MAX_POLLS")
+terminal_statuses = {"success", "failed", "canceled", "skipped", "manual"}
 url = (
     f"https://gitlab.com/api/v4/projects/{project}/pipelines"
     f"?ref={urllib.parse.quote(branch, safe='')}&per_page=1"
 )
 
-while True:
+for attempt in itertools.count(1):
     request = urllib.request.Request(url, headers=headers)
     with urllib.request.urlopen(request, timeout=30) as response:
         pipelines = json.load(response)
     if not pipelines:
-        print("No pipeline found yet")
+        print(f"poll {attempt}: no pipeline found yet", flush=True)
     else:
         pipeline = pipelines[0]
-        print(pipeline["id"], pipeline["status"], pipeline["web_url"])
-        if pipeline["status"] in {"success", "failed", "canceled", "skipped"}:
+        print(
+            f"poll {attempt}: {pipeline['id']} {pipeline['status']} "
+            f"{pipeline['web_url']}",
+            flush=True,
+        )
+        if pipeline["status"] in terminal_statuses:
             break
-    time.sleep(30)
+    if max_polls is not None and attempt >= int(max_polls):
+        raise SystemExit(
+            f"Pipeline did not reach a terminal status after {attempt} poll(s)"
+        )
+    time.sleep(interval)
 PY
 ```
 
@@ -112,8 +123,20 @@ request = urllib.request.Request(
     headers=headers,
 )
 with urllib.request.urlopen(request, timeout=30) as response:
-    for job in json.load(response):
-        print(job["id"], job["name"], job["status"], job["web_url"])
+    jobs = json.load(response)
+
+failed_jobs = [job for job in jobs if job["status"] == "failed"]
+if not failed_jobs:
+    print("No failed jobs found")
+
+for job in failed_jobs:
+    print(f"===== {job['id']} {job['name']} {job['web_url']} =====")
+    trace_request = urllib.request.Request(
+        f"https://gitlab.com/api/v4/projects/{project}/jobs/{job['id']}/trace",
+        headers=headers,
+    )
+    with urllib.request.urlopen(trace_request, timeout=30) as trace_response:
+        print(trace_response.read().decode("utf-8", errors="replace"))
 PY
 ```
 
