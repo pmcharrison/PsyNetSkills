@@ -395,7 +395,12 @@ td {
   font-size: 0.95rem;
 }
 
-.performance-table th,
+.performance-table th {
+  line-height: 1.25;
+  padding: 0.45rem 0.35rem;
+  white-space: normal;
+}
+
 .performance-table td {
   padding: 0.45rem 0.35rem;
   white-space: nowrap;
