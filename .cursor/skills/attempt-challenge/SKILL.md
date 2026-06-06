@@ -60,19 +60,18 @@ metadata and evaluation notes.
 agents. Use compact cards, one section per learning:
 
 - `## <short title>`
-- `**Summary:** <what happened>`
-- `**Suggestions**`
-  - `PsyNetSkills quick fix: <near-term repo/skill/docs change>. Confidence: <level>.`
-  - `PsyNet long-term fix: <framework/docs/CLI change>. Confidence: <level>.`
-- `**Decision:** Pending. Notes:`
+- Optional prose describing what happened.
+- `Actions:`
+  - `psynetskills: <repo/skill/docs change>. Confidence: <level>. Status: <status>.`
+  - `psynet: <framework/docs/CLI change>. Confidence: <level>. Status: <status>.`
 
 Use confidence levels `high`, `medium`, or `low`. Generally propose a near-term
 PsyNetSkills change first, then a longer-term PsyNet change if the learning
-points to a framework issue. Maintainers can later update `Decision` to
-`Accepted`, `Implemented in PsyNetSkills`, `Implemented in PsyNet`, `Declined`,
-or `Superseded`. Include only concrete observations from the attempt, such as
-framework gotchas, missing instructions, evidence collection friction, or useful
-refactors. Do not repeat the evaluation score or hidden criteria.
+points to a framework issue. Use lowercase status values: `pending`, `accepted`,
+`implemented`, `declined`, or `superseded`. Include only concrete observations
+from the attempt, such as framework gotchas, missing instructions, evidence
+collection friction, or useful refactors. Do not repeat the evaluation score or
+hidden criteria.
 
 ## Notes
 

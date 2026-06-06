@@ -41,5 +41,5 @@ Attempts and evaluations are documented separately in the Attempts section.
 
 Each new attempt should include `LEARNINGS.md` alongside `agent.json`,
 `code/`, `evidence/`, and `EVALUATION.md`. Agents use this file to record
-implementation findings and confidence-labelled suggestions for quick
-PsyNetSkills fixes and longer-term PsyNet fixes.
+implementation findings and confidence-labelled actions targeting PsyNetSkills
+or PsyNet.

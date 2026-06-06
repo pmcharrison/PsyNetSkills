@@ -96,8 +96,9 @@ def test_collect_challenges_reports_attempt_metadata(tmp_path: Path) -> None:
         attempt_dir / "LEARNINGS.md",
         "# Learnings\n\n"
         "## Useful finding\n\n"
-        "**Summary:** Useful finding.\n\n"
-        "**Decision:** Pending. Notes:\n",
+        "Useful finding.\n\n"
+        "Actions:\n\n"
+        "- psynetskills: Document it. Confidence: high. Status: pending.\n",
     )
     write(attempt_dir / "challenge/INSTRUCTIONS.md", "# Example\n")
     write(attempt_dir / "code/README.md", "# Code notes\n")
@@ -262,8 +263,9 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
         / "challenges/example/attempts/2026-06-01-10-10/LEARNINGS.md",
         "# Learnings\n\n"
         "## Useful finding\n\n"
-        "**Summary:** Useful finding.\n\n"
-        "**Decision:** Pending. Notes:\n",
+        "Useful finding.\n\n"
+        "Actions:\n\n"
+        "- psynetskills: Document it. Confidence: high. Status: pending.\n",
     )
     write(
         tmp_path

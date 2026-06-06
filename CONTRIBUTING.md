@@ -78,8 +78,8 @@ The `challenge/` folder is a snapshot of the original challenge excluding
 previous attempts. The `EVALUATION.md` file should be human-written and include
 YAML frontmatter with a `score` field when the evaluation is complete.
 `LEARNINGS.md` should be written by the agent and summarize concrete
-implementation findings plus confidence-labelled suggestions for quick
-PsyNetSkills fixes and longer-term PsyNet fixes.
+implementation findings plus confidence-labelled actions targeting PsyNetSkills
+or PsyNet.
 
 ## Large files
 

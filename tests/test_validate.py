@@ -1,6 +1,10 @@
 from pathlib import Path
 
-from psynetsk_tools.validate import parse_evaluation_score, validate_repository
+from psynetsk_tools.validate import (
+    parse_evaluation_score,
+    validate_learnings_file,
+    validate_repository,
+)
 
 
 def write(path: Path, text: str = "") -> None:
@@ -61,3 +65,58 @@ def test_parse_evaluation_score_handles_frontmatter(tmp_path: Path) -> None:
     )
 
     assert parse_evaluation_score(evaluation_file) == 7
+
+
+def test_validate_learnings_accepts_expected_format(tmp_path: Path) -> None:
+    learnings_file = tmp_path / "LEARNINGS.md"
+    write(
+        learnings_file,
+        "# Learnings\n\n"
+        "## Useful finding\n\n"
+        "This explains what happened.\n\n"
+        "Actions:\n\n"
+        "- psynetskills: Document the workflow. Confidence: high. Status: pending.\n"
+        "- psynet: Improve the error message. Confidence: medium. Status: pending.\n",
+    )
+
+    assert validate_learnings_file(learnings_file) == []
+
+
+def test_validate_learnings_rejects_missing_actions(tmp_path: Path) -> None:
+    learnings_file = tmp_path / "LEARNINGS.md"
+    write(learnings_file, "# Learnings\n\n## Useful finding\n\nNo actions.\n")
+
+    problems = validate_learnings_file(learnings_file)
+
+    assert any("missing Actions:" in problem for problem in problems)
+
+
+def test_validate_learnings_rejects_invalid_action(tmp_path: Path) -> None:
+    learnings_file = tmp_path / "LEARNINGS.md"
+    write(
+        learnings_file,
+        "# Learnings\n\n"
+        "## Useful finding\n\n"
+        "Actions:\n\n"
+        "- psynetsk: Document it. Confidence: certain. Status: maybe.\n",
+    )
+
+    problems = validate_learnings_file(learnings_file)
+
+    assert any("invalid learning action" in problem for problem in problems)
+
+
+def test_validate_repository_requires_learnings_for_real_attempt(
+    tmp_path: Path,
+) -> None:
+    minimal_repo(tmp_path)
+    attempt_dir = tmp_path / "challenges/example/attempts/2026-06-01-10-10"
+    write(attempt_dir / "challenge/INSTRUCTIONS.md", "# Snapshot\n")
+    write(attempt_dir / "agent.json", "{}\n")
+    write(attempt_dir / "code/README.md", "# Code\n")
+    write(attempt_dir / "evidence/README.md", "# Evidence\n")
+    write(attempt_dir / "EVALUATION.md", "---\nscore:\n---\n")
+
+    problems = validate_repository(tmp_path)
+
+    assert any("missing LEARNINGS.md" in problem for problem in problems)
