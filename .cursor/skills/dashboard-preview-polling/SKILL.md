@@ -44,7 +44,8 @@ a pull request.
 
 4. If the matching run completes successfully within 75 seconds, tell the user
    the dashboard preview has been rebuilt for the latest commit and print the
-   preview URL.
+   preview URL only. Do not print the workflow run link in the user-facing
+   response unless the user asks for it.
 
 5. If no matching run appears within 75 seconds, do not say the preview build was
    triggered. Tell the user no preview run has appeared yet for the latest
@@ -66,3 +67,4 @@ a pull request.
   commit yet.
 - If the workflow run is still queued or in progress after 75 seconds, print the
   branch-filtered workflow-runs link.
+- If the matching run succeeds, print only the dashboard preview URL.

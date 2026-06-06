@@ -127,9 +127,9 @@ repository, use the `dashboard-preview-polling` skill before sharing dashboard
 preview links. Wait up to 75 seconds for the `Deploy dashboard PR preview`
 workflow to appear and complete successfully for the current head commit. If it
 completes, tell the user the dashboard preview has been rebuilt and provide the
-preview URL. If no matching run appears, or if it does not complete successfully
-within 75 seconds, tell the user the preview may not contain the latest changes
-yet and provide the branch-filtered workflow-runs link instead.
+preview URL only. If no matching run appears, or if it does not complete
+successfully within 75 seconds, tell the user the preview may not contain the
+latest changes yet and provide the branch-filtered workflow-runs link instead.
 
 Include these links when first creating/updating the PR, after changes that
 affect dashboard rendering or challenge attempt pages, and in the final response.
