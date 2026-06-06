@@ -118,9 +118,11 @@ PsyNet commands need sandboxing disabled in Cursor (`required_permissions: ["all
 ### Dashboard preview links
 
 When a Cloud Agent opens or updates a pull request from a branch in this
-repository, include the dashboard preview link in the final response once the PR
-number is known. Write the generated URL as ordinary Markdown text so it is
-clickable; do not put it in a fenced code block or inline code.
+repository, regularly provide the dashboard preview link to the user once the PR
+number is known. Include it when first creating/updating the PR, after changes
+that affect dashboard rendering or challenge attempt pages, and in the final
+response. Write the generated URL as ordinary Markdown text so it is clickable;
+do not put it in a fenced code block or inline code.
 
 https://pmcharrison.github.io/PsyNetSkills/pr-preview/pr-<number>/
 
