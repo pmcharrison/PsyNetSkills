@@ -95,9 +95,9 @@ def test_collect_challenges_reports_attempt_metadata(tmp_path: Path) -> None:
     write(
         attempt_dir / "LEARNINGS.md",
         "# Learnings\n\n"
-        "## Learning: Useful finding\n\n"
-        "### Summary\n\n"
-        "Useful finding.\n",
+        "## Useful finding\n\n"
+        "**Summary:** Useful finding.\n\n"
+        "**Decision:** Pending. Notes:\n",
     )
     write(attempt_dir / "challenge/INSTRUCTIONS.md", "# Example\n")
     write(attempt_dir / "code/README.md", "# Code notes\n")
@@ -109,7 +109,7 @@ def test_collect_challenges_reports_attempt_metadata(tmp_path: Path) -> None:
     assert attempt.model == "test-model"
     assert attempt.url == "challenges/example/2026-06-01-10-10/"
     assert attempt.evaluation == "Attempt body.\n"
-    assert "## Learning: Useful finding" in attempt.learnings
+    assert "## Useful finding" in attempt.learnings
     assert "Useful finding.\n" in attempt.learnings
     assert attempt.evaluation_metadata == {"example": "true"}
     assert attempt.code_files[0].path == "README.md"
@@ -261,9 +261,9 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
         tmp_path
         / "challenges/example/attempts/2026-06-01-10-10/LEARNINGS.md",
         "# Learnings\n\n"
-        "## Learning: Useful finding\n\n"
-        "### Summary\n\n"
-        "Useful finding.\n",
+        "## Useful finding\n\n"
+        "**Summary:** Useful finding.\n\n"
+        "**Decision:** Pending. Notes:\n",
     )
     write(
         tmp_path
@@ -331,7 +331,7 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
     assert '"url": "challenges/example/2026-06-01-10-10/"' in data
     exported_attempt = parsed_data["challenges"][0]["attempts"][0]
     assert exported_attempt["evaluation"] == "Attempt body.\n"
-    assert "## Learning: Useful finding" in exported_attempt["learnings"]
+    assert "## Useful finding" in exported_attempt["learnings"]
     assert exported_attempt["evaluation_metadata"] == {"example": "true"}
     assert exported_attempt["code_files"][0]["size_bytes"] == len(
         "# Code notes\n",

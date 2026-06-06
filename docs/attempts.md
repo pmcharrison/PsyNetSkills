@@ -60,37 +60,29 @@ step.
 
 ## Learning notes
 
-Write `LEARNINGS.md` before closing an attempt. Use one section per learning:
+Write `LEARNINGS.md` before closing an attempt. Use compact cards, one section
+per learning:
 
 ```markdown
-## Learning: Short descriptive title
+## Short descriptive title
 
-### Summary
+**Summary:** What happened during implementation or testing.
 
-What happened during implementation or testing.
+**Suggestions**
 
-### Suggested changes
+- PsyNetSkills quick fix: A near-term repo, skill, docs, validation, dashboard,
+  or evidence workflow change. Confidence: high.
+- PsyNet long-term fix: A longer-term PsyNet framework, documentation, or
+  command-line change. Use `None` if no PsyNet change is implied. Confidence:
+  medium.
 
-#### PsyNetSkills quick fix
-
-- `[confidence: high]` A near-term repo, skill, docs, validation, dashboard, or
-  evidence workflow change.
-
-#### PsyNet long-term fix
-
-- `[confidence: medium]` A longer-term PsyNet framework, documentation, or
-  command-line change. Use `None` if no PsyNet change is implied.
-
-### Decision
-
-- Status: Proposed
-- Notes:
+**Decision:** Pending. Notes:
 ```
 
 Keep learning notes concise and grounded in what happened. Useful topics include
 PsyNet or Dallinger API gotchas, ambiguous instructions, evidence collection
 friction, local testing friction, and candidate refactors. Maintainers can later
-update `Decision` with statuses such as `Accepted`, `Implemented in
+update `Decision` from `Pending` to statuses such as `Accepted`, `Implemented in
 PsyNetSkills`, `Implemented in PsyNet`, `Declined`, or `Superseded`.
 
 Do not use `LEARNINGS.md` for hidden evaluation criteria or scoring decisions.

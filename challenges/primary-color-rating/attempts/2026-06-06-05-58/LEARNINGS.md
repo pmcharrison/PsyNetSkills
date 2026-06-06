@@ -1,109 +1,75 @@
 # Learnings
 
-## Learning: `code/` can collide with Python's standard library
+## `code/` can collide with Python's standard library
 
-### Summary
+**Summary:** A PsyNet experiment placed directly in an attempt folder named
+`code/` did not run with `psynet test local`, because Dallinger imports the
+current directory by basename and resolved Python's standard-library `code`
+module instead of the attempt package. Nesting the runnable experiment in
+`code/primary_color_rating/` avoided the collision while keeping the
+implementation self-contained.
 
-A PsyNet experiment placed directly in an attempt folder named `code/` did not
-run with `psynet test local`, because Dallinger imports the current directory by
-basename and resolved Python's standard-library `code` module instead of the
-attempt package. Nesting the runnable experiment in `code/primary_color_rating/`
-avoided the collision while keeping the implementation self-contained.
+**Suggestions**
 
-### Suggested changes
-
-#### PsyNetSkills quick fix
-
-- `[confidence: high]` Clarify in the attempt instructions that generated
+- PsyNetSkills quick fix: Clarify in the attempt instructions that generated
   PsyNet experiments may need a runnable subdirectory under `code/` when the
   framework's package import rules conflict with the attempt folder name.
-
-#### PsyNet long-term fix
-
-- `[confidence: high]` Avoid importing an experiment package solely by current
+  Confidence: high.
+- PsyNet long-term fix: Avoid importing an experiment package solely by current
   directory basename, or raise a targeted error when the current directory name
   resolves to a non-package module such as Python's standard-library `code`.
+  Confidence: high.
 
-### Decision
+**Decision:** Implemented in PsyNetSkills. Notes: The attempt now uses
+`code/primary_color_rating/`, and the attempt README documents why.
 
-- Status: Implemented in PsyNetSkills
-- Notes: The attempt now uses `code/primary_color_rating/`, and the attempt
-  README documents why.
+## Static trials may run in framework-selected order
 
-## Learning: Static trials may run in framework-selected order
+**Summary:** `StaticTrialMaker` did not preserve the declared color order during
+the bot run. The implementation test now checks that one trial exists for each
+target color rather than assuming a fixed presentation order.
 
-### Summary
+**Suggestions**
 
-`StaticTrialMaker` did not preserve the declared color order during the bot run.
-The implementation test now checks that one trial exists for each target color
-rather than assuming a fixed presentation order.
-
-### Suggested changes
-
-#### PsyNetSkills quick fix
-
-- `[confidence: medium]` Encourage challenge implementations and tests to assert
-  scientifically relevant invariants unless the public instructions explicitly
-  require a presentation order.
-
-#### PsyNet long-term fix
-
-- `[confidence: low]` Document the default static-trial ordering behavior more
+- PsyNetSkills quick fix: Encourage challenge implementations and tests to
+  assert scientifically relevant invariants unless the public instructions
+  explicitly require a presentation order. Confidence: medium.
+- PsyNet long-term fix: Document the default static-trial ordering behavior more
   prominently in `StaticTrialMaker` docs, including how to force a fixed order
-  when an experiment requires one.
+  when an experiment requires one. Confidence: low.
 
-### Decision
+**Decision:** Pending. Notes:
 
-- Status: Proposed
-- Notes:
+## Dashboard basic data needs JSON-friendly values
 
-## Learning: Dashboard basic data needs JSON-friendly values
+**Summary:** `get_basic_data(context="monitor")` needs JSON-serializable values
+for the dashboard. The export path can still return a DataFrame, but the monitor
+path should return plain records.
 
-### Summary
+**Suggestions**
 
-`get_basic_data(context="monitor")` needs JSON-serializable values for the
-dashboard. The export path can still return a DataFrame, but the monitor path
-should return plain records.
-
-### Suggested changes
-
-#### PsyNetSkills quick fix
-
-- `[confidence: medium]` Mention in experiment attempt guidance that dashboard
+- PsyNetSkills quick fix: Mention in experiment attempt guidance that dashboard
   data checks should exercise `context="monitor"` if `get_basic_data` returns
-  pandas objects for export.
-
-#### PsyNet long-term fix
-
-- `[confidence: medium]` Make dashboard basic-data rendering convert pandas
+  pandas objects for export. Confidence: medium.
+- PsyNet long-term fix: Make dashboard basic-data rendering convert pandas
   DataFrames to records automatically, matching the exporter's behavior.
+  Confidence: medium.
 
-### Decision
+**Decision:** Pending. Notes:
 
-- Status: Proposed
-- Notes:
+## Local export can prompt for source download credentials
 
-## Learning: Local export can prompt for source download credentials
+**Summary:** `psynet export local` can prompt for dashboard credentials when
+downloading source code. Passing `--no-source` made the data export
+noninteractive and better suited to automated challenge evidence collection.
 
-### Summary
+**Suggestions**
 
-`psynet export local` can prompt for dashboard credentials when downloading
-source code. Passing `--no-source` made the data export noninteractive and
-better suited to automated challenge evidence collection.
-
-### Suggested changes
-
-#### PsyNetSkills quick fix
-
-- `[confidence: high]` Use `psynet export local --no-source` in challenge
-  evidence instructions when only `evidence/data.zip` is required.
-
-#### PsyNet long-term fix
-
-- `[confidence: medium]` Add a noninteractive export preset for local evidence
+- PsyNetSkills quick fix: Use `psynet export local --no-source` in challenge
+  evidence instructions when only `evidence/data.zip` is required. Confidence:
+  high.
+- PsyNet long-term fix: Add a noninteractive export preset for local evidence
   collection that implies `--no-source` when source artifacts are not requested.
+  Confidence: medium.
 
-### Decision
-
-- Status: Proposed
-- Notes:
+**Decision:** Pending. Notes:

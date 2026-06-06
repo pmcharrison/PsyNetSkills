@@ -1,25 +1,15 @@
 # Learnings
 
-## Learning: Short descriptive title
+## Short descriptive title
 
-### Summary
+**Summary:** Briefly describe the concrete implementation or testing discovery.
 
-Briefly describe the concrete implementation or testing discovery.
+**Suggestions**
 
-### Suggested changes
-
-#### PsyNetSkills quick fix
-
-- `[confidence: medium]` Describe the near-term repository, skill, docs,
-  validation, dashboard, or evidence workflow change.
-
-#### PsyNet long-term fix
-
-- `[confidence: medium]` Describe the longer-term PsyNet framework,
+- PsyNetSkills quick fix: Describe the near-term repository, skill, docs,
+  validation, dashboard, or evidence workflow change. Confidence: medium.
+- PsyNet long-term fix: Describe the longer-term PsyNet framework,
   documentation, or command-line change. Use `None` if this learning does not
-  imply a PsyNet change.
+  imply a PsyNet change. Confidence: medium.
 
-### Decision
-
-- Status: Proposed
-- Notes:
+**Decision:** Pending. Notes:
