@@ -5,6 +5,7 @@ from psynetsk_tools.dashboard import (
     collect_challenges,
     collect_skills,
     dashboard_data,
+    demote_markdown_headings,
     export_dashboard,
     strip_challenge_frontmatter,
     strip_frontmatter,
@@ -66,6 +67,7 @@ def test_collect_challenges_reports_latest_score(tmp_path: Path) -> None:
 def test_collect_challenges_reports_attempt_metadata(tmp_path: Path) -> None:
     challenge_dir = tmp_path / "challenges/example"
     write(challenge_dir / "INSTRUCTIONS.md", challenge_instructions())
+    write(challenge_dir / "CRITERIA.md", "# Criteria\n\n- Top-level criterion.\n")
     attempt_dir = challenge_dir / "attempts/2026-06-01-10-10"
     write(attempt_dir / "agent.json", '{"model": "test-model"}\n')
     write(attempt_dir / "EVALUATION.md", evaluation())
@@ -78,10 +80,18 @@ def test_collect_challenges_reports_attempt_metadata(tmp_path: Path) -> None:
         "# Learnings\n\n"
         "## Useful finding\n\n"
         "Useful finding.\n\n"
-        "Actions:\n\n"
-        "- psynetskills: Document it. Confidence: high. Status: awaiting_review.\n",
+        "*Actions:*\n\n"
+        "- **PsyNetSkills:** Document it. Confidence: high. Status: awaiting_review.\n",
     )
-    write(attempt_dir / "challenge/INSTRUCTIONS.md", "# Example\n")
+    write(
+        attempt_dir / "challenge/INSTRUCTIONS.md",
+        "---\n"
+        "title: Example challenge\n"
+        "type: experiment implementation\n"
+        "difficulty: 4\n"
+        "---\n\n"
+        "Implement the snapshot experiment.\n",
+    )
     write(attempt_dir / "code/README.md", "# Code notes\n")
     write(attempt_dir / "evidence/README.md", "# Evidence notes\n")
 
@@ -96,13 +106,38 @@ def test_collect_challenges_reports_attempt_metadata(tmp_path: Path) -> None:
     assert attempt.timeline_entries[0].timestamp == "T+00:00:00"
     assert attempt.timeline_entries[0].actor == "agent-start"
     assert attempt.timeline_entries[0].description == "Started."
-    assert "## Useful finding" in attempt.learnings
+    assert "### Useful finding" in attempt.learnings
     assert "Useful finding.\n" in attempt.learnings
     assert attempt.evaluation_metadata == {"example": "true"}
+    assert attempt.challenge_instructions == "Implement the snapshot experiment.\n"
+    assert attempt.challenge_criteria == "- Top-level criterion.\n"
     assert attempt.code_files[0].path == "README.md"
     assert attempt.code_files[0].content == "# Code notes\n"
     assert attempt.code_files[0].kind == "md"
     assert attempt.code_files[0].size_bytes == len("# Code notes\n")
+
+
+def test_collect_challenges_prefers_snapshotted_criteria(
+    tmp_path: Path,
+) -> None:
+    challenge_dir = tmp_path / "challenges/example"
+    write(challenge_dir / "INSTRUCTIONS.md", challenge_instructions())
+    write(challenge_dir / "CRITERIA.md", "# Criteria\n\n- Current criterion.\n")
+    attempt_dir = challenge_dir / "attempts/2026-06-01-10-10"
+    write(attempt_dir / "EVALUATION.md", evaluation())
+    write(attempt_dir / "challenge/CRITERIA.md", "# Criteria\n\n- Snapshot criterion.\n")
+
+    attempt = collect_challenges(tmp_path)[0].attempts[0]
+
+    assert attempt.challenge_criteria == "- Snapshot criterion.\n"
+
+
+def test_demote_markdown_headings_lowers_embedded_heading_hierarchy() -> None:
+    markdown = "## Useful finding\n\nText.\n\n- # Not a heading\n"
+
+    assert demote_markdown_headings(markdown) == (
+        "### Useful finding\n\nText.\n\n- # Not a heading\n"
+    )
 
 
 def test_collect_challenges_reports_binary_and_nested_attempt_files(
@@ -237,6 +272,20 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
         challenge_instructions(),
     )
     write(
+        tmp_path / "challenges/example/CRITERIA.md",
+        "# Criteria\n\n- Exported top-level criterion.\n",
+    )
+    write(
+        tmp_path
+        / "challenges/example/attempts/2026-06-01-10-10/challenge/INSTRUCTIONS.md",
+        "---\n"
+        "title: Example challenge\n"
+        "type: experiment implementation\n"
+        "difficulty: 4\n"
+        "---\n\n"
+        "Implement the exported snapshot.\n",
+    )
+    write(
         tmp_path / "challenges/example/attempts/2026-06-01-10-10/agent.json",
         '{"model": "test-model"}\n',
     )
@@ -255,8 +304,8 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
         "# Learnings\n\n"
         "## Useful finding\n\n"
         "Useful finding.\n\n"
-        "Actions:\n\n"
-        "- psynetskills: Document it. Confidence: high. Status: awaiting_review.\n",
+        "*Actions:*\n\n"
+        "- **PsyNetSkills:** Document it. Confidence: high. Status: awaiting_review.\n",
     )
     write(
         tmp_path
@@ -366,8 +415,16 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
             "description": "Started.",
         },
     ]
-    assert "## Useful finding" in exported_attempt["learnings"]
+    assert "### Useful finding" in exported_attempt["learnings"]
     assert exported_attempt["evaluation_metadata"] == {"example": "true"}
+    assert (
+        exported_attempt["challenge_instructions"]
+        == "Implement the exported snapshot.\n"
+    )
+    assert (
+        exported_attempt["challenge_criteria"]
+        == "- Exported top-level criterion.\n"
+    )
     assert exported_attempt["code_files"][0]["size_bytes"] == len(
         "# Code notes\n",
     )

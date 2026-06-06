@@ -89,6 +89,8 @@ class Attempt:
     timeline_entries: list[TimelineEntry]
     learnings: str
     evaluation_metadata: dict[str, str]
+    challenge_instructions: str
+    challenge_criteria: str
     challenge_files: list[AttemptFile]
     code_files: list[AttemptFile]
     evidence_files: list[AttemptFile]
@@ -129,6 +131,28 @@ def strip_challenge_frontmatter(markdown: str) -> str:
     return strip_first_heading(strip_frontmatter(markdown))
 
 
+def read_challenge_snapshot_instructions(attempt_dir: Path) -> str:
+    """Read rendered challenge instructions from an attempt snapshot."""
+    instructions_file = attempt_dir / "challenge" / "INSTRUCTIONS.md"
+    if not instructions_file.exists():
+        return ""
+    return strip_challenge_frontmatter(
+        instructions_file.read_text(encoding="utf-8"),
+    )
+
+
+def read_challenge_criteria(challenge_dir: Path, attempt_dir: Path) -> str:
+    """Read rendered criteria from an attempt snapshot or challenge folder."""
+    criteria_file = attempt_dir / "challenge" / "CRITERIA.md"
+    if not criteria_file.exists():
+        criteria_file = challenge_dir / "CRITERIA.md"
+    if not criteria_file.exists():
+        return ""
+    return strip_first_heading(
+        strip_frontmatter(criteria_file.read_text(encoding="utf-8")),
+    )
+
+
 def strip_first_heading(markdown: str) -> str:
     """Remove the first H1 heading from Markdown content."""
     lines = markdown.splitlines()
@@ -146,6 +170,19 @@ def strip_frontmatter(markdown: str) -> str:
     if len(parts) < 3:
         return markdown
     return parts[2].lstrip("\n")
+
+
+def demote_markdown_headings(markdown: str, levels: int = 1) -> str:
+    """Increase Markdown heading depth without changing non-heading text."""
+    prefix = "#" * levels
+    lines: list[str] = []
+    for line in markdown.splitlines():
+        if line.startswith("#"):
+            heading_marks, separator, _ = line.partition(" ")
+            if separator and set(heading_marks) == {"#"}:
+                line = f"{prefix}{line}"
+        lines.append(line)
+    return "\n".join(lines).strip() + "\n" if lines else ""
 
 
 def write_frontmatter(
@@ -413,13 +450,22 @@ def collect_attempts(challenge_dir: Path) -> list[Attempt]:
                 timeline=timeline,
                 timeline_entries=parse_timeline_entries(timeline),
                 learnings=(
-                    strip_first_heading(
-                        learnings_file.read_text(encoding="utf-8")
+                    demote_markdown_headings(
+                        strip_first_heading(
+                            learnings_file.read_text(encoding="utf-8")
+                        )
                     )
                     if learnings_file.exists()
                     else ""
                 ),
                 evaluation_metadata=evaluation_metadata,
+                challenge_instructions=read_challenge_snapshot_instructions(
+                    attempt_dir,
+                ),
+                challenge_criteria=read_challenge_criteria(
+                    challenge_dir,
+                    attempt_dir,
+                ),
                 challenge_files=collect_attempt_files(
                     attempt_dir / "challenge",
                     f"{artifact_prefix}/challenge",

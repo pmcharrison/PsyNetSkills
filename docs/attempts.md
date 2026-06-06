@@ -20,7 +20,8 @@ LEARNINGS.md
 EVALUATION.md
 ```
 
-`challenge/` snapshots the original challenge at the time of the attempt.
+`challenge/` snapshots the original challenge at the time of the attempt,
+including optional `CRITERIA.md` when it exists.
 `agent.json` records the model, Cursor version, relevant skill commit, and
 attempt start time. `code/` contains the generated implementation. `evidence/`
 contains the materials used to evaluate whether the implementation worked.
@@ -103,6 +104,11 @@ with an agent rather than by editing files directly. Agents should ask the user
 for a 1-10 score and concise evaluation feedback, then summarize that feedback in
 `EVALUATION.md` and update the score field.
 
+If the challenge includes `CRITERIA.md`, agents should use those criteria during
+the conversational evaluation. Ask the user about each criterion, then record the
+results in `EVALUATION.md` as a Markdown checklist, for example `- [x] Criterion`
+or `- [ ] Criterion`, with concise notes for any failed or uncertain items.
+
 The dashboard uses this field to show progress over time. Keep written feedback
 specific and actionable. Strong evaluations explain both what failed and which
 future skill change might prevent the same failure.
@@ -110,18 +116,20 @@ future skill change might prevent the same failure.
 ## Learning notes
 
 Write `LEARNINGS.md` after implementation and, when possible, after the human
-evaluation conversation. Use compact cards, one section per learning:
+evaluation conversation. Use compact cards, one second-level section per
+learning. The dashboard embeds these cards below its own Learnings heading, so it
+renders the card titles one level lower:
 
 ```markdown
 ## Short descriptive title
 
 What happened during implementation or testing.
 
-Actions:
+*Actions:*
 
-- psynetskills: A repo, skill, docs, validation, dashboard, or evidence workflow
+- **PsyNetSkills:** A repo, skill, docs, validation, dashboard, or evidence workflow
   change. Confidence: high. Status: awaiting_review.
-- psynet: A PsyNet framework, documentation, or command-line change. Confidence:
+- **PsyNet:** A PsyNet framework, documentation, or command-line change. Confidence:
   medium. Status: awaiting_review.
 ```
 
