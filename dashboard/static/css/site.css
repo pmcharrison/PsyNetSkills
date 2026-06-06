@@ -315,6 +315,15 @@ td {
   margin-bottom: 0;
 }
 
+.learning-markdown h3 {
+  font-size: 1.05rem;
+  margin-bottom: 0.35rem;
+}
+
+.learning-markdown li strong:first-child {
+  color: var(--foreground);
+}
+
 .file-grid {
   display: grid;
   gap: 0.75rem;

@@ -11,7 +11,7 @@ from pathlib import Path
 SKILLS_ROOT = Path(".cursor") / "skills"
 SKILL_NAME_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 LEARNING_ACTION_RE = re.compile(
-    r"^- (?P<target>psynetskills|psynet): (?P<action>.+) "
+    r"^- (?P<target>\*\*(?:PsyNetSkills|PsyNet):\*\*) (?P<action>.+) "
     r"Confidence: (?P<confidence>high|medium|low)\. "
     r"Status: (?P<status>awaiting_review|planned|implemented|declined|superseded)\.$",
 )
@@ -117,6 +117,11 @@ def learning_action_bullets(lines: list[str]) -> list[str]:
     return bullets
 
 
+def is_learning_actions_heading(line: str) -> bool:
+    """Return whether a line is the Actions heading for a learning card."""
+    return line.strip() == "**Actions:**"
+
+
 def validate_learnings_file(learnings_file: Path) -> list[str]:
     """Validate the structured Markdown format for attempt learnings."""
     problems: list[str] = []
@@ -135,10 +140,16 @@ def validate_learnings_file(learnings_file: Path) -> list[str]:
         if not title:
             problems.append(f"{learnings_file}: learning section has empty title")
 
-        try:
-            actions_index = section_lines.index("Actions:")
-        except ValueError:
-            problems.append(f"{learnings_file}: learning {title!r} missing Actions:")
+        actions_index = next(
+            (
+                index
+                for index, line in enumerate(section_lines)
+                if is_learning_actions_heading(line)
+            ),
+            None,
+        )
+        if actions_index is None:
+            problems.append(f"{learnings_file}: learning {title!r} missing **Actions:**")
             continue
 
         action_lines = section_lines[actions_index + 1 :]
