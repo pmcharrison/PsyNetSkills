@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="{{ "css/site.css" | relURL }}">
   </head>
   <body>
+    {{ $firstSkill := index (sort site.Data.psynetsk.skills "title") 0 }}
     <header class="site-header">
       <a class="site-title" href="{{ "workflow/" | relURL }}">{{ site.Title }}</a>
       <nav class="primary-nav" aria-label="Main navigation">
@@ -17,7 +18,7 @@
         >Workflow</a>
         <a
           {{ if eq .Section "skills" }}aria-current="page" class="current"{{ end }}
-          href="{{ "skills/" | relURL }}"
+          href="{{ $firstSkill.url | relURL }}"
         >Skills</a>
         <a
           {{ if eq .Section "challenges" }}aria-current="page" class="current"{{ end }}

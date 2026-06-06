@@ -6,7 +6,12 @@
   <div class="content-layout">
     {{ partial "section-sidebar.html" (dict "page" . "section" "skills" "title" "Skills") }}
     <article class="prose">
-      <h1>{{ .Title }}</h1>
+      <h1>Skills</h1>
+      <p>
+        Skills are reusable Agent Skills that guide agents through PsyNet
+        experiment implementation, challenge attempts, and evidence collection.
+      </p>
+      <h2>{{ .Title }}</h2>
       <p>{{ $skill.description }}</p>
       <p><strong>Source:</strong> <code>{{ $skill.path }}</code></p>
       {{ .Content }}
