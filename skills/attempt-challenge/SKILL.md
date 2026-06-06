@@ -18,29 +18,41 @@ PsyNetSkills repository.
 4. Snapshot the challenge into `attempts/<timestamp>/challenge/`, excluding
    `CRITERIA.md` and previous attempts.
 5. Write `agent.json` with the model/client details you know and the current
-   skills commit hash if available.
+   commit hash of the PsyNetSkills repository.
 6. Implement the challenge in `code/`.
-7. Collect evidence in `evidence/`.
+7. Collect evidence in `evidence/`. Use the `record-participant-video` skill
+   when creating `evidence/participant.mp4`.
 8. Leave `EVALUATION.md` as a template for human evaluators unless explicitly
    asked to evaluate.
 
 ## Evidence expectations
 
-For experiment implementation challenges, aim to provide:
+Evidence should give reviewers enough material to judge both the
+participant-facing behavior and the technical health of the attempt. For
+experiment implementation challenges, provide the standard documented evidence:
 
-- A runnable PsyNet experiment in `code/`.
-- Command output or JSON from local validation in `evidence/`.
-- Screenshots or recordings if the participant experience was exercised.
-- Notes about any missing evidence or blocked checks.
+- Put a runnable, self-contained PsyNet experiment in `code/`.
+- Record the participant experience in `evidence/participant.mp4`.
+- Save technical validation output in `evidence/`, such as
+  `performance.json` from `psynet performance-test`, command logs, or JSON from
+  equivalent local checks.
+- Include a PsyNet dashboard monitor snapshot in `evidence/monitor.html`.
+- Include exported experiment data in `evidence/data.zip`.
+- When the challenge needs scientific checks, figures, or concise reports, put
+  them in `evidence/analyses/`.
+
+The `evidence/analyses/` directory is optional because not every challenge needs
+analysis beyond the standard artifacts. Treat the other evidence items as
+required. Do not imply a skipped check passed: record what was run, what
+happened, and why any required evidence is missing or blocked in
+`EVALUATION.md`.
 
 ## Templates
 
 Use the files in `assets/attempt-template/` as the starting point for attempt
 metadata and evaluation notes.
 
-## Guardrails
+## Notes
 
-- Do not optimize for hidden criteria. Implement the visible task faithfully.
 - Do not delete or rewrite previous attempts.
 - Keep generated challenge code self-contained inside the attempt folder.
-- If PsyNet commands are needed in Cursor, disable sandboxing for those commands.

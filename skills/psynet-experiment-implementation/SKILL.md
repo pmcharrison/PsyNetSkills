@@ -8,10 +8,11 @@ description: Implement PsyNet experiments from text specifications, using local 
 Use this skill when implementing a PsyNet experiment from a natural-language
 specification.
 
-## Start with local context
+## PsyNet source code
 
-In this workshop setup, the PsyNet source checkout is available at `~/PsyNet`.
-Inspect it before choosing APIs or inventing patterns.
+It is essential that you have access to the local PsyNet source code and demos.
+Ensure you have a source code repository available at `~/PsyNet`
+(if necessary, clone it from `https://gitlab.com/PsyNetDev/PsyNet`).
 
 Useful starting points:
 
@@ -29,26 +30,12 @@ Useful starting points:
    `ModularPage`, controls, prompts, trials, and trial makers.
 4. Put generated experiment files in the requested output directory.
 5. Add short comments only where the PsyNet pattern is not obvious.
-6. Validate with the narrowest command that exercises the relevant behavior.
-7. Record commands, outputs, and any missing checks as evidence.
+6. Regularly use `psynet test local` to test the experiment logic,
+   and implement custom assertions to test the experiment's behavior.
 
 ## PsyNet setup reminders
 
-PsyNet experiments usually need Python, uv, PostgreSQL, Redis, and PsyNet
-dependencies. If running PsyNet commands from Cursor, disable sandboxing for
-those commands.
-
-For a PsyNet experiment directory, dependency installation commonly follows:
-
-```bash
-uv pip install -r constraints.txt
-```
-
-For the PsyNet source checkout, development installation commonly follows:
-
-```bash
-uv pip install -e '.[dev,slack]'
-```
+Follow full instructions in the PsyNet source code repository to set up the environment.
 
 Read `references/experiment-patterns.md` for common implementation patterns and
 `references/validation.md` for validation guidance.
