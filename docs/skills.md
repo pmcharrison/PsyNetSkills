@@ -1,12 +1,11 @@
 # Skills
 
-Skills live in `.cursor/skills/`. Each skill is a folder containing a `SKILL.md` file
+Skills live in `.agents/skills/`. Each skill is a folder containing a `SKILL.md` file
 with Agent Skills-compatible YAML frontmatter.
 
-Agents should verify that the skills are registered before relying on them. If
-an agent runtime expects skills in another location, symlink or copy
-`.cursor/skills/` to that required location rather than editing a duplicate
-skills tree.
+Cursor discovers project skills automatically from `.agents/skills/` (and
+`.cursor/skills/` for compatibility). Before challenge or PsyNet experiment
+work, confirm the three repository skills appear in the agent session.
 
 ## Required frontmatter
 

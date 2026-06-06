@@ -6,7 +6,7 @@ evaluations that help AI agents implement experiments in
 
 The repository has three main jobs:
 
-- Store reusable Agent Skills in `.cursor/skills/`.
+- Store reusable Agent Skills in `.agents/skills/`.
 - Store challenge definitions and attempt histories in `challenges/`.
 - Build a static dashboard from skills, challenges, attempts, and docs.
 
@@ -37,7 +37,7 @@ testing commands.
 ## Repository layout
 
 ```text
-.cursor/skills/ Agent Skills-compatible folders, each with a SKILL.md file.
+.agents/skills/ Agent Skills-compatible folders, each with a SKILL.md file.
 challenges/    Challenge definitions, private criteria, and attempt histories.
 docs/          Markdown pages mounted into the Hugo dashboard.
 dashboard/     Hugo site that renders docs, skills, challenges, and attempts.
