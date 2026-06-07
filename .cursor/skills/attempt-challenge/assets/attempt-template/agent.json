@@ -4,5 +4,15 @@
   "model": null,
   "started_at": null,
   "skills_commit": null,
+  "psynet": {
+    "checkout_path": "~/PsyNet",
+    "branch": "master",
+    "commit": null,
+    "version": null,
+    "updated_from": "origin/master",
+    "updated_at": null,
+    "update_command": "git pull --ff-only origin master",
+    "dirty": null
+  },
   "notes": []
 }

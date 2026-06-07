@@ -105,6 +105,12 @@ update the file in follow-up commits when users revise or decide on actions.
 Videos, data exports, and other evidence artifacts should be committed through
 Git LFS. See `.gitattributes` for the configured patterns.
 
+Command logs are allowed in attempt evidence when they help reviewers understand
+what ran, but challenge work must not use or publish custom credentials. Use
+only local, ephemeral PsyNet/Dallinger dashboard defaults, and do not configure
+real AWS credentials, Prolific API tokens, or other production secrets for this
+repository.
+
 ## Before opening a PR
 
 Run:

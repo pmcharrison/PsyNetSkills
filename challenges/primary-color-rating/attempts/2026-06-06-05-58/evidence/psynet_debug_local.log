@@ -1,7 +1,11 @@
 
 ❯❯ Experiment directory size: 0.018 MB.
-Creating networks:   0%|          | 0/3 [00:00<?, ?it/s]Creating networks: 100%|██████████| 3/3 [00:00<00:00, 4689.87it/s]
-Staging assets:   0%|          | 0/3 [00:00<?, ?it/s]Staging assets: 100%|██████████| 3/3 [00:00<00:00, 149796.57it/s]
+
+Creating networks:   0%|          | 0/3 [00:00<?, ?it/s]
+Creating networks: 100%|██████████| 3/3 [00:00<00:00, 4689.87it/s]
+
+Staging assets:   0%|          | 0/3 [00:00<?, ?it/s]
+Staging assets: 100%|██████████| 3/3 [00:00<00:00, 149796.57it/s]
 ✓ config.txt is PRESENT
 ✓ experiment.py is PRESENT
 ✓ Size OK at 0MB (max is 256MB)
@@ -31,7 +35,7 @@ Recruitment requests will open browser windows automatically.
 
 ❯❯ Experiment dashboard: http://localhost:5000/dashboard/
 
-❯❯ Dashboard user: admin password: pQdgx5GD9L4RQyApcIn5
+❯❯ Dashboard user: admin password: [REDACTED]
 
 ❯❯ Monitoring the Heroku Local server for recruitment or completion...
 6:15:58 AM web.1    |  [2026-06-06 06:15:58 +0000] [13362] [INFO] Listening at: http://0.0.0.0:5000 (13362)
@@ -43,7 +47,7 @@ Recruitment requests will open browser windows automatically.
 6:15:59 AM web.1    |  2026-06-06 06:15:59,269 Launched experiment "Primary color rating" (`69f2ce00-7fe5-4960-8b26-01fe5e539740`) locally
 6:15:59 AM web.1    |  2026-06-06 06:15:59,270 [1mExperiment dashboard[0m: http://localhost:5000/dashboard
 6:15:59 AM web.1    |  Username: `admin`
-6:15:59 AM web.1    |  Password: `pQdgx5GD9L4RQyApcIn5`
+6:15:59 AM web.1    |  Password: `[REDACTED]`
 6:15:59 AM web.1    |  2026-06-06 06:15:59,270 Experiment launch complete!
 6:15:59 AM web.1    |  2026-06-06 06:15:59,270 New participant requested: http://localhost:5000/ad?recruiter=hotair&assignmentId=CWADUA&hitId=AOK7ZK&workerId=WRAID3&mode=debug
 

@@ -15,6 +15,27 @@ def write(path: Path, text: str = "") -> None:
     path.write_text(text, encoding="utf-8")
 
 
+def agent_json() -> str:
+    return (
+        json.dumps(
+            {
+                "model": "test-model",
+                "psynet": {
+                    "checkout_path": "~/PsyNet",
+                    "branch": "master",
+                    "commit": "abc123",
+                    "version": "12.3.0",
+                    "updated_from": "origin/master",
+                    "updated_at": "2026-06-06T20:21:00Z",
+                    "update_command": "git pull --ff-only origin master",
+                    "dirty": False,
+                },
+            },
+        )
+        + "\n"
+    )
+
+
 def minimal_repo(root: Path) -> None:
     write(root / "docs/index.md", "# Docs\n")
     write(
@@ -108,13 +129,28 @@ def test_validate_learnings_rejects_invalid_action(tmp_path: Path) -> None:
     assert any("invalid learning action" in problem for problem in problems)
 
 
+def test_validate_learnings_rejects_legacy_status(tmp_path: Path) -> None:
+    learnings_file = tmp_path / "LEARNINGS.md"
+    write(
+        learnings_file,
+        "# Learnings\n\n"
+        "## Useful finding\n\n"
+        "*Actions:*\n\n"
+        "- **PsyNetSkills:** Document it. Confidence: high. Status: implemented.\n",
+    )
+
+    problems = validate_learnings_file(learnings_file)
+
+    assert any("invalid learning action" in problem for problem in problems)
+
+
 def test_validate_repository_requires_learnings_for_real_attempt(
     tmp_path: Path,
 ) -> None:
     minimal_repo(tmp_path)
     attempt_dir = tmp_path / "challenges/example/attempts/2026-06-01-10-10"
     write(attempt_dir / "challenge/INSTRUCTIONS.md", "# Snapshot\n")
-    write(attempt_dir / "agent.json", "{}\n")
+    write(attempt_dir / "agent.json", agent_json())
     write(attempt_dir / "code/README.md", "# Code\n")
     write(attempt_dir / "evidence/README.md", "# Evidence\n")
     write(attempt_dir / "EVALUATION.md", "---\nscore:\n---\n")
@@ -158,7 +194,7 @@ def test_validate_repository_requires_timeline_for_real_attempt(
     minimal_repo(tmp_path)
     attempt_dir = tmp_path / "challenges/example/attempts/2026-06-01-10-10"
     write(attempt_dir / "challenge/INSTRUCTIONS.md", "# Snapshot\n")
-    write(attempt_dir / "agent.json", "{}\n")
+    write(attempt_dir / "agent.json", agent_json())
     write(attempt_dir / "code/README.md", "# Code\n")
     write(attempt_dir / "evidence/README.md", "# Evidence\n")
     write(attempt_dir / "EVALUATION.md", "---\nscore:\n---\n")
@@ -177,27 +213,18 @@ def test_validate_repository_requires_timeline_for_real_attempt(
 
 def test_validate_agent_metadata_accepts_psynet_block(tmp_path: Path) -> None:
     agent_file = tmp_path / "agent.json"
-    write(
-        agent_file,
-        json.dumps(
-            {
-                "model": "test-model",
-                "psynet": {
-                    "checkout_path": "~/PsyNet",
-                    "branch": "master",
-                    "commit": "abc123",
-                    "version": "12.3.0",
-                    "updated_from": "origin/master",
-                    "updated_at": "2026-06-06T20:21:00Z",
-                    "update_command": "git pull --ff-only origin master",
-                    "dirty": False,
-                },
-            },
-        )
-        + "\n",
-    )
+    write(agent_file, agent_json())
 
     assert validate_agent_metadata(agent_file) == []
+
+
+def test_validate_agent_metadata_requires_psynet_block(tmp_path: Path) -> None:
+    agent_file = tmp_path / "agent.json"
+    write(agent_file, '{"model": "test-model"}\n')
+
+    assert validate_agent_metadata(agent_file) == [
+        f"{agent_file}: missing psynet metadata",
+    ]
 
 
 def test_validate_agent_metadata_rejects_incomplete_psynet_block(
@@ -228,3 +255,34 @@ def test_validate_agent_metadata_rejects_incomplete_psynet_block(
 
     assert any("psynet.commit must not be empty" in problem for problem in problems)
     assert any("psynet.dirty must be a boolean" in problem for problem in problems)
+
+
+def test_validate_repository_requires_criteria_snapshot_and_checklist(
+    tmp_path: Path,
+) -> None:
+    minimal_repo(tmp_path)
+    write(tmp_path / "challenges/example/CRITERIA.md", "# Criteria\n\n- Criterion.\n")
+    attempt_dir = tmp_path / "challenges/example/attempts/2026-06-01-10-10"
+    write(attempt_dir / "challenge/INSTRUCTIONS.md", "# Snapshot\n")
+    write(attempt_dir / "agent.json", agent_json())
+    write(attempt_dir / "code/README.md", "# Code\n")
+    write(attempt_dir / "evidence/README.md", "# Evidence\n")
+    write(attempt_dir / "EVALUATION.md", "---\nscore: 7\n---\n\n# Evaluation\n")
+    write(
+        attempt_dir / "LEARNINGS.md",
+        "# Learnings\n\n"
+        "## Useful finding\n\n"
+        "*Actions:*\n\n"
+        "- **PsyNetSkills:** Document it. Confidence: high. Status: considering.\n",
+    )
+    write(
+        attempt_dir / "TIMELINE.md",
+        "# Timeline\n\n"
+        "- T+00:00:00 [agent-start] Started.\n"
+        "- T+00:00:01 [agent-stop] Stopped.\n",
+    )
+
+    problems = validate_repository(tmp_path)
+
+    assert any("missing challenge/CRITERIA.md snapshot" in problem for problem in problems)
+    assert any("missing criteria checklist" in problem for problem in problems)
