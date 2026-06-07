@@ -182,7 +182,10 @@ given the different time zones at play.
 However, this makes it doubly critical to be self-critical about one's code. 
 A good strategy is to ask the agent to review your pull request before merging it.
 
-Once you've done this, you can start the workflow again from the first step
+If someone has been working on similar parts of the codebase to you, you might encounter merge conflicts.
+Don't panic! Normally the agent can solve this for you if you ask nicely.
+
+Once you've successfully merged, you can start the workflow again from the first step
 with a fresh Cloud Agent! While in theory you could reuse your pre-existing one,
 it's normally good to start a fresh one to keep the context clean.
 
