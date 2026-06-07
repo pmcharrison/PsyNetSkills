@@ -4,10 +4,11 @@ Skills live in `.cursor/skills/`. Each skill is a folder containing a `SKILL.md`
 with Agent Skills-compatible YAML frontmatter.
 
 In the normal workflow, users should ask a Cursor Cloud Agent to create or update
-a skill from prose. The agent should use the `create-skill` skill, inspect the
-existing skill tree, and decide whether the lesson belongs in a new skill or an
-existing one. The details below are the specification that the agent and advanced
-manual contributors should follow.
+a skill from prose with Cursor skill syntax, for example
+`/create-skill "Turn this attempt lesson into reusable PsyNet guidance"`. The
+agent should inspect the existing skill tree and decide whether the lesson
+belongs in a new skill or an existing one. The details below are the
+specification that the agent and advanced manual contributors should follow.
 
 Agents should verify that the skills are registered before relying on them. If
 an agent runtime expects skills in another location, symlink or copy
