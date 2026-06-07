@@ -329,6 +329,7 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
     write(
         tmp_path / "README.md",
         "# PsyNetSkills\n\n"
+        "## TLDR\n\n"
         "This README is the dashboard index source.\n\n"
         "## Workshop cycle\n\n"
         "Repeat useful challenge attempts.\n",
@@ -439,7 +440,6 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
     assert (tmp_path / "dashboard/data/psynetsk.json").exists()
     index_page = tmp_path / "dashboard/content/_index.md"
     assert index_page.read_text(encoding="utf-8") == (
-        "# PsyNetSkills\n\n"
         "This README is the dashboard index source.\n\n"
         "## Workshop cycle\n\n"
         "Repeat useful challenge attempts.\n"

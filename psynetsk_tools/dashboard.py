@@ -570,10 +570,23 @@ def write_index_content(root: Path, dashboard_dir: Path) -> None:
     """Write the Hugo index page from the repository README."""
     content_dir = dashboard_dir / "content"
     content_dir.mkdir(parents=True, exist_ok=True)
+    readme = strip_first_two_headings((root / "README.md").read_text(encoding="utf-8"))
     (content_dir / "_index.md").write_text(
-        (root / "README.md").read_text(encoding="utf-8"),
+        readme,
         encoding="utf-8",
     )
+
+
+def strip_first_two_headings(markdown: str) -> str:
+    """Return Markdown with its first two ATX headings removed."""
+    headings_removed = 0
+    lines: list[str] = []
+    for line in markdown.splitlines(keepends=True):
+        if headings_removed < 2 and re.match(r"^[ \t]{0,3}#{1,6}(?:\s|$)", line):
+            headings_removed += 1
+            continue
+        lines.append(line)
+    return "".join(lines).lstrip("\n")
 
 
 def write_skill_content(
