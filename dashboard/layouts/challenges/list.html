@@ -11,7 +11,7 @@
       </tr>
     </thead>
     <tbody>
-      {{ range site.Data.psynetsk.challenges }}
+      {{ range hugo.Data.psynetsk.challenges }}
         {{ $openActions := int .open_actions }}
         {{ $openActionsClass := "open-actions-danger" }}
         {{ if eq $openActions 0 }}

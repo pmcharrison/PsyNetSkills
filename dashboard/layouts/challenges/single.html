@@ -1,9 +1,18 @@
 {{ define "main" }}
   {{ $challengeSlug := .Params.challenge }}
-  {{ $matches := where site.Data.psynetsk.challenges "slug" $challengeSlug }}
-  {{ $challenge := index $matches 0 }}
+  {{ $matches := where hugo.Data.psynetsk.challenges "slug" $challengeSlug }}
+  {{ $challenge := dict "attempts" (slice) "difficulty" "" "instructions" "" "title" $challengeSlug "type" "" }}
+  {{ if gt (len $matches) 0 }}
+    {{ $challenge = index $matches 0 }}
+  {{ end }}
 
   <article class="prose">
+    {{ if eq (len $matches) 0 }}
+      <section class="attempt-panel">
+        <h1>Challenge data unavailable</h1>
+        <p>The generated page metadata does not match the exported dashboard data.</p>
+      </section>
+    {{ end }}
     <h1>{{ $challenge.title }}</h1>
     <p><strong>Type:</strong> {{ $challenge.type }}</p>
     <p><strong>Difficulty:</strong> {{ $challenge.difficulty }}</p>
@@ -32,7 +41,7 @@
             {{ else if le $openActions 3 }}
               {{ $openActionsClass = "open-actions-warning" }}
             {{ end }}
-            <tr class="clickable-row" onclick="window.location='{{ .url | relURL }}'">
+            <tr class="attempt-row">
               <td><a href="{{ .url | relURL }}">{{ .date_time }}</a></td>
               <td>{{ .model }}</td>
               <td>{{ with .score }}{{ . }}{{ else }}Not scored{{ end }}</td>

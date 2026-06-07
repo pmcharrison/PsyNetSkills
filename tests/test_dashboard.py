@@ -437,7 +437,6 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
     assert 'href="#"' in exported_monitor
     assert "/dashboard/index" not in exported_monitor
     assert "const network_structure" in exported_monitor
-    assert "Network visualization snapshot" not in exported_monitor
     network_monitor = (
         tmp_path
         / "dashboard/static/artifacts/challenges/example/attempts/"

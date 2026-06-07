@@ -16,9 +16,12 @@ jobs:
         with:
           python-version-file: .python-version
       - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          cache-dependency-glob: uv.lock
       - uses: peaceiris/actions-hugo@v3
         with:
-          hugo-version: latest
+          hugo-version: "0.162.1"
       - run: uv sync --group dev
       - run: uv run psynetsk-validate
       - run: uv run pytest
