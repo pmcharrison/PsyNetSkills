@@ -11,7 +11,7 @@ easy to inspect.
 The main loop is simple:
 
 1. Write or choose a challenge that represents a real PsyNet experiment task.
-2. Ask one or more Cloud Agents to attempt it.
+2. Ask one or more Cursor Cloud Agents to attempt it.
 3. Review the generated experiment, evidence, timeline, and evaluation.
 4. Turn recurring failures or useful discoveries into better skills, better
    challenges, or upstream PsyNet improvements.
@@ -41,16 +41,16 @@ what worked and what failed; learnings identify changes worth making next. The
 dashboard keeps those artifacts close together, making it easier to see whether
 the system is improving and where the next skill or framework fix should land.
 
-## Cloud Agents
+## Cursor Cloud Agents
 
-Cloud Agents are remote coding agents that work in a repository branch, run
-commands, edit files, collect evidence, push commits, and prepare pull requests.
-For PsyNetSkills, they are useful because they make the workshop loop parallel
-and reviewable: several agents can try the same challenge independently, one
-agent can improve a skill while another implements an experiment, and each result
-arrives as a normal version-controlled diff.
+Cursor Cloud Agents are remote coding agents that work in a repository branch,
+run commands, edit files, collect evidence, push commits, and prepare pull
+requests. For PsyNetSkills, they are useful because they make the workshop loop
+parallel and reviewable: several agents can try the same challenge independently,
+one agent can improve a skill while another implements an experiment, and each
+result arrives as a normal version-controlled diff.
 
-The version-control side matters. A good Cloud Agent task should end with:
+The version-control side matters. A good Cursor Cloud Agent task should end with:
 
 - a branch containing the attempted implementation or documentation change;
 - a pull request with a concise summary and test evidence;
@@ -60,68 +60,70 @@ The version-control side matters. A good Cloud Agent task should end with:
 
 ## Quickstart
 
-This quickstart assumes Cloud Agent use. The default unit of work is a branch
-and pull request, not a local uncommitted edit.
+This quickstart assumes Cursor Cloud Agent use. The default unit of work is a
+branch and pull request, not a local uncommitted edit.
 
 ### Implementing a challenge
 
 Here "implementing a challenge" means writing a new challenge for future agents
 to attempt.
 
-1. Ask a Cloud Agent to create a new challenge under `challenges/<slug>/`.
-2. Put the public task in `INSTRUCTIONS.md`: participant experience, stimuli,
-   responses, scientific checks, and any constraints that matter.
-3. Put private evaluator guidance in `CRITERIA.md` when you need hidden success
-   criteria. Attempting agents should not read this file before evidence
-   collection is complete.
-4. Keep challenge-specific reference material in `references/`.
-5. Review the pull request, dashboard preview, and validation output before
-   merging.
+Ask a Cursor Cloud Agent to create the challenge for you. Describe the intended
+participant experience in prose: what participants should see, hear, or do; what
+stimuli or inputs matter; what responses should be collected; and what would
+make the implementation scientifically convincing. If there are evaluator-only
+checks, say that they should be private criteria.
+
+The agent should take care of the repository structure, metadata, validation,
+and pull request. Review the generated challenge instructions, any private
+criteria, the dashboard preview, and the validation output before merging.
 
 ### Attempting a challenge
 
-Ask a Cloud Agent to attempt a specific challenge, for example:
+Ask a Cursor Cloud Agent to attempt a specific challenge, for example:
 
-> Attempt the `primary-color-rating` challenge. Use the available PsyNetSkills
-> skills, implement the experiment, run the relevant checks, and collect
-> participant-facing evidence.
+> Attempt the `primary-color-rating` challenge.
 
-For real experiment attempts, the agent should refresh its local PsyNet checkout
-before implementation and record the checkout in `agent.json`. Attempts should
-include code, evidence, a timeline, learnings, and enough test output for a
-reviewer to judge the result.
+Do not provide extra implementation instructions at attempt time. The point is to
+test whether the current challenge and skills are sufficient. If the challenge is
+underspecified, update the challenge in a separate change and then start a fresh
+attempt.
+
+The agent should handle the attempt structure, PsyNet checkout metadata, code,
+evidence, timeline, learnings, and pull request.
 
 ### Evaluating an attempt
 
-Review the pull request and dashboard attempt page. Inspect the generated code,
-participant video, performance evidence, exported data, timeline, and learning
-notes. If `CRITERIA.md` exists, use the copied criteria in the attempt snapshot
-for evaluation. Then ask the agent to update `EVALUATION.md` with a score,
-specific feedback, and any criterion checklist that belongs in the record.
+Ask a Cursor Cloud Agent to help evaluate an attempt. Give your score and prose
+feedback conversationally after reviewing the pull request and dashboard attempt
+page. The agent should inspect the relevant attempt materials, use copied private
+criteria when present, and update `EVALUATION.md` with the score, feedback, and
+criterion checklist.
 
 ### Updating skills in PsyNetSkills
 
-When an attempt reveals a recurring failure mode, update the relevant skill in
-`.cursor/skills/`. Good skill changes are compact and procedural: they tell
-future agents what to inspect, what command to run, what evidence to collect, or
-which PsyNet assumption to avoid. Commit the skill change through the same
-branch-and-PR workflow, then run another attempt to see whether it helped.
+When an attempt reveals a recurring failure mode, ask a Cursor Cloud Agent to
+update the relevant PsyNetSkills skill. Describe the lesson in prose and point to
+the attempt or evaluation that motivated it. The agent should decide whether to
+edit an existing skill or create a new one, keep the guidance compact and
+procedural, validate the repository, and open a pull request. Then run another
+attempt to see whether the change helped.
 
 ### Updating PsyNet
 
 Sometimes the right fix is upstream in PsyNet rather than in PsyNetSkills: a
 missing API example, a brittle command, unclear framework documentation, or a bug
-that affects generated experiments. In that case, use the local `~/PsyNet`
-checkout, make the PsyNet change on its own branch, run PsyNet's tests or demo
-checks, and prepare an upstream merge request. Keep production credentials out of
-PsyNetSkills attempts and out of evidence artifacts.
+that affects generated experiments. Ask a Cursor Cloud Agent to prepare the
+PsyNet change from the local `~/PsyNet` checkout, run the relevant PsyNet tests
+or demo checks, and prepare an upstream merge request. Keep production
+credentials out of PsyNetSkills attempts and out of evidence artifacts.
 
 ## Local workflow (advanced users only)
 
-Most workshop work should happen through Cloud Agents, because branches, pull
-requests, previews, and evidence are part of the method. Advanced users can also
-work locally in Cursor, Claude Code, or another coding agent, provided they keep
-the same artifact discipline.
+Most workshop work should happen through Cursor Cloud Agents, because branches,
+pull requests, previews, and evidence are part of the method. Advanced users can
+also work locally in Cursor, Claude Code, or another coding agent, provided they
+keep the same artifact discipline.
 
 From the PsyNetSkills repository root:
 

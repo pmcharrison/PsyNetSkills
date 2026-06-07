@@ -34,9 +34,9 @@ artifacts are the maintained state.
 
 ## Review flow
 
-Cloud Agents work on branches and submit pull requests. Repository validation,
-pytest, dashboard export, Hugo build, and the dashboard preview workflow are the
-main review checks. Pull-request previews are published under
+Cursor Cloud Agents work on branches and submit pull requests. Repository
+validation, pytest, dashboard export, Hugo build, and the dashboard preview
+workflow are the main review checks. Pull-request previews are published under
 `pr-preview/pr-NUMBER/` on the GitHub Pages branch.
 
 ## Boundaries

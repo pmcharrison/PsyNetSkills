@@ -26,4 +26,4 @@ the result here.
 ## Notes
 
 - Score and feedback should come from a human evaluator, captured
-  conversationally when working with Cursor Cloud agents.
+  conversationally when working with Cursor Cloud Agents.

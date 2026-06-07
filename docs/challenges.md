@@ -2,6 +2,13 @@
 
 Challenges live in `challenges/` and define tasks for agents to attempt.
 
+In the normal workflow, users should ask a Cursor Cloud Agent to create a
+challenge from prose. The prose should describe the participant experience,
+stimuli, responses, constraints, and any evaluator-only checks; the agent should
+use the `create-challenge` skill and take care of the repository structure. The
+details below are the specification that the agent and advanced manual
+contributors should follow.
+
 Each challenge folder contains at minimum:
 
 ```text

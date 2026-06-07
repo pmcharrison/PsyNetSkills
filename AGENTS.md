@@ -129,7 +129,7 @@ PsyNet commands need sandboxing disabled in Cursor (`required_permissions: ["all
 
 ### Dashboard preview links
 
-When a Cloud Agent opens or updates a pull request from a branch in this
+When a Cursor Cloud Agent opens or updates a pull request from a branch in this
 repository, use the `dashboard-preview-polling` skill before sharing dashboard
 preview links. Wait up to 75 seconds for the `Deploy dashboard PR preview`
 workflow to appear and complete successfully for the current head commit. If it

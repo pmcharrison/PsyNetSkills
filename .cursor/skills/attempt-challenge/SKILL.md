@@ -8,6 +8,12 @@ description: Attempt a PsyNetSkills challenge by creating a timestamped attempt 
 Use this skill when the user asks you to attempt a challenge in the
 PsyNetSkills repository.
 
+The user should only need to initiate the attempt, for example:
+`Attempt the <challenge-slug> challenge.` Do not ask for or rely on supplementary
+implementation instructions at attempt time. If the public challenge
+instructions are insufficient, record that as an issue and recommend updating the
+challenge before starting a fresh attempt.
+
 ## Workflow
 
 1. Read `INSTRUCTIONS.md` from the target challenge, including its YAML
@@ -165,14 +171,14 @@ Develop learning notes after the human evaluation conversation whenever
 possible. The evaluator's score and feedback may reveal different process
 lessons than the implementation alone.
 
-Treat learning notes as a conversational artifact. Cloud users will often review
-them by chatting with the agent rather than editing Markdown directly. After an
-attempt is complete, briefly ask the user to comment on the drafted actions. On
-follow-up, update action text, confidence, or status according to the user's
-comments. For example, change `considering` to `planned` when the user agrees
-the action should be done, `in_progress` while an agent is actively working on
-it, `dismissed` when they reject it, `completed` when it has been finished, or
-`superseded` when a better action replaces it.
+Treat learning notes as a conversational artifact. Cursor Cloud Agent users will
+often review them by chatting with the agent rather than editing Markdown
+directly. After an attempt is complete, briefly ask the user to comment on the
+drafted actions. On follow-up, update action text, confidence, or status
+according to the user's comments. For example, change `considering` to `planned`
+when the user agrees the action should be done, `in_progress` while an agent is
+actively working on it, `dismissed` when they reject it, `completed` when it has
+been finished, or `superseded` when a better action replaces it.
 
 ## Notes
 
