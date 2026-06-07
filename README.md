@@ -138,9 +138,10 @@ for you to review (see
 
 ### Evaluating an attempt
 
-Once the agent has completed its attempt, it should prompt you to evaluate its output.
-You will want to review the evidence that it generates, including code, videos, performance tests,
-and so on. The agent will store your verdict in `EVALUATION.md`.
+Once the agent has completed its attempt, it should prompt you to review the generated evidence
+via the dashboard (it should print you a link to visit).
+This evidence should include things like code, videos, performance tests, and so on.
+The agent will store your verdict in `EVALUATION.md`.
 
 ### Learning notes
 
