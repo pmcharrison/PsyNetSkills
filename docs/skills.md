@@ -19,7 +19,7 @@ skills tree.
 
 ```markdown
 ---
-name: psynet-experiment-implementation
+name: implement-experiment
 description: Explain what this skill does and when an agent should use it.
 ---
 ```
