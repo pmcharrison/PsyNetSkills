@@ -101,20 +101,6 @@ top-tier model to review and implement the action points proposed by the cheap m
 The guide below is written assuming Cursor Cloud Agent use;
 more advanced users are welcome to customize these steps to a local workflow instead.
 
-### Invoking skills in Cursor
-
-PsyNetSkills workflows are exposed as Cursor skills. Invoke them in the agent
-chat with slash syntax, followed by a concise quoted task description:
-
-- `/create-challenge "Audio memory sequence experiment"` creates a new challenge
-  from your prose description.
-- `/attempt-challenge "audio-memory-sequence"` starts a fresh attempt for an
-  existing challenge slug or title.
-- `/evaluate-attempt "Evaluate the latest audio-memory-sequence attempt"` records
-  your score and feedback after reviewing evidence.
-- `/create-skill "Turn this attempt lesson into reusable PsyNet guidance"` drafts
-  or updates skill instructions.
-
 ### Implementing a challenge
 
 Here "implementing a challenge" means writing a new challenge for future agents
