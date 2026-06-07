@@ -10,7 +10,7 @@ AI agents better at building [PsyNet](https://gitlab.com/PsyNetDev/PsyNet) exper
 The repository contains an expanding collection of
 [agent skills](https://pmcharrison.github.io/PsyNetSkills/skills/),
 [challenges](https://pmcharrison.github.io/PsyNetSkills/challenges/) for testing those skills,
-and records of past challenge attempts, all exposed through a live dashboard.
+and records of past challenge attempts, all exposed through a [live dashboard](https://pmcharrison.github.io/PsyNetSkills/).
 
 We encourage users to contribute to these resources by implementing and testing challenges
 that reflect their own research areas. This will help the generalizability of future AI agents.
