@@ -199,11 +199,14 @@ def write_frontmatter(
     weight: int | None = None,
     previous: DocNavItem | None = None,
     next_: DocNavItem | None = None,
+    edit_path: str | None = None,
 ) -> str:
     """Write simple Hugo frontmatter plus Markdown body."""
     lines = ["---", f"title: {json.dumps(title)}"]
     if weight is not None:
         lines.append(f"weight: {weight}")
+    if edit_path is not None:
+        lines.append(f"edit_path: {json.dumps(edit_path)}")
     if previous is not None:
         lines.extend(
             [
@@ -387,7 +390,9 @@ def collect_attempts(challenge_dir: Path) -> list[Attempt]:
             else ({}, [])
         )
         evaluation_metadata = {
-            key: value for key, value in evaluation_metadata.items() if key != "score"
+            key: value
+            for key, value in evaluation_metadata.items()
+            if key != "score"
         }
         agent, agent_json = read_agent_json(attempt_dir / "agent.json")
         artifact_prefix = (
@@ -486,6 +491,7 @@ def write_docs_content(
                 weight=doc.weight,
                 previous=page_navigation.previous,
                 next_=page_navigation.next,
+                edit_path=doc.path,
             ),
             encoding="utf-8",
         )

@@ -1,6 +1,7 @@
 ---
 title: "Introduction"
 weight: 10
+edit_path: "docs/index.md"
 next:
   title: "Skills"
   url: "docs/skills/"

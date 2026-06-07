@@ -4,7 +4,10 @@
   {{ $challenge := index $matches 0 }}
 
   <article class="prose">
-    <h1>{{ $challenge.title }}</h1>
+    <div class="page-heading">
+      <h1>{{ $challenge.title }}</h1>
+      {{ partial "edit-in-github.html" (printf "%s/INSTRUCTIONS.md" $challenge.path) }}
+    </div>
     <p><strong>Type:</strong> {{ $challenge.type }}</p>
     <p><strong>Difficulty:</strong> {{ $challenge.difficulty }}</p>
 

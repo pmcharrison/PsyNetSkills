@@ -5,6 +5,8 @@ disableKinds = ["taxonomy", "term", "RSS", "sitemap", "robotsTXT"]
 relativeURLs = true
 
 [params]
+  github_edit_base_url = "https://github.com/pmcharrison/PsyNetSkills/edit/main/"
+
   [params.giscus]
     enabled = false
     repo = ""

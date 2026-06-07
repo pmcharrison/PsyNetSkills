@@ -40,12 +40,8 @@ Follow full instructions in the PsyNet source code repository to set up the envi
 Read `references/experiment-patterns.md` for common implementation patterns and
 `references/validation.md` for validation guidance.
 
-## Gotchas
+## Rules
 
-- Do not assume a DOM media element exists for every PsyNet audio prompt; inspect
-  the relevant demo or PsyNet implementation path.
 - Do not make challenge code depend on files outside its attempt directory unless
-  the dependency is documented.
-- Do not skip validation because the experiment is small; at minimum, check that
-  the experiment imports or runs through PsyNet's local test path.
+  absolutely necessary.
 - Use visible challenge instructions only. Hidden criteria are for evaluators.

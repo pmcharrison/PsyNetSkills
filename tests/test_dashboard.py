@@ -278,7 +278,9 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
         encoding="utf-8",
     )
     assert "next:" in docs_index
+    assert 'edit_path: "docs/index.md"' in docs_index
     assert "previous:" in docs_skills
+    assert 'edit_path: "docs/skills.md"' in docs_skills
     assert not (tmp_path / "dashboard/content/skills/_index.md").exists()
     assert (
         tmp_path / "dashboard/content/skills/example-skill/index.md"

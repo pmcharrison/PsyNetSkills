@@ -1,0 +1,9 @@
+{{ $path := . }}
+{{ $baseURL := site.Params.github_edit_base_url }}
+{{ if and $path $baseURL }}
+  <p class="page-actions">
+    <a class="edit-source-link" href="{{ printf "%s%s" $baseURL $path | safeURL }}">
+      Edit in GitHub
+    </a>
+  </p>
+{{ end }}

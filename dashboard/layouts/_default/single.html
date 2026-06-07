@@ -3,7 +3,10 @@
     <div class="content-layout">
       {{ partial "section-sidebar.html" (dict "page" . "section" "docs" "title" "Docs") }}
       <article class="prose">
-        <h1>{{ .Title }}</h1>
+        <div class="page-heading">
+          <h1>{{ .Title }}</h1>
+          {{ partial "edit-in-github.html" .Params.edit_path }}
+        </div>
         {{ .Content }}
         {{ partial "docs-pagination.html" . }}
       </article>
