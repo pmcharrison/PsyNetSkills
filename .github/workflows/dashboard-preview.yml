@@ -34,7 +34,7 @@ jobs:
           cache-dependency-glob: uv.lock
       - uses: peaceiris/actions-hugo@v3
         with:
-          hugo-version: latest
+          hugo-version: "0.162.1"
       - id: preview
         name: Define preview URL
         run: |
@@ -145,6 +145,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version-file: .python-version
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          cache-dependency-glob: uv.lock
+      - run: uv sync --group dev
       - id: preview
         name: Define preview URLs
         run: |
@@ -183,7 +191,7 @@ jobs:
           git -C "${pages_dir}" config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
           if [ "${MERGED}" = "true" ]; then
-            python -m psynetsk_tools.pr_preview_redirect "${pages_dir}/${PREVIEW_PATH}" "${PRODUCTION_URL}"
+            uv run python -m psynetsk_tools.pr_preview_redirect "${pages_dir}/${PREVIEW_PATH}" "${PRODUCTION_URL}"
           else
             python - "${pages_dir}/${PREVIEW_PATH}" <<'PY'
           import shutil

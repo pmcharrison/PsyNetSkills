@@ -1,9 +1,18 @@
 {{ define "main" }}
   {{ $skillName := .Params.skill }}
-  {{ $matches := where site.Data.psynetsk.skills "name" $skillName }}
-  {{ $skill := index $matches 0 }}
+  {{ $matches := where hugo.Data.psynetsk.skills "name" $skillName }}
+  {{ $skill := dict "description" "" "path" "" }}
+  {{ if gt (len $matches) 0 }}
+    {{ $skill = index $matches 0 }}
+  {{ end }}
 
   <article class="prose">
+    {{ if eq (len $matches) 0 }}
+      <section class="attempt-panel">
+        <h1>Skill data unavailable</h1>
+        <p>The generated page metadata does not match the exported dashboard data.</p>
+      </section>
+    {{ end }}
     <h1>{{ .Title }}</h1>
     <p>{{ $skill.description }}</p>
     <p><strong>Source:</strong> <code>{{ $skill.path }}</code></p>

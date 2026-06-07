@@ -16,6 +16,7 @@ build/
 *.egg-info/
 public/
 dashboard/public/
+dashboard/.hugo_build.lock
 dashboard/data/psynetsk.json
 dashboard/content/challenges/
 dashboard/content/docs/

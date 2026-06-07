@@ -1,5 +1,5 @@
 baseURL = "/"
-languageCode = "en-gb"
+locale = "en-gb"
 title = "PsyNetSkills"
 disableKinds = ["taxonomy", "term", "RSS", "sitemap", "robotsTXT"]
 

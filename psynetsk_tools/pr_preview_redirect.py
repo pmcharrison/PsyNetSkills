@@ -90,7 +90,7 @@ def write_redirect_preview(target: Path, base_url: str) -> None:
         redirect_file.write_text(redirect_html(destination_url), encoding="utf-8")
 
 
-def main() -> None:
+def main(argv: list[str] | None = None) -> int:
     """Run the redirect writer from the command line."""
 
     parser = argparse.ArgumentParser(
@@ -98,10 +98,11 @@ def main() -> None:
     )
     parser.add_argument("target", type=Path)
     parser.add_argument("base_url")
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
 
     write_redirect_preview(args.target, args.base_url)
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

@@ -1,6 +1,7 @@
 from pathlib import Path
 
 from psynetsk_tools.pr_preview_redirect import (
+    main,
     redirect_destination,
     write_redirect_preview,
 )
@@ -62,3 +63,10 @@ def test_write_redirect_preview_creates_root_redirect_without_existing_preview(
         'url=https://example.github.io/PsyNetSkills/"'
         in (target / "index.html").read_text(encoding="utf-8")
     )
+
+
+def test_main_writes_redirect_preview(tmp_path: Path) -> None:
+    target = tmp_path / "pr-preview/pr-12"
+
+    assert main([str(target), "https://example.github.io/PsyNetSkills/"]) == 0
+    assert (target / "index.html").exists()
