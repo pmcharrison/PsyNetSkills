@@ -19,6 +19,8 @@ The main loop is simple:
 This README is also the textual source for the PsyNetSkills dashboard index
 page, so user-facing overview edits should start here.
 
+The repository is maintained by Peter Harrison (pmch2@cam.ac.uk).
+
 ## Motivation
 
 PsyNet is a Python framework for building and deploying online behavioral
@@ -49,6 +51,11 @@ requests. For PsyNetSkills, they are useful because they make the workshop loop
 parallel and reviewable: several agents can try the same challenge independently,
 one agent can improve a skill while another implements an experiment, and each
 result arrives as a normal version-controlled diff.
+
+To get started with Cursor Cloud Agents for this workshop, you need access to
+Nori Jacoby's team Cursor subscription. Once you have joined that subscription,
+you can start agents from this repository and review their work through branches,
+pull requests, and dashboard previews.
 
 The version-control side matters. A good Cursor Cloud Agent task should end with:
 
@@ -90,15 +97,17 @@ underspecified, update the challenge in a separate change and then start a fresh
 attempt.
 
 The agent should handle the attempt structure, PsyNet checkout metadata, code,
-evidence, timeline, learnings, and pull request.
+evidence, timeline, learnings, and pull request. Once implementation and
+first-pass evidence collection are complete, it should automatically prompt you
+for an evaluation.
 
 ### Evaluating an attempt
 
-Ask a Cursor Cloud Agent to help evaluate an attempt. Give your score and prose
-feedback conversationally after reviewing the pull request and dashboard attempt
-page. The agent should inspect the relevant attempt materials, use copied private
-criteria when present, and update `EVALUATION.md` with the score, feedback, and
-criterion checklist.
+Normally, you do not need to start evaluation as a separate task. The attempting
+agent should prompt you for a score and prose feedback once implementation is
+complete. After you respond, the agent should inspect the relevant attempt
+materials, use copied private criteria when present, and update `EVALUATION.md`
+with the score, feedback, and criterion checklist.
 
 ### Updating skills in PsyNetSkills
 
@@ -113,10 +122,9 @@ attempt to see whether the change helped.
 
 Sometimes the right fix is upstream in PsyNet rather than in PsyNetSkills: a
 missing API example, a brittle command, unclear framework documentation, or a bug
-that affects generated experiments. Ask a Cursor Cloud Agent to prepare the
-PsyNet change from the local `~/PsyNet` checkout, run the relevant PsyNet tests
-or demo checks, and prepare an upstream merge request. Keep production
-credentials out of PsyNetSkills attempts and out of evidence artifacts.
+that affects generated experiments. Ask a Cursor Cloud Agent to propose a change
+to PsyNet. The agent should take care of the local PsyNet checkout, testing, and
+upstream merge-request workflow.
 
 ## Local workflow (advanced users only)
 
