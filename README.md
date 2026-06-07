@@ -1,4 +1,4 @@
-# PsyNetSkills
+# [PsyNetSkills](https://pmcharrison.github.io/PsyNetSkills/)
 
 The repository is maintained by Peter Harrison (pmch2@cam.ac.uk),
 feel free to ask him questions by email or on Slack.
