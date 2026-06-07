@@ -1,8 +1,17 @@
 {{ define "main" }}
   {{ $challengeSlug := .Params.challenge }}
   {{ $attemptName := .Params.attempt }}
-  {{ $challenge := index (where site.Data.psynetsk.challenges "slug" $challengeSlug) 0 }}
-  {{ $attempt := index (where $challenge.attempts "name" $attemptName) 0 }}
+  {{ $challengeMatches := where hugo.Data.psynetsk.challenges "slug" $challengeSlug }}
+  {{ $challenge := dict "attempts" (slice) "title" $challengeSlug "url" (printf "challenges/%s/" $challengeSlug) }}
+  {{ if gt (len $challengeMatches) 0 }}
+    {{ $challenge = index $challengeMatches 0 }}
+  {{ end }}
+  {{ $attemptMatches := where $challenge.attempts "name" $attemptName }}
+  {{ $attempt := dict "code_files" (slice) "evidence_files" (slice) "timeline_entries" (slice) "name" $attemptName }}
+  {{ if gt (len $attemptMatches) 0 }}
+    {{ $attempt = index $attemptMatches 0 }}
+  {{ end }}
+  {{ $missingData := or (eq (len $challengeMatches) 0) (eq (len $attemptMatches) 0) }}
   {{ $hasExperiment := false }}
   {{ range $attempt.code_files }}
     {{ if or (eq .path "experiment.py") (strings.HasSuffix .path "/experiment.py") }}
@@ -63,6 +72,12 @@
 
   <article class="prose attempt-detail">
     <p class="back-link"><a href="{{ $challenge.url | relURL }}">Back to {{ $challenge.title }}</a></p>
+    {{ if $missingData }}
+      <section class="attempt-panel">
+        <h1>Attempt data unavailable</h1>
+        <p>The generated page metadata does not match the exported dashboard data.</p>
+      </section>
+    {{ end }}
     <header class="attempt-hero">
       <div>
         <p class="eyebrow">Challenge attempt</p>

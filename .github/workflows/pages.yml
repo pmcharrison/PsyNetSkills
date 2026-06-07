@@ -29,7 +29,7 @@ jobs:
           cache-dependency-glob: uv.lock
       - uses: peaceiris/actions-hugo@v3
         with:
-          hugo-version: latest
+          hugo-version: "0.162.1"
       - run: uv sync --group dev
       - run: uv run psynetsk-validate
       - run: uv run psynetsk-export-dashboard-data

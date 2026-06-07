@@ -55,38 +55,6 @@ nav {
   font-weight: 700;
 }
 
-.content-layout {
-  align-items: start;
-  display: grid;
-  gap: 2rem;
-  grid-template-columns: minmax(12rem, 16rem) 1fr;
-}
-
-.section-sidebar {
-  border: 1px solid var(--border);
-  border-radius: 0.5rem;
-  padding: 1rem;
-  position: sticky;
-  top: 1rem;
-}
-
-.section-sidebar nav {
-  display: grid;
-  gap: 0.5rem;
-}
-
-.section-sidebar a {
-  border-radius: 0.25rem;
-  padding: 0.25rem 0.4rem;
-  text-decoration: none;
-}
-
-.section-sidebar a.current {
-  background: var(--code-background);
-  color: var(--foreground);
-  font-weight: 700;
-}
-
 .cards,
 .item-list {
   display: grid;
@@ -142,11 +110,7 @@ td {
   border-color: var(--danger-border);
 }
 
-.clickable-row {
-  cursor: pointer;
-}
-
-.clickable-row:hover {
+.attempt-row:hover {
   background: var(--code-background);
 }
 
@@ -614,14 +578,6 @@ footer {
 }
 
 @media (max-width: 720px) {
-  .content-layout {
-    grid-template-columns: 1fr;
-  }
-
-  .section-sidebar {
-    position: static;
-  }
-
   .timeline-entry {
     grid-template-columns: 1fr;
   }
