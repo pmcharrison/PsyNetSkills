@@ -81,6 +81,11 @@ stimuli or inputs matter; what responses should be collected; and what would
 make the implementation scientifically convincing. If there are evaluator-only
 checks, say that they should be private criteria.
 
+You can browse existing challenges on the
+[Challenges page](https://pmcharrison.github.io/PsyNetSkills/challenges/). The
+detailed challenge format is documented in the
+[challenge specification](https://github.com/pmcharrison/PsyNetSkills/blob/main/docs/challenges.md).
+
 The agent should take care of the repository structure, metadata, validation,
 and pull request. Review the generated challenge instructions, any private
 criteria, the dashboard preview, and the validation output before merging.
@@ -101,6 +106,9 @@ evidence, timeline, learnings, and pull request. Once implementation and
 first-pass evidence collection are complete, it should automatically prompt you
 for an evaluation.
 
+The detailed attempt format is documented in the
+[attempt specification](https://github.com/pmcharrison/PsyNetSkills/blob/main/docs/attempts.md).
+
 ### Evaluating an attempt
 
 Normally, you do not need to start evaluation as a separate task. The attempting
@@ -108,6 +116,9 @@ agent should prompt you for a score and prose feedback once implementation is
 complete. After you respond, the agent should inspect the relevant attempt
 materials, use copied private criteria when present, and update `EVALUATION.md`
 with the score, feedback, and criterion checklist.
+
+The evaluation record is part of the
+[attempt specification](https://github.com/pmcharrison/PsyNetSkills/blob/main/docs/attempts.md).
 
 ### Updating skills in PsyNetSkills
 
@@ -117,6 +128,11 @@ the attempt or evaluation that motivated it. The agent should decide whether to
 edit an existing skill or create a new one, keep the guidance compact and
 procedural, validate the repository, and open a pull request. Then run another
 attempt to see whether the change helped.
+
+You can browse existing skills on the
+[Skills page](https://pmcharrison.github.io/PsyNetSkills/skills/). The detailed
+skill format is documented in the
+[skill specification](https://github.com/pmcharrison/PsyNetSkills/blob/main/docs/skills.md).
 
 ### Updating PsyNet
 
