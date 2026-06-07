@@ -88,6 +88,14 @@ We assume that collaborators on this project will be part of Nori Jacoby's
 Cursor team. This should enable you to create Cloud Agents for this repository
 via the online [agents page](https://cursor.com/agents). If you have problems with this, please let us know.
 
+An important question is which LLM you should configure the Cloud Agent to use.
+In general, my experience is that a lot of pain can be saved by defaulting to top-tier models.
+However, it is worthwhile also to see if we can get PsyNet performing well with cheaper agents,
+so please feel free to attempt challenges using such agents.
+Just be wary of making substantial code changes with cheap models. A good strategy could be to complete 
+the challenge attempt with a cheap model, merge the results, then start a fresh cloud agent with a 
+top-tier model to review and implement the action points proposed by the cheap model.
+
 ## Quickstart
 
 The guide below is written assuming Cursor Cloud Agent use;
