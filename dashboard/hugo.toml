@@ -39,6 +39,9 @@ disableKinds = ["taxonomy", "term", "RSS", "sitemap", "robotsTXT"]
     source = "static"
     target = "static"
   [[module.mounts]]
+    source = "../docs"
+    target = "static/docs"
+  [[module.mounts]]
     source = "layouts"
     target = "layouts"
   [[module.mounts]]

@@ -1,50 +1,129 @@
 # PsyNetSkills
 
-PsyNetSkills is a workshop repository for improving how AI agents implement
-[PsyNet](https://gitlab.com/PsyNetDev/PsyNet) experiments. It collects reusable
-Agent Skills, realistic experiment implementation challenges, attempt evidence,
-and human evaluations in one reviewable place.
+## TLDR
 
-The dashboard index page is generated from this README, so user-facing overview
-changes should start here.
+PsyNetSkills is a workshop repository for making AI agents better at building
+[PsyNet](https://gitlab.com/PsyNetDev/PsyNet) experiments. It does this by
+combining reusable agent skills, realistic implementation challenges, recorded
+attempts, human evaluations, and a dashboard that makes the whole learning loop
+easy to inspect.
 
-## What this repository contains
+The main loop is simple:
 
-- `.cursor/skills/` stores reusable Agent Skills-compatible folders.
-- `challenges/` stores challenge definitions, private criteria, and attempt
-  histories.
-- `dashboard/` is the Hugo site that renders this overview, skills, challenges,
-  and attempts.
-- `psynetsk_tools/` contains Python validation and dashboard export tooling.
-- `tests/` contains pytest coverage for repository tooling.
-- `public/` is generated dashboard output and is not committed by default.
+1. Write or choose a challenge that represents a real PsyNet experiment task.
+2. Ask one or more Cloud Agents to attempt it.
+3. Review the generated experiment, evidence, timeline, and evaluation.
+4. Turn recurring failures or useful discoveries into better skills, better
+   challenges, or upstream PsyNet improvements.
 
-## Workshop cycle
+This README is also the textual source for the PsyNetSkills dashboard index
+page, so user-facing overview edits should start here.
 
-1. **Choose or define a challenge.** Use `challenges/` for realistic PsyNet
-   experiment implementation tasks. Public instructions describe the participant
-   experience; private criteria stay hidden from attempting agents.
-2. **Start a Cloud Agent.** In Cursor, select this repository and start a Cloud
-   Agent with a focused task. Run multiple agents when you want independent
-   attempts or alternative approaches.
-3. **Initiate an attempt.** Ask the agent to attempt a specific challenge. The
-   agent creates a timestamped attempt folder, implements the experiment, runs
-   checks, and collects evidence.
-4. **Review and evaluate the attempt.** Inspect the generated code, participant
-   evidence, timeline, and learnings. Score the attempt and write concrete
-   feedback in `EVALUATION.md`.
-5. **Improve the skills.** Convert recurring failures or useful discoveries into
-   reusable guidance in `.cursor/skills/`.
-6. **Merge the branch.** Cloud agents work on branches and put their results into
-   pull requests. Merge when the work is done; ask Peter Harrison for review when
-   a change is risky or affects the wider codebase.
-7. **Repeat.** Run another attempt with the improved skills and compare the new
-   result with previous evaluations.
+## Motivation
+
+PsyNet is a Python framework for building and deploying online behavioral
+experiments, especially experiments whose logic is richer than a simple survey:
+adaptive psychophysics, iterated learning, network experiments, cultural
+evolution, audio and image trials, bot testing, and dashboard-based monitoring.
+It is powerful, but power brings surface area. A capable agent can write PsyNet
+code quickly; a well-guided agent can write PsyNet code that is idiomatic,
+testable, and easier for researchers to trust.
+
+Agent skills are one way to provide that guidance. They turn hard-won local
+knowledge into reusable procedures: which PsyNet demos to inspect, which APIs are
+easy to misuse, which commands actually validate an experiment, and what evidence
+a reviewer will need. Skills are most useful when they are refined against real
+tasks rather than written once in the abstract.
+
+That is where the PsyNetSkills challenge workflow helps. Challenges define
+representative tasks; attempts show what an agent actually did; evaluations say
+what worked and what failed; learnings identify changes worth making next. The
+dashboard keeps those artifacts close together, making it easier to see whether
+the system is improving and where the next skill or framework fix should land.
+
+## Cloud Agents
+
+Cloud Agents are remote coding agents that work in a repository branch, run
+commands, edit files, collect evidence, push commits, and prepare pull requests.
+For PsyNetSkills, they are useful because they make the workshop loop parallel
+and reviewable: several agents can try the same challenge independently, one
+agent can improve a skill while another implements an experiment, and each result
+arrives as a normal version-controlled diff.
+
+The version-control side matters. A good Cloud Agent task should end with:
+
+- a branch containing the attempted implementation or documentation change;
+- a pull request with a concise summary and test evidence;
+- dashboard preview output when the change affects public challenge, attempt, or
+  site content;
+- enough committed artifacts for a human to reconstruct what happened.
 
 ## Quickstart
 
-This repository uses `uv` for Python environment management and Hugo for
-dashboard rendering.
+This quickstart assumes Cloud Agent use. The default unit of work is a branch
+and pull request, not a local uncommitted edit.
+
+### Implementing a challenge
+
+Here "implementing a challenge" means writing a new challenge for future agents
+to attempt.
+
+1. Ask a Cloud Agent to create a new challenge under `challenges/<slug>/`.
+2. Put the public task in `INSTRUCTIONS.md`: participant experience, stimuli,
+   responses, scientific checks, and any constraints that matter.
+3. Put private evaluator guidance in `CRITERIA.md` when you need hidden success
+   criteria. Attempting agents should not read this file before evidence
+   collection is complete.
+4. Keep challenge-specific reference material in `references/`.
+5. Review the pull request, dashboard preview, and validation output before
+   merging.
+
+### Attempting a challenge
+
+Ask a Cloud Agent to attempt a specific challenge, for example:
+
+> Attempt the `primary-color-rating` challenge. Use the available PsyNetSkills
+> skills, implement the experiment, run the relevant checks, and collect
+> participant-facing evidence.
+
+For real experiment attempts, the agent should refresh its local PsyNet checkout
+before implementation and record the checkout in `agent.json`. Attempts should
+include code, evidence, a timeline, learnings, and enough test output for a
+reviewer to judge the result.
+
+### Evaluating an attempt
+
+Review the pull request and dashboard attempt page. Inspect the generated code,
+participant video, performance evidence, exported data, timeline, and learning
+notes. If `CRITERIA.md` exists, use the copied criteria in the attempt snapshot
+for evaluation. Then ask the agent to update `EVALUATION.md` with a score,
+specific feedback, and any criterion checklist that belongs in the record.
+
+### Updating skills in PsyNetSkills
+
+When an attempt reveals a recurring failure mode, update the relevant skill in
+`.cursor/skills/`. Good skill changes are compact and procedural: they tell
+future agents what to inspect, what command to run, what evidence to collect, or
+which PsyNet assumption to avoid. Commit the skill change through the same
+branch-and-PR workflow, then run another attempt to see whether it helped.
+
+### Updating PsyNet
+
+Sometimes the right fix is upstream in PsyNet rather than in PsyNetSkills: a
+missing API example, a brittle command, unclear framework documentation, or a bug
+that affects generated experiments. In that case, use the local `~/PsyNet`
+checkout, make the PsyNet change on its own branch, run PsyNet's tests or demo
+checks, and prepare an upstream merge request. Keep production credentials out of
+PsyNetSkills attempts and out of evidence artifacts.
+
+## Local workflow (advanced users only)
+
+Most workshop work should happen through Cloud Agents, because branches, pull
+requests, previews, and evidence are part of the method. Advanced users can also
+work locally in Cursor, Claude Code, or another coding agent, provided they keep
+the same artifact discipline.
+
+From the PsyNetSkills repository root:
 
 ```bash
 uv sync --group dev
@@ -54,26 +133,17 @@ uv run psynetsk-export-dashboard-data
 hugo --source dashboard --destination ../public --cleanDestinationDir
 ```
 
-`psynetsk-export-dashboard-data` writes Hugo inputs from repository files,
-including `README.md` as the dashboard index content. The Hugo build then renders
-the final static site into `public/`.
+For dashboard preview during local documentation work:
 
-## PsyNet environment
+```bash
+uv run psynetsk-export-dashboard-data
+hugo server --source dashboard --bind 0.0.0.0 --port 1313
+```
 
-Experiment implementation work also needs a local PsyNet checkout at `~/PsyNet`.
-Agents and contributors should inspect that checkout for concrete APIs, demos,
-testing commands, and implementation patterns instead of guessing from memory.
-
-Useful PsyNet paths include:
-
-- `~/PsyNet/demos/experiments/` for complete experiment examples.
-- `~/PsyNet/demos/features/` for focused examples of individual PsyNet features.
-- `~/PsyNet/docs/` for human-facing PsyNet documentation.
-- `~/PsyNet/psynet/resources/experiment_scripts/AGENTS.md` for agent setup and
-  PsyNet command guidance.
-
-Before implementing a real experiment challenge, refresh the PsyNet checkout and
-record the resulting metadata in the attempt's `agent.json`:
+For experiment implementation, maintain a separate PsyNet checkout at
+`~/PsyNet`. Inspect `~/PsyNet/demos/experiments/`, `~/PsyNet/demos/features/`,
+and `~/PsyNet/docs/` for concrete patterns, and refresh the checkout before real
+attempts:
 
 ```bash
 cd ~/PsyNet
@@ -81,134 +151,23 @@ git checkout master
 git pull --ff-only origin master
 ```
 
-Challenge and experiment work must use only local, ephemeral PsyNet and
-Dallinger defaults. Do not configure real AWS credentials, Prolific API tokens,
-or other production secrets for attempts or evidence.
+Large attempt evidence such as videos and data exports should be committed with
+Git LFS. The generated `public/` dashboard output is not committed by default.
 
-## Skills
+## Further resources
 
-Skills live in `.cursor/skills/`. Each skill is a folder containing a `SKILL.md`
-file with Agent Skills-compatible YAML frontmatter:
+- [Skill specification](docs/skills.md)
+- [Challenge specification](docs/challenges.md)
+- [Attempt and evidence specification](docs/attempts.md)
+- [PsyNetSkills repository architecture](docs/architecture.md)
+- [Dashboard build and preview notes](docs/dashboard.md)
+- [PsyNet local reference](docs/psynet-reference.md)
+- [PsyNet documentation](https://psynetdev.gitlab.io/PsyNet/)
+- [PsyNet source repository](https://gitlab.com/PsyNetDev/PsyNet)
 
-```markdown
----
-name: example-skill
-description: Explain what this skill does and when an agent should use it.
----
-```
+## See also
 
-The frontmatter `name` must match the folder name and use lowercase letters,
-numbers, and hyphens. Good skills are concise: they tell agents when to use the
-skill, which PsyNet APIs or examples matter, which commands validate the work,
-and which common assumptions fail. Put longer API notes in `references/`,
-templates in `assets/`, and reusable scripts in `scripts/`.
-
-After each challenge attempt, read the attempt transcript, generated code,
-evidence, and evaluation. Add only reusable lessons back to skills; avoid
-patching a skill for a single challenge unless the underlying issue is likely to
-recur.
-
-## Challenges
-
-Challenges live in `challenges/` and define tasks for agents to attempt. Each
-challenge folder contains at minimum:
-
-```text
-INSTRUCTIONS.md
-attempts/
-```
-
-`INSTRUCTIONS.md` is visible to agents and must include YAML frontmatter:
-
-```markdown
----
-title: Example challenge
-type: experiment implementation
-difficulty: 3
----
-```
-
-Challenges may also include private `CRITERIA.md` and optional `references/`.
-Public instructions should describe the intended participant experience,
-stimuli, responses, and success checks clearly enough for an agent to implement
-the experiment without reading hidden evaluation criteria.
-
-## Attempts and evidence
-
-Attempts live under `challenges/<challenge>/attempts/<attempt-name>/`. Prefer
-timestamped names such as `2026-06-01-10-10` for real attempts. Each attempt
-should contain:
-
-```text
-challenge/
-agent.json
-code/
-evidence/
-TIMELINE.md
-LEARNINGS.md
-EVALUATION.md
-```
-
-The `challenge/` folder snapshots the original challenge. `agent.json` records
-model, runtime, and PsyNet checkout metadata. `code/` contains the generated
-implementation. `evidence/` contains materials used to judge participant-facing
-behavior and technical health. `TIMELINE.md` records major implementation events
-with relative timestamps, `LEARNINGS.md` records reusable findings and proposed
-actions, and `EVALUATION.md` records human feedback and score.
-
-Experiment attempts should provide enough evidence for a reviewer to judge the
-implementation. Use this standard evidence shape unless the challenge needs
-something more specific:
-
-```text
-evidence/
-participant.mp4
-performance.json
-monitor.html
-data.zip
-analyses/
-```
-
-Command logs are allowed when they help reviewers understand what ran, but keep
-logs concise and free of custom or real credentials. If evidence is missing,
-explain why in `EVALUATION.md`.
-
-## Dashboard and previews
-
-The dashboard is a Hugo static site generated from repository files. It renders:
-
-- This README as the public index page.
-- Skill pages from `.cursor/skills/*/SKILL.md`.
-- Challenge summaries from `challenges/*`.
-- Attempt histories, scores, evidence, and open learning-action counts.
-
-Build it locally with:
-
-```bash
-uv run psynetsk-export-dashboard-data
-hugo --source dashboard --destination ../public --cleanDestinationDir
-```
-
-The production dashboard is built and deployed automatically by the
-`Deploy dashboard to GitHub Pages` workflow when changes are pushed to `main`.
-Configure GitHub Pages to deploy from the `gh-pages` branch root.
-
-Pull requests from branches in this repository get dashboard previews at
-https://OWNER.github.io/REPOSITORY/pr-preview/pr-NUMBER/.
-
-The preview workflow posts the concrete URL to the pull request. Merged preview
-URLs redirect to the production dashboard after the PR lands.
-
-## Large files and agent visibility
-
-Challenge attempts may include videos, data exports, and other large evidence
-artifacts. These are tracked with Git LFS patterns in `.gitattributes`. Install
-Git LFS locally before committing large attempt evidence:
-
-```bash
-git lfs install
-```
-
-Agents should not read hidden evaluation criteria, when present, or previous
-attempts before attempting a challenge. The repository hides `CRITERIA.md` and
-`attempts/` paths through `.cursorignore`.
+- [SweetBean](https://autoresearch.github.io/sweetbean/) is a nearby project and
+  useful comparator: a declarative Python language that compiles behavioral
+  experiment specifications to jsPsych experiments for human participants and
+  text-based experiments for synthetic participants.
