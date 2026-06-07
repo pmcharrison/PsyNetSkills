@@ -1,5 +1,7 @@
 {{ define "main" }}
-  {{ $url := "workflow/" }}
-  <p>Redirecting to <a href="{{ $url | relURL }}">PsyNetSkills</a>.</p>
-  <script>window.location.replace({{ $url | jsonify | safeJS }});</script>
+  {{ with site.GetPage "workflow" }}
+    {{ .Content }}
+  {{ else }}
+    {{ .Content }}
+  {{ end }}
 {{ end }}
