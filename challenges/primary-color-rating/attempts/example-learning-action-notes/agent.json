@@ -1,0 +1,9 @@
+{
+  "agent": "example",
+  "client": "example",
+  "model": "example-model",
+  "notes": [
+    "Illustrative attempt for showing LEARNINGS.md action notes in the dashboard."
+  ],
+  "started_at": "2026-06-07T08:28:00Z"
+}

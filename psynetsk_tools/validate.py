@@ -15,7 +15,8 @@ SKILL_NAME_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 LEARNING_ACTION_RE = re.compile(
     r"^- (?P<target>\*\*(?:PsyNetSkills|PsyNet):\*\*) (?P<action>.+) "
     r"Confidence: (?P<confidence>high|medium|low)\. "
-    r"Status: (?P<status>considering|in_progress|planned|completed|dismissed|superseded|implemented|declined)\.$",
+    r"Status: (?P<status>considering|in_progress|planned|completed|dismissed|superseded|implemented|declined)"
+    r"(?:\. Notes: (?P<notes>.+))?\.$",
 )
 PSYNET_AGENT_REQUIRED_FIELDS = {
     "checkout_path": str,
