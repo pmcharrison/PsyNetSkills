@@ -170,6 +170,13 @@ Another possible action (possibly complementary to the skills contribution)
 is to contribute a change to PsyNet. The agent can again help you with this;
 it should take responsibility for managing the Git workflow as well as testing.
 
+### Leaving tasks for later
+
+Note that you don't have to resolve all action points right away. 
+Often you will want to leave some for others to review and discuss.
+That's totally fine! The [challenges dashboard](https://pmcharrison.github.io/PsyNetSkills/challenges/)
+provides a handy visualization of unresolved actions so that they don't get forgotten about.
+
 ### Finishing up
 
 Once you've finished your challenge attempt and corresponding skill contributions,
