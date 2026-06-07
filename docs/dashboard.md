@@ -2,7 +2,7 @@
 
 The dashboard is a Hugo static site generated from repository files. It renders:
 
-- The public workflow overview from `dashboard/content/_index.md`.
+- The public workflow overview from `README.md`.
 - Skill summaries from `.cursor/skills/*/SKILL.md`.
 - Challenge summaries from `challenges/*`.
 - Attempt histories and latest scores when evaluations exist.
@@ -16,10 +16,10 @@ hugo --source dashboard --destination ../public --cleanDestinationDir
 ```
 
 The Python command exports structured repository data to
-`dashboard/data/psynetsk.json` and creates lightweight Hugo content stubs for
-skills and challenges. Hugo then renders the workflow overview, generated content,
-layouts, and final HTML into `public/`. The GitHub Pages workflow builds the
-same output in CI.
+`dashboard/data/psynetsk.json`, writes `README.md` to the Hugo index page, and
+creates lightweight Hugo content stubs for skills and challenges. Hugo then
+renders the workflow overview, generated content, layouts, and final HTML into
+`public/`. The GitHub Pages workflow builds the same output in CI.
 
 Attempt pages are reviewer-facing artifacts. They may show evaluation criteria
 so reviewers can compare the implementation against the rubric, but agents must
@@ -30,10 +30,10 @@ same challenge before implementation and evidence collection are complete.
 
 The production dashboard is published from the `gh-pages` branch root. Pull
 requests from branches in this repository are built into subdirectories of the
-same branch, under `pr-preview/pr-<number>/`.
+same branch, under `pr-preview/pr-NUMBER/`.
 
 The resulting preview URL is
-https://<owner>.github.io/<repository>/pr-preview/pr-<number>/.
+https://OWNER.github.io/REPOSITORY/pr-preview/pr-NUMBER/.
 
 The preview workflow updates one pull request comment with the current preview
 URL whenever the PR branch changes. When the PR is merged, the workflow replaces

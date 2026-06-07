@@ -18,6 +18,7 @@ public/
 dashboard/public/
 dashboard/.hugo_build.lock
 dashboard/data/psynetsk.json
+dashboard/content/_index.md
 dashboard/content/challenges/
 dashboard/content/docs/
 dashboard/content/skills/

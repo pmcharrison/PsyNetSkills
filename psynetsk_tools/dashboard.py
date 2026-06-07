@@ -566,6 +566,16 @@ def dashboard_data(root: Path) -> dict[str, object]:
     }
 
 
+def write_index_content(root: Path, dashboard_dir: Path) -> None:
+    """Write the Hugo index page from the repository README."""
+    content_dir = dashboard_dir / "content"
+    content_dir.mkdir(parents=True, exist_ok=True)
+    (content_dir / "_index.md").write_text(
+        (root / "README.md").read_text(encoding="utf-8"),
+        encoding="utf-8",
+    )
+
+
 def write_skill_content(
     root: Path,
     dashboard_dir: Path,
@@ -684,6 +694,7 @@ def export_dashboard(root: Path, dashboard_dir: Path) -> None:
         encoding="utf-8",
     )
 
+    write_index_content(root, dashboard_dir)
     shutil.rmtree(dashboard_dir / "content" / "docs", ignore_errors=True)
     write_skill_content(
         root,
