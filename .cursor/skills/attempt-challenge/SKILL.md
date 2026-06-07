@@ -13,7 +13,9 @@ PsyNetSkills repository.
 1. Read `INSTRUCTIONS.md` from the target challenge, including its YAML
    frontmatter.
 2. Do not read `CRITERIA.md` or any existing `attempts/` folders before
-   implementation and evidence collection are complete.
+   implementation and evidence collection are complete. Do not inspect dashboard
+   attempt pages for the same challenge during this phase either; any criteria
+   shown there are for later review.
 3. Refresh the local PsyNet checkout before implementing experiment code:
    `cd ~/PsyNet && git checkout master && git pull --ff-only origin master`.
    If the checkout is missing, clone it first. If local changes or a
@@ -86,6 +88,15 @@ analysis beyond the standard artifacts. Treat the other evidence items as
 required. Do not imply a skipped check passed: record what was run, what
 happened, and why any required evidence is missing or blocked in
 `EVALUATION.md`.
+
+## Credential policy
+
+Challenge work in this repository must not use custom or real service
+credentials. Use only local, ephemeral PsyNet/Dallinger dashboard defaults. Do
+not configure real AWS credentials, Prolific API tokens, or other production
+secrets for an attempt. If the user, challenge materials, copied environment
+files, logs, or evidence artifacts include custom credentials, stop and ask for a
+safer workflow rather than committing or publishing them.
 
 ## Templates
 

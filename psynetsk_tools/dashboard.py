@@ -9,6 +9,10 @@ import shutil
 from dataclasses import asdict, dataclass
 from pathlib import Path
 
+from psynetsk_tools.learnings import (
+    COMPLETED_LEARNING_STATUSES,
+    parse_learning_actions,
+)
 from psynetsk_tools.validate import (
     SKILLS_ROOT,
     parse_difficulty,
@@ -40,18 +44,19 @@ TEXT_FILE_EXTENSIONS = {
 ATTEMPT_ARTIFACTS_DIR = "artifacts/challenges"
 MONITOR_STATIC_ROOT = Path(__file__).parent / "assets" / "monitor-static" / "static"
 STATIC_REF_RE = re.compile(r'(?:href|src)="/static/(?P<path>[^"]+)"')
-LEARNING_ACTION_RE = re.compile(
-    r"^(?:\*\*)?(?P<repository>PsyNetSkills|PsyNet|psynetskills|psynet):"
-    r"(?:\*\*)? (?P<proposal>.+?) Confidence: "
-    r"(?P<confidence>[^.]+)\. Status: (?P<status>[^.]+)\.?$"
+CREDENTIAL_REDACTIONS = (
+    (re.compile(r"(?i)(dashboard_password=)[^&\"'\s<)]+"), r"\1[REDACTED]"),
+    (re.compile(r"(?i)(dashboard_user=)[^&\"'\s<)]+"), r"\1[REDACTED]"),
+    (re.compile(r"(?i)(Dashboard user:\s*\S+\s+password:\s*)\S+"), r"\1[REDACTED]"),
+    (re.compile(r"(?i)(Username:\s*`?)[^`\s]+(`?)"), r"\1[REDACTED]\2"),
+    (re.compile(r"(?i)(Password:\s*`?)[^`\s]+(`?)"), r"\1[REDACTED]\2"),
+    (re.compile(r"(?i)(AWS_ACCESS_KEY_ID\s*=\s*)[^\s\"']+"), r"\1[REDACTED]"),
+    (re.compile(r"(?i)(AWS_SECRET_ACCESS_KEY\s*=\s*)[^\s\"']+"), r"\1[REDACTED]"),
+    (re.compile(r"(?i)(AWS_SESSION_TOKEN\s*=\s*)[^\s\"']+"), r"\1[REDACTED]"),
+    (re.compile(r"(?i)(PROLIFIC_API_TOKEN\s*=\s*)[^\s\"']+"), r"\1[REDACTED]"),
+    (re.compile(r"(?i)(PROLIFIC_API_KEY\s*=\s*)[^\s\"']+"), r"\1[REDACTED]"),
 )
-COMPLETED_LEARNING_STATUSES = {
-    "completed",
-    "declined",
-    "dismissed",
-    "implemented",
-    "superseded",
-}
+TEXT_ARTIFACT_EXTENSIONS = {".html", ".log", ".md", ".txt", ".json", ".csv", ".yaml", ".yml"}
 
 
 @dataclass(frozen=True)
@@ -269,47 +274,6 @@ def read_agent_json(agent_file: Path) -> tuple[dict[str, object], str]:
     return agent, json.dumps(agent, indent=2, sort_keys=True)
 
 
-def parse_learning_action_text(text: str) -> tuple[str, str, str, str] | None:
-    """Parse one normalized LEARNINGS.md action bullet."""
-    normalized = re.sub(r"\s+", " ", text).strip()
-    match = LEARNING_ACTION_RE.fullmatch(normalized)
-    if match is None:
-        return None
-    return (
-        match.group("repository").strip().lower(),
-        match.group("confidence").strip().lower(),
-        match.group("proposal").strip(),
-        match.group("status").strip().lower(),
-    )
-
-
-def parse_learning_actions(markdown: str) -> list[tuple[str, str, str, str]]:
-    """Parse action bullets from a LEARNINGS.md body."""
-    actions: list[tuple[str, str, str, str]] = []
-    current: list[str] = []
-
-    def flush_current() -> None:
-        if not current:
-            return
-        action = parse_learning_action_text(" ".join(current))
-        if action is not None:
-            actions.append(action)
-        current.clear()
-
-    for line in markdown.splitlines():
-        stripped = line.strip()
-        if stripped.startswith("- "):
-            flush_current()
-            current.append(stripped[2:])
-        elif current and line.startswith((" ", "\t")):
-            current.append(stripped)
-        else:
-            flush_current()
-
-    flush_current()
-    return actions
-
-
 def file_kind(path: Path) -> str:
     """Return a display-oriented file type."""
     suffix = path.suffix.lower().lstrip(".")
@@ -371,9 +335,29 @@ def collect_attempt_files(
     return files
 
 
+def redact_known_credentials(text: str) -> str:
+    """Redact credential values that should never appear in public artifacts."""
+
+    for pattern, replacement in CREDENTIAL_REDACTIONS:
+        text = pattern.sub(replacement, text)
+    return text
+
+
+def sanitize_text_artifact(path: Path) -> None:
+    """Redact known credential values from copied text evidence."""
+
+    if path.suffix.lower() not in TEXT_ARTIFACT_EXTENSIONS:
+        return
+    try:
+        text = path.read_text(encoding="utf-8")
+    except UnicodeDecodeError:
+        return
+    path.write_text(redact_known_credentials(text), encoding="utf-8")
+
+
 def sanitize_html_artifact(path: Path) -> None:
     """Make copied HTML evidence safer to view from static dashboard previews."""
-    html = path.read_text(encoding="utf-8")
+    html = redact_known_credentials(path.read_text(encoding="utf-8"))
     static_refs = sorted(set(STATIC_REF_RE.findall(html)))
     if "<head>" in html and "<base " not in html:
         html = html.replace("<head>", '<head>\n        <base href="./">', 1)
@@ -678,8 +662,13 @@ def write_attempt_artifacts(root: Path, dashboard_dir: Path) -> None:
             dirs_exist_ok=True,
             ignore=shutil.ignore_patterns(".gitkeep"),
         )
-        for html_file in target_attempts_dir.rglob("*.html"):
-            sanitize_html_artifact(html_file)
+        for artifact_file in target_attempts_dir.rglob("*"):
+            if not artifact_file.is_file():
+                continue
+            if artifact_file.suffix.lower() == ".html":
+                sanitize_html_artifact(artifact_file)
+            else:
+                sanitize_text_artifact(artifact_file)
 
 
 def export_dashboard(root: Path, dashboard_dir: Path) -> None:

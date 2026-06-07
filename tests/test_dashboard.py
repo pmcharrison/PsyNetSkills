@@ -380,6 +380,22 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
         '<script src="/static/vis@4.17.0/dist/vis.min.js"></script>'
         '<script src="/static/scripts/network-monitor.js"></script></body></html>',
     )
+    write(
+        tmp_path
+        / "challenges/example/attempts/2026-06-01-10-10/evidence/psynet_debug.log",
+        "Dashboard user: admin password: local-password\n"
+        "Username: `admin`\n"
+        "Password: `local-password`\n"
+        "AWS_ACCESS_KEY_ID=AKIAEXAMPLE\n"
+        "AWS_SECRET_ACCESS_KEY=secret\n"
+        "PROLIFIC_API_TOKEN=token\n",
+    )
+    write(
+        tmp_path
+        / "challenges/example/attempts/2026-06-01-10-10/evidence/dashboard_data.html",
+        '<a href="http://localhost:5000/basic_data?'
+        'dashboard_user=admin&amp;dashboard_password=local-password">data</a>',
+    )
     write_bytes(
         tmp_path
         / (
@@ -438,6 +454,24 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
     assert "/dashboard/index" not in exported_monitor
     assert "const network_structure" in exported_monitor
     assert "Network visualization snapshot" not in exported_monitor
+    exported_dashboard_data = (
+        tmp_path
+        / "dashboard/static/artifacts/challenges/example/attempts/"
+        "2026-06-01-10-10/evidence/dashboard_data.html"
+    ).read_text(encoding="utf-8")
+    assert "dashboard_user=[REDACTED]" in exported_dashboard_data
+    assert "dashboard_password=[REDACTED]" in exported_dashboard_data
+    exported_log = (
+        tmp_path
+        / "dashboard/static/artifacts/challenges/example/attempts/"
+        "2026-06-01-10-10/evidence/psynet_debug.log"
+    ).read_text(encoding="utf-8")
+    assert "Dashboard user: admin password: [REDACTED]" in exported_log
+    assert "Username: `[REDACTED]`" in exported_log
+    assert "Password: `[REDACTED]`" in exported_log
+    assert "AWS_ACCESS_KEY_ID=[REDACTED]" in exported_log
+    assert "AWS_SECRET_ACCESS_KEY=[REDACTED]" in exported_log
+    assert "PROLIFIC_API_TOKEN=[REDACTED]" in exported_log
     network_monitor = (
         tmp_path
         / "dashboard/static/artifacts/challenges/example/attempts/"

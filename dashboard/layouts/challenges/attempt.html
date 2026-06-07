@@ -108,6 +108,10 @@
       {{ end }}
       {{ with $attempt.challenge_criteria }}
         <h2>Evaluation criteria</h2>
+        <p class="criteria-note">
+          These criteria are shown for review. The implementing agent was not
+          allowed to inspect them before evidence collection.
+        </p>
         <div class="attempt-markdown">
           {{ . | markdownify }}
         </div>
@@ -157,8 +161,6 @@
           {{ $learningHtml = replaceRE `Status:\s+planned\.` `<span class="learning-chip learning-chip-status learning-chip-status-planned"><span class="learning-chip-label">Status</span> planned</span>` $learningHtml }}
           {{ $learningHtml = replaceRE `Status:\s+completed\.` `<span class="learning-chip learning-chip-status learning-chip-status-completed"><span class="learning-chip-label">Status</span> completed</span>` $learningHtml }}
           {{ $learningHtml = replaceRE `Status:\s+dismissed\.` `<span class="learning-chip learning-chip-status learning-chip-status-dismissed"><span class="learning-chip-label">Status</span> dismissed</span>` $learningHtml }}
-          {{ $learningHtml = replaceRE `Status:\s+implemented\.` `<span class="learning-chip learning-chip-status learning-chip-status-implemented"><span class="learning-chip-label">Status</span> implemented</span>` $learningHtml }}
-          {{ $learningHtml = replaceRE `Status:\s+declined\.` `<span class="learning-chip learning-chip-status learning-chip-status-declined"><span class="learning-chip-label">Status</span> declined</span>` $learningHtml }}
           {{ $learningHtml = replaceRE `Status:\s+superseded\.` `<span class="learning-chip learning-chip-status learning-chip-status-superseded"><span class="learning-chip-label">Status</span> superseded</span>` $learningHtml }}
           {{ $learningHtml | safeHTML }}
         </div>
@@ -370,7 +372,7 @@
       {{ else }}
         <p>No evidence files were found for this attempt.</p>
       {{ end }}
-    </section>
+    </details>
 
     <details class="attempt-panel">
       <summary>Agent metadata</summary>

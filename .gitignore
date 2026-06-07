@@ -25,4 +25,5 @@ dashboard/static/artifacts/
 # Local files
 .DS_Store
 *.log
+!challenges/*/attempts/*/evidence/*.log
 tmp/

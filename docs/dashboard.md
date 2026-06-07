@@ -21,6 +21,11 @@ skills and challenges. Hugo then renders the workflow page, generated content,
 layouts, and final HTML into `public/`. The GitHub Pages workflow builds the
 same output in CI.
 
+Attempt pages are reviewer-facing artifacts. They may show evaluation criteria
+so reviewers can compare the implementation against the rubric, but agents must
+not inspect `CRITERIA.md`, prior attempts, or dashboard attempt pages for the
+same challenge before implementation and evidence collection are complete.
+
 ## Pull request previews
 
 The production dashboard is published from the `gh-pages` branch root. Pull
