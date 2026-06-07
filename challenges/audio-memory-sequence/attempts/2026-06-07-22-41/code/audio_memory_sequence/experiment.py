@@ -28,7 +28,7 @@ def get_nodes():
         StaticNode(
             definition={
                 "target_sequence": sequence,
-                "trial_number": i + 1,
+                "sequence_id": i + 1,
             }
         )
         for i, sequence in enumerate(TRIAL_SEQUENCES)
@@ -71,7 +71,7 @@ class SequenceRecallTrial(StaticTrial):
     def show_trial(self, experiment, participant):
         sequence = self.definition["target_sequence"]
         notes = [Note(TONE_PITCHES[label]) for label in sequence]
-        trial_number = self.definition["trial_number"]
+        trial_number = self.position + 1
         n_trials = len(TRIAL_SEQUENCES)
 
         return ModularPage(
