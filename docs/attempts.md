@@ -156,6 +156,14 @@ the conversational evaluation. Ask the user about each criterion, then record th
 results in `EVALUATION.md` as a Markdown checklist, for example `- [x] Criterion`
 or `- [ ] Criterion`, with concise notes for any failed or uncertain items.
 
+Criteria remain hidden during implementation and evidence collection. After the
+attempt is frozen with completed evidence, the agent may read only the current
+attempt's copied criteria snapshot at
+`challenges/<challenge>/attempts/<attempt-name>/challenge/CRITERIA.md` for
+evaluation. The agent should not browse or search other attempts. If criteria
+reveal implementation problems, record that as evaluation feedback and start a
+new attempt or explicitly log any post-evaluation revision.
+
 The dashboard uses this field to show progress over time. Keep written feedback
 specific and actionable. Strong evaluations explain both what failed and which
 future skill change might prevent the same failure.

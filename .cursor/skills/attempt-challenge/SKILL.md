@@ -55,11 +55,15 @@ PsyNetSkills repository.
 10. Leave `EVALUATION.md` as a template for human evaluators unless the user
    provides evaluation feedback.
 11. In the final response, invite the user to evaluate the attempt
-   conversationally, including a 1-10 score and concise feedback. If optional
-   `CRITERIA.md` is present, ask the user about each criterion during this
-   evaluation conversation. If the user provides evaluation feedback, summarize
-   it in `EVALUATION.md`, check off each criterion as met or unmet, and enter the
-   score in YAML frontmatter.
+   conversationally, including a 1-10 score and concise feedback. After
+   implementation and evidence collection are complete, you may read exactly the
+   current attempt's copied criteria file at
+   `challenges/<challenge>/attempts/<timestamp>/challenge/CRITERIA.md` for this
+   evaluation conversation. Do not browse or search prior attempts. If optional
+   `CRITERIA.md` is present, ask the user about each criterion during evaluation.
+   If the user provides evaluation feedback, summarize it in `EVALUATION.md`,
+   check off each criterion as met or unmet, and enter the score in YAML
+   frontmatter.
 12. After evaluation feedback is captured, write or update `LEARNINGS.md` with
    concise implementation notes and suggested actions for PsyNetSkills or
    PsyNet. Learnings may depend on the human evaluation.
