@@ -22,7 +22,7 @@ LEARNING_ACTION_RE = re.compile(
     r"(?P<proposal>.+) Confidence: (?P<confidence>high|medium|low)\. "
     r"Status: (?P<status>"
     + "|".join(sorted(CANONICAL_LEARNING_STATUSES))
-    + r")\.$",
+    + r")(?:\. Notes: (?P<notes>.+))?\.$",
 )
 
 
