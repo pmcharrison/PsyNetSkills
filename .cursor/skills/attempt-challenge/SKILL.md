@@ -13,7 +13,9 @@ PsyNetSkills repository.
 1. Read `INSTRUCTIONS.md` from the target challenge, including its YAML
    frontmatter.
 2. Do not read `CRITERIA.md` or any existing `attempts/` folders before
-   implementation and evidence collection are complete.
+   implementation and evidence collection are complete. Do not inspect dashboard
+   attempt pages for the same challenge during this phase either; any criteria
+   shown there are for later review.
 3. Refresh the local PsyNet checkout before implementing experiment code:
    `cd ~/PsyNet && git checkout master && git pull --ff-only origin master`.
    If the checkout is missing, clone it first. If local changes or a
@@ -53,11 +55,15 @@ PsyNetSkills repository.
 10. Leave `EVALUATION.md` as a template for human evaluators unless the user
    provides evaluation feedback.
 11. In the final response, invite the user to evaluate the attempt
-   conversationally, including a 1-10 score and concise feedback. If optional
-   `CRITERIA.md` is present, ask the user about each criterion during this
-   evaluation conversation. If the user provides evaluation feedback, summarize
-   it in `EVALUATION.md`, check off each criterion as met or unmet, and enter the
-   score in YAML frontmatter.
+   conversationally, including a 1-10 score and concise feedback. After
+   implementation and evidence collection are complete, you may read exactly the
+   current attempt's copied criteria file at
+   `challenges/<challenge>/attempts/<timestamp>/challenge/CRITERIA.md` for this
+   evaluation conversation. Do not browse or search prior attempts. If optional
+   `CRITERIA.md` is present, ask the user about each criterion during evaluation.
+   If the user provides evaluation feedback, summarize it in `EVALUATION.md`,
+   check off each criterion as met or unmet, and enter the score in YAML
+   frontmatter.
 12. After evaluation feedback is captured, write or update `LEARNINGS.md` with
    concise implementation notes and suggested actions for PsyNetSkills or
    PsyNet. Learnings may depend on the human evaluation.
@@ -86,6 +92,15 @@ analysis beyond the standard artifacts. Treat the other evidence items as
 required. Do not imply a skipped check passed: record what was run, what
 happened, and why any required evidence is missing or blocked in
 `EVALUATION.md`.
+
+## Credential policy
+
+Challenge work in this repository must not use custom or real service
+credentials. Use only local, ephemeral PsyNet/Dallinger dashboard defaults. Do
+not configure real AWS credentials, Prolific API tokens, or other production
+secrets for an attempt. If the user, challenge materials, copied environment
+files, logs, or evidence artifacts include custom credentials, stop and ask for a
+safer workflow rather than committing or publishing them.
 
 ## Templates
 

@@ -11,8 +11,8 @@
     <header class="site-header">
       <nav class="primary-nav" aria-label="Main navigation">
         <a
-          {{ if eq .Section "workflow" }}aria-current="page" class="current"{{ end }}
-          href="{{ "workflow/" | relURL }}"
+          {{ if .IsHome }}aria-current="page" class="current"{{ end }}
+          href="{{ site.Home.RelPermalink }}"
         >PsyNetSkills</a>
         <a
           {{ if eq .Section "skills" }}aria-current="page" class="current"{{ end }}

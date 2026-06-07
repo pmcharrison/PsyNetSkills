@@ -61,6 +61,10 @@ the output of `psynet performance-test` or an equivalent performance check.
 exported experiment data. `analyses/` contains challenge-specific scientific
 checks, typically figures or concise reports.
 
+Command logs may also be included in `evidence/` when they help reviewers
+understand what ran and what failed. Keep logs concise when practical, and do
+not include custom or real credentials in logs or other artifacts.
+
 Not every early attempt will have every evidence artifact. When something is
 missing, explain why in `EVALUATION.md` so later contributors know whether the
 gap reflects an implementation problem, tooling limitation, or skipped manual
@@ -96,6 +100,11 @@ Record the refreshed checkout in `agent.json` under the standard `psynet` key:
 `dirty` should normally be `false` and comes from `git status --short`. If the
 PsyNet checkout cannot be updated to the latest `origin/master`, record the
 blocker in `TIMELINE.md` and `EVALUATION.md`.
+
+This metadata is required for all real attempts so reviewers can identify the
+framework checkout associated with the work. If metadata is backfilled for an
+older attempt, say so in `agent.json` notes rather than presenting it as exact
+historical provenance.
 
 ## Timeline notes
 
@@ -147,6 +156,14 @@ the conversational evaluation. Ask the user about each criterion, then record th
 results in `EVALUATION.md` as a Markdown checklist, for example `- [x] Criterion`
 or `- [ ] Criterion`, with concise notes for any failed or uncertain items.
 
+Criteria remain hidden during implementation and evidence collection. After the
+attempt is frozen with completed evidence, the agent may read only the current
+attempt's copied criteria snapshot at
+`challenges/<challenge>/attempts/<attempt-name>/challenge/CRITERIA.md` for
+evaluation. The agent should not browse or search other attempts. If criteria
+reveal implementation problems, record that as evaluation feedback and start a
+new attempt or explicitly log any post-evaluation revision.
+
 The dashboard uses this field to show progress over time. Keep written feedback
 specific and actionable. Strong evaluations explain both what failed and which
 future skill change might prevent the same failure.
@@ -189,3 +206,12 @@ update action text, confidence, or status in a follow-up commit based on that
 conversation.
 
 Do not use `LEARNINGS.md` for hidden evaluation criteria or scoring decisions.
+
+## Credential policy
+
+Challenge attempts must not use custom or real service credentials. Use only
+local, ephemeral defaults for PsyNet/Dallinger dashboards, and do not configure
+real AWS credentials, Prolific API tokens, or other production secrets for work
+in this repository. Agents should stop and ask for a safer workflow if they see
+custom credentials in challenge instructions, local configuration, logs, or
+evidence artifacts.

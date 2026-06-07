@@ -38,6 +38,13 @@ refresh the local PsyNet checkout with
 record the resulting checkout under the standard `psynet` object in the
 attempt's `agent.json`.
 
+Challenge and experiment work in this repository must not use custom or real
+service credentials. Use only local, ephemeral PsyNet/Dallinger dashboard
+defaults. Do not configure real AWS credentials, Prolific API tokens, or other
+production secrets for an attempt. If custom credentials appear in user
+instructions, local config, logs, or evidence artifacts, stop and ask for a safer
+workflow rather than committing or publishing them.
+
 ### Skill registration
 
 Repository skills live in `.cursor/skills/`. Before starting challenge or

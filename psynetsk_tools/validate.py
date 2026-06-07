@@ -8,16 +8,11 @@ import re
 import sys
 from pathlib import Path
 
+from psynetsk_tools.learnings import LEARNING_ACTION_RE, learning_action_bullets
 from psynetsk_tools.timeline import TIMELINE_ENTRY_RE
 
 SKILLS_ROOT = Path(".cursor") / "skills"
 SKILL_NAME_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
-LEARNING_ACTION_RE = re.compile(
-    r"^- (?P<target>\*\*(?:PsyNetSkills|PsyNet):\*\*) (?P<action>.+) "
-    r"Confidence: (?P<confidence>high|medium|low)\. "
-    r"Status: (?P<status>considering|in_progress|planned|completed|dismissed|superseded|implemented|declined)"
-    r"(?:\. Notes: (?P<notes>.+))?\.$",
-)
 PSYNET_AGENT_REQUIRED_FIELDS = {
     "checkout_path": str,
     "branch": str,
@@ -104,29 +99,6 @@ def iter_learning_sections(text: str) -> list[tuple[str, list[str]]]:
     return sections
 
 
-def learning_action_bullets(lines: list[str]) -> list[str]:
-    """Return action bullets, joining indented continuation lines."""
-    bullets: list[str] = []
-    current: list[str] | None = None
-
-    for line in lines:
-        if line.startswith("- "):
-            if current is not None:
-                bullets.append(" ".join(part.strip() for part in current))
-            current = [line]
-        elif current is not None and (line.startswith("  ") or not line.strip()):
-            if line.strip():
-                current.append(line)
-        elif current is not None:
-            bullets.append(" ".join(part.strip() for part in current))
-            current = None
-
-    if current is not None:
-        bullets.append(" ".join(part.strip() for part in current))
-
-    return bullets
-
-
 def is_learning_actions_heading(line: str) -> bool:
     """Return whether a line is the Actions heading for a learning card."""
     return line.strip() == "*Actions:*"
@@ -209,7 +181,7 @@ def validate_agent_metadata(agent_file: Path) -> list[str]:
     problems: list[str] = []
     psynet = agent.get("psynet")
     if psynet is None:
-        return problems
+        return [f"{agent_file}: missing psynet metadata"]
     if not isinstance(psynet, dict):
         return [f"{agent_file}: psynet must be a JSON object"]
 
@@ -222,6 +194,15 @@ def validate_agent_metadata(agent_file: Path) -> list[str]:
             problems.append(f"{agent_file}: psynet.{field} must not be empty")
 
     return problems
+
+
+def has_evaluation_checklist(evaluation_file: Path) -> bool:
+    """Return whether an evaluation records criterion-level checklist results."""
+
+    for line in evaluation_file.read_text(encoding="utf-8").splitlines():
+        if line.startswith("- [x] ") or line.startswith("- [ ] "):
+            return True
+    return False
 
 
 def validate_skills(root: Path) -> list[str]:
@@ -257,7 +238,7 @@ def validate_skills(root: Path) -> list[str]:
     return problems
 
 
-def validate_attempt(attempt_dir: Path) -> list[str]:
+def validate_attempt(attempt_dir: Path, challenge_dir: Path) -> list[str]:
     """Validate one challenge attempt folder."""
     problems: list[str] = []
     required = ["challenge", "agent.json", "code", "evidence", "EVALUATION.md"]
@@ -274,6 +255,19 @@ def validate_attempt(attempt_dir: Path) -> list[str]:
         score = parse_evaluation_score(evaluation_file)
         if score is not None and not 1 <= score <= 10:
             problems.append(f"{evaluation_file}: score must be between 1 and 10")
+        if (
+            not attempt_dir.name.startswith("example-")
+            and (challenge_dir / "CRITERIA.md").exists()
+            and not has_evaluation_checklist(evaluation_file)
+        ):
+            problems.append(f"{evaluation_file}: missing criteria checklist")
+
+    if (
+        not attempt_dir.name.startswith("example-")
+        and (challenge_dir / "CRITERIA.md").exists()
+        and not (attempt_dir / "challenge" / "CRITERIA.md").exists()
+    ):
+        problems.append(f"{attempt_dir}: missing challenge/CRITERIA.md snapshot")
 
     learnings_file = attempt_dir / "LEARNINGS.md"
     if learnings_file.exists():
@@ -320,7 +314,7 @@ def validate_challenges(root: Path) -> list[str]:
             problems.append(f"{challenge_dir}: missing attempts directory")
         else:
             for attempt_dir in sorted(path for path in attempts_dir.iterdir() if path.is_dir()):
-                problems.extend(validate_attempt(attempt_dir))
+                problems.extend(validate_attempt(attempt_dir, challenge_dir))
 
     return problems
 
