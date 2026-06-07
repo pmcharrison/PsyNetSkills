@@ -26,8 +26,7 @@ The dashboard is built from ordinary repository files:
 3. The exporter writes generated Hugo content stubs for skills and challenges.
 4. The exporter writes `README.md` to `dashboard/content/_index.md`, making the
    README the source for the public dashboard index page.
-5. Hugo mounts `docs/` as static Markdown resources for links from the README.
-6. Hugo renders the final static site into `public/`.
+5. Hugo renders the final static site into `public/`.
 
 Generated dashboard inputs are ignored by Git. Source files such as `README.md`,
 `.cursor/skills/*/SKILL.md`, `challenges/*/INSTRUCTIONS.md`, and attempt

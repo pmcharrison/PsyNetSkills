@@ -17,9 +17,9 @@ hugo --source dashboard --destination ../public --cleanDestinationDir
 
 The Python command exports structured repository data to
 `dashboard/data/psynetsk.json`, writes `README.md` to the Hugo index page, and
-creates lightweight Hugo content stubs for skills and challenges. Hugo also
-mounts `docs/` as static Markdown resources so links from the README work on the
-rendered site. The GitHub Pages workflow builds the same output in CI.
+creates lightweight Hugo content stubs for skills and challenges. Hugo then
+renders the workflow overview, generated content, layouts, and final HTML into
+`public/`. The GitHub Pages workflow builds the same output in CI.
 
 Attempt pages are reviewer-facing artifacts. They may show evaluation criteria
 so reviewers can compare the implementation against the rubric, but agents must

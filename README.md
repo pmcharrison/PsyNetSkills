@@ -156,12 +156,12 @@ Git LFS. The generated `public/` dashboard output is not committed by default.
 
 ## Further resources
 
-- [Skill specification](docs/skills.md)
-- [Challenge specification](docs/challenges.md)
-- [Attempt and evidence specification](docs/attempts.md)
-- [PsyNetSkills repository architecture](docs/architecture.md)
-- [Dashboard build and preview notes](docs/dashboard.md)
-- [PsyNet local reference](docs/psynet-reference.md)
+- [Skill specification](https://github.com/pmcharrison/PsyNetSkills/blob/main/docs/skills.md)
+- [Challenge specification](https://github.com/pmcharrison/PsyNetSkills/blob/main/docs/challenges.md)
+- [Attempt and evidence specification](https://github.com/pmcharrison/PsyNetSkills/blob/main/docs/attempts.md)
+- [PsyNetSkills repository architecture](https://github.com/pmcharrison/PsyNetSkills/blob/main/docs/architecture.md)
+- [Dashboard build and preview notes](https://github.com/pmcharrison/PsyNetSkills/blob/main/docs/dashboard.md)
+- [PsyNet local reference](https://github.com/pmcharrison/PsyNetSkills/blob/main/docs/psynet-reference.md)
 - [PsyNet documentation](https://psynetdev.gitlab.io/PsyNet/)
 - [PsyNet source repository](https://gitlab.com/PsyNetDev/PsyNet)
 
