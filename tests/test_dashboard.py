@@ -7,6 +7,7 @@ from psynetsk_tools.dashboard import (
     dashboard_data,
     demote_markdown_headings,
     export_dashboard,
+    parse_learning_actions,
     strip_challenge_frontmatter,
     strip_frontmatter,
 )
@@ -147,6 +148,27 @@ def test_demote_markdown_headings_lowers_embedded_heading_hierarchy() -> None:
     )
 
 
+def test_parse_learning_actions_accepts_optional_notes() -> None:
+    markdown = (
+        "*Actions:*\n\n"
+        "- **PsyNetSkills:** Add reviewed-action notes. Confidence: high. "
+        "Status: completed. Notes: Implemented in the dashboard parser.\n"
+        "- **PsyNet:** Keep related framework behavior unchanged. Confidence: "
+        "medium. Status: dismissed. Notes: The repository convention is enough "
+        "for now.\n"
+    )
+
+    assert parse_learning_actions(markdown) == [
+        ("psynetskills", "high", "Add reviewed-action notes.", "completed"),
+        (
+            "psynet",
+            "medium",
+            "Keep related framework behavior unchanged.",
+            "dismissed",
+        ),
+    ]
+
+
 def test_dashboard_data_reports_open_learning_actions(tmp_path: Path) -> None:
     write(
         tmp_path / ".cursor/skills/example-skill/SKILL.md",
@@ -169,7 +191,7 @@ def test_dashboard_data_reports_open_learning_actions(tmp_path: Path) -> None:
         "Confidence: high. Status: completed.\n"
         "- **PsyNet:** Clarify the underlying framework behavior across\n"
         "  the relevant API docs. Confidence: medium.\n"
-        "  Status: considering.\n"
+        "  Status: considering. Notes: Waiting for a framework maintainer to review.\n"
         "- **PsyNetSkills:** Work on the active repository update. "
         "Confidence: high. Status: in_progress.\n"
         "- **PsyNetSkills:** Plan the repository update. "
@@ -177,7 +199,7 @@ def test_dashboard_data_reports_open_learning_actions(tmp_path: Path) -> None:
         "- **PsyNet:** Mark the framework follow-up completed. "
         "Confidence: high. Status: completed.\n"
         "- **PsyNetSkills:** Dismiss the duplicate proposal. "
-        "Confidence: medium. Status: dismissed.\n"
+        "Confidence: medium. Status: dismissed. Notes: Covered by the repository update.\n"
         "- **PsyNet:** Supersede the old framework proposal. "
         "Confidence: medium. Status: superseded.\n",
     )

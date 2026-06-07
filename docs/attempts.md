@@ -166,7 +166,8 @@ What happened during implementation or testing.
 *Actions:*
 
 - **PsyNetSkills:** A repo, skill, docs, validation, dashboard, or evidence workflow
-  change. Confidence: high. Status: considering.
+  change. Confidence: high. Status: considering. Notes: Optional decision
+  rationale after review.
 - **PsyNet:** A PsyNet framework, documentation, or command-line change. Confidence:
   medium. Status: considering.
 ```
@@ -177,7 +178,9 @@ friction, local testing friction, and candidate refactors. Maintainers can later
 update action statuses from `considering` to `planned`, `in_progress`,
 `completed`, `dismissed`, or `superseded`. Cloud agents should set a relevant
 action to `in_progress` when they start working on it and update it again when
-the work is completed, dismissed, or superseded.
+the work is completed, dismissed, or superseded. When an action is reviewed or
+its status changes, append an optional `Notes: ...` clause to the original action
+bullet to preserve the decision rationale.
 
 In Cursor Cloud workflows, users usually review attempts through conversation
 with an agent rather than by editing files directly. Agents should draft

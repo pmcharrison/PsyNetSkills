@@ -130,7 +130,7 @@ agents. Use compact cards, one section per learning:
 - `## <short title>`
 - Optional prose describing what happened.
 - `*Actions:*`
-  - `**PsyNetSkills:** <repo/skill/docs change>. Confidence: <level>. Status: <status>.`
+  - `**PsyNetSkills:** <repo/skill/docs change>. Confidence: <level>. Status: <status>. Notes: <optional review rationale>.`
   - `**PsyNet:** <framework/docs/CLI change>. Confidence: <level>. Status: <status>.`
 
 Use confidence levels `high`, `medium`, or `low`. Generally propose a near-term
@@ -140,9 +140,11 @@ points to a framework issue. Use lowercase status values: `considering`,
 should default to `considering`; use `planned` once a maintainer agrees the
 action should be done. When you actively work on an action from `LEARNINGS.md`,
 set that action to `in_progress` and update it again when the work is completed,
-dismissed, or superseded. Include only concrete observations from the attempt,
-such as framework gotchas, missing instructions, evidence collection friction,
-or useful refactors. Do not repeat the evaluation score or hidden criteria.
+dismissed, or superseded. When an action is reviewed or its status changes,
+append an optional `Notes: ...` clause to the original action bullet with the
+decision rationale. Include only concrete observations from the attempt, such as
+framework gotchas, missing instructions, evidence collection friction, or useful
+refactors. Do not repeat the evaluation score or hidden criteria.
 
 Develop learning notes after the human evaluation conversation whenever
 possible. The evaluator's score and feedback may reveal different process

@@ -43,7 +43,8 @@ STATIC_REF_RE = re.compile(r'(?:href|src)="/static/(?P<path>[^"]+)"')
 LEARNING_ACTION_RE = re.compile(
     r"^(?:\*\*)?(?P<repository>PsyNetSkills|PsyNet|psynetskills|psynet):"
     r"(?:\*\*)? (?P<proposal>.+?) Confidence: "
-    r"(?P<confidence>[^.]+)\. Status: (?P<status>[^.]+)\.?$"
+    r"(?P<confidence>[^.]+)\. Status: (?P<status>[^.]+)"
+    r"(?:\. Notes: (?P<notes>.+))?\.?$"
 )
 COMPLETED_LEARNING_STATUSES = {
     "completed",
