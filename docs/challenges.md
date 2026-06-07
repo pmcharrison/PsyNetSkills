@@ -47,7 +47,8 @@ Attempts and evaluations are documented separately in the Attempts section.
 
 ## Attempt learning notes
 
-Each new attempt should include `LEARNINGS.md` alongside `agent.json`,
-`code/`, `evidence/`, and `EVALUATION.md`. Agents use this file to record
-implementation findings and confidence-labelled actions targeting PsyNetSkills
-or PsyNet.
+Each new attempt should initialize `LEARNINGS.md` alongside `agent.json`,
+`code/`, `evidence/`, and `EVALUATION.md`. Agents use this file throughout the
+attempt to record implementation findings and confidence-labelled actions
+targeting PsyNetSkills or PsyNet, then revise it after evaluation when feedback
+changes the lessons.

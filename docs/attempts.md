@@ -38,9 +38,9 @@ of the attempt, including manual user interventions or corrective guidance. The
 dashboard derives implementation time from completed `[agent-start]` to
 `[agent-stop]` intervals and excludes manual gaps between those intervals.
 `EVALUATION.md` records human evaluation feedback and the score.
-`LEARNINGS.md` records implementation findings and confidence-labelled
-improvement ideas from the agent's perspective, ideally after evaluation
-feedback has been captured.
+`LEARNINGS.md` is initialized when the attempt is created, then records
+implementation findings and confidence-labelled improvement ideas as the attempt
+proceeds. Agents should revisit it after evaluation feedback has been captured.
 
 ## Experiment challenge attempts
 
@@ -177,8 +177,17 @@ future skill change might prevent the same failure.
 
 ## Learning notes
 
-Write `LEARNINGS.md` after implementation and, when possible, after the human
-evaluation conversation. Use compact cards, one second-level section per
+Initialize `LEARNINGS.md` when creating the attempt folder, before implementation
+starts. It may begin with this placeholder:
+
+```markdown
+# Learnings
+
+_No learning notes recorded yet. Add compact cards below as concrete lessons emerge._
+```
+
+Replace the placeholder with compact cards as concrete implementation, testing,
+or evidence-collection lessons appear. Use one second-level section per
 learning. The dashboard embeds these cards below its own Learnings heading, so it
 renders the card titles one level lower:
 
@@ -198,19 +207,22 @@ What happened during implementation or testing.
 
 Keep learning notes concise and grounded in what happened. Useful topics include
 PsyNet or Dallinger API gotchas, ambiguous instructions, evidence collection
-friction, local testing friction, and candidate refactors. Maintainers can later
-update action statuses from `considering` to `planned`, `in_progress`,
-`completed`, `dismissed`, or `superseded`. Cursor Cloud Agents should set a
-relevant action to `in_progress` when they start working on it and update it
-again when the work is completed, dismissed, or superseded. When an action is
-reviewed or its status changes, append an optional `Notes: ...` clause to the
-original action bullet to preserve the decision rationale.
+friction, local testing friction, and candidate refactors. Agents should update
+the file incrementally during the attempt so useful observations are not lost,
+then revisit it after the human evaluation conversation because feedback may
+revise or add lessons. Maintainers can later update action statuses from
+`considering` to `planned`, `in_progress`, `completed`, `dismissed`, or
+`superseded`. Cursor Cloud Agents should set a relevant action to `in_progress`
+when they start working on it and update it again when the work is completed,
+dismissed, or superseded. When an action is reviewed or its status changes,
+append an optional `Notes: ...` clause to the original action bullet to preserve
+the decision rationale.
 
 In Cursor Cloud Agent workflows, users usually review attempts through
 conversation with an agent rather than by editing files directly. Agents should
-draft `LEARNINGS.md`, invite the user to comment on the proposed actions, and
-then update action text, confidence, or status in a follow-up commit based on
-that conversation.
+invite the user to comment on the proposed actions in `LEARNINGS.md`, then
+update action text, confidence, or status in a follow-up commit based on that
+conversation.
 
 Do not use `LEARNINGS.md` for hidden evaluation criteria or scoring decisions.
 

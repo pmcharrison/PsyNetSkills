@@ -23,6 +23,11 @@ PSYNET_AGENT_REQUIRED_FIELDS = {
     "update_command": str,
     "dirty": bool,
 }
+EMPTY_LEARNINGS_PLACEHOLDER = (
+    "# Learnings\n\n"
+    "_No learning notes recorded yet. Add compact cards below as concrete lessons "
+    "emerge._"
+)
 
 
 def read_markdown_frontmatter(markdown_file: Path) -> tuple[dict[str, str], list[str]]:
@@ -115,6 +120,8 @@ def validate_learnings_file(learnings_file: Path) -> list[str]:
 
     sections = iter_learning_sections(text)
     if not sections:
+        if text.strip() == EMPTY_LEARNINGS_PLACEHOLDER:
+            return problems
         problems.append(f"{learnings_file}: missing learning sections")
         return problems
 

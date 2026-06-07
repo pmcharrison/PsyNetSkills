@@ -601,9 +601,9 @@ def write_skill_content(
     (skills_dir / "_index.md").write_text(
         write_frontmatter(
             "Skills",
-            "Skills are reusable Agent Skills that guide agents through PsyNet "
-            "experiment implementation, challenge attempts, and evidence "
-            "collection.\n",
+            "The currently implemented skills are listed below; see also the "
+            "[skills specification document]"
+            "(https://github.com/pmcharrison/PsyNetSkills/blob/main/docs/skills.md).\n",
         ),
         encoding="utf-8",
     )
