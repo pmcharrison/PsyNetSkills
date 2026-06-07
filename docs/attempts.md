@@ -15,13 +15,25 @@ challenge/
 agent.json
 code/
 evidence/
+TIMELINE.md
+LEARNINGS.md
 EVALUATION.md
 ```
 
-`challenge/` snapshots the original challenge at the time of the attempt.
-`agent.json` records the model, Cursor version, relevant skill commit, and
-attempt start time. `code/` contains the generated implementation. `evidence/`
-contains the materials used to evaluate whether the implementation worked.
+`challenge/` snapshots the original challenge at the time of the attempt,
+including optional `CRITERIA.md` when it exists.
+`agent.json` records the model, Cursor version, relevant skill commit, attempt
+start time, and PsyNet checkout metadata. `code/` contains the generated
+implementation. `evidence/` contains the materials used to evaluate whether the
+implementation worked.
+`TIMELINE.md` records major attempt events with timestamps relative to the start
+of the attempt, including manual user interventions or corrective guidance. The
+dashboard derives implementation time from completed `[agent-start]` to
+`[agent-stop]` intervals and excludes manual gaps between those intervals.
+`EVALUATION.md` records human evaluation feedback and the score.
+`LEARNINGS.md` records implementation findings and confidence-labelled
+improvement ideas from the agent's perspective, ideally after evaluation
+feedback has been captured.
 
 ## Experiment challenge attempts
 
@@ -49,10 +61,79 @@ the output of `psynet performance-test` or an equivalent performance check.
 exported experiment data. `analyses/` contains challenge-specific scientific
 checks, typically figures or concise reports.
 
+Command logs may also be included in `evidence/` when they help reviewers
+understand what ran and what failed. Keep logs concise when practical, and do
+not include custom or real credentials in logs or other artifacts.
+
 Not every early attempt will have every evidence artifact. When something is
 missing, explain why in `EVALUATION.md` so later contributors know whether the
 gap reflects an implementation problem, tooling limitation, or skipped manual
 step.
+
+## PsyNet version metadata
+
+Before implementing an experiment challenge, refresh the local PsyNet checkout:
+
+```bash
+cd ~/PsyNet
+git checkout master
+git pull --ff-only origin master
+```
+
+Record the refreshed checkout in `agent.json` under the standard `psynet` key:
+
+```json
+{
+  "psynet": {
+    "checkout_path": "~/PsyNet",
+    "branch": "master",
+    "commit": "<git rev-parse HEAD>",
+    "version": "<python -c 'from importlib.metadata import version; print(version(\"psynet\"))'>",
+    "updated_from": "origin/master",
+    "updated_at": "<UTC ISO 8601 timestamp after pulling>",
+    "update_command": "git pull --ff-only origin master",
+    "dirty": false
+  }
+}
+```
+
+`dirty` should normally be `false` and comes from `git status --short`. If the
+PsyNet checkout cannot be updated to the latest `origin/master`, record the
+blocker in `TIMELINE.md` and `EVALUATION.md`.
+
+This metadata is required for all real attempts so reviewers can identify the
+framework checkout associated with the work. If metadata is backfilled for an
+older attempt, say so in `agent.json` notes rather than presenting it as exact
+historical provenance.
+
+## Timeline notes
+
+Write `TIMELINE.md` while implementing the experiment. Use concise entries with
+relative timestamps that include seconds:
+
+```markdown
+# Timeline
+
+- T+00:00:00 [agent-start] Started autonomous implementation work.
+- T+00:00:30 [agent] Read public challenge instructions.
+- T+00:12:10 [agent] Implemented initial experiment scaffold.
+- T+00:25:45 [agent-stop] Work paused while an interactive command waited for input.
+- T+00:26:05 [manual] User interrupted the command and clarified the next step.
+- T+00:27:20 [agent-start] Resumed autonomous implementation work.
+- T+00:45:00 [agent-stop] Experiment implementation and first-pass evidence collection complete.
+```
+
+Use `[agent-start]` and `[agent-stop]` to show when the agent is actively
+working, especially around manual interruptions. Use `[agent]` for autonomous
+milestones, `[manual]` for user interventions or corrective guidance, and
+`[system]` for notable environment/tool events. Stop the timeline when the
+experiment implementation and first-pass evidence collection are complete. Do
+not include later repository-process discussions unless they directly change the
+experiment implementation.
+
+Close every active implementation segment with `[agent-stop]`. If a timeline has
+no completed start/stop segment, or if the final segment is left open, the
+dashboard reports implementation time as `Not recorded`.
 
 ## Evaluation frontmatter
 
@@ -65,7 +146,72 @@ score:
 ---
 ```
 
-The dashboard uses this field to show progress over time.
+In Cursor Cloud workflows, users usually review attempts through conversation
+with an agent rather than by editing files directly. Agents should ask the user
+for a 1-10 score and concise evaluation feedback, then summarize that feedback in
+`EVALUATION.md` and update the score field.
 
-Keep written feedback specific and actionable. Strong evaluations explain both
-what failed and which future skill change might prevent the same failure.
+If the challenge includes `CRITERIA.md`, agents should use those criteria during
+the conversational evaluation. Ask the user about each criterion, then record the
+results in `EVALUATION.md` as a Markdown checklist, for example `- [x] Criterion`
+or `- [ ] Criterion`, with concise notes for any failed or uncertain items.
+
+Criteria remain hidden during implementation and evidence collection. After the
+attempt is frozen with completed evidence, the agent may read only the current
+attempt's copied criteria snapshot at
+`challenges/<challenge>/attempts/<attempt-name>/challenge/CRITERIA.md` for
+evaluation. The agent should not browse or search other attempts. If criteria
+reveal implementation problems, record that as evaluation feedback and start a
+new attempt or explicitly log any post-evaluation revision.
+
+The dashboard uses this field to show progress over time. Keep written feedback
+specific and actionable. Strong evaluations explain both what failed and which
+future skill change might prevent the same failure.
+
+## Learning notes
+
+Write `LEARNINGS.md` after implementation and, when possible, after the human
+evaluation conversation. Use compact cards, one second-level section per
+learning. The dashboard embeds these cards below its own Learnings heading, so it
+renders the card titles one level lower:
+
+```markdown
+## Short descriptive title
+
+What happened during implementation or testing.
+
+*Actions:*
+
+- **PsyNetSkills:** A repo, skill, docs, validation, dashboard, or evidence workflow
+  change. Confidence: high. Status: considering. Notes: Optional decision
+  rationale after review.
+- **PsyNet:** A PsyNet framework, documentation, or command-line change. Confidence:
+  medium. Status: considering.
+```
+
+Keep learning notes concise and grounded in what happened. Useful topics include
+PsyNet or Dallinger API gotchas, ambiguous instructions, evidence collection
+friction, local testing friction, and candidate refactors. Maintainers can later
+update action statuses from `considering` to `planned`, `in_progress`,
+`completed`, `dismissed`, or `superseded`. Cloud agents should set a relevant
+action to `in_progress` when they start working on it and update it again when
+the work is completed, dismissed, or superseded. When an action is reviewed or
+its status changes, append an optional `Notes: ...` clause to the original action
+bullet to preserve the decision rationale.
+
+In Cursor Cloud workflows, users usually review attempts through conversation
+with an agent rather than by editing files directly. Agents should draft
+`LEARNINGS.md`, invite the user to comment on the proposed actions, and then
+update action text, confidence, or status in a follow-up commit based on that
+conversation.
+
+Do not use `LEARNINGS.md` for hidden evaluation criteria or scoring decisions.
+
+## Credential policy
+
+Challenge attempts must not use custom or real service credentials. Use only
+local, ephemeral defaults for PsyNet/Dallinger dashboards, and do not configure
+real AWS credentials, Prolific API tokens, or other production secrets for work
+in this repository. Agents should stop and ask for a safer workflow if they see
+custom credentials in challenge instructions, local configuration, logs, or
+evidence artifacts.

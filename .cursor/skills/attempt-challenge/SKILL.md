@@ -12,18 +12,64 @@ PsyNetSkills repository.
 
 1. Read `INSTRUCTIONS.md` from the target challenge, including its YAML
    frontmatter.
-2. Do not read `CRITERIA.md` or any existing `attempts/` folders.
-3. Create a new attempt folder named with the local timestamp:
+2. Do not read `CRITERIA.md` or any existing `attempts/` folders before
+   implementation and evidence collection are complete. Do not inspect dashboard
+   attempt pages for the same challenge during this phase either; any criteria
+   shown there are for later review.
+3. Refresh the local PsyNet checkout before implementing experiment code:
+   `cd ~/PsyNet && git checkout master && git pull --ff-only origin master`.
+   If the checkout is missing, clone it first. If local changes or a
+   non-fast-forward state prevent updating, record the blocker in `TIMELINE.md` and
+   `EVALUATION.md` rather than silently using an unknown revision.
+4. Create a new attempt folder named with the local timestamp:
    `challenges/<challenge>/attempts/YYYY-MM-DD-HH-MM/`.
-4. Snapshot the challenge into `attempts/<timestamp>/challenge/`, excluding
-   `CRITERIA.md` and previous attempts.
-5. Write `agent.json` with the model/client details you know and the current
-   commit hash of the PsyNetSkills repository.
-6. Implement the challenge in `code/`.
-7. Collect evidence in `evidence/`. Use the `record-participant-video` skill
+5. Snapshot the challenge into `attempts/<timestamp>/challenge/`, excluding
+   previous attempts. Keep optional `CRITERIA.md` in the snapshot if it exists,
+   but do not open it during implementation.
+6. Write `agent.json` with the model/client details you know, the current commit
+   hash of the PsyNetSkills repository, and a `psynet` object recording the
+   refreshed PsyNet checkout. Use this standard shape:
+
+   ```json
+   {
+     "psynet": {
+       "checkout_path": "~/PsyNet",
+       "branch": "master",
+       "commit": "<git rev-parse HEAD>",
+       "version": "<python -c 'from importlib.metadata import version; print(version(\"psynet\"))'>",
+       "updated_from": "origin/master",
+       "updated_at": "<UTC ISO 8601 timestamp after pulling>",
+       "update_command": "git pull --ff-only origin master",
+       "dirty": false
+     }
+   }
+   ```
+
+   Set `dirty` from `git status --short`; it should normally be `false`.
+7. Start `TIMELINE.md` and append relative-timestamped entries as the attempt
+   progresses. Close every active implementation segment with `[agent-stop]` so
+   the dashboard can derive implementation time while excluding manual gaps.
+8. Implement the challenge in `code/`.
+9. Collect evidence in `evidence/`. Use the `record-participant-video` skill
    when creating `evidence/participant.mp4`.
-8. Leave `EVALUATION.md` as a template for human evaluators unless explicitly
-   asked to evaluate.
+10. Leave `EVALUATION.md` as a template for human evaluators unless the user
+   provides evaluation feedback.
+11. In the final response, invite the user to evaluate the attempt
+   conversationally, including a 1-10 score and concise feedback. After
+   implementation and evidence collection are complete, you may read exactly the
+   current attempt's copied criteria file at
+   `challenges/<challenge>/attempts/<timestamp>/challenge/CRITERIA.md` for this
+   evaluation conversation. Do not browse or search prior attempts. If optional
+   `CRITERIA.md` is present, ask the user about each criterion during evaluation.
+   If the user provides evaluation feedback, summarize it in `EVALUATION.md`,
+   check off each criterion as met or unmet, and enter the score in YAML
+   frontmatter.
+12. After evaluation feedback is captured, write or update `LEARNINGS.md` with
+   concise implementation notes and suggested actions for PsyNetSkills or
+   PsyNet. Learnings may depend on the human evaluation.
+13. Invite the user to review the drafted learning actions conversationally. If
+   the user comments on the learnings, update `LEARNINGS.md` for them rather
+   than expecting manual Markdown edits.
 
 ## Evidence expectations
 
@@ -47,10 +93,86 @@ required. Do not imply a skipped check passed: record what was run, what
 happened, and why any required evidence is missing or blocked in
 `EVALUATION.md`.
 
+## Credential policy
+
+Challenge work in this repository must not use custom or real service
+credentials. Use only local, ephemeral PsyNet/Dallinger dashboard defaults. Do
+not configure real AWS credentials, Prolific API tokens, or other production
+secrets for an attempt. If the user, challenge materials, copied environment
+files, logs, or evidence artifacts include custom credentials, stop and ask for a
+safer workflow rather than committing or publishing them.
+
 ## Templates
 
 Use the files in `assets/attempt-template/` as the starting point for attempt
 metadata and evaluation notes.
+
+## Timeline notes
+
+`TIMELINE.md` should help reviewers understand how the experiment implementation
+progressed. Start it early, keep entries concise, and use relative timestamps
+with seconds from the beginning of the attempt. Use this format:
+
+```markdown
+# Timeline
+
+- T+00:00:00 [agent-start] Started autonomous implementation work.
+- T+00:00:30 [agent] Read public challenge instructions.
+- T+00:12:10 [agent] Implemented initial experiment scaffold.
+- T+00:25:45 [agent-stop] Work paused while an interactive command waited for input.
+- T+00:26:05 [manual] User interrupted the command and clarified the next step.
+- T+00:27:20 [agent-start] Resumed autonomous implementation work.
+- T+00:45:00 [agent-stop] Experiment implementation and first-pass evidence collection complete.
+```
+
+Use `[agent-start]` and `[agent-stop]` to show when the agent is actively
+working, especially around manual interruptions. Use `[agent]` for autonomous
+milestones, `[manual]` for user interventions or corrective guidance, and
+`[system]` for notable environment/tool events. Stop the timeline when the
+experiment implementation and first-pass evidence collection are complete. Do
+not include later repository-process discussions unless they directly change the
+experiment implementation.
+
+The dashboard derives implementation time from completed `[agent-start]` to
+`[agent-stop]` intervals. If the final active segment is left open, the
+implementation time is reported as `Not recorded`.
+
+## Learning notes
+
+`LEARNINGS.md` should capture information that would help future maintainers and
+agents. Use compact cards, one section per learning:
+
+- `## <short title>`
+- Optional prose describing what happened.
+- `*Actions:*`
+  - `**PsyNetSkills:** <repo/skill/docs change>. Confidence: <level>. Status: <status>. Notes: <optional review rationale>.`
+  - `**PsyNet:** <framework/docs/CLI change>. Confidence: <level>. Status: <status>.`
+
+Use confidence levels `high`, `medium`, or `low`. Generally propose a near-term
+PsyNetSkills change first, then a longer-term PsyNet change if the learning
+points to a framework issue. Use lowercase status values: `considering`,
+`planned`, `in_progress`, `completed`, `dismissed`, or `superseded`. New actions
+should default to `considering`; use `planned` once a maintainer agrees the
+action should be done. When you actively work on an action from `LEARNINGS.md`,
+set that action to `in_progress` and update it again when the work is completed,
+dismissed, or superseded. When an action is reviewed or its status changes,
+append an optional `Notes: ...` clause to the original action bullet with the
+decision rationale. Include only concrete observations from the attempt, such as
+framework gotchas, missing instructions, evidence collection friction, or useful
+refactors. Do not repeat the evaluation score or hidden criteria.
+
+Develop learning notes after the human evaluation conversation whenever
+possible. The evaluator's score and feedback may reveal different process
+lessons than the implementation alone.
+
+Treat learning notes as a conversational artifact. Cloud users will often review
+them by chatting with the agent rather than editing Markdown directly. After an
+attempt is complete, briefly ask the user to comment on the drafted actions. On
+follow-up, update action text, confidence, or status according to the user's
+comments. For example, change `considering` to `planned` when the user agrees
+the action should be done, `in_progress` while an agent is actively working on
+it, `dismissed` when they reject it, `completed` when it has been finished, or
+`superseded` when a better action replaces it.
 
 ## Notes
 

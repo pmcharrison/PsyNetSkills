@@ -2,12 +2,10 @@
 
 Challenges live in `challenges/` and define tasks for agents to attempt.
 
-Each challenge folder contains:
+Each challenge folder contains at minimum:
 
 ```text
 INSTRUCTIONS.md
-CRITERIA.md
-references/
 attempts/
 ```
 
@@ -22,7 +20,10 @@ difficulty: 2
 ---
 ```
 
-`CRITERIA.md` is hidden from agents and used during evaluation.
+Challenges may also include `CRITERIA.md` for evaluator-facing success
+criteria and `references/` for supporting material. `CRITERIA.md` is optional:
+when present, agents should not read it before implementing the challenge, but
+it should be used during conversational evaluation.
 
 ## Challenge instructions
 
@@ -36,3 +37,10 @@ describe the participant experience, the stimuli or inputs, the responses to
 collect, and any scientific checks that matter for success.
 
 Attempts and evaluations are documented separately in the Attempts section.
+
+## Attempt learning notes
+
+Each new attempt should include `LEARNINGS.md` alongside `agent.json`,
+`code/`, `evidence/`, and `EVALUATION.md`. Agents use this file to record
+implementation findings and confidence-labelled actions targeting PsyNetSkills
+or PsyNet.

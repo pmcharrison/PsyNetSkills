@@ -1,23 +1,29 @@
 {{ define "main" }}
-  <h1>{{ .Title }}</h1>
   {{ .Content }}
 
   <table>
     <thead>
       <tr>
         <th>Challenge</th>
-        <th>Type</th>
         <th>Difficulty</th>
         <th>Latest score</th>
+        <th>Open actions</th>
       </tr>
     </thead>
     <tbody>
-      {{ range site.Data.psynetsk.challenges }}
+      {{ range hugo.Data.psynetsk.challenges }}
+        {{ $openActions := int .open_actions }}
+        {{ $openActionsClass := "open-actions-danger" }}
+        {{ if eq $openActions 0 }}
+          {{ $openActionsClass = "open-actions-success" }}
+        {{ else if le $openActions 3 }}
+          {{ $openActionsClass = "open-actions-warning" }}
+        {{ end }}
         <tr>
           <td><a href="{{ .url | relURL }}">{{ .title }}</a></td>
-          <td>{{ .type }}</td>
           <td>{{ .difficulty }}</td>
           <td>{{ with .latest_score }}{{ . }}{{ else }}Not scored{{ end }}</td>
+          <td><span class="open-actions-count {{ $openActionsClass }}">{{ $openActions }}</span></td>
         </tr>
       {{ end }}
     </tbody>

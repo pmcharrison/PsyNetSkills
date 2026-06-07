@@ -42,8 +42,6 @@ Create a folder under `challenges/` with:
 
 ```text
 INSTRUCTIONS.md
-CRITERIA.md
-references/
 attempts/.gitkeep
 ```
 
@@ -57,7 +55,10 @@ difficulty: 3
 ---
 ```
 
-`CRITERIA.md` is for evaluators and is hidden from agents by `.cursorignore`.
+Optionally add `CRITERIA.md` for evaluator-facing success criteria and
+`references/` for supporting material. Agents should not read `CRITERIA.md`
+before implementing a challenge, but should use it during conversational
+evaluation when it is present.
 
 ## Recording an attempt
 
@@ -70,17 +71,45 @@ challenge/
 agent.json
 code/
 evidence/
+TIMELINE.md
+LEARNINGS.md
 EVALUATION.md
 ```
 
 The `challenge/` folder is a snapshot of the original challenge excluding
-previous attempts. The `EVALUATION.md` file should be human-written and include
-YAML frontmatter with a `score` field when the evaluation is complete.
+previous attempts. Before implementing a PsyNet experiment attempt, update the
+local framework checkout with
+`cd ~/PsyNet && git checkout master && git pull --ff-only origin master`. Record
+the resulting PsyNet checkout in `agent.json` under a `psynet` object with
+`checkout_path`, `branch`, `commit`, `version`, `updated_from`, `updated_at`,
+`update_command`, and `dirty` fields. The `EVALUATION.md` file should be
+human-written and include YAML frontmatter with a `score` field when the
+evaluation is complete. In Cursor Cloud workflows, agents should ask the user for
+a 1-10 score and concise feedback. If `CRITERIA.md` is present, agents should ask
+the user about each criterion and record the answers as a checklist in
+`EVALUATION.md`.
+`TIMELINE.md` should log major experiment implementation events with timestamps
+relative to the start of the attempt, including seconds and manual user
+interventions or corrective guidance. Stop the timeline when the experiment
+implementation and first-pass evidence collection are complete. The dashboard
+derives implementation time from completed `[agent-start]` to `[agent-stop]`
+intervals and excludes manual gaps between those intervals.
+`LEARNINGS.md` should be written by the agent and summarize concrete
+implementation findings plus confidence-labelled actions targeting PsyNetSkills
+or PsyNet after implementation and, when possible, after evaluation feedback has
+been captured. Agents should invite conversational review of these actions and
+update the file in follow-up commits when users revise or decide on actions.
 
 ## Large files
 
 Videos, data exports, and other evidence artifacts should be committed through
 Git LFS. See `.gitattributes` for the configured patterns.
+
+Command logs are allowed in attempt evidence when they help reviewers understand
+what ran, but challenge work must not use or publish custom credentials. Use
+only local, ephemeral PsyNet/Dallinger dashboard defaults, and do not configure
+real AWS credentials, Prolific API tokens, or other production secrets for this
+repository.
 
 ## Before opening a PR
 
@@ -94,3 +123,9 @@ hugo --source dashboard --destination ../public --cleanDestinationDir
 ```
 
 Do not commit generated `public/` output unless the repository policy changes.
+
+For pull requests from branches in this repository, GitHub Actions publishes a
+dashboard preview at
+https://<owner>.github.io/<repository>/pr-preview/pr-<number>/.
+
+The preview workflow posts the concrete URL to the pull request.

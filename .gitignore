@@ -16,6 +16,7 @@ build/
 *.egg-info/
 public/
 dashboard/public/
+dashboard/.hugo_build.lock
 dashboard/data/psynetsk.json
 dashboard/content/challenges/
 dashboard/content/docs/
@@ -25,4 +26,5 @@ dashboard/static/artifacts/
 # Local files
 .DS_Store
 *.log
+!challenges/*/attempts/*/evidence/*.log
 tmp/

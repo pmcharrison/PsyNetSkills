@@ -3,10 +3,11 @@ from pathlib import Path
 
 from psynetsk_tools.dashboard import (
     collect_challenges,
-    collect_docs,
     collect_skills,
     dashboard_data,
+    demote_markdown_headings,
     export_dashboard,
+    parse_learning_actions,
     strip_challenge_frontmatter,
     strip_frontmatter,
 )
@@ -44,28 +45,6 @@ def evaluation(score: int = 6) -> str:
     )
 
 
-def test_collect_docs_uses_h1_title(tmp_path: Path) -> None:
-    write(tmp_path / "docs/index.md", "# Introduction\n\nDetails.\n")
-    write(tmp_path / "docs/skills.md", "# Skills\n\nDetails.\n")
-    write(tmp_path / "docs/challenges.md", "# Challenges\n\nDetails.\n")
-    write(tmp_path / "docs/attempts.md", "# Attempts\n\nDetails.\n")
-    write(tmp_path / "docs/dashboard.md", "# Dashboard\n\nDetails.\n")
-
-    docs = collect_docs(tmp_path)
-
-    assert docs[0].slug == "index"
-    assert docs[0].title == "Introduction"
-    assert docs[1].slug == "skills"
-    assert docs[1].title == "Skills"
-    assert [doc.slug for doc in docs] == [
-        "index",
-        "skills",
-        "challenges",
-        "attempts",
-        "dashboard",
-    ]
-
-
 def test_collect_challenges_reports_latest_score(tmp_path: Path) -> None:
     challenge_dir = tmp_path / "challenges/example"
     write(challenge_dir / "INSTRUCTIONS.md", challenge_instructions())
@@ -89,10 +68,33 @@ def test_collect_challenges_reports_latest_score(tmp_path: Path) -> None:
 def test_collect_challenges_reports_attempt_metadata(tmp_path: Path) -> None:
     challenge_dir = tmp_path / "challenges/example"
     write(challenge_dir / "INSTRUCTIONS.md", challenge_instructions())
+    write(challenge_dir / "CRITERIA.md", "# Criteria\n\n- Top-level criterion.\n")
     attempt_dir = challenge_dir / "attempts/2026-06-01-10-10"
     write(attempt_dir / "agent.json", '{"model": "test-model"}\n')
     write(attempt_dir / "EVALUATION.md", evaluation())
-    write(attempt_dir / "challenge/INSTRUCTIONS.md", "# Example\n")
+    write(
+        attempt_dir / "TIMELINE.md",
+        "# Timeline\n\n"
+        "- T+00:00:00 [agent-start] Started.\n"
+        "- T+00:12:05 [agent-stop] Finished.\n",
+    )
+    write(
+        attempt_dir / "LEARNINGS.md",
+        "# Learnings\n\n"
+        "## Useful finding\n\n"
+        "Useful finding.\n\n"
+        "*Actions:*\n\n"
+        "- **PsyNetSkills:** Document it. Confidence: high. Status: considering.\n",
+    )
+    write(
+        attempt_dir / "challenge/INSTRUCTIONS.md",
+        "---\n"
+        "title: Example challenge\n"
+        "type: experiment implementation\n"
+        "difficulty: 4\n"
+        "---\n\n"
+        "Implement the snapshot experiment.\n",
+    )
     write(attempt_dir / "code/README.md", "# Code notes\n")
     write(attempt_dir / "evidence/README.md", "# Evidence notes\n")
 
@@ -102,11 +104,110 @@ def test_collect_challenges_reports_attempt_metadata(tmp_path: Path) -> None:
     assert attempt.model == "test-model"
     assert attempt.url == "challenges/example/2026-06-01-10-10/"
     assert attempt.evaluation == "Attempt body.\n"
+    assert attempt.timeline == (
+        "- T+00:00:00 [agent-start] Started.\n"
+        "- T+00:12:05 [agent-stop] Finished.\n"
+    )
+    assert len(attempt.timeline_entries) == 2
+    assert attempt.timeline_entries[0].timestamp == "T+00:00:00"
+    assert attempt.timeline_entries[0].actor == "agent-start"
+    assert attempt.timeline_entries[0].description == "Started."
+    assert attempt.implementation_time_seconds == 725
+    assert attempt.implementation_time_display == "12m 5s"
+    assert "### Useful finding" in attempt.learnings
+    assert "Useful finding.\n" in attempt.learnings
     assert attempt.evaluation_metadata == {"example": "true"}
+    assert attempt.challenge_instructions == "Implement the snapshot experiment.\n"
+    assert attempt.challenge_criteria == "- Top-level criterion.\n"
     assert attempt.code_files[0].path == "README.md"
     assert attempt.code_files[0].content == "# Code notes\n"
     assert attempt.code_files[0].kind == "md"
     assert attempt.code_files[0].size_bytes == len("# Code notes\n")
+
+
+def test_collect_challenges_prefers_snapshotted_criteria(
+    tmp_path: Path,
+) -> None:
+    challenge_dir = tmp_path / "challenges/example"
+    write(challenge_dir / "INSTRUCTIONS.md", challenge_instructions())
+    write(challenge_dir / "CRITERIA.md", "# Criteria\n\n- Current criterion.\n")
+    attempt_dir = challenge_dir / "attempts/2026-06-01-10-10"
+    write(attempt_dir / "EVALUATION.md", evaluation())
+    write(attempt_dir / "challenge/CRITERIA.md", "# Criteria\n\n- Snapshot criterion.\n")
+
+    attempt = collect_challenges(tmp_path)[0].attempts[0]
+
+    assert attempt.challenge_criteria == "- Snapshot criterion.\n"
+
+
+def test_demote_markdown_headings_lowers_embedded_heading_hierarchy() -> None:
+    markdown = "## Useful finding\n\nText.\n\n- # Not a heading\n"
+
+    assert demote_markdown_headings(markdown) == (
+        "### Useful finding\n\nText.\n\n- # Not a heading\n"
+    )
+
+
+def test_parse_learning_actions_accepts_optional_notes() -> None:
+    markdown = (
+        "*Actions:*\n\n"
+        "- **PsyNetSkills:** Add reviewed-action notes. Confidence: high. "
+        "Status: completed. Notes: Implemented in the dashboard parser.\n"
+        "- **PsyNet:** Keep related framework behavior unchanged. Confidence: "
+        "medium. Status: dismissed. Notes: The repository convention is enough "
+        "for now.\n"
+    )
+
+    assert parse_learning_actions(markdown) == [
+        ("psynetskills", "high", "Add reviewed-action notes.", "completed"),
+        (
+            "psynet",
+            "medium",
+            "Keep related framework behavior unchanged.",
+            "dismissed",
+        ),
+    ]
+
+
+def test_dashboard_data_reports_open_learning_actions(tmp_path: Path) -> None:
+    write(
+        tmp_path / ".cursor/skills/example-skill/SKILL.md",
+        "---\n"
+        "name: example-skill\n"
+        "description: Use when testing dashboard generation.\n"
+        "---\n\n"
+        "# Example skill\n",
+    )
+    challenge_dir = tmp_path / "challenges/example"
+    write(challenge_dir / "INSTRUCTIONS.md", challenge_instructions())
+    attempt_dir = challenge_dir / "attempts/2026-06-01-10-10"
+    write(attempt_dir / "EVALUATION.md", evaluation())
+    write(
+        attempt_dir / "LEARNINGS.md",
+        "# Learnings\n\n"
+        "## Useful finding\n\n"
+        "*Actions:*\n\n"
+        "- **PsyNetSkills:** Document the behavior in the attempt guide. "
+        "Confidence: high. Status: completed.\n"
+        "- **PsyNet:** Clarify the underlying framework behavior across\n"
+        "  the relevant API docs. Confidence: medium.\n"
+        "  Status: considering. Notes: Waiting for a framework maintainer to review.\n"
+        "- **PsyNetSkills:** Work on the active repository update. "
+        "Confidence: high. Status: in_progress.\n"
+        "- **PsyNetSkills:** Plan the repository update. "
+        "Confidence: low. Status: planned.\n"
+        "- **PsyNet:** Mark the framework follow-up completed. "
+        "Confidence: high. Status: completed.\n"
+        "- **PsyNetSkills:** Dismiss the duplicate proposal. "
+        "Confidence: medium. Status: dismissed. Notes: Covered by the repository update.\n"
+        "- **PsyNet:** Supersede the old framework proposal. "
+        "Confidence: medium. Status: superseded.\n",
+    )
+
+    data = dashboard_data(tmp_path)
+
+    assert data["challenges"][0]["open_actions"] == 3
+    assert data["challenges"][0]["attempts"][0]["open_actions"] == 3
 
 
 def test_collect_challenges_reports_binary_and_nested_attempt_files(
@@ -220,7 +321,8 @@ def test_dashboard_data_reports_counts(tmp_path: Path) -> None:
 
     data = dashboard_data(tmp_path)
 
-    assert data["counts"] == {"docs": 1, "skills": 1, "challenges": 1}
+    assert data["counts"] == {"skills": 1, "challenges": 1}
+    assert "docs" not in data
 
 
 def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
@@ -240,6 +342,20 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
         challenge_instructions(),
     )
     write(
+        tmp_path / "challenges/example/CRITERIA.md",
+        "# Criteria\n\n- Exported top-level criterion.\n",
+    )
+    write(
+        tmp_path
+        / "challenges/example/attempts/2026-06-01-10-10/challenge/INSTRUCTIONS.md",
+        "---\n"
+        "title: Example challenge\n"
+        "type: experiment implementation\n"
+        "difficulty: 4\n"
+        "---\n\n"
+        "Implement the exported snapshot.\n",
+    )
+    write(
         tmp_path / "challenges/example/attempts/2026-06-01-10-10/agent.json",
         '{"model": "test-model"}\n',
     )
@@ -247,6 +363,21 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
         tmp_path
         / "challenges/example/attempts/2026-06-01-10-10/EVALUATION.md",
         evaluation(),
+    )
+    write(
+        tmp_path / "challenges/example/attempts/2026-06-01-10-10/TIMELINE.md",
+        "# Timeline\n\n"
+        "- T+00:00:00 [agent-start] Started.\n"
+        "- T+00:12:05 [agent-stop] Finished.\n",
+    )
+    write(
+        tmp_path
+        / "challenges/example/attempts/2026-06-01-10-10/LEARNINGS.md",
+        "# Learnings\n\n"
+        "## Useful finding\n\n"
+        "Useful finding.\n\n"
+        "*Actions:*\n\n"
+        "- **PsyNetSkills:** Document it. Confidence: high. Status: considering.\n",
     )
     write(
         tmp_path
@@ -257,6 +388,35 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
         tmp_path
         / "challenges/example/attempts/2026-06-01-10-10/evidence/README.md",
         "# Evidence notes\n",
+    )
+    write(
+        tmp_path
+        / "challenges/example/attempts/2026-06-01-10-10/evidence/monitor.html",
+        '<!doctype html><html><head><link href="/static/css/dashboard.css">'
+        '<link href="/static/vis@4.17.0/dist/vis-network.min.css"></head>'
+        '<body><a href="/dashboard/index">Dashboard</a><section id="mynetwork"></section>'
+        '<script>const network_structure = {"networks":[{"id":1,"failed":false}],'
+        "\"nodes\":[{\"id\":1,\"network_id\":1,\"definition\":\"{'color': 'red', 'hex': '#ff0000'}\"}],"
+        '"infos":[{"id":2,"network_id":1,"class":"ColorRatingTrial","answer":4}]};'
+        'const vis_options = {};</script>'
+        '<script src="/static/vis@4.17.0/dist/vis.min.js"></script>'
+        '<script src="/static/scripts/network-monitor.js"></script></body></html>',
+    )
+    write(
+        tmp_path
+        / "challenges/example/attempts/2026-06-01-10-10/evidence/psynet_debug.log",
+        "Dashboard user: admin password: local-password\n"
+        "Username: `admin`\n"
+        "Password: `local-password`\n"
+        "AWS_ACCESS_KEY_ID=AKIAEXAMPLE\n"
+        "AWS_SECRET_ACCESS_KEY=secret\n"
+        "PROLIFIC_API_TOKEN=token\n",
+    )
+    write(
+        tmp_path
+        / "challenges/example/attempts/2026-06-01-10-10/evidence/dashboard_data.html",
+        '<a href="http://localhost:5000/basic_data?'
+        'dashboard_user=admin&amp;dashboard_password=local-password">data</a>',
     )
     write_bytes(
         tmp_path
@@ -270,18 +430,8 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
     export_dashboard(tmp_path, tmp_path / "dashboard")
 
     assert (tmp_path / "dashboard/data/psynetsk.json").exists()
-    assert (tmp_path / "dashboard/content/docs/_index.md").exists()
-    docs_index = (tmp_path / "dashboard/content/docs/_index.md").read_text(
-        encoding="utf-8",
-    )
-    docs_skills = (tmp_path / "dashboard/content/docs/skills.md").read_text(
-        encoding="utf-8",
-    )
-    assert "next:" in docs_index
-    assert 'edit_path: "docs/index.md"' in docs_index
-    assert "previous:" in docs_skills
-    assert 'edit_path: "docs/skills.md"' in docs_skills
-    assert not (tmp_path / "dashboard/content/skills/_index.md").exists()
+    assert not (tmp_path / "dashboard/content/docs").exists()
+    assert (tmp_path / "dashboard/content/skills/_index.md").exists()
     assert (
         tmp_path / "dashboard/content/skills/example-skill/index.md"
     ).exists()
@@ -294,6 +444,7 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
         encoding="utf-8",
     )
     parsed_data = json.loads(data)
+    assert "docs" not in parsed_data
     assert '"title": "Example skill"' in data
     challenge_page = (
         tmp_path / "dashboard/content/challenges/example/_index.md"
@@ -312,11 +463,85 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
         / "dashboard/static/artifacts/challenges/example/attempts/"
         "2026-06-01-10-10/evidence/participant.mp4"
     ).exists()
+    exported_monitor = (
+        tmp_path
+        / "dashboard/static/artifacts/challenges/example/attempts/"
+        "2026-06-01-10-10/evidence/monitor.html"
+    ).read_text(encoding="utf-8")
+    assert '<base href="./">' in exported_monitor
+    assert 'href="./static/css/dashboard.css"' in exported_monitor
+    assert 'src="./static/scripts/network-monitor.js"' in exported_monitor
+    assert 'src="./static/vis@4.17.0/dist/vis.min.js"' in exported_monitor
+    assert 'href="#"' in exported_monitor
+    assert "/dashboard/index" not in exported_monitor
+    assert "const network_structure" in exported_monitor
+    exported_dashboard_data = (
+        tmp_path
+        / "dashboard/static/artifacts/challenges/example/attempts/"
+        "2026-06-01-10-10/evidence/dashboard_data.html"
+    ).read_text(encoding="utf-8")
+    assert "dashboard_user=[REDACTED]" in exported_dashboard_data
+    assert "dashboard_password=[REDACTED]" in exported_dashboard_data
+    exported_log = (
+        tmp_path
+        / "dashboard/static/artifacts/challenges/example/attempts/"
+        "2026-06-01-10-10/evidence/psynet_debug.log"
+    ).read_text(encoding="utf-8")
+    assert "Dashboard user: admin password: [REDACTED]" in exported_log
+    assert "Username: `[REDACTED]`" in exported_log
+    assert "Password: `[REDACTED]`" in exported_log
+    assert "AWS_ACCESS_KEY_ID=[REDACTED]" in exported_log
+    assert "AWS_SECRET_ACCESS_KEY=[REDACTED]" in exported_log
+    assert "PROLIFIC_API_TOKEN=[REDACTED]" in exported_log
+    network_monitor = (
+        tmp_path
+        / "dashboard/static/artifacts/challenges/example/attempts/"
+        "2026-06-01-10-10/evidence/static/scripts/network-monitor.js"
+    )
+    assert network_monitor.exists()
+    assert (
+        tmp_path
+        / "dashboard/static/artifacts/challenges/example/attempts/"
+        "2026-06-01-10-10/evidence/static/vis@4.17.0/dist/vis.min.js"
+    ).exists()
+    assert (
+        "Live dashboard node details are unavailable"
+        in network_monitor.read_text(encoding="utf-8")
+    )
     assert '"model": "test-model"' in data
     assert '"url": "challenges/example/2026-06-01-10-10/"' in data
+    assert parsed_data["challenges"][0]["open_actions"] == 1
     exported_attempt = parsed_data["challenges"][0]["attempts"][0]
+    assert exported_attempt["open_actions"] == 1
     assert exported_attempt["evaluation"] == "Attempt body.\n"
+    assert exported_attempt["timeline"] == (
+        "- T+00:00:00 [agent-start] Started.\n"
+        "- T+00:12:05 [agent-stop] Finished.\n"
+    )
+    assert exported_attempt["timeline_entries"] == [
+        {
+            "timestamp": "T+00:00:00",
+            "actor": "agent-start",
+            "description": "Started.",
+        },
+        {
+            "timestamp": "T+00:12:05",
+            "actor": "agent-stop",
+            "description": "Finished.",
+        },
+    ]
+    assert exported_attempt["implementation_time_seconds"] == 725
+    assert exported_attempt["implementation_time_display"] == "12m 5s"
+    assert "### Useful finding" in exported_attempt["learnings"]
     assert exported_attempt["evaluation_metadata"] == {"example": "true"}
+    assert (
+        exported_attempt["challenge_instructions"]
+        == "Implement the exported snapshot.\n"
+    )
+    assert (
+        exported_attempt["challenge_criteria"]
+        == "- Exported top-level criterion.\n"
+    )
     assert exported_attempt["code_files"][0]["size_bytes"] == len(
         "# Code notes\n",
     )

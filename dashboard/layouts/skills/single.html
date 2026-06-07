@@ -1,18 +1,24 @@
 {{ define "main" }}
   {{ $skillName := .Params.skill }}
-  {{ $matches := where site.Data.psynetsk.skills "name" $skillName }}
-  {{ $skill := index $matches 0 }}
+  {{ $matches := where hugo.Data.psynetsk.skills "name" $skillName }}
+  {{ $skill := dict "description" "" "path" "" }}
+  {{ if gt (len $matches) 0 }}
+    {{ $skill = index $matches 0 }}
+  {{ end }}
 
-  <div class="content-layout">
-    {{ partial "section-sidebar.html" (dict "page" . "section" "skills" "title" "Skills") }}
-    <article class="prose">
-      <div class="page-heading">
-        <h1>{{ .Title }}</h1>
-        {{ partial "edit-in-github.html" $skill.path }}
-      </div>
-      <p>{{ $skill.description }}</p>
-      <p><strong>Source:</strong> <code>{{ $skill.path }}</code></p>
-      {{ .Content }}
-    </article>
-  </div>
+  <article class="prose">
+    {{ if eq (len $matches) 0 }}
+      <section class="attempt-panel">
+        <h1>Skill data unavailable</h1>
+        <p>The generated page metadata does not match the exported dashboard data.</p>
+      </section>
+    {{ end }}
+    <div class="page-heading">
+      <h1>{{ .Title }}</h1>
+      {{ partial "edit-in-github.html" $skill.path }}
+    </div>
+    <p>{{ $skill.description }}</p>
+    <p><strong>Source:</strong> <code>{{ $skill.path }}</code></p>
+    {{ .Content }}
+  </article>
 {{ end }}

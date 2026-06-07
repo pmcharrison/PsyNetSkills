@@ -4,7 +4,46 @@
 
 ### What this repo is
 
-PsyNetSkills is a workshop repository (not a multi-service app). Local development centers on Python tooling (`psynetsk_tools/`) and a Hugo static dashboard (`dashboard/`). See `README.md` and `CONTRIBUTING.md` for the canonical workflow.
+PsyNetSkills is a workshop repository (not a multi-service app). Local development centers on Python tooling (`psynetsk_tools/`), a Hugo static dashboard (`dashboard/`), and a **local PsyNet checkout** at `~/PsyNet` for experiment APIs, demos, and challenge work. See `README.md` and `CONTRIBUTING.md` for the canonical workflow.
+
+### Required development environment
+
+A complete Cursor Cloud (or local) setup for this repository includes **both** the PsyNetSkills repo **and** the PsyNet stack below. Challenge skills and experiment implementation assume PsyNet is installed and verified — not only the Hugo dashboard and `psynetsk_tools` CLI.
+
+| Component | Location / command | Purpose |
+|-----------|-------------------|---------|
+| PsyNetSkills Python env | `uv sync --group dev` (repo root) | Validation, tests, dashboard export |
+| Hugo extended | `hugo --source dashboard ...` | Static dashboard build/preview |
+| **PsyNet checkout** | `~/PsyNet` | Experiment APIs, demos, `psynet test local` |
+| PostgreSQL + `dallinger` DB | `psql -h localhost -U dallinger -d dallinger` | PsyNet local runtime |
+| Redis | `redis-cli ping` → `PONG` | PsyNet local runtime |
+| Heroku CLI | `heroku --version` | `psynet debug local` / `psynet test local` |
+
+**Verify the full environment** (run after initial setup and when debugging PsyNet issues):
+
+```bash
+# PsyNetSkills (repo root)
+uv run psynetsk-validate && uv run pytest
+
+# PsyNet (separate venv at ~/PsyNet/.venv)
+sudo service postgresql start && sudo service redis-server start
+cd ~/PsyNet && source .venv/bin/activate
+cd demos/experiments/hello_world && psynet test local
+```
+
+`psynet test local` on the `hello_world` demo must pass before attempting challenges or implementing experiments.
+Before starting a challenge attempt or generated experiment implementation,
+refresh the local PsyNet checkout with
+`cd ~/PsyNet && git checkout master && git pull --ff-only origin master`, then
+record the resulting checkout under the standard `psynet` object in the
+attempt's `agent.json`.
+
+Challenge and experiment work in this repository must not use custom or real
+service credentials. Use only local, ephemeral PsyNet/Dallinger dashboard
+defaults. Do not configure real AWS credentials, Prolific API tokens, or other
+production secrets for an attempt. If custom credentials appear in user
+instructions, local config, logs, or evidence artifacts, stop and ask for a safer
+workflow rather than committing or publishing them.
 
 ### Skill registration
 
@@ -18,7 +57,7 @@ before proceeding. Do not maintain a second editable copy of the skills.
 
 - **uv** — Python env and package management (`~/.local/bin` should be on `PATH`).
 - **Hugo** — Dashboard build/preview (`hugo --source dashboard ...`). CI uses the latest extended Hugo release.
-- **Git LFS** — Required when working with large attempt evidence (videos, zips). Run `git lfs install` once per machine; CI checks out with `lfs: true`.
+- **Git LFS** — Required when working with large attempt evidence (videos, zips). Run `git lfs install` once per machine; CI checks out with `lfs: true`. On Cursor Cloud VMs, `git lfs install` may fail because Git hooks are managed by the environment; run `git lfs update --force` instead.
 
 ### Standard commands
 
@@ -38,9 +77,9 @@ There is no separate linter; `psynetsk-validate` is the structural check used in
 
 `uv sync --group dev` creates `.venv/`. Activate with `source .venv/bin/activate` when running tools outside `uv run`.
 
-### External PsyNet checkout (`~/PsyNet`)
+### PsyNet checkout (`~/PsyNet`) — required
 
-Challenge experiment E2E testing uses a separate PsyNet clone at `~/PsyNet` (not part of this repo).
+Clone and install PsyNet on every new machine. It is **not** vendored in this repo but is a **necessary** part of the development environment for skills, challenges, and experiment work.
 
 **Clone** (if missing):
 
@@ -87,3 +126,31 @@ PsyNet commands need sandboxing disabled in Cursor (`required_permissions: ["all
 
 - `dashboard/data/` and related Hugo inputs are written by `psynetsk-export-dashboard-data`.
 - `public/` is the Hugo build output; do not commit unless policy changes.
+
+### Dashboard preview links
+
+When a Cloud Agent opens or updates a pull request from a branch in this
+repository, use the `dashboard-preview-polling` skill before sharing dashboard
+preview links. Wait up to 75 seconds for the `Deploy dashboard PR preview`
+workflow to appear and complete successfully for the current head commit. If it
+completes, tell the user the dashboard preview has been rebuilt and provide the
+preview URL only. If no matching run appears, or if it does not complete
+successfully within 75 seconds, tell the user the preview may not contain the
+latest changes yet and provide the branch-filtered workflow-runs link instead.
+
+Include these links when first creating/updating the PR, after changes that
+affect dashboard rendering or challenge attempt pages, and in the final response.
+Write generated URLs as ordinary Markdown text so they are clickable; do not put
+them in fenced code blocks or inline code. When the work is a general dashboard
+or docs change, provide only the preview index URL. When the work completes a
+challenge attempt, provide the direct challenge attempt page URL instead.
+
+https://pmcharrison.github.io/PsyNetSkills/pr-preview/pr-<number>/
+
+https://pmcharrison.github.io/PsyNetSkills/pr-preview/pr-<number>/challenges/<challenge-slug>/<attempt-name>/
+
+https://github.com/pmcharrison/PsyNetSkills/actions/workflows/dashboard-preview.yml?query=branch%3A<branch-name>
+
+The preview workflow also posts this URL to the pull request. Forked pull
+requests do not publish previews because the workflow needs write access to the
+`gh-pages` branch.

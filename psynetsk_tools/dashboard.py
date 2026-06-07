@@ -9,12 +9,22 @@ import shutil
 from dataclasses import asdict, dataclass
 from pathlib import Path
 
+from psynetsk_tools.learnings import (
+    COMPLETED_LEARNING_STATUSES,
+    parse_learning_actions,
+)
 from psynetsk_tools.validate import (
     SKILLS_ROOT,
     parse_difficulty,
     parse_evaluation_score,
     read_markdown_frontmatter,
     read_skill_frontmatter,
+)
+from psynetsk_tools.timeline import (
+    TimelineEntry,
+    format_duration,
+    implementation_time_seconds,
+    parse_timeline_entries,
 )
 
 TEXT_FILE_EXTENSIONS = {
@@ -32,32 +42,21 @@ TEXT_FILE_EXTENSIONS = {
     ".yml",
 }
 ATTEMPT_ARTIFACTS_DIR = "artifacts/challenges"
-
-
-@dataclass(frozen=True)
-class DocPage:
-    """A markdown documentation page."""
-
-    slug: str
-    title: str
-    path: str
-    weight: int
-
-
-@dataclass(frozen=True)
-class DocNavItem:
-    """Adjacent docs page metadata."""
-
-    title: str
-    url: str
-
-
-@dataclass(frozen=True)
-class DocNavigation:
-    """Previous and next links for a docs page."""
-
-    previous: DocNavItem | None
-    next: DocNavItem | None
+MONITOR_STATIC_ROOT = Path(__file__).parent / "assets" / "monitor-static" / "static"
+STATIC_REF_RE = re.compile(r'(?:href|src)="/static/(?P<path>[^"]+)"')
+CREDENTIAL_REDACTIONS = (
+    (re.compile(r"(?i)(dashboard_password=)[^&\"'\s<)]+"), r"\1[REDACTED]"),
+    (re.compile(r"(?i)(dashboard_user=)[^&\"'\s<)]+"), r"\1[REDACTED]"),
+    (re.compile(r"(?i)(Dashboard user:\s*\S+\s+password:\s*)\S+"), r"\1[REDACTED]"),
+    (re.compile(r"(?i)(Username:\s*`?)[^`\s]+(`?)"), r"\1[REDACTED]\2"),
+    (re.compile(r"(?i)(Password:\s*`?)[^`\s]+(`?)"), r"\1[REDACTED]\2"),
+    (re.compile(r"(?i)(AWS_ACCESS_KEY_ID\s*=\s*)[^\s\"']+"), r"\1[REDACTED]"),
+    (re.compile(r"(?i)(AWS_SECRET_ACCESS_KEY\s*=\s*)[^\s\"']+"), r"\1[REDACTED]"),
+    (re.compile(r"(?i)(AWS_SESSION_TOKEN\s*=\s*)[^\s\"']+"), r"\1[REDACTED]"),
+    (re.compile(r"(?i)(PROLIFIC_API_TOKEN\s*=\s*)[^\s\"']+"), r"\1[REDACTED]"),
+    (re.compile(r"(?i)(PROLIFIC_API_KEY\s*=\s*)[^\s\"']+"), r"\1[REDACTED]"),
+)
+TEXT_ARTIFACT_EXTENSIONS = {".html", ".log", ".md", ".txt", ".json", ".csv", ".yaml", ".yml"}
 
 
 @dataclass(frozen=True)
@@ -95,7 +94,15 @@ class Attempt:
     model: str
     agent_json: str
     evaluation: str
+    timeline: str
+    timeline_entries: list[TimelineEntry]
+    implementation_time_seconds: int | None
+    implementation_time_display: str
+    learnings: str
+    open_actions: int
     evaluation_metadata: dict[str, str]
+    challenge_instructions: str
+    challenge_criteria: str
     challenge_files: list[AttemptFile]
     code_files: list[AttemptFile]
     evidence_files: list[AttemptFile]
@@ -122,6 +129,11 @@ class Challenge:
                 return attempt.score
         return None
 
+    @property
+    def open_actions(self) -> int:
+        """Return the number of unresolved learning actions."""
+        return sum(attempt.open_actions for attempt in self.attempts)
+
 
 def title_from_markdown(markdown: str, fallback: str) -> str:
     """Extract a title from the first H1 heading."""
@@ -131,27 +143,31 @@ def title_from_markdown(markdown: str, fallback: str) -> str:
     return fallback.replace("-", " ").title()
 
 
-def doc_sort_key(path: Path) -> tuple[int, str]:
-    """Return the intended docs navigation order."""
-    order = {
-        "index": 10,
-        "skills": 20,
-        "challenges": 30,
-        "attempts": 40,
-        "dashboard": 50,
-        "psynet-reference": 60,
-    }
-    return (order.get(path.stem, 100), path.stem)
-
-
 def strip_challenge_frontmatter(markdown: str) -> str:
     """Remove challenge frontmatter and heading for dashboard display."""
     return strip_first_heading(strip_frontmatter(markdown))
 
 
-def docs_url(slug: str) -> str:
-    """Return the Hugo URL for a docs page."""
-    return "docs/" if slug == "index" else f"docs/{slug}/"
+def read_challenge_snapshot_instructions(attempt_dir: Path) -> str:
+    """Read rendered challenge instructions from an attempt snapshot."""
+    instructions_file = attempt_dir / "challenge" / "INSTRUCTIONS.md"
+    if not instructions_file.exists():
+        return ""
+    return strip_challenge_frontmatter(
+        instructions_file.read_text(encoding="utf-8"),
+    )
+
+
+def read_challenge_criteria(challenge_dir: Path, attempt_dir: Path) -> str:
+    """Read rendered criteria from an attempt snapshot or challenge folder."""
+    criteria_file = attempt_dir / "challenge" / "CRITERIA.md"
+    if not criteria_file.exists():
+        criteria_file = challenge_dir / "CRITERIA.md"
+    if not criteria_file.exists():
+        return ""
+    return strip_first_heading(
+        strip_frontmatter(criteria_file.read_text(encoding="utf-8")),
+    )
 
 
 def strip_first_heading(markdown: str) -> str:
@@ -173,79 +189,30 @@ def strip_frontmatter(markdown: str) -> str:
     return parts[2].lstrip("\n")
 
 
-def collect_docs(root: Path) -> list[DocPage]:
-    """Collect markdown docs for dashboard navigation."""
-    docs_dir = root / "docs"
-    pages: list[DocPage] = []
-    for index, path in enumerate(
-        sorted(docs_dir.glob("*.md"), key=doc_sort_key),
-        start=1,
-    ):
-        markdown = path.read_text(encoding="utf-8")
-        pages.append(
-            DocPage(
-                slug=path.stem,
-                title=title_from_markdown(markdown, path.stem),
-                path=f"docs/{path.name}",
-                weight=index * 10,
-            )
-        )
-    return pages
+def demote_markdown_headings(markdown: str, levels: int = 1) -> str:
+    """Increase Markdown heading depth without changing non-heading text."""
+    prefix = "#" * levels
+    lines: list[str] = []
+    for line in markdown.splitlines():
+        if line.startswith("#"):
+            heading_marks, separator, _ = line.partition(" ")
+            if separator and set(heading_marks) == {"#"}:
+                line = f"{prefix}{line}"
+        lines.append(line)
+    return "\n".join(lines).strip() + "\n" if lines else ""
 
 
 def write_frontmatter(
     title: str,
     body: str,
     weight: int | None = None,
-    previous: DocNavItem | None = None,
-    next_: DocNavItem | None = None,
-    edit_path: str | None = None,
 ) -> str:
     """Write simple Hugo frontmatter plus Markdown body."""
     lines = ["---", f"title: {json.dumps(title)}"]
     if weight is not None:
         lines.append(f"weight: {weight}")
-    if edit_path is not None:
-        lines.append(f"edit_path: {json.dumps(edit_path)}")
-    if previous is not None:
-        lines.extend(
-            [
-                "previous:",
-                f"  title: {json.dumps(previous.title)}",
-                f"  url: {json.dumps(previous.url)}",
-            ]
-        )
-    if next_ is not None:
-        lines.extend(
-            [
-                "next:",
-                f"  title: {json.dumps(next_.title)}",
-                f"  url: {json.dumps(next_.url)}",
-            ]
-        )
     lines.extend(["---", "", body])
     return "\n".join(lines)
-
-
-def docs_navigation(docs: list[DocPage]) -> dict[str, DocNavigation]:
-    """Build previous/next navigation for docs pages."""
-    navigation: dict[str, DocNavigation] = {}
-    for index, doc in enumerate(docs):
-        previous_doc = docs[index - 1] if index > 0 else None
-        next_doc = docs[index + 1] if index < len(docs) - 1 else None
-        navigation[doc.slug] = DocNavigation(
-            previous=(
-                DocNavItem(previous_doc.title, docs_url(previous_doc.slug))
-                if previous_doc is not None
-                else None
-            ),
-            next=(
-                DocNavItem(next_doc.title, docs_url(next_doc.slug))
-                if next_doc is not None
-                else None
-            ),
-        )
-    return navigation
 
 
 def collect_skills(root: Path) -> list[Skill]:
@@ -368,6 +335,81 @@ def collect_attempt_files(
     return files
 
 
+def redact_known_credentials(text: str) -> str:
+    """Redact credential values that should never appear in public artifacts."""
+
+    for pattern, replacement in CREDENTIAL_REDACTIONS:
+        text = pattern.sub(replacement, text)
+    return text
+
+
+def sanitize_text_artifact(path: Path) -> None:
+    """Redact known credential values from copied text evidence."""
+
+    if path.suffix.lower() not in TEXT_ARTIFACT_EXTENSIONS:
+        return
+    try:
+        text = path.read_text(encoding="utf-8")
+    except UnicodeDecodeError:
+        return
+    path.write_text(redact_known_credentials(text), encoding="utf-8")
+
+
+def sanitize_html_artifact(path: Path) -> None:
+    """Make copied HTML evidence safer to view from static dashboard previews."""
+    html = redact_known_credentials(path.read_text(encoding="utf-8"))
+    static_refs = sorted(set(STATIC_REF_RE.findall(html)))
+    if "<head>" in html and "<base " not in html:
+        html = html.replace("<head>", '<head>\n        <base href="./">', 1)
+    html = re.sub(r'href="/dashboard/[^"]*"', 'href="#"', html)
+    html = re.sub(r'src="/dashboard/[^"]*"', 'src="#"', html)
+    html = html.replace('href="/static/', 'href="./static/')
+    html = html.replace('src="/static/', 'src="./static/')
+    html = re.sub(r'<script([^>]*)\s*/></script>', r'<script\1></script>', html)
+    html = html.replace(
+        "</head>",
+        """
+        <style>
+          body { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; margin: 1rem; }
+          .container { max-width: none; }
+          #dashboard-navigation, #logout { display: none; }
+          #monitor-wrapper { display: flex; gap: 1rem; align-items: flex-start; }
+          #sidebar { flex: 0 0 18rem; }
+          #timeline-wrapper, #timeline, main { flex: 1 1 auto; min-width: 0; }
+          table { border-collapse: collapse; width: 100%; }
+          th, td { border: 1px solid #d0d7de; padding: 0.4rem; text-align: left; vertical-align: top; }
+          button { border: 1px solid #d0d7de; border-radius: 0.35rem; background: #f6f8fa; padding: 0.3rem 0.6rem; }
+        </style>
+    </head>""",
+        1,
+    )
+    path.write_text(html, encoding="utf-8")
+    copy_monitor_static_assets(path.parent, static_refs)
+
+
+def copy_monitor_static_assets(html_dir: Path, static_refs: list[str]) -> None:
+    """Copy vendored Dallinger monitor assets next to a copied HTML artifact."""
+    for ref in static_refs:
+        source = MONITOR_STATIC_ROOT / ref
+        if not source.is_file():
+            continue
+        destination = html_dir / "static" / ref
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(source, destination)
+        if ref == "scripts/network-monitor.js":
+            disable_live_node_details(destination)
+
+
+def disable_live_node_details(script_path: Path) -> None:
+    """Avoid live dashboard fetches while preserving embedded JSON click details."""
+    text = script_path.read_text(encoding="utf-8")
+    text = text.replace(
+        "$(custom_node).load('/dashboard/node_details/' + node.options.data.object_type + '/' + String(node.options.data.id));",
+        "custom_node.textContent = 'Live dashboard node details are unavailable in this static snapshot.';",
+    )
+    script_path.write_text(text, encoding="utf-8")
+
+
 def collect_attempts(challenge_dir: Path) -> list[Attempt]:
     """Collect attempts for a challenge."""
     attempts_dir = challenge_dir / "attempts"
@@ -379,6 +421,8 @@ def collect_attempts(challenge_dir: Path) -> list[Attempt]:
         path for path in attempts_dir.iterdir() if path.is_dir()
     ):
         evaluation_file = attempt_dir / "EVALUATION.md"
+        learnings_file = attempt_dir / "LEARNINGS.md"
+        timeline_file = attempt_dir / "TIMELINE.md"
         score = (
             parse_evaluation_score(evaluation_file)
             if evaluation_file.exists()
@@ -395,6 +439,27 @@ def collect_attempts(challenge_dir: Path) -> list[Attempt]:
             if key != "score"
         }
         agent, agent_json = read_agent_json(attempt_dir / "agent.json")
+        timeline = (
+            strip_first_heading(timeline_file.read_text(encoding="utf-8"))
+            if timeline_file.exists()
+            else ""
+        )
+        timeline_entries = parse_timeline_entries(timeline)
+        implementation_seconds = implementation_time_seconds(timeline_entries)
+        learnings = (
+            demote_markdown_headings(
+                strip_first_heading(
+                    learnings_file.read_text(encoding="utf-8")
+                )
+            )
+            if learnings_file.exists()
+            else ""
+        )
+        open_actions = sum(
+            1
+            for _, _, _, status in parse_learning_actions(learnings)
+            if status not in COMPLETED_LEARNING_STATUSES
+        )
         artifact_prefix = (
             f"{ATTEMPT_ARTIFACTS_DIR}/{challenge_dir.name}/attempts/"
             f"{attempt_dir.name}"
@@ -420,7 +485,20 @@ def collect_attempts(challenge_dir: Path) -> list[Attempt]:
                     if evaluation_file.exists()
                     else ""
                 ),
+                timeline=timeline,
+                timeline_entries=timeline_entries,
+                implementation_time_seconds=implementation_seconds,
+                implementation_time_display=format_duration(implementation_seconds),
+                learnings=learnings,
+                open_actions=open_actions,
                 evaluation_metadata=evaluation_metadata,
+                challenge_instructions=read_challenge_snapshot_instructions(
+                    attempt_dir,
+                ),
+                challenge_criteria=read_challenge_criteria(
+                    challenge_dir,
+                    attempt_dir,
+                ),
                 challenge_files=collect_attempt_files(
                     attempt_dir / "challenge",
                     f"{artifact_prefix}/challenge",
@@ -467,53 +545,21 @@ def collect_challenges(root: Path) -> list[Challenge]:
     return challenges
 
 
-def write_docs_content(
-    root: Path,
-    dashboard_dir: Path,
-    docs: list[DocPage],
-) -> None:
-    """Write generated Hugo content pages for docs."""
-    source_docs_dir = root / "docs"
-    docs_dir = dashboard_dir / "content" / "docs"
-    shutil.rmtree(docs_dir, ignore_errors=True)
-    docs_dir.mkdir(parents=True, exist_ok=True)
-    navigation = docs_navigation(docs)
-
-    for doc in docs:
-        source = source_docs_dir / f"{doc.slug}.md"
-        body = strip_first_heading(source.read_text(encoding="utf-8"))
-        target_name = "_index.md" if doc.slug == "index" else f"{doc.slug}.md"
-        page_navigation = navigation[doc.slug]
-        (docs_dir / target_name).write_text(
-            write_frontmatter(
-                doc.title,
-                body,
-                weight=doc.weight,
-                previous=page_navigation.previous,
-                next_=page_navigation.next,
-                edit_path=doc.path,
-            ),
-            encoding="utf-8",
-        )
-
-
 def dashboard_data(root: Path) -> dict[str, object]:
     """Return all structured data needed by the dashboard."""
-    docs = collect_docs(root)
     skills = collect_skills(root)
     challenges = collect_challenges(root)
     return {
-        "docs": [asdict(doc) for doc in docs],
         "skills": [asdict(skill) for skill in skills],
         "challenges": [
             {
                 **asdict(challenge),
                 "latest_score": challenge.latest_score,
+                "open_actions": challenge.open_actions,
             }
             for challenge in challenges
         ],
         "counts": {
-            "docs": len(docs),
             "skills": len(skills),
             "challenges": len(challenges),
         },
@@ -529,6 +575,15 @@ def write_skill_content(
     skills_dir = dashboard_dir / "content" / "skills"
     shutil.rmtree(skills_dir, ignore_errors=True)
     skills_dir.mkdir(parents=True, exist_ok=True)
+    (skills_dir / "_index.md").write_text(
+        write_frontmatter(
+            "Skills",
+            "Skills are reusable Agent Skills that guide agents through PsyNet "
+            "experiment implementation, challenge attempts, and evidence "
+            "collection.\n",
+        ),
+        encoding="utf-8",
+    )
 
     for skill in skills:
         source = root / skill.path
@@ -609,6 +664,13 @@ def write_attempt_artifacts(root: Path, dashboard_dir: Path) -> None:
             dirs_exist_ok=True,
             ignore=shutil.ignore_patterns(".gitkeep"),
         )
+        for artifact_file in target_attempts_dir.rglob("*"):
+            if not artifact_file.is_file():
+                continue
+            if artifact_file.suffix.lower() == ".html":
+                sanitize_html_artifact(artifact_file)
+            else:
+                sanitize_text_artifact(artifact_file)
 
 
 def export_dashboard(root: Path, dashboard_dir: Path) -> None:
@@ -622,11 +684,7 @@ def export_dashboard(root: Path, dashboard_dir: Path) -> None:
         encoding="utf-8",
     )
 
-    write_docs_content(
-        root,
-        dashboard_dir,
-        [DocPage(**doc) for doc in data["docs"]],  # type: ignore[arg-type]
-    )
+    shutil.rmtree(dashboard_dir / "content" / "docs", ignore_errors=True)
     write_skill_content(
         root,
         dashboard_dir,

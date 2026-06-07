@@ -1,0 +1,383 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>Basic data -  Dashboard</title>
+        
+          <link rel="stylesheet" href="/static/css/bootstrap.min.css" type="text/css">
+          <link rel="stylesheet" href="/static/css/dashboard.css" type="text/css">
+          
+
+          
+
+        
+        
+        
+    </head>
+    <body>
+      <div class="container">
+        
+          <nav id="dashboard-navigation">
+            <ul class="nav nav-tabs">
+              
+                
+                  <li class="nav-item">
+                    <a class="nav-link" href="/dashboard/index">Config</a>
+                  </li>
+                
+              
+                
+                  <li class="nav-item">
+                    <a class="nav-link" href="/dashboard/deployments">Deployments</a>
+                  </li>
+                
+              
+                
+                <li class="nav-item">
+                  <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Monitor</a>
+                  <div class="dropdown-menu">
+                    
+                      <a class="dropdown-item" href="/dashboard/monitoring">Monitoring</a>
+                    
+                      <a class="dropdown-item" href="/dashboard/timeline">Timeline</a>
+                    
+                      <a class="dropdown-item" href="/dashboard/resources">Resources</a>
+                    
+                      <a class="dropdown-item" href="/dashboard/participants">Participants</a>
+                    
+                      <a class="dropdown-item" href="/dashboard/logger">Logger</a>
+                    
+                      <a class="dropdown-item" href="/dashboard/errors">Errors</a>
+                    
+                  </div>
+                </li>
+                
+              
+                
+                  <li class="nav-item">
+                    <a class="nav-link active" href="/dashboard/data">Basic data</a>
+                  </li>
+                
+              
+                
+                  <li class="nav-item">
+                    <a class="nav-link" href="/dashboard/export">Export</a>
+                  </li>
+                
+              
+                
+                <li class="nav-item">
+                  <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Database</a>
+                  <div class="dropdown-menu">
+                    
+                      <a class="dropdown-item" href="/dashboard/database?table=participant&amp;polymorphic_identity=psynet.bot.Bot">Bot</a>
+                    
+                      <a class="dropdown-item" href="/dashboard/database?table=module_state&amp;polymorphic_identity=psynet.trial.chain.ChainTrialMakerState">ChainTrialMakerState</a>
+                    
+                      <a class="dropdown-item" href="/dashboard/database?table=info&amp;polymorphic_identity=dallinger_experiment.experiment.ColorRatingTrial">ColorRatingTrial</a>
+                    
+                      <a class="dropdown-item" href="/dashboard/database?table=experiment&amp;polymorphic_identity=psynet.experiment.ExperimentConfig">ExperimentConfig</a>
+                    
+                      <a class="dropdown-item" href="/dashboard/database?table=experiment_status&amp;polymorphic_identity=psynet.experiment.ExperimentStatus">ExperimentStatus</a>
+                    
+                      <a class="dropdown-item" href="/dashboard/database?table=request&amp;polymorphic_identity=psynet.experiment.Request">Request</a>
+                    
+                      <a class="dropdown-item" href="/dashboard/database?table=response&amp;polymorphic_identity=psynet.timeline.Response">Response</a>
+                    
+                      <a class="dropdown-item" href="/dashboard/database?table=network&amp;polymorphic_identity=psynet.trial.static.StaticNetwork">StaticNetwork</a>
+                    
+                      <a class="dropdown-item" href="/dashboard/database?table=node&amp;polymorphic_identity=psynet.trial.static.StaticNode">StaticNode</a>
+                    
+                  </div>
+                </li>
+                
+              
+                
+                  <li class="nav-item">
+                    <a class="nav-link" href="/dashboard/develop">Development</a>
+                  </li>
+                
+              
+            </ul>
+          </nav>
+          
+          <a id="logout" class="btn btn-primary" href="/dashboard/logout">Logout</a>
+          
+        
+        
+          
+          
+        
+        
+        
+<style>
+
+</style>
+<h1>Basic data</h1>
+<script src="/static/scripts/prism/script.js"></script>
+<link rel="stylesheet" href="/static/scripts/prism/style.css">
+
+<div class="accordion">
+  <div class="accordion-item">
+    <h2 class="accordion-header">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panel-howto" aria-expanded="true" aria-controls="panel-howto">
+        Implement the experiment method
+      </button>
+    </h2>
+    <div id="panel-howto" class="accordion-collapse collapse">
+      <div class="accordion-body">
+          To use the <code>/basic_data</code> endpoint in your experiment, you need to implement the <code>get_basic_data</code> method in your experiment class.
+            The method should return a list of dictionaries with the data you want to expose.
+          You can make this method as complex as you need. For example, you can add GET parameters to the endpoint, e.g. <code>/basic_data?sheet=participant</code> which allows to switch between different data sheets.
+          <div><pre class="with-copy-button"><code class="language-python">
+class Exp(psynet.experiment.Experiment):
+    …
+
+    @classmethod
+    def get_basic_data(cls, context=None, **kwargs, ):
+        data = {
+            "trial":
+                [
+                # List all trials with their answers
+                    {
+                        "id": trial.id,
+                        "answer": str(trial.answer),
+                    }
+                    for trial in Trial.query.filter_by(failed=False, finalized=True).all()
+                ],
+            "participant": [
+                # List all participants with their last answer
+                {
+                    "id": participant.id,
+                    "answer": str(participant.answer),
+                }
+                for participant in Participant.query.filter_by().all()
+            ],
+        }
+        sheet = kwargs.get("sheet", "participant")
+        if sheet not in data:
+            raise DataError("Invalid sheet parameter")
+        return data[sheet]
+
+</code></pre></div>
+
+      </div>
+    </div>
+  </div>
+  <div class="accordion-item">
+    <h2 class="accordion-header">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panel-data-loading" aria-expanded="false" aria-controls="panel-data-loading">
+        Load the data
+      </button>
+    </h2>
+    <div id="panel-data-loading" class="accordion-collapse collapse">
+      <div class="accordion-body">
+        <p>
+    Here are some examples of how to load the data in R and Python.
+</p>
+
+<div class="row mt-4">
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">R example</h5>
+                <div class="overflow-container">
+                        <div><pre class="with-copy-button"><code class="language-R">
+library(jsonlite)
+url <- "http://localhost:5000/basic_data?dashboard_user=[REDACTED]&amp;dashboard_password=[REDACTED]"
+df <- fromJSON(url)
+                        </code></pre></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Python example</h5>
+                <div class="overflow-container">
+                                                <div><pre class="with-copy-button"><code class="language-python">
+import pandas as pd
+url = "http://localhost:5000/basic_data?dashboard_user=[REDACTED]&amp;dashboard_password=[REDACTED]"
+df = pd.read_json(url)
+                                                </code></pre></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+      </div>
+    </div>
+  </div>
+  <div class="accordion-item">
+    <h2 class="accordion-header">
+      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panel-data-preview" aria-expanded="false" aria-controls="panel-data-preview">
+        Data preview
+      </button>
+    </h2>
+    <div id="panel-data-preview" class="accordion-collapse collapse show">
+      <div class="accordion-body">
+          Showing data from <code>/data</code> endpoint.<br>
+          <button class="btn btn-primary btn-sm btn-copy mb-2" onclick="copyToClipboard('http://localhost:5000/basic_data?dashboard_user=[REDACTED]&amp;dashboard_password=[REDACTED]')">Copy data URL</button><br>
+        <pre>
+{
+    "color_ratings": [
+        {
+            "participant_id": 1,
+            "color": "blue",
+            "hex": "#0000ff",
+            "rating": 4
+        },
+        {
+            "participant_id": 1,
+            "color": "green",
+            "hex": "#00a000",
+            "rating": 4
+        },
+        {
+            "participant_id": 1,
+            "color": "red",
+            "hex": "#ff0000",
+            "rating": 4
+        }
+    ]
+}
+</pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+    pre {
+        background: #eee;
+        padding: 5px;
+        margin: 0;
+        overflow: scroll;
+        border-radius: 5px;
+
+    }
+
+    .overflow-container {
+        max-height: 200px;
+        overflow: auto;
+        width: 100%;
+    }
+</style>
+    <script src="/static/scripts/bootstrap.bundle.min.js"></script>
+
+
+<script>
+    function copyToClipboard(text) {
+        navigator.clipboard.writeText(text).then(function () {});
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+        var copyButtons = document.querySelectorAll('.with-copy-button')
+        copyButtons.forEach(function (copyButton) {
+
+            var button = document.createElement('a');
+            button.classList.add('btn', 'btn-copy', 'btn-primary', 'btn-sm');
+            button.textContent = 'Copy snippet';
+            button.style.position = 'absolute';
+            button.style.top = '5px';
+            button.style.right = '5px';
+            button.addEventListener('click', function () {
+                copyToClipboard(copyButton.textContent)
+            });
+            copyButton.parentNode.style.position = 'relative';
+            copyButton.parentNode.insertBefore(button, copyButton.nextSibling);
+        });
+
+        // .btn-copy add tooltip: "Copied!"
+        var copyButtons = document.querySelectorAll('.btn-copy')
+        copyButtons.forEach(function (copyButton) {
+            copyButton.addEventListener('click', function () {
+                copyButton.textContent = 'Copied!';
+                setTimeout(function () {
+                    copyButton.textContent = 'Copy to clipboard';
+                }, 1000);
+            });
+        });
+
+        // Activate the accordion
+        const collapseElementList = document.querySelectorAll('.collapse')
+        const collapseList = [...collapseElementList].map(collapseEl => new bootstrap.Collapse(collapseEl, { toggle: false }));
+    });
+
+
+
+</script>
+
+
+        <footer>
+          
+          
+        </footer>
+      </div>
+      
+
+      <script src="/static/scripts/jquery-3.7.1.min.js"></script>
+      <script src="/static/scripts/popper.min.js"></script>
+      <script src="/static/scripts/bootstrap.min.js"></script>
+      <script src="/static/scripts/clipboard.min.js"></script>
+      
+
+
+      
+
+
+      
+<script>
+/**
+ * Generate a copy-to-clipboard icon for use in popovers or tables.
+ *
+ * Parameters
+ * ----------
+ * value : string
+ *     The value to be copied to the clipboard when the icon is clicked.
+ *
+ * Returns
+ * -------
+ * string
+ *     HTML string for the copy-to-clipboard icon with tooltip and unique id.
+ */
+function makeCopyIcon(value) {
+    return `
+        <span class="copy-icon"
+              data-bs-toggle="tooltip"
+              data-bs-placement="top"
+              title="Copy to clipboard"
+              id="${value}"
+              style="cursor:pointer; margin-left:4px;">
+            <i class="bi bi-clipboard"></i>
+        </span>
+    `;
+}
+
+// Global handler for copy-to-clipboard icons (Bootstrap 4 compatible)
+$(document).on('click', '.copy-icon', function () {
+    const $icon = $(this);
+    const value = $icon.attr('id');
+    const $i = $icon.find('i');
+    navigator.clipboard.writeText(value).then(() => {
+        // Change icon to checkmark
+        $i.removeClass('bi-clipboard').addClass('bi-clipboard-check');
+        // Update tooltip to "Copied!" and show
+        $icon.tooltip('dispose');
+        $icon.attr('title', 'Copied!');
+        $icon.tooltip({trigger: 'manual'}).tooltip('show');
+        setTimeout(() => {
+            // Revert icon and tooltip
+            $i.removeClass('bi-clipboard-check').addClass('bi-clipboard');
+            $icon.tooltip('dispose');
+            $icon.attr('title', 'Copy to clipboard');
+            $icon.tooltip({trigger: 'manual'});
+        }, 1000);
+    });
+});
+</script>
+
+
+    </body>
+</html>

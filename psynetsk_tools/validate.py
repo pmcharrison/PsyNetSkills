@@ -8,8 +8,21 @@ import re
 import sys
 from pathlib import Path
 
+from psynetsk_tools.learnings import LEARNING_ACTION_RE, learning_action_bullets
+from psynetsk_tools.timeline import TIMELINE_ENTRY_RE
+
 SKILLS_ROOT = Path(".cursor") / "skills"
 SKILL_NAME_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
+PSYNET_AGENT_REQUIRED_FIELDS = {
+    "checkout_path": str,
+    "branch": str,
+    "commit": str,
+    "version": str,
+    "updated_from": str,
+    "updated_at": str,
+    "update_command": str,
+    "dirty": bool,
+}
 
 
 def read_markdown_frontmatter(markdown_file: Path) -> tuple[dict[str, str], list[str]]:
@@ -65,6 +78,133 @@ def parse_evaluation_score(evaluation_file: Path) -> int | None:
         return None
 
 
+def iter_learning_sections(text: str) -> list[tuple[str, list[str]]]:
+    """Split LEARNINGS.md into second-level learning sections."""
+    sections: list[tuple[str, list[str]]] = []
+    current_title: str | None = None
+    current_lines: list[str] = []
+
+    for line in text.splitlines():
+        if line.startswith("## "):
+            if current_title is not None:
+                sections.append((current_title, current_lines))
+            current_title = line[3:].strip()
+            current_lines = []
+        elif current_title is not None:
+            current_lines.append(line)
+
+    if current_title is not None:
+        sections.append((current_title, current_lines))
+
+    return sections
+
+
+def is_learning_actions_heading(line: str) -> bool:
+    """Return whether a line is the Actions heading for a learning card."""
+    return line.strip() == "*Actions:*"
+
+
+def validate_learnings_file(learnings_file: Path) -> list[str]:
+    """Validate the structured Markdown format for attempt learnings."""
+    problems: list[str] = []
+    text = learnings_file.read_text(encoding="utf-8")
+    lines = text.splitlines()
+
+    if not lines or lines[0].strip() != "# Learnings":
+        problems.append(f"{learnings_file}: first line must be '# Learnings'")
+
+    sections = iter_learning_sections(text)
+    if not sections:
+        problems.append(f"{learnings_file}: missing learning sections")
+        return problems
+
+    for title, section_lines in sections:
+        if not title:
+            problems.append(f"{learnings_file}: learning section has empty title")
+
+        actions_index = next(
+            (
+                index
+                for index, line in enumerate(section_lines)
+                if is_learning_actions_heading(line)
+            ),
+            None,
+        )
+        if actions_index is None:
+            problems.append(f"{learnings_file}: learning {title!r} missing *Actions:*")
+            continue
+
+        action_lines = section_lines[actions_index + 1 :]
+        bullets = learning_action_bullets(action_lines)
+        if not bullets:
+            problems.append(f"{learnings_file}: learning {title!r} has no actions")
+            continue
+
+        for bullet in bullets:
+            if LEARNING_ACTION_RE.fullmatch(bullet) is None:
+                problems.append(
+                    f"{learnings_file}: invalid learning action in {title!r}: {bullet!r}"
+                )
+
+    return problems
+
+
+def validate_timeline_file(timeline_file: Path) -> list[str]:
+    """Validate the structured Markdown format for attempt timelines."""
+    problems: list[str] = []
+    lines = timeline_file.read_text(encoding="utf-8").splitlines()
+
+    if not lines or lines[0].strip() != "# Timeline":
+        problems.append(f"{timeline_file}: first line must be '# Timeline'")
+
+    entries = [line for line in lines if line.startswith("- ")]
+    if not entries:
+        problems.append(f"{timeline_file}: missing timeline entries")
+
+    for line in entries:
+        if TIMELINE_ENTRY_RE.fullmatch(line) is None:
+            problems.append(f"{timeline_file}: invalid timeline entry: {line!r}")
+
+    return problems
+
+
+def validate_agent_metadata(agent_file: Path) -> list[str]:
+    """Validate attempt agent metadata."""
+    try:
+        agent = json.loads(agent_file.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        return [f"{agent_file}: invalid JSON: {exc}"]
+
+    if not isinstance(agent, dict):
+        return [f"{agent_file}: metadata must be a JSON object"]
+
+    problems: list[str] = []
+    psynet = agent.get("psynet")
+    if psynet is None:
+        return [f"{agent_file}: missing psynet metadata"]
+    if not isinstance(psynet, dict):
+        return [f"{agent_file}: psynet must be a JSON object"]
+
+    for field, expected_type in PSYNET_AGENT_REQUIRED_FIELDS.items():
+        value = psynet.get(field)
+        if not isinstance(value, expected_type):
+            expected_name = "boolean" if expected_type is bool else "string"
+            problems.append(f"{agent_file}: psynet.{field} must be a {expected_name}")
+        elif expected_type is str and not value.strip():
+            problems.append(f"{agent_file}: psynet.{field} must not be empty")
+
+    return problems
+
+
+def has_evaluation_checklist(evaluation_file: Path) -> bool:
+    """Return whether an evaluation records criterion-level checklist results."""
+
+    for line in evaluation_file.read_text(encoding="utf-8").splitlines():
+        if line.startswith("- [x] ") or line.startswith("- [ ] "):
+            return True
+    return False
+
+
 def validate_skills(root: Path) -> list[str]:
     """Validate all skill folders."""
     problems: list[str] = []
@@ -98,7 +238,7 @@ def validate_skills(root: Path) -> list[str]:
     return problems
 
 
-def validate_attempt(attempt_dir: Path) -> list[str]:
+def validate_attempt(attempt_dir: Path, challenge_dir: Path) -> list[str]:
     """Validate one challenge attempt folder."""
     problems: list[str] = []
     required = ["challenge", "agent.json", "code", "evidence", "EVALUATION.md"]
@@ -108,16 +248,38 @@ def validate_attempt(attempt_dir: Path) -> list[str]:
 
     agent_file = attempt_dir / "agent.json"
     if agent_file.exists():
-        try:
-            json.loads(agent_file.read_text(encoding="utf-8"))
-        except json.JSONDecodeError as exc:
-            problems.append(f"{agent_file}: invalid JSON: {exc}")
+        problems.extend(validate_agent_metadata(agent_file))
 
     evaluation_file = attempt_dir / "EVALUATION.md"
     if evaluation_file.exists():
         score = parse_evaluation_score(evaluation_file)
         if score is not None and not 1 <= score <= 10:
             problems.append(f"{evaluation_file}: score must be between 1 and 10")
+        if (
+            not attempt_dir.name.startswith("example-")
+            and (challenge_dir / "CRITERIA.md").exists()
+            and not has_evaluation_checklist(evaluation_file)
+        ):
+            problems.append(f"{evaluation_file}: missing criteria checklist")
+
+    if (
+        not attempt_dir.name.startswith("example-")
+        and (challenge_dir / "CRITERIA.md").exists()
+        and not (attempt_dir / "challenge" / "CRITERIA.md").exists()
+    ):
+        problems.append(f"{attempt_dir}: missing challenge/CRITERIA.md snapshot")
+
+    learnings_file = attempt_dir / "LEARNINGS.md"
+    if learnings_file.exists():
+        problems.extend(validate_learnings_file(learnings_file))
+    elif not attempt_dir.name.startswith("example-"):
+        problems.append(f"{attempt_dir}: missing LEARNINGS.md")
+
+    timeline_file = attempt_dir / "TIMELINE.md"
+    if timeline_file.exists():
+        problems.extend(validate_timeline_file(timeline_file))
+    elif not attempt_dir.name.startswith("example-"):
+        problems.append(f"{attempt_dir}: missing TIMELINE.md")
 
     return problems
 
@@ -130,9 +292,8 @@ def validate_challenges(root: Path) -> list[str]:
         return [f"{challenges_dir}: missing challenges directory"]
 
     for challenge_dir in sorted(path for path in challenges_dir.iterdir() if path.is_dir()):
-        for filename in ["INSTRUCTIONS.md", "CRITERIA.md"]:
-            if not (challenge_dir / filename).exists():
-                problems.append(f"{challenge_dir}: missing {filename}")
+        if not (challenge_dir / "INSTRUCTIONS.md").exists():
+            problems.append(f"{challenge_dir}: missing INSTRUCTIONS.md")
 
         instructions_file = challenge_dir / "INSTRUCTIONS.md"
         if instructions_file.exists():
@@ -153,7 +314,7 @@ def validate_challenges(root: Path) -> list[str]:
             problems.append(f"{challenge_dir}: missing attempts directory")
         else:
             for attempt_dir in sorted(path for path in attempts_dir.iterdir() if path.is_dir()):
-                problems.extend(validate_attempt(attempt_dir))
+                problems.extend(validate_attempt(attempt_dir, challenge_dir))
 
     return problems
 

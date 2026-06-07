@@ -1,9 +1,23 @@
 {{ define "main" }}
   {{ $challengeSlug := .Params.challenge }}
   {{ $attemptName := .Params.attempt }}
-  {{ $challenge := index (where site.Data.psynetsk.challenges "slug" $challengeSlug) 0 }}
-  {{ $attempt := index (where $challenge.attempts "name" $attemptName) 0 }}
-  {{ $hasExperiment := gt (len (where $attempt.code_files "path" "experiment.py")) 0 }}
+  {{ $challengeMatches := where hugo.Data.psynetsk.challenges "slug" $challengeSlug }}
+  {{ $challenge := dict "attempts" (slice) "title" $challengeSlug "url" (printf "challenges/%s/" $challengeSlug) }}
+  {{ if gt (len $challengeMatches) 0 }}
+    {{ $challenge = index $challengeMatches 0 }}
+  {{ end }}
+  {{ $attemptMatches := where $challenge.attempts "name" $attemptName }}
+  {{ $attempt := dict "code_files" (slice) "evidence_files" (slice) "timeline_entries" (slice) "name" $attemptName }}
+  {{ if gt (len $attemptMatches) 0 }}
+    {{ $attempt = index $attemptMatches 0 }}
+  {{ end }}
+  {{ $missingData := or (eq (len $challengeMatches) 0) (eq (len $attemptMatches) 0) }}
+  {{ $hasExperiment := false }}
+  {{ range $attempt.code_files }}
+    {{ if or (eq .path "experiment.py") (strings.HasSuffix .path "/experiment.py") }}
+      {{ $hasExperiment = true }}
+    {{ end }}
+  {{ end }}
   {{ $participantVideos := where $attempt.evidence_files "path" "participant.mp4" }}
   {{ $hasParticipantVideo := gt (len $participantVideos) 0 }}
   {{ $participantVideo := dict }}
@@ -16,6 +30,15 @@
     {{ $performanceFile = index $performanceFiles 0 }}
   {{ end }}
   {{ $hasPerformance := gt (len $performanceFiles) 0 }}
+  {{ $performanceData := dict }}
+  {{ $performanceResults := slice }}
+  {{ if and $hasPerformance $performanceFile.content }}
+    {{ $performanceData = $performanceFile.content | transform.Unmarshal }}
+    {{ with $performanceData.results }}
+      {{ $performanceResults = . }}
+    {{ end }}
+  {{ end }}
+  {{ $hasPerformanceResults := gt (len $performanceResults) 0 }}
   {{ $monitorFiles := where $attempt.evidence_files "path" "monitor.html" }}
   {{ $monitorFile := dict }}
   {{ if gt (len $monitorFiles) 0 }}
@@ -45,9 +68,16 @@
       {{ $visibleEvidenceFiles = $visibleEvidenceFiles | append . }}
     {{ end }}
   {{ end }}
+  {{ $hasTimeline := gt (len $attempt.timeline_entries) 0 }}
 
   <article class="prose attempt-detail">
     <p class="back-link"><a href="{{ $challenge.url | relURL }}">Back to {{ $challenge.title }}</a></p>
+    {{ if $missingData }}
+      <section class="attempt-panel">
+        <h1>Attempt data unavailable</h1>
+        <p>The generated page metadata does not match the exported dashboard data.</p>
+      </section>
+    {{ end }}
     <header class="attempt-hero">
       <div>
         <p class="eyebrow">Challenge attempt</p>
@@ -73,10 +103,56 @@
         <dd>{{ $attempt.model }}</dd>
       </div>
       <div>
+        <dt>Implementation time</dt>
+        <dd>{{ $attempt.implementation_time_display }}</dd>
+      </div>
+      <div>
         <dt>Attempt path</dt>
         <dd><code>{{ $attempt.path }}</code></dd>
       </div>
     </dl>
+
+    <section class="attempt-panel challenge-brief">
+      <h2>Challenge instructions</h2>
+      {{ with $attempt.challenge_instructions }}
+        <div class="attempt-markdown">
+          {{ . | markdownify }}
+        </div>
+      {{ else }}
+        <p>No rendered challenge instructions were found for this attempt.</p>
+      {{ end }}
+      {{ with $attempt.challenge_criteria }}
+        <h2>Evaluation criteria</h2>
+        <p class="criteria-note">
+          These criteria are shown for review. The implementing agent was not
+          allowed to inspect them before evidence collection.
+        </p>
+        <div class="attempt-markdown">
+          {{ . | markdownify }}
+        </div>
+      {{ end }}
+    </section>
+
+    <section class="attempt-panel timeline-panel">
+      <h2>Timeline</h2>
+      {{ if $hasTimeline }}
+        <ol class="timeline-list">
+          {{ range $attempt.timeline_entries }}
+            <li class="timeline-entry timeline-entry-{{ .actor }}">
+              <span class="timeline-time">{{ .timestamp }}</span>
+              <span class="timeline-actor">{{ replace .actor "-" " " }}</span>
+              <span class="timeline-description">{{ .description | markdownify }}</span>
+            </li>
+          {{ end }}
+        </ol>
+      {{ else if $attempt.timeline }}
+        <div class="attempt-markdown timeline-markdown">
+          {{ $attempt.timeline | markdownify }}
+        </div>
+      {{ else }}
+        <p>No timeline was found for this attempt.</p>
+      {{ end }}
+    </section>
 
     <section class="attempt-panel">
       <h2>Evaluation</h2>
@@ -87,7 +163,24 @@
       {{ else }}
         <p>No evaluation file was found for this attempt.</p>
       {{ end }}
-    </details>
+    </section>
+
+    {{ with $attempt.learnings }}
+      <section class="attempt-panel">
+        <h2>Learnings</h2>
+        <div class="attempt-markdown learning-markdown">
+          {{ $learningHtml := . | markdownify }}
+          {{ $learningHtml = replaceRE `Confidence:\s+(high|medium|low)\.` `<span class="learning-chip learning-chip-confidence learning-chip-confidence-$1"><span class="learning-chip-label">Confidence</span> $1</span>` $learningHtml }}
+          {{ $learningHtml = replaceRE `Status:\s+considering\.` `<span class="learning-chip learning-chip-status learning-chip-status-considering"><span class="learning-chip-label">Status</span> considering</span>` $learningHtml }}
+          {{ $learningHtml = replaceRE `Status:\s+in_progress\.` `<span class="learning-chip learning-chip-status learning-chip-status-in-progress"><span class="learning-chip-label">Status</span> in progress</span>` $learningHtml }}
+          {{ $learningHtml = replaceRE `Status:\s+planned\.` `<span class="learning-chip learning-chip-status learning-chip-status-planned"><span class="learning-chip-label">Status</span> planned</span>` $learningHtml }}
+          {{ $learningHtml = replaceRE `Status:\s+completed\.` `<span class="learning-chip learning-chip-status learning-chip-status-completed"><span class="learning-chip-label">Status</span> completed</span>` $learningHtml }}
+          {{ $learningHtml = replaceRE `Status:\s+dismissed\.` `<span class="learning-chip learning-chip-status learning-chip-status-dismissed"><span class="learning-chip-label">Status</span> dismissed</span>` $learningHtml }}
+          {{ $learningHtml = replaceRE `Status:\s+superseded\.` `<span class="learning-chip learning-chip-status learning-chip-status-superseded"><span class="learning-chip-label">Status</span> superseded</span>` $learningHtml }}
+          {{ $learningHtml | safeHTML }}
+        </div>
+      </section>
+    {{ end }}
 
     <section class="attempt-panel">
       <h2>Review evidence</h2>
@@ -114,7 +207,7 @@
         </li>
         <li>
           {{ if $hasPerformance }}
-            <a href="{{ $performanceFile.url | relURL }}">View performance result</a>
+            <a href="{{ $performanceFile.url | relURL }}">View performance test result</a>
           {{ else }}
             <span class="missing-artifact">Performance result missing</span>
           {{ end }}
@@ -134,6 +227,73 @@
           {{ end }}
         </li>
       </ul>
+
+      {{ if $hasPerformance }}
+        <section class="performance-result">
+          <header class="performance-result-header">
+            <div>
+              <h3>Performance test result</h3>
+            </div>
+            <a href="{{ $performanceFile.url | relURL }}">Raw JSON</a>
+          </header>
+          {{ with $performanceData.options }}
+            <dl class="performance-options">
+              <div>
+                <dt>Target concurrent bots</dt>
+                <dd>{{ delimit .n_bots_sweep ", " }}</dd>
+              </div>
+              <div>
+                <dt>Duration</dt>
+                <dd>{{ printf "%.2f min" .duration_minutes }}</dd>
+              </div>
+              <div>
+                <dt>Start stagger</dt>
+                <dd>{{ printf "%.1fs" .stagger_interval_s }}</dd>
+              </div>
+              <div>
+                <dt>Time factor</dt>
+                <dd>{{ .time_factor }}</dd>
+              </div>
+            </dl>
+          {{ end }}
+          {{ if $hasPerformanceResults }}
+            <div class="performance-table-wrap">
+              <table class="performance-table">
+                <thead>
+                  <tr>
+                    <th>Concurrent target</th>
+                    <th>Bots started</th>
+                    <th>Succeeded</th>
+                    <th>Requests</th>
+                    <th>Req/s</th>
+                    <th>Resp P95 (s)</th>
+                    <th>Q P95 all (s)</th>
+                    <th>Errors</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {{ range $performanceResults }}
+                    <tr>
+                      <td>{{ .n_bots }}</td>
+                      <td>{{ .total_bots_started }}</td>
+                      <td>{{ .bots_succeeded }}</td>
+                      <td>{{ .total_requests }}</td>
+                      <td>{{ with .requests_per_sec }}{{ printf "%.1f" . }}{{ else }}N/A{{ end }}</td>
+                      <td>{{ with .p95_response_time }}{{ printf "%.3f" . }}{{ else }}N/A{{ end }}</td>
+                      <td>{{ with .q_delay_p95 }}{{ printf "%.3f" . }}{{ else }}N/A{{ end }}</td>
+                      <td>{{ add (or .request_errors 0) (or .bot_errors 0) }}</td>
+                    </tr>
+                  {{ end }}
+                </tbody>
+              </table>
+            </div>
+          {{ else }}
+            <p class="artifact-note">
+              This performance artifact does not contain tabular result rows.
+            </p>
+          {{ end }}
+        </section>
+      {{ end }}
     </section>
 
     <section class="attempt-panel">
@@ -141,6 +301,7 @@
       <ul class="artifact-checklist">
         <li class="present">challenge/ <span>{{ len $attempt.challenge_files }} file{{ if ne (len $attempt.challenge_files) 1 }}s{{ end }}</span></li>
         <li class="present">agent.json <span>metadata captured</span></li>
+        <li class="{{ if $hasTimeline }}present{{ else }}missing{{ end }}">TIMELINE.md <span>{{ if $hasTimeline }}present{{ else }}missing{{ end }}</span></li>
         <li class="{{ if $hasExperiment }}present{{ else }}missing{{ end }}">code/experiment.py <span>{{ if $hasExperiment }}present{{ else }}missing{{ end }}</span></li>
         <li class="{{ if $hasParticipantVideo }}present{{ else }}missing{{ end }}">evidence/participant.mp4 <span>{{ if $hasParticipantVideo }}present{{ else }}missing{{ end }}</span></li>
         <li class="{{ if $hasPerformance }}present{{ else }}missing{{ end }}">evidence/performance.json <span>{{ if $hasPerformance }}present{{ else }}missing{{ end }}</span></li>
@@ -226,7 +387,7 @@
       {{ else }}
         <p>No evidence files were found for this attempt.</p>
       {{ end }}
-    </section>
+    </details>
 
     <details class="attempt-panel">
       <summary>Agent metadata</summary>
