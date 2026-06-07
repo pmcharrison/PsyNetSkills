@@ -154,3 +154,15 @@ https://github.com/pmcharrison/PsyNetSkills/actions/workflows/dashboard-preview.
 The preview workflow also posts this URL to the pull request. Forked pull
 requests do not publish previews because the workflow needs write access to the
 `gh-pages` branch.
+
+### Dashboard and documentation review artifacts
+
+For README, documentation, and general dashboard-content changes, do not record
+screen walkthroughs unless the user explicitly asks for one. These changes are
+best reviewed through the PR diff and dashboard preview links. Validate the site
+with the standard export/build commands, then provide the specific preview page
+or GitHub file links that are worth reviewing.
+
+Use screenshots or recordings only when they add information that a reviewer
+cannot easily get from the live preview, such as participant-facing challenge
+evidence, interactive UI behavior, or a user-requested manual test artifact.
