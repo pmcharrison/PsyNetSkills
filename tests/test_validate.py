@@ -2,6 +2,7 @@ import json
 from pathlib import Path
 
 from psynetsk_tools.validate import (
+    EMPTY_LEARNINGS_PLACEHOLDER,
     parse_evaluation_score,
     validate_agent_metadata,
     validate_learnings_file,
@@ -103,6 +104,13 @@ def test_validate_learnings_accepts_expected_format(tmp_path: Path) -> None:
         "- **PsyNet:** Improve the error message. Confidence: medium. "
         "Status: in_progress.\n",
     )
+
+    assert validate_learnings_file(learnings_file) == []
+
+
+def test_validate_learnings_accepts_initialized_placeholder(tmp_path: Path) -> None:
+    learnings_file = tmp_path / "LEARNINGS.md"
+    write(learnings_file, EMPTY_LEARNINGS_PLACEHOLDER + "\n")
 
     assert validate_learnings_file(learnings_file) == []
 

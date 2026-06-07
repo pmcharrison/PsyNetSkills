@@ -52,9 +52,12 @@ challenge before starting a fresh attempt.
    ```
 
    Set `dirty` from `git status --short`; it should normally be `false`.
-7. Start `TIMELINE.md` and append relative-timestamped entries as the attempt
-   progresses. Close every active implementation segment with `[agent-stop]` so
-   the dashboard can derive implementation time while excluding manual gaps.
+7. Start `TIMELINE.md` and initialize `LEARNINGS.md` from the template before
+   implementation. Append relative-timestamped timeline entries as the attempt
+   progresses. Add or revise learning cards whenever concrete implementation,
+   testing, or evidence-collection lessons appear so they are not forgotten.
+   Close every active implementation segment with `[agent-stop]` so the
+   dashboard can derive implementation time while excluding manual gaps.
 8. Implement the challenge in `code/`.
 9. Collect evidence in `evidence/`. Use the `record-participant-video` skill
    when creating `evidence/participant.mp4`.
@@ -70,10 +73,11 @@ challenge before starting a fresh attempt.
    If the user provides evaluation feedback, summarize it in `EVALUATION.md`,
    check off each criterion as met or unmet, and enter the score in YAML
    frontmatter.
-12. After evaluation feedback is captured, write or update `LEARNINGS.md` with
-   concise implementation notes and suggested actions for PsyNetSkills or
-   PsyNet. Learnings may depend on the human evaluation.
-13. Invite the user to review the drafted learning actions conversationally. If
+12. After evaluation feedback is captured, review and update `LEARNINGS.md` with
+   any revised or additional implementation notes and suggested actions for
+   PsyNetSkills or PsyNet. Learnings may be seeded during the attempt and later
+   changed by the human evaluation.
+13. Invite the user to review the current learning actions conversationally. If
    the user comments on the learnings, update `LEARNINGS.md` for them rather
    than expecting manual Markdown edits.
 
@@ -111,7 +115,7 @@ safer workflow rather than committing or publishing them.
 ## Templates
 
 Use the files in `assets/attempt-template/` as the starting point for attempt
-metadata and evaluation notes.
+metadata, timeline, learnings, and evaluation notes.
 
 ## Timeline notes
 
@@ -146,7 +150,9 @@ implementation time is reported as `Not recorded`.
 ## Learning notes
 
 `LEARNINGS.md` should capture information that would help future maintainers and
-agents. Use compact cards, one section per learning:
+agents. Initialize it at attempt setup with the template placeholder, then
+replace the placeholder with compact cards as soon as concrete lessons emerge.
+Use one section per learning:
 
 - `## <short title>`
 - Optional prose describing what happened.
@@ -167,14 +173,15 @@ decision rationale. Include only concrete observations from the attempt, such as
 framework gotchas, missing instructions, evidence collection friction, or useful
 refactors. Do not repeat the evaluation score or hidden criteria.
 
-Develop learning notes after the human evaluation conversation whenever
-possible. The evaluator's score and feedback may reveal different process
-lessons than the implementation alone.
+Keep learning notes live during the attempt. Add cards while implementing or
+collecting evidence, then revisit them after the human evaluation conversation
+whenever possible. The evaluator's score and feedback may revise, supersede, or
+add process lessons beyond the implementation notes.
 
 Treat learning notes as a conversational artifact. Cursor Cloud Agent users will
 often review them by chatting with the agent rather than editing Markdown
 directly. After an attempt is complete, briefly ask the user to comment on the
-drafted actions. On follow-up, update action text, confidence, or status
+current actions. On follow-up, update action text, confidence, or status
 according to the user's comments. For example, change `considering` to `planned`
 when the user agrees the action should be done, `in_progress` while an agent is
 actively working on it, `dismissed` when they reject it, `completed` when it has

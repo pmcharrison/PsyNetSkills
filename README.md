@@ -136,9 +136,10 @@ and so on. The agent will store your verdict in `EVALUATION.md`.
 
 ### Learning notes
 
-After the evaluation, the agent should also initialize a collection of 'learning notes' in 
-`LEARNING.md`, which include a set of concrete action points for how to improve PsyNetSkills and PsyNet.
-These will need review from you, and possibly from other collaborators.
+The agent should initialize a collection of learning notes in `LEARNINGS.md`
+when it creates the attempt, then add concrete action points as implementation
+and evaluation reveal ways to improve PsyNetSkills and PsyNet. These will need
+review from you, and possibly from other collaborators.
 Action points each have a 'status' attribute, taking values from 
 `considering`, `planned`, `in_progress`, `completed`, `dismissed`, or `superseded`.
 The agent can help you keep these up to date.

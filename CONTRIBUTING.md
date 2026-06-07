@@ -109,11 +109,12 @@ interventions or corrective guidance. Stop the timeline when the experiment
 implementation and first-pass evidence collection are complete. The dashboard
 derives implementation time from completed `[agent-start]` to `[agent-stop]`
 intervals and excludes manual gaps between those intervals.
-`LEARNINGS.md` should be written by the agent and summarize concrete
-implementation findings plus confidence-labelled actions targeting PsyNetSkills
-or PsyNet after implementation and, when possible, after evaluation feedback has
-been captured. Agents should invite conversational review of these actions and
-update the file in follow-up commits when users revise or decide on actions.
+`LEARNINGS.md` should be initialized by the agent when the attempt is created.
+The agent should replace its placeholder with concrete implementation findings
+and confidence-labelled actions targeting PsyNetSkills or PsyNet as the attempt
+proceeds, then revisit the file after evaluation feedback has been captured.
+Agents should invite conversational review of these actions and update the file
+in follow-up commits when users revise or decide on actions.
 
 ## Large files
 

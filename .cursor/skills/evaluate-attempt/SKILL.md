@@ -25,8 +25,8 @@ you organize that judgment into the repository's evaluation record.
    already provided it.
 6. Update `EVALUATION.md` with YAML frontmatter containing `score`, the user's
    feedback, and a concise checklist for copied criteria when present.
-7. Update `LEARNINGS.md` only when evaluation feedback changes or clarifies a
-   reusable lesson.
+7. Review the already-initialized `LEARNINGS.md` and update it only when
+   evaluation feedback changes or clarifies a reusable lesson.
 8. Run `uv run psynetsk-validate` and any narrow checks needed for changed files.
 
 ## Rules
