@@ -602,7 +602,8 @@ def write_skill_content(
         write_frontmatter(
             "Skills",
             "The currently implemented skills are listed below; see also the "
-            "[skills specification document](../docs/skills/).\n",
+            "[skills specification document]"
+            "(https://github.com/pmcharrison/PsyNetSkills/blob/main/docs/skills.md).\n",
         ),
         encoding="utf-8",
     )

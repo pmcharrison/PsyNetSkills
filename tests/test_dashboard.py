@@ -451,8 +451,10 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
     ).read_text(encoding="utf-8")
     assert (
         "The currently implemented skills are listed below; see also the "
-        "[skills specification document](../docs/skills/)."
+        "[skills specification document]"
+        "(https://github.com/pmcharrison/PsyNetSkills/blob/main/docs/skills.md)."
     ) in skills_index
+    assert "../docs/skills/" not in skills_index
     assert (
         tmp_path / "dashboard/content/skills/example-skill/index.md"
     ).exists()
