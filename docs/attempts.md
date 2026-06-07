@@ -2,6 +2,13 @@
 
 Attempts record what happened when an agent tried to solve a challenge.
 
+In the normal workflow, users should ask a Cursor Cloud Agent to attempt a
+challenge by name, without supplementary implementation instructions. This keeps
+the attempt a test of the public challenge instructions and the current skills.
+The agent should use the `attempt-challenge` skill and take care of the
+repository structure. The details below are the specification that the agent and
+advanced manual contributors should follow.
+
 They live under `challenges/<challenge>/attempts/<attempt-name>/`. Prefer
 timestamped names such as `2026-06-01-10-10` for real attempts, and use an
 `example-` prefix only for illustrative dashboard fixtures.
@@ -146,10 +153,10 @@ score:
 ---
 ```
 
-In Cursor Cloud workflows, users usually review attempts through conversation
-with an agent rather than by editing files directly. Agents should ask the user
-for a 1-10 score and concise evaluation feedback, then summarize that feedback in
-`EVALUATION.md` and update the score field.
+In Cursor Cloud Agent workflows, users usually review attempts through
+conversation with an agent rather than by editing files directly. Agents should
+ask the user for a 1-10 score and concise evaluation feedback, then summarize
+that feedback in `EVALUATION.md` and update the score field.
 
 If the challenge includes `CRITERIA.md`, agents should use those criteria during
 the conversational evaluation. Ask the user about each criterion, then record the
@@ -193,17 +200,17 @@ Keep learning notes concise and grounded in what happened. Useful topics include
 PsyNet or Dallinger API gotchas, ambiguous instructions, evidence collection
 friction, local testing friction, and candidate refactors. Maintainers can later
 update action statuses from `considering` to `planned`, `in_progress`,
-`completed`, `dismissed`, or `superseded`. Cloud agents should set a relevant
-action to `in_progress` when they start working on it and update it again when
-the work is completed, dismissed, or superseded. When an action is reviewed or
-its status changes, append an optional `Notes: ...` clause to the original action
-bullet to preserve the decision rationale.
+`completed`, `dismissed`, or `superseded`. Cursor Cloud Agents should set a
+relevant action to `in_progress` when they start working on it and update it
+again when the work is completed, dismissed, or superseded. When an action is
+reviewed or its status changes, append an optional `Notes: ...` clause to the
+original action bullet to preserve the decision rationale.
 
-In Cursor Cloud workflows, users usually review attempts through conversation
-with an agent rather than by editing files directly. Agents should draft
-`LEARNINGS.md`, invite the user to comment on the proposed actions, and then
-update action text, confidence, or status in a follow-up commit based on that
-conversation.
+In Cursor Cloud Agent workflows, users usually review attempts through
+conversation with an agent rather than by editing files directly. Agents should
+draft `LEARNINGS.md`, invite the user to comment on the proposed actions, and
+then update action text, confidence, or status in a follow-up commit based on
+that conversation.
 
 Do not use `LEARNINGS.md` for hidden evaluation criteria or scoring decisions.
 

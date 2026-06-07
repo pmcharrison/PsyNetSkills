@@ -21,8 +21,14 @@ instructions.
 
 ## Adding a skill
 
-Create a folder under `.cursor/skills/` with a `SKILL.md` file. The folder name and
-frontmatter `name` must match and use lowercase letters, numbers, and hyphens.
+In the normal workflow, ask a Cursor Cloud Agent to create or update the skill.
+Describe the reusable lesson in prose and point to any attempt, evaluation, or
+discussion that motivated it. The agent should use the `create-skill` skill and
+take care of the repository format.
+
+For manual edits, create a folder under `.cursor/skills/` with a `SKILL.md`
+file. The folder name and frontmatter `name` must match and use lowercase
+letters, numbers, and hyphens.
 
 Each `SKILL.md` must include YAML frontmatter:
 
@@ -38,7 +44,12 @@ templates in `assets/`, and reusable code in `scripts/`.
 
 ## Adding a challenge
 
-Create a folder under `challenges/` with:
+In the normal workflow, ask a Cursor Cloud Agent to create the challenge.
+Describe the intended participant experience, stimuli, responses, constraints,
+and any private evaluator-only checks in prose. The agent should use the
+`create-challenge` skill and take care of the repository format.
+
+For manual edits, create a folder under `challenges/` with:
 
 ```text
 INSTRUCTIONS.md
@@ -62,6 +73,10 @@ evaluation when it is present.
 
 ## Recording an attempt
 
+In the normal workflow, ask a Cursor Cloud Agent to attempt a challenge by name,
+without supplementary implementation instructions. The agent should use the
+`attempt-challenge` skill and take care of the repository format.
+
 Attempts live under `challenges/<challenge>/attempts/<timestamp>/`.
 
 Use this structure:
@@ -84,8 +99,8 @@ the resulting PsyNet checkout in `agent.json` under a `psynet` object with
 `checkout_path`, `branch`, `commit`, `version`, `updated_from`, `updated_at`,
 `update_command`, and `dirty` fields. The `EVALUATION.md` file should be
 human-written and include YAML frontmatter with a `score` field when the
-evaluation is complete. In Cursor Cloud workflows, agents should ask the user for
-a 1-10 score and concise feedback. If `CRITERIA.md` is present, agents should ask
+evaluation is complete. In Cursor Cloud Agent workflows, agents should ask the user
+for a 1-10 score and concise feedback. If `CRITERIA.md` is present, agents should ask
 the user about each criterion and record the answers as a checklist in
 `EVALUATION.md`.
 `TIMELINE.md` should log major experiment implementation events with timestamps
@@ -126,6 +141,6 @@ Do not commit generated `public/` output unless the repository policy changes.
 
 For pull requests from branches in this repository, GitHub Actions publishes a
 dashboard preview at
-https://<owner>.github.io/<repository>/pr-preview/pr-<number>/.
+https://OWNER.github.io/REPOSITORY/pr-preview/pr-NUMBER/.
 
 The preview workflow posts the concrete URL to the pull request.

@@ -129,7 +129,7 @@ PsyNet commands need sandboxing disabled in Cursor (`required_permissions: ["all
 
 ### Dashboard preview links
 
-When a Cloud Agent opens or updates a pull request from a branch in this
+When a Cursor Cloud Agent opens or updates a pull request from a branch in this
 repository, use the `dashboard-preview-polling` skill before sharing dashboard
 preview links. Wait up to 75 seconds for the `Deploy dashboard PR preview`
 workflow to appear and complete successfully for the current head commit. If it
@@ -154,3 +154,15 @@ https://github.com/pmcharrison/PsyNetSkills/actions/workflows/dashboard-preview.
 The preview workflow also posts this URL to the pull request. Forked pull
 requests do not publish previews because the workflow needs write access to the
 `gh-pages` branch.
+
+### Dashboard and documentation review artifacts
+
+For README, documentation, and general dashboard-content changes, do not record
+screen walkthroughs unless the user explicitly asks for one. These changes are
+best reviewed through the PR diff and dashboard preview links. Validate the site
+with the standard export/build commands, then provide the specific preview page
+or GitHub file links that are worth reviewing.
+
+Use screenshots or recordings only when they add information that a reviewer
+cannot easily get from the live preview, such as participant-facing challenge
+evidence, interactive UI behavior, or a user-requested manual test artifact.

@@ -1,18 +1,13 @@
-# Introduction
+# Documentation index
 
-PsyNetSkills collects skills, challenges, and evaluation evidence for improving
-how AI agents implement PsyNet experiments.
+The public overview lives in `README.md`, which is also rendered as the
+PsyNetSkills dashboard index page. The files in this directory provide detailed
+specifications for contributors and agents.
 
-The workshop loop is:
-
-1. Define challenges that represent realistic PsyNet experiment implementation
-   tasks.
-2. Ask agents to attempt those challenges using the available skills.
-3. Collect code, evidence, and process notes from each attempt.
-4. Evaluate the attempt against hidden criteria.
-5. Improve skills based on recurring failures.
-
-The public dashboard renders a concise workflow overview together with live
-repository data, so contributors can browse skills, challenges, scores, and
-attempt histories in one place. These source documentation files remain in the
-repository for contributor reference, but they are not exposed as website pages.
+- `skills.md` describes skill format and iteration practice.
+- `challenges.md` describes challenge format and authoring guidance.
+- `attempts.md` describes attempt structure, evidence, timelines, evaluations,
+  learnings, and credential policy.
+- `architecture.md` describes the repository layout and dashboard data flow.
+- `dashboard.md` describes static-site export, builds, and previews.
+- `psynet-reference.md` describes the expected local PsyNet checkout.
