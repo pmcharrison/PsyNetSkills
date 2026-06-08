@@ -43,7 +43,9 @@ def minimal_repo(root: Path) -> None:
         root / "authors.yaml",
         "pmcharrison:\n"
         "  name: Peter Harrison\n"
-        "  url: https://github.com/pmcharrison\n",
+        "  url: https://github.com/pmcharrison\n"
+        "  email: pmch2@cam.ac.uk\n"
+        "  affiliation: University of Cambridge\n",
     )
     write(root / "docs/index.md", "# Docs\n")
     write(

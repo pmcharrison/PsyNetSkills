@@ -11,12 +11,13 @@ Author records live in `authors.yaml`:
 pmcharrison:
   name: Peter Harrison
   url: https://github.com/pmcharrison
+  email: Optional public email
   affiliation: Optional public affiliation
   orcid: Optional public ORCID
 ```
 
-`name` is required. `url`, `affiliation`, and `orcid` are optional. Do not add
-private email addresses or other non-public contact details.
+`name` is required. `url`, `email`, `affiliation`, and `orcid` are optional. Do
+not add private email addresses or other non-public contact details.
 
 ## References
 

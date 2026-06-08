@@ -20,6 +20,7 @@ class Author:
     id: str
     name: str
     url: str
+    email: str = ""
     affiliation: str = ""
     orcid: str = ""
 
@@ -91,6 +92,13 @@ def read_author_registry(root: Path) -> tuple[dict[str, Author], list[str]]:
             "affiliation",
             problems,
         )
+        email = normalize_optional_string(
+            record.get("email", ""),
+            authors_file,
+            author_id,
+            "email",
+            problems,
+        )
         orcid = normalize_optional_string(
             record.get("orcid", ""),
             authors_file,
@@ -103,6 +111,7 @@ def read_author_registry(root: Path) -> tuple[dict[str, Author], list[str]]:
             id=author_id,
             name=name.strip(),
             url=(url or f"https://github.com/{author_id}").strip(),
+            email=(email or "").strip(),
             affiliation=(affiliation or "").strip(),
             orcid=(orcid or "").strip(),
         )
