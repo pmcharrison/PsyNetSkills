@@ -58,6 +58,34 @@ before proceeding. Do not maintain a second editable copy of the skills.
 - **uv** — Python env and package management (`~/.local/bin` should be on `PATH`).
 - **Hugo** — Dashboard build/preview (`hugo --source dashboard ...`). CI uses the latest extended Hugo release.
 - **Git LFS** — Required when working with large attempt evidence (videos, zips). Run `git lfs install` once per machine; CI checks out with `lfs: true`. On Cursor Cloud VMs, `git lfs install` may fail because Git hooks are managed by the environment; run `git lfs update --force` instead.
+- **ffmpeg** — Required for participant evidence recordings.
+- **PulseAudio utilities** — Required when recording browser/system audio in
+  Cursor Cloud (`pulseaudio`, `pulseaudio-utils`). Agents should be able to
+  create a null sink named `psynet_rec` and record `psynet_rec.monitor`.
+- **Node.js + npm** — Required for JavaScript Playwright participant-flow
+  scripts used in challenge evidence. Attempt code may install `@playwright/test`
+  locally with npm and commit `package.json`/`package-lock.json`.
+
+For Cursor Cloud participant recordings with browser audio, a known-good Linux
+setup is:
+
+```bash
+export XDG_RUNTIME_DIR="/tmp/xdg-runtime-$UID"
+mkdir -p "$XDG_RUNTIME_DIR"
+chmod 700 "$XDG_RUNTIME_DIR"
+pulseaudio --start --exit-idle-time=-1 --log-target=stderr || true
+pactl load-module module-null-sink sink_name=psynet_rec \
+  sink_properties=device.description=psynet_rec || true
+pactl set-default-sink psynet_rec
+pactl list short sources  # should include psynet_rec.monitor
+```
+
+Launch headed Chrome/Chromium or Playwright with the same PulseAudio
+environment:
+
+```bash
+export PULSE_SERVER="unix:$XDG_RUNTIME_DIR/pulse/native"
+```
 
 ### Standard commands
 

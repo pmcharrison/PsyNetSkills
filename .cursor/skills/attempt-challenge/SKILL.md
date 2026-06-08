@@ -59,6 +59,11 @@ challenge before starting a fresh attempt.
    Close every active implementation segment with `[agent-stop]` so the
    dashboard can derive implementation time while excluding manual gaps.
 8. Implement the challenge in `code/`.
+   - For runnable PsyNet experiments, prefer a non-conflicting nested directory
+     such as `code/<experiment_slug>/` rather than running directly from a
+     directory named `code`; Dallinger imports the experiment directory as a
+     Python package, and `code` can collide with Python's standard-library
+     module of the same name.
 9. Collect evidence in `evidence/`. Use the `record-participant-video` skill
    when creating `evidence/participant.mp4`.
 10. Leave `EVALUATION.md` as a template for human evaluators unless the user
@@ -96,6 +101,19 @@ experiment implementation challenges, provide the standard documented evidence:
 - Include exported experiment data in `evidence/data.zip`.
 - When the challenge needs scientific checks, figures, or concise reports, put
   them in `evidence/analyses/`.
+
+For participant-flow evidence, prefer a hybrid workflow when feasible:
+
+- Use a short visual review run to inspect the interface, instructions, labels,
+  button states, and completion page. If the experiment supports
+  `PSYNET_PROFILE=minimal`, use that profile for this visual review and save a
+  few targeted screenshots.
+- Use a scripted browser runner for the canonical full-flow recording. Prefer
+  JavaScript Playwright, and use a human-time pacing option for illustrative
+  recordings so reviewers can see individual actions and hear audio without
+  watching a slow agent-driven session.
+- Keep the default experiment path canonical; minimal profile is for review
+  only and should be visibly documented in evidence.
 
 The `evidence/analyses/` directory is optional because not every challenge needs
 analysis beyond the standard artifacts. Treat the other evidence items as
