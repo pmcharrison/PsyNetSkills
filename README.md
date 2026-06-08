@@ -120,12 +120,15 @@ You can browse existing challenges on the
 [Challenges page](https://pmcharrison.github.io/PsyNetSkills/challenges/). The
 detailed challenge format is documented in the
 [challenge specification](https://github.com/pmcharrison/PsyNetSkills/blob/main/docs/challenges.md).
+To create one through a Cloud Agent, invoke the skill explicitly, for example:
+
+> `/create-challenge Audio memory sequence experiment`
 
 ### Attempting a challenge
 
 Ask a Cursor Cloud Agent to attempt a specific challenge, for example:
 
-> Attempt the `primary-color-rating` challenge.
+> `/attempt-challenge primary-color-rating`
 
 Do not provide extra implementation instructions at attempt time. The point is to
 test whether the current challenge and skills are sufficient. If the challenge is
@@ -142,6 +145,9 @@ Once the agent has completed its attempt, it should prompt you to review the gen
 via the dashboard (it should print you a link to visit).
 This evidence should include things like code, videos, performance tests, and so on.
 The agent will store your verdict in `EVALUATION.md`.
+You can invoke this explicitly with:
+
+> `/evaluate-attempt Evaluate the latest primary-color-rating attempt`
 
 ### Learning notes
 
@@ -158,6 +164,9 @@ The agent can help you keep these up to date.
 One possible action is to update skills in PsyNetSkills. The agent can help you draft new skills
 or edit existing ones, and these can be contributed as part of your attempt pull request.
 You should exercise manual review here; be warned that LLMs often generate overly verbose skills.
+Invoke the skill explicitly when you want this workflow:
+
+> `/create-skill Capture the latest attempt lesson as reusable guidance`
 
 You can browse existing skills on the
 [Skills page](https://pmcharrison.github.io/PsyNetSkills/skills/). The detailed
