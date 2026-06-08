@@ -27,3 +27,12 @@ experiment class. Small generated experiments should choose one source of truth.
 *Actions:*
 - **PsyNetSkills:** Add a reminder to generated experiment templates to avoid duplicating config keys across files. Confidence: high. Status: considering.
 - **PsyNet:** The current error is clear enough; no framework change suggested. Confidence: medium. Status: dismissed.
+
+## Constraints file is part of local PsyNet validation
+
+`psynet test local` checks Python dependencies through `constraints.txt`, so a
+minimal experiment folder with only `requirements.txt` is not enough.
+
+*Actions:*
+- **PsyNetSkills:** Include `dallinger constraints generate` in the experiment-attempt setup checklist. Confidence: high. Status: considering.
+- **PsyNet:** Consider having `psynet test local` explain how to generate missing constraints. Confidence: medium. Status: considering.

@@ -14,7 +14,7 @@ request = <SubRequest 'debug_experiment' for <Function test_experiment[/workspac
 env = {'AGENT_TRANSCRIPTS': '/home/ubuntu/.cursor/projects/workspace/agent-transcripts', 'CARGO_HOME': '/usr/local/cargo', '...EN,DALLINGER_FORK_URL,DALLINGER_GH_TOKEN', 'CLOUD_AGENT_INJECTED_SECRET_NAMES': 'GITLAB_TOKEN,DALLINGER_GH_TOKEN', ...}
 clear_workers = None
 in_experiment_directory = '/workspace/challenges/audio-memory-sequence/attempts/2026-06-08-09-29/code/audio_memory_sequence'
-db_session = <sqlalchemy.orm.scoping.scoped_session object at 0x7f61fd42b4d0>
+db_session = <sqlalchemy.orm.scoping.scoped_session object at 0x7fd5aed074d0>
 skip_constraints_check = None
 
     @pytest.fixture(scope="class")
@@ -71,7 +71,7 @@ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
            ^^^^^^^^^^^
 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
 
-self = <pexpect.expect.Expecter object at 0x7f61eac72f90>
+self = <pexpect.expect.Expecter object at 0x7fd59c542f90>
 err = EOF('End Of File (EOF). Exception style platform.')
 
     def eof(self, err=None):
@@ -98,17 +98,17 @@ err = EOF('End Of File (EOF). Exception style platform.')
             exc.__cause__ = None # in Python 3.x we can use "raise exc from None"
 >           raise exc
 E           pexpect.exceptions.EOF: End Of File (EOF). Exception style platform.
-E           <pexpect.pty_spawn.spawn object at 0x7f61eac72ba0>
+E           <pexpect.pty_spawn.spawn object at 0x7fd59c542ba0>
 E           command: /home/ubuntu/PsyNet/.venv/bin/psynet
 E           args: [b'/home/ubuntu/PsyNet/.venv/bin/psynet', b'debug', b'local', b'--legacy', b'--no-browsers']
 E           buffer (last 2000 chars): ''
-E           before (last 2000 chars): 'rocess_result(sub_ctx.command.invoke(sub_ctx))\r\n                           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^\r\n  File "/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/click/core.py", line 1269, in invoke\r\n    return ctx.invoke(self.callback, **ctx.params)\r\n           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File "/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/click/core.py", line 824, in invoke\r\n    return callback(*args, **kwargs)\r\n  File "/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/click/decorators.py", line 34, in new_func\r\n    return f(get_current_context(), *args, **kwargs)\r\n  File "/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/psynet/command_line.py", line 635, in wrapper\r\n    return func(*args, **kwargs)\r\n  File "/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/psynet/command_line.py", line 674, in debug__local\r\n    _run_local(\r\n    ~~~~~~~~~~^\r\n        ctx,\r\n        ^^^^\r\n    ...<5 lines>...\r\n        context_group=debug,\r\n        ^^^^^^^^^^^^^^^^^^^^\r\n    )\r\n    ^\r\n  File "/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/psynet/command_line.py", line 379, in _run_local\r\n    _pre_launch(ctx, mode=mode, archive=archive, local_=True, docker=docker, app=None)\r\n    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File "/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/psynet/command_line.py", line 1078, in _pre_launch\r\n    run_pre_checks(mode, local_, heroku, docker, app)\r\n    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File "/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/psynet/command_line.py", line 1351, in run_pre_checks\r\n    exp.check_config()\r\n    ~~~~~~~~~~~~~~~~^^\r\n  File "/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/psynet/experiment.py", line 2175, in check_config\r\n    raise ValueError(\r\n    ...<2 lines>...\r\n    )\r\nValueError: Config variable show_reward was registered both in config.txt and experiment.py. Please choose just one location.\r\n'
+E           before (last 2000 chars): 'x.command.invoke(sub_ctx))\r\n                           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^\r\n  File "/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/click/core.py", line 1269, in invoke\r\n    return ctx.invoke(self.callback, **ctx.params)\r\n           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File "/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/click/core.py", line 824, in invoke\r\n    return callback(*args, **kwargs)\r\n  File "/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/click/decorators.py", line 34, in new_func\r\n    return f(get_current_context(), *args, **kwargs)\r\n  File "/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/psynet/command_line.py", line 635, in wrapper\r\n    return func(*args, **kwargs)\r\n  File "/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/psynet/command_line.py", line 674, in debug__local\r\n    _run_local(\r\n    ~~~~~~~~~~^\r\n        ctx,\r\n        ^^^^\r\n    ...<5 lines>...\r\n        context_group=debug,\r\n        ^^^^^^^^^^^^^^^^^^^^\r\n    )\r\n    ^\r\n  File "/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/psynet/command_line.py", line 379, in _run_local\r\n    _pre_launch(ctx, mode=mode, archive=archive, local_=True, docker=docker, app=None)\r\n    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File "/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/psynet/command_line.py", line 1078, in _pre_launch\r\n    run_pre_checks(mode, local_, heroku, docker, app)\r\n    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File "/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/psynet/command_line.py", line 1354, in run_pre_checks\r\n    exp.check_python_dependencies()\r\n    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^\r\n  File "/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/psynet/experiment.py", line 4232, in check_python_dependencies\r\n    with open("constraints.txt", "r") as f:\r\n         ~~~~^^^^^^^^^^^^^^^^^^^^^^^^\r\nFileNotFoundError: [Errno 2] No such file or directory: \'constraints.txt\'\r\n'
 E           after: <class 'pexpect.exceptions.EOF'>
 E           match: None
 E           match_index: None
 E           exitstatus: None
 E           flag_eof: True
-E           pid: 8289
+E           pid: 9051
 E           child_fd: 19
 E           closed: False
 E           timeout: 60
@@ -128,6 +128,8 @@ E               0: 'Experiment launch complete!'
 /home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/pexpect/expect.py:122: EOF
 ---------------------------- Captured stdout setup -----------------------------
 Launching experiment in directory '/workspace/challenges/audio-memory-sequence/attempts/2026-06-08-09-29/code/audio_memory_sequence'...
+
+❯❯ Experiment directory size: 0.009 MB.
 Traceback (most recent call last):
   File "/home/ubuntu/PsyNet/.venv/bin/psynet", line 10, in <module>
     sys.exit(psynet())
@@ -168,15 +170,14 @@ Traceback (most recent call last):
   File "/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/psynet/command_line.py", line 1078, in _pre_launch
     run_pre_checks(mode, local_, heroku, docker, app)
     ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/psynet/command_line.py", line 1351, in run_pre_checks
-    exp.check_config()
-    ~~~~~~~~~~~~~~~~^^
-  File "/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/psynet/experiment.py", line 2175, in check_config
-    raise ValueError(
-    ...<2 lines>...
-    )
-ValueError: Config variable show_reward was registered both in config.txt and experiment.py. Please choose just one location.
-
+  File "/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/psynet/command_line.py", line 1354, in run_pre_checks
+    exp.check_python_dependencies()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/psynet/experiment.py", line 4232, in check_python_dependencies
+    with open("constraints.txt", "r") as f:
+         ~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'constraints.txt'
+^C
 =============================== warnings summary ===============================
 ../../../../../../../home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/_pytest/config/__init__.py:1309
   /home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/_pytest/config/__init__.py:1309: PytestAssertRewriteWarning: Module already imported so cannot be rewritten; dallinger
@@ -193,4 +194,4 @@ ValueError: Config variable show_reward was registered both in config.txt and ex
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
 =========================== short test summary info ============================
 ERROR test.py::test_experiment[/workspace/challenges/audio-memory-sequence/attempts/2026-06-08-09-29/code/audio_memory_sequence]
-==================== 1 passed, 3 warnings, 1 error in 3.75s ====================
+==================== 1 passed, 3 warnings, 1 error in 3.52s ====================
