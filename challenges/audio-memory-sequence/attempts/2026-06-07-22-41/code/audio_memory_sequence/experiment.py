@@ -1,3 +1,5 @@
+import os
+
 from markupsafe import Markup
 
 import psynet.experiment
@@ -23,6 +25,33 @@ TRIAL_SEQUENCES = [
 ]
 
 
+def is_minimal_profile():
+    return os.getenv("PSYNET_PROFILE", "").lower() == "minimal"
+
+
+def get_trial_sequences():
+    if is_minimal_profile():
+        return TRIAL_SEQUENCES[:2]
+    return TRIAL_SEQUENCES
+
+
+def get_intro_text():
+    review_notice = ""
+    if is_minimal_profile():
+        review_notice = """
+        <p><strong>Minimal profile:</strong> this local review run uses two trials
+        and is not the canonical participant flow.</p>
+        """
+    return Markup(
+        f"""
+        <p>In this experiment you will hear short sequences made from three
+        synthesized tones: low, medium, and high. After each sequence, press
+        the labeled buttons in the same order that you heard the tones.</p>
+        {review_notice}
+        """
+    )
+
+
 def get_nodes():
     return [
         StaticNode(
@@ -31,7 +60,7 @@ def get_nodes():
                 "sequence_id": i + 1,
             }
         )
-        for i, sequence in enumerate(TRIAL_SEQUENCES)
+        for i, sequence in enumerate(get_trial_sequences())
     ]
 
 
@@ -72,7 +101,7 @@ class SequenceRecallTrial(StaticTrial):
         sequence = self.definition["target_sequence"]
         notes = [Note(TONE_PITCHES[label]) for label in sequence]
         trial_number = self.position + 1
-        n_trials = len(TRIAL_SEQUENCES)
+        n_trials = len(get_trial_sequences())
 
         return ModularPage(
             "sequence_recall",
@@ -120,11 +149,7 @@ class Exp(psynet.experiment.Experiment):
 
     timeline = Timeline(
         InfoPage(
-            """
-            In this experiment you will hear short sequences made from three
-            synthesized tones: low, medium, and high. After each sequence, press
-            the labeled buttons in the same order that you heard the tones.
-            """,
+            get_intro_text(),
             time_estimate=5,
         ),
         StaticTrialMaker(
@@ -144,7 +169,7 @@ class Exp(psynet.experiment.Experiment):
 
     def test_check_bot(self, bot: Bot, **kwargs):
         assert not bot.failed
-        assert len(bot.alive_trials) == len(TRIAL_SEQUENCES)
+        assert len(bot.alive_trials) == len(get_trial_sequences())
 
         for trial in bot.alive_trials:
             assert trial.finalized
