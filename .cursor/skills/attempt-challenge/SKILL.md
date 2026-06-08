@@ -97,6 +97,23 @@ experiment implementation challenges, provide the standard documented evidence:
 - Save technical validation output in `evidence/`, such as
   `performance.json` from `psynet performance-test`, command logs, or JSON from
   equivalent local checks.
+- For performance evidence, do not rely on experiment defaults such as
+  `test_n_bots = 1` or short implicit durations. Keep `psynet test local` for
+  fast functional verification, then run an explicit load test from the
+  experiment directory:
+
+  ```bash
+  psynet performance-test local \
+    --n-bots 40 \
+    --duration-minutes 5 \
+    --time-factor 0 \
+    --json-output ../../evidence/performance.json
+  ```
+
+  Adjust the JSON output path if the experiment is not in `code/<slug>/`.
+  Save the command log in `evidence/` when it helps reviewers see what ran.
+  If local resources block the full run, record the blocker in `EVALUATION.md`
+  rather than substituting a trivial one-bot smoke test without explanation.
 - Include a PsyNet dashboard monitor snapshot in `evidence/monitor.html`.
 - Include exported experiment data in `evidence/data.zip`.
 - When the challenge needs scientific checks, figures, or concise reports, put
