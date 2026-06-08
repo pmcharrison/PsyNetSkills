@@ -6,6 +6,16 @@
 
 PsyNetSkills is a workshop repository (not a multi-service app). Local development centers on Python tooling (`psynetsk_tools/`), a Hugo static dashboard (`dashboard/`), and a **local PsyNet checkout** at `~/PsyNet` for experiment APIs, demos, and challenge work. See `README.md` and `docs/` for the canonical workflow.
 
+### Engineering judgement
+
+While working in this repository, keep an eye out for reasonable opportunities to
+improve maintainability and reliability. When you notice duplicated workflow
+instructions, avoidable complexity, likely bugs, missing robustness checks, or
+useful validation gaps, mention them to the user and suggest a focused follow-up
+when it would help the current work. Keep those suggestions scoped: do not fold
+unrelated refactors or broad cleanups into the current task unless the user asks
+for them or they are needed to finish safely.
+
 ### Required development environment
 
 A complete Cursor Cloud (or local) setup for this repository includes **both** the PsyNetSkills repo **and** the PsyNet stack below. Challenge skills and experiment implementation assume PsyNet is installed and verified — not only the Hugo dashboard and `psynetsk_tools` CLI.

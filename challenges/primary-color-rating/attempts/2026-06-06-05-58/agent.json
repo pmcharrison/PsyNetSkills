@@ -1,4 +1,7 @@
 {
+  "authors": [
+    "pmcharrison"
+  ],
   "agent": "GPT-5.5 coding agent",
   "client": "Cursor Cloud",
   "model": "GPT-5.5",

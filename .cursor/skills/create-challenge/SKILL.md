@@ -1,6 +1,7 @@
 ---
 name: create-challenge
 description: Create a PsyNetSkills challenge from a prose task description, including public instructions, optional private criteria, references, validation, and dashboard-ready structure. Use when asked to draft, design, add, or create a challenge in this repository.
+authors: [pmcharrison]
 ---
 
 # Create a challenge
@@ -14,9 +15,10 @@ you are responsible for turning that description into the repository format.
 1. Interpret the user's prose description. Identify the participant experience,
    stimuli or inputs, responses to collect, scientific checks, and constraints.
 2. Choose a concise lowercase slug using hyphens, unless the user provided one.
-3. Create `challenges/<slug>/INSTRUCTIONS.md` with YAML frontmatter containing
-   `title`, `type`, and `difficulty`.
-4. Write public instructions that are sufficient for an attempting agent to
+3. Use the `identify-author` skill before writing metadata.
+4. Create `challenges/<slug>/INSTRUCTIONS.md` with YAML frontmatter containing
+   `title`, `type`, `difficulty`, and `authors`.
+5. Write public instructions that are sufficient for an attempting agent to
    implement the task without hidden criteria. Focus on behavior and evidence,
    not an exact implementation strategy, unless the challenge is explicitly about
    a PsyNet API.
@@ -27,12 +29,12 @@ you are responsible for turning that description into the repository format.
    - Mention practice, replay, or stimulus-generation details only when the
      challenge intentionally differs from these defaults or is specifically
      evaluating that design choice.
-5. Add `challenges/<slug>/CRITERIA.md` only when there are evaluator-facing
+6. Add `challenges/<slug>/CRITERIA.md` only when there are evaluator-facing
    checks that should stay hidden during implementation.
-6. Put any supporting public material in `challenges/<slug>/references/`.
-7. Create `challenges/<slug>/attempts/.gitkeep`.
-8. Run `uv run psynetsk-validate` and the narrowest useful additional checks.
-9. Summarize the challenge at the level a human reviewer needs: what the agent
+7. Put any supporting public material in `challenges/<slug>/references/`.
+8. Create `challenges/<slug>/attempts/.gitkeep`.
+9. Run `uv run psynetsk-validate` and the narrowest useful additional checks.
+10. Summarize the challenge at the level a human reviewer needs: what the agent
    will be asked to build, what is hidden for evaluation, and how to review it.
 
 ## Rules

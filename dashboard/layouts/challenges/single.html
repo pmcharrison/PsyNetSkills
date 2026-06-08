@@ -19,6 +19,12 @@
     </div>
     <p><strong>Type:</strong> {{ $challenge.type }}</p>
     <p><strong>Difficulty:</strong> {{ $challenge.difficulty }}</p>
+    {{ with $challenge.authors }}
+      <p>
+        <strong>Author{{ if ne (len .) 1 }}s{{ end }}:</strong>
+        {{ partial "authors.html" . }}
+      </p>
+    {{ end }}
 
     <h2>Instructions</h2>
     {{ $challenge.instructions | markdownify }}

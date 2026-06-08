@@ -1,6 +1,7 @@
 ---
 name: attempt-challenge
 description: Attempt a PsyNetSkills challenge by creating a timestamped attempt folder, implementing the task, collecting evidence, and preparing outputs for human evaluation. Use when asked to attempt, run, or solve a challenge in this repository.
+authors: [pmcharrison]
 ---
 
 # Attempt a challenge
@@ -22,22 +23,26 @@ challenge before starting a fresh attempt.
    implementation and evidence collection are complete. Do not inspect dashboard
    attempt pages for the same challenge during this phase either; any criteria
    shown there are for later review.
-3. Refresh the local PsyNet checkout before implementing experiment code:
+3. Use the `identify-author` skill before writing metadata. Treat author
+   identification as metadata only, not as supplementary implementation
+   guidance.
+4. Refresh the local PsyNet checkout before implementing experiment code:
    `cd ~/PsyNet && git checkout master && git pull --ff-only origin master`.
    If the checkout is missing, clone it first. If local changes or a
    non-fast-forward state prevent updating, record the blocker in `TIMELINE.md` and
    `EVALUATION.md` rather than silently using an unknown revision.
-4. Create a new attempt folder named with the local timestamp:
+5. Create a new attempt folder named with the local timestamp:
    `challenges/<challenge>/attempts/YYYY-MM-DD-HH-MM/`.
-5. Snapshot the challenge into `attempts/<timestamp>/challenge/`, excluding
+6. Snapshot the challenge into `attempts/<timestamp>/challenge/`, excluding
    previous attempts. Keep optional `CRITERIA.md` in the snapshot if it exists,
    but do not open it during implementation.
-6. Write `agent.json` with the model/client details you know, the current commit
-   hash of the PsyNetSkills repository, and a `psynet` object recording the
-   refreshed PsyNet checkout. Use this standard shape:
+7. Write `agent.json` with the author key, model/client details you know, the
+   current commit hash of the PsyNetSkills repository, and a `psynet` object
+   recording the refreshed PsyNet checkout. Use this standard shape:
 
    ```json
    {
+     "authors": ["<github-id>"],
      "psynet": {
        "checkout_path": "~/PsyNet",
        "branch": "master",
@@ -52,23 +57,23 @@ challenge before starting a fresh attempt.
    ```
 
    Set `dirty` from `git status --short`; it should normally be `false`.
-7. Start `TIMELINE.md` and initialize `LEARNINGS.md` from the template before
+8. Start `TIMELINE.md` and initialize `LEARNINGS.md` from the template before
    implementation. Append relative-timestamped timeline entries as the attempt
    progresses. Add or revise learning cards whenever concrete implementation,
    testing, or evidence-collection lessons appear so they are not forgotten.
    Close every active implementation segment with `[agent-stop]` so the
    dashboard can derive implementation time while excluding manual gaps.
-8. Implement the challenge in `code/`.
+9. Implement the challenge in `code/`.
    - For runnable PsyNet experiments, prefer a non-conflicting nested directory
      such as `code/<experiment_slug>/` rather than running directly from a
      directory named `code`; Dallinger imports the experiment directory as a
      Python package, and `code` can collide with Python's standard-library
      module of the same name.
-9. Collect evidence in `evidence/`. Use the `record-participant-video` skill
+10. Collect evidence in `evidence/`. Use the `record-participant-video` skill
    when creating `evidence/participant.mp4`.
-10. Leave `EVALUATION.md` as a template for human evaluators unless the user
+11. Leave `EVALUATION.md` as a template for human evaluators unless the user
    provides evaluation feedback.
-11. In the final response, invite the user to evaluate the attempt
+12. In the final response, invite the user to evaluate the attempt
    conversationally, including a 1-10 score and concise feedback. After
    implementation and evidence collection are complete, you may read exactly the
    current attempt's copied criteria file at
@@ -78,11 +83,11 @@ challenge before starting a fresh attempt.
    If the user provides evaluation feedback, summarize it in `EVALUATION.md`,
    check off each criterion as met or unmet, and enter the score in YAML
    frontmatter.
-12. After evaluation feedback is captured, review and update `LEARNINGS.md` with
+13. After evaluation feedback is captured, review and update `LEARNINGS.md` with
    any revised or additional implementation notes and suggested actions for
    PsyNetSkills or PsyNet. Learnings may be seeded during the attempt and later
    changed by the human evaluation.
-13. Invite the user to review the current learning actions conversationally. If
+14. Invite the user to review the current learning actions conversationally. If
    the user comments on the learnings, update `LEARNINGS.md` for them rather
    than expecting manual Markdown edits.
 

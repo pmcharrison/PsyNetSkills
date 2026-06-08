@@ -20,11 +20,13 @@ skills tree.
 ---
 name: psynet-experiment-implementation
 description: Explain what this skill does and when an agent should use it.
+authors: [pmcharrison]
 ---
 ```
 
 The `name` must match the folder name. Use lowercase letters, numbers, and
-hyphens only.
+hyphens only. `authors` must list one or more GitHub author keys from
+`authors.yaml`; see `docs/authors.md` for the registration workflow.
 
 ## Writing useful skills
 

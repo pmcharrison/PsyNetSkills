@@ -20,6 +20,7 @@ def agent_json() -> str:
     return (
         json.dumps(
             {
+                "authors": ["pmcharrison"],
                 "model": "test-model",
                 "psynet": {
                     "checkout_path": "~/PsyNet",
@@ -38,12 +39,17 @@ def agent_json() -> str:
 
 
 def minimal_repo(root: Path) -> None:
+    write(
+        root / "authors.yaml",
+        "pmcharrison: Peter Harrison\n",
+    )
     write(root / "docs/index.md", "# Docs\n")
     write(
         root / ".cursor/skills/example-skill/SKILL.md",
         "---\n"
         "name: example-skill\n"
         "description: Use when testing repository validation.\n"
+        "authors: [pmcharrison]\n"
         "---\n",
     )
     write(
@@ -52,6 +58,7 @@ def minimal_repo(root: Path) -> None:
         "title: Example challenge\n"
         "type: experiment implementation\n"
         "difficulty: 3\n"
+        "authors: [pmcharrison]\n"
         "---\n\n"
         "Implement the experiment.\n",
     )
@@ -73,6 +80,7 @@ def test_validate_repository_rejects_skill_name_mismatch(
         "---\n"
         "name: other-skill\n"
         "description: Use when testing repository validation.\n"
+        "authors: [pmcharrison]\n"
         "---\n",
     )
 
@@ -230,7 +238,7 @@ def test_validate_agent_metadata_accepts_psynet_block(tmp_path: Path) -> None:
 
 def test_validate_agent_metadata_requires_psynet_block(tmp_path: Path) -> None:
     agent_file = tmp_path / "agent.json"
-    write(agent_file, '{"model": "test-model"}\n')
+    write(agent_file, '{"authors": ["pmcharrison"], "model": "test-model"}\n')
 
     assert validate_agent_metadata(agent_file) == [
         f"{agent_file}: missing psynet metadata",
@@ -245,6 +253,7 @@ def test_validate_agent_metadata_rejects_incomplete_psynet_block(
         agent_file,
         json.dumps(
             {
+                "authors": ["pmcharrison"],
                 "model": "test-model",
                 "psynet": {
                     "checkout_path": "~/PsyNet",
@@ -265,6 +274,50 @@ def test_validate_agent_metadata_rejects_incomplete_psynet_block(
 
     assert any("psynet.commit must not be empty" in problem for problem in problems)
     assert any("psynet.dirty must be a boolean" in problem for problem in problems)
+
+
+def test_validate_repository_rejects_unknown_author(tmp_path: Path) -> None:
+    minimal_repo(tmp_path)
+    write(
+        tmp_path / "challenges/example/INSTRUCTIONS.md",
+        "---\n"
+        "title: Example challenge\n"
+        "type: experiment implementation\n"
+        "difficulty: 3\n"
+        "authors: [unknown-author]\n"
+        "---\n\n"
+        "Implement the experiment.\n",
+    )
+
+    problems = validate_repository(tmp_path)
+
+    assert any("unknown author id 'unknown-author'" in problem for problem in problems)
+
+
+def test_validate_repository_rejects_author_details_mapping(tmp_path: Path) -> None:
+    minimal_repo(tmp_path)
+    write(
+        tmp_path / "authors.yaml",
+        "pmcharrison:\n"
+        "  name: Peter Harrison\n"
+        "  affiliation: University of Cambridge\n",
+    )
+
+    problems = validate_repository(tmp_path)
+
+    assert any(
+        "author 'pmcharrison' must be a full name" in problem
+        for problem in problems
+    )
+
+
+def test_validate_repository_rejects_missing_authors_yaml(tmp_path: Path) -> None:
+    minimal_repo(tmp_path)
+    (tmp_path / "authors.yaml").unlink()
+
+    problems = validate_repository(tmp_path)
+
+    assert any("missing author registry" in problem for problem in problems)
 
 
 def test_validate_repository_requires_criteria_snapshot_and_checklist(

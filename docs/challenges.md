@@ -24,8 +24,12 @@ the challenge title, type, and difficulty:
 title: Primary color rating experiment
 type: experiment implementation
 difficulty: 2
+authors: [pmcharrison]
 ---
 ```
+
+`authors` must list one or more GitHub author keys from `authors.yaml`; see
+`docs/authors.md` for the registration workflow.
 
 Challenges may also include `CRITERIA.md` for evaluator-facing success
 criteria and `references/` for supporting material. `CRITERIA.md` is optional:

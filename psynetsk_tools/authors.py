@@ -1,0 +1,132 @@
+"""Author registry helpers."""
+
+from __future__ import annotations
+
+import re
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Any
+
+import yaml
+
+AUTHORS_FILE = "authors.yaml"
+GITHUB_ID_RE = re.compile(r"^[a-z0-9](?:[a-z0-9-]{0,37}[a-z0-9])?$")
+
+
+@dataclass(frozen=True)
+class Author:
+    """A public author record."""
+
+    id: str
+    name: str
+    url: str
+
+
+def load_yaml_mapping(path: Path) -> tuple[dict[str, Any], list[str]]:
+    """Load a YAML mapping from ``path``."""
+
+    try:
+        data = yaml.safe_load(path.read_text(encoding="utf-8"))
+    except yaml.YAMLError as exc:
+        return {}, [f"{path}: invalid YAML: {exc}"]
+
+    return validate_yaml_mapping(data, path)
+
+
+def validate_yaml_mapping(data: Any, path: Path) -> tuple[dict[str, Any], list[str]]:
+    """Validate that loaded YAML data is a mapping."""
+
+    if data is None:
+        return {}, []
+    if not isinstance(data, dict):
+        return {}, [f"{path}: YAML document must be a mapping"]
+
+    mapping: dict[str, Any] = {}
+    problems: list[str] = []
+    for key, value in data.items():
+        if not isinstance(key, str):
+            problems.append(f"{path}: YAML keys must be strings")
+            continue
+        mapping[key] = value
+    return mapping, problems
+
+
+def read_author_registry(root: Path) -> tuple[dict[str, Author], list[str]]:
+    """Read the central author registry."""
+
+    authors_file = root / AUTHORS_FILE
+    if not authors_file.exists():
+        return {}, [f"{authors_file}: missing author registry"]
+
+    data, problems = load_yaml_mapping(authors_file)
+    authors: dict[str, Author] = {}
+    for author_id, record in data.items():
+        if not GITHUB_ID_RE.fullmatch(author_id):
+            problems.append(
+                f"{authors_file}: invalid GitHub author id {author_id!r}"
+            )
+            continue
+        if not isinstance(record, str) or not record.strip():
+            problems.append(
+                f"{authors_file}: author {author_id!r} must be a full name"
+            )
+            continue
+
+        authors[author_id] = Author(
+            id=author_id,
+            name=record.strip(),
+            url=f"https://github.com/{author_id}",
+        )
+    return authors, problems
+
+
+def author_ids_from_value(value: Any) -> list[str]:
+    """Return author ids from a structured metadata value."""
+
+    if value is None:
+        return []
+    if isinstance(value, str):
+        return [value]
+    if not isinstance(value, list):
+        return []
+    return [item for item in value if isinstance(item, str)]
+
+
+def resolve_authors(
+    author_ids: list[str],
+    registry: dict[str, Author],
+) -> list[Author]:
+    """Resolve author ids to public records."""
+
+    return [registry[author_id] for author_id in author_ids if author_id in registry]
+
+
+def validate_author_references(
+    source: Path,
+    value: Any,
+    registry: dict[str, Author] | None,
+) -> list[str]:
+    """Validate a metadata author reference list."""
+
+    author_ids = author_ids_from_value(value)
+    if not author_ids:
+        return [f"{source}: missing authors"]
+    if not isinstance(value, list) or len(author_ids) != len(value):
+        return [f"{source}: authors must be a non-empty list of GitHub ids"]
+
+    problems: list[str] = []
+    for author_id in author_ids:
+        if not GITHUB_ID_RE.fullmatch(author_id):
+            problems.append(f"{source}: invalid author id {author_id!r}")
+        elif registry is not None and author_id not in registry:
+            problems.append(f"{source}: unknown author id {author_id!r}")
+    return problems
+
+
+def validate_authors(root: Path) -> tuple[dict[str, Author], list[str]]:
+    """Validate the central author registry."""
+
+    registry, problems = read_author_registry(root)
+    if not registry and not problems:
+        problems.append(f"{root / AUTHORS_FILE}: author registry is empty")
+    return registry, problems

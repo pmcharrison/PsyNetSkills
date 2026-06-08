@@ -18,6 +18,12 @@
       {{ partial "edit-in-github.html" $skill.path }}
     </div>
     <p>{{ $skill.description }}</p>
+    {{ with $skill.authors }}
+      <p>
+        <strong>Author{{ if ne (len .) 1 }}s{{ end }}:</strong>
+        {{ partial "authors.html" . }}
+      </p>
+    {{ end }}
     <p><strong>Source:</strong> <code>{{ $skill.path }}</code></p>
     {{ .Content }}
   </article>

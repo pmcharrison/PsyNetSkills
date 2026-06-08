@@ -7,7 +7,16 @@ import json
 import re
 import sys
 from pathlib import Path
+from typing import Any
 
+import yaml
+
+from psynetsk_tools.authors import (
+    Author,
+    validate_author_references,
+    validate_authors,
+    validate_yaml_mapping,
+)
 from psynetsk_tools.learnings import LEARNING_ACTION_RE, learning_action_bullets
 from psynetsk_tools.timeline import TIMELINE_ENTRY_RE
 
@@ -30,31 +39,25 @@ EMPTY_LEARNINGS_PLACEHOLDER = (
 )
 
 
-def read_markdown_frontmatter(markdown_file: Path) -> tuple[dict[str, str], list[str]]:
+def read_markdown_frontmatter(markdown_file: Path) -> tuple[dict[str, Any], list[str]]:
     """Read simple YAML frontmatter from a Markdown file."""
     text = markdown_file.read_text(encoding="utf-8")
-    problems: list[str] = []
     if not text.startswith("---\n"):
         return {}, [f"{markdown_file}: missing YAML frontmatter"]
 
-    try:
-        frontmatter_text = text.split("---\n", 2)[1]
-    except IndexError:
+    parts = text.split("---\n", 2)
+    if len(parts) < 3:
         return {}, [f"{markdown_file}: malformed YAML frontmatter"]
+    frontmatter_text = parts[1]
 
-    data: dict[str, str] = {}
-    for line in frontmatter_text.splitlines():
-        if not line.strip():
-            continue
-        if ":" not in line:
-            problems.append(f"{markdown_file}: unsupported frontmatter line {line!r}")
-            continue
-        key, value = line.split(":", 1)
-        data[key.strip()] = value.strip().strip("\"'")
-    return data, problems
+    try:
+        loaded = yaml.safe_load(frontmatter_text)
+    except yaml.YAMLError as exc:
+        return {}, [f"{markdown_file}: invalid YAML frontmatter: {exc}"]
+    return validate_yaml_mapping(loaded, markdown_file)
 
 
-def read_skill_frontmatter(skill_file: Path) -> tuple[dict[str, str], list[str]]:
+def read_skill_frontmatter(skill_file: Path) -> tuple[dict[str, Any], list[str]]:
     """Read simple YAML frontmatter from a skill file."""
     return read_markdown_frontmatter(skill_file)
 
@@ -65,8 +68,10 @@ def parse_difficulty(instructions_file: Path) -> int | None:
     difficulty = frontmatter.get("difficulty")
     if difficulty is None:
         return None
+    if isinstance(difficulty, int) and not isinstance(difficulty, bool):
+        return difficulty
     try:
-        return int(difficulty)
+        return int(str(difficulty))
     except ValueError:
         return None
 
@@ -77,8 +82,10 @@ def parse_evaluation_score(evaluation_file: Path) -> int | None:
     score = frontmatter.get("score")
     if not score:
         return None
+    if isinstance(score, int) and not isinstance(score, bool):
+        return score
     try:
-        return int(score)
+        return int(str(score))
     except ValueError:
         return None
 
@@ -175,7 +182,10 @@ def validate_timeline_file(timeline_file: Path) -> list[str]:
     return problems
 
 
-def validate_agent_metadata(agent_file: Path) -> list[str]:
+def validate_agent_metadata(
+    agent_file: Path,
+    registry: dict[str, Author] | None = None,
+) -> list[str]:
     """Validate attempt agent metadata."""
     try:
         agent = json.loads(agent_file.read_text(encoding="utf-8"))
@@ -186,11 +196,16 @@ def validate_agent_metadata(agent_file: Path) -> list[str]:
         return [f"{agent_file}: metadata must be a JSON object"]
 
     problems: list[str] = []
+    problems.extend(
+        validate_author_references(agent_file, agent.get("authors"), registry)
+    )
     psynet = agent.get("psynet")
     if psynet is None:
-        return [f"{agent_file}: missing psynet metadata"]
+        problems.append(f"{agent_file}: missing psynet metadata")
+        return problems
     if not isinstance(psynet, dict):
-        return [f"{agent_file}: psynet must be a JSON object"]
+        problems.append(f"{agent_file}: psynet must be a JSON object")
+        return problems
 
     for field, expected_type in PSYNET_AGENT_REQUIRED_FIELDS.items():
         value = psynet.get(field)
@@ -212,7 +227,23 @@ def has_evaluation_checklist(evaluation_file: Path) -> bool:
     return False
 
 
-def validate_skills(root: Path) -> list[str]:
+def require_string_field(
+    source: Path,
+    frontmatter: dict[str, Any],
+    field_name: str,
+) -> list[str]:
+    """Validate a required string frontmatter field."""
+
+    value = frontmatter.get(field_name)
+    if not isinstance(value, str) or not value.strip():
+        return [f"{source}: missing {field_name}"]
+    return []
+
+
+def validate_skills(
+    root: Path,
+    registry: dict[str, Author] | None = None,
+) -> list[str]:
     """Validate all skill folders."""
     problems: list[str] = []
     skills_dir = root / SKILLS_ROOT
@@ -232,20 +263,29 @@ def validate_skills(root: Path) -> list[str]:
         description = frontmatter.get("description", "")
         if not name:
             problems.append(f"{skill_file}: missing name")
+        elif not isinstance(name, str):
+            problems.append(f"{skill_file}: name must be a string")
         elif name != skill_dir.name:
             problems.append(f"{skill_file}: name must match folder {skill_dir.name!r}")
         elif not SKILL_NAME_RE.fullmatch(name):
             problems.append(f"{skill_file}: invalid skill name {name!r}")
 
-        if not description:
+        if not isinstance(description, str) or not description:
             problems.append(f"{skill_file}: missing description")
         elif len(description) > 1024:
             problems.append(f"{skill_file}: description exceeds 1024 characters")
+        problems.extend(
+            validate_author_references(skill_file, frontmatter.get("authors"), registry)
+        )
 
     return problems
 
 
-def validate_attempt(attempt_dir: Path, challenge_dir: Path) -> list[str]:
+def validate_attempt(
+    attempt_dir: Path,
+    challenge_dir: Path,
+    registry: dict[str, Author] | None = None,
+) -> list[str]:
     """Validate one challenge attempt folder."""
     problems: list[str] = []
     required = ["challenge", "agent.json", "code", "evidence", "EVALUATION.md"]
@@ -255,7 +295,7 @@ def validate_attempt(attempt_dir: Path, challenge_dir: Path) -> list[str]:
 
     agent_file = attempt_dir / "agent.json"
     if agent_file.exists():
-        problems.extend(validate_agent_metadata(agent_file))
+        problems.extend(validate_agent_metadata(agent_file, registry))
 
     evaluation_file = attempt_dir / "EVALUATION.md"
     if evaluation_file.exists():
@@ -291,37 +331,53 @@ def validate_attempt(attempt_dir: Path, challenge_dir: Path) -> list[str]:
     return problems
 
 
-def validate_challenges(root: Path) -> list[str]:
+def validate_challenges(
+    root: Path,
+    registry: dict[str, Author] | None = None,
+) -> list[str]:
     """Validate all challenge folders."""
     problems: list[str] = []
     challenges_dir = root / "challenges"
     if not challenges_dir.exists():
         return [f"{challenges_dir}: missing challenges directory"]
 
-    for challenge_dir in sorted(path for path in challenges_dir.iterdir() if path.is_dir()):
+    for challenge_dir in sorted(
+        path for path in challenges_dir.iterdir() if path.is_dir()
+    ):
         if not (challenge_dir / "INSTRUCTIONS.md").exists():
             problems.append(f"{challenge_dir}: missing INSTRUCTIONS.md")
 
         instructions_file = challenge_dir / "INSTRUCTIONS.md"
         if instructions_file.exists():
-            frontmatter, frontmatter_problems = read_markdown_frontmatter(instructions_file)
+            frontmatter, frontmatter_problems = read_markdown_frontmatter(
+                instructions_file
+            )
             problems.extend(frontmatter_problems)
-            if not frontmatter.get("title"):
-                problems.append(f"{instructions_file}: missing title field")
-            if not frontmatter.get("type"):
-                problems.append(f"{instructions_file}: missing type field")
+            problems.extend(require_string_field(instructions_file, frontmatter, "title"))
+            problems.extend(require_string_field(instructions_file, frontmatter, "type"))
+            problems.extend(
+                validate_author_references(
+                    instructions_file,
+                    frontmatter.get("authors"),
+                    registry,
+                )
+            )
             difficulty = parse_difficulty(instructions_file)
             if difficulty is None:
                 problems.append(f"{instructions_file}: missing difficulty field")
             elif not 1 <= difficulty <= 10:
-                problems.append(f"{instructions_file}: difficulty must be between 1 and 10")
+                problems.append(
+                    f"{instructions_file}: difficulty must be between 1 and 10"
+                )
 
         attempts_dir = challenge_dir / "attempts"
         if not attempts_dir.exists():
             problems.append(f"{challenge_dir}: missing attempts directory")
         else:
-            for attempt_dir in sorted(path for path in attempts_dir.iterdir() if path.is_dir()):
-                problems.extend(validate_attempt(attempt_dir, challenge_dir))
+            for attempt_dir in sorted(
+                path for path in attempts_dir.iterdir() if path.is_dir()
+            ):
+                problems.extend(validate_attempt(attempt_dir, challenge_dir, registry))
 
     return problems
 
@@ -339,9 +395,11 @@ def validate_docs(root: Path) -> list[str]:
 def validate_repository(root: Path) -> list[str]:
     """Validate the repository structure."""
     problems: list[str] = []
+    registry, author_problems = validate_authors(root)
+    problems.extend(author_problems)
     problems.extend(validate_docs(root))
-    problems.extend(validate_skills(root))
-    problems.extend(validate_challenges(root))
+    problems.extend(validate_skills(root, registry))
+    problems.extend(validate_challenges(root, registry))
     return problems
 
 

@@ -8,6 +8,7 @@ specifications for contributors and agents.
 - `challenges.md` describes challenge format and authoring guidance.
 - `attempts.md` describes attempt structure, evidence, timelines, evaluations,
   learnings, and credential policy.
+- `authors.md` describes the central author registry and attribution workflow.
 - `architecture.md` describes the repository layout and dashboard data flow.
 - `dashboard.md` describes static-site export, builds, and previews.
 - `psynet-reference.md` describes the expected local PsyNet checkout.

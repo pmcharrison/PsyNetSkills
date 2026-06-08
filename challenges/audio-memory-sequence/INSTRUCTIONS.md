@@ -2,6 +2,7 @@
 title: Audio memory sequence experiment
 type: experiment implementation
 difficulty: 5
+authors: [pmcharrison]
 ---
 
 Implement a PsyNet experiment where participants listen to short sequences of
