@@ -57,8 +57,14 @@ async function clickEnabledButton(page, name) {
     await sleep(800);
     await clickButton(page, "Next");
 
-    for (const [trialIndex, sequence] of sequences.entries()) {
-      await page.getByText(new RegExp(`Trial ${trialIndex + 1} of 4`, "i")).waitFor({ timeout: 20000 });
+    for (let trialIndex = 0; trialIndex < sequences.length; trialIndex += 1) {
+      await page.getByText(/Sequence \d+/i).waitFor({ timeout: 20000 });
+      const bodyText = await page.locator("body").innerText();
+      const match = bodyText.match(/Sequence (\d+)/i);
+      if (!match) {
+        throw new Error(`Could not identify sequence number from page text: ${bodyText}`);
+      }
+      const sequence = sequences[Number(match[1]) - 1];
       await sleep(2500);
       for (const label of sequence) {
         await clickEnabledButton(page, label);

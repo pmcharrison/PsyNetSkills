@@ -117,7 +117,7 @@ class ToneSequenceTrial(StaticTrial):
             AudioPrompt(
                 self.assets["sequence_audio"],
                 (
-                    f"Trial {self.definition['trial_number']} of {N_TRIALS}. "
+                    f"Sequence {self.definition['trial_number']}. "
                     "Listen to the tones, then reproduce the sequence using the "
                     "Low, Medium, and High buttons. The audio plays once."
                 ),

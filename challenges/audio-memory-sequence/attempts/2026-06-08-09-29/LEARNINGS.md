@@ -45,3 +45,13 @@ PsyNet local launch writes archive/deployment files and explicitly requires
 *Actions:*
 - **PsyNetSkills:** Add `.deploy/` and `source_code.zip` to generated PsyNet experiment `.gitignore` files. Confidence: high. Status: considering.
 - **PsyNet:** Current preflight reports the missing ignore clearly. Confidence: medium. Status: dismissed.
+
+## Static nodes may not appear in manifest order
+
+The participant recording showed static nodes can appear in a different order
+than the manifest. Participant-facing labels should avoid implying a trial
+ordinal unless the trial maker explicitly enforces that order.
+
+*Actions:*
+- **PsyNetSkills:** Advise attempt authors to phrase static-trial labels as stimulus IDs or explicitly configure trial ordering. Confidence: high. Status: considering.
+- **PsyNet:** Consider making static trial ordering behavior more prominent in docs. Confidence: medium. Status: considering.
