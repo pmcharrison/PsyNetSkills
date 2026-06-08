@@ -1,6 +1,7 @@
 ---
 name: dashboard-preview-polling
 description: Poll the dashboard PR preview workflow before sharing preview links. Use when a Cursor Cloud Agent creates or updates a PR and needs to tell the user whether the dashboard preview reflects the latest pushed commit.
+authors: [pmcharrison]
 ---
 
 # Dashboard preview polling

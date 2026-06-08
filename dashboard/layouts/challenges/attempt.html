@@ -102,6 +102,12 @@
         <dt>Model</dt>
         <dd>{{ $attempt.model }}</dd>
       </div>
+      {{ with $attempt.authors }}
+        <div>
+          <dt>Author{{ if ne (len .) 1 }}s{{ end }}</dt>
+          <dd>{{ partial "authors.html" . }}</dd>
+        </div>
+      {{ end }}
       <div>
         <dt>Implementation time</dt>
         <dd>{{ $attempt.implementation_time_display }}</dd>

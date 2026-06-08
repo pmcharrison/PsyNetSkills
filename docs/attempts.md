@@ -29,10 +29,10 @@ EVALUATION.md
 
 `challenge/` snapshots the original challenge at the time of the attempt,
 including optional `CRITERIA.md` when it exists.
-`agent.json` records the model, Cursor version, relevant skill commit, attempt
-start time, and PsyNet checkout metadata. `code/` contains the generated
-implementation. `evidence/` contains the materials used to evaluate whether the
-implementation worked.
+`agent.json` records human author keys plus model, Cursor version, relevant
+skill commit, attempt start time, and PsyNet checkout metadata. `code/` contains
+the generated implementation. `evidence/` contains the materials used to
+evaluate whether the implementation worked.
 `TIMELINE.md` records major attempt events with timestamps relative to the start
 of the attempt, including manual user interventions or corrective guidance. The
 dashboard derives implementation time from completed `[agent-start]` to
@@ -106,10 +106,11 @@ git checkout master
 git pull --ff-only origin master
 ```
 
-Record the refreshed checkout in `agent.json` under the standard `psynet` key:
+Record the human author keys and refreshed checkout in `agent.json`:
 
 ```json
 {
+  "authors": ["pmcharrison"],
   "psynet": {
     "checkout_path": "~/PsyNet",
     "branch": "master",
@@ -122,6 +123,10 @@ Record the refreshed checkout in `agent.json` under the standard `psynet` key:
   }
 }
 ```
+
+`authors` must list one or more GitHub author keys from `authors.yaml`; see
+`docs/authors.md` for the registration workflow. Cursor, model, client, and
+runtime metadata are provenance, not authorship.
 
 `dirty` should normally be `false` and comes from `git status --short`. If the
 PsyNet checkout cannot be updated to the latest `origin/master`, record the

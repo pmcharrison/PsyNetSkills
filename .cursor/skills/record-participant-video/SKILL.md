@@ -1,6 +1,7 @@
 ---
 name: record-participant-video
 description: Record a PsyNet participant flow to evidence/participant.mp4 with screen and experiment audio using ffmpeg. Use when collecting challenge evidence, creating participant.mp4, or documenting participant-facing behavior.
+authors: [pmcharrison]
 ---
 
 # Record participant video

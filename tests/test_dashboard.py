@@ -23,12 +23,21 @@ def write_bytes(path: Path, data: bytes) -> None:
     path.write_bytes(data)
 
 
+def authors_yaml() -> str:
+    return (
+        "pmcharrison:\n"
+        "  name: Peter Harrison\n"
+        "  url: https://github.com/pmcharrison\n"
+    )
+
+
 def challenge_instructions(difficulty: int = 4) -> str:
     return (
         "---\n"
         "title: Example challenge\n"
         "type: experiment implementation\n"
         f"difficulty: {difficulty}\n"
+        "authors: [pmcharrison]\n"
         "---\n\n"
         "Implement the experiment.\n"
     )
@@ -66,11 +75,15 @@ def test_collect_challenges_reports_latest_score(tmp_path: Path) -> None:
 
 
 def test_collect_challenges_reports_attempt_metadata(tmp_path: Path) -> None:
+    write(tmp_path / "authors.yaml", authors_yaml())
     challenge_dir = tmp_path / "challenges/example"
     write(challenge_dir / "INSTRUCTIONS.md", challenge_instructions())
     write(challenge_dir / "CRITERIA.md", "# Criteria\n\n- Top-level criterion.\n")
     attempt_dir = challenge_dir / "attempts/2026-06-01-10-10"
-    write(attempt_dir / "agent.json", '{"model": "test-model"}\n')
+    write(
+        attempt_dir / "agent.json",
+        '{"authors": ["pmcharrison"], "model": "test-model"}\n',
+    )
     write(attempt_dir / "EVALUATION.md", evaluation())
     write(
         attempt_dir / "TIMELINE.md",
@@ -102,6 +115,8 @@ def test_collect_challenges_reports_attempt_metadata(tmp_path: Path) -> None:
 
     assert attempt.date_time == "06/01 10:10"
     assert attempt.model == "test-model"
+    assert attempt.authors[0].id == "pmcharrison"
+    assert attempt.authors[0].name == "Peter Harrison"
     assert attempt.url == "challenges/example/2026-06-01-10-10/"
     assert attempt.evaluation == "Attempt body.\n"
     assert attempt.timeline == (
@@ -255,11 +270,13 @@ def test_collect_challenges_uses_agent_timestamp_for_example_attempt(
 
 
 def test_collect_skills_uses_h1_title(tmp_path: Path) -> None:
+    write(tmp_path / "authors.yaml", authors_yaml())
     write(
         tmp_path / ".cursor/skills/example-skill/SKILL.md",
         "---\n"
         "name: example-skill\n"
         "description: Use when testing dashboard generation.\n"
+        "authors: [pmcharrison]\n"
         "---\n\n"
         "# Example skill\n\n"
         "Use this skill when testing dashboard generation.\n",
@@ -269,6 +286,7 @@ def test_collect_skills_uses_h1_title(tmp_path: Path) -> None:
 
     assert skills[0].name == "example-skill"
     assert skills[0].title == "Example skill"
+    assert skills[0].authors[0].name == "Peter Harrison"
 
 
 def test_strip_challenge_frontmatter_removes_metadata() -> None:
@@ -304,12 +322,14 @@ def test_strip_frontmatter_removes_yaml_block() -> None:
 
 
 def test_dashboard_data_reports_counts(tmp_path: Path) -> None:
+    write(tmp_path / "authors.yaml", authors_yaml())
     write(tmp_path / "docs/index.md", "# Docs\n")
     write(
         tmp_path / ".cursor/skills/example-skill/SKILL.md",
         "---\n"
         "name: example-skill\n"
         "description: Use when testing dashboard generation.\n"
+        "authors: [pmcharrison]\n"
         "---\n\n"
         "# Example skill\n\n"
         "Use this skill when testing dashboard generation.\n",
@@ -322,10 +342,16 @@ def test_dashboard_data_reports_counts(tmp_path: Path) -> None:
     data = dashboard_data(tmp_path)
 
     assert data["counts"] == {"skills": 1, "challenges": 1}
+    assert data["authors"][0]["id"] == "pmcharrison"
+    assert data["skills"][0]["authors"][0]["name"] == "Peter Harrison"
+    assert data["challenges"][0]["authors"][0]["url"] == (
+        "https://github.com/pmcharrison"
+    )
     assert "docs" not in data
 
 
 def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
+    write(tmp_path / "authors.yaml", authors_yaml())
     write(
         tmp_path / "README.md",
         "# PsyNetSkills\n\n"
@@ -341,6 +367,7 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
         "---\n"
         "name: example-skill\n"
         "description: Use when testing dashboard generation.\n"
+        "authors: [pmcharrison]\n"
         "---\n\n"
         "# Example skill\n\n"
         "Use this skill when testing dashboard generation.\n",

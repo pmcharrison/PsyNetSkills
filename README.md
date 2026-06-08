@@ -235,6 +235,7 @@ Note that large attempt evidence such as videos and data exports should be commi
 - [Skill specification](https://github.com/pmcharrison/PsyNetSkills/blob/main/docs/skills.md)
 - [Challenge specification](https://github.com/pmcharrison/PsyNetSkills/blob/main/docs/challenges.md)
 - [Attempt and evidence specification](https://github.com/pmcharrison/PsyNetSkills/blob/main/docs/attempts.md)
+- [Author registry specification](https://github.com/pmcharrison/PsyNetSkills/blob/main/docs/authors.md)
 - [PsyNetSkills repository architecture](https://github.com/pmcharrison/PsyNetSkills/blob/main/docs/architecture.md)
 - [Dashboard build and preview notes](https://github.com/pmcharrison/PsyNetSkills/blob/main/docs/dashboard.md)
 - [PsyNet local reference](https://github.com/pmcharrison/PsyNetSkills/blob/main/docs/psynet-reference.md)

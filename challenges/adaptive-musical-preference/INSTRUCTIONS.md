@@ -2,6 +2,7 @@
 title: Adaptive musical preference experiment
 type: experiment implementation
 difficulty: 8
+authors: [pmcharrison]
 ---
 
 Implement a PsyNet experiment that estimates a participant's preference over a

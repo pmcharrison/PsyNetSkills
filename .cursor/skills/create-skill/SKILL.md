@@ -1,6 +1,7 @@
 ---
 name: create-skill
 description: Create or update PsyNetSkills Agent Skills from prose lessons, recurring failures, attempt evaluations, or process improvements. Use when asked to add, revise, improve, or create a skill in this repository.
+authors: [pmcharrison]
 ---
 
 # Create or update a skill
@@ -17,15 +18,19 @@ the skill tree.
 2. Search existing skills in `.cursor/skills/` before creating a new one.
 3. If an existing skill owns the behavior, update it directly. If no existing
    skill fits, create `.cursor/skills/<skill-name>/SKILL.md`.
-4. Use Agent Skills-compatible frontmatter. The `name` must match the folder and
-   use lowercase letters, numbers, and hyphens.
-5. Keep the main `SKILL.md` concise and procedural: when to use it, what to read,
+4. Identify the human author before writing metadata. Read `authors.yaml`; ask
+   the user which GitHub username should be credited. If the key is missing, ask
+   for display name and optional public profile details, add the author to
+   `authors.yaml`, then reference the GitHub key.
+5. Use Agent Skills-compatible frontmatter. The `name` must match the folder and
+   use lowercase letters, numbers, and hyphens. Include `authors: [<github-id>]`.
+6. Keep the main `SKILL.md` concise and procedural: when to use it, what to read,
    what to do, what to test, and which assumptions commonly fail.
-6. Put longer supporting notes in `references/`, templates in `assets/`, and
+7. Put longer supporting notes in `references/`, templates in `assets/`, and
    reusable helper code in `scripts/`.
-7. If the change resolves an action from an attempt `LEARNINGS.md`, update that
+8. If the change resolves an action from an attempt `LEARNINGS.md`, update that
    action's status and notes where appropriate.
-8. Run `uv run psynetsk-validate` and any tests relevant to the changed tooling.
+9. Run `uv run psynetsk-validate` and any tests relevant to the changed tooling.
 
 ## Rules
 

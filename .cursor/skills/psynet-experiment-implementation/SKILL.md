@@ -1,6 +1,7 @@
 ---
 name: psynet-experiment-implementation
 description: Implement PsyNet experiments from text specifications, using local PsyNet source code, demos, setup commands, and validation practices. Use when asked to create, modify, test, or debug a PsyNet experiment implementation.
+authors: [pmcharrison]
 ---
 
 # Implement PsyNet experiments

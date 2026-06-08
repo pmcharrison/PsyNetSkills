@@ -9,6 +9,12 @@ import shutil
 from dataclasses import asdict, dataclass
 from pathlib import Path
 
+from psynetsk_tools.authors import (
+    Author,
+    author_ids_from_value,
+    read_author_registry,
+    resolve_authors,
+)
 from psynetsk_tools.learnings import (
     COMPLETED_LEARNING_STATUSES,
     parse_learning_actions,
@@ -66,6 +72,7 @@ class Skill:
     name: str
     title: str
     description: str
+    authors: list[Author]
     path: str
     url: str
 
@@ -92,6 +99,7 @@ class Attempt:
     url: str
     date_time: str
     model: str
+    authors: list[Author]
     agent_json: str
     evaluation: str
     timeline: str
@@ -116,6 +124,7 @@ class Challenge:
     title: str
     type: str
     difficulty: int | None
+    authors: list[Author]
     instructions: str
     path: str
     url: str
@@ -215,9 +224,14 @@ def write_frontmatter(
     return "\n".join(lines)
 
 
-def collect_skills(root: Path) -> list[Skill]:
+def collect_skills(
+    root: Path,
+    author_registry: dict[str, Author] | None = None,
+) -> list[Skill]:
     """Collect skill summaries."""
     skills: list[Skill] = []
+    if author_registry is None:
+        author_registry, _ = read_author_registry(root)
     skills_root = root / SKILLS_ROOT
     for skill_dir in sorted(skills_root.iterdir()):
         if not skill_dir.is_dir():
@@ -231,6 +245,10 @@ def collect_skills(root: Path) -> list[Skill]:
                 name=name,
                 title=title_from_markdown(body, name),
                 description=frontmatter.get("description", ""),
+                authors=resolve_authors(
+                    author_ids_from_value(frontmatter.get("authors")),
+                    author_registry,
+                ),
                 path=(SKILLS_ROOT / skill_dir.name / "SKILL.md").as_posix(),
                 url=f"skills/{name}/",
             )
@@ -410,8 +428,12 @@ def disable_live_node_details(script_path: Path) -> None:
     script_path.write_text(text, encoding="utf-8")
 
 
-def collect_attempts(challenge_dir: Path) -> list[Attempt]:
+def collect_attempts(
+    challenge_dir: Path,
+    author_registry: dict[str, Author] | None = None,
+) -> list[Attempt]:
     """Collect attempts for a challenge."""
+    author_registry = author_registry or {}
     attempts_dir = challenge_dir / "attempts"
     if not attempts_dir.exists():
         return []
@@ -475,6 +497,10 @@ def collect_attempts(challenge_dir: Path) -> list[Attempt]:
                 url=f"challenges/{challenge_dir.name}/{attempt_dir.name}/",
                 date_time=attempt_date_time(attempt_dir.name, agent),
                 model=str(agent.get("model") or "Unknown model"),
+                authors=resolve_authors(
+                    author_ids_from_value(agent.get("authors")),
+                    author_registry,
+                ),
                 agent_json=agent_json,
                 evaluation=(
                     strip_first_heading(
@@ -516,9 +542,14 @@ def collect_attempts(challenge_dir: Path) -> list[Attempt]:
     return attempts
 
 
-def collect_challenges(root: Path) -> list[Challenge]:
+def collect_challenges(
+    root: Path,
+    author_registry: dict[str, Author] | None = None,
+) -> list[Challenge]:
     """Collect challenge summaries."""
     challenges: list[Challenge] = []
+    if author_registry is None:
+        author_registry, _ = read_author_registry(root)
     for challenge_dir in sorted((root / "challenges").iterdir()):
         if not challenge_dir.is_dir():
             continue
@@ -536,10 +567,14 @@ def collect_challenges(root: Path) -> list[Challenge]:
                 ),
                 type=frontmatter.get("type", ""),
                 difficulty=parse_difficulty(instructions_file),
+                authors=resolve_authors(
+                    author_ids_from_value(frontmatter.get("authors")),
+                    author_registry,
+                ),
                 instructions=instructions,
                 path=f"challenges/{slug}",
                 url=f"challenges/{slug}/",
-                attempts=collect_attempts(challenge_dir),
+                attempts=collect_attempts(challenge_dir, author_registry),
             )
         )
     return challenges
@@ -547,9 +582,11 @@ def collect_challenges(root: Path) -> list[Challenge]:
 
 def dashboard_data(root: Path) -> dict[str, object]:
     """Return all structured data needed by the dashboard."""
-    skills = collect_skills(root)
-    challenges = collect_challenges(root)
+    author_registry, _ = read_author_registry(root)
+    skills = collect_skills(root, author_registry)
+    challenges = collect_challenges(root, author_registry)
     return {
+        "authors": [asdict(author) for author in author_registry.values()],
         "skills": [asdict(skill) for skill in skills],
         "challenges": [
             {
@@ -722,6 +759,7 @@ def export_dashboard(root: Path, dashboard_dir: Path) -> None:
                 title=challenge["title"],
                 type=challenge["type"],
                 difficulty=challenge["difficulty"],
+                authors=challenge["authors"],
                 instructions=challenge["instructions"],
                 path=challenge["path"],
                 url=challenge["url"],

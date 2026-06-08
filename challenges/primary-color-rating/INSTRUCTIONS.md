@@ -2,6 +2,7 @@
 title: Primary color rating experiment
 type: experiment implementation
 difficulty: 2
+authors: [pmcharrison]
 ---
 
 Implement a PsyNet experiment where the participant is shown each primary color
