@@ -20,6 +20,12 @@ you are responsible for turning that description into the repository format.
    implement the task without hidden criteria. Focus on behavior and evidence,
    not an exact implementation strategy, unless the challenge is explicitly about
    a PsyNet API.
+   - For memory, learning, or otherwise nontrivial participant tasks, specify
+     whether the experiment should include practice/training trials.
+   - For memory tasks, state whether replay is allowed; default to no replay
+     unless relistening is part of the scientific design.
+   - For tasks with nontrivial stimulus sets, consider asking for a deterministic
+     stimulus manifest rather than hardcoded stimuli.
 5. Add `challenges/<slug>/CRITERIA.md` only when there are evaluator-facing
    checks that should stay hidden during implementation.
 6. Put any supporting public material in `challenges/<slug>/references/`.

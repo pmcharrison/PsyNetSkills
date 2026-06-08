@@ -59,6 +59,49 @@ browser/system monitor source:
 pactl list short sources
 ```
 
+If no PulseAudio/PipeWire source is exposed in Cursor Cloud, create a PulseAudio
+null sink and route the browser through it:
+
+```bash
+sudo apt-get update
+sudo apt-get install -y pulseaudio pulseaudio-utils
+
+export XDG_RUNTIME_DIR="/tmp/xdg-runtime-$UID"
+mkdir -p "$XDG_RUNTIME_DIR"
+chmod 700 "$XDG_RUNTIME_DIR"
+pulseaudio --start --exit-idle-time=-1 --log-target=stderr || true
+pactl load-module module-null-sink sink_name=psynet_rec \
+  sink_properties=device.description=psynet_rec || true
+pactl set-default-sink psynet_rec
+pactl list short sources
+```
+
+Launch Chrome or the scripted browser with the same PulseAudio environment so
+WebAudio output is routed into the sink:
+
+```bash
+export PULSE_SERVER="unix:$XDG_RUNTIME_DIR/pulse/native"
+google-chrome --no-first-run --new-window --window-size=1280,720 "$PARTICIPANT_URL"
+```
+
+Record the screen and the null-sink monitor:
+
+```bash
+ffmpeg -y \
+  -video_size 1280x720 -framerate 30 -f x11grab -i "$DISPLAY" \
+  -f pulse -i psynet_rec.monitor \
+  -c:v libx264 -pix_fmt yuv420p -c:a aac -shortest \
+  evidence/participant.mp4
+```
+
+Verify that the MP4 really has a non-silent audio stream:
+
+```bash
+ffprobe -hide_banner -show_streams evidence/participant.mp4
+ffmpeg -hide_banner -i evidence/participant.mp4 \
+  -af volumedetect -vn -sn -dn -f null /tmp/volumedetect-null
+```
+
 ## macOS
 
 Use `ffmpeg` with `avfoundation`. macOS usually needs a virtual audio device
