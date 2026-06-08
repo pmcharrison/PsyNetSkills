@@ -87,3 +87,13 @@ training, feedback, response modality, and calibration.
 *Actions:*
 - **PsyNetSkills:** Discuss whether `attempt-challenge` should include a short design-checkpoint option for underspecified experiment challenges before code is written. Confidence: medium. Status: considering.
 - **PsyNet:** No framework change suggested; this is a process question. Confidence: high. Status: dismissed.
+
+## Performance evidence should be a required artifact
+
+This attempt initially omitted `performance.json` because the guidance allowed
+technical validation from "equivalent local checks." That made a missing standard
+artifact too easy to rationalize.
+
+*Actions:*
+- **PsyNetSkills:** Require `evidence/performance.json` from `psynet performance-test`, or a saved `performance-test.log` plus an explicit blocker in `EVALUATION.md`; do not allow replacement by equivalent local checks. Confidence: high. Status: completed. Notes: Updated `attempt-challenge` evidence expectations and final artifact checklist.
+- **PsyNet:** No framework change suggested; this is an attempt workflow issue. Confidence: high. Status: dismissed.

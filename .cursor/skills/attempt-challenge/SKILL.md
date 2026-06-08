@@ -94,9 +94,10 @@ experiment implementation challenges, provide the standard documented evidence:
 
 - Put a runnable, self-contained PsyNet experiment in `code/`.
 - Record the participant experience in `evidence/participant.mp4`.
-- Save technical validation output in `evidence/`, such as
-  `performance.json` from `psynet performance-test`, command logs, or JSON from
-  equivalent local checks.
+- Run `psynet performance-test` and save its JSON output as
+  `evidence/performance.json`. If the command is technically blocked, save the
+  command output in `evidence/performance-test.log` and record the blocker in
+  `EVALUATION.md`; do not substitute other checks for this artifact.
 - Include a PsyNet dashboard monitor snapshot in `evidence/monitor.html`.
 - Include exported experiment data in `evidence/data.zip`.
 - When the challenge needs scientific checks, figures, or concise reports, put
@@ -120,6 +121,19 @@ analysis beyond the standard artifacts. Treat the other evidence items as
 required. Do not imply a skipped check passed: record what was run, what
 happened, and why any required evidence is missing or blocked in
 `EVALUATION.md`.
+
+Before finalizing an experiment implementation attempt, verify this required
+artifact checklist and either provide each artifact or document its blocker in
+`EVALUATION.md`:
+
+- `code/` contains the runnable, self-contained experiment.
+- `evidence/participant.mp4` records the participant flow.
+- `evidence/performance.json` exists, or `evidence/performance-test.log` plus
+  an `EVALUATION.md` blocker explains why `psynet performance-test` could not
+  run.
+- `evidence/monitor.html` contains a PsyNet dashboard monitor snapshot.
+- `evidence/data.zip` contains exported experiment data.
+- `EVALUATION.md` has the copied criteria checklist.
 
 ## Credential policy
 
