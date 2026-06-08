@@ -11,19 +11,22 @@
     "result": "2 passed, 3 warnings"
   },
   "performance_test": {
-    "command": "psynet performance-test local --n-bots 40 --duration-minutes 5 --time-factor 0 --json-output ../../evidence/performance.json",
+    "command": "PYTHONPATH=\"$HOME/PsyNet\" psynet performance-test local --n-bots 40 --duration-minutes 5 --time-factor 1.0 --json-output ../../evidence/performance.json",
     "json": "evidence/performance.json",
     "log": "evidence/performance-test.log",
     "status": "completed",
     "result": {
       "n_bots": 40,
       "duration_minutes": 5.0,
-      "bots_started": 242,
-      "bots_succeeded": 203,
+      "time_factor": 1.0,
+      "bots_started": 203,
+      "bots_succeeded": 164,
+      "bots_incomplete": 37,
       "bot_errors": 0,
-      "requests": 3231,
-      "requests_per_second": 10.6,
-      "p95_response_time_seconds": 1.714
+      "requests": 2660,
+      "requests_per_second": 8.726,
+      "median_response_time_seconds": 0.104,
+      "p95_response_time_seconds": 0.286
     }
   },
   "participant_video": {

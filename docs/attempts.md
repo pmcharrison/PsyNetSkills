@@ -75,7 +75,7 @@ should exercise sustained concurrency. Do not rely on experiment defaults such a
 psynet performance-test local \
   --n-bots 40 \
   --duration-minutes 5 \
-  --time-factor 0 \
+  --time-factor 1.0 \
   --json-output ../../evidence/performance.json
 ```
 

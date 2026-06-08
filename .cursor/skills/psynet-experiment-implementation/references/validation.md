@@ -17,7 +17,7 @@ defaults such as `test_n_bots = 1`:
 psynet performance-test local \
   --n-bots 40 \
   --duration-minutes 5 \
-  --time-factor 0 \
+  --time-factor 1.0 \
   --json-output ../../evidence/performance.json
 ```
 
