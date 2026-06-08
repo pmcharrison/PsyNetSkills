@@ -50,10 +50,27 @@ nav {
   text-decoration: none;
 }
 
+.site-header nav a:hover,
+.site-header nav a:focus {
+  color: var(--foreground);
+}
+
 .site-header nav a.current {
   border-bottom-color: currentColor;
   color: var(--foreground);
   font-weight: 700;
+}
+
+.github-nav-link {
+  align-items: center;
+  display: inline-flex;
+  margin-left: auto;
+}
+
+.github-nav-icon {
+  fill: currentColor;
+  height: 1.25rem;
+  width: 1.25rem;
 }
 
 .page-heading {

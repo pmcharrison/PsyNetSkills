@@ -4,6 +4,7 @@ title = "PsyNetSkills"
 disableKinds = ["taxonomy", "term", "RSS", "sitemap", "robotsTXT"]
 
 [params]
+  github_repo_url = "https://github.com/pmcharrison/PsyNetSkills"
   github_edit_base_url = "https://github.com/pmcharrison/PsyNetSkills/edit/main/"
 
   [params.giscus]
