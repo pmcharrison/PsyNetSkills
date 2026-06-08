@@ -344,6 +344,12 @@ td {
   color: var(--muted-light);
 }
 
+.learning-action::marker {
+  content: "→ ";
+  color: var(--muted);
+  font-weight: 700;
+}
+
 .learning-action:has(.learning-chip-status-completed)::marker {
   content: "✓ ";
   color: var(--success-border);

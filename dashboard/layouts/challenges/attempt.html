@@ -177,6 +177,7 @@
           {{ $learningHtml = replaceRE `Status:\s+completed\.` `<span class="learning-chip learning-chip-status learning-chip-status-completed"><span class="learning-chip-label">Status</span> completed</span>` $learningHtml }}
           {{ $learningHtml = replaceRE `Status:\s+dismissed\.` `<span class="learning-chip learning-chip-status learning-chip-status-dismissed"><span class="learning-chip-label">Status</span> dismissed</span>` $learningHtml }}
           {{ $learningHtml = replaceRE `Status:\s+superseded\.` `<span class="learning-chip learning-chip-status learning-chip-status-superseded"><span class="learning-chip-label">Status</span> superseded</span>` $learningHtml }}
+          {{ $learningHtml = replace $learningHtml `<p><em>Actions:</em></p>` `` }}
           {{ $learningHtml = replace $learningHtml `<li>` `<li class="learning-action">` }}
           {{ $learningHtml = replace $learningHtml `<h3` `</div><div class="learning-card"><h3` }}
           {{ $learningHtml = replaceRE `^\s*</div>` `` $learningHtml }}
