@@ -7,3 +7,4 @@
 - T+00:14:10 [agent] Fixed PsyNet local import path after `psynet test local` exposed Dallinger's `dallinger_experiment` import context.
 - T+00:17:30 [agent] Removed duplicate PsyNet config declarations after local validation rejected mixed `config.txt` and class-level values.
 - T+00:20:20 [agent] Generated `constraints.txt` for PsyNet dependency checks and ignored transient `.deploy/` state.
+- T+00:23:05 [agent] Added `source_code.zip` to local ignores after PsyNet archive preflight required it.

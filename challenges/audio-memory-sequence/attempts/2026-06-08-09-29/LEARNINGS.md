@@ -36,3 +36,12 @@ minimal experiment folder with only `requirements.txt` is not enough.
 *Actions:*
 - **PsyNetSkills:** Include `dallinger constraints generate` in the experiment-attempt setup checklist. Confidence: high. Status: considering.
 - **PsyNet:** Consider having `psynet test local` explain how to generate missing constraints. Confidence: medium. Status: considering.
+
+## Ignore generated PsyNet archive state
+
+PsyNet local launch writes archive/deployment files and explicitly requires
+`source_code.zip` to be ignored before continuing.
+
+*Actions:*
+- **PsyNetSkills:** Add `.deploy/` and `source_code.zip` to generated PsyNet experiment `.gitignore` files. Confidence: high. Status: considering.
+- **PsyNet:** Current preflight reports the missing ignore clearly. Confidence: medium. Status: dismissed.
