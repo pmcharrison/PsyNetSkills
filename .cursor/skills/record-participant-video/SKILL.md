@@ -34,6 +34,11 @@ because it can miss system audio.
 If recording fails or audio is missing, do not imply the participant video is
 complete. Record the failure and the missing evidence in `EVALUATION.md`.
 
+When sharing a recorded video inline in a Cursor final response, warn the user
+if the evidence depends on audio: the Cursor agent video player may not play the
+audio track. Tell them to download the MP4 directly or view it through the
+dashboard/PR preview to hear the audio.
+
 ## Linux
 
 Use X11/Xvfb screen capture plus PulseAudio/PipeWire monitor audio. Prefer a
