@@ -510,8 +510,16 @@ td {
   cursor: help;
   display: inline-block;
   position: relative;
-  text-decoration: underline dotted var(--muted);
-  text-underline-offset: 0.18rem;
+  text-decoration: underline dotted color-mix(in srgb, var(--muted) 35%, transparent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.22rem;
+  transition: color 0.15s ease, text-decoration-color 0.15s ease;
+}
+
+.header-popover:hover,
+.header-popover:focus {
+  color: var(--muted);
+  text-decoration-color: color-mix(in srgb, var(--muted) 65%, transparent);
 }
 
 .header-popover:focus {
