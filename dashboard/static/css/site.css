@@ -506,11 +506,26 @@ td {
   white-space: normal;
 }
 
-.performance-table th .info-popover {
-  position: static;
+.header-popover {
+  cursor: help;
+  display: inline-block;
+  position: relative;
+  text-decoration: underline dotted var(--muted);
+  text-underline-offset: 0.18rem;
 }
 
-.performance-table th .info-popover-content {
+.header-popover:focus {
+  outline: 2px solid var(--link);
+  outline-offset: 2px;
+}
+
+.header-popover:hover .info-popover-content,
+.header-popover:focus .info-popover-content,
+.header-popover:focus-within .info-popover-content {
+  display: block;
+}
+
+.performance-table th .header-popover .info-popover-content {
   bottom: calc(100% + 0.35rem);
   left: 0;
   min-width: 15rem;
