@@ -747,7 +747,15 @@ footer {
   padding-top: 1rem;
 }
 
+.comments {
+  margin-top: 2rem;
+}
+
 @media (max-width: 720px) {
+  .github-nav-link {
+    display: none;
+  }
+
   .timeline-entry {
     grid-template-columns: 1fr;
   }

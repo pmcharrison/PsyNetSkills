@@ -27,7 +27,7 @@
     <main>
       {{ block "main" . }}{{ end }}
     </main>
-    {{ if and .IsPage (in (slice "skills" "challenges") .Section) }}
+    {{ if or .IsHome (and .IsPage (in (slice "skills" "challenges") .Section)) (and (eq .Section "challenges") .Params.challenge) }}
       {{ partial "giscus.html" . }}
     {{ end }}
     <footer>
