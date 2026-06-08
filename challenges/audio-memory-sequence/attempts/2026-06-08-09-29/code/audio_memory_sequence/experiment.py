@@ -146,11 +146,6 @@ class ToneSequenceTrial(StaticTrial):
 class Exp(psynet.experiment.Experiment):
     label = "Audio memory sequence"
 
-    config = {
-        "show_reward": False,
-        "show_progress_bar": True,
-    }
-
     timeline = Timeline(
         InfoPage(
             """

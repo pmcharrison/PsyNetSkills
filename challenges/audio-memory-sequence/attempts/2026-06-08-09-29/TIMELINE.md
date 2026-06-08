@@ -5,3 +5,4 @@
 - T+00:01:20 [agent] Refreshed local PsyNet checkout and created attempt scaffold.
 - T+00:07:45 [agent] Implemented static tone-sequence trials with generated WAV assets and response-sequence formatting.
 - T+00:14:10 [agent] Fixed PsyNet local import path after `psynet test local` exposed Dallinger's `dallinger_experiment` import context.
+- T+00:17:30 [agent] Removed duplicate PsyNet config declarations after local validation rejected mixed `config.txt` and class-level values.
