@@ -21,3 +21,14 @@ at that server.
 *Actions:*
 - **PsyNetSkills:** Add a Linux fallback to the recording skill that installs/starts PulseAudio, creates `psynet_rec`, launches Chrome with `PULSE_SERVER`, and records `psynet_rec.monitor`. Confidence: high. Status: considering.
 - **PsyNet:** No framework change needed; this is a cloud recording environment setup issue. Confidence: medium. Status: dismissed.
+
+## Combine minimal visual review with scripted full-flow evidence
+
+A shortened `PSYNET_PROFILE=minimal` run gave the visual reviewer enough surface
+to inspect copy, labels, button state, reset behavior, and completion. A
+Playwright-driven full run then produced a concise 35-second participant video
+with audio, replacing a much slower agent-driven recording.
+
+*Actions:*
+- **PsyNetSkills:** Make the default challenge evidence workflow hybrid: use minimal profile for visual review screenshots, then use a scripted browser runner for the canonical recorded flow. Confidence: high. Status: considering.
+- **PsyNet:** Consider a framework-level `PSYNET_PROFILE=minimal` convention for skipping or shortening standard components during local review while preserving custom experiment behavior. Confidence: medium. Status: considering.

@@ -7,7 +7,7 @@
     "hard_max_experiment_payment": 1100.0,
     "soft_max_experiment_payment": 1000.0,
     "max_participant_payment": 25.0,
-    "deployment_id": "audio-memory-sequence__mode=debug__launch=2026-06-07--23-00-16",
+    "deployment_id": "audio-memory-sequence__mode=debug__launch=2026-06-08--07-08-19",
     "label": "Audio memory sequence",
     "deployment_config": {
         "aws_region": "us-east-1",
@@ -92,8 +92,8 @@
         "description": "Listen to short tone sequences and reproduce each sequence with labeled buttons.",
         "organization_name": "PsyNetSkills",
         "recruiter": "generic",
-        "id": "ae8e7cda-2e3e-d166-9443-38e11989c0d3",
-        "heroku_app_id_root": "ae8e7cda-2e3e-d166-9443-38e11989c0d3",
+        "id": "ddd77889-b0e4-d683-ae87-de32eee1c5b5",
+        "heroku_app_id_root": "ddd77889-b0e4-d683-ae87-de32eee1c5b5",
         "port": 5000
     }
 }
@@ -103,16 +103,18 @@
 Preparing to export the data...
 Zipping up the package...
 Done. Local export available in data/local-data.zip
+/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/yaspin/core.py:172: UserWarning: color, on_color and attrs are not supported when output stream is not a TTY
+  self._color = self._set_color(color) if color else color
+
 ⠋ Completed.             ✔ Completed.
-Bot:   0%|          | 0/2 [00:00<?, ?it/s]Bot: 100%|██████████| 2/2 [00:00<00:00, 3729.93it/s]
-Participant:   0%|          | 0/2 [00:00<?, ?it/s]Participant: 100%|██████████| 2/2 [00:00<00:00, 4951.95it/s]
-StaticNetwork:   0%|          | 0/4 [00:00<?, ?it/s]StaticNetwork: 100%|██████████| 4/4 [00:00<00:00, 16810.84it/s]
-StaticNode:   0%|          | 0/4 [00:00<?, ?it/s]StaticNode: 100%|██████████| 4/4 [00:00<00:00, 13819.78it/s]
-SequenceRecallTrial:   0%|          | 0/16 [00:00<?, ?it/s]SequenceRecallTrial: 100%|██████████| 16/16 [00:00<00:00, 10773.62it/s]
-Response:   0%|          | 0/26 [00:00<?, ?it/s]Response: 100%|██████████| 26/26 [00:00<00:00, 9318.29it/s]
-ChainTrialMakerState:   0%|          | 0/4 [00:00<?, ?it/s]ChainTrialMakerState: 100%|██████████| 4/4 [00:00<00:00, 15155.57it/s]
-Request:   0%|          | 0/63 [00:00<?, ?it/s]Request: 100%|██████████| 63/63 [00:00<00:00, 180246.35it/s]
-ExperimentConfig:   0%|          | 0/1 [00:00<?, ?it/s]ExperimentConfig: 100%|██████████| 1/1 [00:00<00:00, 4798.97it/s]
+Participant:   0%|          | 0/1 [00:00<?, ?it/s]Participant: 100%|██████████| 1/1 [00:00<00:00, 2837.82it/s]
+StaticNetwork:   0%|          | 0/4 [00:00<?, ?it/s]StaticNetwork: 100%|██████████| 4/4 [00:00<00:00, 12576.62it/s]
+StaticNode:   0%|          | 0/4 [00:00<?, ?it/s]StaticNode: 100%|██████████| 4/4 [00:00<00:00, 13086.75it/s]
+SequenceRecallTrial:   0%|          | 0/4 [00:00<?, ?it/s]SequenceRecallTrial: 100%|██████████| 4/4 [00:00<00:00, 7426.83it/s]
+Response:   0%|          | 0/7 [00:00<?, ?it/s]Response: 100%|██████████| 7/7 [00:00<00:00, 6580.04it/s]
+ChainTrialMakerState:   0%|          | 0/1 [00:00<?, ?it/s]ChainTrialMakerState: 100%|██████████| 1/1 [00:00<00:00, 10356.31it/s]
+Request:   0%|          | 0/19 [00:00<?, ?it/s]Request: 100%|██████████| 19/19 [00:00<00:00, 154142.70it/s]
+ExperimentConfig:   0%|          | 0/1 [00:00<?, ?it/s]ExperimentConfig: 100%|██████████| 1/1 [00:00<00:00, 4433.73it/s]
 ⠋ Completed.             ✔ Completed.
 
 ❯❯ Export complete. You can find your results at: /workspace/challenges/audio-memory-sequence/attempts/2026-06-07-22-41/evidence/exported-data
@@ -123,15 +125,14 @@ Preparing to export the data...
 Zipping up the package...
 Done. Local export available in data/local-data.zip
 ⠋ Completed.             ✔ Completed.
-Bot:   0%|          | 0/2 [00:00<?, ?it/s]Bot: 100%|██████████| 2/2 [00:00<00:00, 4801.72it/s]
-Participant:   0%|          | 0/2 [00:00<?, ?it/s]Participant: 100%|██████████| 2/2 [00:00<00:00, 5447.15it/s]
-StaticNetwork:   0%|          | 0/4 [00:00<?, ?it/s]StaticNetwork: 100%|██████████| 4/4 [00:00<00:00, 17660.23it/s]
-StaticNode:   0%|          | 0/4 [00:00<?, ?it/s]StaticNode: 100%|██████████| 4/4 [00:00<00:00, 15797.76it/s]
-SequenceRecallTrial:   0%|          | 0/16 [00:00<?, ?it/s]SequenceRecallTrial: 100%|██████████| 16/16 [00:00<00:00, 10913.79it/s]
-Response:   0%|          | 0/26 [00:00<?, ?it/s]Response: 100%|██████████| 26/26 [00:00<00:00, 9565.96it/s]
-ChainTrialMakerState:   0%|          | 0/4 [00:00<?, ?it/s]ChainTrialMakerState: 100%|██████████| 4/4 [00:00<00:00, 15978.30it/s]
-Request:   0%|          | 0/63 [00:00<?, ?it/s]Request: 100%|██████████| 63/63 [00:00<00:00, 218923.90it/s]
-ExperimentConfig:   0%|          | 0/1 [00:00<?, ?it/s]ExperimentConfig: 100%|██████████| 1/1 [00:00<00:00, 4922.89it/s]
+Participant:   0%|          | 0/1 [00:00<?, ?it/s]Participant: 100%|██████████| 1/1 [00:00<00:00, 3956.89it/s]
+StaticNetwork:   0%|          | 0/4 [00:00<?, ?it/s]StaticNetwork: 100%|██████████| 4/4 [00:00<00:00, 17349.76it/s]
+StaticNode:   0%|          | 0/4 [00:00<?, ?it/s]StaticNode: 100%|██████████| 4/4 [00:00<00:00, 15033.35it/s]
+SequenceRecallTrial:   0%|          | 0/4 [00:00<?, ?it/s]SequenceRecallTrial: 100%|██████████| 4/4 [00:00<00:00, 10143.42it/s]
+Response:   0%|          | 0/7 [00:00<?, ?it/s]Response: 100%|██████████| 7/7 [00:00<00:00, 7875.57it/s]
+ChainTrialMakerState:   0%|          | 0/1 [00:00<?, ?it/s]ChainTrialMakerState: 100%|██████████| 1/1 [00:00<00:00, 10205.12it/s]
+Request:   0%|          | 0/19 [00:00<?, ?it/s]Request: 100%|██████████| 19/19 [00:00<00:00, 199229.44it/s]
+ExperimentConfig:   0%|          | 0/1 [00:00<?, ?it/s]ExperimentConfig: 100%|██████████| 1/1 [00:00<00:00, 5295.84it/s]
 ⠋ Completed.             ✔ Completed.
 
 ❯❯ Export complete. You can find your results at: /workspace/challenges/audio-memory-sequence/attempts/2026-06-07-22-41/evidence/exported-data
