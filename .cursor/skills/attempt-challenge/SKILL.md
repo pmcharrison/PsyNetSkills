@@ -94,9 +94,10 @@ experiment implementation challenges, provide the standard documented evidence:
 
 - Put a runnable, self-contained PsyNet experiment in `code/`.
 - Record the participant experience in `evidence/participant.mp4`.
-- Save technical validation output in `evidence/`, such as
-  `performance.json` from `psynet performance-test`, command logs, or JSON from
-  equivalent local checks.
+- Run `psynet performance-test` and save its JSON output as
+  `evidence/performance.json`. If the command is technically blocked, save the
+  command output in `evidence/performance-test.log` and record the blocker in
+  `EVALUATION.md`; do not substitute other checks for this artifact.
 - For performance evidence, do not rely on experiment defaults such as
   `test_n_bots = 1` or short implicit durations. Keep `psynet test local` for
   fast functional verification, then run an explicit load test from the
@@ -106,7 +107,7 @@ experiment implementation challenges, provide the standard documented evidence:
   psynet performance-test local \
     --n-bots 40 \
     --duration-minutes 5 \
-    --time-factor 0 \
+    --time-factor 1.0 \
     --json-output ../../evidence/performance.json
   ```
 
@@ -137,6 +138,19 @@ analysis beyond the standard artifacts. Treat the other evidence items as
 required. Do not imply a skipped check passed: record what was run, what
 happened, and why any required evidence is missing or blocked in
 `EVALUATION.md`.
+
+Before finalizing an experiment implementation attempt, verify this required
+artifact checklist and either provide each artifact or document its blocker in
+`EVALUATION.md`:
+
+- `code/` contains the runnable, self-contained experiment.
+- `evidence/participant.mp4` records the participant flow.
+- `evidence/performance.json` exists, or `evidence/performance-test.log` plus
+  an `EVALUATION.md` blocker explains why `psynet performance-test` could not
+  run.
+- `evidence/monitor.html` contains a PsyNet dashboard monitor snapshot.
+- `evidence/data.zip` contains exported experiment data.
+- `EVALUATION.md` has the copied criteria checklist.
 
 ## Credential policy
 
@@ -194,6 +208,11 @@ Use one section per learning:
 - `*Actions:*`
   - `**PsyNetSkills:** <repo/skill/docs change>. Confidence: <level>. Status: <status>. Notes: <optional review rationale>.`
   - `**PsyNet:** <framework/docs/CLI change>. Confidence: <level>. Status: <status>.`
+
+Only include action bullets for concrete proposed or completed actions. If there
+is no suggested action for PsyNet, PsyNetSkills, or another owner, omit that
+owner's bullet entirely rather than adding a dismissed no-op such as "No
+framework change suggested."
 
 Use confidence levels `high`, `medium`, or `low`. Generally propose a near-term
 PsyNetSkills change first, then a longer-term PsyNet change if the learning

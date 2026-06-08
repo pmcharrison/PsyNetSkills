@@ -1,0 +1,12 @@
+{
+  "name": "audio-memory-sequence-evidence",
+  "version": "1.0.0",
+  "description": "Participant-flow recording helper for the audio memory sequence attempt.",
+  "scripts": {
+    "participant-flow": "node evidence/participant_flow.js"
+  },
+  "private": true,
+  "devDependencies": {
+    "playwright": "^1.60.0"
+  }
+}
