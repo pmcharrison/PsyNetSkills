@@ -26,11 +26,11 @@ at that server.
 
 A shortened `PSYNET_PROFILE=minimal` run gave the visual reviewer enough surface
 to inspect copy, labels, button state, reset behavior, and completion. A
-Playwright-driven full run then produced a concise participant video with audio,
-replacing a much slower agent-driven recording. The best illustrative recording
-used the script's `--human-time` option so reviewers could see the individual
-clicks and complete staged responses.
+JavaScript Playwright-driven full run then produced a concise participant video
+with audio, replacing a much slower agent-driven recording. The best
+illustrative recording used the script's `--human-time` option so reviewers
+could see the individual clicks and complete staged responses.
 
 *Actions:*
-- **PsyNetSkills:** Make the default challenge evidence workflow hybrid: use minimal profile for visual review screenshots, then use a scripted browser runner in human-time mode for the canonical recorded flow. Confidence: high. Status: considering.
+- **PsyNetSkills:** Make the default challenge evidence workflow hybrid: use minimal profile for visual review screenshots, then use a JavaScript Playwright runner in human-time mode for the canonical recorded flow. Confidence: high. Status: considering.
 - **PsyNet:** Consider a framework-level `PSYNET_PROFILE=minimal` convention for skipping or shortening standard components during local review while preserving custom experiment behavior. Confidence: medium. Status: considering.

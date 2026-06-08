@@ -18,7 +18,7 @@ notice.
 For fast full-flow review recordings, launch the experiment normally and run:
 
 ```bash
-python scripts/playwright_participant_flow.py "<participant-url>" --human-time
+npm run participant-flow -- "<participant-url>" --human-time
 ```
 
 The scripted runner drives the same participant UI as a human reviewer and is

@@ -4,6 +4,7 @@
 __pycache__
 data
 local
+node_modules
 server.log
 static/assets
 Dockertag
