@@ -131,7 +131,7 @@ def test_collect_challenges_reports_attempt_metadata(tmp_path: Path) -> None:
     assert attempt.implementation_time_display == "12m 5s"
     assert "### Useful finding" in attempt.learnings
     assert "Useful finding.\n" in attempt.learnings
-    assert attempt.evaluation_metadata == {"example": "true"}
+    assert attempt.evaluation_metadata == {"example": True}
     assert attempt.challenge_instructions == "Implement the snapshot experiment.\n"
     assert attempt.challenge_criteria == "- Top-level criterion.\n"
     assert attempt.code_files[0].path == "README.md"
@@ -583,7 +583,7 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
     assert exported_attempt["implementation_time_seconds"] == 725
     assert exported_attempt["implementation_time_display"] == "12m 5s"
     assert "### Useful finding" in exported_attempt["learnings"]
-    assert exported_attempt["evaluation_metadata"] == {"example": "true"}
+    assert exported_attempt["evaluation_metadata"] == {"example": True}
     assert (
         exported_attempt["challenge_instructions"]
         == "Implement the exported snapshot.\n"

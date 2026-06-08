@@ -108,7 +108,7 @@ class Attempt:
     implementation_time_display: str
     learnings: str
     open_actions: int
-    evaluation_metadata: dict[str, str]
+    evaluation_metadata: dict[str, object]
     challenge_instructions: str
     challenge_criteria: str
     challenge_files: list[AttemptFile]
