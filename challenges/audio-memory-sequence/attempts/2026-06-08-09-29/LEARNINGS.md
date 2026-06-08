@@ -66,3 +66,24 @@ one video frame.
 *Actions:*
 - **PsyNetSkills:** Update participant-recording guidance to use an isolated Xvfb display, a dedicated PulseAudio null sink, and a flash/beep sync probe before publishing audio-sensitive evidence. Confidence: high. Status: completed. Notes: Updated `record-participant-video` with calibrated recording and post-processing guidance.
 - **PsyNet:** No framework change suggested; this is a recorder-environment issue. Confidence: high. Status: dismissed.
+
+## Audio memory tasks need baseline participant affordances
+
+The human evaluation highlighted several design expectations that were not
+explicit in the challenge prompt: disable advancement until audio completes,
+hide internal stimulus IDs, show audio progress/status, support keyboard input,
+and include volume calibration plus a practice trial.
+
+*Actions:*
+- **PsyNetSkills:** Add audio-experiment design guidance to challenge-attempt or experiment-implementation instructions, covering calibration, practice, response modality, hidden stimulus identifiers, and audio playback state. Confidence: high. Status: considering.
+- **PsyNet:** Consider a documented pattern or helper for audio memory trials with playback state, keyboard shortcuts, and response gating. Confidence: medium. Status: considering.
+
+## Challenge attempts may need an explicit design checkpoint
+
+The evaluator suggested a planning phase before implementation for open-ended
+experiment challenges, where the agent asks about design choices such as
+training, feedback, response modality, and calibration.
+
+*Actions:*
+- **PsyNetSkills:** Discuss whether `attempt-challenge` should include a short design-checkpoint option for underspecified experiment challenges before code is written. Confidence: medium. Status: considering.
+- **PsyNet:** No framework change suggested; this is a process question. Confidence: high. Status: dismissed.
