@@ -40,8 +40,8 @@ should stay in their existing metadata fields.
 
 ## Agent workflow
 
-When creating a skill, challenge, or attempt, identify the human author before
-writing the metadata:
+When creating a skill, challenge, or attempt, use the `identify-author` skill to
+identify the human author before writing the metadata:
 
 1. Read `authors.yaml`.
 2. Ask which GitHub username should be credited as author.

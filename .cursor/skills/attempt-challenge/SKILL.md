@@ -23,11 +23,9 @@ challenge before starting a fresh attempt.
    implementation and evidence collection are complete. Do not inspect dashboard
    attempt pages for the same challenge during this phase either; any criteria
    shown there are for later review.
-3. Identify the human author as metadata only, not as supplementary
-   implementation guidance. Read `authors.yaml`; ask the user which GitHub
-   username should be credited. If the key is missing, ask for display name and
-   optional public profile details, add the author to `authors.yaml`, then use
-   the GitHub key in `agent.json`.
+3. Use the `identify-author` skill before writing metadata. Treat author
+   identification as metadata only, not as supplementary implementation
+   guidance.
 4. Refresh the local PsyNet checkout before implementing experiment code:
    `cd ~/PsyNet && git checkout master && git pull --ff-only origin master`.
    If the checkout is missing, clone it first. If local changes or a

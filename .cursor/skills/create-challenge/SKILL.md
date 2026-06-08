@@ -15,10 +15,7 @@ you are responsible for turning that description into the repository format.
 1. Interpret the user's prose description. Identify the participant experience,
    stimuli or inputs, responses to collect, scientific checks, and constraints.
 2. Choose a concise lowercase slug using hyphens, unless the user provided one.
-3. Identify the human author before writing metadata. Read `authors.yaml`; ask
-   the user which GitHub username should be credited. If the key is missing, ask
-   for display name and optional public profile details, add the author to
-   `authors.yaml`, then reference the GitHub key.
+3. Use the `identify-author` skill before writing metadata.
 4. Create `challenges/<slug>/INSTRUCTIONS.md` with YAML frontmatter containing
    `title`, `type`, `difficulty`, and `authors`.
 5. Write public instructions that are sufficient for an attempting agent to

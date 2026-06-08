@@ -13,9 +13,8 @@ import yaml
 
 from psynetsk_tools.authors import (
     Author,
-    GITHUB_ID_RE,
-    author_ids_from_value,
-    read_author_registry,
+    validate_author_references,
+    validate_authors,
     validate_yaml_mapping,
 )
 from psynetsk_tools.learnings import LEARNING_ACTION_RE, learning_action_bullets
@@ -183,28 +182,6 @@ def validate_timeline_file(timeline_file: Path) -> list[str]:
     return problems
 
 
-def validate_author_references(
-    source: Path,
-    value: Any,
-    registry: dict[str, Author] | None,
-) -> list[str]:
-    """Validate a metadata author reference list."""
-
-    author_ids = author_ids_from_value(value)
-    if not author_ids:
-        return [f"{source}: missing authors"]
-    if not isinstance(value, list) or len(author_ids) != len(value):
-        return [f"{source}: authors must be a non-empty list of GitHub ids"]
-
-    problems: list[str] = []
-    for author_id in author_ids:
-        if not GITHUB_ID_RE.fullmatch(author_id):
-            problems.append(f"{source}: invalid author id {author_id!r}")
-        elif registry is not None and author_id not in registry:
-            problems.append(f"{source}: unknown author id {author_id!r}")
-    return problems
-
-
 def validate_agent_metadata(
     agent_file: Path,
     registry: dict[str, Author] | None = None,
@@ -248,15 +225,6 @@ def has_evaluation_checklist(evaluation_file: Path) -> bool:
         if line.startswith("- [x] ") or line.startswith("- [ ] "):
             return True
     return False
-
-
-def validate_authors(root: Path) -> tuple[dict[str, Author], list[str]]:
-    """Validate the central author registry."""
-
-    registry, problems = read_author_registry(root)
-    if not registry and not problems:
-        problems.append(f"{root / 'authors.yaml'}: author registry is empty")
-    return registry, problems
 
 
 def require_string_field(

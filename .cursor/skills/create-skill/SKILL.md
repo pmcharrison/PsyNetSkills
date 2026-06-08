@@ -18,10 +18,7 @@ the skill tree.
 2. Search existing skills in `.cursor/skills/` before creating a new one.
 3. If an existing skill owns the behavior, update it directly. If no existing
    skill fits, create `.cursor/skills/<skill-name>/SKILL.md`.
-4. Identify the human author before writing metadata. Read `authors.yaml`; ask
-   the user which GitHub username should be credited. If the key is missing, ask
-   for display name and optional public profile details, add the author to
-   `authors.yaml`, then reference the GitHub key.
+4. Use the `identify-author` skill before writing metadata.
 5. Use Agent Skills-compatible frontmatter. The `name` must match the folder and
    use lowercase letters, numbers, and hyphens. Include `authors: [<github-id>]`.
 6. Keep the main `SKILL.md` concise and procedural: when to use it, what to read,
