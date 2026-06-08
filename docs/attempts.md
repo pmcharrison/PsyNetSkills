@@ -4,7 +4,7 @@ Attempts record what happened when an agent tried to solve a challenge.
 
 In the normal workflow, users should ask a Cursor Cloud Agent to attempt a
 challenge with Cursor skill syntax, for example
-`/attempt-challenge "audio-memory-sequence"`, without supplementary
+`/attempt-challenge audio-memory-sequence`, without supplementary
 implementation instructions. This keeps the attempt a test of the public
 challenge instructions and the current skills. The agent should take care of the
 repository structure. The details below are the specification that the agent and
@@ -158,8 +158,8 @@ In Cursor Cloud Agent workflows, users usually review attempts through
 conversation with an agent rather than by editing files directly. Agents should
 ask the user for a 1-10 score and concise evaluation feedback, then summarize
 that feedback in `EVALUATION.md` and update the score field.
-Users can start that workflow explicitly with `/evaluate-attempt "Evaluate the
-latest <challenge-slug> attempt"`.
+Users can start that workflow explicitly with `/evaluate-attempt Evaluate the
+latest <challenge-slug> attempt`.
 
 If the challenge includes `CRITERIA.md`, agents should use those criteria during
 the conversational evaluation. Ask the user about each criterion, then record the

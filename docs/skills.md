@@ -5,7 +5,7 @@ with Agent Skills-compatible YAML frontmatter.
 
 In the normal workflow, users should ask a Cursor Cloud Agent to create or update
 a skill from prose with Cursor skill syntax, for example
-`/create-skill "Turn this attempt lesson into reusable PsyNet guidance"`. The
+`/create-skill Turn this attempt lesson into reusable PsyNet guidance`. The
 agent should inspect the existing skill tree and decide whether the lesson
 belongs in a new skill or an existing one. The details below are the
 specification that the agent and advanced manual contributors should follow.
