@@ -55,3 +55,14 @@ ordinal unless the trial maker explicitly enforces that order.
 *Actions:*
 - **PsyNetSkills:** Advise attempt authors to phrase static-trial labels as stimulus IDs or explicitly configure trial ordering. Confidence: high. Status: considering.
 - **PsyNet:** Consider making static trial ordering behavior more prominent in docs. Confidence: medium. Status: considering.
+
+## Participant recorder needs sync calibration
+
+The shared-desktop ffmpeg recorder can put browser audio ahead of the screen
+capture. A synthetic flash/beep probe showed the isolated Xvfb capture still
+needed a 2080 ms audio delay to align repeated visual and audio markers within
+one video frame.
+
+*Actions:*
+- **PsyNetSkills:** Update participant-recording guidance to use an isolated Xvfb display, a dedicated PulseAudio null sink, and a flash/beep sync probe before publishing audio-sensitive evidence. Confidence: high. Status: completed. Notes: Updated `record-participant-video` with calibrated recording and post-processing guidance.
+- **PsyNet:** No framework change suggested; this is a recorder-environment issue. Confidence: high. Status: dismissed.

@@ -34,6 +34,10 @@ because it can miss system audio.
 If recording fails or audio is missing, do not imply the participant video is
 complete. Record the failure and the missing evidence in `EVALUATION.md`.
 
+For audio-sensitive evidence, do not rely on a shared desktop/audio session
+without calibration. Use the calibrated Linux workflow below, or record and
+document why calibration was not possible.
+
 When sharing a recorded video inline in a Cursor final response, warn the user
 if the evidence depends on audio: the Cursor agent video player may not play the
 audio track. Tell them to download the MP4 directly or view it through the
@@ -93,6 +97,41 @@ ffmpeg -y \
   -c:v libx264 -pix_fmt yuv420p -c:a aac -shortest \
   evidence/participant.mp4
 ```
+
+For audio-sensitive recordings in Cursor Cloud, prefer an isolated display and
+dedicated sink, then calibrate the recording:
+
+1. Start a fresh Xvfb display and PulseAudio null sink for the recording.
+2. Launch only the participant browser on that display and route it to that sink.
+3. Record with large input queues and a low-latency x264 preset:
+
+```bash
+ffmpeg -y \
+  -thread_queue_size 4096 \
+  -video_size 1280x720 -framerate 30 -f x11grab -i "$DISPLAY" \
+  -thread_queue_size 4096 -isync 0 -f pulse -i psynet_rec.monitor \
+  -fps_mode cfr \
+  -c:v libx264 -preset ultrafast -tune zerolatency -pix_fmt yuv420p \
+  -c:a aac -shortest \
+  evidence/participant_raw.mp4
+```
+
+4. Before publishing the participant recording, run a short sync probe in the
+   same browser/display/sink that flashes the screen and plays a beep from the
+   same JavaScript callback.
+5. Measure the flash/beep offset from the resulting MP4. If audio is early or
+   late, post-process the participant recording using the measured offset, for
+   example:
+
+```bash
+ffmpeg -y -i evidence/participant_raw.mp4 \
+  -filter_complex "[0:a]adelay=<delay_ms>|<delay_ms>[a]" \
+  -map 0:v:0 -map "[a]" -c:v copy -c:a aac \
+  evidence/participant.mp4
+```
+
+6. Save the sync-probe analysis logs with the evidence. Do not hard-code a
+   delay from a previous run; measure it for the current recording environment.
 
 Verify that the MP4 really has a non-silent audio stream:
 

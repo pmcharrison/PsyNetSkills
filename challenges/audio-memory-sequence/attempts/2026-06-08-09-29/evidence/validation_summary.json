@@ -12,10 +12,16 @@
   },
   "participant_video": {
     "path": "evidence/participant.mp4",
+    "capture_log": "evidence/ffmpeg_participant.log",
+    "postprocess_log": "evidence/ffmpeg_participant_xvfb_postdelay_2080.log",
     "ffprobe_log": "evidence/ffprobe_participant.log",
     "volumedetect_log": "evidence/volumedetect_participant.log",
-    "duration_seconds": 33.53,
-    "audio_mean_volume_db": -19.9,
+    "audio_segments_log": "evidence/audio_segments_xvfb_postdelay_2080.log",
+    "sync_probe_uncorrected_analysis": "evidence/sync_probe_analysis.log",
+    "sync_probe_corrected_analysis": "evidence/sync_probe_postdelay_2080_analysis.log",
+    "duration_seconds": 36.8,
+    "audio_delay_ms": 2080,
+    "audio_mean_volume_db": -20.1,
     "audio_max_volume_db": -9.1
   },
   "dashboard_evidence": {
