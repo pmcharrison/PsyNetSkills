@@ -1,0 +1,26 @@
+{
+  "python_experiment": {
+    "command": "python experiment.py",
+    "log": "evidence/python_experiment.log",
+    "status": "passed"
+  },
+  "psynet_test_local": {
+    "command": "psynet test local",
+    "log": "evidence/psynet_test_local.log",
+    "status": "passed",
+    "result": "2 passed, 3 warnings"
+  },
+  "participant_video": {
+    "path": "evidence/participant.mp4",
+    "ffprobe_log": "evidence/ffprobe_participant.log",
+    "volumedetect_log": "evidence/volumedetect_participant.log",
+    "duration_seconds": 33.53,
+    "audio_mean_volume_db": -19.9,
+    "audio_max_volume_db": -9.1
+  },
+  "dashboard_evidence": {
+    "monitor_snapshot": "evidence/monitor.html",
+    "data_export": "evidence/data.zip",
+    "data_listing": "evidence/data_zip_listing.log"
+  }
+}
