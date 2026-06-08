@@ -310,6 +310,26 @@ td {
   color: var(--foreground);
 }
 
+.learning-action:has(.learning-chip-status-completed),
+.learning-action:has(.learning-chip-status-dismissed),
+.learning-action:has(.learning-chip-status-superseded) {
+  color: var(--muted);
+}
+
+.learning-action:has(.learning-chip-status-completed) strong:first-child,
+.learning-action:has(.learning-chip-status-dismissed) strong:first-child,
+.learning-action:has(.learning-chip-status-superseded) strong:first-child {
+  color: var(--muted);
+}
+
+.learning-action:has(.learning-chip-status-completed) .learning-chip,
+.learning-action:has(.learning-chip-status-dismissed) .learning-chip,
+.learning-action:has(.learning-chip-status-superseded) .learning-chip {
+  background: var(--code-background);
+  border-color: var(--border);
+  color: var(--muted);
+}
+
 .learning-markdown p > em:only-child {
   color: var(--muted);
   display: inline-block;
