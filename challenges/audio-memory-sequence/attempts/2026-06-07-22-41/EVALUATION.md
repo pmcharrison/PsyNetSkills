@@ -34,5 +34,6 @@ the result here.
 - Score and feedback should come from a human evaluator, captured
   conversationally when working with Cursor Cloud Agents.
 - Evidence note: `evidence/participant.mp4` shows the participant-facing flow
-  through completion, but it is screen-only. PulseAudio and PipeWire capture
-  sources were unavailable in this VM; only ALSA `null` was exposed.
+  through completion with captured browser audio. This required installing
+  PulseAudio, creating a null sink, launching Chrome with that sink as its audio
+  target, and recording `psynet_rec.monitor` with `ffmpeg`.
