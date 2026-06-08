@@ -21,4 +21,4 @@ test.py ..                                                               [100%]
     self._mark_plugins_for_rewrite(hook, disable_autoload)
 
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
-======================== 2 passed, 3 warnings in 10.22s ========================
+======================== 2 passed, 3 warnings in 10.49s ========================

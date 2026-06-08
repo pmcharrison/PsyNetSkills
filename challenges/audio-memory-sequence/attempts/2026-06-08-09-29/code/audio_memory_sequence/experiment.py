@@ -172,8 +172,14 @@ class Exp(psynet.experiment.Experiment):
     )
 
     @classmethod
-    def run_bot(cls, bot, **kwargs):
-        bot.run_to_completion(render_pages=True, time_factor=0.0)
+    def run_bot(cls, bot=None, **kwargs):
+        if bot is None:
+            return super().run_bot(bot=bot, **kwargs)
+
+        bot.run_to_completion(
+            render_pages=kwargs.get("render_pages", True),
+            time_factor=kwargs.get("time_factor", 0.0),
+        )
         trials = ToneSequenceTrial.query.filter_by(participant_id=bot.id).all()
         assert len(trials) == N_TRIALS
         for trial in trials:

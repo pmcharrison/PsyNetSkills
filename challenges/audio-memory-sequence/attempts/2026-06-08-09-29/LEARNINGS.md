@@ -97,3 +97,14 @@ artifact too easy to rationalize.
 *Actions:*
 - **PsyNetSkills:** Require `evidence/performance.json` from `psynet performance-test`, or a saved `performance-test.log` plus an explicit blocker in `EVALUATION.md`; do not allow replacement by equivalent local checks. Confidence: high. Status: completed. Notes: Updated `attempt-challenge` evidence expectations and final artifact checklist.
 - **PsyNet:** No framework change suggested; this is an attempt workflow issue. Confidence: high. Status: dismissed.
+
+## Bot overrides must preserve performance-test compatibility
+
+The first performance-test run produced `performance.json` but all bots failed
+before reaching the database because the experiment overrode `run_bot(cls, bot,
+...)` without allowing PsyNet's no-argument `exp.run_bot(time_factor=...)`
+performance-test path.
+
+*Actions:*
+- **PsyNetSkills:** Add guidance that custom `run_bot` methods should keep `bot=None` support and delegate to `super().run_bot(...)` for framework-created bots. Confidence: high. Status: completed. Notes: Updated experiment validation guidance after the performance-test failure exposed the incompatible signature.
+- **PsyNet:** Consider warning when an experiment overrides `run_bot` with an incompatible signature before running `performance-test`. Confidence: medium. Status: considering.

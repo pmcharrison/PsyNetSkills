@@ -22,6 +22,9 @@ psynet performance-test local \
 ```
 
 Adjust the JSON output path to match the attempt or project layout.
+If the experiment customizes `run_bot`, preserve `bot=None` support and delegate
+to `super().run_bot(...)` for framework-created bots; `psynet performance-test`
+calls `exp.run_bot(time_factor=...)` without passing a bot object.
 
 For interactive flow checks:
 
