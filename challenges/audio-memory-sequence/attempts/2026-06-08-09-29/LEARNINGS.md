@@ -26,7 +26,6 @@ experiment class. Small generated experiments should choose one source of truth.
 
 *Actions:*
 - **PsyNetSkills:** Add a reminder to generated experiment templates to avoid duplicating config keys across files. Confidence: high. Status: considering.
-- **PsyNet:** The current error is clear enough; no framework change suggested. Confidence: medium. Status: dismissed.
 
 ## Constraints file is part of local PsyNet validation
 
@@ -44,7 +43,6 @@ PsyNet local launch writes archive/deployment files and explicitly requires
 
 *Actions:*
 - **PsyNetSkills:** Add `.deploy/` and `source_code.zip` to generated PsyNet experiment `.gitignore` files. Confidence: high. Status: considering.
-- **PsyNet:** Current preflight reports the missing ignore clearly. Confidence: medium. Status: dismissed.
 
 ## Static nodes may not appear in manifest order
 
@@ -65,7 +63,6 @@ one video frame.
 
 *Actions:*
 - **PsyNetSkills:** Update participant-recording guidance to use an isolated Xvfb display, a dedicated PulseAudio null sink, and a flash/beep sync probe before publishing audio-sensitive evidence. Confidence: high. Status: completed. Notes: Updated `record-participant-video` with calibrated recording and post-processing guidance.
-- **PsyNet:** No framework change suggested; this is a recorder-environment issue. Confidence: high. Status: dismissed.
 
 ## Audio memory tasks need baseline participant affordances
 
@@ -86,7 +83,6 @@ training, feedback, response modality, and calibration.
 
 *Actions:*
 - **PsyNetSkills:** Discuss whether `attempt-challenge` should include a short design-checkpoint option for underspecified experiment challenges before code is written. Confidence: medium. Status: considering.
-- **PsyNet:** No framework change suggested; this is a process question. Confidence: high. Status: dismissed.
 
 ## Performance evidence should be a required artifact
 
@@ -96,7 +92,6 @@ artifact too easy to rationalize.
 
 *Actions:*
 - **PsyNetSkills:** Require `evidence/performance.json` from `psynet performance-test`, or a saved `performance-test.log` plus an explicit blocker in `EVALUATION.md`; do not allow replacement by equivalent local checks. Confidence: high. Status: completed. Notes: Updated `attempt-challenge` evidence expectations and final artifact checklist.
-- **PsyNet:** No framework change suggested; this is an attempt workflow issue. Confidence: high. Status: dismissed.
 
 ## Bot overrides must preserve performance-test compatibility
 

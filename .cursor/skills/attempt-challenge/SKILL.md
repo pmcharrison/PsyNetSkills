@@ -209,6 +209,11 @@ Use one section per learning:
   - `**PsyNetSkills:** <repo/skill/docs change>. Confidence: <level>. Status: <status>. Notes: <optional review rationale>.`
   - `**PsyNet:** <framework/docs/CLI change>. Confidence: <level>. Status: <status>.`
 
+Only include action bullets for concrete proposed or completed actions. If there
+is no suggested action for PsyNet, PsyNetSkills, or another owner, omit that
+owner's bullet entirely rather than adding a dismissed no-op such as "No
+framework change suggested."
+
 Use confidence levels `high`, `medium`, or `low`. Generally propose a near-term
 PsyNetSkills change first, then a longer-term PsyNet change if the learning
 points to a framework issue. Use lowercase status values: `considering`,
