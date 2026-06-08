@@ -9,9 +9,9 @@ test.py::test_experiment[/workspace/challenges/audio-memory-sequence/attempts/20
 -------------------------------- live log call ---------------------------------
 INFO     psynet:experiment.py:1393 Testing experiment with 1 serial bot(s)...
 INFO     psynet:bot.py:74 Waiting for experiment launch to complete....
-INFO     psynet:bot.py:37 Initializing bot with worker ID 91f1da80-eafd-45d0-8a37-b5340bbbb27d.
-INFO     psynet:participant.py:1125 ParticipantDriver 1 has finished the experiment (took 6 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 0.877 seconds).
-INFO     psynet:experiment.py:1369 Mean HTTP request duration: 0.082 seconds
+INFO     psynet:bot.py:37 Initializing bot with worker ID 85a5aebb-cf7f-4e53-8836-289fc9b391c7.
+INFO     psynet:participant.py:1125 ParticipantDriver 1 has finished the experiment (took 6 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 0.935 seconds).
+INFO     psynet:experiment.py:1369 Mean HTTP request duration: 0.088 seconds
 PASSED                                                                   [100%]
 
-============================== 1 passed in 10.05s ==============================
+============================== 1 passed in 10.82s ==============================

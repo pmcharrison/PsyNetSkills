@@ -18,8 +18,9 @@ notice.
 For fast full-flow review recordings, launch the experiment normally and run:
 
 ```bash
-python scripts/playwright_participant_flow.py "<participant-url>"
+python scripts/playwright_participant_flow.py "<participant-url>" --human-time
 ```
 
 The scripted runner drives the same participant UI as a human reviewer and is
-intended to be used with screen/audio recording.
+intended to be used with screen/audio recording. Omit `--human-time` for faster
+mechanical checks where reviewer-readable pacing is not needed.
