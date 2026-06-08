@@ -129,6 +129,8 @@ sudo pg_ctlcluster 16 main start   # or: sudo service postgresql start
 sudo redis-server --daemonize yes    # or: sudo service redis-server start
 ```
 
+On Cursor Cloud VMs, `service postgresql start` / `service redis-server start` may be denied by `policy-rc.d`; prefer `pg_ctlcluster` and `redis-server --daemonize yes` in that case.
+
 **Python setup** (in `~/PsyNet`):
 
 ```bash
