@@ -7,6 +7,7 @@
   --danger-border: #ff8182;
   --foreground: #1f2328;
   --link: #0969da;
+  --muted-light: #8c959f;
   --muted: #57606a;
   --success-background: #dafbe1;
   --success-border: #4ac26b;
@@ -306,6 +307,19 @@ td {
   margin-bottom: 0.35rem;
 }
 
+.learning-card {
+  margin-bottom: 1rem;
+}
+
+.learning-card:has(.learning-action):not(:has(.learning-chip-status-considering)):not(:has(.learning-chip-status-in-progress)):not(:has(.learning-chip-status-planned)) {
+  color: var(--muted-light);
+}
+
+.learning-card:has(.learning-action):not(:has(.learning-chip-status-considering)):not(:has(.learning-chip-status-in-progress)):not(:has(.learning-chip-status-planned)) h3,
+.learning-card:has(.learning-action):not(:has(.learning-chip-status-considering)):not(:has(.learning-chip-status-in-progress)):not(:has(.learning-chip-status-planned)) strong:first-child {
+  color: var(--muted-light);
+}
+
 .learning-markdown li strong:first-child {
   color: var(--foreground);
 }
@@ -313,13 +327,13 @@ td {
 .learning-action:has(.learning-chip-status-completed),
 .learning-action:has(.learning-chip-status-dismissed),
 .learning-action:has(.learning-chip-status-superseded) {
-  color: var(--muted);
+  color: var(--muted-light);
 }
 
 .learning-action:has(.learning-chip-status-completed) strong:first-child,
 .learning-action:has(.learning-chip-status-dismissed) strong:first-child,
 .learning-action:has(.learning-chip-status-superseded) strong:first-child {
-  color: var(--muted);
+  color: var(--muted-light);
 }
 
 .learning-action:has(.learning-chip-status-completed) .learning-chip,
@@ -327,7 +341,13 @@ td {
 .learning-action:has(.learning-chip-status-superseded) .learning-chip {
   background: var(--code-background);
   border-color: var(--border);
-  color: var(--muted);
+  color: var(--muted-light);
+}
+
+.learning-action:has(.learning-chip-status-completed)::marker {
+  content: "✓ ";
+  color: var(--success-border);
+  font-weight: 700;
 }
 
 .learning-markdown p > em:only-child {
