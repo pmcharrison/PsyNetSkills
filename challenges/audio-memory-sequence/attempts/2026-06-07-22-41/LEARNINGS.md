@@ -42,7 +42,7 @@ training phase explaining the task and giving participants a couple of practice
 attempts before the main trials.
 
 *Actions:*
-- **PsyNetSkills:** Update future audio-memory-style challenge guidance to mention practice/training phases when the task is nontrivial. Confidence: high. Status: completed. Notes: Added to create-challenge and psynet-experiment-implementation guidance.
+- **PsyNetSkills:** Update future audio-memory-style challenge guidance to mention practice/training phases when the task is nontrivial. Confidence: high. Status: completed. Notes: Defaults now live in implementation guidance; create-challenge warns not to make prompts more specific just to force defaults.
 - **PsyNet:** Consider documenting a reusable pattern for practice trial makers that precede scored static trials. Confidence: medium. Status: considering.
 
 ## Avoid replay controls in memory tasks
@@ -52,7 +52,7 @@ tasks, relistening can give participants a large advantage and change the
 cognitive demands of the task.
 
 *Actions:*
-- **PsyNetSkills:** Add review guidance to flag replay controls in memory tasks unless the challenge explicitly asks for replay. Confidence: high. Status: completed. Notes: Added to create-challenge and psynet-experiment-implementation guidance.
+- **PsyNetSkills:** Add review guidance to flag replay controls in memory tasks unless the challenge explicitly asks for replay. Confidence: high. Status: completed. Notes: Defaults now live in implementation guidance; create-challenge warns to mention replay only when intentionally departing from defaults.
 - **PsyNet:** No framework change needed; this is an experiment-design convention. Confidence: high. Status: dismissed.
 
 ## Prefer generated audio files for control and replication
@@ -73,5 +73,5 @@ random sampling, reproducibility, and manual regeneration while keeping the
 runtime experiment deterministic.
 
 *Actions:*
-- **PsyNetSkills:** Add a recommendation that attempts with nontrivial stimulus sets use a generated stimulus manifest, such as committed JSON plus optional generated media. Confidence: high. Status: completed. Notes: Added to create-challenge and psynet-experiment-implementation guidance.
+- **PsyNetSkills:** Add a recommendation that attempts with nontrivial stimulus sets use a generated stimulus manifest, such as committed JSON plus optional generated media. Confidence: high. Status: completed. Notes: Defaults now live in implementation guidance; create-challenge warns to mention stimulus-generation details only when they are part of the task.
 - **PsyNet:** Consider documenting a standard manifest-driven static trial pattern. Confidence: medium. Status: considering.
