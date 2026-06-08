@@ -64,6 +64,25 @@ analyses/
 
 `participant.mp4` records the participant experience. `performance.json` stores
 the output of `psynet performance-test` or an equivalent performance check.
+
+For challenge attempts, treat `psynet test local` and `psynet performance-test
+local` as separate checks. Functional tests can stay fast; performance evidence
+should exercise sustained concurrency. Do not rely on experiment defaults such as
+`test_n_bots = 1` or short implicit durations. From the experiment directory
+(typically `code/<slug>/`), run:
+
+```bash
+psynet performance-test local \
+  --n-bots 40 \
+  --duration-minutes 5 \
+  --time-factor 0 \
+  --json-output ../../evidence/performance.json
+```
+
+Adjust the JSON output path if needed. Include a command log in `evidence/` when
+it helps reviewers understand what ran. If the full load test cannot run locally,
+say so in `EVALUATION.md` rather than presenting a one-bot smoke test as
+complete performance evidence.
 `monitor.html` snapshots the PsyNet dashboard monitor view. `data.zip` contains
 exported experiment data. `analyses/` contains challenge-specific scientific
 checks, typically figures or concise reports.
