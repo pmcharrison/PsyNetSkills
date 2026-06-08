@@ -25,11 +25,7 @@ def write_bytes(path: Path, data: bytes) -> None:
 
 def authors_yaml() -> str:
     return (
-        "pmcharrison:\n"
-        "  name: Peter Harrison\n"
-        "  url: https://github.com/pmcharrison\n"
-        "  email: pmch2@cam.ac.uk\n"
-        "  affiliation: University of Cambridge\n"
+        "pmcharrison: Peter Harrison\n"
     )
 
 
@@ -345,8 +341,6 @@ def test_dashboard_data_reports_counts(tmp_path: Path) -> None:
 
     assert data["counts"] == {"skills": 1, "challenges": 1}
     assert data["authors"][0]["id"] == "pmcharrison"
-    assert data["authors"][0]["email"] == "pmch2@cam.ac.uk"
-    assert data["authors"][0]["affiliation"] == "University of Cambridge"
     assert data["skills"][0]["authors"][0]["name"] == "Peter Harrison"
     assert data["challenges"][0]["authors"][0]["url"] == (
         "https://github.com/pmcharrison"

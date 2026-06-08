@@ -18,13 +18,9 @@ attempt.
      runtime provenance.
 3. If the key exists in `authors.yaml`, reference it directly.
 4. If the key is missing, ask whether to register a new author.
-5. For a new author, ask for:
-   - display name;
-   - optional public URL;
-   - optional public email;
-   - optional public affiliation;
-   - optional public ORCID.
-6. Add the new author record to `authors.yaml`.
+5. For a new author, ask for their full display name.
+6. Add the new author record to `authors.yaml` as
+   `<github-id>: <Full Name>`.
 7. Reference the GitHub key in the artifact metadata:
    - skills and challenges: `authors: [<github-id>]` in YAML frontmatter;
    - attempts: `"authors": ["<github-id>"]` in `agent.json`.
@@ -35,7 +31,7 @@ attempt.
   provenance and belong in their existing metadata fields.
 - For challenge attempts, author identification is metadata only. Do not accept
   supplementary implementation guidance while identifying the author.
-- Do not add private contact details. Only record email, affiliation, URLs, or
-  identifiers that the user explicitly provides for public attribution.
+- Do not add email addresses, affiliations, URLs, or other profile details to
+  `authors.yaml`; GitHub profile links are derived from the author key.
 - If the user does not know which existing key to use, show the current keys from
   `authors.yaml` and ask them to choose.

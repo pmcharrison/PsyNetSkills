@@ -41,11 +41,7 @@ def agent_json() -> str:
 def minimal_repo(root: Path) -> None:
     write(
         root / "authors.yaml",
-        "pmcharrison:\n"
-        "  name: Peter Harrison\n"
-        "  url: https://github.com/pmcharrison\n"
-        "  email: pmch2@cam.ac.uk\n"
-        "  affiliation: University of Cambridge\n",
+        "pmcharrison: Peter Harrison\n",
     )
     write(root / "docs/index.md", "# Docs\n")
     write(
@@ -296,6 +292,23 @@ def test_validate_repository_rejects_unknown_author(tmp_path: Path) -> None:
     problems = validate_repository(tmp_path)
 
     assert any("unknown author id 'unknown-author'" in problem for problem in problems)
+
+
+def test_validate_repository_rejects_author_details_mapping(tmp_path: Path) -> None:
+    minimal_repo(tmp_path)
+    write(
+        tmp_path / "authors.yaml",
+        "pmcharrison:\n"
+        "  name: Peter Harrison\n"
+        "  affiliation: University of Cambridge\n",
+    )
+
+    problems = validate_repository(tmp_path)
+
+    assert any(
+        "author 'pmcharrison' must be a full name" in problem
+        for problem in problems
+    )
 
 
 def test_validate_repository_rejects_missing_authors_yaml(tmp_path: Path) -> None:

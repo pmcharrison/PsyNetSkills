@@ -20,9 +20,6 @@ class Author:
     id: str
     name: str
     url: str
-    email: str = ""
-    affiliation: str = ""
-    orcid: str = ""
 
 
 def load_yaml_mapping(path: Path) -> tuple[dict[str, Any], list[str]]:
@@ -69,72 +66,18 @@ def read_author_registry(root: Path) -> tuple[dict[str, Author], list[str]]:
                 f"{authors_file}: invalid GitHub author id {author_id!r}"
             )
             continue
-        if not isinstance(record, dict):
-            problems.append(f"{authors_file}: author {author_id!r} must be a mapping")
+        if not isinstance(record, str) or not record.strip():
+            problems.append(
+                f"{authors_file}: author {author_id!r} must be a full name"
+            )
             continue
-
-        name = record.get("name")
-        if not isinstance(name, str) or not name.strip():
-            problems.append(f"{authors_file}: author {author_id!r} missing name")
-            continue
-
-        url = normalize_optional_string(
-            record.get("url"),
-            authors_file,
-            author_id,
-            "url",
-            problems,
-        )
-        affiliation = normalize_optional_string(
-            record.get("affiliation", ""),
-            authors_file,
-            author_id,
-            "affiliation",
-            problems,
-        )
-        email = normalize_optional_string(
-            record.get("email", ""),
-            authors_file,
-            author_id,
-            "email",
-            problems,
-        )
-        orcid = normalize_optional_string(
-            record.get("orcid", ""),
-            authors_file,
-            author_id,
-            "orcid",
-            problems,
-        )
 
         authors[author_id] = Author(
             id=author_id,
-            name=name.strip(),
-            url=(url or f"https://github.com/{author_id}").strip(),
-            email=(email or "").strip(),
-            affiliation=(affiliation or "").strip(),
-            orcid=(orcid or "").strip(),
+            name=record.strip(),
+            url=f"https://github.com/{author_id}",
         )
     return authors, problems
-
-
-def normalize_optional_string(
-    value: Any,
-    authors_file: Path,
-    author_id: str,
-    field_name: str,
-    problems: list[str],
-) -> str:
-    """Return an optional author string field."""
-
-    if value is None:
-        return ""
-    if isinstance(value, str):
-        return value
-    problems.append(
-        f"{authors_file}: author {author_id!r} {field_name} must be a string"
-    )
-    return ""
 
 
 def author_ids_from_value(value: Any) -> list[str]:
