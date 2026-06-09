@@ -626,6 +626,21 @@ def strip_first_two_headings(markdown: str) -> str:
     return "".join(lines).lstrip("\n")
 
 
+def write_challenge_builder_content(dashboard_dir: Path) -> None:
+    """Write the static challenge builder page."""
+    builder_dir = dashboard_dir / "content" / "new-challenge"
+    builder_dir.mkdir(parents=True, exist_ok=True)
+    (builder_dir / "index.md").write_text(
+        "---\n"
+        "title: New challenge\n"
+        'layout: "challenge-builder"\n'
+        "---\n\n"
+        "Draft a PsyNetSkills challenge in the browser, then copy the generated "
+        "files into a Cursor or GitHub pull request workflow.\n",
+        encoding="utf-8",
+    )
+
+
 def write_skill_content(
     root: Path,
     dashboard_dir: Path,
@@ -745,6 +760,7 @@ def export_dashboard(root: Path, dashboard_dir: Path) -> None:
     )
 
     write_index_content(root, dashboard_dir)
+    write_challenge_builder_content(dashboard_dir)
     shutil.rmtree(dashboard_dir / "content" / "docs", ignore_errors=True)
     write_skill_content(
         root,
