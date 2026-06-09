@@ -33,6 +33,10 @@ psynet debug local
 ```
 
 Then open the generated ad page URL and progress through the participant flow.
+For grouped experiments, set explicit `max_wait_time` values on groupers and
+barriers before recording participant flows; browser windows and headed
+automation often enter sequentially, and default waits can be too short for
+reliable evidence collection.
 
 Record what you ran and what happened in the challenge attempt's `evidence/`
 folder. If a command cannot run because system services are unavailable, record
