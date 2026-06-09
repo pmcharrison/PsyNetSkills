@@ -58,9 +58,10 @@ Useful starting points:
   `markupsafe.Markup` only for trusted, static HTML snippets passed directly as
   page content; do not nest raw markup strings inside `dominate` containers.
   Avoid interpolating participant- or user-provided data into `Markup`.
-- For payoff matrices and other important tables, use a small helper that builds
-  a Bootstrap-styled `tags.table(...)`, then inspect it in a browser or
-  participant recording for readability, escaped HTML, and visual polish.
+- For participant-facing UI, inspect the rendered pages in a browser or
+  participant recording for readability, escaped HTML, layout issues, and visual
+  polish. Pay particular attention to instructions, tables, controls, and
+  feedback pages.
 - For repeated tasks where order matters, do not rely on `StaticTrialMaker`'s
   default block order. Use explicit blocks plus `choose_block_order`, or use a
   timeline loop, so visible round numbers match the actual presentation order.
