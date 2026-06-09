@@ -66,6 +66,29 @@ Useful starting points:
   default block order. Use explicit blocks plus `choose_block_order`, or use a
   timeline loop, so visible round numbers match the actual presentation order.
 
+## Realtime synchronous experiments
+
+For websocket experiments where multiple participants interact during the same
+trial, especially games with ordered turns or rounds:
+
+- Design the server as the authority for shared experiment state. The server
+  should accept actions, reject out-of-turn or duplicate actions, advance turns,
+  and broadcast the resulting state snapshot.
+- Treat browser state as a rendering cache only. Clients may show pending UI
+  feedback, but they should not decide that a round has advanced, that a turn is
+  complete, or that another participant's action is valid.
+- Keep websocket payloads scoped to what each participant is allowed to know.
+  Do not send private rewards, signals, hidden probabilities, or partner-only
+  outcomes to the wrong client just because they are convenient for local UI
+  updates.
+- Persist enough server-side transition data to reconstruct the interaction:
+  incoming action, actor, pre-state, accepted/rejected status, post-state, and
+  participant-specific outbound updates.
+- Test with at least two real participant sessions and review the recording for
+  interaction semantics, not just visual updates. Confirm that participants stay
+  on the same ordered turn and that one client's stale or repeated click cannot
+  advance the game incorrectly.
+
 ## PsyNet setup reminders
 
 Follow full instructions in the PsyNet source code repository to set up the environment.
