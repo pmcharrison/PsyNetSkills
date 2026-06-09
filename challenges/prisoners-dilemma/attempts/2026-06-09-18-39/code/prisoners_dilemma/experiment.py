@@ -255,7 +255,8 @@ class PrisonersDilemmaTrial(StaticTrial):
 
 
 class PrisonersDilemmaTrialMaker(StaticTrialMaker):
-    pass
+    def choose_block_order(self, experiment, participant, blocks):
+        return sorted(blocks)
 
 
 def final_summary_page(participant: Participant) -> InfoPage:
@@ -319,11 +320,15 @@ trial_maker = PrisonersDilemmaTrialMaker(
     id_="prisoners_dilemma",
     trial_class=PrisonersDilemmaTrial,
     nodes=[
-        StaticNode(definition={"round_number": round_number})
+        StaticNode(
+            definition={"round_number": round_number},
+            block=round_number,
+        )
         for round_number in range(1, N_SCORED_ROUNDS + 1)
     ],
     expected_trials_per_participant=N_SCORED_ROUNDS,
     max_trials_per_participant=N_SCORED_ROUNDS,
+    max_trials_per_block=1,
     sync_group_type=GROUP_TYPE,
 )
 
