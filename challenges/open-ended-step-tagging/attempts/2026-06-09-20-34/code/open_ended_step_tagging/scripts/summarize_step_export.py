@@ -29,7 +29,7 @@ def parse_jsonish(value: str):
 
 
 def summarize(zip_path: Path) -> dict[str, object]:
-    trial_rows = read_csv_from_zip(zip_path, "trial.csv")
+    trial_rows = read_csv_from_zip(zip_path, "StepTagTrial.csv")
     summary: dict[str, object] = {
         "zip_path": str(zip_path),
         "n_trials": len(trial_rows),
@@ -49,10 +49,16 @@ def summarize(zip_path: Path) -> dict[str, object]:
             str(stimulus_name),
             {
                 "n_trials_with_answers": 0,
+                "accepted_new_tags": [],
+                "rejected_new_tags": [],
                 "tags": {},
             },
         )
         stimulus_summary["n_trials_with_answers"] += 1  # type: ignore[index,operator]
+        for field in ["accepted_new_tags", "rejected_new_tags"]:
+            values = parse_jsonish(row.get(field, ""))
+            if isinstance(values, list):
+                stimulus_summary[field].extend(values)  # type: ignore[index,union-attr]
         tags = stimulus_summary["tags"]  # type: ignore[index]
         for candidate in candidates:
             if not isinstance(candidate, dict):
