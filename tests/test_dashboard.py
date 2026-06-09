@@ -41,7 +41,7 @@ def challenge_instructions(difficulty: int = 4) -> str:
     )
 
 
-def evaluation(score: int = 6) -> str:
+def evaluation(score: int | float = 6) -> str:
     return (
         "---\n"
         f"score: {score}\n"
@@ -70,6 +70,20 @@ def test_collect_challenges_reports_latest_score(tmp_path: Path) -> None:
     assert challenges[0].type == "experiment implementation"
     assert challenges[0].difficulty == 4
     assert challenges[0].latest_score == 8
+
+
+def test_collect_challenges_reports_decimal_score(tmp_path: Path) -> None:
+    challenge_dir = tmp_path / "challenges/example"
+    write(challenge_dir / "INSTRUCTIONS.md", challenge_instructions())
+    write(
+        challenge_dir / "attempts/2026-06-01-10-10/EVALUATION.md",
+        evaluation(9.5),
+    )
+
+    challenges = collect_challenges(tmp_path)
+
+    assert challenges[0].attempts[0].score == 9.5
+    assert challenges[0].latest_score == 9.5
 
 
 def test_collect_challenges_reports_attempt_metadata(tmp_path: Path) -> None:

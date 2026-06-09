@@ -94,7 +94,7 @@ class Attempt:
     """A dashboard summary of a challenge attempt."""
 
     name: str
-    score: int | None
+    score: int | float | None
     path: str
     url: str
     date_time: str
@@ -131,7 +131,7 @@ class Challenge:
     attempts: list[Attempt]
 
     @property
-    def latest_score(self) -> int | None:
+    def latest_score(self) -> int | float | None:
         """Return the most recent scored attempt."""
         for attempt in reversed(self.attempts):
             if attempt.score is not None:
