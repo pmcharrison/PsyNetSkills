@@ -6,3 +6,4 @@ local_only/
 logs/
 *.log
 source_code.zip
+static/assets
