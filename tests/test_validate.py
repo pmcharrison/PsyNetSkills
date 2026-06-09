@@ -99,6 +99,16 @@ def test_parse_evaluation_score_handles_frontmatter(tmp_path: Path) -> None:
     assert parse_evaluation_score(evaluation_file) == 7
 
 
+def test_parse_evaluation_score_handles_decimal_frontmatter(tmp_path: Path) -> None:
+    evaluation_file = tmp_path / "EVALUATION.md"
+    evaluation_file.write_text(
+        "---\nscore: 9.5\n---\n\n# Evaluation\n",
+        encoding="utf-8",
+    )
+
+    assert parse_evaluation_score(evaluation_file) == 9.5
+
+
 def test_validate_learnings_accepts_expected_format(tmp_path: Path) -> None:
     learnings_file = tmp_path / "LEARNINGS.md"
     write(
