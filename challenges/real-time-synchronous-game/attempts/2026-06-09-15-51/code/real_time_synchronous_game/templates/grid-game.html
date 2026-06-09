@@ -170,6 +170,7 @@
     var channel = String(psynet.var["channel"]);
     var submitClickUrl = String(psynet.var["submit_click_url"]);
     var stateUrl = String(psynet.var["state_url"]);
+    var uniqueId = dallinger.identity.uniqueId || psynet.uniqueId;
     var participants = psynet.var["participants"] || [];
     var participantNames = {};
     var currentState = null;
@@ -262,7 +263,7 @@
         var response = await fetch(stateUrl, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ unique_id: psynet.uniqueId, group_id: groupId, node_id: nodeId }),
+            body: JSON.stringify({ unique_id: uniqueId, group_id: groupId, node_id: nodeId }),
         });
         var data = await response.json();
         if (data.ok) applyState(data.state, false);
@@ -280,7 +281,7 @@
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    unique_id: psynet.uniqueId,
+                    unique_id: uniqueId,
                     participant_id: participantId,
                     group_id: groupId,
                     node_id: nodeId,
