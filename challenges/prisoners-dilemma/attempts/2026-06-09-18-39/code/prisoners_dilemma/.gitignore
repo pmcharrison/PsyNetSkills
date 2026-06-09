@@ -9,7 +9,12 @@ env/
 server.log
 
 # Automatically generated resources for running experiments with assets
-static/assets
+static/
+
+# Local debug/export byproducts
+data/
+dump.rdb
+Dockertag
 
 # Experiment source code snapshot created in `Experiment.pre_deploy`
 source_code.zip
