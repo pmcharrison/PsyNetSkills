@@ -13,3 +13,10 @@ The first visual two-browser run failed before the game page because the default
 
 *Actions:*
 - **PsyNetSkills:** Update evidence-collection guidance to recommend absolute paths for `psynet export local --path` inside challenge attempts. Confidence: medium. Status: considering.
+
+## Review recordings for interaction semantics
+
+The first successful visual recording showed realtime heatmap updates, but video review caught that participant round counters advanced independently after each participant's own click. A second implementation pass made the grid wait for both dyad members before advancing rounds, and a second recording verified the corrected behavior.
+
+*Actions:*
+- **PsyNetSkills:** Keep video review as an explicit evidence-validation step for synchronous/interacting-participant challenges, not just a final artifact check. Confidence: high. Status: considering.

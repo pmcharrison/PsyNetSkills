@@ -13,6 +13,10 @@
 - T+01:02:00 [agent] Recorded successful two-participant evidence showing private signals and partner heatmap updates.
 - T+01:07:00 [agent] Ran the required 40-bot, 5-minute performance test and saved JSON/log evidence.
 - T+01:15:00 [agent] Exported local data and saved a dashboard monitor snapshot.
-- T+01:17:00 [agent-stop] Experiment implementation and first-pass evidence collection complete.
+- T+01:19:00 [agent] Video review identified that participant round counters advanced independently after each own click.
+- T+01:23:00 [agent] Updated the client to advance each round only after both dyad members clicked.
+- T+01:29:00 [agent] Re-recorded participant evidence showing lockstep round advancement and private signals.
+- T+01:35:00 [agent] Re-ran the 40-bot performance test, exported final local data, and refreshed the monitor snapshot.
+- T+01:36:00 [agent-stop] Experiment implementation and first-pass evidence collection complete.
 
 <!-- Close active implementation segments with [agent-stop] when work pauses or completes. -->
