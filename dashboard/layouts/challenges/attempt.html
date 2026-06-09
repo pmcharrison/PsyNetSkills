@@ -7,7 +7,7 @@
     {{ $challenge = index $challengeMatches 0 }}
   {{ end }}
   {{ $attemptMatches := where $challenge.attempts "name" $attemptName }}
-  {{ $attempt := dict "code_files" (slice) "evidence_files" (slice) "timeline_entries" (slice) "name" $attemptName }}
+  {{ $attempt := dict "code_files" (slice) "evidence_files" (slice) "timeline_entries" (slice) "name" $attemptName "path" "" }}
   {{ if gt (len $attemptMatches) 0 }}
     {{ $attempt = index $attemptMatches 0 }}
   {{ end }}
@@ -161,7 +161,12 @@
     </section>
 
     <section class="attempt-panel">
-      <h2>Evaluation</h2>
+      <div class="section-heading">
+        <h2>Evaluation</h2>
+        {{ with $attempt.path }}
+          {{ partial "edit-in-github.html" (printf "%s/EVALUATION.md" .) }}
+        {{ end }}
+      </div>
       {{ with $attempt.evaluation }}
         <div class="attempt-markdown">
           {{ . | markdownify }}
@@ -173,7 +178,12 @@
 
     {{ with $attempt.learnings }}
       <section class="attempt-panel">
-        <h2>Learnings</h2>
+        <div class="section-heading">
+          <h2>Learnings</h2>
+          {{ with $attempt.path }}
+            {{ partial "edit-in-github.html" (printf "%s/LEARNINGS.md" .) }}
+          {{ end }}
+        </div>
         <div class="attempt-markdown learning-markdown">
           {{ $learningHtml := . | markdownify }}
           {{ $learningHtml = replaceRE `Confidence:\s+(high|medium|low)\.` `<span class="learning-chip learning-chip-confidence learning-chip-confidence-$1"><span class="learning-chip-label">Confidence</span> $1</span>` $learningHtml }}
