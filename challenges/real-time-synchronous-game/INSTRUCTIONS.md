@@ -10,7 +10,7 @@ played by pairs of participants using websockets.
 
 The experiment should:
 
-- Group participants into dyads using `SimpleGrouper`.
+- Group participants into dyads using `SimpleGrouper`. A trial maker (for now static) assigns trials to dyads.
 - Let each dyad play a single synchronous trial containing 64 rounds.
 - Show each participant a clickable pixel grid. The grid size should be
   controlled by a global experiment variable and default to 8 by 8.
