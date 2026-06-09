@@ -66,6 +66,49 @@ Useful starting points:
   default block order. Use explicit blocks plus `choose_block_order`, or use a
   timeline loop, so visible round numbers match the actual presentation order.
 
+## Realtime synchronous experiments
+
+For websocket experiments where multiple participants interact during the same
+trial, especially games with ordered turns or rounds:
+
+- Design the server as the authority for shared experiment state. The server
+  should accept actions, reject out-of-turn or duplicate actions, advance turns,
+  and broadcast the resulting state snapshot.
+- Move experiment logic to the server side as much as is reasonable. This
+  reduces out-of-sync client bugs and keeps page templates from accumulating
+  complex JavaScript experiment logic.
+- After every accepted update, the server should send each participant the
+  current state they are allowed to see; the browser should render that snapshot
+  rather than reconstructing or tracking the game state independently.
+- Treat browser state as a rendering cache only. Clients may show pending UI
+  feedback, timers, animations, or sounds, but they should not decide that a
+  round has advanced, that a turn is complete, or that another participant's
+  action is valid.
+- Keep websocket payloads scoped to what each participant is allowed to know.
+  Do not send private rewards, signals, hidden probabilities, or partner-only
+  outcomes to the wrong client just because they are convenient for local UI
+  updates.
+- Separate three data concepts instead of mixing them in one table or payload:
+  raw submitted events, reconstructed/checkpointed game state, and
+  participant-specific outbound deliveries.
+- Treat the raw event log as the private source of truth. It should contain the
+  complete submitted action and any private consequences needed for analysis
+  (for example rewards, signals, hidden probabilities, timing, and validation
+  metadata).
+- Make game state derivable from the event log whenever practical. For
+  high-volume or highly parallel games, add server-side state snapshots or
+  checkpoints, but keep them downstream of accepted events.
+- Record outbound deliveries separately when it matters what each participant
+  actually received. These delivery records should contain only the public
+  payload sent to that participant, plus routing/status metadata.
+- Implement an explicit privacy projection from private events/state to
+  per-recipient public payloads. Never rely on the browser to hide fields that
+  should not have been sent.
+- Test with at least two real participant sessions and review the recording for
+  interaction semantics, not just visual updates. Confirm that participants stay
+  on the same ordered turn and that one client's stale or repeated click cannot
+  advance the game incorrectly.
+
 ## PsyNet setup reminders
 
 Follow full instructions in the PsyNet source code repository to set up the environment.
