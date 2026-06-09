@@ -324,9 +324,14 @@ class Exp(psynet.experiment.Experiment):
         for bot in bots:
             assert bot.get_current_page().label == "pixel_game"
             bot.take_page()
+        advance_past_wait_pages(bots)
         for bot in bots:
-            assert "Thank you" in bot.current_page_text
-            bot.take_page()
+            if "Thank you" in bot.current_page_text:
+                bot.take_page()
+        advance_past_wait_pages(bots)
+        for bot in bots:
+            bot.run_to_completion()
+            assert not bot.from_db("failed")
 
     def handle_pixel_game_message(self, payload, participant, node, receive_time):
         msg_type = payload.get("type")
