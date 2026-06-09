@@ -418,14 +418,11 @@ class Exp(psynet.experiment.Experiment):
         for bot in bots:
             assert "Thanks for participating!" in bot.current_page_text
 
-        group_id = bots[0].participant.sync_group.id
-        node_id = bots[0].participant.current_trial.node.id
-        clicks = SyncGridGameClick.query.filter_by(
-            group_id=group_id,
-            node_id=node_id,
-        ).all()
+        clicks = SyncGridGameClick.query.all()
         assert len(clicks) == 128
         assert {click.signal for click in clicks}.issubset({0, 1})
+        group_id = clicks[0].group_id
+        node_id = clicks[0].node_id
 
         sessions = SyncGridGameSession.query.filter_by(
             group_id=group_id,
