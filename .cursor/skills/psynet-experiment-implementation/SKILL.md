@@ -75,7 +75,7 @@ Useful starting points:
   default block order. Use explicit blocks plus `choose_block_order`, or use a
   timeline loop, so visible round numbers match the actual presentation order.
 
-## Realtime synchronous experiments
+### Realtime synchronous experiments
 
 For websocket experiments where multiple participants interact during the same
 trial, especially games with ordered turns or rounds:
@@ -93,6 +93,17 @@ trial, especially games with ordered turns or rounds:
   feedback, timers, animations, or sounds, but they should not decide that a
   round has advanced, that a turn is complete, or that another participant's
   action is valid.
+- Even when much of the interaction happens within a single trial, integrate it
+  with PsyNet's node/trial system. Realtime session parameters should be
+  derivable from the trial's node definition.
+- The node should contain all information needed for a realtime session to
+  begin, without consulting previous sessions, prior events, or mutable runtime
+  state. If a future session should resume or transform earlier data,
+  `summarize_trials` should write that information into the next node definition
+  first.
+- Important trial outputs (for example the accepted event sequence) should be
+  recorded in the trial answer so `summarize_trials` can build the next node
+  from the accumulated data.
 - Keep websocket payloads scoped to what each participant is allowed to know.
   Do not send private rewards, signals, hidden probabilities, or partner-only
   outcomes to the wrong client just because they are convenient for local UI
