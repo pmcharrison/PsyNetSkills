@@ -1,2 +1,7 @@
+.deploy/
+__pycache__/
+Dockertag
+server.log
+static/assets
 node_modules/
-static/scripts/
+source_code.zip

@@ -41,6 +41,10 @@ class FerryMarketUnityPage(UnityPage):
             resources="/static",
             contents={
                 "game": "ferry-market",
+                "goal": 3,
+                "gain": "2",
+                "mGame": 1,
+                "rule": "2",
                 "completion_instruction": "Finish the Unity task to continue.",
             },
             session_id="ferry-market-unity",
