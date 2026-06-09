@@ -336,7 +336,11 @@ class Exp(psynet.experiment.Experiment):
             ),
             time_estimate=15,
         ),
-        SimpleGrouper(group_type=GROUP_TYPE, initial_group_size=2),
+        SimpleGrouper(
+            group_type=GROUP_TYPE,
+            initial_group_size=2,
+            max_wait_time=300,
+        ),
         SyncGridGameTrialMaker(
             id_="sync_grid_game",
             trial_class=SyncGridGameTrial,
