@@ -22,6 +22,14 @@ Common building blocks:
 - Assets should be declared through PsyNet asset helpers when files must be
   served to participants.
 
+Project layout patterns:
+
+- If `experiment.py` imports sibling helper modules, make the experiment
+  directory importable before those imports. `psynet test local` imports the
+  experiment as `dallinger_experiment`, so plain sibling imports can fail even
+  when `python experiment.py` succeeds. Prefer packaging the helpers, or prepend
+  `Path(__file__).parent` to `sys.path` before importing them.
+
 Participant-flow patterns:
 
 - Add practice or training trials before main trials when the task has rules the

@@ -16,7 +16,7 @@ into a participant response sequence without custom JavaScript.
 plain sibling imports can fail even when `python experiment.py` works locally.
 
 *Actions:*
-- **PsyNetSkills:** Update generated experiment guidance to either package helper modules or prepend the experiment directory to `sys.path` before local helper imports. Confidence: high. Status: considering.
+- **PsyNetSkills:** Update generated experiment guidance to either package helper modules or prepend the experiment directory to `sys.path` before local helper imports. Confidence: high. Status: completed. Notes: Added sibling-helper import guidance to `psynet-experiment-implementation` experiment patterns.
 - **PsyNet:** Consider documenting the `dallinger_experiment` import context in local testing guidance. Confidence: medium. Status: considering.
 
 ## Keep PsyNet config in one place
@@ -25,7 +25,7 @@ PsyNet rejects config variables declared both in `config.txt` and on the
 experiment class. Small generated experiments should choose one source of truth.
 
 *Actions:*
-- **PsyNetSkills:** Add a reminder to generated experiment templates to avoid duplicating config keys across files. Confidence: high. Status: considering.
+- **PsyNetSkills:** Add a reminder to generated experiment templates to avoid duplicating config keys across files. Confidence: high. Status: completed. Notes: Added a single-source-of-truth config reminder to the `psynet-experiment-implementation` workflow.
 
 ## Constraints file is part of local PsyNet validation
 

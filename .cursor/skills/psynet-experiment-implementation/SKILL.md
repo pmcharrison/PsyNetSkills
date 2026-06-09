@@ -30,8 +30,10 @@ Useful starting points:
 3. Prefer established PsyNet components such as `Timeline`, `InfoPage`,
    `ModularPage`, controls, prompts, trials, and trial makers.
 4. Put generated experiment files in the requested output directory.
-5. Add short comments only where the PsyNet pattern is not obvious.
-6. Regularly use `psynet test local` to test the experiment logic,
+5. Keep PsyNet configuration in one source of truth. Do not declare the same
+   config key in both `config.txt` and the experiment class.
+6. Add short comments only where the PsyNet pattern is not obvious.
+7. Regularly use `psynet test local` to test the experiment logic,
    and implement custom assertions to test the experiment's behavior.
 
 ## Design guidance
