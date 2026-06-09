@@ -84,14 +84,17 @@ class PreferenceTrial(MCMCPTrial):
     time_estimate = 12
 
     def finalize_definition(self, definition, experiment, participant):
+        pair_audio = OnDemandAsset(
+            function=synth_pair,
+            extension=".wav",
+        )
         self.add_assets(
             {
-                "pair_audio": OnDemandAsset(
-                    function=synth_pair,
-                    extension=".wav",
-                )
+                "pair_audio": pair_audio,
             }
         )
+        # PsyNet 12.2 computes on-demand URLs before insert; recompute after add.
+        pair_audio.url = pair_audio.get_url()
         return definition
 
     def show_trial(self, experiment, participant):
@@ -238,6 +241,8 @@ class Exp(psynet.experiment.Experiment):
         for trial in trials:
             assert "current_state" in trial.definition
             assert "proposal" in trial.definition
+            assert trial.assets["pair_audio"].id is not None
+            assert "id=None" not in trial.assets["pair_audio"].url
             assert trial.answer["value"] in [
                 trial.definition["current_state"],
                 trial.definition["proposal"],
