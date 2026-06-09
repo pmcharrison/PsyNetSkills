@@ -4,8 +4,9 @@ Use these conventions when preparing a challenge attempt for review.
 
 ## Evidence checklist
 
-For experiment implementation challenges, provide these artifacts or document the
-blocker in `EVALUATION.md`:
+Use the public challenge instructions as the source of truth for required
+evidence. For experiment implementation challenges, provide these artifacts or
+document the blocker in `EVALUATION.md`:
 
 - `code/` contains the runnable, self-contained experiment.
 - `evidence/participant.mp4` records the participant flow. Use the
@@ -21,6 +22,11 @@ blocker in `EVALUATION.md`:
 
 The `evidence/analyses/` directory is optional because not every challenge needs
 analysis beyond the standard artifacts.
+
+For non-experiment challenges, collect the evidence requested by the public
+instructions and any artifacts needed to make the result reviewable. Do not add
+experiment-only artifacts such as `performance.json`, `monitor.html`, or
+`data.zip` unless they are relevant to that challenge type.
 
 For participant-flow evidence, prefer a hybrid workflow when feasible:
 
