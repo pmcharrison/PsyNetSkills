@@ -12,4 +12,5 @@
 - T+01:00:00 [agent] Exported dashboard monitor and experiment data evidence.
 - T+01:11:00 [agent] Completed 40-bot, 5-minute `psynet performance-test local` evidence collection.
 - T+01:15:00 [agent] Video review found Like feedback appeared blue/cyan, so the feedback page was revised to use explicit green/red text on white.
+- T+01:19:00 [agent] Added a bot response hook for the custom feedback page after `psynet test local` exposed the missing method.
 

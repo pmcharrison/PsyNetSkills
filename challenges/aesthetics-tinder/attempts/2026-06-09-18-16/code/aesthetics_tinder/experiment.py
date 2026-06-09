@@ -9,7 +9,7 @@ from markupsafe import Markup
 
 import psynet.experiment
 from psynet.asset import asset
-from psynet.bot import Bot
+from psynet.bot import Bot, BotResponse
 from psynet.modular_page import KeyboardPushButtonControl, ModularPage
 from psynet.page import InfoPage
 from psynet.participant import Participant
@@ -87,6 +87,9 @@ class PreferenceFeedbackPage(Page):
             """,
             template_arg={"text": text, "color": color},
         )
+
+    def get_bot_response(self, experiment, bot):
+        return BotResponse(answer=None)
 
 
 class AestheticImageTrial(StaticTrial):
