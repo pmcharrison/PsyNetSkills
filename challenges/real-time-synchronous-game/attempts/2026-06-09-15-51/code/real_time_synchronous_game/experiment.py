@@ -397,6 +397,10 @@ class Exp(psynet.experiment.Experiment):
             )
 
     def test_serial_run_bots(self, bots: List[BotDriver]):
+        for bot in bots:
+            assert "Synchronous grid game" in bot.current_page_text
+            bot.take_page()
+
         advance_past_wait_pages(bots)
         for bot in bots:
             assert bot.current_page_label == "grid_game"
