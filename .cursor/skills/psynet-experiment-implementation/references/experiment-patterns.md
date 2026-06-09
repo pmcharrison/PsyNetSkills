@@ -33,4 +33,7 @@ Participant-flow patterns:
   regeneration, and replication easier while keeping runtime deterministic.
 
 When adapting a demo, preserve the PsyNet idiom and simplify only after the
-experiment runs.
+experiment runs. Prefer native PsyNet mechanisms over custom JavaScript whenever
+possible; use custom frontend scripts only as a last resort when existing
+PsyNet pages, controls, events, modules, or helpers cannot express the required
+behavior.

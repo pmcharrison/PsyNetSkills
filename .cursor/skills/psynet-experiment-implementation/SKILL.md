@@ -29,15 +29,19 @@ Useful starting points:
 2. Build a minimal runnable experiment first, then add complexity.
 3. Prefer established PsyNet components such as `Timeline`, `InfoPage`,
    `ModularPage`, controls, prompts, trials, and trial makers.
-4. Put generated experiment files in the requested output directory.
-5. If the experiment has a `requirements.txt`, pin PsyNet to the local checkout
+4. Before adding custom frontend code, check whether existing PsyNet
+   mechanisms can express the behavior. Custom JavaScript should be a last
+   resort, used only when the required functionality cannot be achieved through
+   PsyNet pages, controls, timelines, events, modules, or native helpers.
+5. Put generated experiment files in the requested output directory.
+6. If the experiment has a `requirements.txt`, pin PsyNet to the local checkout
    commit used for the implementation, for example:
    `psynet@git+https://gitlab.com/PsyNetDev/PsyNet@<commit>#egg=psynet`.
-6. Generate `constraints.txt` from that pinned `requirements.txt` using the
+7. Generate `constraints.txt` from that pinned `requirements.txt` using the
    PsyNet/Dallinger environment, typically `dallinger constraints generate`.
    Do not copy a constraints file that still points to `master`.
-7. Add short comments only where the PsyNet pattern is not obvious.
-8. Regularly use `psynet test local` to test the experiment logic,
+8. Add short comments only where the PsyNet pattern is not obvious.
+9. Regularly use `psynet test local` to test the experiment logic,
    and implement custom assertions to test the experiment's behavior.
 
 ## Design guidance
@@ -58,6 +62,11 @@ Useful starting points:
   `markupsafe.Markup` only for trusted, static HTML snippets passed directly as
   page content; do not nest raw markup strings inside `dominate` containers.
   Avoid interpolating participant- or user-provided data into `Markup`.
+- For demo extensions, keep the implementation close to PsyNet's native style.
+  Prefer built-in pages, controls, events, chatrooms, grouping, and timeline
+  constructs over bespoke browser scripts. If custom JavaScript is unavoidable,
+  keep it small, isolated, and justified by a requirement that PsyNet cannot
+  express natively.
 - For participant-facing UI, inspect the rendered pages in a browser or
   participant recording for readability, escaped HTML, layout issues, and visual
   polish. Pay particular attention to instructions, tables, controls, and
