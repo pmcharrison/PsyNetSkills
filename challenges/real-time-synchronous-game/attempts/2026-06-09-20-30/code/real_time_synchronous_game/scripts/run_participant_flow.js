@@ -64,6 +64,15 @@ async function clickCell(page, row, col) {
   await page.locator(`#own-grid [data-row='${row}'][data-col='${col}']`).click();
 }
 
+async function waitForNextRoundOrCompletion(page) {
+  await page.waitForFunction(() => {
+    return Boolean(
+      document.querySelector("#finish-btn:not(:disabled)")
+      || document.querySelector("#own-grid button:not(:disabled)")
+    );
+  }, { timeout: 30_000 });
+}
+
 async function ownClickCount(page) {
   return page.locator("#own-grid .own-clicked").count();
 }
@@ -94,16 +103,10 @@ async function run() {
       clickCell(player1, round % 8, (round * 3) % 8),
       clickCell(player2, (round * 5) % 8, (round * 7) % 8),
     ]);
-    await player1.waitForFunction(
-      (count) => document.querySelectorAll("#own-grid .own-clicked").length >= count,
-      round + 1,
-      { timeout: 30_000 },
-    );
-    await player2.waitForFunction(
-      (count) => document.querySelectorAll("#own-grid .own-clicked").length >= count,
-      round + 1,
-      { timeout: 30_000 },
-    );
+    await Promise.all([
+      waitForNextRoundOrCompletion(player1),
+      waitForNextRoundOrCompletion(player2),
+    ]);
     await player1.waitForTimeout(round < 6 ? 220 : 45);
   }
 
