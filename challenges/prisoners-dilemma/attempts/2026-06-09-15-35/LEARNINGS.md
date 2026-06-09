@@ -28,3 +28,13 @@ instructions visible as an actual list.
 
 *Actions:*
 - **PsyNetSkills:** Add a validation reminder for participant-facing challenge evidence to inspect instruction pages for escaped HTML. Confidence: medium. Status: considering.
+
+## Static trial makers shuffle blocks unless ordered explicitly
+
+The first participant recording showed rounds in the order 2, 1, 3, 4, 5 because
+`StaticTrialMaker` inherits a randomized default `choose_block_order`. Repeated
+game rounds should use explicit blocks plus a sorted block order when the visible
+round sequence matters.
+
+*Actions:*
+- **PsyNetSkills:** Add a note to experiment implementation guidance that ordered repeated tasks need explicit block ordering or a timeline loop. Confidence: high. Status: considering.

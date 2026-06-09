@@ -11,3 +11,4 @@
 - T+00:42:00 [agent] Added `.python-version` after legacy debug preflight required it for constraints validation.
 - T+00:44:00 [agent] Removed a Redis `dump.rdb` generated during local testing and ignored future Redis dumps.
 - T+00:50:00 [agent] Fixed escaped instruction-list HTML found during a browser probe.
+- T+01:03:00 [agent] Fixed static trial ordering so the five repeated rounds display in numeric sequence.

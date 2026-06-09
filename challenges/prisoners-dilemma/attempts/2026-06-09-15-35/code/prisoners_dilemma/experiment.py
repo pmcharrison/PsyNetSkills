@@ -140,6 +140,9 @@ class PrisonersDilemmaTrial(StaticTrial):
 
 
 class PrisonersDilemmaTrialMaker(StaticTrialMaker):
+    def choose_block_order(self, experiment, participant, blocks):
+        return sorted(blocks)
+
     def finalize_trial(self, answer, trial, experiment, participant):
         super().finalize_trial(answer, trial, experiment, participant)
         partner_choice = trial.definition["partner_choice"]
@@ -179,9 +182,13 @@ class PrisonersDilemmaTrialMaker(StaticTrialMaker):
 trial_maker = PrisonersDilemmaTrialMaker(
     id_="prisoners_dilemma",
     trial_class=PrisonersDilemmaTrial,
-    nodes=[StaticNode(definition=definition) for definition in PARTNER_ROUNDS],
+    nodes=[
+        StaticNode(definition=definition, block=f"{definition['round']:02d}")
+        for definition in PARTNER_ROUNDS
+    ],
     expected_trials_per_participant=N_ROUNDS,
     max_trials_per_participant=N_ROUNDS,
+    max_trials_per_block=1,
     allow_repeated_nodes=False,
     balance_across_nodes=False,
     check_performance_at_end=True,
