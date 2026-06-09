@@ -20,3 +20,13 @@ a full participant run.
 
 *Actions:*
 - **PsyNetSkills:** Extend `record-participant-video` with a browser-audio preflight check in Cursor Cloud. Confidence: high. Status: considering.
+
+## Performance evidence should foreground completion rate
+
+The performance test reported zero bot/request errors, but the human evaluation
+still flagged that about half of the attempts did not complete within the fixed
+test window. Future summaries should report both error rate and completion rate
+prominently.
+
+*Actions:*
+- **PsyNetSkills:** Clarify challenge evidence guidance to interpret performance-test timeout/incomplete counts separately from request or bot errors. Confidence: medium. Status: considering.
