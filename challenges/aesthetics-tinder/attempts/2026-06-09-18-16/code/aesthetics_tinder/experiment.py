@@ -11,9 +11,9 @@ import psynet.experiment
 from psynet.asset import asset
 from psynet.bot import Bot
 from psynet.modular_page import KeyboardPushButtonControl, ModularPage
-from psynet.page import InfoPage, WaitPage
+from psynet.page import InfoPage
 from psynet.participant import Participant
-from psynet.timeline import Timeline
+from psynet.timeline import Page, Timeline
 from psynet.trial.static import StaticNode, StaticTrial, StaticTrialMaker
 
 ROOT = Path(__file__).parent
@@ -59,6 +59,34 @@ def get_nodes() -> list[StaticNode]:
 
 def validate_arrow_key(key: str) -> bool:
     return key in {"ArrowLeft", "ArrowRight"}
+
+
+class PreferenceFeedbackPage(Page):
+    def __init__(self, text: str, color: str):
+        super().__init__(
+            label="preference_feedback",
+            time_estimate=0.7,
+            save_answer=False,
+            template_str="""
+            {% extends "timeline-page.html" %}
+            {% block main_body %}
+                <div style="min-height: 70vh; display: flex; align-items: center; justify-content: center; background: #fff;">
+                    <div style="font-size: 4.5rem; font-weight: 800; color: {{ color }};">
+                        {{ text }}
+                    </div>
+                </div>
+            {% endblock %}
+            {% block scripts %}
+                {{ super() }}
+                <script>
+                    setTimeout(function () {
+                        psynet.nextPage();
+                    }, 700);
+                </script>
+            {% endblock %}
+            """,
+            template_arg={"text": text, "color": color},
+        )
 
 
 class AestheticImageTrial(StaticTrial):
@@ -143,16 +171,7 @@ class AestheticImageTrial(StaticTrial):
     def show_feedback(self, experiment, participant):
         response = self.answer["response"]
         color = PREFERENCE_LABELS[self.answer["raw_key_choice"]]["color"]
-        return WaitPage(
-            wait_time=0.7,
-            content=Markup(
-                f"""
-                <div style="font-size: 4rem; font-weight: 800; color: {color};">
-                    {response}
-                </div>
-                """
-            ),
-        )
+        return PreferenceFeedbackPage(response, color)
 
 
 trial_maker = StaticTrialMaker(
