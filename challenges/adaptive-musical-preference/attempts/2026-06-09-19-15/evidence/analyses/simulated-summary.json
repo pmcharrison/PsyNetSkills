@@ -1,0 +1,202 @@
+{
+  "summary": {
+    "n_choices": 12,
+    "mean_tempo": 109.0,
+    "mean_brightness": 1.6666666666666667,
+    "tempo_counts": {
+      "84": 1,
+      "96": 4,
+      "120": 7
+    },
+    "brightness_counts": {
+      "1": 4,
+      "2": 8
+    },
+    "final_choice": {
+      "tempo": 120,
+      "brightness": 2
+    }
+  },
+  "trials": [
+    {
+      "trial_index": 0,
+      "current_state": {
+        "tempo": 84,
+        "brightness": 1
+      },
+      "proposal": {
+        "tempo": 84,
+        "brightness": 2
+      },
+      "choice": {
+        "tempo": 84,
+        "brightness": 2
+      }
+    },
+    {
+      "trial_index": 1,
+      "current_state": {
+        "tempo": 84,
+        "brightness": 2
+      },
+      "proposal": {
+        "tempo": 96,
+        "brightness": 1
+      },
+      "choice": {
+        "tempo": 96,
+        "brightness": 1
+      }
+    },
+    {
+      "trial_index": 2,
+      "current_state": {
+        "tempo": 96,
+        "brightness": 1
+      },
+      "proposal": {
+        "tempo": 84,
+        "brightness": 1
+      },
+      "choice": {
+        "tempo": 96,
+        "brightness": 1
+      }
+    },
+    {
+      "trial_index": 3,
+      "current_state": {
+        "tempo": 96,
+        "brightness": 1
+      },
+      "proposal": {
+        "tempo": 84,
+        "brightness": 2
+      },
+      "choice": {
+        "tempo": 96,
+        "brightness": 1
+      }
+    },
+    {
+      "trial_index": 4,
+      "current_state": {
+        "tempo": 96,
+        "brightness": 1
+      },
+      "proposal": {
+        "tempo": 84,
+        "brightness": 1
+      },
+      "choice": {
+        "tempo": 96,
+        "brightness": 1
+      }
+    },
+    {
+      "trial_index": 5,
+      "current_state": {
+        "tempo": 96,
+        "brightness": 1
+      },
+      "proposal": {
+        "tempo": 120,
+        "brightness": 2
+      },
+      "choice": {
+        "tempo": 120,
+        "brightness": 2
+      }
+    },
+    {
+      "trial_index": 6,
+      "current_state": {
+        "tempo": 120,
+        "brightness": 2
+      },
+      "proposal": {
+        "tempo": 132,
+        "brightness": 1
+      },
+      "choice": {
+        "tempo": 120,
+        "brightness": 2
+      }
+    },
+    {
+      "trial_index": 7,
+      "current_state": {
+        "tempo": 120,
+        "brightness": 2
+      },
+      "proposal": {
+        "tempo": 96,
+        "brightness": 3
+      },
+      "choice": {
+        "tempo": 120,
+        "brightness": 2
+      }
+    },
+    {
+      "trial_index": 8,
+      "current_state": {
+        "tempo": 120,
+        "brightness": 2
+      },
+      "proposal": {
+        "tempo": 144,
+        "brightness": 1
+      },
+      "choice": {
+        "tempo": 120,
+        "brightness": 2
+      }
+    },
+    {
+      "trial_index": 9,
+      "current_state": {
+        "tempo": 120,
+        "brightness": 2
+      },
+      "proposal": {
+        "tempo": 108,
+        "brightness": 1
+      },
+      "choice": {
+        "tempo": 120,
+        "brightness": 2
+      }
+    },
+    {
+      "trial_index": 10,
+      "current_state": {
+        "tempo": 120,
+        "brightness": 2
+      },
+      "proposal": {
+        "tempo": 108,
+        "brightness": 1
+      },
+      "choice": {
+        "tempo": 120,
+        "brightness": 2
+      }
+    },
+    {
+      "trial_index": 11,
+      "current_state": {
+        "tempo": 120,
+        "brightness": 2
+      },
+      "proposal": {
+        "tempo": 96,
+        "brightness": 3
+      },
+      "choice": {
+        "tempo": 120,
+        "brightness": 2
+      }
+    }
+  ]
+}
