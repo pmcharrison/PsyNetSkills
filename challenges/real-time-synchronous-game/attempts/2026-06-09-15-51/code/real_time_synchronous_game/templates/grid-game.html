@@ -112,6 +112,9 @@
     var clicks = [];
     var partnerUpdatesSeen = [];
     var partnerCounts = [];
+    var pendingPartnerClicks = {};
+    var ownClickedThisRound = false;
+    var partnerClickedThisRound = false;
     var socket = null;
 
     document.getElementById("round-total").textContent = String(roundsPerGame);
@@ -192,14 +195,14 @@
                 col: col,
                 signal: data.signal,
             });
+            ownClickedThisRound = true;
             document.getElementById("signal-badge").textContent = String(data.signal);
             appendLog("You clicked (" + row + ", " + col + ") and saw private signal " + data.signal + ".");
-            currentRound += 1;
-            if (currentRound >= roundsPerGame) {
-                finishGame();
+            if (partnerClickedThisRound) {
+                completeRound();
             } else {
-                updateRoundDisplay();
-                setGridDisabled(false);
+                document.getElementById("connection-status").textContent = "Waiting for partner click";
+                setGridDisabled(true);
             }
         } catch (error) {
             appendLog("Submission error: " + error.message);
@@ -241,6 +244,18 @@
             if (data.room_id !== roomId || data.type !== "partner_click") return;
             if (String(data.sender_id) === participantId) return;
             renderPartnerClick(data);
+            var partnerRound = Number(data.round);
+            if (partnerRound === currentRound) {
+                partnerClickedThisRound = true;
+                if (ownClickedThisRound) {
+                    completeRound();
+                } else {
+                    document.getElementById("connection-status").textContent = "Partner clicked; choose your cell";
+                    setGridDisabled(false);
+                }
+            } else if (partnerRound > currentRound) {
+                pendingPartnerClicks[partnerRound] = true;
+            }
         };
     }
 
@@ -264,6 +279,22 @@
 
     function updateRoundDisplay() {
         document.getElementById("round-number").textContent = String(currentRound + 1);
+    }
+
+    function completeRound() {
+        appendLog("Round " + (currentRound + 1) + " complete for both players.");
+        currentRound += 1;
+        ownClickedThisRound = false;
+        partnerClickedThisRound = !!pendingPartnerClicks[currentRound];
+        delete pendingPartnerClicks[currentRound];
+        if (currentRound >= roundsPerGame) {
+            finishGame();
+        } else {
+            updateRoundDisplay();
+            document.getElementById("connection-status").textContent = partnerClickedThisRound ?
+                "Partner clicked; choose your cell" : "Connected";
+            setGridDisabled(false);
+        }
     }
 
     function setGridDisabled(disabled) {
