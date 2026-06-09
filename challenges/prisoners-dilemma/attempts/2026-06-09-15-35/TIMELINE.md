@@ -7,3 +7,4 @@
 - T+00:04:00 [agent] Created the timestamped attempt folder and public challenge snapshot.
 - T+00:07:30 [agent] Reviewed relevant PsyNet demos for static trials, repeated choices, feedback, and bot checks.
 - T+00:14:00 [agent] Implemented the first self-contained Prisoner's Dilemma experiment scaffold.
+- T+00:28:00 [agent] Added the standard experiment `.gitignore` after PsyNet preflight rejected the missing file.
