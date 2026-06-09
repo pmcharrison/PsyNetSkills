@@ -1,9 +1,21 @@
 from collections import Counter
 from pathlib import Path
+import sys
 
+import pytest
 from PIL import Image
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
 import experiment
+
+pytest_plugins = ["pytest_dallinger", "pytest_psynet"]
+experiment_dir = Path(__file__).resolve().parent
+
+
+@pytest.mark.parametrize("experiment_directory", [str(experiment_dir)], indirect=True)
+def test_experiment(launched_experiment):
+    launched_experiment.test_experiment()
 
 
 def test_manifest_has_required_stimuli():
