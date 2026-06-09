@@ -86,9 +86,15 @@ trial, especially games with ordered turns or rounds:
   action is valid.
 - Even when much of the interaction happens within a single trial, integrate it
   with PsyNet's node/trial system. Realtime session parameters should be
-  derivable from the trial's node definition, and important trial outputs (for
-  example the accepted event sequence) should be recorded in the trial answer so
-  `summarize_trials` can build the next node from the accumulated data.
+  derivable from the trial's node definition.
+- The node should contain all information needed for a realtime session to
+  begin, without consulting previous sessions, prior events, or mutable runtime
+  state. If a future session should resume or transform earlier data,
+  `summarize_trials` should write that information into the next node definition
+  first.
+- Important trial outputs (for example the accepted event sequence) should be
+  recorded in the trial answer so `summarize_trials` can build the next node
+  from the accumulated data.
 - Keep websocket payloads scoped to what each participant is allowed to know.
   Do not send private rewards, signals, hidden probabilities, or partner-only
   outcomes to the wrong client just because they are convenient for local UI
