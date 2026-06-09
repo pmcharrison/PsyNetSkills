@@ -16,6 +16,14 @@ when it would help the current work. Keep those suggestions scoped: do not fold
 unrelated refactors or broad cleanups into the current task unless the user asks
 for them or they are needed to finish safely.
 
+### Git and PR workflow
+
+Never push directly to `main` or `master` unless the user explicitly asks for a
+direct production push. For repository changes, create a feature branch before
+editing, commit the work there, push the branch, and open or update a pull
+request. If the checkout starts on `main` or `master`, branch from it first and
+keep the base branch unchanged.
+
 ### Required development environment
 
 A complete Cursor Cloud (or local) setup for this repository includes **both** the PsyNetSkills repo **and** the PsyNet stack below. Challenge skills and experiment implementation assume PsyNet is installed and verified — not only the Hugo dashboard and `psynetsk_tools` CLI.
