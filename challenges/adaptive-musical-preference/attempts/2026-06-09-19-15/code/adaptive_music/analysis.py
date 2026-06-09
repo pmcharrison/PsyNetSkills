@@ -19,10 +19,18 @@ def clamp(value, values):
 
 
 def proposal(state):
-    return {
-        "tempo": clamp(state["tempo"] + random.choice([-24, -12, 12, 24]), TEMPOS),
-        "brightness": clamp(state["brightness"] + random.choice([-1, 1]), BRIGHTNESSES),
-    }
+    candidates = []
+    for tempo_step in [-24, -12, 0, 12, 24]:
+        for brightness_step in [-1, 0, 1]:
+            if tempo_step == 0 and brightness_step == 0:
+                continue
+            candidate = {
+                "tempo": clamp(state["tempo"] + tempo_step, TEMPOS),
+                "brightness": clamp(state["brightness"] + brightness_step, BRIGHTNESSES),
+            }
+            if candidate != state and candidate not in candidates:
+                candidates.append(candidate)
+    return random.choice(candidates)
 
 
 def simulate(n_trials=12):
