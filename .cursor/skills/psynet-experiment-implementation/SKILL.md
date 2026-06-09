@@ -84,6 +84,11 @@ trial, especially games with ordered turns or rounds:
   feedback, timers, animations, or sounds, but they should not decide that a
   round has advanced, that a turn is complete, or that another participant's
   action is valid.
+- Even when much of the interaction happens within a single trial, integrate it
+  with PsyNet's node/trial system. Realtime session parameters should be
+  derivable from the trial's node definition, and important trial outputs (for
+  example the accepted event sequence) should be recorded in the trial answer so
+  `summarize_trials` can build the next node from the accumulated data.
 - Keep websocket payloads scoped to what each participant is allowed to know.
   Do not send private rewards, signals, hidden probabilities, or partner-only
   outcomes to the wrong client just because they are convenient for local UI
