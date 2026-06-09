@@ -1,0 +1,8 @@
+[Config]
+title = Real-time synchronous grid game
+description = A paired real-time grid game where each participant receives private binary signals and sees their partner's click heatmap.
+contact_email_on_error = test@example.com
+organization_name = PsyNetSkills
+recruiter = generic
+currency = $
+wage_per_hour = 12.0
