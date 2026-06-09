@@ -10,24 +10,26 @@ metadata more closely.
 *Actions:*
 - **PsyNetSkills:** Update the attempt workflow notes to recommend pinning generated experiment requirements to the recorded PsyNet commit. Confidence: medium. Status: considering.
 
-## Simulated partners simplify repeated-game challenge evidence
+## Repeated game challenges need explicit partner semantics
 
-The public challenge asks for a clearly described partner, not necessarily a
-live synchronized participant. A deterministic simulated partner keeps the
-participant experience clear while avoiding local multi-participant grouping
-fragility during evidence collection.
+The first attempt used a deterministic simulated partner because the public
+instructions did not specify whether the partner had to be another participant.
+Human evaluation clarified that this challenge should require live,
+synchronised participant pairs.
 
 *Actions:*
-- **PsyNetSkills:** For future game challenges, specify whether a partner should be simulated or another live participant when that distinction matters for evaluation. Confidence: high. Status: considering.
+- **PsyNetSkills:** Clarify the public challenge instructions to require pairs of real synchronised participants, 10 rounds per pair, and a bonus proportional to points won. Confidence: high. Status: completed. Notes: Implemented after human evaluation feedback on the 2026-06-09-15-35 attempt.
 
-## Prefer structured tags over raw markup in instruction pages
+## Review payoff tables for both correctness and presentation
 
 A browser probe caught a payoff list rendered as escaped HTML when raw markup was
 nested inside a `dominate` container. Using `tags.ul` and `tags.li` kept the
-instructions visible as an actual list.
+instructions visible as an actual list, but the evaluator still found the payoff
+table aesthetically weak. Participant-facing payoff matrices need both correct
+rendering and careful visual formatting.
 
 *Actions:*
-- **PsyNetSkills:** Add a validation reminder for participant-facing challenge evidence to inspect instruction pages for escaped HTML. Confidence: medium. Status: considering.
+- **PsyNetSkills:** Add a validation reminder for participant-facing challenge evidence to inspect instruction pages and payoff tables for escaped HTML, clarity, and visual polish. Confidence: medium. Status: considering.
 
 ## Static trial makers shuffle blocks unless ordered explicitly
 

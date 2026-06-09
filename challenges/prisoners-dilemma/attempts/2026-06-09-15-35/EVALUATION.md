@@ -1,20 +1,30 @@
 ---
-score:
+score: 5
 ---
 
 # Evaluation
 
 ## Summary
 
-Summarize the human evaluator's overall judgment.
+The attempt completed a functional repeated Prisoner's Dilemma flow, but it did
+not meet the intended social-interaction requirement. The evaluator expected
+live, synchronised participant pairs rather than a simulated partner.
 
 ## Strengths
 
-- 
+- The implementation produced a working PsyNet experiment with participant-flow,
+  performance, monitor, and data-export evidence.
+- Participants could learn the choices, play repeated rounds, receive feedback,
+  and see the final outcome.
 
 ## Weaknesses
 
-- 
+- The partner should have been a live, synchronised participant, not a simulated
+  partner.
+- The game should have paired real participants for 10 rounds.
+- Participants should have received a small cash bonus proportional to the
+  points won.
+- The payoff table was not formatted very elegantly.
 
 ## Criteria
 
@@ -32,7 +42,10 @@ attempt.
 
 ## Notes
 
-- Score and feedback should come from a human evaluator, captured
-  conversationally when working with Cursor Cloud Agents.
+- Human evaluator score: 5/10.
+- Human feedback: the challenge should be clarified to require synchronised
+  pairs of real participants, 10 rounds per pair, and a small cash bonus
+  proportional to points won. The payoff table also needed better visual
+  formatting.
 - The participant video has no audio track because the experiment is visual and
   does not produce audio.
