@@ -2,7 +2,7 @@ from decimal import Decimal, ROUND_FLOOR, ROUND_HALF_UP
 from typing import List
 
 from dominate import tags
-from markupsafe import Markup
+from dominate.util import raw
 
 import psynet.experiment
 from psynet.bot import BotDriver, advance_past_wait_pages
@@ -86,7 +86,7 @@ class CommonPoolTrial(StaticTrial):
             GroupBarrier(
                 id_="finished_contributing",
                 group_type=GROUP_TYPE,
-                max_wait_time=CONTRIBUTION_TIMEOUT_SECONDS + 10,
+                max_wait_time=CONTRIBUTION_TIMEOUT_SECONDS + 30,
                 on_release=self.score_round,
             ),
             PageMaker(self.feedback_page, time_estimate=FEEDBACK_SECONDS),
@@ -107,17 +107,16 @@ class CommonPoolTrial(StaticTrial):
                 "Enter a whole number of coins to invest in the common pool "
                 f"(0 to {max_contribution})."
             )
-            tags.p(
-                Markup(
-                    f"Time remaining: <strong id='countdown'>{CONTRIBUTION_TIMEOUT_SECONDS}</strong> seconds."
-                )
-            )
+            timer = tags.p("Time remaining: ")
+            with timer:
+                tags.strong(str(CONTRIBUTION_TIMEOUT_SECONDS), id="countdown")
+                tags.span(" seconds.")
             tags.p(
                 "If the timer expires, the experiment will submit "
                 f"{max_contribution} coins for this round."
             )
             tags.script(
-                Markup(
+                raw(
                     f"""
                     psynet.trial.onEvent("trialStart", function() {{
                         let remaining = {CONTRIBUTION_TIMEOUT_SECONDS};
@@ -143,6 +142,16 @@ class CommonPoolTrial(StaticTrial):
                 prompt,
                 NumberControl(bot_response=self.bot_contribution),
                 time_estimate=CONTRIBUTION_TIMEOUT_SECONDS,
+                events={
+                    "auto_submit_timeout": Event(
+                        is_triggered_by="trialStart",
+                        delay=CONTRIBUTION_TIMEOUT_SECONDS,
+                        js=(
+                            f'document.getElementById("number-input").value = "{max_contribution}"; '
+                            "psynet.submitResponse();"
+                        ),
+                    )
+                },
                 save_answer="contribution",
                 validate=lambda answer: self.validate_contribution(
                     answer, max_contribution

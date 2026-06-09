@@ -1,0 +1,12 @@
+{
+  "name": "common-pool-resources-attempt-2026-06-09-19-02",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Evidence runner for the common-pool resources PsyNetSkills attempt.",
+  "scripts": {
+    "participant-flow": "node evidence/run_participant_flow.js"
+  },
+  "dependencies": {
+    "@playwright/test": "^1.60.0"
+  }
+}
