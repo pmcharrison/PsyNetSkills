@@ -30,6 +30,7 @@ DEFAULT_N_ROUNDS = 64
 DEFAULT_LOW_P = 0.33
 DEFAULT_HIGH_P = 0.67
 DEFAULT_TURN_SECONDS = 8
+REWARD_FOR_SUCCESS = 0.01
 MINIMAL_N_ROUNDS = 4
 
 NAME_POOL = [
@@ -167,6 +168,7 @@ class PixelGameEvent(SQLBase, SQLMixin):
     col = Column(Integer)
     probability = Column(Float)
     signal = Column(Integer)
+    reward = Column(Float)
     accepted = Column(Boolean)
     error = Column(String)
     receive_time = Column(String)
@@ -289,10 +291,11 @@ class Exp(psynet.experiment.Experiment):
                 """
                 <h3>Synchronous grid game</h3>
                 <p>You and another participant will take turns clicking cells in an 8 by 8 grid.
-                Each cell has a hidden chance of producing a binary signal. Your goal is to learn
-                which cells are more likely to produce signal 1.</p>
-                <p>You will see your own sampled signals. You will also see a heatmap of the other
-                player's click locations, but not their private signals.</p>
+                Each cell has a hidden chance of producing a reward. Your goal is to learn
+                which cells are more likely to produce reward 1.</p>
+                <p>You will see your own sampled rewards and earn $0.01 whenever the reward is 1.
+                You will also see a heatmap of the other player's click locations, but not their
+                private rewards.</p>
                 """
             ),
             time_estimate=20,
@@ -416,8 +419,12 @@ class Exp(psynet.experiment.Experiment):
         if error is None:
             probability = session.hidden_probabilities[row][col]
             signal = 1 if random.random() < probability else 0
+            reward = REWARD_FOR_SUCCESS if signal else 0.0
             event.probability = probability
             event.signal = signal
+            event.reward = reward
+            if reward:
+                participant.inc_performance_reward(reward)
             self._advance_turn(session)
         db.session.add(event)
         db.session.commit()
@@ -527,7 +534,7 @@ class Exp(psynet.experiment.Experiment):
     @classmethod
     def _private_payload(cls, session, participant):
         if session is None:
-            return {"ok": False, "events": [], "last_signal": None}
+            return {"ok": False, "events": [], "last_reward_y": None}
         events = PixelGameEvent.query.filter_by(
             session_id=session.id,
             participant_id=participant.id,
@@ -538,7 +545,8 @@ class Exp(psynet.experiment.Experiment):
                 "turn_position": event.turn_position,
                 "row": event.row,
                 "col": event.col,
-                "signal": event.signal,
+                "reward_y": event.signal,
+                "bonus_delta": event.reward or 0.0,
                 "accepted": event.accepted,
                 "error": event.error,
                 "receive_time": event.receive_time,
@@ -551,7 +559,7 @@ class Exp(psynet.experiment.Experiment):
             "session_id": session.id,
             "participant_id": participant.id,
             "events": own_events,
-            "last_signal": accepted[-1]["signal"] if accepted else None,
+            "last_reward_y": accepted[-1]["reward_y"] if accepted else None,
         }
 
     @experiment_route("/pixel_game_private_state", methods=["GET"])
@@ -563,7 +571,7 @@ class Exp(psynet.experiment.Experiment):
             id=request.args.get("participant_id")
         ).first()
         if participant is None or participant.unique_id != request.args.get("unique_id"):
-            return success_response(ok=False, events=[], last_signal=None)
+            return success_response(ok=False, events=[], last_reward_y=None)
         session_id = request.args.get("session_id")
         session = (
             PixelGameSession.query.filter_by(id=session_id, failed=False).first()
@@ -621,6 +629,7 @@ class Exp(psynet.experiment.Experiment):
                         "col": event.col,
                         "probability": event.probability,
                         "signal": event.signal,
+                        "reward": event.reward,
                         "accepted": event.accepted,
                         "error": event.error,
                         "receive_time": event.receive_time,
