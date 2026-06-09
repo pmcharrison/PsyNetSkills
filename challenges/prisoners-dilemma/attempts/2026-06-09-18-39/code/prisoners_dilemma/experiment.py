@@ -188,11 +188,16 @@ class PrisonersDilemmaTrial(StaticTrial):
 
     def show_trial(self, experiment, participant):
         return join(
-            GroupBarrier(id_="wait_for_round_start", group_type=GROUP_TYPE),
+            GroupBarrier(
+                id_="wait_for_round_start",
+                group_type=GROUP_TYPE,
+                max_wait_time=300,
+            ),
             self.choose_action(),
             GroupBarrier(
                 id_="wait_for_round_finish",
                 group_type=GROUP_TYPE,
+                max_wait_time=300,
                 on_release=self.score_trial,
             ),
         )
