@@ -141,12 +141,20 @@ class PreferenceNode(MCMCPNode):
         }
 
     def get_proposal(self, state, experiment, participant):
-        tempo_step = random.choice([-24, -12, 12, 24])
-        brightness_step = random.choice([-1, 1])
-        return {
-            "tempo": clamp(state["tempo"] + tempo_step, TEMPOS),
-            "brightness": clamp(state["brightness"] + brightness_step, BRIGHTNESSES),
-        }
+        candidates = []
+        for tempo_step in [-24, -12, 0, 12, 24]:
+            for brightness_step in [-1, 0, 1]:
+                if tempo_step == 0 and brightness_step == 0:
+                    continue
+                candidate = {
+                    "tempo": clamp(state["tempo"] + tempo_step, TEMPOS),
+                    "brightness": clamp(
+                        state["brightness"] + brightness_step, BRIGHTNESSES
+                    ),
+                }
+                if candidate != state and candidate not in candidates:
+                    candidates.append(candidate)
+        return random.choice(candidates)
 
 
 def start_nodes(participant):
@@ -244,6 +252,7 @@ class Exp(psynet.experiment.Experiment):
         for trial in trials:
             assert "current_state" in trial.definition
             assert "proposal" in trial.definition
+            assert trial.definition["current_state"] != trial.definition["proposal"]
             assert trial.assets["pair_audio"].id is not None
             assert "id=None" not in trial.assets["pair_audio"].url
             assert trial.answer["value"] in [

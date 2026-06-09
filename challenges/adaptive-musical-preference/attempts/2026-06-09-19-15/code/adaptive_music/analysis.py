@@ -57,12 +57,21 @@ def parse_jsonish(value):
 def load_from_export(path):
     rows = []
     with zipfile.ZipFile(path) as archive:
-        candidates = [name for name in archive.namelist() if name.endswith("info.csv")]
+        candidates = [
+            name
+            for name in archive.namelist()
+            if name.endswith("PreferenceTrial.csv") or name.endswith("info.csv")
+        ]
         if not candidates:
             return rows
-        with archive.open(candidates[0]) as raw:
+        trial_table = sorted(
+            candidates, key=lambda name: not name.endswith("PreferenceTrial.csv")
+        )[0]
+        with archive.open(trial_table) as raw:
             reader = csv.DictReader(line.decode("utf-8") for line in raw)
             for row in reader:
+                if row.get("complete") not in {None, "", "True", "true", "1"}:
+                    continue
                 definition = parse_jsonish(row.get("definition"))
                 answer = parse_jsonish(row.get("answer") or row.get("details"))
                 if not definition or not answer or "current_state" not in definition:
