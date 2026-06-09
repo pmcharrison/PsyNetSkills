@@ -18,10 +18,8 @@ Summarize the human evaluator's overall judgment.
 
 ## Criteria
 
-If `CRITERIA.md` is present, ask the evaluator about each criterion and record
-the result here.
-
-- [ ]
+No `CRITERIA.md` file was present in the challenge snapshot for this attempt.
+Ask the evaluator for an overall 1-10 score and concise feedback.
 
 ## Notes
 
