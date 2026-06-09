@@ -111,7 +111,7 @@ class PreferenceTrial(MCMCPTrial):
                 <p>The clips play as: first clip, a short pause, then second clip.</p>
                 """
             ),
-            controls={"Play pair again": "Replay"},
+            controls={"Play from start": "Replay pair"},
         )
         return ModularPage(
             "adaptive_music_choice",
@@ -135,10 +135,9 @@ class PreferenceTrial(MCMCPTrial):
 
 class PreferenceNode(MCMCPNode):
     def create_initial_seed(self, experiment, participant):
-        chain_index = self.context["chain_index"]
         return {
-            "tempo": TEMPOS[chain_index * (len(TEMPOS) - 1)],
-            "brightness": BRIGHTNESSES[chain_index * (len(BRIGHTNESSES) - 1)],
+            "tempo": random.choice(TEMPOS),
+            "brightness": random.choice(BRIGHTNESSES),
         }
 
     def get_proposal(self, state, experiment, participant):
@@ -151,8 +150,12 @@ class PreferenceNode(MCMCPNode):
 
 
 def start_nodes(participant):
+    seeds = [
+        {"tempo": TEMPOS[0], "brightness": BRIGHTNESSES[0]},
+        {"tempo": TEMPOS[-1], "brightness": BRIGHTNESSES[-1]},
+    ]
     return [
-        PreferenceNode(context={"chain_index": chain_index})
+        PreferenceNode(seed=seeds[chain_index], context={"chain_index": chain_index})
         for chain_index in range(N_CHAINS)
     ]
 
