@@ -22,6 +22,8 @@ you are responsible for turning that description into the repository format.
    implement the task without hidden criteria. Focus on behavior and evidence,
    not an exact implementation strategy, unless the challenge is explicitly about
    a PsyNet API.
+   - Do not move unapproved evaluator criteria into `INSTRUCTIONS.md`; delete
+     them instead unless the user explicitly wants them in the public prompt.
    - Do not make challenge prompts more specific just to force standard good
      experiment-design defaults. Let implementation guidance supply defaults
      such as practice/training for nontrivial tasks, no replay in memory tasks,
