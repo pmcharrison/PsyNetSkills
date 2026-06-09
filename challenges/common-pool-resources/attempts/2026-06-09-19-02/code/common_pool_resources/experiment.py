@@ -72,7 +72,8 @@ def instructions():
 
 
 class CommonPoolTrialMaker(StaticTrialMaker):
-    pass
+    def choose_block_order(self, experiment, participant, blocks):
+        return sorted(blocks, key=int)
 
 
 class CommonPoolTrial(StaticTrial):
@@ -167,9 +168,7 @@ class CommonPoolTrial(StaticTrial):
         return None
 
     def bot_contribution(self, experiment, bot, page, prompt):
-        bot_index = bot.participant.id % GROUP_SIZE
-        pattern = [8, 12, 16]
-        return str(pattern[bot_index] + self.round_number - 1)
+        return str(10 + self.round_number)
 
     def score_round(self, participants: List[Participant]):
         assert len(participants) == GROUP_SIZE
@@ -228,7 +227,8 @@ class CommonPoolTrial(StaticTrial):
             tags.p(f"Rounds remaining: {result['rounds_remaining']}.")
             tags.p(f"This page will continue automatically after {FEEDBACK_SECONDS} seconds.")
 
-        return InfoPage(
+        return ModularPage(
+            "feedback",
             content,
             time_estimate=FEEDBACK_SECONDS,
             events={"auto_continue": auto_advance_event(FEEDBACK_SECONDS)},
@@ -241,7 +241,7 @@ def completion_page(participant: Participant):
         tags.h1("Task complete")
         tags.p("You have completed all scored common-pool rounds.")
         tags.p(f"Final coin balance: {participant.var.balance} coins.")
-    return InfoPage(content, time_estimate=10)
+    return ModularPage("completion", content, time_estimate=10)
 
 
 class Exp(psynet.experiment.Experiment):
@@ -265,11 +265,15 @@ class Exp(psynet.experiment.Experiment):
             id_="common_pool_rounds",
             trial_class=CommonPoolTrial,
             nodes=[
-                StaticNode(definition={"round": round_number})
+                StaticNode(
+                    definition={"round": round_number},
+                    block=str(round_number),
+                )
                 for round_number in range(1, N_ROUNDS + 1)
             ],
             expected_trials_per_participant=N_ROUNDS,
             max_trials_per_participant=N_ROUNDS,
+            max_trials_per_block=1,
             sync_group_type=GROUP_TYPE,
         ),
         PageMaker(completion_page, time_estimate=10),
