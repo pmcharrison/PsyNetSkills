@@ -5,7 +5,7 @@
 The base RPS grouping defaults are adequate for bot tests, but manual and headed-browser evidence collection can lose participants if two windows cannot be advanced at exactly the same pace. Setting explicit group and barrier wait windows made the participant-flow recording reliable without changing the pairing requirement.
 
 *Actions:*
-- **PsyNetSkills:** Add a short note to experiment-implementation guidance recommending explicit `max_wait_time` settings for grouped participant recordings. Confidence: medium. Status: considering.
+- **PsyNetSkills:** Add a short note to experiment-implementation guidance recommending explicit `max_wait_time` settings for grouped participant recordings. Confidence: medium. Status: completed. Notes: Added guidance to the PsyNet experiment validation reference for grouped participant-flow recordings.
 
 ## Keep demo attempts close to PsyNet idioms
 
