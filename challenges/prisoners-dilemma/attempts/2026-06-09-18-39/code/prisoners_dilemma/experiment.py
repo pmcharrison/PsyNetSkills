@@ -322,7 +322,7 @@ trial_maker = PrisonersDilemmaTrialMaker(
     nodes=[
         StaticNode(
             definition={"round_number": round_number},
-            block=round_number,
+            block=f"{round_number:02d}",
         )
         for round_number in range(1, N_SCORED_ROUNDS + 1)
     ],
