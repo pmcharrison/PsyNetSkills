@@ -90,6 +90,7 @@ class GridGameDelivery(SQLBase, SQLMixin):
 
     group_id = Column(Integer, index=True)
     trial_id = Column(Integer, index=True)
+    node_id = Column(Integer, index=True)
     recipient_participant_id = Column(Integer, ForeignKey("participant.id"), index=True)
     sender_participant_id = Column(Integer, ForeignKey("participant.id"), nullable=True)
     delivery_type = Column(String, index=True)
@@ -105,9 +106,9 @@ def sorted_group_participants(participant) -> List[Participant]:
     return sorted(participant.sync_group.participants, key=lambda p: p.id)
 
 
-def accepted_clicks(group_id: int, trial_id: int) -> List[GridGameClick]:
+def accepted_clicks(group_id: int, node_id: int) -> List[GridGameClick]:
     return (
-        GridGameClick.query.filter_by(group_id=group_id, trial_id=trial_id, accepted=True)
+        GridGameClick.query.filter_by(group_id=group_id, node_id=node_id, accepted=True)
         .order_by(GridGameClick.round_index, GridGameClick.id)
         .all()
     )
@@ -125,7 +126,7 @@ def build_projection(participant, trial, message_type="state_update"):
     participants = sorted_group_participants(participant)
     grid_size = _config_int("grid_size", DEFAULT_GRID_SIZE)
     num_rounds = int(trial.definition["num_rounds"])
-    clicks = accepted_clicks(group.id, trial.id)
+    clicks = accepted_clicks(group.id, trial.node.id)
     counts = counts_by_participant(clicks, participants)
     own_clicks = [c for c in clicks if c.participant_id == participant.id]
     partner_clicks = [c for c in clicks if c.participant_id != participant.id]
@@ -170,6 +171,7 @@ def record_delivery(experiment, participant, trial, payload, sender_participant_
         GridGameDelivery(
             group_id=participant.sync_group.id,
             trial_id=trial.id,
+            node_id=trial.node.id,
             recipient_participant_id=participant.id,
             sender_participant_id=sender_participant_id,
             delivery_type=payload["type"],
@@ -233,7 +235,7 @@ class EnableGridGame(NullElt, WebSocketElt):
         row = int(payload.get("row", -1))
         col = int(payload.get("col", -1))
         valid_cell = 0 <= row < grid_size and 0 <= col < grid_size
-        clicks = accepted_clicks(participant.sync_group.id, trial.id)
+        clicks = accepted_clicks(participant.sync_group.id, trial.node.id)
         counts = counts_by_participant(clicks, participants)
         current_round = min(counts.values())
         reason = None
@@ -335,11 +337,11 @@ class GridGamePage(Page):
             return client_answer
 
         grid_size = _config_int("grid_size", DEFAULT_GRID_SIZE)
-        clicks = accepted_clicks(participant.sync_group.id, trial.id)
+        clicks = accepted_clicks(participant.sync_group.id, trial.node.id)
         deliveries = (
             GridGameDelivery.query.filter_by(
                 group_id=participant.sync_group.id,
-                trial_id=trial.id,
+                node_id=trial.node.id,
                 recipient_participant_id=participant.id,
             )
             .order_by(GridGameDelivery.id)
@@ -430,7 +432,7 @@ class Exp(psynet.experiment.Experiment):
         clicks = (
             GridGameClick.query.filter_by(
                 group_id=participant.sync_group.id,
-                trial_id=participant.current_trial.id,
+                node_id=participant.current_trial.node.id,
                 participant_id=participant.id,
                 accepted=True,
             )
