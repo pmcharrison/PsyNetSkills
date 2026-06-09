@@ -401,14 +401,6 @@ class GridGameTrialMaker(StaticTrialMaker):
 class Exp(psynet.experiment.Experiment):
     label = "Real-time synchronous grid game"
 
-    config = {
-        "show_reward": False,
-        "show_progress_bar": True,
-        "grid_size": DEFAULT_GRID_SIZE,
-        "low_signal_probability": DEFAULT_LOW_SIGNAL_PROBABILITY,
-        "high_signal_probability": DEFAULT_HIGH_SIGNAL_PROBABILITY,
-    }
-
     @classmethod
     def extra_parameters(cls):
         super().extra_parameters()
