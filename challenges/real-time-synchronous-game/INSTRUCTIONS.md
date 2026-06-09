@@ -34,3 +34,5 @@ The experiment should:
 The submitted evidence should demonstrate that two participants can play the
 game together, that partner click heatmaps update during the synchronous trial,
 and that hidden rewards remain private.
+
+The implementation should be easy to adapt. if the interface or nature of the task changes, or if we use chain trial makers rather than static trial makers, etc.
