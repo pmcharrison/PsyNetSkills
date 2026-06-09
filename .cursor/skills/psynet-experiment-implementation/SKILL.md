@@ -30,8 +30,14 @@ Useful starting points:
 3. Prefer established PsyNet components such as `Timeline`, `InfoPage`,
    `ModularPage`, controls, prompts, trials, and trial makers.
 4. Put generated experiment files in the requested output directory.
-5. Add short comments only where the PsyNet pattern is not obvious.
-6. Regularly use `psynet test local` to test the experiment logic,
+5. If the experiment has a `requirements.txt`, pin PsyNet to the local checkout
+   commit used for the implementation, for example:
+   `psynet@git+https://gitlab.com/PsyNetDev/PsyNet@<commit>#egg=psynet`.
+6. Generate `constraints.txt` from that pinned `requirements.txt` using the
+   PsyNet/Dallinger environment, typically `dallinger constraints generate`.
+   Do not copy a constraints file that still points to `master`.
+7. Add short comments only where the PsyNet pattern is not obvious.
+8. Regularly use `psynet test local` to test the experiment logic,
    and implement custom assertions to test the experiment's behavior.
 
 ## Design guidance
@@ -47,6 +53,18 @@ Useful starting points:
 - In audio experiments, make sure you start with a volume calibration page,
   and generally you should only activate the 'Next' button when the participant
   has finished listening to the trial stimulus.
+- For participant-facing instructions, payoff tables, lists, headings, and other
+  ordinary page structure, prefer `dominate.tags` over raw HTML. Use
+  `markupsafe.Markup` only for trusted, static HTML snippets passed directly as
+  page content; do not nest raw markup strings inside `dominate` containers.
+  Avoid interpolating participant- or user-provided data into `Markup`.
+- For participant-facing UI, inspect the rendered pages in a browser or
+  participant recording for readability, escaped HTML, layout issues, and visual
+  polish. Pay particular attention to instructions, tables, controls, and
+  feedback pages.
+- For repeated tasks where order matters, do not rely on `StaticTrialMaker`'s
+  default block order. Use explicit blocks plus `choose_block_order`, or use a
+  timeline loop, so visible round numbers match the actual presentation order.
 
 ## PsyNet setup reminders
 

@@ -33,7 +33,6 @@ you organize that judgment into the repository's evaluation record.
 ## Rules
 
 - Do not present your own judgment as the user's score.
-- Do not revise implementation code as part of evaluation unless the user
-  explicitly asks for a post-evaluation repair.
+- Do not revise implementation code as part of evaluation. If the user needs a post-evaluation repair, they will request one.
 - Keep feedback specific enough to guide future skill, challenge, or PsyNet
   improvements.

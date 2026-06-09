@@ -12,33 +12,19 @@ you are responsible for turning that description into the repository format.
 
 ## Workflow
 
-1. Interpret the user's prose description. Identify the participant experience,
-   stimuli or inputs, responses to collect, scientific checks, and constraints.
-2. Choose a concise lowercase slug using hyphens, unless the user provided one.
-3. Use the `identify-author` skill before writing metadata.
-4. Create `challenges/<slug>/INSTRUCTIONS.md` with YAML frontmatter containing
+1. Choose a concise lowercase slug using hyphens, unless the user provided one.
+2. Use the `identify-author` skill before writing metadata.
+3. Create `challenges/<slug>/INSTRUCTIONS.md` with YAML frontmatter containing
    `title`, `type`, `difficulty`, and `authors`.
-5. Write public instructions that are sufficient for an attempting agent to
-   implement the task without hidden criteria. Focus on behavior and evidence,
-   not an exact implementation strategy, unless the challenge is explicitly about
-   a PsyNet API.
-   - Do not move unapproved evaluator criteria into `INSTRUCTIONS.md`; delete
-     them instead unless the user explicitly wants them in the public prompt.
-   - Do not make challenge prompts more specific just to force standard good
-     experiment-design defaults. Let implementation guidance supply defaults
-     such as practice/training for nontrivial tasks, no replay in memory tasks,
-     and manifest-driven nontrivial stimulus sets.
-   - Mention practice, replay, or stimulus-generation details only when the
-     challenge intentionally differs from these defaults or is specifically
-     evaluating that design choice.
-6. Add `challenges/<slug>/CRITERIA.md` only when the user has provided or
-   discussed evaluator-facing checks and explicitly approved the criteria before
-   they are committed. Do not auto-populate criteria from the public task prompt.
-7. Put any supporting public material in `challenges/<slug>/references/`.
-8. Create `challenges/<slug>/attempts/.gitkeep`.
-9. Run `uv run psynetsk-validate` and the narrowest useful additional checks.
-10. Summarize the challenge at the level a human reviewer needs: what the agent
-   will be asked to build, what is hidden for evaluation, and how to review it.
+4. Turn the user's input into more formal prose. When the instructions are vague,
+   ask them about potential clarifications. We want a moderate level of detail
+   similar to what one might see in the Procedure section in a psychology research article.
+5. Discuss possible evaluation criteria with the user.
+   If provided, these should go into `challenges/<slug>/CRITERIA.md`.
+6. Put any supporting public material in `challenges/<slug>/references/`.
+7. Create `challenges/<slug>/attempts/.gitkeep`.
+8. Run `uv run psynetsk-validate` and the narrowest useful additional checks.
+9. Show the resulting text to the user and ask them to approve it; iterate if necessary.
 
 ## Rules
 

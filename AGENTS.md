@@ -84,26 +84,10 @@ before proceeding. Do not maintain a second editable copy of the skills.
   scripts used in challenge evidence. Attempt code may install `@playwright/test`
   locally with npm and commit `package.json`/`package-lock.json`.
 
-For Cursor Cloud participant recordings with browser audio, a known-good Linux
-setup is:
-
-```bash
-export XDG_RUNTIME_DIR="/tmp/xdg-runtime-$UID"
-mkdir -p "$XDG_RUNTIME_DIR"
-chmod 700 "$XDG_RUNTIME_DIR"
-pulseaudio --start --exit-idle-time=-1 --log-target=stderr || true
-pactl load-module module-null-sink sink_name=psynet_rec \
-  sink_properties=device.description=psynet_rec || true
-pactl set-default-sink psynet_rec
-pactl list short sources  # should include psynet_rec.monitor
-```
-
-Launch headed Chrome/Chromium or Playwright with the same PulseAudio
-environment:
-
-```bash
-export PULSE_SERVER="unix:$XDG_RUNTIME_DIR/pulse/native"
-```
+For Cursor Cloud participant recordings with browser audio, use the
+`record-participant-video` skill as the operational source of truth. It covers
+the PulseAudio null-sink setup, browser routing, ffmpeg capture command, and
+audio verification checks.
 
 ### Standard commands
 
