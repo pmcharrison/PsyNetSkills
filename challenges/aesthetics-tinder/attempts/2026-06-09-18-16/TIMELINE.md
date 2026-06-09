@@ -6,4 +6,5 @@
 - T+00:02:10 [agent] Created attempt scaffold and challenge snapshot.
 - T+00:18:00 [agent] Implemented the PsyNet experiment, generated 15 standardized image stimuli, and generated pinned constraints.
 - T+00:26:00 [agent] Fixed PsyNet launch preflight failure by adding the required experiment `.gitignore`.
+- T+00:32:00 [agent] Added `source_code.zip` to `.gitignore` after PsyNet's source packaging preflight check.
 
