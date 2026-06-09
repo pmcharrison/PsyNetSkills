@@ -12,6 +12,10 @@
 - T+00:48:00 [agent] Fixed on-demand asset URLs and added bot assertions for valid audio asset IDs.
 - T+01:05:00 [agent] Recorded a full participant visual flow, exported local data, saved a dashboard monitor snapshot, and generated a sample audio pair.
 - T+01:16:00 [agent] Ran a 40-bot, 5-minute performance test and saved JSON output.
-- T+01:20:00 [agent-stop] Implementation and first-pass evidence collection complete.
+- T+01:23:00 [agent] Video review caught an edge case where clamped proposals could duplicate the current stimulus.
+- T+01:28:00 [agent] Updated proposal generation to exclude identical pairs and verified it with `psynet test local`.
+- T+01:45:00 [agent] Re-recorded the participant flow with non-silent audio and no identical visible pair labels.
+- T+01:58:00 [agent] Re-exported data, monitor HTML, analysis summary, and final performance JSON.
+- T+02:00:00 [agent-stop] Implementation and first-pass evidence collection complete.
 
 <!-- Close active implementation segments with [agent-stop] when work pauses or completes. -->

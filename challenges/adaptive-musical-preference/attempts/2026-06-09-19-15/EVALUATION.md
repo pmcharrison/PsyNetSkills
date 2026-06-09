@@ -14,11 +14,9 @@ Awaiting human evaluation.
 
 ## Weaknesses
 
-- `evidence/participant.mp4` visually records a complete participant run, but
-  the PulseAudio capture stayed effectively silent (`mean_volume: -91.0 dB`)
-  despite recording from `psynet_rec.monitor`. `evidence/sample_pair.wav`
-  provides a generated audio-pair sample, and server/export evidence confirms
-  on-demand audio assets loaded successfully.
+- The 40-bot, 5-minute performance window completed with zero bot or request
+  errors, but some bots were still running when the fixed-duration test ended.
+  See `evidence/performance.json` for the concurrency results.
 
 ## Criteria
 
@@ -36,3 +34,6 @@ Awaiting human evaluation.
 
 - Score and feedback should come from a human evaluator, captured
   conversationally when working with Cursor Cloud Agents.
+- `evidence/participant.mp4` records a full participant run with non-silent audio
+  (`mean_volume: -22.6 dB`, `max_volume: -10.6 dB`), 12 non-identical pairwise
+  choices, the preference summary, completion page, and recruiter exit.
