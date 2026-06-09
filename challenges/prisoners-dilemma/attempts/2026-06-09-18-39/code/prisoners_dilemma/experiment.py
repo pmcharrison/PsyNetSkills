@@ -343,7 +343,11 @@ class Exp(psynet.experiment.Experiment):
         practice_round(1, partner_action="cooperate"),
         practice_round(2, partner_action="defect"),
         sync_intro_page(),
-        SimpleGrouper(group_type=GROUP_TYPE, initial_group_size=2),
+        SimpleGrouper(
+            group_type=GROUP_TYPE,
+            initial_group_size=2,
+            max_wait_time=300,
+        ),
         trial_maker,
         PageMaker(final_summary_page, time_estimate=15),
         SuccessfulEndPage(),
