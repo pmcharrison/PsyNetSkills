@@ -66,7 +66,7 @@ Useful starting points:
   default block order. Use explicit blocks plus `choose_block_order`, or use a
   timeline loop, so visible round numbers match the actual presentation order.
 
-## Realtime synchronous experiments
+### Realtime synchronous experiments
 
 For websocket experiments where multiple participants interact during the same
 trial, especially games with ordered turns or rounds:
