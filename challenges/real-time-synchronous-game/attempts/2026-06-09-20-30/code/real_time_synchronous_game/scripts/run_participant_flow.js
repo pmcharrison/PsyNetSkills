@@ -124,7 +124,7 @@ async function run() {
       waitForNextRoundOrCompletion(player1),
       waitForNextRoundOrCompletion(player2),
     ]);
-    await player1.waitForTimeout(round < 6 ? 220 : 45);
+    await player1.waitForTimeout(round < 6 ? 260 : 120);
   }
 
   await Promise.all([

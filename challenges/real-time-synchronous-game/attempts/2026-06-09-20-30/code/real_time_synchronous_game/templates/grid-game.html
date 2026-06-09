@@ -231,7 +231,6 @@
                 finishBtn.disabled = !completed;
                 setCellsDisabled(waiting || completed);
                 renderPartnerHeatmap(latestState.partner_heatmap || []);
-                markOwnClicks(latestState.own_clicks || []);
             }
 
             function renderPrivateSignals() {
