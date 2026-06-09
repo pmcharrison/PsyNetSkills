@@ -76,10 +76,6 @@
                     
                       <a class="dropdown-item" href="/dashboard/database?table=experiment_status&amp;polymorphic_identity=psynet.experiment.ExperimentStatus">ExperimentStatus</a>
                     
-                      <a class="dropdown-item" href="/dashboard/database?table=network&amp;polymorphic_identity=psynet.trial.static.StaticNetwork">StaticNetwork</a>
-                    
-                      <a class="dropdown-item" href="/dashboard/database?table=node&amp;polymorphic_identity=psynet.trial.static.StaticNode">StaticNode</a>
-                    
                   </div>
                 </li>
                 
@@ -188,7 +184,7 @@
                             <div class="card">
                                 <div class="card-body">
                                     <h5 class="card-title">Networks</h5>
-                                    <p class="card-text"><span class="nowrap"><span class="statistics-key">default</span>: <span class="statistics-value"><span class="statistics-value no-failures">1 total, 0 failed (0.0%)</span></span></span></p>
+                                    <p class="card-text"></p>
                                 </div>
                             </div>
                         </div>
@@ -197,7 +193,7 @@
                             <div class="card">
                                 <div class="card-body">
                                     <h5 class="card-title">Nodes</h5>
-                                    <p class="card-text"><span class="statistics-value no-failures">1 total, 0 failed (0.0%)</span></p>
+                                    <p class="card-text">0 total, 0 failed (0.0%)</p>
                                 </div>
                             </div>
                         </div>
@@ -220,12 +216,6 @@
                     
                         <fieldset id="network-ids">
                             <h5>Network IDs</h5>
-                            
-                                <div class="field p-1">
-                                    <input class="network-input" id="val-1" type="checkbox" name="network_ids"
-                                           value="1" checked />
-                                    <label for="val-1">1</label>
-                                </div>
                             
                         </fieldset>
                 </form>
@@ -271,7 +261,7 @@
         });
         window.templateGlobals = function () {
             // Values inscribed by Jinja2 when this template is rendered.
-            const network_structure = {"networks": [{"vars": "{}", "id": 1, "creation_time": "2026-06-09 17:20:28", "failed": false, "failed_reason": null, "time_of_death": null, "type": "StaticNetwork", "max_size": 1, "full": false, "role": "default", "n_pending_infos": 0, "n_completed_infos": 0, "n_failed_infos": 0, "n_alive_nodes": 1, "n_failed_nodes": 0, "trial_maker_id": "sync_grid_game", "module_id": "sync_grid_game", "target_n_trials": 1000000, "participant_group": "default", "sync_group_type": "sync_grid_game", "sync_group_id": null, "participant_id": null, "async_post_grow_network_required": false, "async_post_grow_network_requested": false, "async_post_grow_network_complete": false, "async_post_grow_network_failed": false, "id_within_participant": null, "n_all_trials": 0, "n_alive_trials": 0, "n_failed_trials": 0, "n_completed_trials": 0, "n_all_nodes": 1, "chain_type": "across", "head_id": 1, "trials_per_node": 1000000, "definition": "{}", "context": null, "block": "default", "class": "StaticNetwork", "object_type": "Network"}], "nodes": [{"vars": "{}", "id": 1, "creation_time": "2026-06-09 17:20:28", "failed": false, "failed_reason": null, "time_of_death": null, "type": "TrialSource", "network_id": 1, "participant_id": null, "trial_maker_id": "sync_grid_game", "module_id": "sync_grid_game", "module_state_id": null, "is_global": null, "on_deploy_complete": true, "async_on_deploy_required": false, "async_on_deploy_requested": false, "async_on_deploy_complete": false, "async_on_deploy_failed": false, "key": null, "degree": 0, "target_n_trials": 1000000, "can_spawn": false, "child_id": null, "parent_id": null, "seed": "{}", "definition": "{'game': 'grid'}", "context": null, "participant_group": "default", "block": "default", "propagate_failure": false, "n_viable_trials": 0, "class": "StaticNode", "object_type": "Node"}], "vectors": [], "infos": [], "participants": [], "trans": []};
+            const network_structure = {"networks": [], "nodes": [], "vectors": [], "infos": [], "participants": [], "trans": []};
             const vis_options = {};
             return {
                 network_structure: network_structure,
