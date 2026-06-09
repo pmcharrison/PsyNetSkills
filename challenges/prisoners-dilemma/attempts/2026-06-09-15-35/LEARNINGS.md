@@ -8,7 +8,7 @@ generated experiment to that commit makes later review and reruns match the
 metadata more closely.
 
 *Actions:*
-- **PsyNetSkills:** Update the attempt workflow notes to recommend pinning generated experiment requirements to the recorded PsyNet commit. Confidence: medium. Status: considering.
+- **PsyNetSkills:** Update the attempt workflow notes to recommend pinning generated experiment requirements to the recorded PsyNet commit. Confidence: medium. Status: completed. Notes: Added to the `attempt-challenge` skill after learning review.
 
 ## Repeated game challenges need explicit partner semantics
 
@@ -29,7 +29,7 @@ table aesthetically weak. Participant-facing payoff matrices need both correct
 rendering and careful visual formatting.
 
 *Actions:*
-- **PsyNetSkills:** Add a validation reminder for participant-facing challenge evidence to inspect instruction pages and payoff tables for escaped HTML, clarity, and visual polish. Confidence: medium. Status: considering.
+- **PsyNetSkills:** Add a validation reminder for participant-facing challenge evidence to inspect instruction pages and payoff tables for escaped HTML, clarity, and visual polish. Confidence: medium. Status: completed. Notes: Added concrete `dominate.tags`/`Markup` and table-inspection guidance to the `psynet-experiment-implementation` skill.
 
 ## Static trial makers shuffle blocks unless ordered explicitly
 
@@ -39,4 +39,4 @@ game rounds should use explicit blocks plus a sorted block order when the visibl
 round sequence matters.
 
 *Actions:*
-- **PsyNetSkills:** Add a note to experiment implementation guidance that ordered repeated tasks need explicit block ordering or a timeline loop. Confidence: high. Status: considering.
+- **PsyNetSkills:** Add a note to experiment implementation guidance that ordered repeated tasks need explicit block ordering or a timeline loop. Confidence: high. Status: completed. Notes: Added to the `psynet-experiment-implementation` skill.

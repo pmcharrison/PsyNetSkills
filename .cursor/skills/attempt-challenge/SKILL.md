@@ -69,6 +69,10 @@ challenge before starting a fresh attempt.
      directory named `code`; Dallinger imports the experiment directory as a
      Python package, and `code` can collide with Python's standard-library
      module of the same name.
+   - If the generated experiment includes `requirements.txt` or
+     `constraints.txt`, pin PsyNet references to the refreshed PsyNet commit
+     recorded in `agent.json` rather than leaving them on a moving branch such
+     as `master`.
 10. Collect evidence in `evidence/`. Use the `record-participant-video` skill
    when creating `evidence/participant.mp4`.
 11. Leave `EVALUATION.md` as a template for human evaluators unless the user

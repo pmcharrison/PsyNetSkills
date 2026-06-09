@@ -47,6 +47,17 @@ Useful starting points:
 - In audio experiments, make sure you start with a volume calibration page,
   and generally you should only activate the 'Next' button when the participant
   has finished listening to the trial stimulus.
+- For participant-facing instructions, payoff tables, lists, headings, and other
+  ordinary page structure, prefer `dominate.tags` over raw HTML. Use
+  `markupsafe.Markup` only for trusted, static HTML snippets passed directly as
+  page content; do not nest raw markup strings inside `dominate` containers.
+  Avoid interpolating participant- or user-provided data into `Markup`.
+- For payoff matrices and other important tables, use a small helper that builds
+  a Bootstrap-styled `tags.table(...)`, then inspect it in a browser or
+  participant recording for readability, escaped HTML, and visual polish.
+- For repeated tasks where order matters, do not rely on `StaticTrialMaker`'s
+  default block order. Use explicit blocks plus `choose_block_order`, or use a
+  timeline loop, so visible round numbers match the actual presentation order.
 
 ## PsyNet setup reminders
 
