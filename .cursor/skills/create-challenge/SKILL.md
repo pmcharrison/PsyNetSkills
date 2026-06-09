@@ -29,8 +29,9 @@ you are responsible for turning that description into the repository format.
    - Mention practice, replay, or stimulus-generation details only when the
      challenge intentionally differs from these defaults or is specifically
      evaluating that design choice.
-6. Add `challenges/<slug>/CRITERIA.md` only when there are evaluator-facing
-   checks that should stay hidden during implementation.
+6. Add `challenges/<slug>/CRITERIA.md` only when the user has provided or
+   discussed evaluator-facing checks and explicitly approved the criteria before
+   they are committed. Do not auto-populate criteria from the public task prompt.
 7. Put any supporting public material in `challenges/<slug>/references/`.
 8. Create `challenges/<slug>/attempts/.gitkeep`.
 9. Run `uv run psynetsk-validate` and the narrowest useful additional checks.
