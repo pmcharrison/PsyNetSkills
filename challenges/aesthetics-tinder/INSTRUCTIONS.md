@@ -1,5 +1,5 @@
 ---
-title: "Aesthetics Tinder: Predicting taste using real-world images and music"
+title: "Aesthetics Tinder"
 type: experiment implementation
 difficulty: 5
 authors: [harin-git]
