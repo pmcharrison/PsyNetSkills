@@ -1,6 +1,6 @@
 ---
 name: prepare-for-translation
-description: "Currently experimental skill under preparation: prepare an existing PsyNet experiment for translation by marking participant-facing text, updating locale configuration, validating extraction, and committing the result."
+description: An experimental skill to prepare an existing PsyNet experiment for translation by marking participant-facing text, updating locale configuration, validating extraction, and committing the result.
 authors: [pmcharrison]
 ---
 
