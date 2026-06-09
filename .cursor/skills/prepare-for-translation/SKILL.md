@@ -13,9 +13,8 @@ or ready for `psynet translate`.
 
 - Read PsyNet's internationalization documentation, currently
   `~/PsyNet/docs/tutorials/internationalization.rst`.
-- Check the newest relevant PsyNet translation branch when the user mentions
-  recent translation work, for example `origin/translation`, and inspect the
-  translation demo (`demos/experiments/translation/experiment.py`).
+- Inspect the translation demo
+  (`demos/experiments/translation/experiment.py`).
 - Review the target experiment's `experiment.py`, templates, config files, and
   any custom pages/components before editing.
 
