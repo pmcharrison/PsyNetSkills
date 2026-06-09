@@ -9,6 +9,7 @@ env/
 
 # Automatically generated server log file
 server.log
+dump.rdb
 
 # Automatically generated resources for running experiments with assets
 static/assets
