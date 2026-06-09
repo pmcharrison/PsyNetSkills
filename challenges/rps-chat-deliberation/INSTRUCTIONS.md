@@ -18,7 +18,7 @@ tied to the same participant group that will play the subsequent game round.
 Participants should be able to send and receive messages freely through the chat
 interface while deliberation is open.
 
-The deliberation phase should last exactly one minute. When that minute elapses,
+The deliberation phase should last 15 seconds. When that time elapses,
 the chat phase should close automatically for all participants in the group, and
 everyone should transition together into the rock–paper–scissors decision stage.
 Participants who deliberated together must be the same participants who play

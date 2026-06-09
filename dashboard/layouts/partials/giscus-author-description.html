@@ -1,0 +1,47 @@
+{{- $page := . -}}
+{{- $authors := slice -}}
+{{- $skills := slice -}}
+{{- with hugo.Data.psynetsk.skills -}}
+  {{- $skills = . -}}
+{{- end -}}
+{{- $challenges := slice -}}
+{{- with hugo.Data.psynetsk.challenges -}}
+  {{- $challenges = . -}}
+{{- end -}}
+{{- if and (eq $page.Section "skills") $page.Params.skill -}}
+  {{- $matches := where $skills "name" $page.Params.skill -}}
+  {{- if gt (len $matches) 0 -}}
+    {{- $authors = (index $matches 0).authors -}}
+  {{- end -}}
+{{- else if and (eq $page.Section "challenges") $page.Params.challenge -}}
+  {{- $challengeMatches := where $challenges "slug" $page.Params.challenge -}}
+  {{- if gt (len $challengeMatches) 0 -}}
+    {{- $challenge := index $challengeMatches 0 -}}
+    {{- with $page.Params.attempt -}}
+      {{- $attemptMatches := where $challenge.attempts "name" . -}}
+      {{- if gt (len $attemptMatches) 0 -}}
+        {{- $authors = (index $attemptMatches 0).authors -}}
+      {{- end -}}
+    {{- else -}}
+      {{- $authors = $challenge.authors -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- $mentions := slice -}}
+{{- range $authors -}}
+  {{- with .id -}}
+    {{- $mentions = $mentions | append (printf "@%s" .) -}}
+  {{- end -}}
+{{- end -}}
+{{- $mentions = uniq $mentions -}}
+
+{{- $description := "" -}}
+{{- if gt (len $mentions) 0 -}}
+  {{- $label := "Page author" -}}
+  {{- if ne (len $mentions) 1 -}}
+    {{- $label = "Page authors" -}}
+  {{- end -}}
+  {{- $description = printf "%s: %s" $label (delimit $mentions ", ") -}}
+{{- end -}}
+{{- return $description -}}

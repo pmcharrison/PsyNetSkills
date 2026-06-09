@@ -32,6 +32,9 @@ An attempt should pass only if it demonstrates all of the following:
   stays reasonably concise, and resembles other PsyNet demo experiments in
   structure and code size.
 
+Important criteria
+- The implmentation should not contain almost any custom javascript in the spirit of demos in psynet which only core esential behaviour is presented.
+
 Common reasons to fail an attempt:
 
 - Chat happens after the game choice instead of before it.
