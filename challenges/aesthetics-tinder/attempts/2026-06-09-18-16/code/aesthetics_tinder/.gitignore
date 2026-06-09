@@ -1,0 +1,7 @@
+.dallinger
+__pycache__/
+*.pyc
+data/participants
+data/logs
+*.sqlite
+*.db
