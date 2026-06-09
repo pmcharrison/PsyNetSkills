@@ -18,7 +18,10 @@ function participantUrl(workerId) {
 async function clickFirstVisible(page, selectors) {
   for (const selector of selectors) {
     const locator = page.locator(selector).first();
-    if (await locator.isVisible().catch(() => false)) {
+    if (
+      await locator.isVisible().catch(() => false)
+      && await locator.isEnabled().catch(() => false)
+    ) {
       await locator.click();
       return true;
     }
@@ -29,7 +32,10 @@ async function clickFirstVisible(page, selectors) {
 async function advanceToGame(page, label) {
   const deadline = Date.now() + 90_000;
   while (Date.now() < deadline) {
-    if (await page.locator("#own-grid").isVisible().catch(() => false)) {
+    if (
+      await page.locator("#own-grid").isVisible().catch(() => false)
+      || await page.locator("#finish-btn").isVisible().catch(() => false)
+    ) {
       return;
     }
     await clickFirstVisible(page, [
