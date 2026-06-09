@@ -10,9 +10,8 @@ challenge type, such as screenshots, logs, reports, exported data, recordings,
 or generated outputs.
 
 For experiment implementation challenges, read `experiment-evidence.md` for the
-standard evidence checklist. Do not add experiment-only artifacts such as
-`performance.json`, `monitor.html`, or `data.zip` to other challenge types
-unless they are relevant to that challenge.
+standard evidence checklist. Do not add experiment-specific artifacts to other
+challenge types unless they are relevant to that challenge.
 
 For challenges with a participant-facing flow, use the `record-participant-video`
 skill when creating `evidence/participant.mp4`.
