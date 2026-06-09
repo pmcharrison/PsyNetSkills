@@ -74,9 +74,14 @@ trial, especially games with ordered turns or rounds:
 - Design the server as the authority for shared experiment state. The server
   should accept actions, reject out-of-turn or duplicate actions, advance turns,
   and broadcast the resulting state snapshot.
+- Keep clients as thin as practical. After every accepted update, the server
+  should send each participant the current state they are allowed to see; the
+  browser should render that snapshot rather than reconstructing or tracking the
+  game state independently.
 - Treat browser state as a rendering cache only. Clients may show pending UI
-  feedback, but they should not decide that a round has advanced, that a turn is
-  complete, or that another participant's action is valid.
+  feedback, timers, animations, or sounds, but they should not decide that a
+  round has advanced, that a turn is complete, or that another participant's
+  action is valid.
 - Keep websocket payloads scoped to what each participant is allowed to know.
   Do not send private rewards, signals, hidden probabilities, or partner-only
   outcomes to the wrong client just because they are convenient for local UI
