@@ -171,6 +171,14 @@ nav {
   align-items: center;
 }
 
+.builder-actions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: flex-end;
+}
+
 .generated-files {
   display: grid;
   gap: 1rem;

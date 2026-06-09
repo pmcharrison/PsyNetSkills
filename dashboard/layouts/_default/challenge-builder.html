@@ -45,7 +45,10 @@
     <section class="builder-output" aria-live="polite">
       <div class="section-heading">
         <h2>Generated files</h2>
-        <button class="edit-source-link" type="button" id="copy-cursor-prompt">Copy Cursor prompt</button>
+        <div class="builder-actions">
+          <button class="edit-source-link" type="button" id="copy-cursor-prompt">Copy Cursor prompt</button>
+          <span class="builder-status" id="builder-status" role="status"></span>
+        </div>
       </div>
 
       <div class="generated-files">
@@ -75,7 +78,6 @@
       </div>
     </section>
 
-    <p class="builder-status" id="builder-status" role="status"></p>
   </article>
   <script src="{{ "js/challenge-builder.js" | relURL }}" defer></script>
 {{ end }}
