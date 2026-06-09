@@ -76,18 +76,23 @@ def parse_difficulty(instructions_file: Path) -> int | None:
         return None
 
 
-def parse_evaluation_score(evaluation_file: Path) -> int | None:
+def parse_evaluation_score(evaluation_file: Path) -> int | float | None:
     """Extract an optional numeric evaluation score."""
     frontmatter, _ = read_markdown_frontmatter(evaluation_file)
     score = frontmatter.get("score")
-    if not score:
+    if score in (None, ""):
         return None
-    if isinstance(score, int) and not isinstance(score, bool):
+    if isinstance(score, bool):
+        return None
+    if isinstance(score, int):
         return score
+    if isinstance(score, float):
+        return int(score) if score.is_integer() else score
     try:
-        return int(str(score))
+        parsed = float(str(score))
     except ValueError:
         return None
+    return int(parsed) if parsed.is_integer() else parsed
 
 
 def iter_learning_sections(text: str) -> list[tuple[str, list[str]]]:
