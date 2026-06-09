@@ -3,6 +3,10 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    {{ $giscusAuthorDescription := partial "giscus-author-description.html" . }}
+    {{ with $giscusAuthorDescription }}
+      <meta name="description" content="{{ . }}">
+    {{ end }}
     <title>{{ if .Title }}{{ .Title }} | {{ end }}{{ site.Title }}</title>
     <link rel="stylesheet" href="{{ "css/chroma.css" | relURL }}">
     <link rel="stylesheet" href="{{ "css/site.css" | relURL }}">
