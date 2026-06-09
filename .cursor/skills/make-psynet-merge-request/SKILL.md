@@ -12,12 +12,14 @@ against `https://gitlab.com/PsyNetDev/PsyNet`.
 ## Prerequisites
 
 - Work in the local PsyNet checkout at `~/PsyNet`.
-- Confirm the checkout is clean before making changes:
-  `git status --short --branch`.
-- Activate the PsyNet virtual environment when it exists:
-  `source .venv/bin/activate`.
 - Use `GITLAB_TOKEN` for non-interactive GitLab authentication. A plain HTTPS
   push may fail with `could not read Username for 'https://gitlab.com'`.
+- Confirm the checkout is clean before making changes:
+  `git status --short --branch`.
+- Follow agent guidelines in `~/PsyNet/AGENTS.md`, including instructions
+  on changelog contribution fragments.
+- Run PsyNet's `code-review` skill to evaluate the proposed changes
+  and discuss any decision points with the user as necessary.
 
 ## Check privileges
 
