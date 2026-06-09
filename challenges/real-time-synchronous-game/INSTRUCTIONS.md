@@ -18,15 +18,15 @@ The experiment should:
   controlled by a global experiment variable and default to 8 by 8.
 - On every round, have each participant click one grid cell `(i, j)` when it is
   their turn. The turn order should be synchronized across the group.
-- After each click, give that participant a random binary signal sampled from
-  `Bernoulli(p_ij)`, where each cell's hidden probability `p_ij` is either low
-  or high.
-- Make the low and high signal probabilities adjustable via global experiment
-  variables, defaulting to 0.33 and 0.67.
 - Define a hidden cell pattern for each group or game, where the participant's
   goal is to infer which cells have `p_ij > 0.5`.
+- After each click, give that participant a random binary reward `y~Bernoulli(p_ij)`,
+where each cell's hidden probability `p_ij` is either low or high.
+- Make the low and high signal probabilities adjustable via global experiment
+  variables, defaulting to 0.33 and 0.67.
 - Show each participant their own grid and, to its right, a heatmap aggregating
   all other participants' clicks.
+- When the reward is y=1, give participants $+0.01, and let the color of the cell be momentarily green while indicating the bonus; otherwise, give no financial reward, and let the color of the cell be momentarily red.
 - Do not show a participant the other participants' reward or signal outcomes.
 - Use websockets during the trial to synchronize participant state and share
   each participant's click attempts with the rest of the group in real time.
