@@ -1,0 +1,11 @@
+[Config]
+title = Aesthetics Tinder demo
+description = Participants view 15 real-world images and use the left and right arrow keys to report dislike or like judgments.
+contact_email_on_error = demo@example.com
+organization_name = PsyNetSkills
+
+recruiter = generic
+currency = $
+wage_per_hour = 12.0
+show_reward = false
+show_progress_bar = true
