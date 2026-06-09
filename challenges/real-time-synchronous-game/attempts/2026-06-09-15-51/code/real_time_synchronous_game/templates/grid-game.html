@@ -1,0 +1,292 @@
+{% extends "timeline-page.html" %}
+
+{% block stylesheets %}
+{{ super() }}
+<style>
+    #sync-grid-layout {
+        display: grid;
+        grid-template-columns: minmax(320px, 1fr) minmax(260px, 0.8fr);
+        gap: 1.5rem;
+        align-items: start;
+    }
+
+    .sync-grid {
+        display: grid;
+        gap: 3px;
+        max-width: 520px;
+    }
+
+    .grid-cell {
+        aspect-ratio: 1;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        background: #f8f9fa;
+        font-size: 0.75rem;
+        min-height: 34px;
+    }
+
+    .grid-cell:hover:not(:disabled) {
+        background: #dbeafe;
+        border-color: #0d6efd;
+    }
+
+    .grid-cell:disabled {
+        cursor: default;
+        opacity: 0.75;
+    }
+
+    .heat-cell {
+        aspect-ratio: 1;
+        border-radius: 3px;
+        background: #f1f3f5;
+        border: 1px solid #dee2e6;
+        min-height: 28px;
+    }
+
+    #signal-badge {
+        display: inline-block;
+        min-width: 2rem;
+        padding: 0.25rem 0.5rem;
+        border-radius: 999px;
+        background: #e9ecef;
+        text-align: center;
+        font-weight: 700;
+    }
+
+    #event-log {
+        height: 9rem;
+        overflow-y: auto;
+        border: 1px solid #dee2e6;
+        border-radius: 4px;
+        padding: 0.5rem;
+        background: #fafafa;
+        font-size: 0.9rem;
+    }
+
+    #event-log p {
+        margin-bottom: 0.25rem;
+    }
+</style>
+{% endblock %}
+
+{% block main_body %}
+<h3>Real-time synchronous grid game</h3>
+<p>
+    Click one cell per round. Your private signal appears after each click.
+    Your partner sees only your clicked cell, and you see a heatmap of their clicks.
+</p>
+<div class="alert alert-info py-2">
+    Round <span id="round-number">1</span> of <span id="round-total"></span>.
+    Latest private signal: <span id="signal-badge">-</span>
+    <span id="connection-status" class="ms-3 text-muted">Connecting...</span>
+</div>
+
+<div id="sync-grid-layout">
+    <section>
+        <h5>Your clickable grid</h5>
+        <div id="own-grid" class="sync-grid"></div>
+    </section>
+    <section>
+        <h5>Partner click heatmap</h5>
+        <div id="partner-heatmap" class="sync-grid mb-3"></div>
+        <h6>Live event log</h6>
+        <div id="event-log" aria-live="polite"></div>
+    </section>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+(function () {
+    var gridSize = Number(psynet.var["grid_size"]);
+    var roundsPerGame = Number(psynet.var["rounds_per_game"]);
+    var participantId = String(psynet.var["participant_id"]);
+    var groupId = Number(psynet.var["group_id"]);
+    var nodeId = Number(psynet.var["node_id"]);
+    var roomId = String(psynet.var["room_id"]);
+    var channel = String(psynet.var["channel"]);
+    var submitClickUrl = String(psynet.var["submit_click_url"]);
+    var currentRound = 0;
+    var submitting = false;
+    var clicks = [];
+    var partnerUpdatesSeen = [];
+    var partnerCounts = [];
+    var socket = null;
+
+    document.getElementById("round-total").textContent = String(roundsPerGame);
+    document.getElementById("own-grid").style.gridTemplateColumns = "repeat(" + gridSize + ", 1fr)";
+    document.getElementById("partner-heatmap").style.gridTemplateColumns = "repeat(" + gridSize + ", 1fr)";
+
+    for (var row = 0; row < gridSize; row++) {
+        partnerCounts[row] = [];
+        for (var col = 0; col < gridSize; col++) {
+            partnerCounts[row][col] = 0;
+        }
+    }
+
+    buildOwnGrid();
+    buildHeatmap();
+    openSocket();
+    updateRoundDisplay();
+
+    function buildOwnGrid() {
+        var grid = document.getElementById("own-grid");
+        grid.innerHTML = "";
+        for (var row = 0; row < gridSize; row++) {
+            for (var col = 0; col < gridSize; col++) {
+                var button = document.createElement("button");
+                button.type = "button";
+                button.className = "grid-cell";
+                button.textContent = row + "," + col;
+                button.setAttribute("data-row", row);
+                button.setAttribute("data-col", col);
+                button.onclick = handleCellClick;
+                grid.appendChild(button);
+            }
+        }
+    }
+
+    function buildHeatmap() {
+        var heatmap = document.getElementById("partner-heatmap");
+        heatmap.innerHTML = "";
+        for (var row = 0; row < gridSize; row++) {
+            for (var col = 0; col < gridSize; col++) {
+                var cell = document.createElement("div");
+                cell.className = "heat-cell";
+                cell.id = "heat-" + row + "-" + col;
+                cell.title = "Partner clicks at " + row + "," + col + ": 0";
+                heatmap.appendChild(cell);
+            }
+        }
+    }
+
+    async function handleCellClick(event) {
+        if (submitting || currentRound >= roundsPerGame) return;
+        submitting = true;
+        setGridDisabled(true);
+
+        var row = Number(event.currentTarget.getAttribute("data-row"));
+        var col = Number(event.currentTarget.getAttribute("data-col"));
+        try {
+            var response = await fetch(submitClickUrl, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    unique_id: psynet.uniqueId,
+                    participant_id: participantId,
+                    group_id: groupId,
+                    node_id: nodeId,
+                    round: currentRound,
+                    row: row,
+                    col: col,
+                }),
+            });
+            var data = await response.json();
+            if (!response.ok || !data.ok) {
+                throw new Error(data.error || "Click submission failed");
+            }
+            clicks.push({
+                round: currentRound,
+                row: row,
+                col: col,
+                signal: data.signal,
+            });
+            document.getElementById("signal-badge").textContent = String(data.signal);
+            appendLog("You clicked (" + row + ", " + col + ") and saw private signal " + data.signal + ".");
+            currentRound += 1;
+            if (currentRound >= roundsPerGame) {
+                finishGame();
+            } else {
+                updateRoundDisplay();
+                setGridDisabled(false);
+            }
+        } catch (error) {
+            appendLog("Submission error: " + error.message);
+            setGridDisabled(false);
+        } finally {
+            submitting = false;
+        }
+    }
+
+    function openSocket() {
+        var wsScheme = location.protocol === "https:" ? "wss://" : "ws://";
+        socket = new ReconnectingWebSocket(
+            wsScheme + location.host + "/chat?channel=" + channel
+            + "&worker_id=" + dallinger.identity.workerId
+            + "&participant_id=" + participantId
+        );
+
+        socket.onopen = function () {
+            document.getElementById("connection-status").textContent = "Connected";
+            socket.send(channel + ":" + JSON.stringify({
+                type: "request_state",
+                room_id: roomId,
+                sender_id: participantId,
+            }));
+        };
+
+        socket.onclose = function () {
+            document.getElementById("connection-status").textContent = "Reconnecting...";
+        };
+
+        socket.onmessage = function (event) {
+            if (event.data.indexOf(channel + ":") !== 0) return;
+            var data;
+            try {
+                data = JSON.parse(event.data.slice(channel.length + 1));
+            } catch (error) {
+                return;
+            }
+            if (data.room_id !== roomId || data.type !== "partner_click") return;
+            if (String(data.sender_id) === participantId) return;
+            renderPartnerClick(data);
+        };
+    }
+
+    function renderPartnerClick(data) {
+        var row = Number(data.row);
+        var col = Number(data.col);
+        partnerCounts[row][col] += 1;
+        partnerUpdatesSeen.push({
+            round: Number(data.round),
+            sender_id: String(data.sender_id),
+            row: row,
+            col: col,
+        });
+        var count = partnerCounts[row][col];
+        var intensity = Math.min(1, count / 6);
+        var cell = document.getElementById("heat-" + row + "-" + col);
+        cell.style.background = "rgba(13, 110, 253, " + (0.15 + 0.75 * intensity) + ")";
+        cell.title = "Partner clicks at " + row + "," + col + ": " + count;
+        appendLog("Partner clicked (" + row + ", " + col + ").");
+    }
+
+    function updateRoundDisplay() {
+        document.getElementById("round-number").textContent = String(currentRound + 1);
+    }
+
+    function setGridDisabled(disabled) {
+        Array.prototype.forEach.call(document.querySelectorAll(".grid-cell"), function (button) {
+            button.disabled = disabled;
+        });
+    }
+
+    function appendLog(message) {
+        var log = document.getElementById("event-log");
+        var item = document.createElement("p");
+        item.textContent = message;
+        log.prepend(item);
+    }
+
+    function finishGame() {
+        setGridDisabled(true);
+        document.getElementById("connection-status").textContent = "Game complete";
+        psynet.nextPage({
+            clicks: clicks,
+            partner_updates_seen: partnerUpdatesSeen,
+        });
+    }
+})();
+</script>
+{% endblock %}
