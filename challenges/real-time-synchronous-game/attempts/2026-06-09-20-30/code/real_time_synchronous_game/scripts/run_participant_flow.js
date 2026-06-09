@@ -59,8 +59,24 @@ async function waitForEnabledCell(page) {
   }, { timeout: 30_000 });
 }
 
-async function clickCell(page, row, col) {
-  await waitForEnabledCell(page);
+async function gridDebugState(page, label, round) {
+  return {
+    label,
+    round,
+    status: await page.locator("#grid-game-status").textContent().catch(() => null),
+    finishEnabled: await page.locator("#finish-btn").isEnabled().catch(() => null),
+    enabledCells: await page.locator("#own-grid button:not(:disabled)").count().catch(() => null),
+  };
+}
+
+async function clickCell(page, row, col, label, round) {
+  try {
+    await waitForEnabledCell(page);
+  } catch (error) {
+    console.log(JSON.stringify(await gridDebugState(page, label, round)));
+    await page.screenshot({ path: `${EVIDENCE_DIR}/${label}_stuck_round_${round}.png` });
+    throw error;
+  }
   await page.locator(`#own-grid [data-row='${row}'][data-col='${col}']`).click();
 }
 
@@ -99,9 +115,10 @@ async function run() {
   ]);
 
   for (let round = 0; round < ROUNDS; round += 1) {
+    console.log(`round ${round + 1}`);
     await Promise.all([
-      clickCell(player1, round % 8, (round * 3) % 8),
-      clickCell(player2, (round * 5) % 8, (round * 7) % 8),
+      clickCell(player1, round % 8, (round * 3) % 8, "player1", round + 1),
+      clickCell(player2, (round * 5) % 8, (round * 7) % 8, "player2", round + 1),
     ]);
     await Promise.all([
       waitForNextRoundOrCompletion(player1),
