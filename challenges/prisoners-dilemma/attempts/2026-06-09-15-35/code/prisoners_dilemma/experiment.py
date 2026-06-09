@@ -1,5 +1,4 @@
 from dominate import tags
-from markupsafe import Markup
 
 import psynet.experiment
 from psynet.consent import MainConsent
@@ -204,15 +203,11 @@ def instructions_page():
                 "In each round you choose Cooperate or Defect. Higher points are "
                 "better for you, and your performance reward is based on your points."
             ),
-            Markup(
-                """
-                <ul>
-                    <li>If both cooperate, both players earn 3 points.</li>
-                    <li>If you cooperate and Alex defects, you earn 0 and Alex earns 5.</li>
-                    <li>If you defect and Alex cooperates, you earn 5 and Alex earns 0.</li>
-                    <li>If both defect, both players earn 1 point.</li>
-                </ul>
-                """
+            tags.ul(
+                tags.li("If both cooperate, both players earn 3 points."),
+                tags.li("If you cooperate and Alex defects, you earn 0 and Alex earns 5."),
+                tags.li("If you defect and Alex cooperates, you earn 5 and Alex earns 0."),
+                tags.li("If both defect, both players earn 1 point."),
             ),
         ),
         time_estimate=20,

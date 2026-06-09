@@ -19,3 +19,12 @@ fragility during evidence collection.
 
 *Actions:*
 - **PsyNetSkills:** For future game challenges, specify whether a partner should be simulated or another live participant when that distinction matters for evaluation. Confidence: high. Status: considering.
+
+## Prefer structured tags over raw markup in instruction pages
+
+A browser probe caught a payoff list rendered as escaped HTML when raw markup was
+nested inside a `dominate` container. Using `tags.ul` and `tags.li` kept the
+instructions visible as an actual list.
+
+*Actions:*
+- **PsyNetSkills:** Add a validation reminder for participant-facing challenge evidence to inspect instruction pages for escaped HTML. Confidence: medium. Status: considering.

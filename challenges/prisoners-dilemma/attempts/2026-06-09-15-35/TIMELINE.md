@@ -10,3 +10,4 @@
 - T+00:28:00 [agent] Added the standard experiment `.gitignore` after PsyNet preflight rejected the missing file.
 - T+00:42:00 [agent] Added `.python-version` after legacy debug preflight required it for constraints validation.
 - T+00:44:00 [agent] Removed a Redis `dump.rdb` generated during local testing and ignored future Redis dumps.
+- T+00:50:00 [agent] Fixed escaped instruction-list HTML found during a browser probe.
