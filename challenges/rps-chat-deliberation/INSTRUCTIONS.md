@@ -48,5 +48,5 @@ Use the existing PsyNet demos as references:
 - `demos/experiments/chatrooms`
 
 The submitted evidence should demonstrate grouped participants chatting during
-the one-minute deliberation window, an automatic transition into the game phase,
+the 15-second deliberation window, an automatic transition into the game phase,
 and preserved rock–paper–scissors gameplay afterward.
