@@ -15,7 +15,7 @@ An attempt should pass only if it demonstrates all of the following:
   are identical.
 - Participants can send and receive messages freely during the deliberation
   phase through a working chat interface.
-- The deliberation phase lasts exactly one minute and closes automatically for
+- The deliberation phase lasts exactly 15 seconds and closes automatically for
   all group members without requiring manual advancement by participants.
 - After the deliberation window ends, all grouped participants transition
   together into the rock–paper–scissors decision stage.
@@ -31,6 +31,7 @@ An attempt should pass only if it demonstrates all of the following:
 - The solution uses PsyNet-native grouping and chat patterns where appropriate,
   stays reasonably concise, and resembles other PsyNet demo experiments in
   structure and code size.
+- Relying on basic pysnet functions and not using too much frontend or js.
 
 Important criteria
 - The implmentation should not contain almost any custom javascript in the spirit of demos in psynet which only core esential behaviour is presented.
@@ -48,3 +49,4 @@ Common reasons to fail an attempt:
   native chatroom support would suffice.
 - The code is unnecessarily large, brittle, or not structured for reuse in
   other multi-participant experiments.
+- The implementation uses large amount of explicit js or html, ideally this experiment should only have basic psynet code.
