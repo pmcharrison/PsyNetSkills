@@ -133,6 +133,19 @@
     openSocket();
     updateRoundDisplay();
 
+    function setActionStatus(message) {
+        document.getElementById("connection-status").textContent = message;
+    }
+
+    function showPlayablePrompt() {
+        setActionStatus(
+            partnerClickedThisRound ?
+                "Partner clicked; choose your cell" :
+                "Choose your cell for this round"
+        );
+        setGridDisabled(false);
+    }
+
     function buildOwnGrid() {
         var grid = document.getElementById("own-grid");
         grid.innerHTML = "";
@@ -221,7 +234,9 @@
         );
 
         socket.onopen = function () {
-            document.getElementById("connection-status").textContent = "Connected";
+            if (!submitting && !ownClickedThisRound) {
+                showPlayablePrompt();
+            }
             socket.send(channel + ":" + JSON.stringify({
                 type: "request_state",
                 room_id: roomId,
@@ -250,8 +265,7 @@
                 if (ownClickedThisRound) {
                     completeRound();
                 } else {
-                    document.getElementById("connection-status").textContent = "Partner clicked; choose your cell";
-                    setGridDisabled(false);
+                    showPlayablePrompt();
                 }
             } else if (partnerRound > currentRound) {
                 pendingPartnerClicks[partnerRound] = true;
@@ -291,9 +305,7 @@
             finishGame();
         } else {
             updateRoundDisplay();
-            document.getElementById("connection-status").textContent = partnerClickedThisRound ?
-                "Partner clicked; choose your cell" : "Connected";
-            setGridDisabled(false);
+            showPlayablePrompt();
         }
     }
 
