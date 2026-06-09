@@ -1,12 +1,20 @@
 {{- $page := . -}}
 {{- $authors := slice -}}
+{{- $skills := slice -}}
+{{- with hugo.Data.psynetsk.skills -}}
+  {{- $skills = . -}}
+{{- end -}}
+{{- $challenges := slice -}}
+{{- with hugo.Data.psynetsk.challenges -}}
+  {{- $challenges = . -}}
+{{- end -}}
 {{- if and (eq $page.Section "skills") $page.Params.skill -}}
-  {{- $matches := where hugo.Data.psynetsk.skills "name" $page.Params.skill -}}
+  {{- $matches := where $skills "name" $page.Params.skill -}}
   {{- if gt (len $matches) 0 -}}
     {{- $authors = (index $matches 0).authors -}}
   {{- end -}}
 {{- else if and (eq $page.Section "challenges") $page.Params.challenge -}}
-  {{- $challengeMatches := where hugo.Data.psynetsk.challenges "slug" $page.Params.challenge -}}
+  {{- $challengeMatches := where $challenges "slug" $page.Params.challenge -}}
   {{- if gt (len $challengeMatches) 0 -}}
     {{- $challenge := index $challengeMatches 0 -}}
     {{- with $page.Params.attempt -}}
