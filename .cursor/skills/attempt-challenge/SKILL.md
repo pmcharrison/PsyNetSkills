@@ -20,6 +20,7 @@ challenge before starting a fresh attempt.
 - Read `references/attempt-artifacts.md` before setting up attempt templates or
   collecting evidence.
 - For experiment implementation challenges, also read
+  `references/experiment-evidence.md` and
   `psynet-experiment-implementation/references/validation.md` before finalizing
   functional or performance evidence.
 
@@ -89,10 +90,8 @@ Evidence should give reviewers enough material to judge both the
 participant-facing behavior and the technical health of the attempt. Match the
 evidence to the challenge type and public instructions. For experiment
 implementation challenges, use the required artifact checklist in
-`references/attempt-artifacts.md`; do not apply that checklist wholesale to
-non-experiment challenges unless their public instructions ask for those
-artifacts. For PsyNet functional and performance checks, follow
-`psynet-experiment-implementation/references/validation.md`.
+`references/experiment-evidence.md`. For PsyNet functional and performance
+checks, follow `psynet-experiment-implementation/references/validation.md`.
 
 Do not imply a skipped check passed: record what was run, what happened, and why
 any required evidence is missing or blocked in `EVALUATION.md`.
