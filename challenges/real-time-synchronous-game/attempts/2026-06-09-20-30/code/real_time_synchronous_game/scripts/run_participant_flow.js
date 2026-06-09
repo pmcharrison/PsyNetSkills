@@ -63,17 +63,21 @@ async function ownClickCount(page) {
 }
 
 async function run() {
-  const browser = await chromium.launch({
+  const runId = String(Date.now());
+  const launchOptions = (x) => ({
     executablePath: process.env.CHROME_PATH || "/usr/local/bin/google-chrome",
     headless: false,
-    args: ["--no-sandbox", "--window-size=1280,720"],
+    args: ["--no-sandbox", "--window-size=640,700", `--window-position=${x},0`],
   });
-  const context = await browser.newContext({ viewport: { width: 640, height: 700 } });
-  const player1 = await context.newPage();
-  const player2 = await context.newPage();
+  const browser1 = await chromium.launch(launchOptions(0));
+  const browser2 = await chromium.launch(launchOptions(640));
+  const context1 = await browser1.newContext({ viewport: { width: 640, height: 700 } });
+  const context2 = await browser2.newContext({ viewport: { width: 640, height: 700 } });
+  const player1 = await context1.newPage();
+  const player2 = await context2.newPage();
 
-  await player1.goto(participantUrl("grid-player-1"));
-  await player2.goto(participantUrl("grid-player-2"));
+  await player1.goto(participantUrl(`grid-player-1-${runId}`));
+  await player2.goto(participantUrl(`grid-player-2-${runId}`));
   await Promise.all([
     advanceToGame(player1, "player 1"),
     advanceToGame(player2, "player 2"),
@@ -122,7 +126,8 @@ async function run() {
     player2.getByText("The game is complete").waitFor({ timeout: 30_000 }),
   ]);
   await player1.screenshot({ path: `${EVIDENCE_DIR}/player1_completion_page.png` });
-  await browser.close();
+  await browser1.close();
+  await browser2.close();
 }
 
 run().catch((error) => {
