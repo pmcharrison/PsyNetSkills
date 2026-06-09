@@ -19,9 +19,9 @@ page.
 
 The participant experience should include:
 
-- An introductory information page that clearly explains that the participant's
-  camera will be used during the task and asks for recording consent before the
-  recorded trials begin.
+- An information page at the beginning of the timeline that explains that the
+  experiment uses video recording and tells participants to exit the experiment
+  if they do not consent to being recorded.
 - Camera activation on each recording-enabled trial page, running in parallel
   with the participant's normal interaction with the static task.
 - Recording that starts by default when a trial starts and stops when the trial

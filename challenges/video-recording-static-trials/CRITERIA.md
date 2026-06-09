@@ -46,7 +46,6 @@ criteria.
 
 ## Participant experience and robustness
 
-- Includes a consent or information page before recorded trials begin.
 - Handles denied camera permissions, missing browser media APIs, and failed
   uploads gracefully with participant-facing feedback and researcher-visible
   saved state.
