@@ -81,9 +81,22 @@ trial, especially games with ordered turns or rounds:
   Do not send private rewards, signals, hidden probabilities, or partner-only
   outcomes to the wrong client just because they are convenient for local UI
   updates.
-- Persist enough server-side transition data to reconstruct the interaction:
-  incoming action, actor, pre-state, accepted/rejected status, post-state, and
-  participant-specific outbound updates.
+- Separate three data concepts instead of mixing them in one table or payload:
+  raw submitted events, reconstructed/checkpointed game state, and
+  participant-specific outbound deliveries.
+- Treat the raw event log as the private source of truth. It should contain the
+  complete submitted action and any private consequences needed for analysis
+  (for example rewards, signals, hidden probabilities, timing, and validation
+  metadata).
+- Make game state derivable from the event log whenever practical. For
+  high-volume or highly parallel games, add server-side state snapshots or
+  checkpoints, but keep them downstream of accepted events.
+- Record outbound deliveries separately when it matters what each participant
+  actually received. These delivery records should contain only the public
+  payload sent to that participant, plus routing/status metadata.
+- Implement an explicit privacy projection from private events/state to
+  per-recipient public payloads. Never rely on the browser to hide fields that
+  should not have been sent.
 - Test with at least two real participant sessions and review the recording for
   interaction semantics, not just visual updates. Confirm that participants stay
   on the same ordered turn and that one client's stale or repeated click cannot
