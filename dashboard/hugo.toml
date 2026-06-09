@@ -14,7 +14,8 @@ disableKinds = ["taxonomy", "term", "RSS", "sitemap", "robotsTXT"]
     category = "Announcements"
     category_id = "DIC_kwDOSw3rlM4C-xgp"
     mapping = "pathname"
-    strict = "0"
+    # Require exact pathname matches so attempt pages do not reuse parent challenge discussions.
+    strict = "1"
     reactions_enabled = "1"
     emit_metadata = "0"
     input_position = "bottom"
