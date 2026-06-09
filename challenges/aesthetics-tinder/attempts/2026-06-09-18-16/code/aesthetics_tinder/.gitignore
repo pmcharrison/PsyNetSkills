@@ -1,4 +1,5 @@
 .dallinger
+.deploy/
 __pycache__/
 *.pyc
 data/participants
