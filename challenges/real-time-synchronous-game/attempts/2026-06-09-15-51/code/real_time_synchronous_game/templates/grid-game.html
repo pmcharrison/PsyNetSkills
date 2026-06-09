@@ -87,6 +87,26 @@
         font-weight: 700;
     }
 
+    #reward-feedback {
+        display: inline-block;
+        min-width: 4rem;
+        padding: 0.25rem 0.5rem;
+        border-radius: 999px;
+        background: #e9ecef;
+        text-align: center;
+        font-weight: 700;
+    }
+
+    #reward-feedback.positive {
+        color: white;
+        background: #198754;
+    }
+
+    #reward-feedback.zero {
+        color: white;
+        background: #dc3545;
+    }
+
     #player-list {
         display: flex;
         flex-wrap: wrap;
@@ -137,6 +157,7 @@
 <div class="alert alert-info py-2">
     Round <span id="round-number">1</span> of <span id="round-total"></span>.
     Latest private signal: <span id="signal-badge">-</span>
+    Latest feedback: <span id="reward-feedback">-</span>
     <span id="connection-status" class="ms-3 text-muted">Connecting...</span>
     <span class="ms-3">Turn timer: <strong id="turn-timer">--</strong></span>
 </div>
@@ -298,8 +319,12 @@
             }
             clicks.push({ round: data.round, row: row, col: col, signal: data.signal });
             document.getElementById("signal-badge").textContent = String(data.signal);
+            updateRewardFeedback(data.signal, data.positive_reward || 0);
             flashOwnCell(row, col, data.signal, data.positive_reward || 0);
-            appendLog("You clicked (" + row + ", " + col + ") and saw private signal " + data.signal + ".");
+            appendLog(
+                "You clicked (" + row + ", " + col + ") and saw private signal " + data.signal
+                + (data.positive_reward > 0 ? " (+$" + data.positive_reward.toFixed(2) + ")." : " (+$0.00).")
+            );
             applyState(data.state, false);
         } catch (error) {
             appendLog("Submission error: " + error.message);
@@ -422,6 +447,18 @@
             setTimeout(function () { rewardEl.remove(); }, 1400);
         }
         setTimeout(function () { cell.classList.remove("click-success", "click-fail"); }, 1400);
+    }
+
+    function updateRewardFeedback(signal, reward) {
+        var el = document.getElementById("reward-feedback");
+        el.classList.remove("positive", "zero");
+        if (signal) {
+            el.classList.add("positive");
+            el.textContent = "+$" + reward.toFixed(2);
+        } else {
+            el.classList.add("zero");
+            el.textContent = "+$0.00";
+        }
     }
 
     function setGridDisabled(disabled) {
