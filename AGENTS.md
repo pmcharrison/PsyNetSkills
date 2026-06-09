@@ -83,6 +83,10 @@ before proceeding. Do not maintain a second editable copy of the skills.
 - **Node.js + npm** — Required for JavaScript Playwright participant-flow
   scripts used in challenge evidence. Attempt code may install `@playwright/test`
   locally with npm and commit `package.json`/`package-lock.json`.
+- **Heroku CLI** — Required for `psynet debug local` / `psynet test local`. On
+  Cursor Cloud, if `curl https://cli.heroku.com/install.sh` is unavailable, install
+  with `npm install --prefix ~/.local/heroku-cli heroku` and symlink
+  `~/.local/heroku-cli/node_modules/.bin/heroku` into `~/.local/bin`.
 
 For Cursor Cloud participant recordings with browser audio, a known-good Linux
 setup is:
@@ -122,6 +126,10 @@ There is no separate linter; `psynetsk-validate` is the structural check used in
 ### Virtual environment
 
 `uv sync --group dev` creates `.venv/`. Activate with `source .venv/bin/activate` when running tools outside `uv run`.
+
+If `~/PsyNet/.venv` is active in the same shell, `uv run` in the PsyNetSkills
+repo may warn about a `VIRTUAL_ENV` mismatch; deactivate PsyNet or use a fresh
+shell for repo validation, tests, and dashboard export.
 
 ### PsyNet checkout (`~/PsyNet`) — required
 
