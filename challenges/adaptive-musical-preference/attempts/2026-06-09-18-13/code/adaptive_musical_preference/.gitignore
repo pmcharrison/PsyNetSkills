@@ -1,0 +1,8 @@
+.dallinger
+__pycache__/
+*.pyc
+data/
+local_only/
+logs/
+*.log
+source_code.zip
