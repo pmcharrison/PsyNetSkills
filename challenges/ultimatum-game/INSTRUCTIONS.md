@@ -28,6 +28,12 @@ that round. After each counted round, both participants should receive feedback
 showing their role, the proposal, the responder's decision, the coins earned by
 each participant in that round, and their own cumulative score.
 
+Use WebSockets to manage the real-time interaction between the two participants
+during each round. The implementation should use live updates to notify the
+responder when the proposal has been submitted, to notify the proposer when the
+responder has accepted or rejected the proposal, and to keep both browsers in
+sync during waiting and feedback states.
+
 All pages should be timed so that neither participant can delay the pair
 indefinitely. This includes instructions, proposer decisions, responder waiting,
 responder decisions, feedback, and completion pages where relevant. If either
@@ -44,7 +50,7 @@ short explanation of how their score was accumulated.
 
 The submitted evidence should demonstrate that two participants can be grouped
 together, roles are randomized across rounds, proposals and accept/reject
-decisions synchronize correctly between the two browsers, accepted and rejected
-proposals produce the correct payoffs, timeout behavior prevents a stalled
-round from contributing to accumulated scores, and both participants reach the
-completion page.
+decisions synchronize correctly between the two browsers via WebSockets,
+accepted and rejected proposals produce the correct payoffs, timeout behavior
+prevents a stalled round from contributing to accumulated scores, and both
+participants reach the completion page.
