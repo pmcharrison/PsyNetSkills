@@ -73,8 +73,9 @@ def grid_size():
 
 
 def n_rounds():
-    default = MINIMAL_N_ROUNDS if os.environ.get("PSYNET_PROFILE") == "minimal" else DEFAULT_N_ROUNDS
-    return config_value("pixel_game_n_rounds", default, int)
+    if os.environ.get("PSYNET_PROFILE") == "minimal":
+        return MINIMAL_N_ROUNDS
+    return config_value("pixel_game_n_rounds", DEFAULT_N_ROUNDS, int)
 
 
 def low_probability():
@@ -538,7 +539,6 @@ class Exp(psynet.experiment.Experiment):
                 "row": event.row,
                 "col": event.col,
                 "signal": event.signal,
-                "probability": event.probability,
                 "accepted": event.accepted,
                 "error": event.error,
                 "receive_time": event.receive_time,

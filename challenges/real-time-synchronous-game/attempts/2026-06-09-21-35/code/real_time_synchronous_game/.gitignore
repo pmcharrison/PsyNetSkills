@@ -2,6 +2,7 @@ __pycache__/
 *.py[cod]
 .pytest_cache/
 .dallinger/
+.deploy/
 data/
 local_config_defaults.txt
 logs/
