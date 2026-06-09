@@ -94,20 +94,15 @@ trial, especially games with ordered turns or rounds:
   round has advanced, that a turn is complete, or that another participant's
   action is valid.
 - Even when much of the interaction happens within a single trial, integrate it
-  with PsyNet's node/trial system. Realtime session parameters should be
-  derivable from the trial's node definition.
-- The node should contain all information needed for a realtime session to
-  begin, without consulting previous sessions, prior events, or mutable runtime
-  state. If a future session should resume or transform earlier data,
-  `summarize_trials` should write that information into the next node definition
-  first.
+  with PsyNet's node/trial system. Parameters for the live session (e.g., the parameters of the task, the number of players, etc.) should be
+  derivable from/stored in the trial's node definition.
 - Important trial outputs (for example the accepted event sequence) should be
   recorded in the trial answer so `summarize_trials` can build the next node
-  from the accumulated data.
+  from the accumulated data. Not all events need be recorded in the trial answer, but at least all the information necessary for constructing the next node.
 - Keep websocket payloads scoped to what each participant is allowed to know.
-  Do not send private rewards, signals, hidden probabilities, or partner-only
-  outcomes to the wrong client just because they are convenient for local UI
-  updates.
+  Do not send private informationto the wrong client just because they are convenient for local UI
+  updates. Do not rely entirely on the browser to hide fields that
+  should not have been sent.
 - Separate three data concepts instead of mixing them in one table or payload:
   raw submitted events, reconstructed/checkpointed game state, and
   participant-specific outbound deliveries.
@@ -121,13 +116,6 @@ trial, especially games with ordered turns or rounds:
 - Record outbound deliveries separately when it matters what each participant
   actually received. These delivery records should contain only the public
   payload sent to that participant, plus routing/status metadata.
-- Implement an explicit privacy projection from private events/state to
-  per-recipient public payloads. Never rely on the browser to hide fields that
-  should not have been sent.
-- Test with at least two real participant sessions and review the recording for
-  interaction semantics, not just visual updates. Confirm that participants stay
-  on the same ordered turn and that one client's stale or repeated click cannot
-  advance the game incorrectly.
 
 ## PsyNet setup reminders
 
