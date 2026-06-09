@@ -1,4 +1,4 @@
-from typing import Dict, List, Tuple
+from typing import Dict, List, Optional, Tuple, Union
 
 from dominate import tags
 
@@ -9,7 +9,7 @@ from psynet.page import InfoPage, SuccessfulEndPage
 from psynet.participant import Participant
 from psynet.sync import GroupBarrier, SimpleGrouper
 from psynet.timeline import CodeBlock, Module, PageMaker, Timeline, join
-from psynet.trial.static import StaticNode, StaticTrial, StaticTrialMaker
+from psynet.trial.static import StaticNetwork, StaticNode, StaticTrial, StaticTrialMaker
 
 
 GROUP_TYPE = "prisoners_dilemma"
@@ -260,6 +260,95 @@ class PrisonersDilemmaTrial(StaticTrial):
 
 
 class PrisonersDilemmaTrialMaker(StaticTrialMaker):
+    def __init__(
+        self,
+        *,
+        id_: str,
+        trial_class,
+        nodes: Optional[Union[callable, List[StaticNode]]],
+        expected_trials_per_participant: int | str,
+        max_trials_per_participant: Optional[int | str] = None,
+        recruit_mode: Optional[str] = None,
+        target_n_participants: Optional[int] = None,
+        target_trials_per_node: Optional[int] = None,
+        max_trials_per_block: Optional[int] = None,
+        allow_repeated_nodes: bool = False,
+        balance_across_nodes: bool = True,
+        check_performance_at_end: bool = False,
+        check_performance_every_trial: bool = False,
+        fail_trials_on_premature_exit: bool = True,
+        fail_trials_on_participant_performance_check: bool = True,
+        n_repeat_trials: int = 0,
+        assets=None,
+        choose_participant_group: Optional[callable] = None,
+        sync_group_type: Optional[str] = None,
+        sync_group_max_wait_time: float = 300.0,
+    ):
+        assert isinstance(expected_trials_per_participant, (int, float, str))
+        if isinstance(expected_trials_per_participant, str):
+            assert expected_trials_per_participant == "n_nodes"
+            expected_trials_per_participant = "n_start_nodes"
+
+        assert max_trials_per_participant is None or isinstance(
+            max_trials_per_participant, (int, float, str)
+        )
+        if isinstance(max_trials_per_participant, str):
+            assert max_trials_per_participant == "n_nodes"
+            max_trials_per_participant = "n_start_nodes"
+
+        if callable(nodes):
+            if expected_trials_per_participant is None:
+                raise ValueError(
+                    "If nodes is a function, expected_trials_per_participant must be explicitly provided."
+                )
+        else:
+            assert isinstance(nodes, list)
+            if (
+                isinstance(expected_trials_per_participant, (int, float))
+                and expected_trials_per_participant > len(nodes)
+                and not allow_repeated_nodes
+            ):
+                raise ValueError(
+                    f"expected_trials_per_participant ({expected_trials_per_participant}) "
+                    f"may not exceed len(nodes) ({len(nodes)}) "
+                    "unless allow_repeated_nodes = True."
+                )
+
+        if allow_repeated_nodes:
+            assert (
+                max_trials_per_participant is not None
+                or max_trials_per_block is not None
+            )
+
+        super(StaticTrialMaker, self).__init__(
+            id_=id_,
+            start_nodes=nodes,
+            trial_class=trial_class,
+            network_class=StaticNetwork,
+            node_class=StaticNode,
+            recruit_mode=recruit_mode,
+            target_n_participants=target_n_participants,
+            expected_trials_per_participant=expected_trials_per_participant,
+            max_trials_per_participant=max_trials_per_participant,
+            max_trials_per_block=max_trials_per_block,
+            chain_type="across",
+            chains_per_participant=None,
+            chains_per_experiment=None,
+            max_nodes_per_chain=1,
+            trials_per_node=target_trials_per_node if target_trials_per_node else 1e6,
+            balance_across_chains=balance_across_nodes,
+            allow_revisiting_networks_in_across_chains=allow_repeated_nodes,
+            check_performance_at_end=check_performance_at_end,
+            check_performance_every_trial=check_performance_every_trial,
+            fail_trials_on_premature_exit=fail_trials_on_premature_exit,
+            fail_trials_on_participant_performance_check=fail_trials_on_participant_performance_check,
+            n_repeat_trials=n_repeat_trials,
+            assets=assets,
+            choose_participant_group=choose_participant_group,
+            sync_group_type=sync_group_type,
+            sync_group_max_wait_time=sync_group_max_wait_time,
+        )
+
     def choose_block_order(self, experiment, participant, blocks):
         return sorted(blocks)
 
