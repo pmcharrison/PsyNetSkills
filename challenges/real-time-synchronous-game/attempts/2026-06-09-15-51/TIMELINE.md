@@ -6,5 +6,13 @@
 - T+00:03:30 [agent] Refreshed the local PsyNet checkout to `2290ae6a4f25f9e76f9d08f560bccc4f1cbbc4f5`.
 - T+00:05:00 [agent] Created the timestamped attempt folder and copied the challenge snapshot without reading criteria.
 - T+00:11:30 [agent] Implemented the initial synchronous grid-game experiment, websocket UI, and two-bot test harness.
+- T+00:29:00 [agent] Fixed PsyNet runtime metadata requirements found by local launch checks.
+- T+00:34:00 [agent] `psynet test local` passed for the two-bot dyad flow and database assertions.
+- T+00:52:00 [agent] Manual two-browser run exposed an overly short dyad pairing timeout.
+- T+01:00:00 [agent] Extended the `SimpleGrouper` wait window and confirmed `psynet test local` still passed.
+- T+01:02:00 [agent] Recorded successful two-participant evidence showing private signals and partner heatmap updates.
+- T+01:07:00 [agent] Ran the required 40-bot, 5-minute performance test and saved JSON/log evidence.
+- T+01:15:00 [agent] Exported local data and saved a dashboard monitor snapshot.
+- T+01:17:00 [agent-stop] Experiment implementation and first-pass evidence collection complete.
 
 <!-- Close active implementation segments with [agent-stop] when work pauses or completes. -->
