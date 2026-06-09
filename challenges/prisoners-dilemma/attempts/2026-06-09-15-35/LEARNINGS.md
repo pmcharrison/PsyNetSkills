@@ -8,7 +8,7 @@ generated experiment to that commit makes later review and reruns match the
 metadata more closely.
 
 *Actions:*
-- **PsyNetSkills:** Update the attempt workflow notes to recommend pinning generated experiment requirements to the recorded PsyNet commit. Confidence: medium. Status: completed. Notes: Added to the `attempt-challenge` skill after learning review.
+- **PsyNetSkills:** Update the experiment implementation guidance to recommend creating `requirements.txt` with PsyNet pinned to the recorded checkout commit, then generating `constraints.txt` from that pinned requirement. Confidence: medium. Status: completed. Notes: Added to the `psynet-experiment-implementation` skill after learning review.
 
 ## Repeated game challenges need explicit partner semantics
 
