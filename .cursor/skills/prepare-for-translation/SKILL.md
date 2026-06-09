@@ -43,15 +43,20 @@ or ready for `psynet translate`.
    config or `config.txt`; include English plus each requested target locale.
    If older code uses `language`, align it with current PsyNet documentation or
    migrate it to `locale` rather than adding stale duplicate settings.
-7. Run the strongest safe validation available from the experiment directory:
+7. Before relying on automatic translation, confirm the active PsyNet checkout is
+   recent enough to include the Autotranslation work (commit
+   `02a1cdded737d9fae294b789f7d5a5c288d59580` or a later `master`/release).
+   Update the local PsyNet checkout when appropriate, or record the version
+   blocker if the environment cannot be updated.
+8. Run the strongest safe validation available from the experiment directory:
    usually `psynet translate <locale>` when local/test translation credentials
    or a mock translator are available, otherwise run an extraction/check path
    that creates `locales/experiment.pot` without real service credentials.
    Also run the experiment's existing tests or `psynet test local` when the
    change affects participant flow.
-8. Inspect the generated POT/PO entries or command output to confirm every
+9. Inspect the generated POT/PO entries or command output to confirm every
    marked string was extracted and no f-string-resolved English text remains.
-9. Commit the code/config/test changes. The skill's output is an applied,
+10. Commit the code/config/test changes. The skill's output is an applied,
    committed experiment change, not a report that lists what the user should do.
 
 ## Rules
@@ -62,6 +67,9 @@ or ready for `psynet translate`.
 - Do not configure real OpenAI, Google, Prolific, AWS, or other production
   credentials. If translation APIs are unavailable, still prepare the code and
   document the exact validation blocker.
+- Keep translator API settings such as `.dallingerconfig`, OpenAI API keys, and
+  Google Translate JSON paths machine-local and uncommitted. Do not retrieve,
+  copy, or publish credentials from private stores as part of this skill.
 - Do not translate non-participant identifiers such as page labels, trial IDs,
   asset filenames, data keys, model names, or analysis-only strings unless they
   are displayed to participants.
