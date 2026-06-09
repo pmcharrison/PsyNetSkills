@@ -18,15 +18,5 @@
 - T+01:29:00 [agent] Re-recorded participant evidence showing lockstep round advancement and private signals.
 - T+01:35:00 [agent] Re-ran the 40-bot performance test, exported final local data, and refreshed the monitor snapshot.
 - T+01:36:00 [agent-stop] Experiment implementation and first-pass evidence collection complete.
-- T+02:05:00 [manual] Evaluator reported repeated-click/turn-registration problems and requested a chain-node, configurable-group, turn-taking, and UI repair pass.
-- T+02:06:00 [agent-start] Started post-evaluation repair work.
-- T+02:11:00 [agent] Debug pass identified ambiguous playable-state text as one source of the repeated-click symptom.
-- T+02:25:00 [agent] Reworked the game to use `ChainTrialMaker`/`ChainNode` definitions and server-authoritative turn state.
-- T+02:35:00 [agent] Manual browser test found the state route was missing a reliable participant unique ID.
-- T+02:38:00 [agent] Fixed state-route identity handling and confirmed `psynet test local` still passed.
-- T+02:48:00 [agent] Manual browser test verified named turn-taking, border coordinates, timers, checkmarks, aggregate heatmap, and single-click turn passing.
-- T+02:55:00 [agent] Added persistent reward feedback and verified positive-signal `+$0.01` display in a final two-browser recording.
-- T+03:01:00 [agent] Re-ran the 40-bot performance test, exported final data, and refreshed the monitor snapshot after repairs.
-- T+03:02:00 [agent-stop] Post-evaluation repair and evidence refresh complete.
 
 <!-- Close active implementation segments with [agent-stop] when work pauses or completes. -->
