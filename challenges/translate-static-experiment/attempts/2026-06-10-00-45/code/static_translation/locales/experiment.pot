@@ -1,0 +1,69 @@
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: experiment.py:21
+msgid "cats"
+msgstr ""
+
+#: experiment.py:22
+msgid "dogs"
+msgstr ""
+
+#: experiment.py:23
+msgid "fish"
+msgstr ""
+
+#: experiment.py:24
+msgid "ponies"
+msgstr ""
+
+#: experiment.py:52
+#, python-brace-format
+msgid "Trial {TRIAL_NUMBER}"
+msgstr ""
+
+#: experiment.py:60
+#, python-brace-format
+msgid "Repeat trial {REPEAT_INDEX} out of {REPEAT_TOTAL}"
+msgstr ""
+
+#: experiment.py:66
+#, python-brace-format
+msgid "Block {BLOCK}"
+msgstr ""
+
+#: experiment.py:69
+#, python-brace-format
+msgid "How much do you like {ANIMAL}?"
+msgstr ""
+
+#: experiment.py:78
+#, python-brace-format
+msgid ""
+"You can also use the keys {KEY_A}, {KEY_S}, and {KEY_D} on your keyboard."
+msgstr ""
+
+#: experiment.py:98
+#, python-brace-format
+msgid "Not at all {KEY_A}"
+msgstr ""
+
+#: experiment.py:99
+#, python-brace-format
+msgid "A little {KEY_S}"
+msgstr ""
+
+#: experiment.py:100
+#, python-brace-format
+msgid "Very much {KEY_D}"
+msgstr ""
+
+#: experiment.py:145
+#, python-brace-format
+msgid "You finished the animal questions! Your score was {SCORE}."
+msgstr ""
