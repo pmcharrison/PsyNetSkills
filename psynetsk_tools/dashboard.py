@@ -53,9 +53,11 @@ TEXT_FILE_EXTENSIONS = {
 }
 ATTEMPT_ARTIFACTS_DIR = "artifacts/challenges"
 HASHED_ARTIFACTS_DIR = "artifacts/blobs/sha256"
+MONITOR_STATIC_ARTIFACTS_DIR = "artifacts/monitor-static"
 ARTIFACT_URL_PREFIX_ENV = "PSYNETSK_ARTIFACT_URL_PREFIX"
 MONITOR_STATIC_ROOT = Path(__file__).parent / "assets" / "monitor-static" / "static"
 STATIC_REF_RE = re.compile(r'(?:href|src)="/static/(?P<path>[^"]+)"')
+CENTRAL_MONITOR_STATIC_REFS = {"vis@4.17.0/dist/vis.min.js"}
 CREDENTIAL_REDACTIONS = (
     (re.compile(r"(?i)(dashboard_password=)[^&\"'\s<)]+"), r"\1[REDACTED]"),
     (re.compile(r"(?i)(dashboard_user=)[^&\"'\s<)]+"), r"\1[REDACTED]"),
@@ -512,6 +514,15 @@ def sanitize_html_artifact(path: Path) -> None:
     html = html.replace('href="/static/', 'href="./static/')
     html = html.replace('src="/static/', 'src="./static/')
     html = re.sub(r'<script([^>]*)\s*/></script>', r'<script\1></script>', html)
+    for ref in CENTRAL_MONITOR_STATIC_REFS:
+        html = html.replace(
+            f'src="./static/{ref}"',
+            f'src="../../../../monitor-static/{ref}"',
+        )
+        html = html.replace(
+            f'href="./static/{ref}"',
+            f'href="../../../../monitor-static/{ref}"',
+        )
     html = html.replace(
         "</head>",
         """
@@ -536,6 +547,8 @@ def sanitize_html_artifact(path: Path) -> None:
 def copy_monitor_static_assets(html_dir: Path, static_refs: list[str]) -> None:
     """Copy vendored Dallinger monitor assets next to a copied HTML artifact."""
     for ref in static_refs:
+        if ref in CENTRAL_MONITOR_STATIC_REFS:
+            continue
         source = MONITOR_STATIC_ROOT / ref
         if not source.is_file():
             continue
@@ -897,8 +910,11 @@ def write_attempt_artifacts(
 ) -> dict[tuple[str, str, str, str], str]:
     """Copy attempt artifacts into Hugo's shared content-addressed store."""
     target_root = dashboard_dir / "static" / HASHED_ARTIFACTS_DIR
+    shared_static_root = dashboard_dir / "static" / MONITOR_STATIC_ARTIFACTS_DIR
     shutil.rmtree(target_root, ignore_errors=True)
+    shutil.rmtree(shared_static_root, ignore_errors=True)
     target_root.mkdir(parents=True, exist_ok=True)
+    write_shared_monitor_static_assets(shared_static_root)
     artifact_urls: dict[tuple[str, str, str, str], str] = {}
 
     challenges_dir = root / "challenges"
@@ -933,6 +949,18 @@ def write_attempt_artifacts(
                         )
                     ] = write_hashed_artifact(source_file, target_root)
     return artifact_urls
+
+
+def write_shared_monitor_static_assets(target_root: Path) -> None:
+    """Write monitor static assets shared by all hashed HTML snapshots."""
+
+    for ref in sorted(CENTRAL_MONITOR_STATIC_REFS):
+        source = MONITOR_STATIC_ROOT / ref
+        if not source.is_file():
+            continue
+        destination = target_root / ref
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(source, destination)
 
 
 def write_hashed_artifact(source_file: Path, target_root: Path) -> str:

@@ -721,7 +721,10 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
     assert '<base href="./">' in exported_monitor
     assert 'href="./static/css/dashboard.css"' in exported_monitor
     assert 'src="./static/scripts/network-monitor.js"' in exported_monitor
-    assert 'src="./static/vis@4.17.0/dist/vis.min.js"' in exported_monitor
+    assert (
+        'src="../../../../monitor-static/vis@4.17.0/dist/vis.min.js"'
+        in exported_monitor
+    )
     assert 'href="#"' in exported_monitor
     assert "/dashboard/index" not in exported_monitor
     assert "const network_structure" in exported_monitor
@@ -742,8 +745,10 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
     network_monitor = monitor_blob.parent / "static/scripts/network-monitor.js"
     assert network_monitor.exists()
     assert (
-        monitor_blob.parent / "static/vis@4.17.0/dist/vis.min.js"
+        tmp_path
+        / "dashboard/static/artifacts/monitor-static/vis@4.17.0/dist/vis.min.js"
     ).exists()
+    assert not (monitor_blob.parent / "static/vis@4.17.0/dist/vis.min.js").exists()
     assert (
         "Live dashboard node details are unavailable"
         in network_monitor.read_text(encoding="utf-8")
