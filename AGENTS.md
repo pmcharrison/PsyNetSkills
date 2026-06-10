@@ -8,13 +8,14 @@ PsyNetSkills is a workshop repository (not a multi-service app). Local developme
 
 ### Engineering judgement
 
-While working in this repository, keep an eye out for reasonable opportunities to
-improve maintainability and reliability. When you notice duplicated workflow
-instructions, avoidable complexity, likely bugs, missing robustness checks, or
-useful validation gaps, mention them to the user and suggest a focused follow-up
-when it would help the current work. Keep those suggestions scoped: do not fold
-unrelated refactors or broad cleanups into the current task unless the user asks
-for them or they are needed to finish safely.
+While working in this repository, regularly check for reasonable opportunities
+to improve maintainability and reliability, especially when a feature is nearing
+completion. When you notice duplicated workflow instructions, avoidable
+complexity, likely bugs, missing robustness checks, or useful validation gaps,
+mention them to the user and suggest a focused follow-up when it would help the
+current work. Keep those suggestions scoped: do not fold unrelated refactors or
+broad cleanups into the current task unless the user asks for them or they are
+needed to finish safely.
 
 ### Git and PR workflow
 
