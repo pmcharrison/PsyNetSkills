@@ -22,9 +22,11 @@ experiment's mouse movement or stroke event tracking features.
 Participants should complete informed consent and brief instructions explaining
 that they will compose short melodies that compete on a shared market. Before
 participants enter the main task, include a short audio pre-screening step that
-plays one or more test tones or melodies and requires participants to confirm
-that playback works and is audible. Participants who cannot play or hear the
-audio check should not continue into the market task.
+plays a static sound clip containing a human voice saying "five". Participants
+must prove that they can hear the clip by typing what was said. Accept the
+answer if it is `five` or `5`, ignoring letter case and leading or trailing
+whitespace. Participants who cannot pass the audio check should not continue
+into the market task.
 
 Each round should consist of two steps:
 
@@ -60,7 +62,8 @@ sketch:
 
 - Three pitch rows labelled **Do**, **Re**, and **Mi**.
 - Nine time slots.
-- At most one active pitch per time slot.
+- Overlapping notes are allowed: more than one pitch row may be active in the
+  same time slot.
 - Distinct colours for each pitch row.
 - A **Play melody** button that audibly previews the current sequence.
 

@@ -22,8 +22,8 @@ considered successful only if every must-have item is fully met.
 ## Music-domain interfaces
 
 - [ ] **Must-have:** The creation interface is a 3×9 step sequencer with Do,
-  Re, and Mi rows, at most one active pitch per time slot, distinct row colours,
-  and clickable note toggling.
+  Re, and Mi rows, distinct row colours, clickable note toggling, and support
+  for overlapping notes within the same time slot.
 - [ ] **Must-have:** The creation page includes a working **Play melody**
   control that audibly previews the current sequence before submission.
 - [ ] **Must-have:** Market previews let participants listen to each melody via
@@ -31,8 +31,9 @@ considered successful only if every must-have item is fully met.
 - [ ] **Must-have:** The market preview does not expose the underlying note
   grid.
 - [ ] **Must-have:** Participants complete an audio pre-screening step before
-  the main task, and participants who cannot confirm audible playback do not
-  continue into the market task.
+  the main task by hearing a static voice clip saying "five" and typing the
+  answer; `five` and `5` are accepted irrespective of letter case, and
+  participants who cannot pass do not continue into the market task.
 - [ ] **Nice-to-have:** Market previews include a waveform or similarly clear
   audio visualization.
 
