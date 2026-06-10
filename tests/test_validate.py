@@ -318,6 +318,15 @@ def test_validate_evidence_video_allows_crlf_lfs_pointer(
     assert validate_evidence_video(video_file) == []
 
 
+def test_validate_evidence_video_allows_small_unfetched_placeholder(
+    tmp_path: Path,
+) -> None:
+    video_file = tmp_path / "participant.mp4"
+    video_file.write_bytes(b"")
+
+    assert validate_evidence_video(video_file) == []
+
+
 def test_validate_agent_metadata_accepts_run_cost(tmp_path: Path) -> None:
     agent_file = tmp_path / "agent.json"
     metadata = json.loads(agent_json())
