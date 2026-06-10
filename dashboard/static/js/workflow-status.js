@@ -34,8 +34,23 @@
       return;
     }
     popover.hidden = false;
+    popover.style.transform = "";
     statusLink.classList.add("workflow-tooltip-open");
     popoverOpen = true;
+    window.requestAnimationFrame(function () {
+      const rect = popover.getBoundingClientRect();
+      const viewportPadding = 12;
+      let offset = 0;
+      if (rect.right > window.innerWidth - viewportPadding) {
+        offset -= rect.right - (window.innerWidth - viewportPadding);
+      }
+      if (rect.left + offset < viewportPadding) {
+        offset += viewportPadding - (rect.left + offset);
+      }
+      if (offset !== 0) {
+        popover.style.transform = `translateX(${offset}px)`;
+      }
+    });
   }
 
   function hidePopover() {
@@ -43,6 +58,7 @@
       return;
     }
     popover.hidden = true;
+    popover.style.transform = "";
     statusLink.classList.remove("workflow-tooltip-open");
     popoverOpen = false;
   }
