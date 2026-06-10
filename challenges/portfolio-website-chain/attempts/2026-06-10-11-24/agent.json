@@ -1,5 +1,7 @@
 {
-  "authors": [],
+  "authors": [
+    "haoyu-hu"
+  ],
   "agent": "Cursor Cloud Agent",
   "client": "Cursor",
   "model": "GPT-5.5",
@@ -16,7 +18,6 @@
     "dirty": false
   },
   "notes": [
-    "Author metadata is pending the user-provided GitHub key requested during the attempt.",
     "OpenRouter live calls were not exercised because no API key/model credentials were configured; fallback generation was used for tests and evidence."
   ]
 }

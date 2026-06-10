@@ -39,4 +39,3 @@ Copied from `challenge/CRITERIA.md` for human review:
 - Fallback generation was used for automated tests and evidence because no OpenRouter API key/model credentials were configured, consistent with the challenge credential policy.
 - `evidence/participant.mp4` is a visual recording only; the experiment does not produce audio.
 - `evidence/performance.json` and `evidence/performance-test.log` come from `psynet performance-test local --n-bots 40 --duration-minutes 5 --time-factor 1.0`.
-- `agent.json` author metadata is pending the user-provided GitHub author key requested during the attempt.
