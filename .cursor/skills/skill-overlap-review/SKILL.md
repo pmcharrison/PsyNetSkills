@@ -1,7 +1,7 @@
 ---
 name: skill-overlap-review
 description: Detect, prevent, and reorganize repeated guidance across PsyNetSkills Agent Skills before creating or updating a skill.
-authors: [pmcharrison]
+authors: [haoyu-hu]
 ---
 
 # Review skill overlap
