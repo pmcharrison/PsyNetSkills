@@ -1,0 +1,268 @@
+{
+  "n_participants": 269,
+  "n_trials": 7532,
+  "summary_by_family": [
+    {
+      "family": "augmented_triad",
+      "valence": 2.118,
+      "tension": 4.023,
+      "energy": 3.456,
+      "nostalgia_longing": 2.104,
+      "melancholy_sadness": 2.989,
+      "interest_expectancy": 3.572,
+      "happiness_joy": 1.424,
+      "tenderness": 1.81,
+      "liking_preference": 1.953
+    },
+    {
+      "family": "diminished_triad",
+      "valence": 2.12,
+      "tension": 3.843,
+      "energy": 3.322,
+      "nostalgia_longing": 2.192,
+      "melancholy_sadness": 3.09,
+      "interest_expectancy": 3.415,
+      "happiness_joy": 1.512,
+      "tenderness": 1.891,
+      "liking_preference": 2.066
+    },
+    {
+      "family": "dominant_seventh",
+      "valence": 2.804,
+      "tension": 3.466,
+      "energy": 3.044,
+      "nostalgia_longing": 2.702,
+      "melancholy_sadness": 2.495,
+      "interest_expectancy": 3.592,
+      "happiness_joy": 2.354,
+      "tenderness": 2.22,
+      "liking_preference": 2.753
+    },
+    {
+      "family": "major_seventh",
+      "valence": 2.963,
+      "tension": 3.232,
+      "energy": 2.895,
+      "nostalgia_longing": 2.996,
+      "melancholy_sadness": 2.559,
+      "interest_expectancy": 3.112,
+      "happiness_joy": 1.964,
+      "tenderness": 2.581,
+      "liking_preference": 3.085
+    },
+    {
+      "family": "major_triad",
+      "valence": 4.19,
+      "tension": 2.787,
+      "energy": 3.093,
+      "nostalgia_longing": 2.024,
+      "melancholy_sadness": 1.611,
+      "interest_expectancy": 2.306,
+      "happiness_joy": 3.458,
+      "tenderness": 2.12,
+      "liking_preference": 2.771
+    },
+    {
+      "family": "minor_seventh",
+      "valence": 2.862,
+      "tension": 3.079,
+      "energy": 2.81,
+      "nostalgia_longing": 2.868,
+      "melancholy_sadness": 2.679,
+      "interest_expectancy": 3.0,
+      "happiness_joy": 2.0,
+      "tenderness": 2.651,
+      "liking_preference": 3.017
+    },
+    {
+      "family": "minor_triad",
+      "valence": 2.617,
+      "tension": 3.179,
+      "energy": 2.918,
+      "nostalgia_longing": 2.871,
+      "melancholy_sadness": 3.402,
+      "interest_expectancy": 2.766,
+      "happiness_joy": 1.865,
+      "tenderness": 2.392,
+      "liking_preference": 2.567
+    }
+  ],
+  "summary_by_timbre": [
+    {
+      "timbre": "piano",
+      "nostalgia_longing": 2.378,
+      "melancholy_sadness": 2.444,
+      "tenderness": 2.176,
+      "happiness_joy": 2.35
+    },
+    {
+      "timbre": "strings",
+      "nostalgia_longing": 2.781,
+      "melancholy_sadness": 2.782,
+      "tenderness": 2.416,
+      "happiness_joy": 2.156
+    }
+  ],
+  "reliability": {
+    "valence": 0.845,
+    "tension": 0.82,
+    "energy": 0.872,
+    "nostalgia_longing": 0.855,
+    "melancholy_sadness": 0.858,
+    "interest_expectancy": 0.877,
+    "happiness_joy": 0.844,
+    "tenderness": 0.841,
+    "liking_preference": 0.876
+  },
+  "dimension_correlations": {
+    "valence": {
+      "valence": 1.0,
+      "tension": 0.055,
+      "energy": -0.046,
+      "nostalgia_longing": -0.098,
+      "melancholy_sadness": -0.002,
+      "interest_expectancy": -0.076,
+      "happiness_joy": -0.038,
+      "tenderness": -0.053,
+      "liking_preference": 0.068
+    },
+    "tension": {
+      "valence": 0.055,
+      "tension": 1.0,
+      "energy": -0.051,
+      "nostalgia_longing": 0.049,
+      "melancholy_sadness": 0.017,
+      "interest_expectancy": -0.168,
+      "happiness_joy": -0.057,
+      "tenderness": 0.055,
+      "liking_preference": -0.003
+    },
+    "energy": {
+      "valence": -0.046,
+      "tension": -0.051,
+      "energy": 1.0,
+      "nostalgia_longing": 0.122,
+      "melancholy_sadness": 0.053,
+      "interest_expectancy": 0.274,
+      "happiness_joy": 0.046,
+      "tenderness": 0.094,
+      "liking_preference": 0.186
+    },
+    "nostalgia_longing": {
+      "valence": -0.098,
+      "tension": 0.049,
+      "energy": 0.122,
+      "nostalgia_longing": 1.0,
+      "melancholy_sadness": 0.085,
+      "interest_expectancy": 0.101,
+      "happiness_joy": 0.011,
+      "tenderness": 0.066,
+      "liking_preference": 0.03
+    },
+    "melancholy_sadness": {
+      "valence": -0.002,
+      "tension": 0.017,
+      "energy": 0.053,
+      "nostalgia_longing": 0.085,
+      "melancholy_sadness": 1.0,
+      "interest_expectancy": -0.032,
+      "happiness_joy": -0.123,
+      "tenderness": 0.12,
+      "liking_preference": -0.032
+    },
+    "interest_expectancy": {
+      "valence": -0.076,
+      "tension": -0.168,
+      "energy": 0.274,
+      "nostalgia_longing": 0.101,
+      "melancholy_sadness": -0.032,
+      "interest_expectancy": 1.0,
+      "happiness_joy": -0.002,
+      "tenderness": -0.041,
+      "liking_preference": 0.216
+    },
+    "happiness_joy": {
+      "valence": -0.038,
+      "tension": -0.057,
+      "energy": 0.046,
+      "nostalgia_longing": 0.011,
+      "melancholy_sadness": -0.123,
+      "interest_expectancy": -0.002,
+      "happiness_joy": 1.0,
+      "tenderness": 0.037,
+      "liking_preference": 0.01
+    },
+    "tenderness": {
+      "valence": -0.053,
+      "tension": 0.055,
+      "energy": 0.094,
+      "nostalgia_longing": 0.066,
+      "melancholy_sadness": 0.12,
+      "interest_expectancy": -0.041,
+      "happiness_joy": 0.037,
+      "tenderness": 1.0,
+      "liking_preference": -0.079
+    },
+    "liking_preference": {
+      "valence": 0.068,
+      "tension": -0.003,
+      "energy": 0.186,
+      "nostalgia_longing": 0.03,
+      "melancholy_sadness": -0.032,
+      "interest_expectancy": 0.216,
+      "happiness_joy": 0.01,
+      "tenderness": -0.079,
+      "liking_preference": 1.0
+    }
+  },
+  "feature_correlations": {
+    "nostalgia_longing": {
+      "nostalgia_longing": 1.0,
+      "tenderness": 0.864,
+      "brightness": 0.195,
+      "roughness": 0.598,
+      "spectral_flux": 0.462,
+      "log_attack_time": 0.484
+    },
+    "tenderness": {
+      "nostalgia_longing": 0.864,
+      "tenderness": 1.0,
+      "brightness": 0.247,
+      "roughness": 0.524,
+      "spectral_flux": 0.425,
+      "log_attack_time": 0.416
+    },
+    "brightness": {
+      "nostalgia_longing": 0.195,
+      "tenderness": 0.247,
+      "brightness": 1.0,
+      "roughness": -0.192,
+      "spectral_flux": 0.679,
+      "log_attack_time": 0.676
+    },
+    "roughness": {
+      "nostalgia_longing": 0.598,
+      "tenderness": 0.524,
+      "brightness": -0.192,
+      "roughness": 1.0,
+      "spectral_flux": 0.364,
+      "log_attack_time": 0.372
+    },
+    "spectral_flux": {
+      "nostalgia_longing": 0.462,
+      "tenderness": 0.425,
+      "brightness": 0.679,
+      "roughness": 0.364,
+      "spectral_flux": 1.0,
+      "log_attack_time": 0.949
+    },
+    "log_attack_time": {
+      "nostalgia_longing": 0.484,
+      "tenderness": 0.416,
+      "brightness": 0.676,
+      "roughness": 0.372,
+      "spectral_flux": 0.949,
+      "log_attack_time": 1.0
+    }
+  }
+}
