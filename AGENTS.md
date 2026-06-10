@@ -202,3 +202,9 @@ or GitHub file links that are worth reviewing.
 Use screenshots or recordings only when they add information that a reviewer
 cannot easily get from the live preview, such as participant-facing challenge
 evidence, interactive UI behavior, or a user-requested manual test artifact.
+
+### Workshop GitLab
+
+When users mention a private repository from our GitLab group (https://gitlab.com/computational-audition-lab),
+you may access the code using the GITLAB_TOKEN_CAL access token.
+
