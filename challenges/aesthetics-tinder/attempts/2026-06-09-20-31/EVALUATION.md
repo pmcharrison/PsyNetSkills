@@ -20,14 +20,14 @@ Generally quite good and followed the right instructions. Particularly impressed
 
 ## Criteria
 
-- [X] The experiment runs locally in PsyNet and presents a complete participant flow with instructions, 15 image trials, and a completion page.
-- [X] The stimulus set contains five clothes images, five house interior images, and five painting images, with source metadata documented for each image.
-- [X] All displayed images are standardized to 500 x 500 px.
-- [X] Each trial presents one image in a swipe-style card layout and accepts only left-arrow and right-arrow responses for the like/dislike decision.
-- [X] Left-arrow responses are recorded as "Dislike" and produce brief red "Dislike" feedback.
-- [X] Right-arrow responses are recorded as "Like" and produce brief green "Like" feedback.
-- [X] Trial data include enough metadata to identify the image, category, source, response direction, binary preference response, and response time.
-- [X] The implementation avoids custom service credentials and uses only local demo assets and configuration.
+- [x] The experiment runs locally in PsyNet and presents a complete participant flow with instructions, 15 image trials, and a completion page.
+- [x] The stimulus set contains five clothes images, five house interior images, and five painting images, with source metadata documented for each image.
+- [x] All displayed images are standardized to 500 x 500 px.
+- [x] Each trial presents one image in a swipe-style card layout and accepts only left-arrow and right-arrow responses for the like/dislike decision.
+- [x] Left-arrow responses are recorded as "Dislike" and produce brief red "Dislike" feedback.
+- [x] Right-arrow responses are recorded as "Like" and produce brief green "Like" feedback.
+- [x] Trial data include enough metadata to identify the image, category, source, response direction, binary preference response, and response time.
+- [x] The implementation avoids custom service credentials and uses only local demo assets and configuration.
 
 ## Notes
 
