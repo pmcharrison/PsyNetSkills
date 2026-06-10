@@ -6,6 +6,7 @@
   "started_at": null,
   "ended_at": null,
   "cursor_conversation_id": null,
+  "cursor_usage_user": null,
   "skills_commit": null,
   "psynet": {
     "checkout_path": "~/PsyNet",

@@ -34,6 +34,7 @@ PSYNET_AGENT_REQUIRED_FIELDS = {
 }
 RUN_COST_ATTRIBUTION_STATUSES = {
     "matched_cloud_agent_id",
+    "matched_cursor_user_time_window",
     "matched_time_window",
     "ambiguous",
     "unavailable",
@@ -269,6 +270,15 @@ def validate_run_cost_metadata(agent_file: Path, run_cost: Any) -> list[str]:
     ):
         problems.append(
             f"{agent_file}: run_cost.matched_cloud_agent_ids must be a list of strings",
+        )
+
+    matched_users = run_cost.get("matched_cursor_users")
+    if matched_users is not None and (
+        not isinstance(matched_users, list)
+        or any(not isinstance(value, str) for value in matched_users)
+    ):
+        problems.append(
+            f"{agent_file}: run_cost.matched_cursor_users must be a list of strings",
         )
 
     notes = run_cost.get("notes")

@@ -134,7 +134,10 @@ For Cursor Cloud attempts, also record `cursor_conversation_id` from the
 CSV exports call the same value `Cloud Agent ID`, so this field gives later cost
 imports an exact join key. Account names or emails from Cursor exports may help
 debug ambiguous historical imports, but they should not be treated as author
-identity and should not be committed as a GitHub-author mapping.
+identity. For local Cursor agents, optionally record `cursor_usage_user` with the
+Cursor CSV `User` value when the human is comfortable committing that account
+label. Otherwise, keep the account mapping in a local uncommitted JSON file and
+pass it to the cost importer with `--user-map`.
 
 `dirty` should normally be `false` and comes from `git status --short`. If the
 PsyNet checkout cannot be updated to the latest `origin/master`, record the
@@ -157,9 +160,23 @@ uv run psynetsk-import-cursor-costs path/to/team-usage-events.csv
 
 The importer updates attempts whose `agent.json` has no `run_cost` yet. It first
 matches CSV rows by `cursor_conversation_id` to Cursor's `Cloud Agent ID`. If
-that exact ID is unavailable, it falls back to the attempt time window from
-`started_at`, `ended_at`, and `TIMELINE.md`. Time-window matches are recorded as
-ambiguous unless only one non-empty Cloud Agent ID appears in the window.
+that exact ID is unavailable, it can match by Cursor CSV `User` plus the attempt
+time window from `started_at`, `ended_at`, and `TIMELINE.md`. The Cursor user can
+come from committed `cursor_usage_user` metadata or an uncommitted author map:
+
+```bash
+uv run psynetsk-import-cursor-costs \
+  --user-map path/to/cursor-users.json \
+  path/to/team-usage-events.csv
+```
+
+The map is a local JSON object from GitHub author IDs to Cursor CSV `User`
+values, for example `{"pmcharrison": "pmch2@example.com"}`. Do not commit this
+file unless the account labels are explicitly intended to be public.
+
+If neither exact ID nor account/time matching is available, the importer falls
+back to time-window matching only. Time-window matches are recorded as ambiguous
+unless only one non-empty Cloud Agent ID appears in the window.
 
 `run_cost` should either be `null` or a JSON object shaped like:
 
@@ -175,6 +192,7 @@ ambiguous unless only one non-empty Cloud Agent ID appears in the window.
   "matched_started_at": "2026-06-10T10:01:00Z",
   "matched_ended_at": "2026-06-10T10:44:00Z",
   "matched_cloud_agent_ids": ["bc-..."],
+  "matched_cursor_users": ["pmch2@example.com"],
   "usage": {
     "rows": 3,
     "total_tokens": 123456,

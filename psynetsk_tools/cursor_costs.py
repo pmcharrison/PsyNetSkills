@@ -42,6 +42,9 @@ class ImportResult:
     message: str
 
 
+AuthorUserMap = dict[str, list[str]]
+
+
 def parse_timestamp(value: str) -> datetime:
     """Parse an ISO timestamp from attempt metadata or Cursor CSV."""
 
@@ -97,6 +100,29 @@ def read_usage_events(csv_path: Path) -> list[UsageEvent]:
             ),
         )
     return events
+
+
+def read_user_map(user_map_path: Path | None) -> AuthorUserMap:
+    """Read an optional GitHub author to Cursor CSV user map."""
+
+    if user_map_path is None:
+        return {}
+
+    loaded = json.loads(user_map_path.read_text(encoding="utf-8"))
+    if not isinstance(loaded, dict):
+        raise ValueError("user map must be a JSON object")
+
+    user_map: AuthorUserMap = {}
+    for author, users in loaded.items():
+        if not isinstance(author, str):
+            raise ValueError("user map author keys must be strings")
+        if isinstance(users, str):
+            user_map[author] = [users]
+        elif isinstance(users, list) and all(isinstance(user, str) for user in users):
+            user_map[author] = users
+        else:
+            raise ValueError("user map values must be strings or lists of strings")
+    return user_map
 
 
 def latest_timeline_seconds(timeline_file: Path) -> int | None:
@@ -175,6 +201,25 @@ def event_totals(events: list[UsageEvent]) -> dict[str, Any]:
     }
 
 
+def agent_cursor_users(agent: dict[str, Any], user_map: AuthorUserMap) -> list[str]:
+    """Return Cursor CSV user labels to use for account/time matching."""
+
+    users: list[str] = []
+    cursor_usage_user = agent.get("cursor_usage_user")
+    if isinstance(cursor_usage_user, str):
+        users.append(cursor_usage_user)
+    elif isinstance(cursor_usage_user, list):
+        users.extend(user for user in cursor_usage_user if isinstance(user, str))
+
+    authors = agent.get("authors")
+    if isinstance(authors, list):
+        for author in authors:
+            if isinstance(author, str):
+                users.extend(user_map.get(author, []))
+
+    return sorted({user.strip() for user in users if user.strip()})
+
+
 def build_run_cost(
     *,
     events: list[UsageEvent],
@@ -190,6 +235,7 @@ def build_run_cost(
     cloud_agent_ids = sorted(
         {event.cloud_agent_id for event in events if event.cloud_agent_id}
     )
+    users = sorted({event.user for event in events if event.user})
     event_times = [event.timestamp for event in events]
     window_started_at = attempt_window_value[0] if attempt_window_value else None
     window_ended_at = attempt_window_value[1] if attempt_window_value else None
@@ -217,6 +263,7 @@ def build_run_cost(
             max(event_times).isoformat().replace("+00:00", "Z") if event_times else None
         ),
         "matched_cloud_agent_ids": cloud_agent_ids,
+        "matched_cursor_users": users,
         "usage": event_totals(events),
         "notes": notes,
     }
@@ -227,6 +274,7 @@ def select_events_for_attempt(
     attempt_dir: Path,
     events: list[UsageEvent],
     window_padding: timedelta,
+    user_map: AuthorUserMap,
 ) -> tuple[list[UsageEvent], str, list[str], tuple[datetime, datetime] | None]:
     """Select matching usage events and describe attribution confidence."""
 
@@ -263,6 +311,40 @@ def select_events_for_attempt(
         )
 
     start, end = window
+    cursor_users = agent_cursor_users(agent, user_map)
+    if cursor_users:
+        matched = [
+            event
+            for event in events
+            if event.user in cursor_users
+            and start - window_padding <= event.timestamp <= end + window_padding
+        ]
+        cloud_agent_ids = sorted(
+            {event.cloud_agent_id for event in matched if event.cloud_agent_id}
+        )
+        if matched and len(cloud_agent_ids) <= 1:
+            return (
+                matched,
+                "matched_cursor_user_time_window",
+                [
+                    "Matched Cursor CSV rows by Cursor account label and attempt "
+                    "time window.",
+                    "Use cursor_conversation_id when available for stronger "
+                    "attribution.",
+                ],
+                window,
+            )
+        return (
+            matched,
+            "ambiguous",
+            [
+                "Matched rows by Cursor account label and attempt time window, "
+                "but multiple Cloud Agent IDs appeared or no rows matched. "
+                "Use cursor_conversation_id when available for exact attribution.",
+            ],
+            window,
+        )
+
     matched = [
         event
         for event in events
@@ -302,10 +384,12 @@ def import_cursor_costs(
     force: bool = False,
     window_padding_minutes: int = 5,
     recorded_at: datetime | None = None,
+    user_map_path: Path | None = None,
 ) -> list[ImportResult]:
     """Import missing ``run_cost`` metadata from a Cursor usage CSV."""
 
     events = read_usage_events(csv_path)
+    user_map = read_user_map(user_map_path)
     recorded = recorded_at or datetime.now(timezone.utc)
     padding = timedelta(minutes=window_padding_minutes)
     results: list[ImportResult] = []
@@ -333,6 +417,7 @@ def import_cursor_costs(
             attempt_dir,
             events,
             padding,
+            user_map,
         )
         run_cost = build_run_cost(
             events=matched,
@@ -382,6 +467,14 @@ def main(argv: list[str] | None = None) -> int:
         default=5,
         help="Padding around attempt windows for CSV row matching",
     )
+    parser.add_argument(
+        "--user-map",
+        type=Path,
+        help=(
+            "Optional local JSON map from GitHub author IDs to Cursor CSV User "
+            "values. Do not commit this file."
+        ),
+    )
     args = parser.parse_args(argv)
 
     results = import_cursor_costs(
@@ -390,6 +483,7 @@ def main(argv: list[str] | None = None) -> int:
         dry_run=args.dry_run,
         force=args.force,
         window_padding_minutes=args.window_padding_minutes,
+        user_map_path=args.user_map,
     )
     for result in results:
         amount = "N/A" if result.amount is None else f"${result.amount:.2f}"

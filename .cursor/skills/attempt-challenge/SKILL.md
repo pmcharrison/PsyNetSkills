@@ -57,6 +57,7 @@ challenge before starting a fresh attempt.
      "started_at": "<UTC ISO 8601 timestamp>",
      "ended_at": null,
      "cursor_conversation_id": "<CURSOR_CONVERSATION_ID or null>",
+     "cursor_usage_user": null,
      "skills_commit": "<git rev-parse HEAD>",
      "psynet": {
        "checkout_path": "~/PsyNet",
@@ -76,6 +77,10 @@ challenge before starting a fresh attempt.
    Cursor Cloud, set `cursor_conversation_id` from the
    `CURSOR_CONVERSATION_ID` environment variable when it is available. This lets
    later CSV cost imports match the attempt to Cursor's `Cloud Agent ID` exactly.
+   For local Cursor agents, `cursor_usage_user` may be set to the Cursor CSV
+   `User` value if the human is comfortable committing that account label.
+   Otherwise leave it as `null`; maintainers can pass an uncommitted
+   `--user-map` file to the cost importer.
 8. Start `TIMELINE.md` and initialize `LEARNINGS.md` from the template before
    implementation. Follow `references/attempt-artifacts.md` for timeline and
    learning-note conventions.
@@ -97,6 +102,9 @@ challenge before starting a fresh attempt.
    matching UTC ISO timestamp. Leave `run_cost` as `null`; maintainers can
    periodically run `psynetsk-import-cursor-costs <cursor-usage.csv>` to backfill
    derived cost metadata from Cursor CSV exports without committing the raw CSV.
+   For local agents without `cursor_conversation_id`, use
+   `psynetsk-import-cursor-costs --user-map cursor-users.json <csv>` with a local
+   uncommitted JSON map from GitHub author IDs to Cursor CSV `User` values.
 12. Leave `EVALUATION.md` as a template for human evaluators unless the user
    provides evaluation feedback.
 13. In the final response, invite the user to evaluate the attempt

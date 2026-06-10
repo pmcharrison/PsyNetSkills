@@ -29,6 +29,7 @@ def write_attempt(
     slug: str = "example",
     name: str = "2026-06-10-10-00",
     cursor_conversation_id: str | None = "bc-exact",
+    cursor_usage_user: str | None = None,
     run_cost: object | None = None,
 ) -> Path:
     attempt_dir = root / "challenges" / slug / "attempts" / name
@@ -41,6 +42,8 @@ def write_attempt(
         "cursor_conversation_id": cursor_conversation_id,
         "psynet": psynet_metadata(),
     }
+    if cursor_usage_user is not None:
+        metadata["cursor_usage_user"] = cursor_usage_user
     if run_cost is not None:
         metadata["run_cost"] = run_cost
     write(attempt_dir / "agent.json", json.dumps(metadata) + "\n")
@@ -67,6 +70,21 @@ def write_cursor_csv(path: Path) -> None:
         "gpt-5.5-high,Yes,0,300,40,30,370,1.00\n"
         "2026-06-10T10:15:00.000Z,user@example.com,bc-exact,,Included,"
         "gpt-5.5-high,Yes,0,50,10,5,65,Free\n",
+    )
+
+
+def write_local_cursor_csv(path: Path) -> None:
+    write(
+        path,
+        "Date,User,Cloud Agent ID,Automation ID,Kind,Model,Max Mode,"
+        "Input (w/ Cache Write),Input (w/o Cache Write),Cache Read,"
+        "Output Tokens,Total Tokens,Cost\n"
+        "2026-06-10T10:05:00.000Z,local@example.com,,,On-Demand,"
+        "gpt-5.5-high,Yes,0,100,20,10,130,0.25\n"
+        "2026-06-10T10:15:00.000Z,local@example.com,,,On-Demand,"
+        "gpt-5.5-high,Yes,0,200,30,20,250,0.75\n"
+        "2026-06-10T10:10:00.000Z,other@example.com,,,On-Demand,"
+        "gpt-5.5-high,Yes,0,300,40,30,370,1.00\n",
     )
 
 
@@ -110,6 +128,52 @@ def test_import_cursor_costs_marks_ambiguous_time_window(tmp_path: Path) -> None
     assert metadata["run_cost"]["amount"] is None
     assert metadata["run_cost"]["attribution_status"] == "ambiguous"
     assert metadata["run_cost"]["matched_cloud_agent_ids"] == ["bc-exact", "bc-other"]
+
+
+def test_import_cursor_costs_matches_cursor_usage_user_and_time(
+    tmp_path: Path,
+) -> None:
+    attempt_dir = write_attempt(
+        tmp_path,
+        cursor_conversation_id=None,
+        cursor_usage_user="local@example.com",
+    )
+    csv_path = tmp_path / "usage.csv"
+    write_local_cursor_csv(csv_path)
+
+    results = import_cursor_costs(
+        root=tmp_path,
+        csv_path=csv_path,
+        recorded_at=datetime(2026, 6, 10, 11, 0, tzinfo=timezone.utc),
+    )
+
+    assert results[0].status == "matched_cursor_user_time_window"
+    assert results[0].matched_rows == 2
+    assert results[0].amount == 1.0
+    metadata = json.loads((attempt_dir / "agent.json").read_text(encoding="utf-8"))
+    assert metadata["run_cost"]["matched_cursor_users"] == ["local@example.com"]
+    assert metadata["run_cost"]["matched_cloud_agent_ids"] == []
+
+
+def test_import_cursor_costs_matches_local_user_map(tmp_path: Path) -> None:
+    attempt_dir = write_attempt(tmp_path, cursor_conversation_id=None)
+    csv_path = tmp_path / "usage.csv"
+    user_map_path = tmp_path / "cursor-users.json"
+    write_local_cursor_csv(csv_path)
+    write(user_map_path, '{"pmcharrison": "local@example.com"}\n')
+
+    results = import_cursor_costs(
+        root=tmp_path,
+        csv_path=csv_path,
+        user_map_path=user_map_path,
+        recorded_at=datetime(2026, 6, 10, 11, 0, tzinfo=timezone.utc),
+    )
+
+    assert results[0].status == "matched_cursor_user_time_window"
+    assert results[0].amount == 1.0
+    metadata = json.loads((attempt_dir / "agent.json").read_text(encoding="utf-8"))
+    assert "cursor_usage_user" not in metadata
+    assert metadata["run_cost"]["matched_cursor_users"] == ["local@example.com"]
 
 
 def test_import_cursor_costs_skips_existing_run_cost(tmp_path: Path) -> None:
