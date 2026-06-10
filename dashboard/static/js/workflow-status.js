@@ -128,7 +128,29 @@
     return sha ? sha.slice(0, 7) : "unknown commit";
   }
 
+  function isPagesMode() {
+    return config.mode === "production" || config.mode === "pr-preview";
+  }
+
   function statusForRun(run) {
+    if (isPagesMode()) {
+      if (run.status !== "completed") {
+        return {
+          kind: "running",
+          symbol: "●",
+          text: `Pages publication ${run.status.replace(/_/g, " ")}`,
+        };
+      }
+      if (run.conclusion === "success") {
+        return { kind: "success", symbol: "✓", text: "Pages published" };
+      }
+      return {
+        kind: "failure",
+        symbol: "×",
+        text: `Pages publish ${run.conclusion || "failed"}`,
+      };
+    }
+
     if (run.status !== "completed") {
       return {
         kind: "running",
@@ -147,7 +169,19 @@
   }
 
   function freshnessText(run, isStale) {
-    if (!renderedSha || !run.head_sha) {
+    if (!renderedSha) {
+      return "Page freshness unknown.";
+    }
+    if (isPagesMode()) {
+      if (run.status !== "completed") {
+        return `Viewing ${shortSha(renderedSha)} while GitHub Pages finishes publishing.`;
+      }
+      if (run.conclusion !== "success") {
+        return `Viewing ${shortSha(renderedSha)} because the latest GitHub Pages publication did not complete.`;
+      }
+      return `Published page includes ${shortSha(renderedSha)}.`;
+    }
+    if (!run.head_sha) {
       return "Page freshness unknown.";
     }
     if (!isStale) {
@@ -159,6 +193,10 @@
   }
 
   function branchRunsUrl() {
+    if (isPagesMode()) {
+      return `https://github.com/${config.owner}/${config.repo}/actions?query=workflow%3Apages-build-deployment`;
+    }
+
     const workflowPath = config.workflow
       ? `/actions/workflows/${encodeURIComponent(config.workflow)}`
       : "/actions";
@@ -169,6 +207,10 @@
   }
 
   function apiUrl() {
+    if (isPagesMode()) {
+      return `https://api.github.com/repos/${config.owner}/${config.repo}/actions/runs?event=dynamic&per_page=1`;
+    }
+
     const workflow = encodeURIComponent(config.workflow);
     const branch = encodeURIComponent(config.branch);
     return `https://api.github.com/repos/${config.owner}/${config.repo}/actions/workflows/${workflow}/runs?branch=${branch}&per_page=1`;
@@ -215,8 +257,11 @@
       const run = data.workflow_runs && data.workflow_runs[0];
 
       if (!run) {
+        const missingRun = isPagesMode()
+          ? "No GitHub Pages deployment run found."
+          : `No workflow run found for ${config.branch}.`;
         setState("unknown", "?", [
-          `No workflow run found for ${config.branch}.`,
+          missingRun,
           checkedAt(now),
         ], false);
         statusLink.href = branchRunsUrl();
@@ -225,10 +270,11 @@
       }
 
       const state = statusForRun(run);
-      const isStale = Boolean(
-        renderedSha && run.head_sha && renderedSha !== run.head_sha,
-      );
-      const branch = config.branch ? ` on ${config.branch}` : "";
+      const isStale = isPagesMode()
+        ? run.status !== "completed" || run.conclusion !== "success"
+        : Boolean(renderedSha && run.head_sha && renderedSha !== run.head_sha);
+      const branch =
+        !isPagesMode() && config.branch ? ` on ${config.branch}` : "";
       const label = [
         `${state.text}${branch}.`,
         freshnessText(run, isStale),
