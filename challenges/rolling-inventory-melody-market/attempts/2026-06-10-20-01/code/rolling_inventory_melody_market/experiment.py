@@ -72,7 +72,7 @@ def melody_to_waveform(melody, samples_per_step=8):
     peak = max(waveform) if waveform else 0.0
     if peak <= 0:
         return [0.0 for _ in waveform]
-    return [round(value / peak, 3) for value in waveform]
+    return [float(round(value / peak, 3)) for value in waveform]
 
 
 def latest_melody_from_answer(answer):
