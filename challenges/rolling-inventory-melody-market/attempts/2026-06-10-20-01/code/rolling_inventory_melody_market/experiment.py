@@ -8,7 +8,8 @@ import psynet.experiment
 from markupsafe import Markup
 from psynet.consent import MainConsent
 from psynet.modular_page import Control, ModularPage, Prompt, SurveyJSControl, TextControl
-from psynet.page import InfoPage, SuccessfulEndPage
+from psynet.page import InfoPage, SuccessfulEndPage, VolumeCalibration
+from psynet.prescreen import HugginsHeadphoneTest
 from psynet.timeline import CodeBlock, Event, FailedValidation, PageMaker, Timeline, join
 from psynet.trial.chain import ChainNode
 from psynet.trial.create_and_rate import CreateAndRateNodeMixin, CreateTrialMixin
@@ -601,6 +602,21 @@ class AudioCheckPage(ModularPage):
         return None
 
 
+headphones_warning = InfoPage(
+    Markup(
+        """
+        <h3>Attention</h3>
+        <hr>
+        <b><b>You must use headphones or earplugs</b></b>.
+        <br><br>
+        If you do not, the experiment will terminate early.
+        <hr>
+        """
+    ),
+    time_estimate=3,
+)
+
+
 class MelodyNode(ChainNode, CreateAndRateNodeMixin):
     def __init__(self, condition: str = None, **kwargs):
         kwargs["context"] = {
@@ -1039,6 +1055,10 @@ class Exp(psynet.experiment.Experiment):
 
     timeline = Timeline(
         MainConsent(),
+        headphones_warning,
+        VolumeCalibration(),
+        HugginsHeadphoneTest(),
+        InfoPage("You passed the headphone screening task! Congratulations.", time_estimate=3),
         AudioCheckPage(),
         CodeBlock(lambda participant: participant.var.set("audio_check_passed", True)),
         CodeBlock(lambda participant: participant.var.set("condition", "pi" if participant.id % 2 else "npi")),
