@@ -17,3 +17,14 @@ post-round `GroupBarrier` can reconstruct proposals and decisions.
 
 *Actions:*
 - **PsyNetSkills:** Document the paired pattern of WebSocket live scoring plus barrier-backed bot fallback scoring for synchronous game challenges. Confidence: high. Status: considering.
+
+## Synchronous game evidence should cover every timeout role and reward mapping
+
+The evaluation identified that this attempt demonstrated proposer timeout but
+not responder timeout, and did not verify that monetary rewards correspond to
+accumulated scores. Future synchronous economic-game attempts should explicitly
+exercise each timed decision role and include a check tying final payment logic
+to accumulated score.
+
+*Actions:*
+- **PsyNetSkills:** Expand experiment evidence guidance for synchronous economic games to require role-specific timeout coverage and reward-to-score validation. Confidence: high. Status: considering.
