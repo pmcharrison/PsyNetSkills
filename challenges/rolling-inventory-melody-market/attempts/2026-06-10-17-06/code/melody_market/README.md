@@ -27,8 +27,10 @@ Melodies are stored as a nine-item list. `null` is a rest, `0` is Do, `1` is Re,
 and `2` is Mi.
 
 Participants complete a WebAudio pre-screening page after consent and before
-the main task. They must play a short tone sequence and confirm that it is
-audible before entering the market.
+the main task. The page speaks the number "five" and asks participants to type
+what they heard. Incorrect responses route to PsyNet's unsuccessful end branch
+with `performance_check` and `audio_pre_screening` failure tags, matching PsyNet
+prescreen patterns used by recruiter/payment integrations.
 
 The reference drawing task's mouse movement tracking, stroke event tracking,
 and drawing-specific interaction logs are intentionally omitted.

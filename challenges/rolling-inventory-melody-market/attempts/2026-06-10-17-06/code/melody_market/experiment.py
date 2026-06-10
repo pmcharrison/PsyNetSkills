@@ -11,8 +11,16 @@ import psynet.experiment
 from psynet.bot import Bot
 from psynet.consent import MainConsent
 from psynet.modular_page import Control, ModularPage, Prompt, SurveyJSControl
-from psynet.page import InfoPage, SuccessfulEndPage
-from psynet.timeline import CodeBlock, Event, FailedValidation, PageMaker, Timeline, join
+from psynet.page import InfoPage, SuccessfulEndPage, UnsuccessfulEndPage
+from psynet.timeline import (
+    CodeBlock,
+    Event,
+    FailedValidation,
+    PageMaker,
+    Timeline,
+    conditional,
+    join,
+)
 from psynet.trial.chain import ChainNode
 from psynet.trial.imitation_chain import ImitationChainTrial, ImitationChainTrialMaker
 from psynet.utils import get_logger
@@ -140,28 +148,26 @@ class AudioPreScreenControl(Control):
     external_template = "audio-pre-screen.html"
 
     def __init__(self, **kwargs):
-        super().__init__(**kwargs, bot_response={"played": True, "heard": "yes"})
+        super().__init__(**kwargs, bot_response={"played": True, "response": "five"})
 
     def format_answer(self, raw_answer, **kwargs):
         if not isinstance(raw_answer, dict):
-            return {"played": False, "heard": None}
+            return {"played": False, "response": ""}
         return {
             "played": bool(raw_answer.get("played")),
-            "heard": raw_answer.get("heard"),
+            "response": str(raw_answer.get("response", "")).strip().lower(),
         }
 
     def validate(self, response, **kwargs):
         if not response.answer.get("played"):
             return FailedValidation("Please play the audio check before continuing.")
-        if response.answer.get("heard") != "yes":
-            return FailedValidation(
-                "You need working audio to continue with this melody task."
-            )
+        if not response.answer.get("response"):
+            return FailedValidation("Please type the number you heard.")
         return None
 
     @property
     def metadata(self):
-        return {"requires_audible_playback": True}
+        return {"requires_audible_playback": True, "expected_response": "five"}
 
 
 class MelodyEditControl(Control):
@@ -466,17 +472,22 @@ audio_pre_screen = ModularPage(
     Prompt(
         Markup(
             "<h3>Audio check</h3>"
-            "<p>This experiment uses sound. Please play the short audio check "
-            "and confirm that you can hear it before continuing.</p>"
-            "<p>If you cannot hear the sound, please check your volume or audio "
-            "output and try again. You cannot continue into the melody market "
-            "unless playback is audible.</p>"
+            "<p>This experiment uses sound. Please play the short audio check, "
+            "then type the number that you hear.</p>"
+            "<p>If you cannot hear the spoken number, please check your volume "
+            "or audio output and try again. You cannot continue into the melody "
+            "market unless playback is audible.</p>"
         )
     ),
     AudioPreScreenControl(),
     time_estimate=20,
     save_answer="audio_pre_screening",
 )
+
+
+def audio_pre_screen_passed(answer):
+    response = str(answer.get("response", "")).strip().lower()
+    return answer.get("played") and response in {"5", "five"}
 
 
 def instructions(popularity_information):
@@ -595,6 +606,23 @@ class Exp(psynet.experiment.Experiment):
     timeline = Timeline(
         MainConsent(),
         audio_pre_screen,
+        CodeBlock(
+            lambda participant: participant.var.set(
+                "audio_pre_screening",
+                {
+                    "played": participant.answer.get("played"),
+                    "response": participant.answer.get("response"),
+                    "passed": audio_pre_screen_passed(participant.answer),
+                },
+            )
+        ),
+        conditional(
+            "audio_pre_screening_failed",
+            lambda participant: not participant.var.get("audio_pre_screening")["passed"],
+            UnsuccessfulEndPage(
+                failure_tags=["performance_check", "audio_pre_screening"]
+            ),
+        ),
         CodeBlock(
             lambda participant: participant.var.set(
                 "condition", "pi" if participant.id % 2 else "npi"

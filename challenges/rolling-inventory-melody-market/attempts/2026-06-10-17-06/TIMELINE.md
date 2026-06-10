@@ -22,3 +22,6 @@
 - T+01:15:05 [manual] User reported updated experiment instructions and requested attempt update.
 - T+01:15:10 [agent-start] Resumed autonomous implementation work for updated requirements.
 - T+01:25:00 [agent] Added audio pre-screening gate and removed drawing-style mouse/event tracking.
+- T+01:30:00 [manual] User requested GitLab/PsyNet prescreen failure handling and evidentiary repeat-back audio check.
+- T+01:36:00 [agent] Matched PsyNet prescreen pattern using UnsuccessfulEndPage with performance_check/audio_pre_screening failure tags.
+- T+01:40:00 [agent] Replaced yes/no audio check with spoken five repeat-back response and reran psynet test local successfully.

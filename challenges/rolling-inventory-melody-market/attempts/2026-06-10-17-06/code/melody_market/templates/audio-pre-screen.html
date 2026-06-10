@@ -1,54 +1,58 @@
 {% macro audio_pre_screen_control(config) %}
 <div class="audio-check">
     <button type="button" id="play-audio-check" class="audio-check-button">Play audio check</button>
-    <p id="audio-check-status" class="audio-check-status">Play the sound, then confirm whether you can hear it.</p>
-    <div class="audio-check-choices" role="radiogroup" aria-label="Audio check confirmation">
-        <button type="button" class="audio-choice" data-heard="yes">Yes, I can hear it</button>
-        <button type="button" class="audio-choice secondary" data-heard="no">No, I cannot hear it</button>
-    </div>
+    <p id="audio-check-status" class="audio-check-status">Play the sound, then type the number you hear.</p>
+    <label class="audio-response-label" for="audio-check-response">Number heard</label>
+    <input id="audio-check-response" class="audio-response-input" type="text" inputmode="text" autocomplete="off">
 </div>
 
 <script>
 (function () {
     let played = false;
-    let heard = null;
     let audioContext = null;
 
-    function playCheck() {
-        audioContext = audioContext || new (window.AudioContext || window.webkitAudioContext)();
+    function playSpokenFiveFallback() {
         const start = audioContext.currentTime + 0.04;
-        [261.63, 329.63, 293.66].forEach((frequency, index) => {
+        [700, 700, 700, 700, 700].forEach((frequency, index) => {
             const oscillator = audioContext.createOscillator();
             const gain = audioContext.createGain();
-            const noteStart = start + index * 0.28;
+            const noteStart = start + index * 0.16;
             oscillator.type = "sine";
             oscillator.frequency.value = frequency;
             gain.gain.setValueAtTime(0.0001, noteStart);
-            gain.gain.exponentialRampToValueAtTime(0.18, noteStart + 0.02);
-            gain.gain.exponentialRampToValueAtTime(0.0001, noteStart + 0.22);
+            gain.gain.exponentialRampToValueAtTime(0.12, noteStart + 0.02);
+            gain.gain.exponentialRampToValueAtTime(0.0001, noteStart + 0.11);
             oscillator.connect(gain).connect(audioContext.destination);
             oscillator.start(noteStart);
-            oscillator.stop(noteStart + 0.24);
+            oscillator.stop(noteStart + 0.13);
         });
-        played = true;
-        document.getElementById("audio-check-status").textContent = "Audio check played. Please confirm whether you heard it.";
     }
 
-    function setHeard(value, button) {
-        heard = value;
-        document.querySelectorAll(".audio-choice").forEach((choice) => choice.classList.remove("selected"));
-        button.classList.add("selected");
+    function playCheck() {
+        audioContext = audioContext || new (window.AudioContext || window.webkitAudioContext)();
+        if ("speechSynthesis" in window) {
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance("five");
+            utterance.rate = 0.85;
+            utterance.pitch = 1.0;
+            utterance.volume = 1.0;
+            window.speechSynthesis.speak(utterance);
+        } else {
+            playSpokenFiveFallback();
+        }
+        played = true;
+        document.getElementById("audio-check-status").textContent = "Audio check played. Type the number you heard.";
     }
 
     function responseData() {
-        return { played, heard };
+        return {
+            played,
+            response: document.getElementById("audio-check-response").value
+        };
     }
 
     document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("play-audio-check").addEventListener("click", playCheck);
-        document.querySelectorAll(".audio-choice").forEach((button) => {
-            button.addEventListener("click", () => setHeard(button.dataset.heard, button));
-        });
 
         psynet.stageResponse = function () {
             psynet.response.staged.rawAnswer = responseData();
@@ -72,8 +76,7 @@
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
     }
 
-    .audio-check-button,
-    .audio-choice {
+    .audio-check-button {
         border: none;
         border-radius: 7px;
         color: #fff;
@@ -84,17 +87,25 @@
         margin: 4px;
     }
 
-    .audio-choice.secondary {
-        background: #6c757d;
-    }
-
-    .audio-choice.selected {
-        box-shadow: 0 0 0 3px #28a745 inset;
-    }
-
     .audio-check-status {
         margin: 12px 0;
         color: #333;
+    }
+
+    .audio-response-label {
+        display: block;
+        font-weight: 700;
+        margin-bottom: 6px;
+    }
+
+    .audio-response-input {
+        width: 160px;
+        max-width: 100%;
+        padding: 8px;
+        border: 1px solid #ced4da;
+        border-radius: 7px;
+        text-align: center;
+        font-size: 18px;
     }
 </style>
 {% endmacro %}
