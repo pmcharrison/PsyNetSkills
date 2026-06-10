@@ -1,7 +1,7 @@
 ---
 name: turn-pure-experiment-to-ai-hybrid
 description: Convert a pure-human PsyNet experiment into an AI or hybrid human-AI experiment with active scheduling, prompt parity, and local mock testing.
-authors: [pmcharrison]
+authors: [zeroada]
 ---
 
 # Turn a pure-human experiment into an AI hybrid
