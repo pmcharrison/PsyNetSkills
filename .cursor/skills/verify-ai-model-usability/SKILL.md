@@ -66,7 +66,7 @@ models are usable.
 
 Run from the repository root:
 
-`python .cursor/skills/verify-ai-model-usability/scripts/check_model.py --model <model-id>`
+`uv run python .cursor/skills/verify-ai-model-usability/scripts/check_model.py --model <model-id>`
 
 Useful options:
 
