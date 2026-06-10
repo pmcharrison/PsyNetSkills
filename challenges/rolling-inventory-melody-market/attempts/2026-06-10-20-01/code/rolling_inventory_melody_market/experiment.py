@@ -50,7 +50,7 @@ def melody_change_count(melody, reference):
     return int(np.sum(np.abs(np.array(melody, dtype=int) - np.array(reference, dtype=int))))
 
 
-def melody_to_waveform(melody, samples_per_step=8):
+def melody_to_waveform(melody, samples_per_step=4):
     """Downsample the synthesized melody into deterministic waveform amplitudes."""
     waveform = []
     step_duration = 0.22
