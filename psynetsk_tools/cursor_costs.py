@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import re
 from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -63,7 +64,13 @@ def parse_float(value: str | None) -> float:
 
     if value is None or not value.strip():
         return 0.0
-    return float(value)
+    normalized = value.strip().lower()
+    if normalized in {"free", "included", "n/a", "na", "-"}:
+        return 0.0
+    numeric = re.sub(r"[^0-9.+-]", "", value)
+    if not numeric:
+        return 0.0
+    return float(numeric)
 
 
 def read_usage_events(csv_path: Path) -> list[UsageEvent]:

@@ -64,7 +64,9 @@ def write_cursor_csv(path: Path) -> None:
         "2026-06-10T10:10:00.000Z,user@example.com,bc-exact,,On-Demand,"
         "gpt-5.5-high,Yes,0,200,30,20,250,0.75\n"
         "2026-06-10T10:12:00.000Z,user@example.com,bc-other,,On-Demand,"
-        "gpt-5.5-high,Yes,0,300,40,30,370,1.00\n",
+        "gpt-5.5-high,Yes,0,300,40,30,370,1.00\n"
+        "2026-06-10T10:15:00.000Z,user@example.com,bc-exact,,Included,"
+        "gpt-5.5-high,Yes,0,50,10,5,65,Free\n",
     )
 
 
@@ -80,14 +82,14 @@ def test_import_cursor_costs_matches_cursor_conversation_id(tmp_path: Path) -> N
     )
 
     assert results[0].status == "matched_cloud_agent_id"
-    assert results[0].matched_rows == 2
+    assert results[0].matched_rows == 3
     assert results[0].amount == 1.0
     metadata = json.loads((attempt_dir / "agent.json").read_text(encoding="utf-8"))
     assert metadata["run_cost"]["amount"] == 1.0
     assert metadata["run_cost"]["attribution_status"] == "matched_cloud_agent_id"
     assert metadata["run_cost"]["matched_cloud_agent_ids"] == ["bc-exact"]
-    assert metadata["run_cost"]["usage"]["total_tokens"] == 380
-    assert metadata["run_cost"]["usage"]["models"]["gpt-5.5-high"]["rows"] == 2
+    assert metadata["run_cost"]["usage"]["total_tokens"] == 445
+    assert metadata["run_cost"]["usage"]["models"]["gpt-5.5-high"]["rows"] == 3
 
 
 def test_import_cursor_costs_marks_ambiguous_time_window(tmp_path: Path) -> None:
@@ -102,7 +104,7 @@ def test_import_cursor_costs_marks_ambiguous_time_window(tmp_path: Path) -> None
     )
 
     assert results[0].status == "ambiguous"
-    assert results[0].matched_rows == 3
+    assert results[0].matched_rows == 4
     assert results[0].amount is None
     metadata = json.loads((attempt_dir / "agent.json").read_text(encoding="utf-8"))
     assert metadata["run_cost"]["amount"] is None
