@@ -54,12 +54,14 @@
         sequence.forEach((rowValues, rowIndex) => {
             rowValues.forEach((active, stepIndex) => {
                 if (!active) return;
+                const activeInStep = Math.max(1, sequence.reduce((total, row) => total + (row[stepIndex] ? 1 : 0), 0));
+                const peakGain = 0.24 / activeInStep;
                 const osc = ctx.createOscillator();
                 const gain = ctx.createGain();
                 osc.type = "sine";
                 osc.frequency.value = noteFrequencies[rowIndex];
                 gain.gain.setValueAtTime(0.0001, start + stepIndex * stepDuration);
-                gain.gain.exponentialRampToValueAtTime(0.12, start + stepIndex * stepDuration + 0.015);
+                gain.gain.exponentialRampToValueAtTime(peakGain, start + stepIndex * stepDuration + 0.015);
                 gain.gain.exponentialRampToValueAtTime(0.0001, start + (stepIndex + 0.85) * stepDuration);
                 osc.connect(gain).connect(ctx.destination);
                 osc.start(start + stepIndex * stepDuration);
