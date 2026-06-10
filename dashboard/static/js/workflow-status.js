@@ -124,6 +124,58 @@
     })}`;
   }
 
+  function relativeTime(date, now) {
+    const elapsedSeconds = Math.max(
+      0,
+      Math.round((now.getTime() - date.getTime()) / 1000),
+    );
+    const units = [
+      ["year", 31536000],
+      ["month", 2592000],
+      ["week", 604800],
+      ["day", 86400],
+      ["hour", 3600],
+      ["minute", 60],
+    ];
+
+    for (const [unit, seconds] of units) {
+      const value = Math.floor(elapsedSeconds / seconds);
+      if (value >= 1) {
+        return `${value} ${unit}${value === 1 ? "" : "s"} ago`;
+      }
+    }
+
+    return "just now";
+  }
+
+  function runDate(run) {
+    const timestamp =
+      run.status === "completed"
+        ? run.updated_at || run.created_at
+        : run.run_started_at || run.created_at || run.updated_at;
+
+    if (!timestamp) {
+      return null;
+    }
+
+    const date = new Date(timestamp);
+    return Number.isNaN(date.getTime()) ? null : date;
+  }
+
+  function pagesTimeText(run, now) {
+    const date = runDate(run);
+    if (!date) {
+      return `Last checked ${relativeTime(now, now)}`;
+    }
+    if (run.status !== "completed") {
+      return `Publishing started ${relativeTime(date, now)}`;
+    }
+    if (run.conclusion === "success") {
+      return `Last published ${relativeTime(date, now)}`;
+    }
+    return `Publish ended ${relativeTime(date, now)}`;
+  }
+
   function shortSha(sha) {
     return sha ? sha.slice(0, 7) : "unknown commit";
   }
@@ -278,7 +330,7 @@
       const label = [
         `${state.text}${branch}.`,
         freshnessText(run, isStale),
-        checkedAt(now),
+        isPagesMode() ? pagesTimeText(run, now) : checkedAt(now),
       ];
       setState(state.kind, state.symbol, label, isStale);
       statusLink.href = run.html_url || branchRunsUrl();
