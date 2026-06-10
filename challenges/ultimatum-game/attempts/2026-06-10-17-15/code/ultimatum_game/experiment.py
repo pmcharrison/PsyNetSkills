@@ -9,9 +9,9 @@ from dominate import tags
 from sqlalchemy import Column, Integer, Text
 
 import psynet.experiment
-from psynet.bot import BotDriver, advance_past_wait_pages
+from psynet.bot import BotDriver, BotResponse, advance_past_wait_pages
 from psynet.data import SQLBase, SQLMixin, register_table
-from psynet.page import InfoPage
+from psynet.page import InfoPage, WaitPage
 from psynet.participant import Participant
 from psynet.sync import GroupBarrier, SimpleGrouper
 from psynet.timeline import Page, PageMaker, Timeline
@@ -353,8 +353,9 @@ class UltimatumGamePage(Page):
         )
 
     def get_bot_response(self, experiment, bot):
-        state = simulate_complete_game(bot.active_sync_groups[GROUP_TYPE].id)
-        return public_state_for(state, bot.id)
+        participant = Participant.query.get(bot.id)
+        state = simulate_complete_game(participant.active_sync_groups[GROUP_TYPE].id)
+        return BotResponse(raw_answer=public_state_for(state, bot.id))
 
     def format_answer(self, raw_answer, **kwargs):
         participant = kwargs["participant"]
@@ -430,9 +431,9 @@ def instructions_page():
 
 
 def waiting_page(participant: Participant):
-    return InfoPage(
-        "Waiting for a partner. You will be placed into a two-person group as soon as another participant arrives.",
-        time_estimate=5,
+    return WaitPage(
+        content="Waiting for a partner. You will be placed into a two-person group as soon as another participant arrives.",
+        wait_time=1.0,
     )
 
 
@@ -457,7 +458,6 @@ def completion_page(participant: Participant):
 class Exp(psynet.experiment.Experiment):
     label = "Repeated Ultimatum game"
     channel = GLOBAL_CHANNEL
-    estimated_completion_time = 10
 
     timeline = Timeline(
         PageMaker(instructions_page, time_estimate=45),
@@ -498,7 +498,10 @@ class Exp(psynet.experiment.Experiment):
             bot.take_page()
         advance_past_wait_pages(bots)
         assert all(bot.current_page_label == "ultimatum_game" for bot in bots)
-        state = simulate_complete_game(bots[0].active_sync_groups[GROUP_TYPE].id)
+        first_participant = Participant.query.get(bots[0].id)
+        state = simulate_complete_game(
+            first_participant.active_sync_groups[GROUP_TYPE].id
+        )
         assert state["counted_rounds"] == ROUNDS_REQUIRED
         assert len(state["history"]) >= ROUNDS_REQUIRED
         accepted = [r for r in state["history"] if r.get("decision") == "accept"]
@@ -506,11 +509,11 @@ class Exp(psynet.experiment.Experiment):
         assert accepted and rejected
         assert all(not r.get("skipped") for r in state["history"][-ROUNDS_REQUIRED:])
         for bot in bots:
-            bot.take_page(response=public_state_for(state, bot.id))
+            bot.take_page()
         for bot in bots:
             assert "Task complete" in bot.current_page_text
-            bot.take_page()
-        assert all(bot.finished for bot in bots)
+            bot.run_to_completion()
+        assert all(not bot.is_working for bot in bots)
 
     def test_check_bots(self, bots: List[BotDriver]):
         sessions = UltimatumSession.query.filter_by(failed=False).all()
@@ -520,7 +523,8 @@ class Exp(psynet.experiment.Experiment):
         assert state["status"] == "complete"
         for participant in Participant.query.filter(Participant.id.in_(state["participants"])).all():
             assert participant.var.ultimatum_score == state["totals"][str(participant.id)]
-            assert participant.performance_reward == participant.var.ultimatum_score * COIN_VALUE_DOLLARS
+            expected_reward = participant.var.ultimatum_score * COIN_VALUE_DOLLARS
+            assert abs(participant.performance_reward - expected_reward) < 1e-9
 
         failure_state = {
             "group_id": 999999,

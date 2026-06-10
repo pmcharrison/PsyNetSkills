@@ -8,3 +8,4 @@
 - T+00:10:00 [agent] Created timestamped attempt folder, challenge snapshot, and metadata templates.
 - T+00:35:00 [agent] Implemented a self-contained PsyNet experiment with dyad grouping, WebSocket state updates, Three.js tabletop UI, scoring, and timeout handling.
 - T+00:40:00 [agent] Generated constraints from the pinned PsyNet requirement before validation.
+- T+00:58:00 [agent] Fixed runtime issues found by psynet test local; the full local bot test now passes.
