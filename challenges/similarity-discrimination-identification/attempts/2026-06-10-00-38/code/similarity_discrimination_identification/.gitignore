@@ -1,3 +1,4 @@
+.deploy/
 .dallingerconfig
 .dallinger_config_defaults.txt
 .env
@@ -7,4 +8,5 @@ data/
 local/
 source_code.zip
 static/assets
+node_modules/
 *.pyc
