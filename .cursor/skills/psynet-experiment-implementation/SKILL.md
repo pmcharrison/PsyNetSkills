@@ -62,6 +62,24 @@ Useful starting points:
   `markupsafe.Markup` only for trusted, static HTML snippets passed directly as
   page content; do not nest raw markup strings inside `dominate` containers.
   Avoid interpolating participant- or user-provided data into `Markup`.
+- PsyNet includes a sophisticated Native Graphics system for displaying
+  graphics programmatically. Under the hood, it uses the JavaScript library
+  Raphaël for graphics rendering. PsyNet exposes some Raphaël functionality to
+  users, for example when defining custom object attributes. Whenever custom
+  frontend behavior seems necessary, first consider whether the task can be
+  implemented with PsyNet's Native Graphics system. This is often the
+  recommended approach for psychological experiments involving simple visual
+  stimuli such as geometric shapes, fixation crosses, or several relatively
+  simple objects, shapes, or images presented in a timed sequence within a
+  single trial. Simple interactions, such as clicking on a shape, can also be
+  handled with PsyNet Graphics.
+- Changes that occur within a trial should be controlled using PsyNet's event
+  management system where possible. PsyNet Graphics can use event management to
+  coordinate object display with events such as `promptEnd`. For more details,
+  consult the PsyNet Event Management documentation and the Graphics tutorial.
+  For a deeper understanding of available graphical options, consult the
+  Raphaël documentation:
+  `https://dmitrybaranovskiy.github.io/raphael/reference.html`.
 - For demo extensions, keep the implementation close to PsyNet's native style.
   Prefer built-in pages, controls, events, chatrooms, grouping, and timeline
   constructs over bespoke browser scripts. If custom JavaScript is unavoidable,
