@@ -45,6 +45,10 @@ def test_cleanup_preview_directories_reclaims_merged_and_closed_previews(
     write(preview_root / "pr-12/index.html", "<h1>Open</h1>")
     write(preview_root / "pr-13/index.html", "<h1>Unknown</h1>")
     write(preview_root / "not-a-pr/index.html", "<h1>Kept</h1>")
+    artifact_root = tmp_path / "pr-artifacts"
+    write(artifact_root / "pr-10/artifacts/challenges/example/evidence/video.mp4", "large")
+    write(artifact_root / "pr-11/artifacts/challenges/example/evidence/video.mp4", "large")
+    write(artifact_root / "pr-12/artifacts/challenges/example/evidence/video.mp4", "large")
 
     summary = cleanup_preview_directories(
         preview_root,
@@ -54,23 +58,50 @@ def test_cleanup_preview_directories_reclaims_merged_and_closed_previews(
             11: "CLOSED",
             12: "OPEN",
         },
+        artifact_root=artifact_root,
     )
 
     assert summary.redirected == 1
     assert summary.removed == 1
     assert summary.kept == 1
     assert summary.unknown == 2
+    assert summary.artifacts_removed == 2
     assert not (preview_root / "pr-10/assets/video.mp4").exists()
     assert (
         "https://example.github.io/PsyNetSkills/"
         in (preview_root / "pr-10/index.html").read_text(encoding="utf-8")
     )
     assert not (preview_root / "pr-11").exists()
+    assert not (artifact_root / "pr-10").exists()
+    assert not (artifact_root / "pr-11").exists()
+    assert (artifact_root / "pr-12").exists()
     assert (preview_root / "pr-12/index.html").read_text(encoding="utf-8") == (
         "<h1>Open</h1>"
     )
     assert (preview_root / "pr-13/index.html").exists()
     assert (preview_root / "not-a-pr/index.html").exists()
+
+
+def test_cleanup_preview_directories_removes_artifacts_without_preview(
+    tmp_path: Path,
+) -> None:
+    artifact_root = tmp_path / "pr-artifacts"
+    write(artifact_root / "pr-10/artifacts/challenges/example/video.mp4", "large")
+    write(artifact_root / "pr-12/artifacts/challenges/example/video.mp4", "large")
+
+    summary = cleanup_preview_directories(
+        tmp_path / "missing-pr-preview",
+        "https://example.github.io/PsyNetSkills/",
+        {
+            10: "MERGED",
+            12: "OPEN",
+        },
+        artifact_root=artifact_root,
+    )
+
+    assert summary.artifacts_removed == 1
+    assert not (artifact_root / "pr-10").exists()
+    assert (artifact_root / "pr-12").exists()
 
 
 def test_main_cleans_preview_directories(tmp_path: Path) -> None:
@@ -88,6 +119,8 @@ def test_main_cleans_preview_directories(tmp_path: Path) -> None:
                 str(preview_root),
                 "https://example.github.io/PsyNetSkills/",
                 str(states_path),
+                "--artifact-root",
+                str(tmp_path / "pr-artifacts"),
             ],
         )
         == 0
