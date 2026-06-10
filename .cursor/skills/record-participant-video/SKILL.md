@@ -89,6 +89,11 @@ export PULSE_SERVER="unix:$XDG_RUNTIME_DIR/pulse/native"
 google-chrome --no-first-run --new-window --window-size=1280,720 "$PARTICIPANT_URL"
 ```
 
+If Chrome was already open before the sink was created or before `PULSE_SERVER`
+was exported, do not reuse that window for audio evidence. Launch a fresh browser
+profile from the routed environment; otherwise the recording can contain a valid
+but silent audio track.
+
 Record the screen and the null-sink monitor:
 
 ```bash

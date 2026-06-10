@@ -14,7 +14,7 @@ The participant video evidence required `pulseaudio` and `pulseaudio-utils`; the
 
 *Actions:*
 
-- **PsyNetSkills:** Consider adding a Cursor Cloud environment setup check for PulseAudio utilities before audio challenge attempts begin. Confidence: medium. Status: considering.
+- **PsyNetSkills:** Consider adding a Cursor Cloud environment setup check for PulseAudio utilities before audio challenge attempts begin. Confidence: medium. Status: completed. Notes: Added skill guidance to test audio as first-class experiment behavior and to launch a fresh browser after PulseAudio routing for evidence recordings.
 
 ## Cross-cultural STEP attempts need localization checks
 
