@@ -1,0 +1,100 @@
+{% macro ultimatum(config) %}
+<style>
+  .ultimatum-topbar { display: flex; justify-content: space-between; gap: 1rem; margin: 0 auto 0.75rem; max-width: 1120px; }
+  .ultimatum-round-label, .ultimatum-timer { background: #fff; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.14); padding: 0.65rem 1rem; font-weight: 700; }
+  .ultimatum-prompt-copy { max-width: 1120px; margin: 0 auto 0.5rem; }
+  .ultimatum-shell { display: grid; grid-template-columns: minmax(320px, 0.82fr) minmax(520px, 1.45fr); gap: 1.1rem; min-height: 640px; max-width: 1120px; margin: 0 auto; }
+  .state-panel { background: linear-gradient(180deg, #fff 0%, #fbfdff 100%); border: 2px solid #0b5cff; border-radius: 28px; padding: 1.25rem; box-shadow: 0 8px 24px rgba(11, 92, 255, 0.18); }
+  .state-panel h2, .state-panel h3 { margin-top: 0; }
+  .score-card { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin: 0.75rem 0; }
+  .score-card div { background: white; border: 1px solid #d9e2ec; border-radius: 8px; padding: 0.55rem; }
+  #offer-slider { width: 100%; accent-color: #0b5cff; }
+  .action-button { width: 100%; margin-top: 0.6rem; padding: 0.7rem; border: none; border-radius: 10px; font-weight: 700; color: #fff; background: #0b5cff; cursor: pointer; }
+  .reject { background: #dc2626; }
+  .accept { background: #16a34a; }
+  .tabletop-wrap { position: relative; border-radius: 18px; overflow: hidden; min-height: 640px; background: radial-gradient(circle at 50% 16%, #f8fbff 0%, #dbeafe 38%, #9fb3d9 100%); box-shadow: 0 16px 34px rgba(15, 23, 42, 0.22); border: 1px solid #c7d2fe; }
+  .tabletop-canvas { width: 100%; height: 640px; display: block; }
+  .scene-hud { position: absolute; inset: 0; pointer-events: none; font-weight: 700; color: #52525b; text-shadow: 0 1px 2px rgba(255,255,255,0.9); }
+  .partner-label, .me-label, .partner-coins-label, .me-coins-label, .table-caption { position: absolute; transform: translate(-50%, -50%); white-space: nowrap; }
+  .partner-label { left: 69%; top: 14%; font-size: 1.15rem; }
+  .partner-coins-label { left: 56%; top: 11%; font-size: 0.9rem; }
+  .me-label { left: 70%; top: 90%; font-size: 1.2rem; }
+  .me-coins-label { left: 55%; top: 83%; font-size: 0.95rem; }
+  .table-caption { left: 53%; top: 50%; padding: 0.35rem 0.55rem; border-radius: 999px; background: rgba(255,255,255,0.78); color: #334155; font-size: 0.85rem; }
+  @media (max-width: 900px) { .ultimatum-shell { grid-template-columns: 1fr; } .tabletop-wrap, .tabletop-canvas { min-height: 460px; height: 460px; } }
+</style>
+<div class="ultimatum-shell" data-phase="{{ config.phase }}" data-offer="{{ config.proposal if config.proposal is not none else config.start_value }}" data-me-score="{{ config.accumulated_score_me }}" data-partner-score="{{ config.accumulated_score_partner }}">
+  <section class="state-panel" aria-live="polite">
+    <h2>Ultimatum game</h2>
+    <div class="score-card">
+      <div><small>Your score</small><br><strong>{{ config.accumulated_score_me }} coins</strong></div>
+      <div><small>Partner score</small><br><strong>{{ config.accumulated_score_partner }} coins</strong></div>
+      <div><small>Endowment</small><br><strong>{{ config.endowment }} coins</strong></div>
+      <div><small>Offer</small><br><strong id="offer-label">{{ config.proposal if config.proposal is not none else config.start_value }} coins</strong></div>
+    </div>
+    {% if config.phase == 'proposal' %}
+      <h3>You are the proposer</h3>
+      <p>Use the slider to choose exactly how many coins to give to the responder.</p>
+      <label for="offer-slider">Offer: <strong><span id="slider-value">{{ config.start_value }}</span> coins</strong></label>
+      <input id="offer-slider" type="range" min="{{ config.min_value }}" max="{{ config.max_value }}" step="1" value="{{ config.start_value }}" />
+      <button type="button" class="action-button" id="make-offer">Make the offer</button>
+    {% elif config.phase == 'acceptance' %}
+      <h3>You are the responder</h3>
+      <p>The proposer offered you <strong>{{ config.proposal }} coins</strong>. Accept or reject the offer.</p>
+      <button type="button" class="action-button accept" id="accept-offer">Accept</button>
+      <button type="button" class="action-button reject" id="reject-offer">Reject</button>
+    {% elif config.phase == 'score' %}
+      <h3>Round feedback</h3>
+      <p>{{ config.feedback }}</p>
+      <p>You earned <strong>{{ config.round_payoff }} coins</strong> this round.</p>
+      <button type="button" class="action-button" id="continue-score">Continue</button>
+    {% endif %}
+  </section>
+  <section class="tabletop-wrap" aria-label="3D tabletop view of the Ultimatum game">
+    <canvas class="tabletop-canvas"></canvas>
+    <div class="scene-hud">
+      <div class="partner-coins-label">{{ config.accumulated_score_partner }} coins</div>
+      <div class="partner-label">Partner</div>
+      <div class="table-caption">10-coin endowment</div>
+      <div class="me-coins-label">{{ config.accumulated_score_me }} coins</div>
+      <div class="me-label">Me</div>
+    </div>
+  </section>
+</div>
+<script type="module">
+import * as THREE from "/static/three.module.min.js";
+(function () {
+  const shell = document.querySelector('.ultimatum-shell');
+  const phase = shell.dataset.phase;
+  const canvas = shell.querySelector('.tabletop-canvas');
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0xf5f8ff);
+  const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 100);
+  camera.position.set(0, 6.4, 8.8); camera.lookAt(0, 0.25, 0.05);
+  const renderer = new THREE.WebGLRenderer({canvas, antialias: true, alpha: true});
+  renderer.shadowMap.enabled = true;
+  scene.add(new THREE.HemisphereLight(0xffffff, 0x6b7280, 1.4));
+  const key = new THREE.DirectionalLight(0xffffff, 1.0); key.position.set(-3, 8, 5); scene.add(key);
+  const floor = new THREE.Mesh(new THREE.PlaneGeometry(14, 12), new THREE.MeshStandardMaterial({color: 0xdbeafe, roughness: 0.85}));
+  floor.rotation.x = -Math.PI / 2; floor.position.y = -0.8; scene.add(floor);
+  const table = new THREE.Mesh(new THREE.BoxGeometry(6.3, 0.28, 4.4), new THREE.MeshStandardMaterial({color: 0x8f8975, roughness: 0.72})); scene.add(table);
+  function avatar(scale, z) { const g = new THREE.Group(); const mat = new THREE.MeshStandardMaterial({color: 0x111827}); const body = new THREE.Mesh(new THREE.CapsuleGeometry(0.32, 0.72, 8, 18), mat); body.position.y = 0.52; const head = new THREE.Mesh(new THREE.SphereGeometry(0.28, 24, 24), mat); head.position.y = 1.17; g.add(body); g.add(head); g.scale.setScalar(scale); g.position.set(1.8, 0.1, z); return g; }
+  scene.add(avatar(0.72, -2.85)); scene.add(avatar(1.02, 2.95));
+  function coinSet(count, radius, z) { const g = new THREE.Group(); for (let i = 0; i < count; i++) { const c = new THREE.Mesh(new THREE.CylinderGeometry(radius, radius, 0.075, 32), new THREE.MeshStandardMaterial({color: 0xfacc15, metalness: 0.55, roughness: 0.22})); c.position.set((i % 5) * radius * 1.45 - radius * 2.9, Math.floor(i / 5) * 0.09, (i % 2) * radius * 1.45 - radius * 0.72); g.add(c); } g.position.set(-1.55, 0.55, z); return g; }
+  const centerCoins = coinSet(10, 0.23, 0); centerCoins.position.set(0.05, 0.45, 0); scene.add(centerCoins);
+  const offerCoins = coinSet(10, 0.2, 0); offerCoins.position.set(0, 0.8, 0); scene.add(offerCoins);
+  function visible(group, count) { group.children.forEach((child, i) => { child.visible = i < count; }); }
+  function resize() { const rect = canvas.getBoundingClientRect(); renderer.setSize(rect.width, rect.height, false); camera.aspect = rect.width / rect.height; camera.updateProjectionMatrix(); }
+  function setOffer(value) { const offer = Number(value || 0); visible(offerCoins, Math.min(10, offer)); visible(centerCoins, Math.max(0, 10 - offer)); const label = document.getElementById('offer-label'); if (label) label.textContent = offer + ' coins'; const sliderLabel = document.getElementById('slider-value'); if (sliderLabel) sliderLabel.textContent = offer; }
+  resize(); window.addEventListener('resize', resize); setOffer(shell.dataset.offer);
+  function submit(rawAnswer) { if (window.psynet) psynet.nextPage(rawAnswer); }
+  const slider = document.getElementById('offer-slider');
+  if (slider) slider.addEventListener('input', () => setOffer(slider.value));
+  document.getElementById('make-offer')?.addEventListener('click', () => submit(slider.value));
+  document.getElementById('accept-offer')?.addEventListener('click', () => submit('Accept'));
+  document.getElementById('reject-offer')?.addEventListener('click', () => submit('Reject'));
+  document.getElementById('continue-score')?.addEventListener('click', () => submit(String({{ config.round_payoff }})));
+  (function animate() { requestAnimationFrame(animate); offerCoins.rotation.y += 0.006; renderer.render(scene, camera); })();
+})();
+</script>
+{% endmacro %}

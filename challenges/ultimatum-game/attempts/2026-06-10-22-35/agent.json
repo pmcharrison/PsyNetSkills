@@ -1,0 +1,26 @@
+{
+  "authors": [
+    "pmcharrison"
+  ],
+  "agent": "Cursor Cloud Agent",
+  "client": "cursor",
+  "model": "GPT-5.5",
+  "started_at": "2026-06-10T22:35:40Z",
+  "ended_at": null,
+  "cursor_conversation_id": "bc-5e598a14-7796-41c9-b898-d899a0309311",
+  "skills_commit": "329571fb83155586612bb7cc744f5d7465222184",
+  "psynet": {
+    "checkout_path": "~/PsyNet",
+    "branch": "master",
+    "commit": "bc4c2f699bc1fc04689ead50d450796e22c3cf8c",
+    "version": "13.3.0a0",
+    "updated_from": "origin/master",
+    "updated_at": "2026-06-10T22:35:40Z",
+    "update_command": "git pull --ff-only origin master",
+    "dirty": false
+  },
+  "run_cost": null,
+  "notes": [
+    "Takeover from attempts/2026-06-10-17-15 per user request; refactored toward the external ultimatum_game Trial/TrialMaker/Page/control structure."
+  ]
+}

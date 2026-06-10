@@ -1,0 +1,8 @@
+[Config]
+recruiter = hotair
+base_payment = 0.25
+show_reward = true
+show_progress_bar = false
+
+[Shell Parameters]
+launch_in_sandbox_mode = false
