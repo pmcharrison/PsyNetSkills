@@ -46,24 +46,6 @@ jobs:
         run: |
           set -euo pipefail
 
-          push_pages_branch() {
-            for attempt in 1 2 3 4 5; do
-              if git -C "${pages_dir}" push origin "HEAD:${PAGES_BRANCH}"; then
-                return 0
-              fi
-              if [ "${attempt}" = "5" ]; then
-                echo "Failed to push ${PAGES_BRANCH} after ${attempt} attempts."
-                return 1
-              fi
-              echo "Push to ${PAGES_BRANCH} failed; rebasing on latest remote before retry."
-              if git ls-remote --exit-code --heads origin "${PAGES_BRANCH}" >/dev/null 2>&1; then
-                git -C "${pages_dir}" fetch origin "${PAGES_BRANCH}"
-                git -C "${pages_dir}" rebase FETCH_HEAD
-              fi
-              sleep $((attempt * 2))
-            done
-          }
-
           pages_dir="$(mktemp -d)"
           origin_url="https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
           git remote set-url origin "${origin_url}"
@@ -102,5 +84,5 @@ jobs:
             echo "No production dashboard changes to deploy."
           else
             git -C "${pages_dir}" commit -m "Deploy production dashboard"
-            push_pages_branch
+            .github/scripts/push-pages-branch.sh "${pages_dir}" "${PAGES_BRANCH}"
           fi
