@@ -186,9 +186,12 @@ def parse_ai_slider_answer(text: str) -> int:
             raise ValueError("AI response was not valid JSON or a bare integer.")
         answer = int(match.group(1))
     else:
-        if not isinstance(parsed, dict) or set(parsed) != {"answer"}:
+        if isinstance(parsed, int):
+            answer = parsed
+        elif not isinstance(parsed, dict) or set(parsed) != {"answer"}:
             raise ValueError('AI response must be a JSON object with only an "answer" key.')
-        answer = int(parsed["answer"])
+        else:
+            answer = int(parsed["answer"])
 
     if not SLIDER_MIN <= answer <= SLIDER_MAX:
         raise ValueError("AI answer must be between 0 and 255.")
@@ -546,6 +549,41 @@ class Exp(psynet.experiment.Experiment):
     )
 
     test_n_bots = 6
+
+    @classmethod
+    def extra_parameters(cls):
+        super().extra_parameters()
+        from dallinger.config import get_config as dallinger_get_config
+
+        config = dallinger_get_config()
+        config.register("hybrid_ai_proportion", int)
+        config.register("hybrid_target_n_participants", int)
+        config.register("hybrid_trial_capacity_participants", int)
+        config.register("hybrid_ai_bot_time_factor", float)
+        config.register("hybrid_openrouter_api_key_env", str)
+        config.register("hybrid_openrouter_model", str)
+        config.register("hybrid_openrouter_base_url", str)
+        config.register("hybrid_openrouter_timeout", float)
+        config.register("hybrid_openrouter_max_retries", int)
+        config.register("hybrid_openrouter_mock", bool)
+
+    @classmethod
+    def config_defaults(cls):
+        return {
+            **super().config_defaults(),
+            "hybrid_ai_proportion": HybridSettings.ai_proportion,
+            "hybrid_target_n_participants": HybridSettings.target_n_participants,
+            "hybrid_trial_capacity_participants": (
+                HybridSettings.trial_capacity_participants
+            ),
+            "hybrid_ai_bot_time_factor": HybridSettings.ai_bot_time_factor,
+            "hybrid_openrouter_api_key_env": HybridSettings.openrouter_api_key_env,
+            "hybrid_openrouter_model": HybridSettings.openrouter_model,
+            "hybrid_openrouter_base_url": HybridSettings.openrouter_base_url,
+            "hybrid_openrouter_timeout": HybridSettings.openrouter_timeout,
+            "hybrid_openrouter_max_retries": HybridSettings.openrouter_max_retries,
+            "hybrid_openrouter_mock": HybridSettings.openrouter_mock,
+        }
 
     @classmethod
     def run_bot(
