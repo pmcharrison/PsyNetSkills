@@ -13,15 +13,16 @@ const chromePath = process.env.CHROME_PATH || "/usr/local/bin/google-chrome";
 const headed = process.env.HEADED === "1";
 const slowMo = Number(process.env.SLOW_MO_MS || (headed ? 250 : 50));
 const gameTimeoutMs = Number(process.env.GAME_TIMEOUT_MS || 120000);
+const maxDriveCycles = Number(process.env.MAX_DRIVE_CYCLES || 6);
 
 const defaultActions = [
   { type: "clickCanvas", x: 0.50, y: 0.50, label: "focus canvas" },
   {
     type: "driveToFerry",
-    steps: 180,
+    steps: 1200,
     sideEvery: 10,
-    waitMs: 150,
-    label: "move mostly forward with occasional side corrections",
+    waitMs: 15,
+    label: "rapid ArrowUp movement with 10 percent side corrections",
   },
 ];
 
@@ -117,19 +118,16 @@ async function runCanvasActions(page, canvas) {
       const sideEvery = action.sideEvery || 10;
       let sidePresses = 0;
       let forwardPresses = 0;
-      await page.keyboard.down("ArrowUp");
-      try {
-        for (let i = 1; i <= steps; i += 1) {
+      for (let i = 1; i <= steps; i += 1) {
+        if (i % sideEvery === 0) {
+          const sideKey = Math.floor(i / sideEvery) % 2 === 0 ? "ArrowLeft" : "ArrowRight";
+          await page.keyboard.press(sideKey);
+          sidePresses += 1;
+        } else {
+          await page.keyboard.press("ArrowUp");
           forwardPresses += 1;
-          if (i % sideEvery === 0) {
-            const sideKey = Math.floor(i / sideEvery) % 2 === 0 ? "ArrowLeft" : "ArrowRight";
-            await page.keyboard.press(sideKey);
-            sidePresses += 1;
-          }
-          await page.waitForTimeout(action.waitMs || 120);
         }
-      } finally {
-        await page.keyboard.up("ArrowUp");
+        await page.waitForTimeout(action.waitMs || 20);
       }
       record("drive-to-ferry", { label: action.label, steps, forwardPresses, sidePresses });
     } else {
@@ -138,14 +136,14 @@ async function runCanvasActions(page, canvas) {
   }
 }
 
-async function waitForCompletion(page) {
+async function waitForCompletion(page, timeout = gameTimeoutMs) {
   const completion = page.locator("text=/finished|complete|thank you/i").first();
   try {
-    await completion.waitFor({ state: "visible", timeout: gameTimeoutMs });
+    await completion.waitFor({ state: "visible", timeout });
     record("completion", { text: await completion.textContent().catch(() => null) });
     return true;
   } catch (error) {
-    record("completion-timeout", { timeoutMs: gameTimeoutMs });
+    record("completion-timeout", { timeoutMs: timeout });
     return false;
   }
 }
@@ -167,8 +165,16 @@ async function waitForCompletion(page) {
     await page.goto(participantUrl, { waitUntil: "domcontentloaded", timeout: 60000 });
     const canvas = await advanceUntilCanvas(page);
     record("unity-canvas-visible");
-    await runCanvasActions(page, canvas);
-    const completed = await waitForCompletion(page);
+    let completed = false;
+    for (let cycle = 1; cycle <= maxDriveCycles; cycle += 1) {
+      record("drive-cycle-start", { cycle, maxDriveCycles });
+      await runCanvasActions(page, canvas);
+      completed = await waitForCompletion(page, 5000);
+      if (completed) break;
+    }
+    if (!completed) {
+      completed = await waitForCompletion(page, gameTimeoutMs);
+    }
     fs.mkdirSync(path.dirname(outputPath), { recursive: true });
     fs.writeFileSync(outputPath, JSON.stringify({ completed, actions: log }, null, 2));
     await browser.close();

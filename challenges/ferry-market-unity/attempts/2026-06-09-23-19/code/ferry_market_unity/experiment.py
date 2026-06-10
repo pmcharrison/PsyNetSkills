@@ -3,9 +3,11 @@ from zipfile import ZipFile
 
 import psynet.experiment
 from markupsafe import Markup
+from psynet.bot import BotResponse
 from psynet.consent import MainConsent
 from psynet.page import InfoPage, UnityPage
 from psynet.timeline import Timeline
+from psynet.trial.static import StaticNode, StaticTrial, StaticTrialMaker
 
 EXPERIMENT_DIR = Path(__file__).resolve().parent
 UNITY_ZIP = EXPERIMENT_DIR / "static" / "ferry-market-webgl.zip"
@@ -34,37 +36,37 @@ def ensure_unity_build() -> None:
 ensure_unity_build()
 
 
+def ferry_market_contents():
+    return {
+        # The Unity code names this field "speed", but the values are
+        # travel delays; lower values are faster ferries.
+        "ferry_speeds": [2, 2, 2],
+        "ferry_tickets": [3, 3, 3],
+        "Island_colors": ["red", "yellow", "green"],
+        "ferry_ratings": [-1] * 9,
+        "ferry_window_ratings": [-1] * 9,
+        "ferry_trend_slope": [0.0] * 9,
+        "ferry_popularity": [0] * 9,
+        "dashboard_mode": "off",
+        "show_dashboard": False,
+        "show_stars": False,
+        "show_speeds": False,
+        "show_popularity": False,
+        "show_window_stars": False,
+        "show_trend_arrow": False,
+    }
+
+
 class FerryMarketUnityPage(UnityPage):
-    def __init__(self, **kwargs):
+    def __init__(self, contents, **kwargs):
         super().__init__(
             title="Unity - FerryGov",
             resources="/static",
-            contents={
-                # The Unity code names this field "speed", but the values are
-                # travel delays; lower values are faster ferries.
-                "ferry_speeds": [2, 2, 2],
-                "ferry_tickets": [3, 3, 3],
-                "Island_colors": ["red", "yellow", "green"],
-                "ferry_ratings": [-1] * 9,
-                "ferry_window_ratings": [-1] * 9,
-                "ferry_trend_slope": [0.0] * 9,
-                "ferry_popularity": [0] * 9,
-                "dashboard_mode": "off",
-                "show_dashboard": False,
-                "show_stars": False,
-                "show_speeds": False,
-                "show_popularity": False,
-                "show_window_stars": False,
-                "show_trend_arrow": False,
-            },
+            contents=contents,
             session_id="0",
             game_container_width="960px",
             game_container_height="600px",
             time_estimate=120,
-            bot_response={
-                "completed": True,
-                "source": "psynet-bot-response",
-            },
             **kwargs,
         )
 
@@ -74,6 +76,63 @@ class FerryMarketUnityPage(UnityPage):
         if isinstance(raw_answer, dict):
             return raw_answer
         return {"raw_answer": raw_answer}
+
+    def get_bot_response(self, experiment, bot):
+        return BotResponse(
+            answer={
+                "ferryChoice": 0,
+                "FeedbackScore": 5,
+                "FeedbackDelivered": True,
+                "increment_speed": 0,
+                "ferry": 0,
+                "ferry_ticket": 3,
+                "ferry_speed": 2,
+                "reward": 100,
+                "toll": 30,
+                "balance": 0,
+                "coins": [],
+                "timeElapsed": 20.0,
+                "calledFerryTime": 5.0,
+                "crossedFinishLineTime": 7.0,
+                "feedbackRequestTime": 12.0,
+                "feedbackRequested": True,
+                "scoreActive": True,
+                "participating": True,
+                "expire": False,
+                "turbo": False,
+                "answer": "5",
+                "version": 2,
+                "bot_simulated": True,
+            }
+        )
+
+
+class FerryMarketTrial(StaticTrial):
+    accumulate_answers = False
+    time_estimate = 120
+
+    def show_trial(self, experiment, participant):
+        contents = ferry_market_contents()
+        contents["island_index"] = self.node.definition["island_index"]
+        return FerryMarketUnityPage(contents=contents, time_estimate=self.time_estimate)
+
+
+trial_maker = StaticTrialMaker(
+    id_="ferry_market_unity",
+    trial_class=FerryMarketTrial,
+    nodes=[
+        StaticNode(definition={"island_index": i})
+        for i in range(1, 4)
+    ],
+    max_trials_per_participant=3,
+    expected_trials_per_participant=3,
+    allow_repeated_nodes=False,
+    balance_across_nodes=False,
+    check_performance_at_end=False,
+    check_performance_every_trial=False,
+    target_n_participants=1,
+    recruit_mode="n_participants",
+)
 
 
 class Exp(psynet.experiment.Experiment):
@@ -93,6 +152,6 @@ class Exp(psynet.experiment.Experiment):
             ),
             time_estimate=15,
         ),
-        FerryMarketUnityPage(),
+        trial_maker,
         InfoPage("Thank you. You have finished the Ferry Market task.", time_estimate=5),
     )
