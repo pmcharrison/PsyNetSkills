@@ -1,4 +1,28 @@
 (function () {
+  const branchContextLabel = document.querySelector("[data-branch-context-label]");
+
+  if (branchContextLabel) {
+    const branchPopover = branchContextLabel.querySelector(".branch-context-popover");
+
+    if (branchPopover) {
+      const showBranchPopover = function () {
+        branchPopover.hidden = false;
+      };
+      const hideBranchPopover = function () {
+        branchPopover.hidden = true;
+      };
+
+      branchContextLabel.addEventListener("mouseenter", showBranchPopover);
+      branchContextLabel.addEventListener("mouseleave", hideBranchPopover);
+      branchContextLabel.addEventListener("focus", showBranchPopover);
+      branchContextLabel.addEventListener("blur", hideBranchPopover);
+      branchContextLabel.addEventListener("click", function (event) {
+        event.preventDefault();
+        branchPopover.hidden = !branchPopover.hidden;
+      });
+    }
+  }
+
   const statusLink = document.querySelector("[data-workflow-status]");
 
   if (!statusLink) {

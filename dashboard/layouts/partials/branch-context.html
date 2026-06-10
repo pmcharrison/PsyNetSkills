@@ -11,10 +11,10 @@
     {{ $label = "Branch" }}
   {{ end }}
   <span class="branch-context" aria-label="{{ $label }} branch {{ $branch }}">
-    <span class="branch-context-label-wrap" tabindex="0">
+    <span class="branch-context-label-wrap" tabindex="0" aria-describedby="branch-context-popover" data-branch-context-label>
       <span class="branch-context-label">{{ $label }}:</span>
       {{ if eq $mode "pr-preview" }}
-        <span class="branch-context-popover" role="tooltip">
+        <span class="branch-context-popover" id="branch-context-popover" role="tooltip" hidden>
           This is a draft preview for the branch. Merge the pull request to release these changes on the main dashboard.
         </span>
       {{ end }}

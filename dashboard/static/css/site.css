@@ -98,6 +98,10 @@ a {
   z-index: 100;
 }
 
+.branch-context-popover[hidden] {
+  display: none;
+}
+
 .branch-context-popover::before {
   border: 0.4rem solid transparent;
   border-bottom-color: #24292f;
@@ -107,9 +111,7 @@ a {
   top: -0.78rem;
 }
 
-.branch-context-label-wrap:hover .branch-context-popover,
-.branch-context-label-wrap:focus .branch-context-popover,
-.branch-context-label-wrap:focus-within .branch-context-popover {
+.branch-context-label-wrap .branch-context-popover:not([hidden]) {
   display: block;
 }
 
