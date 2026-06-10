@@ -21,9 +21,11 @@ Use `ffmpeg` for recording. Do not use browser-only video capture as the default
 because it can miss system audio.
 
 Participant videos must be short, review-focused evidence artifacts. Do not
-commit or publish videos longer than 3 minutes. If the full experiment flow takes
-longer, record or edit a concise excerpt that demonstrates the instructions,
-representative trials, responses, and completion state.
+commit or publish videos longer than 3 minutes. For long or repetitive
+experiments, record or edit a concise representative excerpt instead of every
+trial, as long as the excerpt demonstrates the instructions, representative
+trials, responses, and completion behavior, and automated checks or exported
+data cover the full experimental structure.
 
 Published `evidence/participant.mp4` files must be no larger than 1280x720.
 Prefer 15 fps for UI walkthrough evidence unless smooth motion is essential.
@@ -198,7 +200,9 @@ than assuming `1` is correct.
 
 ## Evidence notes
 
-- Prefer a short successful recording over a long unfocused one.
+- Prefer a short successful recording over a long unfocused one. For repetitive
+  experiments, show the interaction pattern once or a few times and rely on
+  automated validation or exported data to prove completeness.
 - Keep participant videos at or below 3 minutes and 1280x720. Re-encode or trim
   before committing if the recording exceeds either limit.
 - If system audio capture cannot be configured, include the visual recording if
