@@ -18,9 +18,9 @@ from psynet.modular_page import (
     TextControl,
 )
 from psynet.page import InfoPage, VolumeCalibration
-from psynet.timeline import CodeBlock, Event, Timeline, conditional, join
+from psynet.timeline import CodeBlock, Event, FailedValidation, Timeline, conditional, join
 from psynet.trial.static import StaticNode, StaticTrial, StaticTrialMaker
-from psynet.utils import FailedValidation, get_country_dict, get_locale
+from psynet.utils import get_country_dict, get_locale
 
 from .questionnaires import (
     OMSI_COMPOSITION_CATEGORIES,
@@ -104,10 +104,10 @@ class NationalityPage(ModularPage):
                 choices=list(country_dict.keys()) + ["OTHER"],
                 labels=list(country_dict.values()) + ["Other / not listed"],
                 default_text="Select a nationality",
-                bot_response="FI",
             ),
             time_estimate=5,
             save_answer="nationality",
+            bot_response="FI",
         )
 
 
@@ -133,10 +133,10 @@ class EducationPage(ModularPage):
                     "Doctorate or professional degree",
                     "Prefer not to say",
                 ],
-                bot_response="bachelor",
             ),
             time_estimate=5,
             save_answer="education",
+            bot_response="bachelor",
         )
 
 
@@ -145,9 +145,10 @@ class ChoicePage(ModularPage):
         super().__init__(
             label,
             prompt,
-            control=RadioButtonControl(choices, labels, bot_response=bot_response),
+            control=RadioButtonControl(choices, labels),
             time_estimate=5,
             save_answer=label,
+            bot_response=bot_response,
         )
 
 
