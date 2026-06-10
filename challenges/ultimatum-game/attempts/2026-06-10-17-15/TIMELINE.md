@@ -9,3 +9,5 @@
 - T+00:35:00 [agent] Implemented a self-contained PsyNet experiment with dyad grouping, WebSocket state updates, Three.js tabletop UI, scoring, and timeout handling.
 - T+00:40:00 [agent] Generated constraints from the pinned PsyNet requirement before validation.
 - T+00:58:00 [agent] Fixed runtime issues found by psynet test local; the full local bot test now passes.
+- T+01:20:00 [agent] Ran a 40-bot, 5-minute performance test with zero bot/request errors.
+- T+01:30:00 [agent] Manual browser testing exposed a missing Three.js core asset and slow proposer controls; added the missing asset and quick-offer buttons.

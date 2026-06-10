@@ -219,11 +219,23 @@ import * as THREE from "/static/three.module.min.js";
                 var slider = document.createElement("input");
                 slider.type = "range"; slider.min = "0"; slider.max = "10"; slider.value = "5"; slider.id = "offer-slider";
                 slider.oninput = function () { document.getElementById("slider-value").textContent = slider.value; };
+                var quickOffers = document.createElement("div");
+                quickOffers.style.marginTop = "0.5rem";
+                [1, 4, 7].forEach(function (offer) {
+                    var quick = document.createElement("button");
+                    quick.className = "btn btn-outline-primary btn-sm";
+                    quick.textContent = "Offer " + offer;
+                    quick.onclick = function () {
+                        slider.value = String(offer);
+                        document.getElementById("slider-value").textContent = String(offer);
+                    };
+                    quickOffers.appendChild(quick);
+                });
                 var button = document.createElement("button");
                 button.className = "btn btn-primary";
                 button.textContent = "Submit offer";
                 button.onclick = function () { send({type: "offer", offer: Number(slider.value)}); button.disabled = true; };
-                area.appendChild(label); area.appendChild(slider); area.appendChild(button);
+                area.appendChild(label); area.appendChild(slider); area.appendChild(quickOffers); area.appendChild(button);
             } else {
                 document.getElementById("status-line").textContent = "Waiting for the proposer to submit an offer.";
                 area.textContent = "The responder controls will appear as soon as the offer arrives.";
