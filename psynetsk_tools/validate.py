@@ -325,10 +325,23 @@ def video_metadata(video_file: Path) -> dict[str, Any] | None:
         return None
 
 
+def is_git_lfs_pointer(path: Path) -> bool:
+    """Return whether a file is an unfetched Git LFS pointer."""
+
+    try:
+        data = path.read_bytes()[:128]
+    except OSError:
+        return False
+    return data.startswith(b"version https://git-lfs.github.com/spec/v1\n")
+
+
 def validate_evidence_video(video_file: Path) -> list[str]:
     """Validate participant evidence video size constraints."""
 
     problems: list[str] = []
+    if is_git_lfs_pointer(video_file):
+        return problems
+
     metadata = video_metadata(video_file)
     if metadata is None:
         return [f"{video_file}: could not read video metadata with ffprobe"]

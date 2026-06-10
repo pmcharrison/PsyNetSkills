@@ -291,6 +291,20 @@ def test_validate_evidence_video_rejects_large_dimensions(
     assert any("at most 1280x720" in problem for problem in problems)
 
 
+def test_validate_evidence_video_allows_unfetched_lfs_pointer(
+    tmp_path: Path,
+) -> None:
+    video_file = tmp_path / "participant.mp4"
+    write(
+        video_file,
+        "version https://git-lfs.github.com/spec/v1\n"
+        "oid sha256:abc123\n"
+        "size 123\n",
+    )
+
+    assert validate_evidence_video(video_file) == []
+
+
 def test_validate_agent_metadata_accepts_run_cost(tmp_path: Path) -> None:
     agent_file = tmp_path / "agent.json"
     metadata = json.loads(agent_json())

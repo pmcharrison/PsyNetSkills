@@ -25,6 +25,7 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           lfs: true
+      - run: git lfs checkout
       - uses: actions/setup-python@v5
         with:
           python-version-file: .python-version
