@@ -267,8 +267,8 @@ def test_collect_challenges_reports_missing_or_ambiguous_cost(
 
     attempts = collect_challenges(tmp_path)[0].attempts
 
-    assert attempts[0].run_cost_display == "Not recorded"
-    assert attempts[1].run_cost_display == "Not recorded"
+    assert attempts[0].run_cost_display == "-"
+    assert attempts[1].run_cost_display == "-"
 
 
 def test_collect_challenges_prefers_snapshotted_criteria(

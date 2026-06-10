@@ -379,7 +379,7 @@ def run_cost_metadata(agent: dict[str, object]) -> tuple[int | float | None, str
 
     run_cost = agent.get("run_cost")
     if not isinstance(run_cost, dict):
-        return None, "", "", "Not recorded"
+        return None, "", "", "-"
 
     amount = run_cost.get("amount")
     currency = run_cost.get("currency")
@@ -391,7 +391,7 @@ def run_cost_metadata(agent: dict[str, object]) -> tuple[int | float | None, str
         or currency != "USD"
         or status != "matched_cloud_agent_id"
     ):
-        return None, str(currency or ""), str(status or ""), "Not recorded"
+        return None, str(currency or ""), str(status or ""), "-"
 
     return amount, currency, status, f"${amount:.2f}"
 
