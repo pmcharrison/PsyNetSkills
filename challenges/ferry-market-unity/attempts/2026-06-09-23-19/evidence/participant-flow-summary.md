@@ -1,27 +1,33 @@
 # Participant flow test summary
 
 The PsyNet participant flow launches and the Unity WebGL build loads successfully.
-The browser automation advanced through consent and instructions, focused the
-Unity canvas, and sent movement/click input to the WebGL app.
+A GUI-driven participant run completed all three Unity trials after the runner
+strategy was adjusted to use rapid `ArrowUp` bursts with occasional side-key
+corrections and no `ArrowDown`.
 
 ## Successful checks
 
 - Unity assets were served by the local PsyNet server after `static/scripts/` was
   allowed into PsyNet's source package.
 - Unity initialized in Chrome and logged `Init` / `GetPage` messages.
-- The participant runner focused `#unity-canvas`.
-- The runner sent `ArrowUp`, `ArrowLeft`, and `ArrowRight` events.
-- A revised runner held `ArrowUp` continuously and tapped side keys about 10% of
-  the time, following Ofer's movement guidance.
+- The experiment uses a `StaticTrialMaker` with `max_trials_per_participant=3`.
+- The successful GUI run completed three Unity trials, selecting ferries and
+  submitting ratings each time.
+- The run reached the PsyNet task-complete page and the final 100% completion
+  page with a `Finish` button.
 
-## Blocking result
+## Evidence files
 
-The WebGL app did not call back to PsyNet completion during the tested sequences.
-The most relevant logs are:
+- `ferry_market_unity_success_slideshow.mp4`: screenshot slideshow of the
+  successful run. This is not a continuous screen recording; the screen recorder
+  failed to save the full live recording.
+- `screenshots/`: key screenshots from landing, consent, instructions, Unity
+  trials, ferry/rating screens, task completion, and final Finish page.
+- `participant-actions-*.json`: earlier headless Playwright attempts showing
+  Unity load and browser input experiments before the GUI strategy succeeded.
 
-- `participant-actions.json`: initial canvas-click and arrow-key run; timed out.
-- `participant-actions-mostly-up.json`: 600-step mostly-up run; timed out.
-- `participant-actions-held-up.json`: held-ArrowUp run with 10% side taps; timed out.
+## Notes
 
-Manual GUI inspection confirmed that the game loads and coins can be collected,
-but the ferry/rating/completion UI did not appear during the test window.
+The successful GUI strategy used rapid `ArrowUp` bursts with minimal pauses and
+occasional `ArrowLeft`/`ArrowRight` corrections. Slow or held-key approaches were
+not sufficient in earlier automated attempts.

@@ -12,3 +12,5 @@
 - T+01:12:00 [agent-start] Resumed after user clarified that `ArrowUp` must be pressed about 10x faster and the experiment should run three Unity trials.
 - T+01:14:00 [agent] Refactored the experiment to use a `StaticTrialMaker` with `max_trials_per_participant=3`.
 - T+01:16:00 [agent] Updated the participant runner to send rapid `ArrowUp` keypresses with side corrections every tenth keypress.
+- T+01:20:00 [agent] GUI participant run completed all three Unity trials using rapid `ArrowUp` bursts and sparse side-key corrections.
+- T+01:24:00 [agent] Created screenshot slideshow evidence after continuous screen recording failed to save.

@@ -6,23 +6,24 @@ score:
 
 ## Summary
 
-Awaiting human evaluator judgment. Current implementation is partially verified:
-PsyNet launches, the Unity WebGL build loads, and browser automation can send
-arrow-key and click input to the canvas. Full participant completion remains
-blocked because the Unity app did not trigger PsyNet completion during tested
-movement sequences.
+Awaiting human evaluator judgment. Current implementation is functionally
+verified in a GUI participant run: PsyNet launches, the Unity WebGL build loads,
+three Unity trials run via `max_trials_per_participant=3`, and the participant
+reaches the final completion page.
 
 ## Strengths
 
-- Uses PsyNet `MainConsent`, instructions, `UnityPage`, and a final completion page.
+- Uses PsyNet `MainConsent`, instructions, `UnityPage`, a three-trial `StaticTrialMaker`, and a final completion page.
 - Serves the provided Unity WebGL build from PsyNet's expected `/static/scripts/` layout.
-- Includes a Playwright participant runner that focuses the WebGL canvas and sends real browser arrow-key and click input.
-- Matches the original experiment's `ferry_*` JSON payload contract for the Unity page.
+- Matches the original experiment's `ferry_*` JSON payload contract and documents that `ferry_speeds` are delays.
+- Includes a browser participant runner with rapid `ArrowUp` and sparse side-key corrections.
+- GUI testing completed all three Unity trials and reached the final 100% Finish page.
 
 ## Weaknesses
 
-- The tested browser flows did not reach the ferry/rating/completion UI.
-- `evidence/participant.mp4`, `evidence/data.zip`, `evidence/monitor.html`, and full performance evidence are not yet complete because the participant flow is blocked before successful completion.
+- The saved video artifact is a screenshot slideshow rather than a continuous recording because the screen recorder failed to save the long live run.
+- The headless Playwright path still needs further tuning; GUI-driven testing completed successfully.
+- `evidence/data.zip`, `evidence/monitor.html`, and performance evidence are not yet collected.
 
 ## Criteria
 
@@ -30,5 +31,5 @@ No separate `CRITERIA.md` file was provided with this challenge.
 
 ## Notes
 
-- `psynet test local` exercises the synthetic PsyNet bot response and passes, but this is not the same as successful WebGL participant completion.
-- Manual GUI inspection and Playwright logs show Unity loading and receiving input, then timing out before completion.
+- `psynet test local` exercises the synthetic PsyNet bot response and passes.
+- The successful participant behavior is documented in `evidence/participant-flow-summary.md`, screenshots, and the slideshow MP4.
