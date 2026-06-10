@@ -649,10 +649,25 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
         / "challenges/example/attempts/2026-06-01-10-10/code/README.md",
         "# Code notes\n",
     )
+    write_bytes(
+        tmp_path
+        / "challenges/example/attempts/2026-06-01-10-10/code/bundle.zip",
+        b"implementation bundle",
+    )
     write(
         tmp_path
         / "challenges/example/attempts/2026-06-01-10-10/evidence/README.md",
         "# Evidence notes\n",
+    )
+    write_bytes(
+        tmp_path
+        / "challenges/example/attempts/2026-06-01-10-10/evidence/data.zip",
+        b"exported experiment data",
+    )
+    write_bytes(
+        tmp_path
+        / "challenges/example/attempts/2026-06-01-10-10/evidence/archive.zip",
+        b"extra evidence archive",
     )
     write(
         tmp_path
@@ -762,6 +777,20 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
     assert code_by_path["README.md"]["url"].startswith(
         "artifacts/blobs/sha256/",
     )
+    assert code_by_path["bundle.zip"]["published"] is False
+    assert code_by_path["bundle.zip"]["url"] == ""
+    assert "generated implementation code" in code_by_path["bundle.zip"][
+        "publication_note"
+    ]
+    assert evidence_by_path["data.zip"]["published"] is True
+    assert evidence_by_path["data.zip"]["url"].startswith(
+        "artifacts/blobs/sha256/",
+    )
+    assert evidence_by_path["archive.zip"]["published"] is False
+    assert evidence_by_path["archive.zip"]["url"] == ""
+    assert "evidence/data.zip" in evidence_by_path["archive.zip"][
+        "publication_note"
+    ]
 
     monitor_blob = (
         tmp_path / "dashboard/static" / evidence_by_path["monitor.html"]["url"]

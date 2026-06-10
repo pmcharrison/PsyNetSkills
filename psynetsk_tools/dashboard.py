@@ -172,6 +172,17 @@ class AttemptFile:
     size_bytes: int
     kind: str
     truncated: bool = False
+    published: bool = True
+    publication_note: str = ""
+
+
+@dataclass(frozen=True)
+class ArtifactPublication:
+    """Publication metadata for an attempt artifact."""
+
+    url: str
+    published: bool = True
+    note: str = ""
 
 
 @dataclass(frozen=True)
@@ -413,7 +424,7 @@ def read_attempt_file(
     path: Path,
     relative_to: Path,
     url_prefix: str,
-    url_overrides: Mapping[str, str] | None = None,
+    publications: Mapping[str, ArtifactPublication] | None = None,
     max_bytes: int = 100_000,
 ) -> AttemptFile:
     """Read display metadata and optional text content for an attempt file."""
@@ -436,24 +447,27 @@ def read_attempt_file(
             content.rstrip()
             + "\n\n[File truncated for dashboard display.]\n"
         )
+    publication = (
+        publications.get(relative_path)
+        if publications is not None and relative_path in publications
+        else ArtifactPublication(f"{url_prefix}/{relative_path}")
+    )
     return AttemptFile(
         path=relative_path,
-        url=(
-            url_overrides.get(relative_path)
-            if url_overrides is not None and relative_path in url_overrides
-            else f"{url_prefix}/{relative_path}"
-        ),
+        url=publication.url,
         content=content,
         size_bytes=size_bytes,
         kind=file_kind(path),
         truncated=truncated,
+        published=publication.published,
+        publication_note=publication.note,
     )
 
 
 def collect_attempt_files(
     directory: Path,
     url_prefix: str,
-    url_overrides: Mapping[str, str] | None = None,
+    publications: Mapping[str, ArtifactPublication] | None = None,
     max_files: int = 50,
 ) -> list[AttemptFile]:
     """Collect files from an attempt subdirectory."""
@@ -466,7 +480,7 @@ def collect_attempt_files(
     ):
         if len(files) >= max_files:
             break
-        files.append(read_attempt_file(path, directory, url_prefix, url_overrides))
+        files.append(read_attempt_file(path, directory, url_prefix, publications))
     return files
 
 
@@ -583,7 +597,10 @@ def disable_live_node_details(script_path: Path) -> None:
 def collect_attempts(
     challenge_dir: Path,
     author_registry: dict[str, Author] | None = None,
-    artifact_urls: Mapping[tuple[str, str, str, str], str] | None = None,
+    artifact_publications: Mapping[
+        tuple[str, str, str, str],
+        ArtifactPublication,
+    ] | None = None,
 ) -> list[Attempt]:
     """Collect attempts for a challenge."""
     author_registry = author_registry or {}
@@ -591,7 +608,7 @@ def collect_attempts(
     if not attempts_dir.exists():
         return []
 
-    artifact_urls = artifact_urls or {}
+    artifact_publications = artifact_publications or {}
     attempts: list[Attempt] = []
     for attempt_dir in sorted(
         path for path in attempts_dir.iterdir() if path.is_dir()
@@ -693,7 +710,7 @@ def collect_attempts(
                     attempt_dir / "challenge",
                     f"{artifact_prefix}/challenge",
                     attempt_section_urls(
-                        artifact_urls,
+                        artifact_publications,
                         challenge_dir.name,
                         attempt_dir.name,
                         "challenge",
@@ -703,7 +720,7 @@ def collect_attempts(
                     attempt_dir / "code",
                     f"{artifact_prefix}/code",
                     attempt_section_urls(
-                        artifact_urls,
+                        artifact_publications,
                         challenge_dir.name,
                         attempt_dir.name,
                         "code",
@@ -713,7 +730,7 @@ def collect_attempts(
                     attempt_dir / "evidence",
                     f"{artifact_prefix}/evidence",
                     attempt_section_urls(
-                        artifact_urls,
+                        artifact_publications,
                         challenge_dir.name,
                         attempt_dir.name,
                         "evidence",
@@ -725,21 +742,24 @@ def collect_attempts(
 
 
 def attempt_section_urls(
-    artifact_urls: Mapping[tuple[str, str, str, str], str],
+    artifact_publications: Mapping[
+        tuple[str, str, str, str],
+        ArtifactPublication,
+    ],
     challenge_slug: str,
     attempt_name: str,
     section: str,
-) -> dict[str, str]:
+) -> dict[str, ArtifactPublication]:
     """Return URL overrides for one attempt section."""
 
     return {
-        relative_path: url
+        relative_path: publication
         for (
             artifact_challenge,
             artifact_attempt,
             artifact_section,
             relative_path,
-        ), url in artifact_urls.items()
+        ), publication in artifact_publications.items()
         if (
             artifact_challenge == challenge_slug
             and artifact_attempt == attempt_name
@@ -751,7 +771,10 @@ def attempt_section_urls(
 def collect_challenges(
     root: Path,
     author_registry: dict[str, Author] | None = None,
-    artifact_urls: Mapping[tuple[str, str, str, str], str] | None = None,
+    artifact_publications: Mapping[
+        tuple[str, str, str, str],
+        ArtifactPublication,
+    ] | None = None,
 ) -> list[Challenge]:
     """Collect challenge summaries."""
     challenges: list[Challenge] = []
@@ -784,7 +807,7 @@ def collect_challenges(
                 attempts=collect_attempts(
                     challenge_dir,
                     author_registry,
-                    artifact_urls,
+                    artifact_publications,
                 ),
             )
         )
@@ -793,12 +816,15 @@ def collect_challenges(
 
 def dashboard_data(
     root: Path,
-    artifact_urls: Mapping[tuple[str, str, str, str], str] | None = None,
+    artifact_publications: Mapping[
+        tuple[str, str, str, str],
+        ArtifactPublication,
+    ] | None = None,
 ) -> dict[str, object]:
     """Return all structured data needed by the dashboard."""
     author_registry, _ = read_author_registry(root)
     skills = collect_skills(root, author_registry)
-    challenges = collect_challenges(root, author_registry, artifact_urls)
+    challenges = collect_challenges(root, author_registry, artifact_publications)
     return {
         "authors": [asdict(author) for author in author_registry.values()],
         "skills": [asdict(skill) for skill in skills],
@@ -918,7 +944,7 @@ def write_challenge_content(
 def write_attempt_artifacts(
     root: Path,
     dashboard_dir: Path,
-) -> dict[tuple[str, str, str, str], str]:
+) -> dict[tuple[str, str, str, str], ArtifactPublication]:
     """Copy attempt artifacts into Hugo's shared content-addressed store."""
     target_root = dashboard_dir / "static" / HASHED_ARTIFACTS_DIR
     shared_static_root = dashboard_dir / "static" / MONITOR_STATIC_ARTIFACTS_DIR
@@ -926,11 +952,14 @@ def write_attempt_artifacts(
     shutil.rmtree(shared_static_root, ignore_errors=True)
     target_root.mkdir(parents=True, exist_ok=True)
     write_shared_monitor_static_assets(shared_static_root)
-    artifact_urls: dict[tuple[str, str, str, str], str] = {}
+    artifact_publications: dict[
+        tuple[str, str, str, str],
+        ArtifactPublication,
+    ] = {}
 
     challenges_dir = root / "challenges"
     if not challenges_dir.exists():
-        return artifact_urls
+        return artifact_publications
 
     for challenge_dir in sorted(
         path for path in challenges_dir.iterdir() if path.is_dir()
@@ -951,15 +980,54 @@ def write_attempt_artifacts(
                     if source_file.name == ".gitkeep":
                         continue
                     relative_path = source_file.relative_to(source_dir).as_posix()
-                    artifact_urls[
-                        (
-                            challenge_dir.name,
-                            attempt_dir.name,
-                            section,
-                            relative_path,
+                    key = (
+                        challenge_dir.name,
+                        attempt_dir.name,
+                        section,
+                        relative_path,
+                    )
+                    if should_publish_attempt_artifact(section, relative_path, source_file):
+                        artifact_publications[key] = ArtifactPublication(
+                            write_hashed_artifact(source_file, target_root),
                         )
-                    ] = write_hashed_artifact(source_file, target_root)
-    return artifact_urls
+                    else:
+                        artifact_publications[key] = ArtifactPublication(
+                            "",
+                            published=False,
+                            note=excluded_attempt_artifact_note(section, relative_path),
+                        )
+    return artifact_publications
+
+
+def should_publish_attempt_artifact(
+    section: str,
+    relative_path: str,
+    source_file: Path,
+) -> bool:
+    """Return whether an attempt artifact should be published to Pages."""
+
+    if source_file.suffix.lower() != ".zip":
+        return True
+    if section == "evidence" and relative_path == "data.zip":
+        return True
+    if section == "challenge":
+        return True
+    return False
+
+
+def excluded_attempt_artifact_note(section: str, relative_path: str) -> str:
+    """Explain why an attempt artifact is metadata-only on the dashboard."""
+
+    if section == "evidence":
+        return (
+            "Excluded from dashboard publication because only evidence/data.zip "
+            "is published among attempt evidence ZIP files."
+        )
+    return (
+        "Excluded from dashboard publication because large ZIP files in generated "
+        "implementation code are retained as source/LFS artifacts, not copied to "
+        "GitHub Pages."
+    )
 
 
 def write_shared_monitor_static_assets(target_root: Path) -> None:
@@ -1045,8 +1113,8 @@ def write_challenge_references(root: Path, dashboard_dir: Path) -> None:
 def export_dashboard(root: Path, dashboard_dir: Path) -> None:
     """Export JSON data and generated content pages for Hugo."""
     dashboard_dir.mkdir(parents=True, exist_ok=True)
-    artifact_urls = write_attempt_artifacts(root, dashboard_dir)
-    data = dashboard_data(root, artifact_urls)
+    artifact_publications = write_attempt_artifacts(root, dashboard_dir)
+    data = dashboard_data(root, artifact_publications)
     data_dir = dashboard_dir / "data"
     data_dir.mkdir(parents=True, exist_ok=True)
     (data_dir / "psynetsk.json").write_text(

@@ -34,6 +34,9 @@ same branch, under `pr-preview/pr-NUMBER/`.
 Attempt artifacts are published to a shared content-addressed store under
 `artifacts/blobs/sha256/`, so production and preview pages can reuse identical
 evidence files instead of copying them into every preview directory.
+Large ZIP files from generated attempt `code/` directories, and evidence ZIPs
+other than `evidence/data.zip`, are shown as metadata-only file entries rather
+than copied to GitHub Pages.
 Deploys publish `gh-pages` as a one-commit snapshot branch. This keeps the live
 site and open previews addressable without letting generated dashboard history
 grow indefinitely.
