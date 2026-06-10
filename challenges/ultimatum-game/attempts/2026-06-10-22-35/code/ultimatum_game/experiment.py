@@ -184,9 +184,7 @@ class Exp(psynet.experiment.Experiment):
 
         trials = GameTrial.query.filter_by(failed=False).all()
         assert len(trials) >= NUMBER_OF_ROUNDS * 2
-        summaries = [trial.definition.get('summary') for trial in trials if trial.definition.get('summary')]
-        assert summaries
-        final = max(summaries, key=lambda summary: summary['counted_rounds'])
-        assert final['counted_rounds'] == NUMBER_OF_ROUNDS
-        assert len({tuple(round_['roles'].values()) for round_ in final['history']}) >= 1
-        assert any(round_['decision'] in {'Accept', 'Reject'} for round_ in final['history'])
+        history = max((participant.var.ultimatum_history for participant in participants), key=len)
+        assert len(history) == NUMBER_OF_ROUNDS
+        assert len({tuple(round_['roles'].values()) for round_ in history}) >= 1
+        assert any(round_['decision'] in {'Accept', 'Reject'} for round_ in history)
