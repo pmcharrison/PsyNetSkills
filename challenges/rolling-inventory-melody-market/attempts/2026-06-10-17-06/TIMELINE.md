@@ -6,3 +6,4 @@
 - T+00:08:00 [agent] Created timestamped attempt scaffold.
 - T+00:25:00 [agent] Implemented initial melody-market experiment and support files.
 - T+00:34:00 [agent] Added standard PsyNet test harness after local test reported missing test.py.
+- T+00:41:00 [agent] Fixed duplicate PsyNet config definitions reported by psynet test local.
