@@ -691,6 +691,10 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
         ),
         b"example video bytes",
     )
+    write(
+        tmp_path / "challenges/example/references/interface-sketch.svg",
+        "<svg><title>Example sketch</title></svg>",
+    )
 
     export_dashboard(tmp_path, tmp_path / "dashboard")
 
@@ -763,6 +767,14 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
         tmp_path / "dashboard/static" / evidence_by_path["monitor.html"]["url"]
     )
     exported_monitor = monitor_blob.read_text(encoding="utf-8")
+    exported_reference = (
+        tmp_path
+        / "dashboard/static/challenges/example/references/"
+        "interface-sketch.svg"
+    )
+    assert exported_reference.read_text(encoding="utf-8") == (
+        "<svg><title>Example sketch</title></svg>"
+    )
     assert '<base href="./">' in exported_monitor
     assert 'href="./static/css/dashboard.css"' in exported_monitor
     assert 'src="./static/scripts/network-monitor.js"' in exported_monitor

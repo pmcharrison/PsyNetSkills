@@ -19,6 +19,42 @@
     "update_command": "git pull --ff-only origin master",
     "dirty": false
   },
-  "run_cost": null,
+  "run_cost": {
+    "currency": "USD",
+    "amount": 58.75,
+    "source": "cursor_usage_csv_batch_import",
+    "recorded_at": "2026-06-10T15:56:36.206926Z",
+    "attribution_status": "matched_cloud_agent_id",
+    "window_started_at": "2026-06-10T12:44:24Z",
+    "window_ended_at": "2026-06-10T14:29:47Z",
+    "matched_started_at": "2026-06-10T12:39:28.313000Z",
+    "matched_ended_at": "2026-06-10T12:39:28.313000Z",
+    "matched_cloud_agent_ids": [
+      "bc-621f7c49-c5b2-4662-82d9-442255f5a131"
+    ],
+    "usage": {
+      "rows": 1,
+      "input_with_cache_write": 516584,
+      "input_without_cache_write": 13659706,
+      "cache_read": 32238224,
+      "output_tokens": 163223,
+      "total_tokens": 46577737,
+      "models": {
+        "gpt-5.4-medium": {
+          "rows": 1,
+          "input_with_cache_write": 516584,
+          "input_without_cache_write": 13659706,
+          "cache_read": 32238224,
+          "output_tokens": 163223,
+          "total_tokens": 46577737,
+          "cost": 58.75
+        }
+      }
+    },
+    "notes": [
+      "Matched Cursor CSV rows by cursor_conversation_id.",
+      "Applied attempt time window plus padding."
+    ]
+  },
   "notes": []
 }
