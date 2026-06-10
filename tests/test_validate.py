@@ -256,7 +256,6 @@ def test_validate_agent_metadata_accepts_run_cost(tmp_path: Path) -> None:
         "recorded_at": "2026-06-10T11:30:00Z",
         "attribution_status": "matched_cloud_agent_id",
         "matched_cloud_agent_ids": ["bc-example"],
-        "matched_cursor_users": ["user@example.com"],
         "usage": {"rows": 1},
         "notes": ["Matched by cursor_conversation_id."],
     }
@@ -275,7 +274,6 @@ def test_validate_agent_metadata_rejects_malformed_run_cost(tmp_path: Path) -> N
         "recorded_at": "",
         "attribution_status": "guessed",
         "matched_cloud_agent_ids": [123],
-        "matched_cursor_users": [123],
         "notes": ["ok", 123],
     }
     write(agent_file, json.dumps(metadata) + "\n")
@@ -288,7 +286,6 @@ def test_validate_agent_metadata_rejects_malformed_run_cost(tmp_path: Path) -> N
     assert any("run_cost.recorded_at must be" in problem for problem in problems)
     assert any("run_cost.attribution_status must be one of" in problem for problem in problems)
     assert any("run_cost.matched_cloud_agent_ids must be" in problem for problem in problems)
-    assert any("run_cost.matched_cursor_users must be" in problem for problem in problems)
     assert any("run_cost.notes must be" in problem for problem in problems)
 
 

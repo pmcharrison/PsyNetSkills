@@ -52,11 +52,6 @@ from the `CURSOR_CONVERSATION_ID` environment variable when available. Cursor
 team usage CSV exports use this value as `Cloud Agent ID`, which lets maintainers
 backfill cost metadata without relying on account-email matching.
 
-Local Cursor agents usually do not have a Cloud Agent ID. For those attempts,
-`cursor_usage_user` may be set in `agent.json` to the Cursor CSV `User` value if
-the human is comfortable committing that account label. Otherwise, leave it
-`null` and pass an uncommitted JSON author map to the importer with `--user-map`.
-
 Do not commit raw Cursor usage CSV exports. They can contain team members,
 account emails, and billing details. After exporting a CSV locally, import
 derived cost metadata with:
@@ -66,11 +61,10 @@ uv run psynetsk-import-cursor-costs path/to/team-usage-events.csv
 ```
 
 The importer writes `run_cost` in `agent.json` for attempts that do not already
-have it. Exact `cursor_conversation_id` matches are preferred, followed by
-Cursor account plus attempt time window matching for local agents. Time-window
-matches without an account are marked ambiguous unless only one non-empty Cloud
-Agent ID appears in the window. Leave `run_cost` as `null` when no CSV import has
-been run yet.
+have it. Exact `cursor_conversation_id` matches are the only high-confidence
+automatic attribution. Time-window matches without a Cloud Agent ID are marked
+ambiguous unless only one non-empty Cloud Agent ID appears in the window. Leave
+`run_cost` as `null` when no CSV import has been run yet.
 
 ## Learning notes
 
