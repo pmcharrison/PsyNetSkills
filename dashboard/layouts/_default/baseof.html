@@ -15,18 +15,21 @@
   <body>
     <header class="site-header">
       <nav class="primary-nav" aria-label="Main navigation">
-        <a
-          {{ if .IsHome }}aria-current="page" class="current"{{ end }}
-          href="{{ site.Home.RelPermalink }}"
-        >PsyNetSkills</a>
-        <a
-          {{ if eq .Section "skills" }}aria-current="page" class="current"{{ end }}
-          href="{{ "skills/" | relURL }}"
-        >Skills</a>
-        <a
-          {{ if eq .Section "challenges" }}aria-current="page" class="current"{{ end }}
-          href="{{ "challenges/" | relURL }}"
-        >Challenges</a>
+        <span class="nav-links">
+          <a
+            {{ if .IsHome }}aria-current="page" class="current"{{ end }}
+            href="{{ site.Home.RelPermalink }}"
+          >PsyNetSkills</a>
+          <a
+            {{ if eq .Section "skills" }}aria-current="page" class="current"{{ end }}
+            href="{{ "skills/" | relURL }}"
+          >Skills</a>
+          <a
+            {{ if eq .Section "challenges" }}aria-current="page" class="current"{{ end }}
+            href="{{ "challenges/" | relURL }}"
+          >Challenges</a>
+        </span>
+        {{ partial "branch-context.html" . }}
         <span class="nav-actions">
           {{ partial "workflow-status.html" . }}
           {{ with site.Params.github_repo_url }}

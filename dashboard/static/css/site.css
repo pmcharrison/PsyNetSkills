@@ -36,11 +36,56 @@ a {
   margin-bottom: 2rem;
 }
 
-nav {
+.primary-nav {
+  align-items: baseline;
+  display: grid;
+  gap: 0.6rem 1.25rem;
+  grid-template-areas: "links branch actions";
+  grid-template-columns: auto minmax(0, 1fr) auto;
+}
+
+.nav-links {
   align-items: baseline;
   display: flex;
   flex-wrap: wrap;
   gap: 1.25rem;
+  grid-area: links;
+}
+
+.branch-context {
+  align-items: baseline;
+  color: var(--muted);
+  display: inline-flex;
+  font-size: 0.85rem;
+  gap: 0.3rem;
+  grid-area: branch;
+  justify-self: center;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.branch-context-label {
+  font-weight: 700;
+}
+
+.site-header nav .branch-context-link {
+  border-bottom: 0;
+  color: var(--muted);
+  display: inline-block;
+  font-family: var(--monospace);
+  font-size: 0.82rem;
+  max-width: min(28rem, 100%);
+  overflow: hidden;
+  padding-bottom: 0;
+  text-overflow: ellipsis;
+  vertical-align: bottom;
+  white-space: nowrap;
+}
+
+.site-header nav .branch-context-link:hover,
+.site-header nav .branch-context-link:focus {
+  color: var(--foreground);
+  text-decoration: underline;
 }
 
 .site-header nav a {
@@ -66,7 +111,8 @@ nav {
   align-items: center;
   display: inline-flex;
   gap: 0.65rem;
-  margin-left: auto;
+  grid-area: actions;
+  justify-self: end;
   position: relative;
 }
 
@@ -921,18 +967,32 @@ footer {
 }
 
 @media (max-width: 720px) {
-  nav {
+  .primary-nav {
     gap: 0.8rem 1rem;
+    grid-template-areas:
+      "links actions"
+      "branch branch";
+    grid-template-columns: minmax(0, 1fr) auto;
   }
 
   .site-header nav a {
     font-size: 1.15rem;
   }
 
+  .nav-links {
+    gap: 0.8rem;
+  }
+
+  .branch-context {
+    justify-self: start;
+  }
+
+  .site-header nav .branch-context-link {
+    max-width: calc(100vw - 8rem);
+  }
+
   .nav-actions {
     justify-content: flex-end;
-    margin-left: 0;
-    width: 100%;
   }
 
   .workflow-status-popover {
