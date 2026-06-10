@@ -45,6 +45,27 @@ The dashboard derives implementation time from completed `[agent-start]` to
 `[agent-stop]` intervals. If the final active segment is left open, the
 implementation time is reported as `Not recorded`.
 
+## Cursor cost notes
+
+Cursor Cloud attempts should record `cursor_conversation_id` in `agent.json`
+from the `CURSOR_CONVERSATION_ID` environment variable when available. Cursor
+team usage CSV exports use this value as `Cloud Agent ID`, which lets maintainers
+backfill cost metadata without relying on account-email matching.
+
+Do not commit raw Cursor usage CSV exports. They can contain team members,
+account emails, and billing details. After exporting a CSV locally, import
+derived cost metadata with:
+
+```bash
+uv run psynetsk-import-cursor-costs path/to/team-usage-events.csv
+```
+
+The importer writes `run_cost` in `agent.json` for attempts that do not already
+have it. Exact `cursor_conversation_id` matches are the only high-confidence
+automatic attribution. Time-window matches without a Cloud Agent ID are marked
+ambiguous unless only one non-empty Cloud Agent ID appears in the window. Leave
+`run_cost` as `null` when no CSV import has been run yet.
+
 ## Learning notes
 
 `LEARNINGS.md` should capture information that would help future maintainers and

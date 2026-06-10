@@ -1,0 +1,139 @@
+{
+    "psynet_version": "13.3.0a0",
+    "dallinger_version": "12.2.0",
+    "python_version": "3.13.13",
+    "hard_max_experiment_payment_email_sent": false,
+    "soft_max_experiment_payment_email_sent": false,
+    "hard_max_experiment_payment": 1100.0,
+    "soft_max_experiment_payment": 1000.0,
+    "max_participant_payment": 25.0,
+    "deployment_id": "portfolio-website-chain__mode=debug__launch=2026-06-10--11-47-48",
+    "label": "Portfolio website chain",
+    "deployment_config": {
+        "aws_region": "us-east-1",
+        "ec2_default_pem": "dallinger",
+        "ec2_default_security_group": "dallinger",
+        "dallinger_develop_directory": "/tmp/dallinger_develop",
+        "smtp_host": "smtp.gmail.com:587",
+        "smtp_username": "???",
+        "contact_email_on_error": "researcher@example.test",
+        "dallinger_email_address": "dallinger@mailinator.com",
+        "docker_worker_cpu_shares": 1024,
+        "enable_global_experiment_registry": false,
+        "language": "en",
+        "lock_table_when_creating_participant": false,
+        "mode": "debug",
+        "replay": false,
+        "auto_recruit": false,
+        "assign_qualifications": true,
+        "allow_repeat_worker_ids": false,
+        "us_only": false,
+        "disable_when_duration_exceeded": false,
+        "webdriver_type": "chrome_headless",
+        "chrome-path": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+        "clock_on": true,
+        "sentry": false,
+        "redis_size": "premium-0",
+        "worker_multiplier": 1.5,
+        "num_dynos_web": 1,
+        "num_dynos_worker": 1,
+        "prolific_api_version": "v1",
+        "prolific_estimated_completion_minutes": 5,
+        "prolific_is_custom_screening": false,
+        "prolific_completion_config": "{}",
+        "prolific_recruitment_config": "{}",
+        "disable_browser_autotranslate": true,
+        "protected_routes": "[\"/network/<network_id>\", \"/question/<participant_id>\", \"/node/<int:node_id>/neighbors\", \"/node/<participant_id>\", \"/node/<int:node_id>/vectors\", \"/node/<int:node_id>/connect/<int:other_node_id>\", \"/info/<int:node_id>/<int:info_id>\", \"/node/<int:node_id>/infos\", \"/node/<int:node_id>/received_infos\", \"/tracking_event/<int:node_id>\", \"/info/<int:node_id>\", \"/node/<int:node_id>/transmissions\", \"/node/<int:node_id>/transmit\", \"/node/<int:node_id>/transformations\", \"/transformation/<int:node_id>/<int:info_in_id>/<int:info_out_id>\"]",
+        "host": "0.0.0.0",
+        "base_port": 5000,
+        "logfile": "/workspace/challenges/portfolio-website-chain/attempts/2026-06-10-11-24/code/portfolio_website_chain/server.log",
+        "loglevel": 1,
+        "loglevel_worker": 1,
+        "threads": "1",
+        "whimsical": true,
+        "allow_mobile_devices": false,
+        "base_payment": 1.0,
+        "big_base_payment": false,
+        "check_dallinger_version": false,
+        "color_mode": "light",
+        "currency": "$",
+        "default_translator": "chat_gpt",
+        "docker_volumes": "${HOME}/psynet-data/assets:/psynet-data/assets",
+        "duration": 100000000.0,
+        "experimenter_name": "unknown",
+        "force_google_chrome": true,
+        "notifier": "logger",
+        "leave_comments_on_every_page": false,
+        "force_incognito_mode": false,
+        "openai_default_model": "gpt-4o",
+        "openai_default_temperature": "0",
+        "initial_recruitment_size": 1,
+        "label": "portfolio_website_chain",
+        "min_accumulated_reward_for_abort": 0.2,
+        "min_browser_version": "80.0",
+        "prolific_enable_return_for_bonus": true,
+        "show_abort_button": false,
+        "show_footer": true,
+        "show_progress_bar": true,
+        "show_reward": true,
+        "needs_internet_access": true,
+        "check_participant_opened_devtools": false,
+        "supported_locales": "[]",
+        "wage_per_hour": 12.0,
+        "window_height": 768,
+        "window_width": 1024,
+        "mute_same_warning_for_n_hours": 1.0,
+        "resource_warning_pct": 0.9,
+        "resource_danger_pct": 0.95,
+        "minimal_disk_space_warning_gb": 5.0,
+        "minimal_disk_space_danger_gb": 2.0,
+        "title": "Portfolio website chain",
+        "description": "Participants collaboratively create and improve a portfolio website by writing instructions for an AI model.",
+        "organization_name": "PsyNetSkills",
+        "recruiter": "generic",
+        "id": "ac65e0db-50a2-a31c-a40f-6902d14a8c4b",
+        "heroku_app_id_root": "ac65e0db-50a2-a31c-a40f-6902d14a8c4b",
+        "port": 5000
+    }
+}
+
+❯❯ Exporting raw database content to /workspace/challenges/portfolio-website-chain/attempts/2026-06-10-11-24/evidence/export/anonymous/database.zip
+
+Preparing to export the data...
+Zipping up the package...
+Done. Local export available in data/local-data.zip
+/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/yaspin/core.py:172: UserWarning: color, on_color and attrs are not supported when output stream is not a TTY
+  self._color = self._set_color(color) if color else color
+
+⠋ Completed.             ✔ Completed.
+Bot:   0%|          | 0/530 [00:00<?, ?it/s]Bot: 100%|██████████| 530/530 [00:00<00:00, 7014.82it/s]
+ChainNetwork:   0%|          | 0/1 [00:00<?, ?it/s]ChainNetwork: 100%|██████████| 1/1 [00:00<00:00, 6123.07it/s]
+PortfolioNode:   0%|          | 0/3 [00:00<?, ?it/s]PortfolioNode: 100%|██████████| 3/3 [00:00<00:00, 6913.69it/s]
+ChainVector:   0%|          | 0/2 [00:00<?, ?it/s]ChainVector: 100%|██████████| 2/2 [00:00<00:00, 19195.90it/s]
+PortfolioTrial:   0%|          | 0/3 [00:00<?, ?it/s]PortfolioTrial: 100%|██████████| 3/3 [00:00<00:00, 4955.85it/s]
+Response:   0%|          | 0/526 [00:00<?, ?it/s]Response: 100%|██████████| 526/526 [00:00<00:00, 21653.44it/s]
+ChainTrialMakerState:   0%|          | 0/530 [00:00<?, ?it/s]ChainTrialMakerState: 100%|██████████| 530/530 [00:00<00:00, 17923.08it/s]
+Request:   0%|          | 0/1574 [00:00<?, ?it/s]Request: 100%|██████████| 1574/1574 [00:00<00:00, 206694.88it/s]
+ExperimentConfig:   0%|          | 0/1 [00:00<?, ?it/s]ExperimentConfig: 100%|██████████| 1/1 [00:00<00:00, 3426.72it/s]
+⠋ Completed.             ✔ Completed.
+
+❯❯ Export complete. You can find your results at: /workspace/challenges/portfolio-website-chain/attempts/2026-06-10-11-24/evidence/export
+
+❯❯ Exporting raw database content to /workspace/challenges/portfolio-website-chain/attempts/2026-06-10-11-24/evidence/export/regular/database.zip
+
+Preparing to export the data...
+Zipping up the package...
+Done. Local export available in data/local-data.zip
+⠋ Completed.             ✔ Completed.
+Bot:   0%|          | 0/530 [00:00<?, ?it/s]Bot: 100%|██████████| 530/530 [00:00<00:00, 7072.60it/s]
+ChainNetwork:   0%|          | 0/1 [00:00<?, ?it/s]ChainNetwork: 100%|██████████| 1/1 [00:00<00:00, 8192.00it/s]
+PortfolioNode:   0%|          | 0/3 [00:00<?, ?it/s]PortfolioNode: 100%|██████████| 3/3 [00:00<00:00, 7772.03it/s]
+ChainVector:   0%|          | 0/2 [00:00<?, ?it/s]ChainVector: 100%|██████████| 2/2 [00:00<00:00, 21454.24it/s]
+PortfolioTrial:   0%|          | 0/3 [00:00<?, ?it/s]PortfolioTrial: 100%|██████████| 3/3 [00:00<00:00, 4275.54it/s]
+Response:   0%|          | 0/526 [00:00<?, ?it/s]Response: 100%|██████████| 526/526 [00:00<00:00, 21922.83it/s]
+ChainTrialMakerState:   0%|          | 0/530 [00:00<?, ?it/s]ChainTrialMakerState: 100%|██████████| 530/530 [00:00<00:00, 20998.06it/s]
+Request:   0%|          | 0/1574 [00:00<?, ?it/s]Request: 100%|██████████| 1574/1574 [00:00<00:00, 196869.88it/s]
+ExperimentConfig:   0%|          | 0/1 [00:00<?, ?it/s]ExperimentConfig: 100%|██████████| 1/1 [00:00<00:00, 3530.56it/s]
+⠋ Completed.             ✔ Completed.
+
+❯❯ Export complete. You can find your results at: /workspace/challenges/portfolio-website-chain/attempts/2026-06-10-11-24/evidence/export

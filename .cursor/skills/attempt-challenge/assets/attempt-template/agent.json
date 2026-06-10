@@ -4,6 +4,8 @@
   "client": null,
   "model": null,
   "started_at": null,
+  "ended_at": null,
+  "cursor_conversation_id": null,
   "skills_commit": null,
   "psynet": {
     "checkout_path": "~/PsyNet",
@@ -15,5 +17,6 @@
     "update_command": "git pull --ff-only origin master",
     "dirty": null
   },
+  "run_cost": null,
   "notes": []
 }
