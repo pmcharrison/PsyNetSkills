@@ -481,6 +481,47 @@ def test_dashboard_data_reports_counts(tmp_path: Path) -> None:
     assert "docs" not in data
 
 
+def test_dashboard_data_uses_configured_artifact_url_prefix(
+    tmp_path: Path,
+    monkeypatch,
+) -> None:
+    write(tmp_path / "authors.yaml", authors_yaml())
+    write(
+        tmp_path / ".cursor/skills/example-skill/SKILL.md",
+        "---\n"
+        "name: example-skill\n"
+        "description: Use when testing dashboard generation.\n"
+        "---\n\n"
+        "# Example skill\n",
+    )
+    write(
+        tmp_path / "challenges/example/INSTRUCTIONS.md",
+        challenge_instructions(),
+    )
+    write(
+        tmp_path / "challenges/example/attempts/2026-06-01-10-10/agent.json",
+        "{}\n",
+    )
+    write(
+        tmp_path
+        / "challenges/example/attempts/2026-06-01-10-10/evidence/participant.mp4",
+        "video",
+    )
+    monkeypatch.setenv(
+        "PSYNETSK_ARTIFACT_URL_PREFIX",
+        "https://example.github.io/PsyNetSkills/pr-artifacts/pr-114/artifacts/challenges",
+    )
+
+    data = dashboard_data(tmp_path)
+    evidence_files = data["challenges"][0]["attempts"][0]["evidence_files"]
+
+    assert evidence_files[0]["url"] == (
+        "https://example.github.io/PsyNetSkills/pr-artifacts/pr-114/"
+        "artifacts/challenges/example/attempts/2026-06-01-10-10/"
+        "evidence/participant.mp4"
+    )
+
+
 def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
     write(tmp_path / "authors.yaml", authors_yaml())
     write(

@@ -50,6 +50,7 @@ TEXT_FILE_EXTENSIONS = {
     ".yml",
 }
 ATTEMPT_ARTIFACTS_DIR = "artifacts/challenges"
+ARTIFACT_URL_PREFIX_ENV = "PSYNETSK_ARTIFACT_URL_PREFIX"
 MONITOR_STATIC_ROOT = Path(__file__).parent / "assets" / "monitor-static" / "static"
 STATIC_REF_RE = re.compile(r'(?:href|src)="/static/(?P<path>[^"]+)"')
 CREDENTIAL_REDACTIONS = (
@@ -457,6 +458,13 @@ def collect_attempt_files(
     return files
 
 
+def attempt_artifact_url_prefix(challenge_slug: str, attempt_name: str) -> str:
+    """Return the public URL prefix for an attempt's copied artifacts."""
+
+    base_url = os.environ.get(ARTIFACT_URL_PREFIX_ENV, ATTEMPT_ARTIFACTS_DIR)
+    return f"{base_url.rstrip('/')}/{challenge_slug}/attempts/{attempt_name}"
+
+
 def redact_known_credentials(text: str) -> str:
     """Redact credential values that should never appear in public artifacts."""
 
@@ -592,9 +600,9 @@ def collect_attempts(
             for _, _, _, status in parse_learning_actions(learnings)
             if status not in COMPLETED_LEARNING_STATUSES
         )
-        artifact_prefix = (
-            f"{ATTEMPT_ARTIFACTS_DIR}/{challenge_dir.name}/attempts/"
-            f"{attempt_dir.name}"
+        artifact_prefix = attempt_artifact_url_prefix(
+            challenge_dir.name,
+            attempt_dir.name,
         )
         attempts.append(
             Attempt(
