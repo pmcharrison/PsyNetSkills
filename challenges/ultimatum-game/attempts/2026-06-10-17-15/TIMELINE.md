@@ -12,3 +12,6 @@
 - T+01:20:00 [agent] Ran a 40-bot, 5-minute performance test with zero bot/request errors.
 - T+01:30:00 [agent] Manual browser testing exposed a missing Three.js core asset and slow proposer controls; added the missing asset and quick-offer buttons.
 - T+02:05:00 [agent] Added authenticated HTTP action submissions after manual browser testing showed WebSocket-only clicks were unreliable; psynet test local passes again.
+- T+02:20:00 [agent] Recorded successful two-participant browser flow with three counted rounds and completion summaries.
+- T+02:30:00 [agent] Exported local data, generated monitor.html, and packaged data.zip.
+- T+02:35:00 [agent-stop] Implementation and first-pass evidence collection complete.
