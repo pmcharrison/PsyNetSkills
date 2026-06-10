@@ -83,42 +83,9 @@ Useful starting points:
 - For repeated tasks where order matters, do not rely on `StaticTrialMaker`'s
   default block order. Use explicit blocks plus `choose_block_order`, or use a
   timeline loop, so visible round numbers match the actual presentation order.
-
-### Realtime synchronous experiments
-
-For websocket experiments with live interactions between multiple participants within the same
-trial:
-
-- Interactions within a trial belong to a *session*. The server is responsible for keeping track of each session state at every point in time.
-- Design the server as the authority for shared session state. The server
-  should accept actions, reject out-of-turn or duplicate actions, advance turns,
-  and broadcast the resulting state snapshot.
-- Move experiment logic to the server side as much as is reasonable. This
-  reduces out-of-sync client bugs and keeps page templates from accumulating
-  complex JavaScript experiment logic. If participants reload the page, they should be able to resume from the current session state.
-- After every accepted update, the server should send each participant the
-  current session state information they are allowed to see; the browser should use this filtered snapshot
-  rather than reconstructing or tracking the session state independently.
-- Record outbound deliveries separately when it matters what each participant
-  actually received. These delivery records should contain only the public
-  payload sent to that participant, plus routing/status metadata.
-- Treat browser state as a rendering cache only. Clients may show pending UI
-  feedback, timers, animations, or sounds, but they should not decide what the session state is.
-- Even when much of the interactions happen within a single trial, integrate it
-  with PsyNet's node/trial system. Input parameters for the live session (e.g., the parameters of the task, etc.) should be loaded from the trial's node definition.
-- Important trial outputs (for example the accepted event sequence) should be
-  recorded in the trial answer so `summarize_trials` can build the next node
-  from the accumulated data. Not all events need be recorded in the trial answer, but at least all the information necessary for constructing the next node.
-- Keep websocket payloads scoped to what each participant is allowed to know.
-  Do not send private informationto the wrong client just because they are convenient for local UI
-  updates. Do not rely entirely on the browser to hide fields that
-  should not have been sent.
-- Separate three data concepts instead of mixing them in one table or payload:
-  raw submitted events, reconstructed/checkpointed session state, and
-  participant-specific outbound deliveries.
-- Treat the raw event log as the private source of truth. It should contain the
-  complete submitted action and any information needed to update the session state or for data analysis.
-
+- For websocket or other live multi-participant interactions within one trial,
+  use the `psynet-realtime-synchronous-experiments` skill alongside this general
+  implementation workflow.
 
 ## PsyNet setup reminders
 
