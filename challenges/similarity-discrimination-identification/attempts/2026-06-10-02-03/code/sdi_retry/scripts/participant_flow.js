@@ -85,7 +85,7 @@ async function completeFlow() {
       savedIdentification = true;
     }
 
-    const visibleTaskButton = page.locator(".push-button:visible:not([disabled])");
+    const visibleTaskButton = page.locator(".response-choice:visible:not([disabled]), .push-button:visible:not([disabled])");
     if ((await visibleTaskButton.count()) > 0) {
       await pause(page, 2);
       await visibleTaskButton.first().click();
