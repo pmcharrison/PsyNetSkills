@@ -44,6 +44,9 @@ def empty_melody() -> list[int | None]:
 
 
 def validate_melody_shape(melody: Any) -> list[int | None] | None:
+    if isinstance(melody, dict):
+        melody = melody.get("edit")
+
     if not isinstance(melody, list) or len(melody) != MELODY_LENGTH:
         return None
 
@@ -64,6 +67,13 @@ def melody_edit_distance(a: list[int | None], b: list[int | None]) -> int:
 
 def melody_is_empty(melody: list[int | None]) -> bool:
     return all(note is None for note in melody)
+
+
+def melody_from_trial_answer(answer: dict[str, Any]) -> list[int | None] | None:
+    melody_answers = {key: answer[key] for key in answer if "edit" in key}
+    if not melody_answers:
+        return None
+    return validate_melody_shape(melody_answers[sorted(melody_answers.keys())[-1]])
 
 
 def mutate_melody(melody: list[int | None]) -> list[int | None]:
@@ -102,11 +112,7 @@ class MelodyNode(ChainNode):
         trial = trials[0]
         trial_id = trial.id
 
-        melody_answers = {
-            key: trial.answer[key] for key in trial.answer if "edit" in key
-        }
-        melody = melody_answers[sorted(melody_answers.keys())[-1]]
-        melody = validate_melody_shape(melody)
+        melody = melody_from_trial_answer(trial.answer)
         assert melody is not None
         definition["melody"] = melody
 
@@ -378,7 +384,7 @@ class MelodyCreateTrial(ImitationChainTrial):
         for index, proposal in enumerate(pool):
             proposal_data = {
                 "id": proposal.id,
-                "melody": validate_melody_shape(proposal.answer["edit"]),
+                "melody": melody_from_trial_answer(proposal.answer),
                 "label": chr(65 + index),
                 "adopted_by": len(self.definition["children"].get(str(proposal.id), [])),
                 "proposed_to": self.definition["proposed"].get(str(proposal.id), 0),
@@ -418,7 +424,7 @@ class MelodyCreateTrial(ImitationChainTrial):
             adopt_id = participant.var.get("adopt")
             try:
                 adopt_proposal = self.query.filter_by(id=adopt_id).one()
-                prefill_melody = validate_melody_shape(adopt_proposal.answer["edit"])
+                prefill_melody = melody_from_trial_answer(adopt_proposal.answer)
                 assert prefill_melody is not None
             except Exception:
                 logger.warning("Could not load adopted melody %s; using empty melody.", adopt_id)

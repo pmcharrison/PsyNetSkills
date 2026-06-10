@@ -10,3 +10,4 @@
 - T+00:47:00 [agent] Added constraints.txt required by PsyNet dependency pre-checks.
 - T+00:54:00 [agent] Exposed sequencer config as control attributes after Jinja rendering failure.
 - T+01:03:00 [agent] Normalized serialized note values after market preview rendered string notes.
+- T+01:10:00 [agent] Added robust melody extraction for raw and formatted control payloads.
