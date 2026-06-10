@@ -9,5 +9,9 @@
 - T+00:10:30 [agent] Implemented the initial rolling-inventory melody market experiment scaffold.
 - T+00:12:20 [agent] Generated a local spoken `five` WAV asset for typed audio pre-screening.
 - T+00:14:10 [agent] Generated experiment constraints from the pinned PsyNet requirement.
+- T+00:17:45 [agent] First `psynet test local` attempt failed because the standard `test.py` entrypoint was missing.
+- T+00:20:15 [agent] Fixed duplicate config ownership between `config.txt` and `Exp.config`.
+- T+00:23:20 [agent] Fixed external-control template attributes for note labels, frequencies, and step count.
+- T+00:25:10 [agent] `psynet test local` passed with 16 serial bots.
 
 <!-- Close active implementation segments with [agent-stop] when work pauses or completes. -->

@@ -155,6 +155,9 @@ class MelodyEditorControl(Control):
         self.prefill_melody = prefill_melody or empty_melody()
         self.num_edits = num_edits
         self.chain_id = chain_id
+        self.note_labels = NOTE_LABELS
+        self.note_frequencies = NOTE_FREQUENCIES
+        self.n_steps = N_STEPS
         super().__init__(**kwargs, bot_response=self.bot_response())
 
     def bot_response(self):
@@ -221,6 +224,9 @@ class MelodySelectControl(Control):
         self.choices = choices
         self.active_generation = active_generation
         self.display_popularity = display_popularity
+        self.note_labels = NOTE_LABELS
+        self.note_frequencies = NOTE_FREQUENCIES
+        self.n_steps = N_STEPS
         super().__init__(**kwargs, bot_response=self.bot_response())
 
     def format_answer(self, raw_answer, **kwargs):
@@ -513,18 +519,7 @@ class Exp(psynet.experiment.Experiment):
     test_mode = "serial"
 
     config = {
-        "recruiter": "generic",
-        "wage_per_hour": 9,
-        "title": f"Melody market experiment (Chrome browser, ~{round(DURATION_ESTIMATE / 60)} minutes)",
-        "description": (
-            "Compose short melodies that compete in a shared rolling market. "
-            "Please use Chrome in an incognito window."
-        ),
         "initial_recruitment_size": 3,
-        "auto_recruit": False,
-        "show_reward": False,
-        "contact_email_on_error": "computational.audition@gmail.com",
-        "organization_name": "Cornell Computational Cognition Lab",
     }
 
     timeline = Timeline(
