@@ -68,6 +68,51 @@ a {
   font-weight: 700;
 }
 
+.branch-context-label-wrap {
+  cursor: help;
+  position: relative;
+}
+
+.branch-context-label-wrap:focus {
+  outline: 2px solid var(--link);
+  outline-offset: 2px;
+}
+
+.branch-context-popover {
+  background: #24292f;
+  border-radius: 0.4rem;
+  box-shadow: 0 0.65rem 1.5rem rgb(15 23 42 / 0.24);
+  color: #ffffff;
+  display: none;
+  font-size: 0.78rem;
+  font-weight: 400;
+  left: 0;
+  line-height: 1.35;
+  max-width: min(22rem, calc(100vw - 2rem));
+  min-width: 15rem;
+  padding: 0.5rem 0.6rem;
+  position: absolute;
+  text-align: left;
+  top: calc(100% + 0.55rem);
+  white-space: normal;
+  z-index: 100;
+}
+
+.branch-context-popover::before {
+  border: 0.4rem solid transparent;
+  border-bottom-color: #24292f;
+  content: "";
+  left: 0.35rem;
+  position: absolute;
+  top: -0.78rem;
+}
+
+.branch-context-label-wrap:hover .branch-context-popover,
+.branch-context-label-wrap:focus .branch-context-popover,
+.branch-context-label-wrap:focus-within .branch-context-popover {
+  display: block;
+}
+
 .site-header nav .branch-context-link {
   border-bottom: 0;
   color: var(--muted);
@@ -985,6 +1030,10 @@ footer {
 
   .branch-context {
     justify-self: start;
+  }
+
+  .branch-context-popover {
+    max-width: calc(100vw - 3rem);
   }
 
   .site-header nav .branch-context-link {

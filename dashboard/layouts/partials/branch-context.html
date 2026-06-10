@@ -11,7 +11,14 @@
     {{ $label = "Branch" }}
   {{ end }}
   <span class="branch-context" aria-label="{{ $label }} branch {{ $branch }}">
-    <span class="branch-context-label">{{ $label }}:</span>
+    <span class="branch-context-label-wrap" tabindex="0">
+      <span class="branch-context-label">{{ $label }}:</span>
+      {{ if eq $mode "pr-preview" }}
+        <span class="branch-context-popover" role="tooltip">
+          This is a draft preview for the branch. Merge the pull request to release these changes on the main dashboard.
+        </span>
+      {{ end }}
+    </span>
     <a class="branch-context-link" href="{{ $branchURL | safeURL }}" target="_blank" rel="noopener noreferrer">{{ $branch }}</a>
   </span>
 {{ end }}
