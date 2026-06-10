@@ -63,8 +63,12 @@ data.zip
 analyses/
 ```
 
-`participant.mp4` records the participant experience. `performance.json` stores
-the output of `psynet performance-test` or an equivalent performance check.
+`participant.mp4` records the participant experience. Keep it as a concise
+review artifact: it must be no longer than 3 minutes and no larger than
+1280x720. Prefer 15 fps, H.264 with CRF 30-34, AAC audio when needed, and
+`+faststart` metadata for streaming. Trim or re-encode recordings before
+committing if they exceed these limits. `performance.json` stores the output of
+`psynet performance-test` or an equivalent performance check.
 
 For challenge attempts, treat `psynet test local` and `psynet performance-test
 local` as separate checks. Functional tests can stay fast; performance evidence
