@@ -4,10 +4,15 @@ import random
 
 import pandas as pd
 from dominate import tags
-from markupsafe import Markup
 
 import psynet.experiment
-from psynet.modular_page import KeyboardPushButtonControl, ModularPage
+from psynet.end import EndLogic
+from psynet.modular_page import (
+    KeyboardPushButtonControl,
+    ModularPage,
+    NullControl,
+    PushButtonControl,
+)
 from psynet.page import InfoPage
 from psynet.participant import Participant
 from psynet.timeline import Timeline
@@ -23,6 +28,29 @@ ANIMAL_LABELS = {
     "fish": _("fish"),
     "ponies": _("ponies"),
 }
+
+
+def translated_debrief_page(
+    self,
+    content,
+    experiment,
+    participant,
+    show_finish_button=True,
+):
+    if show_finish_button:
+        control = PushButtonControl(["Finish"], labels=[_("Finish")])
+    else:
+        control = NullControl()
+
+    return ModularPage(
+        self.__class__.__name__,
+        content,
+        control,
+        show_next_button=False,
+    )
+
+
+EndLogic.debrief_page = translated_debrief_page
 
 nodes = [
     StaticNode(
@@ -73,14 +101,12 @@ class AnimalTrial(StaticTrial):
                 style=f"color: {text_color}",
             )
             tags.small(
-                Markup(
-                    _(
-                        "You can also use the keys {KEY_A}, {KEY_S}, and {KEY_D} on your keyboard."
-                    ).format(
-                        KEY_A="<kbd>A</kbd>",
-                        KEY_S="<kbd>S</kbd>",
-                        KEY_D="<kbd>D</kbd>",
-                    )
+                _(
+                    "You can also use the keys {KEY_A}, {KEY_S}, and {KEY_D} on your keyboard."
+                ).format(
+                    KEY_A="A",
+                    KEY_S="S",
+                    KEY_D="D",
                 ),
                 _class="text-muted",
             )
@@ -95,9 +121,9 @@ class AnimalTrial(StaticTrial):
                     "Very much",
                 ],
                 labels=[
-                    Markup(_("Not at all {KEY_A}").format(KEY_A="<kbd>A</kbd>")),
-                    Markup(_("A little {KEY_S}").format(KEY_S="<kbd>S</kbd>")),
-                    Markup(_("Very much {KEY_D}").format(KEY_D="<kbd>D</kbd>")),
+                    _("Not at all ({KEY_A})").format(KEY_A="A"),
+                    _("A little ({KEY_S})").format(KEY_S="S"),
+                    _("Very much ({KEY_D})").format(KEY_D="D"),
                 ],
                 keys=["KeyA", "KeyS", "KeyD"],
                 bot_response="Very much",
@@ -170,10 +196,6 @@ trial_maker = AnimalTrialMaker(
 class Exp(psynet.experiment.Experiment):
     label = "Static experiment demo"
     test_n_bots = 2
-    config = {
-        "locale": "es",
-        "supported_locales": ["en", "es"],
-    }
 
     timeline = Timeline(
         trial_maker,

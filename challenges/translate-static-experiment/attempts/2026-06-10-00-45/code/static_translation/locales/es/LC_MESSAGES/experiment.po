@@ -23,6 +23,10 @@ msgid "ponies"
 msgstr "los ponis"
 
 #: experiment.py
+msgid "Finish"
+msgstr "Terminar"
+
+#: experiment.py
 #, python-brace-format
 msgid "Trial {TRIAL_NUMBER}"
 msgstr "Ensayo {TRIAL_NUMBER}"
@@ -51,18 +55,18 @@ msgstr ""
 
 #: experiment.py
 #, python-brace-format
-msgid "Not at all {KEY_A}"
-msgstr "Nada {KEY_A}"
+msgid "Not at all ({KEY_A})"
+msgstr "Nada ({KEY_A})"
 
 #: experiment.py
 #, python-brace-format
-msgid "A little {KEY_S}"
-msgstr "Un poco {KEY_S}"
+msgid "A little ({KEY_S})"
+msgstr "Un poco ({KEY_S})"
 
 #: experiment.py
 #, python-brace-format
-msgid "Very much {KEY_D}"
-msgstr "Mucho {KEY_D}"
+msgid "Very much ({KEY_D})"
+msgstr "Mucho ({KEY_D})"
 
 #: experiment.py
 #, python-brace-format
