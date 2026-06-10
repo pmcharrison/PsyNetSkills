@@ -10,16 +10,19 @@ permissions:
   pull-requests: write
 
 concurrency:
-  group: github-pages-branch
-  cancel-in-progress: false
+  group: ${{ github.workflow }}-${{ github.event.pull_request.head.repo.full_name }}-${{ github.event.pull_request.head.ref }}
+  cancel-in-progress: true
 
 jobs:
-  deploy-preview:
-    name: Build and deploy PR preview
+  build-preview:
+    name: Build PR preview
     if: >
       github.event.action != 'closed' &&
       github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
+    outputs:
+      preview-path: ${{ steps.preview.outputs.path }}
+      preview-url: ${{ steps.preview.outputs.url }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -55,11 +58,34 @@ jobs:
           --destination ../public
           --cleanDestinationDir
           --baseURL "${{ steps.preview.outputs.url }}"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dashboard-preview
+          path: public
+          if-no-files-found: error
+
+  deploy-preview:
+    name: Deploy PR preview
+    needs: build-preview
+    if: >
+      github.event.action != 'closed' &&
+      github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    concurrency:
+      group: github-pages-branch
+      cancel-in-progress: false
+      queue: max
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: dashboard-preview
+          path: public
       - name: Deploy preview to gh-pages
         env:
           GITHUB_TOKEN: ${{ github.token }}
           PAGES_BRANCH: gh-pages
-          PREVIEW_PATH: ${{ steps.preview.outputs.path }}
+          PREVIEW_PATH: ${{ needs.build-preview.outputs.preview-path }}
         run: |
           set -euo pipefail
 
@@ -104,7 +130,7 @@ jobs:
         with:
           script: |
             const marker = '<!-- psynetsk-dashboard-preview -->';
-            const previewUrl = '${{ steps.preview.outputs.url }}';
+            const previewUrl = '${{ needs.build-preview.outputs.preview-url }}';
             const body = [
               marker,
               `Dashboard preview: ${previewUrl}`,
@@ -143,6 +169,10 @@ jobs:
       github.event.action == 'closed' &&
       github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
+    concurrency:
+      group: github-pages-branch
+      cancel-in-progress: false
+      queue: max
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5

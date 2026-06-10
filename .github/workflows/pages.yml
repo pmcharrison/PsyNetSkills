@@ -9,12 +9,12 @@ permissions:
   contents: write
 
 concurrency:
-  group: github-pages-branch
-  cancel-in-progress: false
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build:
-    name: Build and deploy dashboard
+    name: Build dashboard
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -39,6 +39,26 @@ jobs:
           --destination ../public
           --cleanDestinationDir
           --baseURL "https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dashboard-public
+          path: public
+          if-no-files-found: error
+
+  deploy:
+    name: Deploy dashboard
+    needs: build
+    runs-on: ubuntu-latest
+    concurrency:
+      group: github-pages-branch
+      cancel-in-progress: false
+      queue: max
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: dashboard-public
+          path: public
       - name: Deploy production site to gh-pages
         env:
           GITHUB_TOKEN: ${{ github.token }}
