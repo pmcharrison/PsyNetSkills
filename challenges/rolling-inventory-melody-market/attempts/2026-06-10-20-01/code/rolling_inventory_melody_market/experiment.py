@@ -51,7 +51,7 @@ def melody_change_count(melody, reference):
 
 
 def melody_to_waveform(melody, samples_per_step=8):
-    """Downsample the synthesized melody into deterministic waveform peaks."""
+    """Downsample the synthesized melody into deterministic waveform amplitudes."""
     waveform = []
     step_duration = 0.22
     sub_samples = 24
@@ -59,7 +59,7 @@ def melody_to_waveform(melody, samples_per_step=8):
     for step in range(N_STEPS):
         active_rows = [row for row in range(N_ROWS) if melody_array[row, step] == 1]
         for display_sample in range(samples_per_step):
-            peak = 0.0
+            values = []
             for sub_sample in range(sub_samples):
                 pos = (display_sample + (sub_sample + 0.5) / sub_samples) / samples_per_step
                 envelope = np.sin(np.pi * pos)
@@ -67,8 +67,8 @@ def melody_to_waveform(melody, samples_per_step=8):
                 value = 0.0
                 for row in active_rows:
                     value += np.sin(2 * np.pi * NOTE_FREQUENCIES[row] * t)
-                peak = max(peak, abs(value) * envelope / max(1, len(active_rows)))
-            waveform.append(peak)
+                values.append(abs(value) * envelope / max(1, len(active_rows)))
+            waveform.append(float(np.mean(values)) if values else 0.0)
     peak = max(waveform) if waveform else 0.0
     if peak <= 0:
         return [0.0 for _ in waveform]
