@@ -157,6 +157,7 @@ class Exp(psynet.experiment.Experiment):
     )
 
     def test_serial_run_bots(self, bots):
+        wait_labels = {'wait', 'ultimatum_wait'}
         for bot in bots:
             assert 'Repeated Ultimatum game' in bot.current_page_text
             bot.take_page()
@@ -166,7 +167,7 @@ class Exp(psynet.experiment.Experiment):
                 break
             progressed = False
             for bot in bots:
-                if bot.is_working and bot.current_page_label != 'ultimatum_wait':
+                if bot.is_working and bot.current_page_label not in wait_labels:
                     bot.take_page()
                     progressed = True
             if not progressed:
