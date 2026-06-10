@@ -16,13 +16,13 @@ const gameTimeoutMs = Number(process.env.GAME_TIMEOUT_MS || 120000);
 
 const defaultActions = [
   { type: "clickCanvas", x: 0.50, y: 0.50, label: "focus canvas" },
-  { type: "key", key: "ArrowUp", repeats: 12, holdMs: 120, label: "move forward" },
-  { type: "key", key: "ArrowRight", repeats: 6, holdMs: 120, label: "move right" },
-  { type: "key", key: "ArrowLeft", repeats: 6, holdMs: 120, label: "move left" },
-  { type: "clickCanvas", x: 0.50, y: 0.50, label: "click center object" },
-  { type: "clickCanvas", x: 0.25, y: 0.50, label: "click left object" },
-  { type: "clickCanvas", x: 0.75, y: 0.50, label: "click right object" },
-  { type: "key", key: "ArrowUp", repeats: 10, holdMs: 120, label: "advance after clicking" },
+  {
+    type: "driveToFerry",
+    steps: 180,
+    sideEvery: 10,
+    waitMs: 150,
+    label: "move mostly forward with occasional side corrections",
+  },
 ];
 
 const actions = process.env.FERRY_MARKET_ACTIONS
@@ -108,12 +108,36 @@ async function runCanvasActions(page, canvas) {
     } else if (action.type === "key") {
       const repeats = action.repeats || 1;
       for (let i = 0; i < repeats; i += 1) {
-        await page.keyboard.down(action.key);
-        await page.waitForTimeout(action.holdMs || 100);
-        await page.keyboard.up(action.key);
+        await page.keyboard.press(action.key);
         await page.waitForTimeout(action.waitMs || 80);
       }
       record("key", { label: action.label, key: action.key, repeats });
+    } else if (action.type === "driveToFerry") {
+      const steps = action.steps || 120;
+      const sideEvery = action.sideEvery || 10;
+      let sidePresses = 0;
+      let forwardPresses = 0;
+      for (let i = 1; i <= steps; i += 1) {
+        const key =
+          i % sideEvery === 0
+            ? (Math.floor(i / sideEvery) % 2 === 0 ? "ArrowLeft" : "ArrowRight")
+            : "ArrowUp";
+        await page.keyboard.press(key);
+        if (key === "ArrowUp") {
+          forwardPresses += 1;
+        } else {
+          sidePresses += 1;
+        }
+        if (i % 30 === 0) {
+          const box = await canvas.boundingBox();
+          if (box) {
+            await page.mouse.click(box.x + box.width * 0.5, box.y + box.height * 0.5);
+            record("canvas-click", { label: "periodic center click while driving", x: 0.5, y: 0.5, step: i });
+          }
+        }
+        await page.waitForTimeout(action.waitMs || 120);
+      }
+      record("drive-to-ferry", { label: action.label, steps, forwardPresses, sidePresses });
     } else {
       throw new Error(`Unknown action type: ${action.type}`);
     }

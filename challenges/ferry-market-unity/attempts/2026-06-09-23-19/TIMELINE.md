@@ -5,3 +5,4 @@
 - T+00:02:00 [agent] Refreshed local PsyNet checkout and initialized attempt metadata.
 - T+00:08:00 [agent] Implemented a PsyNet experiment using `UnityPage` and the provided WebGL build.
 - T+00:12:00 [agent] Added a Playwright participant runner that focuses the Unity canvas, presses arrow keys, and clicks canvas targets.
+- T+00:36:00 [agent] Updated the Unity payload to match the original experiment's `ferry_*` JSON contract and changed navigation to mostly `ArrowUp` with occasional side-key corrections.
