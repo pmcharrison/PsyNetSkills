@@ -25,3 +25,6 @@
 - T+01:30:00 [manual] User requested GitLab/PsyNet prescreen failure handling and evidentiary repeat-back audio check.
 - T+01:36:00 [agent] Matched PsyNet prescreen pattern using UnsuccessfulEndPage with performance_check/audio_pre_screening failure tags.
 - T+01:40:00 [agent] Replaced yes/no audio check with spoken five repeat-back response and reran psynet test local successfully.
+- T+01:48:00 [agent] Recorded repeat-back audio pre-screening evidence and verified advancement into instructions.
+- T+01:54:00 [agent] Replaced browser speech synthesis with committed audio-check-five.wav after capture showed speech synthesis was silent in evidence.
+- T+01:58:00 [agent] Reran psynet test local successfully with static audio pre-screen asset.

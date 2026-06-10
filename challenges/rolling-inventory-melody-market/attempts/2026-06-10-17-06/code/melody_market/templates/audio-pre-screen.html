@@ -1,5 +1,6 @@
 {% macro audio_pre_screen_control(config) %}
 <div class="audio-check">
+    <audio id="audio-check-file" src="/static/audio-check-five.wav" preload="auto"></audio>
     <button type="button" id="play-audio-check" class="audio-check-button">Play audio check</button>
     <p id="audio-check-status" class="audio-check-status">Play the sound, then type the number you hear.</p>
     <label class="audio-response-label" for="audio-check-response">Number heard</label>
@@ -30,16 +31,9 @@
 
     function playCheck() {
         audioContext = audioContext || new (window.AudioContext || window.webkitAudioContext)();
-        if ("speechSynthesis" in window) {
-            window.speechSynthesis.cancel();
-            const utterance = new SpeechSynthesisUtterance("five");
-            utterance.rate = 0.85;
-            utterance.pitch = 1.0;
-            utterance.volume = 1.0;
-            window.speechSynthesis.speak(utterance);
-        } else {
-            playSpokenFiveFallback();
-        }
+        const audio = document.getElementById("audio-check-file");
+        audio.currentTime = 0;
+        audio.play().catch(playSpokenFiveFallback);
         played = true;
         document.getElementById("audio-check-status").textContent = "Audio check played. Type the number you heard.";
     }
