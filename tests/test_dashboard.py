@@ -525,6 +525,51 @@ def test_export_dashboard_uses_configured_artifact_url_prefix(
     assert evidence_files[0]["url"].endswith(".mp4")
 
 
+def test_export_dashboard_normalizes_old_preview_artifact_prefix(
+    tmp_path: Path,
+    monkeypatch,
+) -> None:
+    write(tmp_path / "authors.yaml", authors_yaml())
+    write(tmp_path / "README.md", "# PsyNetSkills\n")
+    write(
+        tmp_path / ".cursor/skills/example-skill/SKILL.md",
+        "---\n"
+        "name: example-skill\n"
+        "description: Use when testing dashboard generation.\n"
+        "---\n\n"
+        "# Example skill\n",
+    )
+    write(
+        tmp_path / "challenges/example/INSTRUCTIONS.md",
+        challenge_instructions(),
+    )
+    write(
+        tmp_path / "challenges/example/attempts/2026-06-01-10-10/agent.json",
+        "{}\n",
+    )
+    write(
+        tmp_path
+        / "challenges/example/attempts/2026-06-01-10-10/evidence/participant.mp4",
+        "video",
+    )
+    monkeypatch.setenv(
+        "PSYNETSK_ARTIFACT_URL_PREFIX",
+        "https://example.github.io/PsyNetSkills/pr-artifacts/pr-114/artifacts/challenges",
+    )
+
+    export_dashboard(tmp_path, tmp_path / "dashboard")
+    data = json.loads(
+        (tmp_path / "dashboard/data/psynetsk.json").read_text(encoding="utf-8"),
+    )
+    evidence_files = data["challenges"][0]["attempts"][0]["evidence_files"]
+
+    assert evidence_files[0]["url"].startswith(
+        "https://example.github.io/PsyNetSkills/pr-artifacts/pr-114/"
+        "artifacts/blobs/sha256/",
+    )
+    assert "/artifacts/challenges/" not in evidence_files[0]["url"]
+
+
 def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
     write(tmp_path / "authors.yaml", authors_yaml())
     write(

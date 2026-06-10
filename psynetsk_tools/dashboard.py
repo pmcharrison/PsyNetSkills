@@ -479,8 +479,18 @@ def attempt_artifact_url_prefix(challenge_slug: str, attempt_name: str) -> str:
 def hashed_artifact_url(relative_path: str) -> str:
     """Return the public URL for a content-addressed artifact path."""
 
-    base_url = os.environ.get(ARTIFACT_URL_PREFIX_ENV, HASHED_ARTIFACTS_DIR)
+    base_url = normalized_hashed_artifact_url_prefix()
     return f"{base_url.rstrip('/')}/{relative_path}"
+
+
+def normalized_hashed_artifact_url_prefix() -> str:
+    """Return a URL prefix compatible with old and new preview workflows."""
+
+    base_url = os.environ.get(ARTIFACT_URL_PREFIX_ENV, HASHED_ARTIFACTS_DIR).rstrip("/")
+    old_attempt_suffix = f"/{ATTEMPT_ARTIFACTS_DIR}"
+    if base_url.endswith(old_attempt_suffix):
+        return base_url[: -len(old_attempt_suffix)] + f"/{HASHED_ARTIFACTS_DIR}"
+    return base_url
 
 
 def redact_known_credentials(text: str) -> str:
