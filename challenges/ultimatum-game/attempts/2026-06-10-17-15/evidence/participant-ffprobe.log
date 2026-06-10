@@ -1,11 +1,12 @@
-Input #0, mov,mp4,m4a,3gp,3g2,mj2, from '../../evidence/participant.mp4':
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from 'challenges/ultimatum-game/attempts/2026-06-10-17-15/evidence/participant.mp4':
   Metadata:
     major_brand     : isom
     minor_version   : 512
     compatible_brands: isomiso2avc1mp41
     encoder         : Lavf60.16.100
-  Duration: 00:10:05.30, start: 0.000000, bitrate: 359 kb/s
-  Stream #0:0[0x1](und): Video: h264 (Constrained Baseline) (avc1 / 0x31637661), yuv420p(progressive), 1920x1200, 358 kb/s, 30 fps, 30 tbr, 15360 tbn (default)
+    comment         : Made with Cursor
+  Duration: 00:00:27.00, start: 0.000000, bitrate: 554 kb/s
+  Stream #0:0[0x1](und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(progressive), 1152x720, 548 kb/s, 60 fps, 60 tbr, 15360 tbn (default)
     Metadata:
       handler_name    : VideoHandler
       vendor_id       : [0][0][0][0]
@@ -14,21 +15,21 @@ Input #0, mov,mp4,m4a,3gp,3g2,mj2, from '../../evidence/participant.mp4':
 index=0
 codec_name=h264
 codec_long_name=H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10
-profile=Constrained Baseline
+profile=High
 codec_type=video
 codec_tag_string=avc1
 codec_tag=0x31637661
-width=1920
-height=1200
-coded_width=1920
-coded_height=1200
+width=1152
+height=720
+coded_width=1152
+coded_height=720
 closed_captions=0
 film_grain=0
-has_b_frames=0
+has_b_frames=2
 sample_aspect_ratio=N/A
 display_aspect_ratio=N/A
 pix_fmt=yuv420p
-level=50
+level=32
 color_range=unknown
 color_space=unknown
 color_transfer=unknown
@@ -39,20 +40,20 @@ refs=1
 is_avc=true
 nal_length_size=4
 id=0x1
-r_frame_rate=30/1
-avg_frame_rate=30/1
+r_frame_rate=60/1
+avg_frame_rate=60/1
 time_base=1/15360
 start_pts=0
 start_time=0.000000
-duration_ts=9297408
-duration=605.300000
-bit_rate=358570
+duration_ts=414720
+duration=27.000000
+bit_rate=548721
 max_bit_rate=N/A
 bits_per_raw_sample=8
-nb_frames=18159
+nb_frames=1620
 nb_read_frames=N/A
 nb_read_packets=N/A
-extradata_size=38
+extradata_size=45
 DISPOSITION:default=1
 DISPOSITION:dub=0
 DISPOSITION:original=0
