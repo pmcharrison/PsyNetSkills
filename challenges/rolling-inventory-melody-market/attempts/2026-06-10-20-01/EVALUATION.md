@@ -1,20 +1,30 @@
 ---
 score:
+feedback:
+  - "The styling/phrasing for the popularity ratings / \"New\" label etc. should be identical to the original experiment."
+  - "Generally, the phrasing should be identical, unless a change is necessary, such as referring to melodies rather than images."
 ---
 
 # Evaluation
 
 ## Summary
 
-Summarize the human evaluator's overall judgment.
+The evaluator responded positively to the attempt overall, but flagged a
+reference-parity issue: the participant-facing wording and styling should match
+the original experiment wherever possible, with only necessary melody-domain
+substitutions.
 
 ## Strengths
 
-- 
+- The attempt was considered good enough to receive positive feedback.
 
 ## Weaknesses
 
-- 
+- Popularity-rating styling and labels, including the "New" presentation, should
+  be identical to the original experiment.
+- Participant-facing phrasing should mirror the reference implementation unless
+  a domain change is required, such as replacing image/drawing language with
+  melody language.
 
 ## Criteria
 
@@ -89,5 +99,4 @@ attempt.
 
 ## Notes
 
-- Score and feedback should come from a human evaluator, captured
-  conversationally when working with Cursor Cloud Agents.
+- Human feedback has been recorded; no numeric score has been provided yet.
