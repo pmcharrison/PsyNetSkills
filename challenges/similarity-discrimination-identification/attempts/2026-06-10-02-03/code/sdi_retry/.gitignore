@@ -1,0 +1,13 @@
+.deploy/
+.dallingerconfig
+.dallinger_config_defaults.txt
+.env
+.pytest_cache/
+__pycache__/
+data/
+dump.rdb
+local/
+node_modules/
+source_code.zip
+static/assets
+*.pyc
