@@ -418,6 +418,7 @@ def get_timeline():
             chains_per_experiment=1,
             trials_per_node=1,
             recruit_mode="n_trials",
+            wait_for_networks=True,
             check_performance_at_end=False,
             check_performance_every_trial=False,
         ),
@@ -437,8 +438,8 @@ class Exp(psynet.experiment.Experiment):
     timeline = get_timeline()
     test_n_bots = 4
 
-    def test_experiment(self):
-        super().test_experiment()
+    def test_check_bots(self, bots):
+        super().test_check_bots(bots)
         complete_trials = (
             PortfolioTrial.query.filter_by(complete=True)
             .order_by(PortfolioTrial.id)
