@@ -168,9 +168,10 @@ jobs:
       - name: Finalize preview on gh-pages
         env:
           GITHUB_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ github.token }}
           MERGED: ${{ github.event.pull_request.merged }}
           PAGES_BRANCH: gh-pages
-          PREVIEW_PATH: ${{ steps.preview.outputs.path }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
           PRODUCTION_URL: ${{ steps.preview.outputs.production_url }}
         run: |
           set -euo pipefail
@@ -190,33 +191,29 @@ jobs:
           git -C "${pages_dir}" config user.name "github-actions[bot]"
           git -C "${pages_dir}" config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          if [ "${MERGED}" = "true" ]; then
-            uv run python -m psynetsk_tools.pr_preview_redirect "${pages_dir}/${PREVIEW_PATH}" "${PRODUCTION_URL}"
-          else
-            python - "${pages_dir}/${PREVIEW_PATH}" <<'PY'
-          import shutil
+          states_json="${RUNNER_TEMP}/dashboard-preview-pr-states.json"
+          gh pr list --state all --limit 1000 --json number,state > "${states_json}"
+          python - "${states_json}" "${PR_NUMBER}" "${MERGED}" <<'PY'
+          import json
           import sys
-          from pathlib import Path
 
-          target = Path(sys.argv[1])
-          if target.exists():
-              shutil.rmtree(target)
+          path = sys.argv[1]
+          pr_number = int(sys.argv[2])
+          state = "MERGED" if sys.argv[3] == "true" else "CLOSED"
+          with open(path, encoding="utf-8") as f:
+              states = json.load(f)
+          if not any(int(item["number"]) == pr_number for item in states):
+              states.append({"number": pr_number, "state": state})
+          with open(path, "w", encoding="utf-8") as f:
+              json.dump(states, f)
           PY
-          fi
+          uv run python -m psynetsk_tools.pr_preview_cleanup "${pages_dir}/pr-preview" "${PRODUCTION_URL}" "${states_json}"
 
           git -C "${pages_dir}" add -A
           if git -C "${pages_dir}" diff --cached --quiet; then
-            if [ "${MERGED}" = "true" ]; then
-              echo "Dashboard preview redirect is already up to date."
-            else
-              echo "No dashboard preview exists for this PR."
-            fi
+            echo "Dashboard preview cleanup is already up to date."
           else
-            if [ "${MERGED}" = "true" ]; then
-              git -C "${pages_dir}" commit -m "Redirect dashboard preview for PR #${{ github.event.pull_request.number }}"
-            else
-              git -C "${pages_dir}" commit -m "Remove dashboard preview for PR #${{ github.event.pull_request.number }}"
-            fi
+            git -C "${pages_dir}" commit -m "Clean dashboard previews after PR #${{ github.event.pull_request.number }}"
             .github/scripts/push-pages-branch.sh "${pages_dir}" "${PAGES_BRANCH}"
           fi
       - name: Comment preview cleanup
