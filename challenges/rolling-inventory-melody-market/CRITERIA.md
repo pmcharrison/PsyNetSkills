@@ -48,9 +48,9 @@ considered successful only if every must-have item is fully met.
 - [ ] **Must-have:** The implementation does not include the reference
   experiment's mouse movement tracking, stroke event tracking, or drawing-specific
   interaction logs.
-- [ ] **Must-have:** Instruction pages, recruitment text, and the post-task
-  survey are rewritten for melodies rather than drawings while preserving the
-  reference debrief structure.
+- [ ] **Must-have:** Instruction pages, recruitment text, post-task survey, and
+  any instruction screenshots are adapted for melodies rather than drawings
+  while preserving the reference debrief structure.
 - [ ] **Must-have:** `psynet test local` passes with local defaults and no real
   production credentials.
 

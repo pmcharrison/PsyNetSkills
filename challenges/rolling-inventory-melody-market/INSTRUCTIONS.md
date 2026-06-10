@@ -84,9 +84,11 @@ allowed number of note changes.
 ### Instructions and debrief
 
 Rewrite the instruction pages, recruitment text, and post-task survey so they
-describe melodies rather than drawings. Preserve the original two-condition
-design and the overall structure of the debrief questions, adapting wording to
-music creation and adoption strategies.
+describe melodies rather than drawings. Any screenshots of the original game
+that appear in the instructions should also be replaced or adapted so they show
+the melody market and step-sequencer interface rather than the drawing task.
+Preserve the original two-condition design and the overall structure of the
+debrief questions, adapting wording to music creation and adoption strategies.
 
 ## Implementation requirements
 
