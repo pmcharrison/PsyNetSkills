@@ -481,11 +481,12 @@ def test_dashboard_data_reports_counts(tmp_path: Path) -> None:
     assert "docs" not in data
 
 
-def test_dashboard_data_uses_configured_artifact_url_prefix(
+def test_export_dashboard_uses_configured_artifact_url_prefix(
     tmp_path: Path,
     monkeypatch,
 ) -> None:
     write(tmp_path / "authors.yaml", authors_yaml())
+    write(tmp_path / "README.md", "# PsyNetSkills\n")
     write(
         tmp_path / ".cursor/skills/example-skill/SKILL.md",
         "---\n"
@@ -509,17 +510,19 @@ def test_dashboard_data_uses_configured_artifact_url_prefix(
     )
     monkeypatch.setenv(
         "PSYNETSK_ARTIFACT_URL_PREFIX",
-        "https://example.github.io/PsyNetSkills/pr-artifacts/pr-114/artifacts/challenges",
+        "https://example.github.io/PsyNetSkills/artifacts/blobs/sha256",
     )
 
-    data = dashboard_data(tmp_path)
+    export_dashboard(tmp_path, tmp_path / "dashboard")
+    data = json.loads(
+        (tmp_path / "dashboard/data/psynetsk.json").read_text(encoding="utf-8"),
+    )
     evidence_files = data["challenges"][0]["attempts"][0]["evidence_files"]
 
-    assert evidence_files[0]["url"] == (
-        "https://example.github.io/PsyNetSkills/pr-artifacts/pr-114/"
-        "artifacts/challenges/example/attempts/2026-06-01-10-10/"
-        "evidence/participant.mp4"
+    assert evidence_files[0]["url"].startswith(
+        "https://example.github.io/PsyNetSkills/artifacts/blobs/sha256/",
     )
+    assert evidence_files[0]["url"].endswith(".mp4")
 
 
 def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
@@ -690,16 +693,31 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
     assert attempt_page.exists()
     attempt_page_text = attempt_page.read_text(encoding="utf-8")
     assert 'layout: "attempt"' in attempt_page_text
-    assert (
-        tmp_path
-        / "dashboard/static/artifacts/challenges/example/attempts/"
-        "2026-06-01-10-10/evidence/participant.mp4"
-    ).exists()
-    exported_monitor = (
-        tmp_path
-        / "dashboard/static/artifacts/challenges/example/attempts/"
-        "2026-06-01-10-10/evidence/monitor.html"
-    ).read_text(encoding="utf-8")
+    exported_attempt = parsed_data["challenges"][0]["attempts"][0]
+    evidence_by_path = {
+        file["path"]: file for file in exported_attempt["evidence_files"]
+    }
+    code_by_path = {
+        file["path"]: file for file in exported_attempt["code_files"]
+    }
+
+    assert evidence_by_path["participant.mp4"]["url"].startswith(
+        "artifacts/blobs/sha256/",
+    )
+    participant_blob = (
+        tmp_path / "dashboard/static" / evidence_by_path["participant.mp4"]["url"]
+    )
+    assert participant_blob.exists()
+    assert participant_blob.read_bytes() == b"example video bytes"
+    assert code_by_path["README.md"]["path"] == "README.md"
+    assert code_by_path["README.md"]["url"].startswith(
+        "artifacts/blobs/sha256/",
+    )
+
+    monitor_blob = (
+        tmp_path / "dashboard/static" / evidence_by_path["monitor.html"]["url"]
+    )
+    exported_monitor = monitor_blob.read_text(encoding="utf-8")
     assert '<base href="./">' in exported_monitor
     assert 'href="./static/css/dashboard.css"' in exported_monitor
     assert 'src="./static/scripts/network-monitor.js"' in exported_monitor
@@ -708,16 +726,12 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
     assert "/dashboard/index" not in exported_monitor
     assert "const network_structure" in exported_monitor
     exported_dashboard_data = (
-        tmp_path
-        / "dashboard/static/artifacts/challenges/example/attempts/"
-        "2026-06-01-10-10/evidence/dashboard_data.html"
+        tmp_path / "dashboard/static" / evidence_by_path["dashboard_data.html"]["url"]
     ).read_text(encoding="utf-8")
     assert "dashboard_user=[REDACTED]" in exported_dashboard_data
     assert "dashboard_password=[REDACTED]" in exported_dashboard_data
     exported_log = (
-        tmp_path
-        / "dashboard/static/artifacts/challenges/example/attempts/"
-        "2026-06-01-10-10/evidence/psynet_debug.log"
+        tmp_path / "dashboard/static" / evidence_by_path["psynet_debug.log"]["url"]
     ).read_text(encoding="utf-8")
     assert "Dashboard user: admin password: [REDACTED]" in exported_log
     assert "Username: `[REDACTED]`" in exported_log
@@ -725,16 +739,10 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
     assert "AWS_ACCESS_KEY_ID=[REDACTED]" in exported_log
     assert "AWS_SECRET_ACCESS_KEY=[REDACTED]" in exported_log
     assert "PROLIFIC_API_TOKEN=[REDACTED]" in exported_log
-    network_monitor = (
-        tmp_path
-        / "dashboard/static/artifacts/challenges/example/attempts/"
-        "2026-06-01-10-10/evidence/static/scripts/network-monitor.js"
-    )
+    network_monitor = monitor_blob.parent / "static/scripts/network-monitor.js"
     assert network_monitor.exists()
     assert (
-        tmp_path
-        / "dashboard/static/artifacts/challenges/example/attempts/"
-        "2026-06-01-10-10/evidence/static/vis@4.17.0/dist/vis.min.js"
+        monitor_blob.parent / "static/vis@4.17.0/dist/vis.min.js"
     ).exists()
     assert (
         "Live dashboard node details are unavailable"
@@ -743,7 +751,6 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
     assert '"model": "test-model"' in data
     assert '"url": "challenges/example/2026-06-01-10-10/"' in data
     assert parsed_data["challenges"][0]["open_actions"] == 1
-    exported_attempt = parsed_data["challenges"][0]["attempts"][0]
     assert exported_attempt["open_actions"] == 1
     assert exported_attempt["evaluation"] == "Attempt body.\n"
     assert exported_attempt["timeline"] == (
@@ -781,3 +788,42 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
     assert exported_attempt["code_files"][0]["size_bytes"] == len(
         "# Code notes\n",
     )
+
+
+def test_export_dashboard_deduplicates_hashed_artifacts(tmp_path: Path) -> None:
+    write(tmp_path / "authors.yaml", authors_yaml())
+    write(tmp_path / "README.md", "# PsyNetSkills\n")
+    write(
+        tmp_path / ".cursor/skills/example-skill/SKILL.md",
+        "---\n"
+        "name: example-skill\n"
+        "description: Use when testing dashboard generation.\n"
+        "---\n\n"
+        "# Example skill\n",
+    )
+    write(
+        tmp_path / "challenges/example/INSTRUCTIONS.md",
+        challenge_instructions(),
+    )
+    for attempt_name in ("2026-06-01-10-10", "2026-06-01-10-11"):
+        attempt_dir = tmp_path / "challenges/example/attempts" / attempt_name
+        write(attempt_dir / "EVALUATION.md", evaluation())
+        write_bytes(attempt_dir / "evidence/participant.mp4", b"shared video")
+
+    export_dashboard(tmp_path, tmp_path / "dashboard")
+
+    data = json.loads(
+        (tmp_path / "dashboard/data/psynetsk.json").read_text(encoding="utf-8"),
+    )
+    attempts = data["challenges"][0]["attempts"]
+    video_urls = [
+        attempt["evidence_files"][0]["url"]
+        for attempt in attempts
+    ]
+    video_blobs = list(
+        (tmp_path / "dashboard/static/artifacts/blobs/sha256").glob("*/*.mp4"),
+    )
+
+    assert video_urls[0] == video_urls[1]
+    assert len(video_blobs) == 1
+    assert video_blobs[0].read_bytes() == b"shared video"

@@ -31,6 +31,9 @@ same challenge before implementation and evidence collection are complete.
 The production dashboard is published from the `gh-pages` branch root. Pull
 requests from branches in this repository are built into subdirectories of the
 same branch, under `pr-preview/pr-NUMBER/`.
+Attempt artifacts are published to a shared content-addressed store under
+`artifacts/blobs/sha256/`, so production and preview pages can reuse identical
+evidence files instead of copying them into every preview directory.
 
 The resulting preview URL is
 https://OWNER.github.io/REPOSITORY/pr-preview/pr-NUMBER/.
