@@ -93,6 +93,15 @@ implementation challenges, use the required artifact checklist in
 `references/experiment-evidence.md`. For PsyNet functional and performance
 checks, follow `psynet-experiment-implementation/references/validation.md`.
 
+When a challenge's central requirement depends on an external service or
+integration, such as S3, payment APIs, webhooks, or third-party recruitment
+services, collect explicit evidence that the real integration worked end to end.
+Local mocks, emulators, simulated payloads, placeholder files, and stub endpoints
+can support development, but they must not be presented as satisfying the
+external-service requirement. If safe credentials or access are unavailable,
+record the blocker in `TIMELINE.md` and `EVALUATION.md` before substituting a
+local stub, and explain exactly what remains unverified.
+
 Do not imply a skipped check passed: record what was run, what happened, and why
 any required evidence is missing or blocked in `EVALUATION.md`.
 
