@@ -30,7 +30,8 @@ EVALUATION.md
 `challenge/` snapshots the original challenge at the time of the attempt,
 including optional `CRITERIA.md` when it exists.
 `agent.json` records human author keys plus model, Cursor version, relevant
-skill commit, attempt start time, and PsyNet checkout metadata. `code/` contains
+skill commit, attempt start/end time, Cursor conversation ID when available,
+PsyNet checkout metadata, and optional derived cost metadata. `code/` contains
 the generated implementation. `evidence/` contains the materials used to
 evaluate whether the implementation worked.
 `TIMELINE.md` records major attempt events with timestamps relative to the start
@@ -128,6 +129,13 @@ Record the human author keys and refreshed checkout in `agent.json`:
 `docs/authors.md` for the registration workflow. Cursor, model, client, and
 runtime metadata are provenance, not authorship.
 
+For Cursor Cloud attempts, also record `cursor_conversation_id` from the
+`CURSOR_CONVERSATION_ID` environment variable when it is available. Cursor usage
+CSV exports call the same value `Cloud Agent ID`, so this field gives later cost
+imports an exact join key. Account names or emails from Cursor exports may help
+debug ambiguous historical imports, but they should not be treated as author
+identity and should not be committed as a GitHub-author mapping.
+
 `dirty` should normally be `false` and comes from `git status --short`. If the
 PsyNet checkout cannot be updated to the latest `origin/master`, record the
 blocker in `TIMELINE.md` and `EVALUATION.md`.
@@ -136,6 +144,55 @@ This metadata is required for all real attempts so reviewers can identify the
 framework checkout associated with the work. If metadata is backfilled for an
 older attempt, say so in `agent.json` notes rather than presenting it as exact
 historical provenance.
+
+## Cursor cost metadata
+
+Do not commit raw Cursor usage CSV exports; they can contain team members,
+account emails, and billing details. Instead, periodically import a local CSV
+export into derived `run_cost` metadata:
+
+```bash
+uv run psynetsk-import-cursor-costs path/to/team-usage-events.csv
+```
+
+The importer updates attempts whose `agent.json` has no `run_cost` yet. It first
+matches CSV rows by `cursor_conversation_id` to Cursor's `Cloud Agent ID`. If
+that exact ID is unavailable, it falls back to the attempt time window from
+`started_at`, `ended_at`, and `TIMELINE.md`. Time-window matches are recorded as
+ambiguous unless only one non-empty Cloud Agent ID appears in the window.
+
+`run_cost` should either be `null` or a JSON object shaped like:
+
+```json
+{
+  "currency": "USD",
+  "amount": 1.23,
+  "source": "cursor_usage_csv_batch_import",
+  "recorded_at": "2026-06-10T11:30:00Z",
+  "attribution_status": "matched_cloud_agent_id",
+  "window_started_at": "2026-06-10T10:00:00Z",
+  "window_ended_at": "2026-06-10T10:45:00Z",
+  "matched_started_at": "2026-06-10T10:01:00Z",
+  "matched_ended_at": "2026-06-10T10:44:00Z",
+  "matched_cloud_agent_ids": ["bc-..."],
+  "usage": {
+    "rows": 3,
+    "total_tokens": 123456,
+    "models": {
+      "gpt-5.5-high": {
+        "rows": 3,
+        "total_tokens": 123456,
+        "cost": 1.23
+      }
+    }
+  },
+  "notes": ["Matched Cursor CSV rows by cursor_conversation_id."]
+}
+```
+
+Use `amount: null` with `attribution_status: "ambiguous"` or `"unavailable"`
+when the CSV cannot be linked confidently. This preserves the audit trail without
+pretending an uncertain estimate is exact.
 
 ## Timeline notes
 
