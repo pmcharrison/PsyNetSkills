@@ -144,6 +144,9 @@ class MelodyEditControl(Control):
     ):
         self.prefill_melody = validate_melody_shape(prefill_melody) or empty_melody()
         self.num_edits = num_edits
+        self.melody_length = MELODY_LENGTH
+        self.pitch_labels = PITCH_LABELS
+        self.pitch_colors = PITCH_COLORS
         self.mouse_sampling_interval_ms = mouse_sampling_interval_ms
         self.max_mouse_positions = max_mouse_positions
         self.user_events = []
