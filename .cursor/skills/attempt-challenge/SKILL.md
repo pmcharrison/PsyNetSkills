@@ -73,6 +73,9 @@ challenge before starting a fresh attempt.
      directory named `code`; Dallinger imports the experiment directory as a
      Python package, and `code` can collide with Python's standard-library
      module of the same name.
+   - When copying a minimal PsyNet demo into `code/`, include the standard
+     experiment support files needed by PsyNet local launch checks, especially
+     `.gitignore`, rather than copying only Python/config/test files.
 10. Collect evidence in `evidence/`. Use the `record-participant-video` skill
    when creating `evidence/participant.mp4`, and follow
    `references/attempt-artifacts.md` for challenge-type-specific evidence
