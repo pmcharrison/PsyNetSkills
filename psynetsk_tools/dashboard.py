@@ -50,6 +50,7 @@ TEXT_FILE_EXTENSIONS = {
     ".yml",
 }
 ATTEMPT_ARTIFACTS_DIR = "artifacts/challenges"
+ARTIFACT_URL_PREFIX_ENV = "PSYNETSK_ARTIFACT_URL_PREFIX"
 MONITOR_STATIC_ROOT = Path(__file__).parent / "assets" / "monitor-static" / "static"
 STATIC_REF_RE = re.compile(r'(?:href|src)="/static/(?P<path>[^"]+)"')
 CREDENTIAL_REDACTIONS = (
@@ -184,6 +185,10 @@ class Attempt:
     timeline_entries: list[TimelineEntry]
     implementation_time_seconds: int | None
     implementation_time_display: str
+    run_cost_amount: int | float | None
+    run_cost_currency: str
+    run_cost_attribution_status: str
+    run_cost_display: str
     learnings: str
     open_actions: int
     evaluation_metadata: dict[str, object]
@@ -370,6 +375,28 @@ def read_agent_json(agent_file: Path) -> tuple[dict[str, object], str]:
     return agent, json.dumps(agent, indent=2, sort_keys=True)
 
 
+def run_cost_metadata(agent: dict[str, object]) -> tuple[int | float | None, str, str, str]:
+    """Return normalized Cursor cost metadata for dashboard display."""
+
+    run_cost = agent.get("run_cost")
+    if not isinstance(run_cost, dict):
+        return None, "", "", "-"
+
+    amount = run_cost.get("amount")
+    currency = run_cost.get("currency")
+    status = run_cost.get("attribution_status")
+    if (
+        isinstance(amount, bool)
+        or not isinstance(amount, int | float)
+        or amount < 0
+        or currency != "USD"
+        or status != "matched_cloud_agent_id"
+    ):
+        return None, str(currency or ""), str(status or ""), "-"
+
+    return amount, currency, status, f"${amount:.2f}"
+
+
 def file_kind(path: Path) -> str:
     """Return a display-oriented file type."""
     suffix = path.suffix.lower().lstrip(".")
@@ -429,6 +456,13 @@ def collect_attempt_files(
             break
         files.append(read_attempt_file(path, directory, url_prefix))
     return files
+
+
+def attempt_artifact_url_prefix(challenge_slug: str, attempt_name: str) -> str:
+    """Return the public URL prefix for an attempt's copied artifacts."""
+
+    base_url = os.environ.get(ARTIFACT_URL_PREFIX_ENV, ATTEMPT_ARTIFACTS_DIR)
+    return f"{base_url.rstrip('/')}/{challenge_slug}/attempts/{attempt_name}"
 
 
 def redact_known_credentials(text: str) -> str:
@@ -539,6 +573,12 @@ def collect_attempts(
             if key != "score"
         }
         agent, agent_json = read_agent_json(attempt_dir / "agent.json")
+        (
+            run_cost_amount,
+            run_cost_currency,
+            run_cost_attribution_status,
+            run_cost_display,
+        ) = run_cost_metadata(agent)
         timeline = (
             strip_first_heading(timeline_file.read_text(encoding="utf-8"))
             if timeline_file.exists()
@@ -560,9 +600,9 @@ def collect_attempts(
             for _, _, _, status in parse_learning_actions(learnings)
             if status not in COMPLETED_LEARNING_STATUSES
         )
-        artifact_prefix = (
-            f"{ATTEMPT_ARTIFACTS_DIR}/{challenge_dir.name}/attempts/"
-            f"{attempt_dir.name}"
+        artifact_prefix = attempt_artifact_url_prefix(
+            challenge_dir.name,
+            attempt_dir.name,
         )
         attempts.append(
             Attempt(
@@ -593,6 +633,10 @@ def collect_attempts(
                 timeline_entries=timeline_entries,
                 implementation_time_seconds=implementation_seconds,
                 implementation_time_display=format_duration(implementation_seconds),
+                run_cost_amount=run_cost_amount,
+                run_cost_currency=run_cost_currency,
+                run_cost_attribution_status=run_cost_attribution_status,
+                run_cost_display=run_cost_display,
                 learnings=learnings,
                 open_actions=open_actions,
                 evaluation_metadata=evaluation_metadata,

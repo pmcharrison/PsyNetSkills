@@ -124,8 +124,71 @@
     })}`;
   }
 
+  function relativeTime(date, now) {
+    const elapsedSeconds = Math.max(
+      0,
+      Math.round((now.getTime() - date.getTime()) / 1000),
+    );
+    const units = [
+      ["year", 31536000],
+      ["month", 2592000],
+      ["week", 604800],
+      ["day", 86400],
+      ["hour", 3600],
+      ["minute", 60],
+    ];
+
+    for (const [unit, seconds] of units) {
+      const value = Math.floor(elapsedSeconds / seconds);
+      if (value >= 1) {
+        return `${value} ${unit}${value === 1 ? "" : "s"} ago`;
+      }
+    }
+
+    return "just now";
+  }
+
+  function runDate(run) {
+    const timestamp =
+      run.status === "completed"
+        ? run.updated_at || run.created_at
+        : run.run_started_at || run.created_at || run.updated_at;
+
+    if (!timestamp) {
+      return null;
+    }
+
+    const date = new Date(timestamp);
+    return Number.isNaN(date.getTime()) ? null : date;
+  }
+
+  function pagesTimeText(run, now) {
+    const date = runDate(run);
+    if (!date) {
+      return `Last checked ${relativeTime(now, now)}`;
+    }
+    if (run.status !== "completed") {
+      return `Publishing started ${relativeTime(date, now)}`;
+    }
+    if (run.conclusion === "success") {
+      return `Last published ${relativeTime(date, now)}`;
+    }
+    return `Publish ended ${relativeTime(date, now)}`;
+  }
+
+  function pagesTimingText(pagesRun, isStale, now) {
+    if (pagesRun && (isStale || pagesRun.status === "completed")) {
+      return pagesTimeText(pagesRun, now);
+    }
+    return `Last checked ${relativeTime(now, now)}`;
+  }
+
   function shortSha(sha) {
     return sha ? sha.slice(0, 7) : "unknown commit";
+  }
+
+  function isPagesMode() {
+    return config.mode === "production" || config.mode === "pr-preview";
   }
 
   function statusForRun(run) {
@@ -146,8 +209,46 @@
     };
   }
 
+  function pagesStatusForRuns(sourceRun, pagesRun, isStale) {
+    if (sourceRun.status !== "completed") {
+      return {
+        kind: "running",
+        symbol: "●",
+        text: `Dashboard build ${sourceRun.status.replace(/_/g, " ")}`,
+      };
+    }
+    if (sourceRun.conclusion !== "success") {
+      return {
+        kind: "failure",
+        symbol: "×",
+        text: `Dashboard build ${sourceRun.conclusion || "failed"}`,
+      };
+    }
+    if (isStale && pagesRun) {
+      if (pagesRun.status !== "completed") {
+        return {
+          kind: "running",
+          symbol: "●",
+          text: `Pages publication ${pagesRun.status.replace(/_/g, " ")}`,
+        };
+      }
+      if (pagesRun.conclusion !== "success") {
+        return {
+          kind: "failure",
+          symbol: "×",
+          text: `Pages publish ${pagesRun.conclusion || "failed"}`,
+        };
+      }
+    }
+
+    return { kind: "success", symbol: "✓", text: "Pages published" };
+  }
+
   function freshnessText(run, isStale) {
-    if (!renderedSha || !run.head_sha) {
+    if (!renderedSha) {
+      return "Page freshness unknown.";
+    }
+    if (!run.head_sha) {
       return "Page freshness unknown.";
     }
     if (!isStale) {
@@ -158,7 +259,27 @@
     )}, latest branch run is ${shortSha(run.head_sha)}.`;
   }
 
+  function pagesFreshnessText(sourceRun, pagesRun, isStale) {
+    if (!renderedSha || !sourceRun.head_sha) {
+      return "Page freshness unknown.";
+    }
+    if (!isStale) {
+      return `Published page includes ${shortSha(renderedSha)}.`;
+    }
+    if (pagesRun && pagesRun.status !== "completed") {
+      return `Viewing ${shortSha(renderedSha)} while GitHub Pages finishes publishing ${shortSha(sourceRun.head_sha)}.`;
+    }
+    if (pagesRun && pagesRun.conclusion !== "success") {
+      return `Viewing ${shortSha(renderedSha)} because the latest GitHub Pages publication did not complete.`;
+    }
+    return `Page is stale: viewing ${shortSha(renderedSha)}, latest dashboard source is ${shortSha(sourceRun.head_sha)}.`;
+  }
+
   function branchRunsUrl() {
+    if (isPagesMode()) {
+      return `https://github.com/${config.owner}/${config.repo}/actions?query=workflow%3Apages-build-deployment`;
+    }
+
     const workflowPath = config.workflow
       ? `/actions/workflows/${encodeURIComponent(config.workflow)}`
       : "/actions";
@@ -168,10 +289,22 @@
     return `https://github.com/${config.owner}/${config.repo}${workflowPath}${query}`;
   }
 
-  function apiUrl() {
+  function sourceApiUrl() {
     const workflow = encodeURIComponent(config.workflow);
     const branch = encodeURIComponent(config.branch);
     return `https://api.github.com/repos/${config.owner}/${config.repo}/actions/workflows/${workflow}/runs?branch=${branch}&per_page=1`;
+  }
+
+  function pagesApiUrl() {
+    return `https://api.github.com/repos/${config.owner}/${config.repo}/actions/runs?event=dynamic&per_page=1`;
+  }
+
+  async function fetchJson(url) {
+    const response = await fetch(url, {
+      headers: { Accept: "application/vnd.github+json" },
+    });
+
+    return { response, data: response.ok ? await response.json() : null };
   }
 
   function scheduleNext(delayMs) {
@@ -193,9 +326,7 @@
     const now = new Date();
 
     try {
-      const response = await fetch(apiUrl(), {
-        headers: { Accept: "application/vnd.github+json" },
-      });
+      const { response, data } = await fetchJson(sourceApiUrl());
 
       if (!response.ok) {
         const resetSeconds = Number(response.headers.get("x-ratelimit-reset"));
@@ -211,12 +342,14 @@
         return;
       }
 
-      const data = await response.json();
       const run = data.workflow_runs && data.workflow_runs[0];
 
       if (!run) {
+        const missingRun = isPagesMode()
+          ? "No dashboard source workflow run found."
+          : `No workflow run found for ${config.branch}.`;
         setState("unknown", "?", [
-          `No workflow run found for ${config.branch}.`,
+          missingRun,
           checkedAt(now),
         ], false);
         statusLink.href = branchRunsUrl();
@@ -224,18 +357,36 @@
         return;
       }
 
-      const state = statusForRun(run);
+      let pagesRun = null;
+      if (isPagesMode()) {
+        const pagesResult = await fetchJson(pagesApiUrl());
+        if (pagesResult.response.ok) {
+          pagesRun =
+            pagesResult.data.workflow_runs &&
+            pagesResult.data.workflow_runs[0];
+        }
+      }
+
       const isStale = Boolean(
         renderedSha && run.head_sha && renderedSha !== run.head_sha,
       );
-      const branch = config.branch ? ` on ${config.branch}` : "";
+      const state = isPagesMode()
+        ? pagesStatusForRuns(run, pagesRun, isStale)
+        : statusForRun(run);
+      const branch =
+        !isPagesMode() && config.branch ? ` on ${config.branch}` : "";
       const label = [
         `${state.text}${branch}.`,
-        freshnessText(run, isStale),
-        checkedAt(now),
+        isPagesMode()
+          ? pagesFreshnessText(run, pagesRun, isStale)
+          : freshnessText(run, isStale),
+        isPagesMode() ? pagesTimingText(pagesRun, isStale, now) : checkedAt(now),
       ];
       setState(state.kind, state.symbol, label, isStale);
-      statusLink.href = run.html_url || branchRunsUrl();
+      statusLink.href =
+        (isPagesMode() && pagesRun && pagesRun.html_url) ||
+        run.html_url ||
+        branchRunsUrl();
       scheduleNext();
     } catch (error) {
       setState("unknown", "?", [

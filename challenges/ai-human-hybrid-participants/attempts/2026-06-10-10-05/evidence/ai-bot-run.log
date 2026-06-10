@@ -1,0 +1,8 @@
+bot_id=4
+status=approved
+failed=False
+is_ai_participant=True
+trials=7
+finalized_trials=7
+answers=[156, 199, 199, 73, 180, 73, 156]
+answers_in_slider_range=True
