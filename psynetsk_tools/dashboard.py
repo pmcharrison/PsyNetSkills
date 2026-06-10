@@ -4,8 +4,10 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
 import shutil
+from collections.abc import Mapping
 from dataclasses import asdict, dataclass
 from pathlib import Path
 
@@ -63,6 +65,75 @@ CREDENTIAL_REDACTIONS = (
     (re.compile(r"(?i)(PROLIFIC_API_KEY\s*=\s*)[^\s\"']+"), r"\1[REDACTED]"),
 )
 TEXT_ARTIFACT_EXTENSIONS = {".html", ".log", ".md", ".txt", ".json", ".csv", ".yaml", ".yml"}
+WORKFLOW_CONTEXT_REPOSITORY = "pmcharrison/PsyNetSkills"
+WORKFLOW_CONTEXT_FILES_BY_NAME = {
+    "Deploy dashboard PR preview": "dashboard-preview.yml",
+    "Deploy dashboard to GitHub Pages": "pages.yml",
+}
+
+
+def read_github_event(env: Mapping[str, str]) -> dict[str, object]:
+    """Read the GitHub event payload for the current workflow."""
+    event_path = env.get("GITHUB_EVENT_PATH")
+    if not event_path:
+        return {}
+    try:
+        event = json.loads(Path(event_path).read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {}
+    return event if isinstance(event, dict) else {}
+
+
+def workflow_context(env: Mapping[str, str] | None = None) -> dict[str, object]:
+    """Return GitHub Actions context for the live dashboard workflow widget."""
+    context_env = os.environ if env is None else env
+    repository = context_env.get("GITHUB_REPOSITORY", WORKFLOW_CONTEXT_REPOSITORY)
+    owner, _, repo = repository.partition("/")
+    workflow_file = WORKFLOW_CONTEXT_FILES_BY_NAME.get(
+        context_env.get("GITHUB_WORKFLOW", ""),
+        "",
+    )
+    event = read_github_event(context_env)
+    pull_request = event.get("pull_request")
+
+    if isinstance(pull_request, dict):
+        head = pull_request.get("head")
+        head = head if isinstance(head, dict) else {}
+        branch = str(head.get("ref") or context_env.get("GITHUB_HEAD_REF", ""))
+        head_sha = str(head.get("sha") or context_env.get("GITHUB_SHA", ""))
+    else:
+        branch = context_env.get("GITHUB_REF_NAME", "")
+        head_sha = context_env.get("GITHUB_SHA", "")
+
+    mode = "local"
+    if workflow_file == "dashboard-preview.yml":
+        mode = "pr-preview"
+    elif workflow_file == "pages.yml":
+        mode = "production"
+
+    enabled = bool(
+        context_env.get("GITHUB_ACTIONS") == "true"
+        and owner
+        and repo
+        and workflow_file
+        and branch
+        and head_sha
+    )
+    if not enabled:
+        branch = ""
+        head_sha = ""
+        workflow_file = ""
+        mode = "local"
+
+    return {
+        "branch": branch,
+        "enabled": enabled,
+        "head_sha": head_sha,
+        "mode": mode,
+        "owner": owner,
+        "repo": repo,
+        "workflow_file": workflow_file,
+    }
 
 
 @dataclass(frozen=True)
@@ -741,6 +812,10 @@ def export_dashboard(root: Path, dashboard_dir: Path) -> None:
     data_dir.mkdir(parents=True, exist_ok=True)
     (data_dir / "psynetsk.json").write_text(
         json.dumps(data, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+    (data_dir / "workflow_context.json").write_text(
+        json.dumps(workflow_context(), indent=2, sort_keys=True) + "\n",
         encoding="utf-8",
     )
 
