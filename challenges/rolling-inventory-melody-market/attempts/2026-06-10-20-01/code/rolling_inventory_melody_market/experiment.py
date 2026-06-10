@@ -7,9 +7,8 @@ import numpy as np
 import psynet.experiment
 from markupsafe import Markup
 from psynet.consent import MainConsent
-from psynet.modular_page import Control, ModularPage, Prompt, SurveyJSControl
+from psynet.modular_page import Control, ModularPage, Prompt, PushButtonControl, SurveyJSControl
 from psynet.page import InfoPage, SuccessfulEndPage, VolumeCalibration
-from psynet.prescreen import HugginsHeadphoneTest
 from psynet.timeline import CodeBlock, Event, FailedValidation, PageMaker, Timeline, join
 from psynet.trial.chain import ChainNode
 from psynet.trial.create_and_rate import CreateAndRateNodeMixin, CreateTrialMixin
@@ -85,19 +84,85 @@ def latest_melody_from_answer(answer):
     return melodies[sorted(melodies.keys())[-1]]
 
 
-headphones_warning = InfoPage(
+sound_warning = InfoPage(
     Markup(
         """
         <h3>Attention</h3>
         <hr>
-        <b><b>You must use headphones or earplugs</b></b>.
+        <b><b>You must be able to hear sounds from this browser</b></b>.
         <br><br>
-        If you do not, the experiment will terminate early.
+        Speakers, headphones, or earplugs are all fine. On the next pages you
+        will adjust your volume and complete a short sound check before the
+        melody market begins.
         <hr>
         """
     ),
     time_estimate=3,
 )
+
+
+class SimpleSoundCheckPage(ModularPage):
+    def __init__(self):
+        super().__init__(
+            "sound_check",
+            Prompt(
+                Markup(
+                    """
+                    <h3>Sound check</h3>
+                    <p>Click <strong>Play sounds</strong>. You will hear three short tones.</p>
+                    <p>Which tone is higher in pitch than the other two?</p>
+                    <button id="play-sound-check" type="button" class="btn btn-primary">Play sounds</button>
+                    <script>
+                    (function () {
+                        const button = document.getElementById("play-sound-check");
+                        const frequencies = [440, 660, 440];
+                        let audioContext = null;
+
+                        function ensureAudioContext() {
+                            if (!audioContext) {
+                                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                            }
+                            return audioContext;
+                        }
+
+                        function playTone(ctx, frequency, start) {
+                            const osc = ctx.createOscillator();
+                            const gain = ctx.createGain();
+                            osc.type = "sine";
+                            osc.frequency.value = frequency;
+                            gain.gain.setValueAtTime(0.0001, start);
+                            gain.gain.exponentialRampToValueAtTime(0.22, start + 0.02);
+                            gain.gain.exponentialRampToValueAtTime(0.0001, start + 0.38);
+                            osc.connect(gain).connect(ctx.destination);
+                            osc.start(start);
+                            osc.stop(start + 0.42);
+                        }
+
+                        button.addEventListener("click", function () {
+                            const ctx = ensureAudioContext();
+                            const start = ctx.currentTime + 0.05;
+                            frequencies.forEach((frequency, index) => {
+                                playTone(ctx, frequency, start + index * 0.6);
+                            });
+                        });
+                    })();
+                    </script>
+                    """
+                )
+            ),
+            PushButtonControl(
+                choices=[1, 2, 3],
+                labels=["First tone", "Second tone", "Third tone"],
+                arrange_vertically=False,
+                bot_response=2,
+            ),
+            time_estimate=12,
+        )
+
+    def validate(self, response, **kwargs):
+        if int(response.answer) != 2:
+            return FailedValidation("Please play the sounds again and choose the higher-pitched tone.")
+        return None
 
 
 class MelodyNode(ChainNode, CreateAndRateNodeMixin):
@@ -538,10 +603,11 @@ class Exp(psynet.experiment.Experiment):
 
     timeline = Timeline(
         MainConsent(),
-        headphones_warning,
+        sound_warning,
         VolumeCalibration(),
-        HugginsHeadphoneTest(),
-        InfoPage("You passed the headphone screening task! Congratulations.", time_estimate=3),
+        SimpleSoundCheckPage(),
+        CodeBlock(lambda participant: participant.var.set("sound_check_passed", True)),
+        InfoPage("You passed the sound check! Congratulations.", time_estimate=3),
         CodeBlock(lambda participant: participant.var.set("condition", "pi" if participant.id % 2 else "npi")),
         CodeBlock(lambda participant: participant.var.set("current_condition", participant.var.get("condition"))),
         PageMaker(
@@ -555,6 +621,7 @@ class Exp(psynet.experiment.Experiment):
 
     def test_check_bot(self, bot, **kwargs):
         assert not bot.failed
+        assert bot.var.sound_check_passed is True
         trials = MelodyCreateTrial.query.filter_by(participant_id=bot.id).all()
         assert len(trials) == N_TRIALS_PER_PARTICIPANT
         for trial in trials:
