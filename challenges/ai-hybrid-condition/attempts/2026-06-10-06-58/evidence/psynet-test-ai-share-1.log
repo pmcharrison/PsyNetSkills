@@ -1,0 +1,32 @@
+============================= test session starts ==============================
+platform linux -- Python 3.13.13, pytest-9.0.3, pluggy-1.6.0
+rootdir: /workspace/challenges/ai-hybrid-condition/attempts/2026-06-10-06-58/code/ai_hybrid_gibbs
+configfile: pytest.ini
+plugins: anyio-4.13.0, dallinger-12.2.0, Faker-40.15.0, psynet-13.3.0a0, dependency-0.6.0, mock-3.14.1, test-groups-1.2.1, timeout-2.4.0
+collected 1 item
+
+test.py::test_experiment[/workspace/challenges/ai-hybrid-condition/attempts/2026-06-10-06-58/code/ai_hybrid_gibbs] 
+-------------------------------- live log call ---------------------------------
+INFO     psynet:experiment.py:1393 Testing experiment with 6 serial bot(s)...
+INFO     psynet:bot.py:74 Waiting for experiment launch to complete....
+INFO     psynet:bot.py:37 Initializing bot with worker ID f59d4a1c-c56b-4522-9785-dfaf960b6364.
+INFO     psynet:bot.py:74 Waiting for experiment launch to complete....
+INFO     psynet:bot.py:37 Initializing bot with worker ID 1dc5c705-5842-4378-8cb7-7cf50e442415.
+INFO     psynet:bot.py:74 Waiting for experiment launch to complete....
+INFO     psynet:bot.py:37 Initializing bot with worker ID 22ab1187-fba3-4e7f-8b4f-cea997e9e282.
+INFO     psynet:bot.py:74 Waiting for experiment launch to complete....
+INFO     psynet:bot.py:37 Initializing bot with worker ID 1c29b7b9-9819-4852-acf8-1b358257d292.
+INFO     psynet:bot.py:74 Waiting for experiment launch to complete....
+INFO     psynet:bot.py:37 Initializing bot with worker ID e5f0da19-4803-464c-b7bf-4b9ca9a3a1ff.
+INFO     psynet:bot.py:74 Waiting for experiment launch to complete....
+INFO     psynet:bot.py:37 Initializing bot with worker ID 2e16ec1b-2a05-434d-ae1d-ece91239b022.
+INFO     psynet:participant.py:1125 ParticipantDriver 1 has finished the experiment (took 14 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 2.167 seconds).
+INFO     psynet:participant.py:1125 ParticipantDriver 2 has finished the experiment (took 14 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 2.128 seconds).
+INFO     psynet:participant.py:1125 ParticipantDriver 3 has finished the experiment (took 14 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 2.074 seconds).
+INFO     psynet:participant.py:1125 ParticipantDriver 4 has finished the experiment (took 14 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 2.265 seconds).
+INFO     psynet:participant.py:1125 ParticipantDriver 5 has finished the experiment (took 14 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 2.116 seconds).
+INFO     psynet:participant.py:1125 ParticipantDriver 6 has finished the experiment (took 14 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 2.172 seconds).
+INFO     psynet:experiment.py:1369 Mean HTTP request duration: 0.074 seconds
+PASSED                                                                   [100%]
+
+============================== 1 passed in 26.57s ==============================

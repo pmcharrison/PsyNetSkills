@@ -1,3 +1,10 @@
 # Learnings
 
-_No learning notes recorded yet. Add compact cards below as concrete lessons emerge._
+## Local export credential inference
+
+`psynet export local --username ... --password ...` still attempted to read
+`dashboard_password` from config during this debug launch, so the export was
+collected from the same dashboard endpoint that the CLI calls internally.
+
+*Actions:*
+- **PsyNet:** Check whether `psynet export local` should honor explicit `--username` and `--password` before reading dashboard credentials from config. Confidence: medium. Status: considering.

@@ -61,9 +61,14 @@ def load_rows(path):
                 if suffix not in {".csv", ".json", ".jsonl"}:
                     continue
                 text = archive.read(name).decode("utf-8")
-                rows.extend(parse_text_rows(text, suffix))
+                for row in parse_text_rows(text, suffix):
+                    row["__source_file"] = name
+                    rows.append(row)
         return rows
-    return parse_text_rows(path.read_text(encoding="utf-8"), path.suffix)
+    rows = parse_text_rows(path.read_text(encoding="utf-8"), path.suffix)
+    for row in rows:
+        row["__source_file"] = path.name
+    return rows
 
 
 def parse_text_rows(text, suffix):
@@ -95,6 +100,15 @@ def field(row, key):
     return row.get(key) or value_from_details(row, key)
 
 
+def trial_id_from_row(row):
+    if field(row, "trial_id"):
+        return field(row, "trial_id")
+    source_file = str(row.get("__source_file", "")).lower()
+    if "trial" in source_file and row.get("id"):
+        return row["id"]
+    return None
+
+
 def summarize(records):
     participant_sources = {}
     trial_counts = Counter()
@@ -105,7 +119,7 @@ def summarize(records):
         if response_source not in {"human", "ai"}:
             continue
         participant_id = str(field(row, "participant_id") or field(row, "participant") or "")
-        trial_id = field(row, "trial_id") or field(row, "id")
+        trial_id = trial_id_from_row(row)
 
         if participant_id:
             participant_sources.setdefault(participant_id, response_source)
