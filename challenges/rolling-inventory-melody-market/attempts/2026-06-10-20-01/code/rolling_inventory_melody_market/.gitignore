@@ -8,6 +8,7 @@ static/assets
 source_code.zip
 .idea
 __pycache__
+dump.rdb
 *.DS_Store
 develop/
 deploy/
