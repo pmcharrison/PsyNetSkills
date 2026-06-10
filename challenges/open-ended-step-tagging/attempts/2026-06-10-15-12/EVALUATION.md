@@ -24,3 +24,4 @@ Not yet evaluated by a human reviewer.
 - `supported_locales` is committed as `["en"]` so local launch does not require an unavailable German `.po`; add `de` after generating `locales/de/LC_MESSAGES/experiment.po`.
 - `psynet test local` passed after bot trials completed and saved structured STEP tagging answers.
 - A local duration check confirmed all six generated demo WAV files are 15.0 seconds.
+- Manual browser walkthrough confirmed the intro and tagging UI render, early incomplete submission does not advance, and valid tags advance to later trials.

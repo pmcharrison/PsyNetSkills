@@ -10,3 +10,6 @@
 - T+00:34:00 [agent] Fixed deployment-time manifest loading and audio control configuration until `psynet test local` passed.
 - T+00:39:00 [agent] Regenerated six 15-second demo WAV files and verified `psynet test local` still passed.
 - T+00:43:09 [agent-stop] Translation preparation, functional validation, and repository validation complete.
+- T+00:55:00 [agent-start] Resumed after manual video review found the visible submit gate could expire too early.
+- T+01:05:00 [agent] Moved submit enabling to the browser `trialConstruct` event and verified PsyNet tests and browser walkthrough still pass.
+- T+01:08:00 [agent-stop] Final UI validation and submit-gate fix complete.

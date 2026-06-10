@@ -21,6 +21,8 @@ _ = get_translator(namespace="experiment")
 
 STIMULUS_MANIFEST = Path("data/stimuli.csv")
 MIN_ITERATIONS_PER_STIMULUS = 5
+CLIP_DURATION_SECONDS = 15
+SUBMIT_DELAY_SECONDS = CLIP_DURATION_SECONDS
 MAX_TAG_CHARS = 15
 GENRE_LABELS = {
     "blues",
@@ -223,7 +225,7 @@ def make_bot_response(existing_tags):
 
 
 class StepTaggingTrial(StaticTrial):
-    time_estimate = 35
+    time_estimate = 45
 
     def show_trial(self, experiment, participant):
         records = existing_tag_records(self.definition["stimulus_id"], self.id)
@@ -243,7 +245,11 @@ class StepTaggingTrial(StaticTrial):
                 bot_response=lambda: make_bot_response(records),
             ),
             validate=lambda answer: validate_tagging_answer(answer, records),
-            events={"submitEnable": Event(is_triggered_by="promptEnd")},
+            events={
+                "submitEnable": Event(
+                    is_triggered_by="trialConstruct", delay=SUBMIT_DELAY_SECONDS
+                )
+            },
             time_estimate=self.time_estimate,
         )
 
