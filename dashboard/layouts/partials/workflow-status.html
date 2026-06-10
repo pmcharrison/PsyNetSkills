@@ -1,4 +1,4 @@
-{{ $context := site.Data.workflow_context | default dict }}
+{{ $context := hugo.Data.workflow_context | default dict }}
 {{ $owner := default site.Params.github_owner $context.owner }}
 {{ $repo := default site.Params.github_repo_name $context.repo }}
 {{ $workflow := default "" $context.workflow_file }}
