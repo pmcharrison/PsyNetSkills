@@ -1,0 +1,100 @@
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: experiment.py:163
+#, python-brace-format
+msgid ""
+"Please keep tags as single emotion words, no more than {MAX_CHARS} "
+"characters, and not genre labels. Check: {TAGS}."
+msgstr ""
+
+#: experiment.py:167
+msgid "Please enter at least one emotion tag before continuing."
+msgstr ""
+
+#: experiment.py:177
+msgid "Add any new emotion or affect tags for this clip."
+msgstr ""
+
+#: experiment.py:179
+msgid ""
+"Use single words in your native language. Separate multiple tags with commas"
+" or new lines. Do not use genre labels or lyrics."
+msgstr ""
+
+#: experiment.py:181
+msgid "for example: joyful, tense, lonely"
+msgstr ""
+
+#: experiment.py:191
+#, python-brace-format
+msgid "How well does \"{TAG}\" describe the clip?"
+msgstr ""
+
+#: experiment.py:197
+msgid "Does not apply"
+msgstr ""
+
+#: experiment.py:198
+msgid "Applies very well"
+msgstr ""
+
+#: experiment.py:207
+msgid "Flag any existing tags that should be reviewed."
+msgstr ""
+
+#: experiment.py:209
+msgid ""
+"Flag tags that are inappropriate, irrelevant, misspelled beyond recognition,"
+" genre labels, direct lyrics, or not emotion words."
+msgstr ""
+
+#: experiment.py:236
+msgid ""
+"Listen to the whole clip. Then add new emotion tags and rate any tags from "
+"earlier participants."
+msgstr ""
+
+#: experiment.py:243
+msgid "Play clip"
+msgstr ""
+
+#: experiment.py:243
+msgid "Play"
+msgstr ""
+
+#: experiment.py:287
+msgid "Open-ended music emotion tagging"
+msgstr ""
+
+#: experiment.py:290
+msgid ""
+"In this study you will listen to short music clips and describe the emotions"
+" or affective qualities you hear."
+msgstr ""
+
+#: experiment.py:294
+msgid "Use single-word tags in your native language."
+msgstr ""
+
+#: experiment.py:297
+msgid ""
+"Do not enter genre labels, direct lyrics, or tags longer than 15 characters."
+msgstr ""
+
+#: experiment.py:302
+msgid ""
+"When previous participants have suggested tags, rate how well they fit and "
+"flag tags that should be reviewed."
+msgstr ""
+
+#: experiment.py:322
+msgid ""
+"Thank you. Your tags will help build a weighted emotion vocabulary for each "
+"clip."
+msgstr ""

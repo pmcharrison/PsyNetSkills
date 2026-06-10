@@ -1,0 +1,14 @@
+[Config]
+title = Open-ended STEP tagging demo
+description = Listen to short local demo clips and add emotion or affect tags. This local configuration uses generic recruitment defaults and no production service credentials.
+contact_email_on_error = test@example.com
+organization_name = PsyNetSkills
+
+recruiter = generic
+currency = $
+wage_per_hour = 12.0
+locale = en
+supported_locales = ["en", "de"]
+
+[Prolific]
+auto_recruit = false
