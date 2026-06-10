@@ -167,13 +167,8 @@ class MelodyEditControl(Control):
             melody = empty_melody()
             for slot in random.sample(range(MELODY_LENGTH), 4):
                 melody[slot] = random.choice([0, 1, 2])
-            return {"edit": melody, "events": [], "mouse": None, "mouse_positions": []}
-        return {
-            "edit": mutate_melody(self.prefill_melody),
-            "events": [],
-            "mouse": None,
-            "mouse_positions": [],
-        }
+            return melody
+        return mutate_melody(self.prefill_melody)
 
     def update_events(self, events):
         events["minimalTime"] = Event(is_triggered_by="trialStart", delay=5.0)
@@ -245,12 +240,7 @@ class MelodySelectControl(Control):
         super().__init__(**kwargs, bot_response=self.bot_response())
 
     def bot_response(self):
-        return {
-            "adopt": random.choice(self.choices) if self.choices else None,
-            "events": [],
-            "mouse": None,
-            "mouse_positions": [],
-        }
+        return random.choice(self.choices) if self.choices else None
 
     def update_events(self, events):
         events["minimalTime"] = Event(is_triggered_by="trialStart", delay=2.0)

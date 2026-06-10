@@ -11,3 +11,4 @@
 - T+00:54:00 [agent] Exposed sequencer config as control attributes after Jinja rendering failure.
 - T+01:03:00 [agent] Normalized serialized note values after market preview rendered string notes.
 - T+01:10:00 [agent] Added robust melody extraction for raw and formatted control payloads.
+- T+01:18:00 [agent] Corrected custom-control bot responses to return formatted answers.
