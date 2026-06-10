@@ -24,25 +24,9 @@ Traceback (most recent call last):
     exp = get_experiment()
   File "/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/psynet/experiment.py", line 4347, in get_experiment
     return import_local_experiment()["class"]()
-           ~~~~~~~~~~~~~~~~~~~~~~~^^
-  File "/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/psynet/experiment.py", line 4318, in import_local_experiment
-    dallinger_get_config()
-    ~~~~~~~~~~~~~~~~~~~~^^
-  File "/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/dallinger/config.py", line 412, in get_config
-    config.load()
-    ~~~~~~~~~~~^^
-  File "/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/psynet/__init__.py", line 50, in load
-    old_load(self, strict=strict)
-    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
-  File "/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/dallinger/config.py", line 345, in load
-    self.load_from_file(localConfig, strict)
-    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
-  File "/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/dallinger/config.py", line 297, in load_from_file
-    self.extend(data, cast_types=True, strict=strict)
-    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/dallinger/config.py", line 180, in extend
-    raise_invalid_key_error(key)
-    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^
-  File "/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/dallinger/config.py", line 452, in raise_invalid_key_error
-    raise KeyError(error_text)
-KeyError: 'launch_in_sandbox_mode is not a valid configuration key'
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/psynet/experiment.py", line 530, in __init__
+    raise RuntimeError(
+    ...<2 lines>...
+    )
+RuntimeError: You can no longer directly set the initial recruitment size in your experiment class, you need to specify it in the config.txt file or in experiment.config

@@ -101,12 +101,12 @@ def completion_page(participant):
 
 class Exp(psynet.experiment.Experiment):
     label = 'Repeated Ultimatum game'
-    initial_recruitment_size = 2
     test_n_bots = 2
     test_mode = 'serial'
 
     config = {
         'recruiter': 'hotair',
+        'initial_recruitment_size': 2,
         'base_payment': BASE_PAYMENT,
         'wage_per_hour': HOURLY_PAYMENT,
         'currency': CURRENCY,
