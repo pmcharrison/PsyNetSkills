@@ -12,7 +12,7 @@
             <div class="wave-preview" aria-hidden="true">
                 {% for note in proposal.melody %}
                 <span class="wave-bar {{ 'rest' if note is none else '' }}"
-                      style="height: {{ 12 if note is none else 18 + note * 9 }}px"></span>
+                      style="height: {{ 12 if note is none else 18 + (note | int) * 9 }}px"></span>
                 {% endfor %}
             </div>
 

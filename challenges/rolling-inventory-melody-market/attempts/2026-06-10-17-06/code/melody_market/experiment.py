@@ -49,9 +49,9 @@ def validate_melody_shape(melody: Any) -> list[int | None] | None:
 
     validated = []
     for value in melody:
-        if value in (None, "", -1):
+        if value in (None, "", -1, "None", "null"):
             validated.append(None)
-        elif value in (0, 1, 2):
+        elif value in (0, 1, 2, "0", "1", "2"):
             validated.append(int(value))
         else:
             return None
@@ -106,6 +106,8 @@ class MelodyNode(ChainNode):
             key: trial.answer[key] for key in trial.answer if "edit" in key
         }
         melody = melody_answers[sorted(melody_answers.keys())[-1]]
+        melody = validate_melody_shape(melody)
+        assert melody is not None
         definition["melody"] = melody
 
         for key, value in trial.answer.items():
@@ -376,7 +378,7 @@ class MelodyCreateTrial(ImitationChainTrial):
         for index, proposal in enumerate(pool):
             proposal_data = {
                 "id": proposal.id,
-                "melody": proposal.answer["edit"],
+                "melody": validate_melody_shape(proposal.answer["edit"]),
                 "label": chr(65 + index),
                 "adopted_by": len(self.definition["children"].get(str(proposal.id), [])),
                 "proposed_to": self.definition["proposed"].get(str(proposal.id), 0),
@@ -416,7 +418,8 @@ class MelodyCreateTrial(ImitationChainTrial):
             adopt_id = participant.var.get("adopt")
             try:
                 adopt_proposal = self.query.filter_by(id=adopt_id).one()
-                prefill_melody = adopt_proposal.answer["edit"]
+                prefill_melody = validate_melody_shape(adopt_proposal.answer["edit"])
+                assert prefill_melody is not None
             except Exception:
                 logger.warning("Could not load adopted melody %s; using empty melody.", adopt_id)
                 prefill_melody = empty_melody()
