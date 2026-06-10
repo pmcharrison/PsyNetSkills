@@ -7,3 +7,5 @@
 - T+00:12:00 [agent] Added a Playwright participant runner that focuses the Unity canvas, presses arrow keys, and clicks canvas targets.
 - T+00:36:00 [agent] Updated the Unity payload to match the original experiment's `ferry_*` JSON contract and changed navigation to mostly `ArrowUp` with occasional side-key corrections.
 - T+00:50:00 [agent] Revised the participant runner to hold `ArrowUp` continuously while tapping side keys about 10% of the time.
+- T+01:05:00 [agent] Tested repeated-up and held-up navigation; Unity accepted input but did not complete.
+- T+01:08:00 [agent-stop] Implementation and first-pass evidence collection stopped with participant-flow blocker documented.

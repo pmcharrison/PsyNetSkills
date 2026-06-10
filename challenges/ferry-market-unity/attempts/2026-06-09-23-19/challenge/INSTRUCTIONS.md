@@ -42,6 +42,10 @@ setup instructions for where to place or serve the provided Unity WebGL build,
 and keep the integration self-contained so that future challenge attempts can be
 evaluated without external credentials or private services.
 
+If using the Unity build's `ferry_speeds` JSON field, treat the values as travel
+delays rather than speeds. Lower values are faster; for example, a delay of `2`
+represents a fast ferry.
+
 The submitted evidence should demonstrate that an automated test participant can
 focus the WebGL canvas, use keyboard arrow keys to move forward and sideways,
 click the relevant in-game buttons or objects, finish the Unity task, and

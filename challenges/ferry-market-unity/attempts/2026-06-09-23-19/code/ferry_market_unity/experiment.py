@@ -40,6 +40,8 @@ class FerryMarketUnityPage(UnityPage):
             title="Unity - FerryGov",
             resources="/static",
             contents={
+                # The Unity code names this field "speed", but the values are
+                # travel delays; lower values are faster ferries.
                 "ferry_speeds": [2, 2, 2],
                 "ferry_tickets": [3, 3, 3],
                 "Island_colors": ["red", "yellow", "green"],
