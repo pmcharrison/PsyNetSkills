@@ -54,9 +54,12 @@ or ready for `psynet translate`.
    that creates `locales/experiment.pot` without real service credentials.
    Also run the experiment's existing tests or `psynet test local` when the
    change affects participant flow.
-9. Inspect the generated POT/PO entries or command output to confirm every
+9. Inspect framework-owned participant pages as well as custom experiment pages.
+   Check consent, welcome/start, debrief, finish buttons, recruiter exit, and
+   completion pages for untranslated PsyNet or Dallinger text.
+10. Inspect the generated POT/PO entries or command output to confirm every
    marked string was extracted and no f-string-resolved English text remains.
-10. Commit the code/config/test changes. The skill's output is an applied,
+11. Commit the code/config/test changes. The skill's output is an applied,
    committed experiment change, not a report that lists what the user should do.
 
 ## Rules

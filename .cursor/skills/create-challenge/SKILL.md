@@ -19,8 +19,8 @@ you are responsible for turning that description into the repository format.
 4. Turn the user's input into more formal prose. When the instructions are vague,
    ask them about potential clarifications. We want a moderate level of detail
    similar to what one might see in the Procedure section in a psychology research article.
-5. Discuss possible evaluation criteria with the user.
-   If provided, these should go into `challenges/<slug>/CRITERIA.md`.
+5. Ask the user if they want to provide any secret evaluation criteria.
+   If provided, these should go into `challenges/<slug>/CRITERIA.md`. Do NOT autopopulate this with inferred content, this should only be provided by the user (and neatened up by the agent).
 6. Put any supporting public material in `challenges/<slug>/references/`.
 7. Create `challenges/<slug>/attempts/.gitkeep`.
 8. Run `uv run psynetsk-validate` and the narrowest useful additional checks.

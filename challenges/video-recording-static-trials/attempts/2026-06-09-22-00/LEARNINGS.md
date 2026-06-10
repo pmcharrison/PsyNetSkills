@@ -33,4 +33,5 @@ credential workflow instead of presenting local placeholders as sufficient.
 - **PsyNetSkills:** Update challenge-attempt guidance to require explicit
   evidence for real external-service integration when it is the central
   challenge requirement, or to record a blocker before substituting a local stub.
-  Confidence: high. Status: considering.
+  Confidence: high. Status: completed. Notes: Added the requirement to the
+  `attempt-challenge` skill and experiment evidence checklist.

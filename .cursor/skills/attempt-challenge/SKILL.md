@@ -73,6 +73,9 @@ challenge before starting a fresh attempt.
      directory named `code`; Dallinger imports the experiment directory as a
      Python package, and `code` can collide with Python's standard-library
      module of the same name.
+   - When copying a minimal PsyNet demo into `code/`, include the standard
+     experiment support files needed by PsyNet local launch checks, especially
+     `.gitignore`, rather than copying only Python/config/test files.
 10. Collect evidence in `evidence/`. Use the `record-participant-video` skill
    when creating `evidence/participant.mp4`, and follow
    `references/attempt-artifacts.md` for challenge-type-specific evidence
@@ -92,6 +95,15 @@ evidence to the challenge type and public instructions. For experiment
 implementation challenges, use the required artifact checklist in
 `references/experiment-evidence.md`. For PsyNet functional and performance
 checks, follow `psynet-experiment-implementation/references/validation.md`.
+
+When a challenge's central requirement depends on an external service or
+integration, such as S3, payment APIs, webhooks, or third-party recruitment
+services, collect explicit evidence that the real integration worked end to end.
+Local mocks, emulators, simulated payloads, placeholder files, and stub endpoints
+can support development, but they must not be presented as satisfying the
+external-service requirement. If safe credentials or access are unavailable,
+record the blocker in `TIMELINE.md` and `EVALUATION.md` before substituting a
+local stub, and explain exactly what remains unverified.
 
 Do not imply a skipped check passed: record what was run, what happened, and why
 any required evidence is missing or blocked in `EVALUATION.md`.

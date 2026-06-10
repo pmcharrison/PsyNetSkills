@@ -10,6 +10,7 @@ from psynetsk_tools.dashboard import (
     parse_learning_actions,
     strip_challenge_frontmatter,
     strip_frontmatter,
+    workflow_context,
 )
 
 
@@ -50,6 +51,80 @@ def evaluation(score: int | float = 6) -> str:
         "# Evaluation\n\n"
         "Attempt body.\n"
     )
+
+
+def test_workflow_context_reports_local_defaults() -> None:
+    context = workflow_context({})
+
+    assert context == {
+        "branch": "",
+        "enabled": False,
+        "head_sha": "",
+        "mode": "local",
+        "owner": "pmcharrison",
+        "repo": "PsyNetSkills",
+        "workflow_file": "",
+    }
+
+
+def test_workflow_context_reports_production_build() -> None:
+    context = workflow_context(
+        {
+            "GITHUB_ACTIONS": "true",
+            "GITHUB_EVENT_NAME": "push",
+            "GITHUB_REPOSITORY": "pmcharrison/PsyNetSkills",
+            "GITHUB_REF_NAME": "main",
+            "GITHUB_SHA": "abc123",
+        },
+    )
+
+    assert context == {
+        "branch": "main",
+        "enabled": True,
+        "head_sha": "abc123",
+        "mode": "production",
+        "owner": "pmcharrison",
+        "repo": "PsyNetSkills",
+        "workflow_file": "pages.yml",
+    }
+
+
+def test_workflow_context_reports_pr_preview_head(tmp_path: Path) -> None:
+    event_path = tmp_path / "event.json"
+    event_path.write_text(
+        json.dumps(
+            {
+                "pull_request": {
+                    "head": {
+                        "ref": "cursor/example-branch",
+                        "sha": "head456",
+                    },
+                },
+            },
+        ),
+        encoding="utf-8",
+    )
+
+    context = workflow_context(
+        {
+            "GITHUB_ACTIONS": "true",
+            "GITHUB_EVENT_NAME": "pull_request_target",
+            "GITHUB_EVENT_PATH": str(event_path),
+            "GITHUB_REPOSITORY": "pmcharrison/PsyNetSkills",
+            "GITHUB_REF_NAME": "main",
+            "GITHUB_SHA": "base123",
+        },
+    )
+
+    assert context == {
+        "branch": "cursor/example-branch",
+        "enabled": True,
+        "head_sha": "head456",
+        "mode": "pr-preview",
+        "owner": "pmcharrison",
+        "repo": "PsyNetSkills",
+        "workflow_file": "dashboard-preview.yml",
+    }
 
 
 def test_collect_challenges_reports_latest_score(tmp_path: Path) -> None:
