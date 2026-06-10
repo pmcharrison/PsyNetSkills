@@ -1,0 +1,19 @@
+{
+  "participants": {
+    "ai": 0,
+    "ai_share_observed": 0.0,
+    "human": 1,
+    "total": 1
+  },
+  "trials": {
+    "ai": 0,
+    "ai_share_observed": 0.0,
+    "human": 7,
+    "total": 7
+  },
+  "trials_by_participant": {
+    "1": {
+      "human": 7
+    }
+  }
+}

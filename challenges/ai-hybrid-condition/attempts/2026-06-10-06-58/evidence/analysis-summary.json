@@ -1,0 +1,52 @@
+{
+  "participants": {
+    "ai": 6,
+    "ai_share_observed": 0.5,
+    "human": 6,
+    "total": 12
+  },
+  "trials": {
+    "ai": 42,
+    "ai_share_observed": 0.5,
+    "human": 42,
+    "total": 84
+  },
+  "trials_by_participant": {
+    "1": {
+      "human": 7
+    },
+    "10": {
+      "ai": 7
+    },
+    "11": {
+      "human": 7
+    },
+    "12": {
+      "ai": 7
+    },
+    "2": {
+      "ai": 7
+    },
+    "3": {
+      "human": 7
+    },
+    "4": {
+      "ai": 7
+    },
+    "5": {
+      "ai": 7
+    },
+    "6": {
+      "human": 7
+    },
+    "7": {
+      "ai": 7
+    },
+    "8": {
+      "human": 7
+    },
+    "9": {
+      "human": 7
+    }
+  }
+}

@@ -1,0 +1,15 @@
+[Config]
+title = AI-hybrid Gibbs demo (Chrome browser, 2 minutes to complete)
+description = This experiment asks participants to adjust color sliders in a Gibbs Sampling with People task. It can also run automated AI-condition participants locally for testing.
+contact_email_on_error = XXX@gmail.com
+organization_name = XXX
+
+recruiter = generic
+currency = $
+wage_per_hour = 12.0
+
+[Prolific]
+# recruiter = prolific
+auto_recruit = false
+prolific_estimated_completion_minutes = 2
+base_payment = 0.34
