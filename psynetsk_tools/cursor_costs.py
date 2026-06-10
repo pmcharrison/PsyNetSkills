@@ -300,6 +300,7 @@ def import_cursor_costs(
     csv_path: Path,
     dry_run: bool = False,
     force: bool = False,
+    include_unresolved: bool = False,
     window_padding_minutes: int = 5,
     recorded_at: datetime | None = None,
 ) -> list[ImportResult]:
@@ -345,6 +346,19 @@ def import_cursor_costs(
         if status in {"ambiguous", "unavailable"}:
             run_cost["amount"] = None
 
+        resolved = status == "matched_cloud_agent_id" and bool(matched)
+        if not resolved and not include_unresolved:
+            results.append(
+                ImportResult(
+                    attempt_path=attempt_dir,
+                    status=status,
+                    matched_rows=len(matched),
+                    amount=None,
+                    message="unresolved; not written",
+                ),
+            )
+            continue
+
         if not dry_run:
             agent["run_cost"] = run_cost
             agent_file.write_text(json.dumps(agent, indent=2) + "\n", encoding="utf-8")
@@ -377,6 +391,11 @@ def main(argv: list[str] | None = None) -> int:
         help="Replace existing run_cost metadata",
     )
     parser.add_argument(
+        "--include-unresolved",
+        action="store_true",
+        help="Also write ambiguous or unavailable run_cost metadata.",
+    )
+    parser.add_argument(
         "--window-padding-minutes",
         type=int,
         default=5,
@@ -389,6 +408,7 @@ def main(argv: list[str] | None = None) -> int:
         csv_path=args.csv_path,
         dry_run=args.dry_run,
         force=args.force,
+        include_unresolved=args.include_unresolved,
         window_padding_minutes=args.window_padding_minutes,
     )
     for result in results:

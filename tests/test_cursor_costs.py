@@ -107,6 +107,23 @@ def test_import_cursor_costs_marks_ambiguous_time_window(tmp_path: Path) -> None
     assert results[0].matched_rows == 4
     assert results[0].amount is None
     metadata = json.loads((attempt_dir / "agent.json").read_text(encoding="utf-8"))
+    assert "run_cost" not in metadata
+
+
+def test_import_cursor_costs_can_write_unresolved_metadata(tmp_path: Path) -> None:
+    attempt_dir = write_attempt(tmp_path, cursor_conversation_id=None)
+    csv_path = tmp_path / "usage.csv"
+    write_cursor_csv(csv_path)
+
+    results = import_cursor_costs(
+        root=tmp_path,
+        csv_path=csv_path,
+        include_unresolved=True,
+        recorded_at=datetime(2026, 6, 10, 11, 0, tzinfo=timezone.utc),
+    )
+
+    assert results[0].status == "ambiguous"
+    metadata = json.loads((attempt_dir / "agent.json").read_text(encoding="utf-8"))
     assert metadata["run_cost"]["amount"] is None
     assert metadata["run_cost"]["attribution_status"] == "ambiguous"
     assert metadata["run_cost"]["matched_cloud_agent_ids"] == ["bc-exact", "bc-other"]

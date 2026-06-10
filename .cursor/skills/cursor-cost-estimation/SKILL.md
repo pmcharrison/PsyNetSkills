@@ -47,10 +47,13 @@ and corresponds to the `Cloud Agent ID` column in Cursor team usage CSV exports.
 4. Review the command output:
    - `matched_cloud_agent_id` means the cost was attributed by exact Cloud Agent
      ID and is suitable for committing.
-   - `matched_time_window`, `ambiguous`, and `unavailable` should be reviewed
-     carefully. In normal concurrent workshop usage, treat non-ID matches as not
-     resolved.
+   - `matched_time_window`, `ambiguous`, and `unavailable` are reported but not
+     written by default. In normal concurrent workshop usage, treat non-ID
+     matches as not resolved.
 5. Commit only derived `run_cost` changes in `agent.json`, never the source CSV.
+
+Use `--include-unresolved` only when you intentionally want to commit
+`amount: null` audit metadata for ambiguous or unavailable attempts.
 
 ## `run_cost` shape
 

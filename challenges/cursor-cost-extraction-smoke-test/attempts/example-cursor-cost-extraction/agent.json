@@ -19,7 +19,43 @@
     "update_command": "git pull --ff-only origin master",
     "dirty": false
   },
-  "run_cost": null,
+  "run_cost": {
+    "currency": "USD",
+    "amount": 22.56,
+    "source": "cursor_usage_csv_batch_import",
+    "recorded_at": "2026-06-10T11:55:42Z",
+    "attribution_status": "matched_cloud_agent_id",
+    "window_started_at": "2026-06-10T10:23:00Z",
+    "window_ended_at": "2026-06-10T11:51:00Z",
+    "matched_started_at": "2026-06-10T10:23:25.579000Z",
+    "matched_ended_at": "2026-06-10T11:50:31.807000Z",
+    "matched_cloud_agent_ids": [
+      "bc-ac8d584e-1afe-412d-8a2a-ce66359dcd4a"
+    ],
+    "usage": {
+      "rows": 17,
+      "input_with_cache_write": 0,
+      "input_without_cache_write": 706844,
+      "cache_read": 22522366,
+      "output_tokens": 70038,
+      "total_tokens": 23299248,
+      "models": {
+        "gpt-5.5-medium": {
+          "rows": 17,
+          "input_with_cache_write": 0,
+          "input_without_cache_write": 706844,
+          "cache_read": 22522366,
+          "output_tokens": 70038,
+          "total_tokens": 23299248,
+          "cost": 22.56
+        }
+      }
+    },
+    "notes": [
+      "Matched Cursor CSV rows by cursor_conversation_id.",
+      "Applied attempt time window plus padding."
+    ]
+  },
   "notes": [
     "Stub attempt for validating Cursor cost CSV import by exact Cloud Agent ID."
   ]
