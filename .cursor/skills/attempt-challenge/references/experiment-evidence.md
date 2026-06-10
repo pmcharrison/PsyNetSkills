@@ -22,9 +22,14 @@ Provide these artifacts or document the blocker in `EVALUATION.md`:
 - If the challenge's central requirement is a real external service or
   integration, evidence includes a successful end-to-end run against that service.
   Local mocks, emulators, simulated files, or stub endpoints are acceptable only
-  as development aids or explicit fallback evidence; if real credentials or
-  access cannot be used safely, record the blocker in `TIMELINE.md` and
-  `EVALUATION.md` and state what remains unverified.
+  as development aids or explicit fallback evidence unless the challenge
+  explicitly permits simulated-service evidence. When simulation is permitted,
+  evidence must show that the same integration contract and code path were
+  exercised, label the evidence as simulated, and provide local instructions for
+  rerunning the same workflow against the real service with user-provided
+  credentials. If real credentials or access cannot be used safely and simulation
+  is not permitted, record the blocker in `TIMELINE.md` and `EVALUATION.md` and
+  state what remains unverified.
 
 The `evidence/analyses/` directory is optional because not every experiment
 implementation challenge needs analysis beyond the standard artifacts.
