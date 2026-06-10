@@ -9,10 +9,10 @@ test.py::test_experiment[/workspace/challenges/ultimatum-game/attempts/2026-06-1
 -------------------------------- live log call ---------------------------------
 INFO     psynet:experiment.py:1393 Testing experiment with 2 serial bot(s)...
 INFO     psynet:bot.py:74 Waiting for experiment launch to complete....
-INFO     psynet:bot.py:37 Initializing bot with worker ID 70f5eaee-016f-4532-a338-a7ccf192b992.
+INFO     psynet:bot.py:37 Initializing bot with worker ID 354333da-aa4b-4378-a1ab-f13a4c81d9e3.
 INFO     psynet:bot.py:74 Waiting for experiment launch to complete....
-INFO     psynet:bot.py:37 Initializing bot with worker ID aa85f475-3778-4324-9c4a-625dfc1d7c61.
-INFO     psynet:experiment.py:1369 Mean HTTP request duration: 0.082 seconds
+INFO     psynet:bot.py:37 Initializing bot with worker ID 818d51f8-1409-4ec9-ba9b-d9b0cf935c1f.
+INFO     psynet:experiment.py:1369 Mean HTTP request duration: 0.063 seconds
 PASSED                                                                   [100%]
 
-============================== 1 passed in 13.10s ==============================
+============================== 1 passed in 11.38s ==============================

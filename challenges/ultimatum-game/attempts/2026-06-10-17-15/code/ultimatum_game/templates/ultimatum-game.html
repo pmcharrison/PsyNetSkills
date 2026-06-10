@@ -152,9 +152,13 @@ import * as THREE from "/static/three.module.min.js";
 
     function send(payload) {
         payload.group_id = GROUP_ID;
-        if (socket && socket.readyState === WebSocket.OPEN) {
-            socket.send(CHANNEL + ":" + JSON.stringify(payload));
-        }
+        payload.participant_id = MY_ID;
+        payload.unique_id = psynet.uniqueId;
+        fetch("/ultimatum_action", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(payload),
+        }).catch(function () {});
     }
 
     function tick() {

@@ -5,7 +5,10 @@ from datetime import datetime, timedelta, timezone
 from typing import Dict, List, Optional
 
 from dallinger import db
+from dallinger.experiment import experiment_route
+from dallinger.experiment_server.utils import success_response
 from dominate import tags
+from flask import request
 from sqlalchemy import Column, Integer, Text
 
 import psynet.experiment
@@ -491,6 +494,18 @@ class Exp(psynet.experiment.Experiment):
         except (json.JSONDecodeError, TypeError):
             return
         process_action(self, participant, msg)
+
+    @experiment_route("/ultimatum_action", methods=["POST"])
+    @classmethod
+    def ultimatum_action(cls):
+        from psynet.experiment import get_experiment
+
+        msg = request.get_json(silent=True) or {}
+        participant = Participant.query.filter_by(id=msg.get("participant_id")).first()
+        if participant is None or participant.unique_id != msg.get("unique_id"):
+            return success_response(ok=False)
+        process_action(get_experiment(), participant, msg)
+        return success_response(ok=True)
 
     def test_serial_run_bots(self, bots: List[BotDriver]):
         for bot in bots:

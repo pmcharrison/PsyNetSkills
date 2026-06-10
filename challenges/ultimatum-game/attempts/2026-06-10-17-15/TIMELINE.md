@@ -11,3 +11,4 @@
 - T+00:58:00 [agent] Fixed runtime issues found by psynet test local; the full local bot test now passes.
 - T+01:20:00 [agent] Ran a 40-bot, 5-minute performance test with zero bot/request errors.
 - T+01:30:00 [agent] Manual browser testing exposed a missing Three.js core asset and slow proposer controls; added the missing asset and quick-offer buttons.
+- T+02:05:00 [agent] Added authenticated HTTP action submissions after manual browser testing showed WebSocket-only clicks were unreliable; psynet test local passes again.
