@@ -41,4 +41,6 @@ is optional but encouraged if it can be implemented cleanly.
 Before the main task begins, participants should complete a short audio
 pre-screening step using a static voice clip saying "five". Participants should
 continue only after typing `five` or `5`, ignoring letter case and surrounding
-whitespace.
+whitespace. Implementers should also look for existing audio pre-screening
+solutions in the Computational Audition Lab GitLab group and prefer a more
+robust reusable solution if one is available.

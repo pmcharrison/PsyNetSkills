@@ -31,3 +31,4 @@
 - T+02:06:00 [agent] Replaced pre-screen evidence with static WAV repeat-back recording, verified non-silent audio, seeded updated debug run with bots, and refreshed data.zip/monitor.html.
 - T+02:07:00 [manual] User reported another challenge update requiring overlapping notes in a time slot.
 - T+02:14:00 [agent] Converted melody representation and sequencer playback to support multiple active pitches per slot.
+- T+02:16:00 [agent] Synced latest challenge wording and documented CAL pre-screen lookup/baseline choice before testing.
