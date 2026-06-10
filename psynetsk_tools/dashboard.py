@@ -1010,8 +1010,6 @@ def should_publish_attempt_artifact(
         return True
     if section == "evidence" and relative_path == "data.zip":
         return True
-    if section == "challenge":
-        return True
     return False
 
 
@@ -1022,6 +1020,12 @@ def excluded_attempt_artifact_note(section: str, relative_path: str) -> str:
         return (
             "Excluded from dashboard publication because only evidence/data.zip "
             "is published among attempt evidence ZIP files."
+        )
+    if section == "challenge":
+        return (
+            "Excluded from dashboard publication because large ZIP files in "
+            "attempt challenge snapshots duplicate the top-level challenge "
+            "reference assets."
         )
     return (
         "Excluded from dashboard publication because large ZIP files in generated "

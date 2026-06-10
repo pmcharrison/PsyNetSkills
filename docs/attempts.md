@@ -93,9 +93,10 @@ exported experiment data. `analyses/` contains challenge-specific scientific
 checks, typically figures or concise reports.
 
 The dashboard publishes `evidence/data.zip`, but it does not publish other ZIP
-files from attempt `evidence/` or generated `code/` directories. Those ZIPs
-remain listed with size metadata so reviewers know they exist, but the static
-dashboard omits the bytes to avoid duplicating large implementation bundles.
+files from attempt `evidence/`, generated `code/`, or attempt `challenge/`
+snapshot directories. Those ZIPs remain listed with size metadata so reviewers
+know they exist, but the static dashboard omits the bytes to avoid duplicating
+large implementation bundles and top-level challenge reference assets.
 
 Command logs may also be included in `evidence/` when they help reviewers
 understand what ran and what failed. Keep logs concise when practical, and do
