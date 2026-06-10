@@ -51,20 +51,24 @@ def melody_change_count(melody, reference):
 
 
 def melody_to_waveform(melody, samples_per_step=8):
-    """Sample the same sine-note model used by browser playback for preview."""
+    """Downsample the synthesized melody into deterministic waveform peaks."""
     waveform = []
     step_duration = 0.22
+    sub_samples = 24
     melody_array = np.array(melody, dtype=int)
     for step in range(N_STEPS):
         active_rows = [row for row in range(N_ROWS) if melody_array[row, step] == 1]
-        for sample in range(samples_per_step):
-            pos = (sample + 0.5) / samples_per_step
-            envelope = np.sin(np.pi * pos)
-            t = (step + pos) * step_duration
-            value = 0.0
-            for row in active_rows:
-                value += np.sin(2 * np.pi * NOTE_FREQUENCIES[row] * t)
-            waveform.append(abs(value) * envelope / max(1, len(active_rows)))
+        for display_sample in range(samples_per_step):
+            peak = 0.0
+            for sub_sample in range(sub_samples):
+                pos = (display_sample + (sub_sample + 0.5) / sub_samples) / samples_per_step
+                envelope = np.sin(np.pi * pos)
+                t = (step + pos) * step_duration
+                value = 0.0
+                for row in active_rows:
+                    value += np.sin(2 * np.pi * NOTE_FREQUENCIES[row] * t)
+                peak = max(peak, abs(value) * envelope / max(1, len(active_rows)))
+            waveform.append(peak)
     peak = max(waveform) if waveform else 0.0
     if peak <= 0:
         return [0.0 for _ in waveform]
