@@ -64,6 +64,7 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
           PAGES_BRANCH: gh-pages
           PREVIEW_PATH: ${{ steps.preview.outputs.path }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
         run: |
           set -euo pipefail
 
@@ -95,6 +96,8 @@ jobs:
 
           if [ -d public/artifacts ]; then
             mkdir -p "${pages_dir}/artifacts"
+            rm -rf "${pages_dir}/artifacts/challenges"
+            rm -rf "${pages_dir}/pr-artifacts/pr-${PR_NUMBER}"
             cp -a public/artifacts/. "${pages_dir}/artifacts/"
             rm -rf public/artifacts
           fi
