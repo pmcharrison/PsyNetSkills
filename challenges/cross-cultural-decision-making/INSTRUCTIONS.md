@@ -6,7 +6,7 @@ authors: [akjagadish]
 ---
 
 Implement a PsyNet experiment where the participant is shown two options with
-different features and decides between them.
+different features and decides between them.  The experiment should be prepared for translation using the Prepare for Translation skill. Provide video evidence showing the experiment running successfully in English, Hindi, and French.
 
 The experiment should:
 
@@ -15,4 +15,5 @@ The experiment should:
 - Ask the participant which option they would choose.
 - Save one choice per trial.
 - Include a short welcome page and a short thank-you page.
-- Be simple enough to run locally with PsyNet.
+- Provide full instructions before the experiment starts and again on the choice page.
+
