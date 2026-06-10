@@ -21,4 +21,5 @@ and completion pages, not only custom trial pages.
 *Actions:*
 - **PsyNetSkills:** Add a reminder to `prepare-for-translation` or challenge
   evidence guidance to inspect framework-owned participant pages during
-  translation attempts. Confidence: high. Status: considering.
+  translation attempts. Confidence: high. Status: completed. Notes: Added to
+  `prepare-for-translation`.
