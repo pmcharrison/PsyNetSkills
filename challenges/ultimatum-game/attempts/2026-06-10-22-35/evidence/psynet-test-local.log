@@ -1,0 +1,48 @@
+Traceback (most recent call last):
+  File "/home/ubuntu/PsyNet/.venv/bin/psynet", line 10, in <module>
+    sys.exit(psynet())
+             ~~~~~~^^
+  File "/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/click/core.py", line 1485, in __call__
+    return self.main(*args, **kwargs)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/click/core.py", line 1406, in main
+    rv = self.invoke(ctx)
+  File "/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/click/core.py", line 1873, in invoke
+    return _process_result(sub_ctx.command.invoke(sub_ctx))
+                           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/click/core.py", line 1873, in invoke
+    return _process_result(sub_ctx.command.invoke(sub_ctx))
+                           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/click/core.py", line 1269, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/click/core.py", line 824, in invoke
+    return callback(*args, **kwargs)
+  File "/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/psynet/command_line.py", line 635, in wrapper
+    return func(*args, **kwargs)
+  File "/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/psynet/command_line.py", line 3161, in test__local
+    exp = get_experiment()
+  File "/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/psynet/experiment.py", line 4347, in get_experiment
+    return import_local_experiment()["class"]()
+           ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/psynet/experiment.py", line 4318, in import_local_experiment
+    dallinger_get_config()
+    ~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/dallinger/config.py", line 412, in get_config
+    config.load()
+    ~~~~~~~~~~~^^
+  File "/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/psynet/__init__.py", line 50, in load
+    old_load(self, strict=strict)
+    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/dallinger/config.py", line 345, in load
+    self.load_from_file(localConfig, strict)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/dallinger/config.py", line 297, in load_from_file
+    self.extend(data, cast_types=True, strict=strict)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/dallinger/config.py", line 180, in extend
+    raise_invalid_key_error(key)
+    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/dallinger/config.py", line 452, in raise_invalid_key_error
+    raise KeyError(error_text)
+KeyError: 'launch_in_sandbox_mode is not a valid configuration key'
