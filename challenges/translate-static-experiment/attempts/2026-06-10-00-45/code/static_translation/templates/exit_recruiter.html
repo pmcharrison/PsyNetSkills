@@ -1,0 +1,81 @@
+{% extends "layout.html" %}
+
+{% block stylesheets %}
+    <style>
+      body {
+          padding:0px;
+          margin: 0px;
+          background-color: white;
+          color: black;
+          font-weight: 300;
+          font-size: 13pt;
+      }
+
+      #adlogo {
+          float: right;
+          width: 140px;
+          padding: 2px;
+          border: none;
+      }
+
+      #container {
+          position: absolute;
+          top: 0px;
+          bottom: 0px;
+          left: 0px;
+          right: 0px;
+          padding: 100px;
+          padding-top: 5%;
+          border: 18px solid #f3f3f3;
+          background: white;
+      }
+    </style>
+{% endblock %}
+
+{% macro translated_exit_key(key) -%}
+    {%- if get_from_config("locale") == "es" -%}
+        {%- if key == "Assignment ID" -%}ID de asignación
+        {%- elif key == "Base Pay" -%}Pago base
+        {%- elif key == "Bonus" -%}Bonificación
+        {%- elif key == "HIT ID" -%}ID del HIT
+        {%- else -%}{{ key }}
+        {%- endif -%}
+    {%- else -%}
+        {{ key }}
+    {%- endif -%}
+{%- endmacro %}
+
+{% block body %}
+    <div id="container">
+      <div class="well">
+        <i>{{ recruiter }}</i>
+        {% if get_from_config("locale") == "es" %}
+          <h1>¡Has terminado!</h1>
+          <hr>
+          {% if participant_exit_info %}
+          <p>A continuación se muestra información que podrías necesitar para recibir compensación por tu participación.</p>
+          <table class="table table-sm table-striped">
+              <tbody>
+              {% for key, value in participant_exit_info %}
+                  <tr><th>{{ translated_exit_key(key) }}</th><td>{{ value }}</td></tr>
+              {% endfor %}
+              </tbody>
+          </table>
+          {% endif %}
+        {% else %}
+          <h1>You're finished!</h1>
+          <hr>
+          {% if participant_exit_info %}
+          <p>Below is information you may need to receive compensation for your
+          participation.</p>
+          <table class="table table-sm table-striped">
+              <tbody>
+              {% for key, value in participant_exit_info %}
+                  <tr><th>{{ key }}</th><td>{{ value }}</td></tr>
+              {% endfor %}
+              </tbody>
+          </table>
+          {% endif %}
+        {% endif %}
+      </div>
+{% endblock %}

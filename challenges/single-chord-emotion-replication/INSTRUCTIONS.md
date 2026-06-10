@@ -1,7 +1,7 @@
 ---
 title: Single chord emotion replication
 type: experiment implementation
-difficulty: 9
+difficulty: 5
 authors: [pmcharrison]
 ---
 

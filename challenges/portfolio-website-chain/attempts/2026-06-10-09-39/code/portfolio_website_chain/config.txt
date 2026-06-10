@@ -1,0 +1,53 @@
+[Config]
+title = Portfolio website chain (Chrome browser, about 2 minutes to complete)
+description = In this experiment, each participant writes one instruction for an AI model that creates or improves a portfolio website. If no OpenRouter-compatible API key is configured, the experiment uses a deterministic fallback backend for local testing.
+contact_email_on_error = local-test@example.com
+organization_name = PsyNetSkills
+
+recruiter = generic
+currency = $
+wage_per_hour = 12.0
+
+# Optional non-secret runtime settings:
+# OPENROUTER_API_KEY or OPENAI_API_KEY supplies the OpenAI-compatible API key.
+# OPENROUTER_MODEL selects the model; default is openai/gpt-4o-mini.
+# OPENROUTER_BASE_URL selects the OpenAI-compatible API base URL.
+# OPENROUTER_TIMEOUT_SECONDS selects request/model-check timeout.
+
+[Prolific]
+# recruiter = prolific
+
+# Setting `auto_recruit = false` means that PsyNet won't recruit participants itself,
+# you'll instead control recruitment via the Prolific interface.
+auto_recruit = false
+
+# When recruiting with Prolific we typically set a small base payment which we then supplement
+# with bonus for time spent on the task.
+prolific_estimated_completion_minutes = 2
+# 10 dollars an hour -> 16.666666667 cents per minutes
+base_payment = 0.34
+
+[Lucid]
+# When recruiting with Lucid below settings need to be applied,
+# except for `debug_recruiter` which only needs to be set for debug mode.
+
+# recruiter = lucid
+# debug_recruiter = DevLucidRecruiter
+# lucid_recruitment_config = file:./lucid_recruitment_config.json
+# show_reward = false
+
+[Lab Recruiter]
+# When recruiting with Lab Recruiter set the following:
+# recruiter = lab-recruiter
+# (default external submission URL: https://recruiter.cococo-lab.cornell.edu/tasks)
+#
+# Alternatively, when using the staging Lab Recruiter set:
+# recruiter = staging-lab-recruiter
+# (default external submission URL: https://recruiter-staging.cococo-lab.cornell.edu/tasks)
+#
+# For local debug Lab Recruiter set:
+# debug_recruiter = dev-lab-recruiter
+# (default external submission URL: http://localhost:8000/tasks)
+#
+# You can override the external submission URL with:
+# lab_recruiter_external_submission_url = https://recruiter.yourdomain.edu/tasks

@@ -1,0 +1,22 @@
+# Timeline
+
+- T+00:00:00 [agent-start] Started autonomous implementation work.
+- T+00:00:30 [agent] Read public challenge instructions.
+- T+00:01:10 [agent] Read attempt artifact, experiment evidence, author, and PsyNet validation workflows.
+- T+00:01:40 [agent] Asked for the human GitHub author key required by the metadata workflow.
+- T+00:02:20 [agent] Created feature branch and refreshed local PsyNet checkout to `2290ae6a4f25f9e76f9d08f560bccc4f1cbbc4f5`.
+- T+00:02:50 [system] `rsync` was unavailable; copied the challenge snapshot with shell globbing while excluding prior attempts.
+- T+00:04:30 [agent] Scaffolded a PsyNet experiment from the imitation-chain demo support files.
+- T+00:07:45 [agent] Implemented portfolio website chain flow, OpenRouter availability checks, deterministic fallback generation, sandboxed website display, and helper tests.
+- T+00:08:45 [agent] Wrote attempt metadata from runtime provenance and noted that live OpenRouter credentials are not configured locally.
+- T+00:11:20 [agent] `pytest -q test.py` initially exposed a bot-order assertion bug; sorted bot trial assertions by recorded node position.
+- T+00:12:15 [agent] `pytest -q test.py` and `psynet test local` passed with three serial bot participants.
+- T+00:20:30 [agent] Recorded three browser participant sessions to `evidence/participant.mp4`, covering creation, improvement, and comparison flow.
+- T+00:27:45 [agent] Reran `psynet performance-test local` after stopping the debug server that occupied port 5000; saved `evidence/performance.json`.
+- T+00:30:15 [agent] Exported local PsyNet data through the dashboard download route and saved `evidence/data.zip`.
+- T+00:31:00 [agent] Saved dashboard monitor snapshot and participant-flow screenshots.
+- T+00:34:00 [agent] Video review found that the third participant could continue after a blank instruction; added explicit instruction validation and a regression test.
+- T+00:37:00 [agent] Reran `pytest -q test.py` and `psynet test local`; both passed with the blank-instruction regression covered.
+- T+00:45:00 [agent] Re-recorded participant evidence, including the blank-instruction validation message and final completion.
+- T+00:51:00 [agent] Refreshed data export, monitor snapshot, screenshots, and final 40-bot performance evidence.
+- T+00:51:30 [agent-stop] Implementation and first-pass evidence collection complete.

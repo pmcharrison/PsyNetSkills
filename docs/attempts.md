@@ -30,7 +30,8 @@ EVALUATION.md
 `challenge/` snapshots the original challenge at the time of the attempt,
 including optional `CRITERIA.md` when it exists.
 `agent.json` records human author keys plus model, Cursor version, relevant
-skill commit, attempt start time, and PsyNet checkout metadata. `code/` contains
+skill commit, attempt start/end time, Cursor conversation ID when available,
+PsyNet checkout metadata, and optional derived cost metadata. `code/` contains
 the generated implementation. `evidence/` contains the materials used to
 evaluate whether the implementation worked.
 `TIMELINE.md` records major attempt events with timestamps relative to the start
@@ -128,6 +129,13 @@ Record the human author keys and refreshed checkout in `agent.json`:
 `docs/authors.md` for the registration workflow. Cursor, model, client, and
 runtime metadata are provenance, not authorship.
 
+For Cursor Cloud attempts, also record `cursor_conversation_id` from the
+`CURSOR_CONVERSATION_ID` environment variable when it is available. Cursor usage
+CSV exports call the same value `Cloud Agent ID`, so this field gives later cost
+imports an exact join key. Account names or emails from Cursor exports should
+not be treated as author identity, and account-plus-timestamp matching is too
+ambiguous for committed cost metadata when multiple agents run concurrently.
+
 `dirty` should normally be `false` and comes from `git status --short`. If the
 PsyNet checkout cannot be updated to the latest `origin/master`, record the
 blocker in `TIMELINE.md` and `EVALUATION.md`.
@@ -136,6 +144,15 @@ This metadata is required for all real attempts so reviewers can identify the
 framework checkout associated with the work. If metadata is backfilled for an
 older attempt, say so in `agent.json` notes rather than presenting it as exact
 historical provenance.
+
+## Cursor cost metadata
+
+Detailed Cursor cost import and attribution rules live in the
+`cursor-cost-estimation` skill. In brief: do not commit raw Cursor usage CSV
+exports; record `cursor_conversation_id` for Cursor Cloud attempts; and only
+treat exact `cursor_conversation_id` to CSV `Cloud Agent ID` matches as resolved
+automatic cost attribution. The importer reports ambiguous matches but does not
+write them by default.
 
 ## Timeline notes
 
