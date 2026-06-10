@@ -417,7 +417,6 @@ def get_timeline():
             chains_per_experiment=1,
             trials_per_node=1,
             recruit_mode="n_trials",
-            target_n_participants=4,
             check_performance_at_end=False,
             check_performance_every_trial=False,
         ),
