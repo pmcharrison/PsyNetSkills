@@ -176,6 +176,13 @@
     return `Publish ended ${relativeTime(date, now)}`;
   }
 
+  function pagesTimingText(pagesRun, isStale, now) {
+    if (pagesRun && (isStale || pagesRun.status === "completed")) {
+      return pagesTimeText(pagesRun, now);
+    }
+    return `Last checked ${relativeTime(now, now)}`;
+  }
+
   function shortSha(sha) {
     return sha ? sha.slice(0, 7) : "unknown commit";
   }
@@ -185,24 +192,6 @@
   }
 
   function statusForRun(run) {
-    if (isPagesMode()) {
-      if (run.status !== "completed") {
-        return {
-          kind: "running",
-          symbol: "●",
-          text: `Pages publication ${run.status.replace(/_/g, " ")}`,
-        };
-      }
-      if (run.conclusion === "success") {
-        return { kind: "success", symbol: "✓", text: "Pages published" };
-      }
-      return {
-        kind: "failure",
-        symbol: "×",
-        text: `Pages publish ${run.conclusion || "failed"}`,
-      };
-    }
-
     if (run.status !== "completed") {
       return {
         kind: "running",
@@ -220,18 +209,44 @@
     };
   }
 
+  function pagesStatusForRuns(sourceRun, pagesRun, isStale) {
+    if (sourceRun.status !== "completed") {
+      return {
+        kind: "running",
+        symbol: "●",
+        text: `Dashboard build ${sourceRun.status.replace(/_/g, " ")}`,
+      };
+    }
+    if (sourceRun.conclusion !== "success") {
+      return {
+        kind: "failure",
+        symbol: "×",
+        text: `Dashboard build ${sourceRun.conclusion || "failed"}`,
+      };
+    }
+    if (isStale && pagesRun) {
+      if (pagesRun.status !== "completed") {
+        return {
+          kind: "running",
+          symbol: "●",
+          text: `Pages publication ${pagesRun.status.replace(/_/g, " ")}`,
+        };
+      }
+      if (pagesRun.conclusion !== "success") {
+        return {
+          kind: "failure",
+          symbol: "×",
+          text: `Pages publish ${pagesRun.conclusion || "failed"}`,
+        };
+      }
+    }
+
+    return { kind: "success", symbol: "✓", text: "Pages published" };
+  }
+
   function freshnessText(run, isStale) {
     if (!renderedSha) {
       return "Page freshness unknown.";
-    }
-    if (isPagesMode()) {
-      if (run.status !== "completed") {
-        return `Viewing ${shortSha(renderedSha)} while GitHub Pages finishes publishing.`;
-      }
-      if (run.conclusion !== "success") {
-        return `Viewing ${shortSha(renderedSha)} because the latest GitHub Pages publication did not complete.`;
-      }
-      return `Published page includes ${shortSha(renderedSha)}.`;
     }
     if (!run.head_sha) {
       return "Page freshness unknown.";
@@ -242,6 +257,22 @@
     return `Page is stale: viewing ${shortSha(
       renderedSha,
     )}, latest branch run is ${shortSha(run.head_sha)}.`;
+  }
+
+  function pagesFreshnessText(sourceRun, pagesRun, isStale) {
+    if (!renderedSha || !sourceRun.head_sha) {
+      return "Page freshness unknown.";
+    }
+    if (!isStale) {
+      return `Published page includes ${shortSha(renderedSha)}.`;
+    }
+    if (pagesRun && pagesRun.status !== "completed") {
+      return `Viewing ${shortSha(renderedSha)} while GitHub Pages finishes publishing ${shortSha(sourceRun.head_sha)}.`;
+    }
+    if (pagesRun && pagesRun.conclusion !== "success") {
+      return `Viewing ${shortSha(renderedSha)} because the latest GitHub Pages publication did not complete.`;
+    }
+    return `Page is stale: viewing ${shortSha(renderedSha)}, latest dashboard source is ${shortSha(sourceRun.head_sha)}.`;
   }
 
   function branchRunsUrl() {
@@ -258,14 +289,22 @@
     return `https://github.com/${config.owner}/${config.repo}${workflowPath}${query}`;
   }
 
-  function apiUrl() {
-    if (isPagesMode()) {
-      return `https://api.github.com/repos/${config.owner}/${config.repo}/actions/runs?event=dynamic&per_page=1`;
-    }
-
+  function sourceApiUrl() {
     const workflow = encodeURIComponent(config.workflow);
     const branch = encodeURIComponent(config.branch);
     return `https://api.github.com/repos/${config.owner}/${config.repo}/actions/workflows/${workflow}/runs?branch=${branch}&per_page=1`;
+  }
+
+  function pagesApiUrl() {
+    return `https://api.github.com/repos/${config.owner}/${config.repo}/actions/runs?event=dynamic&per_page=1`;
+  }
+
+  async function fetchJson(url) {
+    const response = await fetch(url, {
+      headers: { Accept: "application/vnd.github+json" },
+    });
+
+    return { response, data: response.ok ? await response.json() : null };
   }
 
   function scheduleNext(delayMs) {
@@ -287,9 +326,7 @@
     const now = new Date();
 
     try {
-      const response = await fetch(apiUrl(), {
-        headers: { Accept: "application/vnd.github+json" },
-      });
+      const { response, data } = await fetchJson(sourceApiUrl());
 
       if (!response.ok) {
         const resetSeconds = Number(response.headers.get("x-ratelimit-reset"));
@@ -305,12 +342,11 @@
         return;
       }
 
-      const data = await response.json();
       const run = data.workflow_runs && data.workflow_runs[0];
 
       if (!run) {
         const missingRun = isPagesMode()
-          ? "No GitHub Pages deployment run found."
+          ? "No dashboard source workflow run found."
           : `No workflow run found for ${config.branch}.`;
         setState("unknown", "?", [
           missingRun,
@@ -321,19 +357,36 @@
         return;
       }
 
-      const state = statusForRun(run);
-      const isStale = isPagesMode()
-        ? run.status !== "completed" || run.conclusion !== "success"
-        : Boolean(renderedSha && run.head_sha && renderedSha !== run.head_sha);
+      let pagesRun = null;
+      if (isPagesMode()) {
+        const pagesResult = await fetchJson(pagesApiUrl());
+        if (pagesResult.response.ok) {
+          pagesRun =
+            pagesResult.data.workflow_runs &&
+            pagesResult.data.workflow_runs[0];
+        }
+      }
+
+      const isStale = Boolean(
+        renderedSha && run.head_sha && renderedSha !== run.head_sha,
+      );
+      const state = isPagesMode()
+        ? pagesStatusForRuns(run, pagesRun, isStale)
+        : statusForRun(run);
       const branch =
         !isPagesMode() && config.branch ? ` on ${config.branch}` : "";
       const label = [
         `${state.text}${branch}.`,
-        freshnessText(run, isStale),
-        isPagesMode() ? pagesTimeText(run, now) : checkedAt(now),
+        isPagesMode()
+          ? pagesFreshnessText(run, pagesRun, isStale)
+          : freshnessText(run, isStale),
+        isPagesMode() ? pagesTimingText(pagesRun, isStale, now) : checkedAt(now),
       ];
       setState(state.kind, state.symbol, label, isStale);
-      statusLink.href = run.html_url || branchRunsUrl();
+      statusLink.href =
+        (isPagesMode() && pagesRun && pagesRun.html_url) ||
+        run.html_url ||
+        branchRunsUrl();
       scheduleNext();
     } catch (error) {
       setState("unknown", "?", [
