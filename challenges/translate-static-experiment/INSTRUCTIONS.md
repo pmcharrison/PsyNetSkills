@@ -1,5 +1,5 @@
 ---
-title: Spanish translation of the static demo
+title: Translate a static experiment to other languages
 type: experiment implementation
 difficulty: 4
 authors: [jacobyn]
