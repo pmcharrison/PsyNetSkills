@@ -34,11 +34,22 @@ the first node, this context is the original portfolio website task. For the
 second node, it is the website from the previous round. For later nodes, it is
 the participant-selected website from the recent comparison.
 
-Use OpenRouter for AI API calls. Load the API key and any configurable model or
-API settings from configuration or environment variables. Do not hard-code API
-keys, service credentials, local paths, or machine-specific configuration. Tests
-and bots should not require live credentials unless they are explicitly supplied
-through the environment.
+Use OpenRouter for AI API calls through an OpenAI-compatible client or request
+format. Load the API key and any configurable model, base URL, or timeout
+settings from configuration or environment variables. The implementation should
+support an OpenAI-compatible API key setting, check whether an API key is
+available, and check whether the configured model is available before attempting
+live model calls. Do not hard-code API keys, service credentials, local paths, or
+machine-specific configuration.
+
+If no API key is configured, or if the configured model is unavailable, the
+experiment should fall back to a general `bot_response` path that produces
+deterministic placeholder website revisions. This fallback should make the
+experiment testable without live API credentials while preserving the same chain
+flow and saved-data structure. The implementation should save whether each node
+used the live AI backend or the fallback backend, including the fallback reason.
+If an attempt relies on the fallback because credentials or models are
+unavailable, the attempt summary should explicitly inform the user at the end.
 
 Render generated portfolio websites safely inside the experiment page. The
 participant should be able to inspect the generated website without giving the
@@ -55,6 +66,8 @@ each node should save:
 - the participant's free-text instruction;
 - the selected comparison winner for third and later nodes;
 - the website context sent to the AI;
+- whether the live AI backend or fallback `bot_response` backend was used;
+- the fallback reason, when applicable;
 - the complete AI request payload, excluding secrets;
 - the complete AI response payload;
 - the generated website version used for display in the next node; and
@@ -69,6 +82,7 @@ choice determines which recent website version is carried forward.
 Include a bot or other simple automated test path that exercises the main
 experiment flow. The test path should cover creating the first website version,
 improving an existing version, comparing two recent versions, saving the
-comparison choice, and producing the next AI request from the selected context.
-API-dependent behavior should be tested with a stub or mock response unless live
-OpenRouter credentials are intentionally provided.
+comparison choice, checking API/model availability, exercising the fallback path
+when no API key or model is available, and producing the next AI request from the
+selected context. API-dependent behavior should be tested with a stub or mock
+response unless live OpenRouter credentials are intentionally provided.
