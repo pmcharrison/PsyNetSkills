@@ -7,7 +7,7 @@
     "hard_max_experiment_payment": 1100.0,
     "soft_max_experiment_payment": 1000.0,
     "max_participant_payment": 25.0,
-    "deployment_id": "portfolio-website-chain__mode=debug__launch=2026-06-10--11-47-48",
+    "deployment_id": "portfolio-website-chain__mode=debug__launch=2026-06-10--13-47-21",
     "label": "Portfolio website chain",
     "deployment_config": {
         "aws_region": "us-east-1",
@@ -91,8 +91,8 @@
         "description": "Participants collaboratively create and improve a portfolio website by writing instructions for an AI model.",
         "organization_name": "PsyNetSkills",
         "recruiter": "generic",
-        "id": "ac65e0db-50a2-a31c-a40f-6902d14a8c4b",
-        "heroku_app_id_root": "ac65e0db-50a2-a31c-a40f-6902d14a8c4b",
+        "id": "e1e4e8ba-b7ae-ca92-7ab6-c416270488d8",
+        "heroku_app_id_root": "e1e4e8ba-b7ae-ca92-7ab6-c416270488d8",
         "port": 5000
     }
 }
@@ -106,15 +106,15 @@ Done. Local export available in data/local-data.zip
   self._color = self._set_color(color) if color else color
 
 ⠋ Completed.             ✔ Completed.
-Bot:   0%|          | 0/530 [00:00<?, ?it/s]Bot: 100%|██████████| 530/530 [00:00<00:00, 7014.82it/s]
-ChainNetwork:   0%|          | 0/1 [00:00<?, ?it/s]ChainNetwork: 100%|██████████| 1/1 [00:00<00:00, 6123.07it/s]
-PortfolioNode:   0%|          | 0/3 [00:00<?, ?it/s]PortfolioNode: 100%|██████████| 3/3 [00:00<00:00, 6913.69it/s]
-ChainVector:   0%|          | 0/2 [00:00<?, ?it/s]ChainVector: 100%|██████████| 2/2 [00:00<00:00, 19195.90it/s]
-PortfolioTrial:   0%|          | 0/3 [00:00<?, ?it/s]PortfolioTrial: 100%|██████████| 3/3 [00:00<00:00, 4955.85it/s]
-Response:   0%|          | 0/526 [00:00<?, ?it/s]Response: 100%|██████████| 526/526 [00:00<00:00, 21653.44it/s]
-ChainTrialMakerState:   0%|          | 0/530 [00:00<?, ?it/s]ChainTrialMakerState: 100%|██████████| 530/530 [00:00<00:00, 17923.08it/s]
-Request:   0%|          | 0/1574 [00:00<?, ?it/s]Request: 100%|██████████| 1574/1574 [00:00<00:00, 206694.88it/s]
-ExperimentConfig:   0%|          | 0/1 [00:00<?, ?it/s]ExperimentConfig: 100%|██████████| 1/1 [00:00<00:00, 3426.72it/s]
+Participant:   0%|          | 0/3 [00:00<?, ?it/s]Participant: 100%|██████████| 3/3 [00:00<00:00, 4086.69it/s]
+ChainNetwork:   0%|          | 0/1 [00:00<?, ?it/s]ChainNetwork: 100%|██████████| 1/1 [00:00<00:00, 8811.56it/s]
+PortfolioNode:   0%|          | 0/4 [00:00<?, ?it/s]PortfolioNode: 100%|██████████| 4/4 [00:00<00:00, 7724.32it/s]
+ChainVector:   0%|          | 0/3 [00:00<?, ?it/s]ChainVector: 100%|██████████| 3/3 [00:00<00:00, 20936.63it/s]
+PortfolioTrial:   0%|          | 0/3 [00:00<?, ?it/s]PortfolioTrial: 100%|██████████| 3/3 [00:00<00:00, 5249.44it/s]
+Response:   0%|          | 0/10 [00:00<?, ?it/s]Response: 100%|██████████| 10/10 [00:00<00:00, 14160.38it/s]
+ChainTrialMakerState:   0%|          | 0/3 [00:00<?, ?it/s]ChainTrialMakerState: 100%|██████████| 3/3 [00:00<00:00, 14716.86it/s]
+Request:   0%|          | 0/32 [00:00<?, ?it/s]Request: 100%|██████████| 32/32 [00:00<00:00, 174762.67it/s]
+ExperimentConfig:   0%|          | 0/1 [00:00<?, ?it/s]ExperimentConfig: 100%|██████████| 1/1 [00:00<00:00, 5090.17it/s]
 ⠋ Completed.             ✔ Completed.
 
 ❯❯ Export complete. You can find your results at: /workspace/challenges/portfolio-website-chain/attempts/2026-06-10-11-24/evidence/export
@@ -125,15 +125,15 @@ Preparing to export the data...
 Zipping up the package...
 Done. Local export available in data/local-data.zip
 ⠋ Completed.             ✔ Completed.
-Bot:   0%|          | 0/530 [00:00<?, ?it/s]Bot: 100%|██████████| 530/530 [00:00<00:00, 7072.60it/s]
-ChainNetwork:   0%|          | 0/1 [00:00<?, ?it/s]ChainNetwork: 100%|██████████| 1/1 [00:00<00:00, 8192.00it/s]
-PortfolioNode:   0%|          | 0/3 [00:00<?, ?it/s]PortfolioNode: 100%|██████████| 3/3 [00:00<00:00, 7772.03it/s]
-ChainVector:   0%|          | 0/2 [00:00<?, ?it/s]ChainVector: 100%|██████████| 2/2 [00:00<00:00, 21454.24it/s]
-PortfolioTrial:   0%|          | 0/3 [00:00<?, ?it/s]PortfolioTrial: 100%|██████████| 3/3 [00:00<00:00, 4275.54it/s]
-Response:   0%|          | 0/526 [00:00<?, ?it/s]Response: 100%|██████████| 526/526 [00:00<00:00, 21922.83it/s]
-ChainTrialMakerState:   0%|          | 0/530 [00:00<?, ?it/s]ChainTrialMakerState: 100%|██████████| 530/530 [00:00<00:00, 20998.06it/s]
-Request:   0%|          | 0/1574 [00:00<?, ?it/s]Request: 100%|██████████| 1574/1574 [00:00<00:00, 196869.88it/s]
-ExperimentConfig:   0%|          | 0/1 [00:00<?, ?it/s]ExperimentConfig: 100%|██████████| 1/1 [00:00<00:00, 3530.56it/s]
+Participant:   0%|          | 0/3 [00:00<?, ?it/s]Participant: 100%|██████████| 3/3 [00:00<00:00, 4897.98it/s]
+ChainNetwork:   0%|          | 0/1 [00:00<?, ?it/s]ChainNetwork: 100%|██████████| 1/1 [00:00<00:00, 11397.57it/s]
+PortfolioNode:   0%|          | 0/4 [00:00<?, ?it/s]PortfolioNode: 100%|██████████| 4/4 [00:00<00:00, 8413.85it/s]
+ChainVector:   0%|          | 0/3 [00:00<?, ?it/s]ChainVector: 100%|██████████| 3/3 [00:00<00:00, 27294.82it/s]
+PortfolioTrial:   0%|          | 0/3 [00:00<?, ?it/s]PortfolioTrial: 100%|██████████| 3/3 [00:00<00:00, 5552.92it/s]
+Response:   0%|          | 0/10 [00:00<?, ?it/s]Response: 100%|██████████| 10/10 [00:00<00:00, 13742.80it/s]
+ChainTrialMakerState:   0%|          | 0/3 [00:00<?, ?it/s]ChainTrialMakerState: 100%|██████████| 3/3 [00:00<00:00, 15650.39it/s]
+Request:   0%|          | 0/32 [00:00<?, ?it/s]Request: 100%|██████████| 32/32 [00:00<00:00, 209061.88it/s]
+ExperimentConfig:   0%|          | 0/1 [00:00<?, ?it/s]ExperimentConfig: 100%|██████████| 1/1 [00:00<00:00, 4826.59it/s]
 ⠋ Completed.             ✔ Completed.
 
 ❯❯ Export complete. You can find your results at: /workspace/challenges/portfolio-website-chain/attempts/2026-06-10-11-24/evidence/export
