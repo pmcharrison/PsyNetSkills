@@ -23,6 +23,7 @@ dashboard/content/challenges/
 dashboard/content/docs/
 dashboard/content/skills/
 dashboard/static/artifacts/
+dashboard/static/challenges/
 
 # Local files
 .DS_Store

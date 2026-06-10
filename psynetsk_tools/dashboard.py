@@ -50,6 +50,7 @@ TEXT_FILE_EXTENSIONS = {
     ".yml",
 }
 ATTEMPT_ARTIFACTS_DIR = "artifacts/challenges"
+CHALLENGE_REFERENCES_DIR = "challenges"
 ARTIFACT_URL_PREFIX_ENV = "PSYNETSK_ARTIFACT_URL_PREFIX"
 MONITOR_STATIC_ROOT = Path(__file__).parent / "assets" / "monitor-static" / "static"
 STATIC_REF_RE = re.compile(r'(?:href|src)="/static/(?P<path>[^"]+)"')
@@ -855,6 +856,39 @@ def write_attempt_artifacts(root: Path, dashboard_dir: Path) -> None:
                 sanitize_text_artifact(artifact_file)
 
 
+def write_challenge_references(root: Path, dashboard_dir: Path) -> None:
+    """Copy challenge reference assets into Hugo's static directory."""
+    target_root = dashboard_dir / "static" / CHALLENGE_REFERENCES_DIR
+    shutil.rmtree(target_root, ignore_errors=True)
+    target_root.mkdir(parents=True, exist_ok=True)
+
+    challenges_dir = root / "challenges"
+    if not challenges_dir.exists():
+        return
+
+    for challenge_dir in sorted(
+        path for path in challenges_dir.iterdir() if path.is_dir()
+    ):
+        references_dir = challenge_dir / "references"
+        if not references_dir.exists():
+            continue
+        target_references_dir = (
+            target_root / challenge_dir.name / "references"
+        )
+        shutil.copytree(
+            references_dir,
+            target_references_dir,
+            dirs_exist_ok=True,
+        )
+        for reference_file in target_references_dir.rglob("*"):
+            if not reference_file.is_file():
+                continue
+            if reference_file.suffix.lower() == ".html":
+                sanitize_html_artifact(reference_file)
+            else:
+                sanitize_text_artifact(reference_file)
+
+
 def export_dashboard(root: Path, dashboard_dir: Path) -> None:
     """Export JSON data and generated content pages for Hugo."""
     dashboard_dir.mkdir(parents=True, exist_ok=True)
@@ -897,6 +931,7 @@ def export_dashboard(root: Path, dashboard_dir: Path) -> None:
         ],
     )
     write_attempt_artifacts(root, dashboard_dir)
+    write_challenge_references(root, dashboard_dir)
 
 
 def build_parser() -> argparse.ArgumentParser:

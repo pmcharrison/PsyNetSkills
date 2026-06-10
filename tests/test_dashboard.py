@@ -643,6 +643,10 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
         ),
         b"example video bytes",
     )
+    write(
+        tmp_path / "challenges/example/references/interface-sketch.svg",
+        "<svg><title>Example sketch</title></svg>",
+    )
 
     export_dashboard(tmp_path, tmp_path / "dashboard")
 
@@ -695,6 +699,14 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
         / "dashboard/static/artifacts/challenges/example/attempts/"
         "2026-06-01-10-10/evidence/participant.mp4"
     ).exists()
+    exported_reference = (
+        tmp_path
+        / "dashboard/static/challenges/example/references/"
+        "interface-sketch.svg"
+    )
+    assert exported_reference.read_text(encoding="utf-8") == (
+        "<svg><title>Example sketch</title></svg>"
+    )
     exported_monitor = (
         tmp_path
         / "dashboard/static/artifacts/challenges/example/attempts/"
