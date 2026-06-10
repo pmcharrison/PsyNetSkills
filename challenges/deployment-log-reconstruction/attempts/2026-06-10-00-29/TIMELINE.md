@@ -7,5 +7,7 @@
 - T+00:03:30 [agent] Refreshed the local PsyNet checkout and recorded clean provenance metadata.
 - T+00:04:30 [agent] Created the timestamped attempt scaffold and copied the public challenge snapshot.
 - T+00:06:00 [agent] Reconstructed the deployment record from dossier facts and marked uncertain values.
+- T+00:11:30 [agent] Ran structural validation, tests, dashboard export, and Hugo build.
+- T+00:12:00 [agent-stop] Implementation and first-pass evidence collection complete.
 
 <!-- Close active implementation segments with [agent-stop] when work pauses or completes. -->
