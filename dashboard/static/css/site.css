@@ -37,6 +37,7 @@ a {
 }
 
 nav {
+  align-items: baseline;
   display: flex;
   flex-wrap: wrap;
   gap: 1.25rem;
@@ -61,9 +62,29 @@ nav {
   font-weight: 700;
 }
 
-.github-nav-link {
+.nav-actions {
   align-items: center;
   display: inline-flex;
+  gap: 0.65rem;
+  margin-left: auto;
+  position: relative;
+}
+
+.site-header nav .nav-actions a {
+  border-bottom: 0;
+  font-size: inherit;
+  padding-bottom: 0;
+}
+
+.github-nav-link,
+.workflow-status-link {
+  align-items: center;
+  display: inline-flex;
+  flex: 0 0 auto;
+  height: 1.25rem;
+  justify-content: center;
+  position: relative;
+  width: 1.25rem;
 }
 
 .github-nav-icon {
@@ -73,37 +94,24 @@ nav {
 }
 
 .workflow-status-link {
-  align-items: center;
-  border: 1px solid var(--border);
   border-radius: 999px;
-  display: inline-flex;
-  height: 1.35rem;
-  justify-content: center;
-  margin-left: auto;
-  position: relative;
-  width: 1.35rem;
+  color: var(--muted);
+  overflow: visible;
 }
 
-.workflow-status-link.workflow-status-success {
-  background: var(--success-background);
-  border-color: var(--success-border);
+.workflow-status-link.workflow-status-success .workflow-status-icon {
   color: #1a7f37;
 }
 
-.workflow-status-link.workflow-status-running {
-  background: #ddf4ff;
-  border-color: #54aeef;
+.workflow-status-link.workflow-status-running .workflow-status-icon {
   color: #0969da;
 }
 
-.workflow-status-link.workflow-status-failure {
-  background: var(--danger-background);
-  border-color: var(--danger-border);
+.workflow-status-link.workflow-status-failure .workflow-status-icon {
   color: #cf222e;
 }
 
-.workflow-status-link.workflow-status-unknown {
-  background: var(--code-background);
+.workflow-status-link.workflow-status-unknown .workflow-status-icon {
   color: var(--muted);
 }
 
@@ -112,9 +120,17 @@ nav {
 }
 
 .workflow-status-icon {
-  font-size: 0.85rem;
+  align-items: center;
+  border: 1.7px solid currentColor;
+  border-radius: 999px;
+  box-sizing: border-box;
+  display: inline-flex;
+  font-size: 0.72rem;
   font-weight: 800;
+  height: 1.17rem;
+  justify-content: center;
   line-height: 1;
+  width: 1.17rem;
 }
 
 .workflow-freshness-badge {
@@ -126,17 +142,52 @@ nav {
   display: none;
   font-size: 0.65rem;
   font-weight: 800;
-  height: 0.85rem;
+  height: 0.82rem;
   justify-content: center;
   line-height: 1;
   position: absolute;
-  right: -0.35rem;
-  top: -0.4rem;
-  width: 0.85rem;
+  right: -0.42rem;
+  top: -0.45rem;
+  width: 0.82rem;
 }
 
 .workflow-freshness-stale .workflow-freshness-badge {
   display: inline-flex;
+}
+
+.workflow-status-popover {
+  background: #24292f;
+  border-radius: 0.4rem;
+  box-shadow: 0 0.65rem 1.5rem rgb(15 23 42 / 0.24);
+  color: #ffffff;
+  cursor: default;
+  display: grid;
+  font-size: 0.78rem;
+  font-weight: 400;
+  gap: 0.12rem;
+  line-height: 1.35;
+  max-width: min(23rem, calc(100vw - 2rem));
+  min-width: 16rem;
+  padding: 0.5rem 0.6rem;
+  position: absolute;
+  right: 0;
+  text-align: left;
+  top: calc(100% + 0.55rem);
+  white-space: normal;
+  z-index: 100;
+}
+
+.workflow-status-popover[hidden] {
+  display: none;
+}
+
+.workflow-status-popover::before {
+  border: 0.4rem solid transparent;
+  border-bottom-color: #24292f;
+  content: "";
+  position: absolute;
+  right: 0.25rem;
+  top: -0.78rem;
 }
 
 .visually-hidden {
@@ -870,9 +921,24 @@ footer {
 }
 
 @media (max-width: 720px) {
-  .workflow-status-link,
-  .github-nav-link {
-    display: none;
+  nav {
+    gap: 0.8rem 1rem;
+  }
+
+  .site-header nav a {
+    font-size: 1.15rem;
+  }
+
+  .nav-actions {
+    justify-content: flex-end;
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .workflow-status-popover {
+    left: auto;
+    max-width: calc(100vw - 3rem);
+    right: 0;
   }
 
   .timeline-entry {

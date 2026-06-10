@@ -6,6 +6,7 @@
   }
 
   const icon = statusLink.querySelector(".workflow-status-icon");
+  const popover = statusLink.querySelector(".workflow-status-popover");
   const config = statusLink.dataset;
   const enabled = config.enabled === "true";
   const pollMs = Number(config.pollMs) || 90000;
@@ -13,8 +14,47 @@
   const renderedSha = config.renderedSha || "";
   let timerId = null;
   let inFlight = false;
+  let popoverOpen = false;
 
-  function setState(kind, symbol, label, isStale) {
+  function setPopoverLines(lines) {
+    if (!popover) {
+      return;
+    }
+    popover.replaceChildren(
+      ...lines.map(function (line) {
+        const row = document.createElement("span");
+        row.textContent = line;
+        return row;
+      }),
+    );
+  }
+
+  function showPopover() {
+    if (!popover) {
+      return;
+    }
+    popover.hidden = false;
+    statusLink.classList.add("workflow-tooltip-open");
+    popoverOpen = true;
+  }
+
+  function hidePopover() {
+    if (!popover) {
+      return;
+    }
+    popover.hidden = true;
+    statusLink.classList.remove("workflow-tooltip-open");
+    popoverOpen = false;
+  }
+
+  function usesTapTooltip() {
+    return window.matchMedia(
+      "(hover: none), (pointer: coarse), (max-width: 720px)",
+    ).matches;
+  }
+
+  function setState(kind, symbol, labelLines, isStale) {
+    const label = labelLines.join(" ");
     statusLink.classList.remove(
       "workflow-status-success",
       "workflow-status-running",
@@ -31,7 +71,7 @@
       icon.textContent = symbol;
     }
     statusLink.setAttribute("aria-label", label);
-    statusLink.setAttribute("title", label);
+    setPopoverLines(labelLines);
   }
 
   function checkedAt(date) {
@@ -39,7 +79,7 @@
       hour: "2-digit",
       minute: "2-digit",
       second: "2-digit",
-    })}.`;
+    })}`;
   }
 
   function shortSha(sha) {
@@ -121,12 +161,10 @@
           response.status === 403 && resetSeconds
             ? Math.max(resetSeconds * 1000 - Date.now(), hiddenPollMs)
             : undefined;
-        setState(
-          "unknown",
-          "?",
-          `Could not load workflow status. ${checkedAt(now)}`,
-          false,
-        );
+        setState("unknown", "?", [
+          "Could not load workflow status.",
+          checkedAt(now),
+        ], false);
         scheduleNext(resetDelay);
         return;
       }
@@ -135,12 +173,10 @@
       const run = data.workflow_runs && data.workflow_runs[0];
 
       if (!run) {
-        setState(
-          "unknown",
-          "?",
-          `No workflow run found for ${config.branch}. ${checkedAt(now)}`,
-          false,
-        );
+        setState("unknown", "?", [
+          `No workflow run found for ${config.branch}.`,
+          checkedAt(now),
+        ], false);
         statusLink.href = branchRunsUrl();
         scheduleNext();
         return;
@@ -151,25 +187,61 @@
         renderedSha && run.head_sha && renderedSha !== run.head_sha,
       );
       const branch = config.branch ? ` on ${config.branch}` : "";
-      const label = `${state.text}${branch}. ${freshnessText(
-        run,
-        isStale,
-      )} ${checkedAt(now)}`;
+      const label = [
+        `${state.text}${branch}.`,
+        freshnessText(run, isStale),
+        checkedAt(now),
+      ];
       setState(state.kind, state.symbol, label, isStale);
       statusLink.href = run.html_url || branchRunsUrl();
       scheduleNext();
     } catch (error) {
-      setState(
-        "unknown",
-        "?",
-        `Could not load workflow status. ${checkedAt(now)}`,
-        false,
-      );
+      setState("unknown", "?", [
+        "Could not load workflow status.",
+        checkedAt(now),
+      ], false);
       scheduleNext();
     } finally {
       inFlight = false;
     }
   }
+
+  statusLink.addEventListener("mouseenter", function () {
+    if (!usesTapTooltip()) {
+      showPopover();
+    }
+  });
+
+  statusLink.addEventListener("mouseleave", function () {
+    if (!usesTapTooltip()) {
+      hidePopover();
+    }
+  });
+
+  statusLink.addEventListener("focus", showPopover);
+
+  statusLink.addEventListener("blur", function () {
+    window.setTimeout(function () {
+      if (document.activeElement !== statusLink) {
+        hidePopover();
+      }
+    }, 0);
+  });
+
+  statusLink.addEventListener("click", function (event) {
+    if (!usesTapTooltip() || popoverOpen) {
+      return;
+    }
+    event.preventDefault();
+    showPopover();
+  });
+
+  document.addEventListener("click", function (event) {
+    if (!usesTapTooltip() || statusLink.contains(event.target)) {
+      return;
+    }
+    hidePopover();
+  });
 
   if (
     !enabled ||
@@ -178,12 +250,10 @@
     !config.workflow ||
     !config.branch
   ) {
-    setState(
-      "unknown",
-      "?",
-      `Workflow status unavailable for this dashboard. ${checkedAt(new Date())}`,
-      false,
-    );
+    setState("unknown", "?", [
+      "Workflow status unavailable for this dashboard.",
+      checkedAt(new Date()),
+    ], false);
     return;
   }
 
