@@ -1,0 +1,9 @@
+.dallingerconfig
+.dallinger_config_defaults.txt
+.env
+.pytest_cache/
+__pycache__/
+data/
+local/
+source_code.zip
+*.pyc

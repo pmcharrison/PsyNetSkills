@@ -35,6 +35,20 @@ def simulate_task_data():
                 "reaction_time": 0.9 + index * 0.02,
             }
         )
+    for index, left in enumerate(stimuli):
+        right = stimuli[(index + 1) % len(stimuli)]
+        rows.append(
+            {
+                "block_name": "same_different_discrimination",
+                "trial_kind": "discrimination",
+                "left_id": left,
+                "right_id": right,
+                "condition": "different",
+                "answer": "different",
+                "accuracy": 1.0,
+                "reaction_time": 1.0 + index * 0.03,
+            }
+        )
     for set_size in [3, 4, 5]:
         for probe_present in [True, False]:
             for response in range(1, set_size + 1):
