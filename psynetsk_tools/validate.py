@@ -288,7 +288,7 @@ def has_evaluation_checklist(evaluation_file: Path) -> bool:
     """Return whether an evaluation records criterion-level checklist results."""
 
     for line in evaluation_file.read_text(encoding="utf-8").splitlines():
-        if line.startswith("- [x] ") or line.startswith("- [ ] "):
+        if line.startswith("- [x] ") or line.startswith("- [X] ") or line.startswith("- [ ] "):
             return True
     return False
 

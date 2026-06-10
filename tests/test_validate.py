@@ -402,3 +402,35 @@ def test_validate_repository_requires_criteria_snapshot_and_checklist(
 
     assert any("missing challenge/CRITERIA.md snapshot" in problem for problem in problems)
     assert any("missing criteria checklist" in problem for problem in problems)
+
+
+def test_validate_repository_accepts_uppercase_criteria_checklist(
+    tmp_path: Path,
+) -> None:
+    minimal_repo(tmp_path)
+    write(tmp_path / "challenges/example/CRITERIA.md", "# Criteria\n\n- Criterion.\n")
+    attempt_dir = tmp_path / "challenges/example/attempts/2026-06-01-10-10"
+    write(attempt_dir / "challenge/INSTRUCTIONS.md", "# Snapshot\n")
+    write(attempt_dir / "challenge/CRITERIA.md", "# Criteria\n\n- Criterion.\n")
+    write(attempt_dir / "agent.json", agent_json())
+    write(attempt_dir / "code/README.md", "# Code\n")
+    write(attempt_dir / "evidence/README.md", "# Evidence\n")
+    write(
+        attempt_dir / "EVALUATION.md",
+        "---\nscore: 7\n---\n\n# Evaluation\n\n- [X] Criterion.\n",
+    )
+    write(
+        attempt_dir / "LEARNINGS.md",
+        "# Learnings\n\n"
+        "## Useful finding\n\n"
+        "*Actions:*\n\n"
+        "- **PsyNetSkills:** Document it. Confidence: high. Status: considering.\n",
+    )
+    write(
+        attempt_dir / "TIMELINE.md",
+        "# Timeline\n\n"
+        "- T+00:00:00 [agent-start] Started.\n"
+        "- T+00:00:01 [agent-stop] Stopped.\n",
+    )
+
+    assert validate_repository(tmp_path) == []
