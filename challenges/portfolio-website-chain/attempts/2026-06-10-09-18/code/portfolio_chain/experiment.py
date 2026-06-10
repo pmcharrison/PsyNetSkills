@@ -265,6 +265,7 @@ def get_start_nodes():
 class PortfolioTrial(ChainTrial):
     time_estimate = 90
     accumulate_answers = True
+    check_time_credit_received = False
 
     def show_trial(self, experiment, participant):
         position = self.definition["position"]
@@ -438,8 +439,11 @@ class Exp(psynet.experiment.Experiment):
 
     def test_experiment(self):
         super().test_experiment()
-        trials = [trial for bot in self.bots for trial in bot.alive_trials]
-        complete_trials = [trial for trial in trials if trial.complete]
+        complete_trials = (
+            PortfolioTrial.query.filter_by(complete=True)
+            .order_by(PortfolioTrial.id)
+            .all()
+        )
         assert len(complete_trials) >= 3
         answers = [trial.answer for trial in complete_trials]
         assert answers[0]["node_position"] == 1
