@@ -35,3 +35,24 @@ the flow without excluding participants before required end questionnaires.
 - **PsyNetSkills:** Consider advising challenge attempts to make end-of-study
   screening measures non-excluding unless exclusion is explicitly required by
   the challenge. Confidence: medium. Status: considering.
+
+## Fixation alignment needs visual review
+
+The evaluator found that the fixation cross was centered relative to the whole
+page content rather than the stimulus display region, and that multi-item
+identification showed two fixation crosses.
+
+*Actions:*
+- **PsyNetSkills:** Consider adding a participant-video review item that checks
+  fixation alignment against the stimulus display area, not against surrounding
+  question text or controls. Confidence: high. Status: considering.
+
+## Analysis evidence should include plots
+
+CSV summaries were useful but not enough for review; the evaluator requested
+visualizations of response distributions and similarity matrices.
+
+*Actions:*
+- **PsyNetSkills:** Consider recommending both table and image outputs for
+  analysis evidence in experiment implementation attempts. Confidence: medium.
+  Status: considering.
