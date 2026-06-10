@@ -246,6 +246,49 @@ def test_validate_agent_metadata_accepts_psynet_block(tmp_path: Path) -> None:
     assert validate_agent_metadata(agent_file) == []
 
 
+def test_validate_agent_metadata_accepts_run_cost(tmp_path: Path) -> None:
+    agent_file = tmp_path / "agent.json"
+    metadata = json.loads(agent_json())
+    metadata["run_cost"] = {
+        "currency": "USD",
+        "amount": 1.23,
+        "source": "cursor_usage_csv_batch_import",
+        "recorded_at": "2026-06-10T11:30:00Z",
+        "attribution_status": "matched_cloud_agent_id",
+        "matched_cloud_agent_ids": ["bc-example"],
+        "usage": {"rows": 1},
+        "notes": ["Matched by cursor_conversation_id."],
+    }
+    write(agent_file, json.dumps(metadata) + "\n")
+
+    assert validate_agent_metadata(agent_file) == []
+
+
+def test_validate_agent_metadata_rejects_malformed_run_cost(tmp_path: Path) -> None:
+    agent_file = tmp_path / "agent.json"
+    metadata = json.loads(agent_json())
+    metadata["run_cost"] = {
+        "currency": "EUR",
+        "amount": -1,
+        "source": "",
+        "recorded_at": "",
+        "attribution_status": "guessed",
+        "matched_cloud_agent_ids": [123],
+        "notes": ["ok", 123],
+    }
+    write(agent_file, json.dumps(metadata) + "\n")
+
+    problems = validate_agent_metadata(agent_file)
+
+    assert any("run_cost.currency must be USD" in problem for problem in problems)
+    assert any("run_cost.amount must be" in problem for problem in problems)
+    assert any("run_cost.source must be" in problem for problem in problems)
+    assert any("run_cost.recorded_at must be" in problem for problem in problems)
+    assert any("run_cost.attribution_status must be one of" in problem for problem in problems)
+    assert any("run_cost.matched_cloud_agent_ids must be" in problem for problem in problems)
+    assert any("run_cost.notes must be" in problem for problem in problems)
+
+
 def test_validate_agent_metadata_requires_psynet_block(tmp_path: Path) -> None:
     agent_file = tmp_path / "agent.json"
     write(agent_file, '{"authors": ["pmcharrison"], "model": "test-model"}\n')

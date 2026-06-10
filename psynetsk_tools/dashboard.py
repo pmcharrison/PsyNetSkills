@@ -184,6 +184,10 @@ class Attempt:
     timeline_entries: list[TimelineEntry]
     implementation_time_seconds: int | None
     implementation_time_display: str
+    run_cost_amount: int | float | None
+    run_cost_currency: str
+    run_cost_attribution_status: str
+    run_cost_display: str
     learnings: str
     open_actions: int
     evaluation_metadata: dict[str, object]
@@ -370,6 +374,28 @@ def read_agent_json(agent_file: Path) -> tuple[dict[str, object], str]:
     return agent, json.dumps(agent, indent=2, sort_keys=True)
 
 
+def run_cost_metadata(agent: dict[str, object]) -> tuple[int | float | None, str, str, str]:
+    """Return normalized Cursor cost metadata for dashboard display."""
+
+    run_cost = agent.get("run_cost")
+    if not isinstance(run_cost, dict):
+        return None, "", "", "-"
+
+    amount = run_cost.get("amount")
+    currency = run_cost.get("currency")
+    status = run_cost.get("attribution_status")
+    if (
+        isinstance(amount, bool)
+        or not isinstance(amount, int | float)
+        or amount < 0
+        or currency != "USD"
+        or status != "matched_cloud_agent_id"
+    ):
+        return None, str(currency or ""), str(status or ""), "-"
+
+    return amount, currency, status, f"${amount:.2f}"
+
+
 def file_kind(path: Path) -> str:
     """Return a display-oriented file type."""
     suffix = path.suffix.lower().lstrip(".")
@@ -539,6 +565,12 @@ def collect_attempts(
             if key != "score"
         }
         agent, agent_json = read_agent_json(attempt_dir / "agent.json")
+        (
+            run_cost_amount,
+            run_cost_currency,
+            run_cost_attribution_status,
+            run_cost_display,
+        ) = run_cost_metadata(agent)
         timeline = (
             strip_first_heading(timeline_file.read_text(encoding="utf-8"))
             if timeline_file.exists()
@@ -593,6 +625,10 @@ def collect_attempts(
                 timeline_entries=timeline_entries,
                 implementation_time_seconds=implementation_seconds,
                 implementation_time_display=format_duration(implementation_seconds),
+                run_cost_amount=run_cost_amount,
+                run_cost_currency=run_cost_currency,
+                run_cost_attribution_status=run_cost_attribution_status,
+                run_cost_display=run_cost_display,
                 learnings=learnings,
                 open_actions=open_actions,
                 evaluation_metadata=evaluation_metadata,

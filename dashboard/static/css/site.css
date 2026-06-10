@@ -467,6 +467,13 @@ td {
   padding: 1rem;
 }
 
+.metadata-note {
+  color: var(--muted);
+  display: block;
+  font-size: 0.85rem;
+  margin-top: 0.15rem;
+}
+
 .attempt-panel {
   border: 1px solid var(--border);
   border-radius: 0.5rem;
