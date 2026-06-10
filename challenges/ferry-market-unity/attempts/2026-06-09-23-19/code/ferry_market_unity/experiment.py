@@ -58,7 +58,7 @@ def ferry_market_contents():
 
 
 class FerryMarketUnityPage(UnityPage):
-    def __init__(self, contents, **kwargs):
+    def __init__(self, contents, time_estimate=120, **kwargs):
         super().__init__(
             title="Unity - FerryGov",
             resources="/static",
@@ -66,7 +66,7 @@ class FerryMarketUnityPage(UnityPage):
             session_id="0",
             game_container_width="960px",
             game_container_height="600px",
-            time_estimate=120,
+            time_estimate=time_estimate,
             **kwargs,
         )
 
