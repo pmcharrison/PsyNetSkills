@@ -15,19 +15,27 @@ the skill tree.
 
 1. Identify the reusable behavior the skill should change. Prefer lessons that
    are likely to recur across challenges or PsyNet experiment implementations.
-2. Search existing skills in `.cursor/skills/` before creating a new one.
-3. If an existing skill owns the behavior, update it directly. If no existing
-   skill fits, create `.cursor/skills/<skill-name>/SKILL.md`.
-4. Use the `identify-author` skill before writing metadata.
-5. Use Agent Skills-compatible frontmatter. The `name` must match the folder and
+2. Use the `skill-overlap-review` skill to compare the proposed behavior against
+   existing skills before creating a new one.
+3. Follow the overlap review's disposition:
+   - If an existing skill already covers or owns the behavior, update that skill
+     instead of creating a duplicate.
+   - If the proposal combines multiple existing skills in a reusable scenario,
+     create or update a combination skill that points to the component skills.
+   - If only small sections overlap, keep the new skill focused and point to the
+     owner skills instead of repeating their full procedures.
+   - If no existing skill fits, create `.cursor/skills/<skill-name>/SKILL.md`.
+4. Mention all overlaps found to the user, including small pointer-level overlap.
+5. Use the `identify-author` skill before writing metadata.
+6. Use Agent Skills-compatible frontmatter. The `name` must match the folder and
    use lowercase letters, numbers, and hyphens. Include `authors: [<github-id>]`.
-6. Keep the main `SKILL.md` concise and procedural: when to use it, what to read,
+7. Keep the main `SKILL.md` concise and procedural: when to use it, what to read,
    what to do, what to test, and which assumptions commonly fail.
-7. Put longer supporting notes in `references/`, templates in `assets/`, and
+8. Put longer supporting notes in `references/`, templates in `assets/`, and
    reusable helper code in `scripts/`.
-8. If the change resolves an action from an attempt `LEARNINGS.md`, update that
+9. If the change resolves an action from an attempt `LEARNINGS.md`, update that
    action's status and notes where appropriate.
-9. Run `uv run psynetsk-validate` and any tests relevant to the changed tooling.
+10. Run `uv run psynetsk-validate` and any tests relevant to the changed tooling.
 
 ## Rules
 
