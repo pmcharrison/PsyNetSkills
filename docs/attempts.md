@@ -147,54 +147,11 @@ historical provenance.
 
 ## Cursor cost metadata
 
-Do not commit raw Cursor usage CSV exports; they can contain team members,
-account emails, and billing details. Instead, periodically import a local CSV
-export into derived `run_cost` metadata:
-
-```bash
-uv run psynetsk-import-cursor-costs path/to/team-usage-events.csv
-```
-
-The importer updates attempts whose `agent.json` has no `run_cost` yet. It first
-matches CSV rows by `cursor_conversation_id` to Cursor's `Cloud Agent ID`. If
-that exact ID is unavailable, the importer falls back to the attempt time window
-from `started_at`, `ended_at`, and `TIMELINE.md` only to decide whether a result
-is ambiguous. Time-window matches are recorded as ambiguous unless only one
-non-empty Cloud Agent ID appears in the window. Local attempts without a Cloud
-Agent ID should leave `run_cost` as `null` unless a human records a manual cost.
-
-`run_cost` should either be `null` or a JSON object shaped like:
-
-```json
-{
-  "currency": "USD",
-  "amount": 1.23,
-  "source": "cursor_usage_csv_batch_import",
-  "recorded_at": "2026-06-10T11:30:00Z",
-  "attribution_status": "matched_cloud_agent_id",
-  "window_started_at": "2026-06-10T10:00:00Z",
-  "window_ended_at": "2026-06-10T10:45:00Z",
-  "matched_started_at": "2026-06-10T10:01:00Z",
-  "matched_ended_at": "2026-06-10T10:44:00Z",
-  "matched_cloud_agent_ids": ["bc-..."],
-  "usage": {
-    "rows": 3,
-    "total_tokens": 123456,
-    "models": {
-      "gpt-5.5-high": {
-        "rows": 3,
-        "total_tokens": 123456,
-        "cost": 1.23
-      }
-    }
-  },
-  "notes": ["Matched Cursor CSV rows by cursor_conversation_id."]
-}
-```
-
-Use `amount: null` with `attribution_status: "ambiguous"` or `"unavailable"`
-when the CSV cannot be linked confidently. This preserves the audit trail without
-pretending an uncertain estimate is exact.
+Detailed Cursor cost import and attribution rules live in the
+`cursor-cost-estimation` skill. In brief: do not commit raw Cursor usage CSV
+exports; record `cursor_conversation_id` for Cursor Cloud attempts; and only
+treat exact `cursor_conversation_id` to CSV `Cloud Agent ID` matches as resolved
+automatic cost attribution.
 
 ## Timeline notes
 

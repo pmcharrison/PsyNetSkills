@@ -99,7 +99,8 @@ challenge before starting a fresh attempt.
    derived cost metadata from Cursor CSV exports without committing the raw CSV.
    The importer only treats exact `cursor_conversation_id` / `Cloud Agent ID`
    matches as resolved. Local attempts without a Cloud Agent ID should keep
-   `run_cost` as `null` unless a human records a manual cost.
+   `run_cost` as `null` unless a human records a manual cost. Use the
+   `cursor-cost-estimation` skill when importing, auditing, or backfilling costs.
 12. Leave `EVALUATION.md` as a template for human evaluators unless the user
    provides evaluation feedback.
 13. In the final response, invite the user to evaluate the attempt
