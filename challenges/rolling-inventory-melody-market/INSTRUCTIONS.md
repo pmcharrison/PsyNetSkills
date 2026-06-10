@@ -26,7 +26,10 @@ plays a static sound clip containing a human voice saying "five". Participants
 must prove that they can hear the clip by typing what was said. Accept the
 answer if it is `five` or `5`, ignoring letter case and leading or trailing
 whitespace. Participants who cannot pass the audio check should not continue
-into the market task.
+into the market task. Treat this as a baseline requirement: implementers should
+look for existing audio pre-screening solutions in the Computational Audition
+Lab GitLab group and privilege any more robust, reusable solution they find,
+documenting the choice in the attempt README.
 
 Each round should consist of two steps:
 

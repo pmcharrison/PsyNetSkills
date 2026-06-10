@@ -33,7 +33,9 @@ considered successful only if every must-have item is fully met.
 - [ ] **Must-have:** Participants complete an audio pre-screening step before
   the main task by hearing a static voice clip saying "five" and typing the
   answer; `five` and `5` are accepted irrespective of letter case, and
-  participants who cannot pass do not continue into the market task.
+  participants who cannot pass do not continue into the market task, unless the
+  attempt documents and uses a more robust pre-screening solution found in the
+  Computational Audition Lab GitLab group.
 - [ ] **Nice-to-have:** Market previews include a waveform or similarly clear
   audio visualization.
 
