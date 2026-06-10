@@ -332,7 +332,7 @@ def is_git_lfs_pointer(path: Path) -> bool:
         data = path.read_bytes()[:128]
     except OSError:
         return False
-    return data.startswith(b"version https://git-lfs.github.com/spec/v1\n")
+    return data.startswith(b"version https://git-lfs.github.com/spec/v1")
 
 
 def validate_evidence_video(video_file: Path) -> list[str]:
