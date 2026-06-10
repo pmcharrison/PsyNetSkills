@@ -34,3 +34,10 @@ The evaluator judged that the interface did not satisfy the requested 3D tableto
 
 *Actions:*
 - **PsyNetSkills:** Consider adding a visual-fidelity review step for challenges with explicit interface sketches or 3D scene requirements. Confidence: medium. Status: considering.
+
+## Interaction evidence should match specified controls and framing
+
+After the Three.js interface update, the evaluator still noted that the proposal interaction did not visibly use the slider and that the video only showed a partial view. Future recordings should frame the full browser viewport and demonstrate the exact control named in the instructions when one is specified.
+
+*Actions:*
+- **PsyNetSkills:** Consider adding an evidence-framing reminder for UI challenges: capture the full relevant viewport and use the specified controls, not only faster helper controls. Confidence: high. Status: considering.
