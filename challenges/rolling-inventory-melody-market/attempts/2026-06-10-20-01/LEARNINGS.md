@@ -13,3 +13,10 @@ When a challenge asks to preserve an existing experiment except for domain-speci
 
 *Actions:*
 - **PsyNetSkills:** Add a reminder to experiment implementation guidance that reference-replication challenges require exact participant-facing phrasing and styling by default, with documented exceptions only for necessary domain substitutions. Confidence: high. Status: considering.
+
+## Audio visualizations should encode the audio
+
+Decorative waveform-like bars are not enough when a challenge asks for market audio previews. The visual representation should be derived from the melody or rendered audio so different melodies produce different shapes and similar melodies look similar.
+
+*Actions:*
+- **PsyNetSkills:** Clarify that waveform or audio-visual preview evidence should be semantically tied to the audio signal or note sequence, not just a generic iconographic cue. Confidence: high. Status: considering.

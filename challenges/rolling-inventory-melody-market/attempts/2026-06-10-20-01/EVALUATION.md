@@ -3,6 +3,7 @@ score:
 feedback:
   - "The styling/phrasing for the popularity ratings / \"New\" label etc. should be identical to the original experiment."
   - "Generally, the phrasing should be identical, unless a change is necessary, such as referring to melodies rather than images."
+  - "The waveform should be real, so that different melodies in the market will have different waveforms and similar melodies will visually appear to be similar."
 ---
 
 # Evaluation
@@ -25,6 +26,9 @@ substitutions.
 - Participant-facing phrasing should mirror the reference implementation unless
   a domain change is required, such as replacing image/drawing language with
   melody language.
+- Market waveform previews should be data-derived from the melody/audio rather
+  than decorative; different melodies should yield different waveforms, and
+  similar melodies should look visually similar.
 
 ## Criteria
 
