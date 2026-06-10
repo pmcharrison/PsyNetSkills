@@ -2,7 +2,7 @@
 title: Portfolio website chain experiment with human instructions and AI editing
 type: experiment implementation
 difficulty: 7
-authors: [Haoyu-Hu]
+authors: [haoyu-hu]
 ---
 
 Implement a PsyNet chain experiment in which participants collaboratively create
