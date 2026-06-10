@@ -10,6 +10,7 @@ from psynetsk_tools.dashboard import (
     parse_learning_actions,
     strip_challenge_frontmatter,
     strip_frontmatter,
+    workflow_context,
 )
 
 
@@ -50,6 +51,80 @@ def evaluation(score: int | float = 6) -> str:
         "# Evaluation\n\n"
         "Attempt body.\n"
     )
+
+
+def test_workflow_context_reports_local_defaults() -> None:
+    context = workflow_context({})
+
+    assert context == {
+        "branch": "",
+        "enabled": False,
+        "head_sha": "",
+        "mode": "local",
+        "owner": "pmcharrison",
+        "repo": "PsyNetSkills",
+        "workflow_file": "",
+    }
+
+
+def test_workflow_context_reports_production_build() -> None:
+    context = workflow_context(
+        {
+            "GITHUB_ACTIONS": "true",
+            "GITHUB_EVENT_NAME": "push",
+            "GITHUB_REPOSITORY": "pmcharrison/PsyNetSkills",
+            "GITHUB_REF_NAME": "main",
+            "GITHUB_SHA": "abc123",
+        },
+    )
+
+    assert context == {
+        "branch": "main",
+        "enabled": True,
+        "head_sha": "abc123",
+        "mode": "production",
+        "owner": "pmcharrison",
+        "repo": "PsyNetSkills",
+        "workflow_file": "pages.yml",
+    }
+
+
+def test_workflow_context_reports_pr_preview_head(tmp_path: Path) -> None:
+    event_path = tmp_path / "event.json"
+    event_path.write_text(
+        json.dumps(
+            {
+                "pull_request": {
+                    "head": {
+                        "ref": "cursor/example-branch",
+                        "sha": "head456",
+                    },
+                },
+            },
+        ),
+        encoding="utf-8",
+    )
+
+    context = workflow_context(
+        {
+            "GITHUB_ACTIONS": "true",
+            "GITHUB_EVENT_NAME": "pull_request_target",
+            "GITHUB_EVENT_PATH": str(event_path),
+            "GITHUB_REPOSITORY": "pmcharrison/PsyNetSkills",
+            "GITHUB_REF_NAME": "main",
+            "GITHUB_SHA": "base123",
+        },
+    )
+
+    assert context == {
+        "branch": "cursor/example-branch",
+        "enabled": True,
+        "head_sha": "head456",
+        "mode": "pr-preview",
+        "owner": "pmcharrison",
+        "repo": "PsyNetSkills",
+        "workflow_file": "dashboard-preview.yml",
+    }
 
 
 def test_collect_challenges_reports_latest_score(tmp_path: Path) -> None:
@@ -94,7 +169,18 @@ def test_collect_challenges_reports_attempt_metadata(tmp_path: Path) -> None:
     attempt_dir = challenge_dir / "attempts/2026-06-01-10-10"
     write(
         attempt_dir / "agent.json",
-        '{"authors": ["pmcharrison"], "model": "test-model"}\n',
+        json.dumps(
+            {
+                "authors": ["pmcharrison"],
+                "model": "test-model",
+                "run_cost": {
+                    "currency": "USD",
+                    "amount": 22.56,
+                    "attribution_status": "matched_cloud_agent_id",
+                },
+            },
+        )
+        + "\n",
     )
     write(attempt_dir / "EVALUATION.md", evaluation())
     write(
@@ -141,6 +227,10 @@ def test_collect_challenges_reports_attempt_metadata(tmp_path: Path) -> None:
     assert attempt.timeline_entries[0].description == "Started."
     assert attempt.implementation_time_seconds == 725
     assert attempt.implementation_time_display == "12m 5s"
+    assert attempt.run_cost_amount == 22.56
+    assert attempt.run_cost_currency == "USD"
+    assert attempt.run_cost_attribution_status == "matched_cloud_agent_id"
+    assert attempt.run_cost_display == "$22.56"
     assert "### Useful finding" in attempt.learnings
     assert "Useful finding.\n" in attempt.learnings
     assert attempt.evaluation_metadata == {"example": True}
@@ -150,6 +240,35 @@ def test_collect_challenges_reports_attempt_metadata(tmp_path: Path) -> None:
     assert attempt.code_files[0].content == "# Code notes\n"
     assert attempt.code_files[0].kind == "md"
     assert attempt.code_files[0].size_bytes == len("# Code notes\n")
+
+
+def test_collect_challenges_reports_missing_or_ambiguous_cost(
+    tmp_path: Path,
+) -> None:
+    challenge_dir = tmp_path / "challenges/example"
+    write(challenge_dir / "INSTRUCTIONS.md", challenge_instructions())
+    missing_dir = challenge_dir / "attempts/2026-06-01-10-10"
+    write(missing_dir / "agent.json", '{"model": "test-model"}\n')
+    ambiguous_dir = challenge_dir / "attempts/2026-06-02-10-10"
+    write(
+        ambiguous_dir / "agent.json",
+        json.dumps(
+            {
+                "model": "test-model",
+                "run_cost": {
+                    "currency": "USD",
+                    "amount": None,
+                    "attribution_status": "ambiguous",
+                },
+            },
+        )
+        + "\n",
+    )
+
+    attempts = collect_challenges(tmp_path)[0].attempts
+
+    assert attempts[0].run_cost_display == "-"
+    assert attempts[1].run_cost_display == "-"
 
 
 def test_collect_challenges_prefers_snapshotted_criteria(
@@ -362,6 +481,47 @@ def test_dashboard_data_reports_counts(tmp_path: Path) -> None:
     assert "docs" not in data
 
 
+def test_dashboard_data_uses_configured_artifact_url_prefix(
+    tmp_path: Path,
+    monkeypatch,
+) -> None:
+    write(tmp_path / "authors.yaml", authors_yaml())
+    write(
+        tmp_path / ".cursor/skills/example-skill/SKILL.md",
+        "---\n"
+        "name: example-skill\n"
+        "description: Use when testing dashboard generation.\n"
+        "---\n\n"
+        "# Example skill\n",
+    )
+    write(
+        tmp_path / "challenges/example/INSTRUCTIONS.md",
+        challenge_instructions(),
+    )
+    write(
+        tmp_path / "challenges/example/attempts/2026-06-01-10-10/agent.json",
+        "{}\n",
+    )
+    write(
+        tmp_path
+        / "challenges/example/attempts/2026-06-01-10-10/evidence/participant.mp4",
+        "video",
+    )
+    monkeypatch.setenv(
+        "PSYNETSK_ARTIFACT_URL_PREFIX",
+        "https://example.github.io/PsyNetSkills/pr-artifacts/pr-114/artifacts/challenges",
+    )
+
+    data = dashboard_data(tmp_path)
+    evidence_files = data["challenges"][0]["attempts"][0]["evidence_files"]
+
+    assert evidence_files[0]["url"] == (
+        "https://example.github.io/PsyNetSkills/pr-artifacts/pr-114/"
+        "artifacts/challenges/example/attempts/2026-06-01-10-10/"
+        "evidence/participant.mp4"
+    )
+
+
 def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
     write(tmp_path / "authors.yaml", authors_yaml())
     write(
@@ -404,7 +564,17 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
     )
     write(
         tmp_path / "challenges/example/attempts/2026-06-01-10-10/agent.json",
-        '{"model": "test-model"}\n',
+        json.dumps(
+            {
+                "model": "test-model",
+                "run_cost": {
+                    "currency": "USD",
+                    "amount": 22.56,
+                    "attribution_status": "matched_cloud_agent_id",
+                },
+            },
+        )
+        + "\n",
     )
     write(
         tmp_path
@@ -594,6 +764,10 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
     ]
     assert exported_attempt["implementation_time_seconds"] == 725
     assert exported_attempt["implementation_time_display"] == "12m 5s"
+    assert exported_attempt["run_cost_amount"] == 22.56
+    assert exported_attempt["run_cost_currency"] == "USD"
+    assert exported_attempt["run_cost_attribution_status"] == "matched_cloud_agent_id"
+    assert exported_attempt["run_cost_display"] == "$22.56"
     assert "### Useful finding" in exported_attempt["learnings"]
     assert exported_attempt["evaluation_metadata"] == {"example": True}
     assert (

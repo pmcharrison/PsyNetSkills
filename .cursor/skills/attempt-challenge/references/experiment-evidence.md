@@ -19,6 +19,12 @@ Provide these artifacts or document the blocker in `EVALUATION.md`:
 - `evidence/data.zip` contains exported experiment data.
 - `EVALUATION.md` has the copied criteria checklist when the challenge includes
   copied criteria.
+- If the challenge's central requirement is a real external service or
+  integration, evidence includes a successful end-to-end run against that service.
+  Local mocks, emulators, simulated files, or stub endpoints are acceptable only
+  as development aids or explicit fallback evidence; if real credentials or
+  access cannot be used safely, record the blocker in `TIMELINE.md` and
+  `EVALUATION.md` and state what remains unverified.
 
 The `evidence/analyses/` directory is optional because not every experiment
 implementation challenge needs analysis beyond the standard artifacts.

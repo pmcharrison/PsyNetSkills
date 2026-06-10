@@ -4,8 +4,10 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
 import shutil
+from collections.abc import Mapping
 from dataclasses import asdict, dataclass
 from pathlib import Path
 
@@ -48,6 +50,7 @@ TEXT_FILE_EXTENSIONS = {
     ".yml",
 }
 ATTEMPT_ARTIFACTS_DIR = "artifacts/challenges"
+ARTIFACT_URL_PREFIX_ENV = "PSYNETSK_ARTIFACT_URL_PREFIX"
 MONITOR_STATIC_ROOT = Path(__file__).parent / "assets" / "monitor-static" / "static"
 STATIC_REF_RE = re.compile(r'(?:href|src)="/static/(?P<path>[^"]+)"')
 CREDENTIAL_REDACTIONS = (
@@ -63,6 +66,82 @@ CREDENTIAL_REDACTIONS = (
     (re.compile(r"(?i)(PROLIFIC_API_KEY\s*=\s*)[^\s\"']+"), r"\1[REDACTED]"),
 )
 TEXT_ARTIFACT_EXTENSIONS = {".html", ".log", ".md", ".txt", ".json", ".csv", ".yaml", ".yml"}
+WORKFLOW_CONTEXT_REPOSITORY = "pmcharrison/PsyNetSkills"
+WORKFLOW_CONTEXT_FILES_BY_NAME = {
+    "Deploy dashboard PR preview": "dashboard-preview.yml",
+    "Deploy dashboard to GitHub Pages": "pages.yml",
+}
+
+
+def read_github_event(env: Mapping[str, str]) -> dict[str, object]:
+    """Read the GitHub event payload for the current workflow."""
+    event_path = env.get("GITHUB_EVENT_PATH")
+    if not event_path:
+        return {}
+    try:
+        event = json.loads(Path(event_path).read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {}
+    return event if isinstance(event, dict) else {}
+
+
+def workflow_context(env: Mapping[str, str] | None = None) -> dict[str, object]:
+    """Return GitHub Actions context for the live dashboard workflow widget."""
+    context_env = os.environ if env is None else env
+    repository = context_env.get("GITHUB_REPOSITORY", WORKFLOW_CONTEXT_REPOSITORY)
+    owner, _, repo = repository.partition("/")
+    event_name = context_env.get("GITHUB_EVENT_NAME", "")
+    workflow_file = WORKFLOW_CONTEXT_FILES_BY_NAME.get(
+        context_env.get("GITHUB_WORKFLOW", ""),
+        "",
+    )
+    event = read_github_event(context_env)
+    pull_request = event.get("pull_request")
+
+    if isinstance(pull_request, dict):
+        head = pull_request.get("head")
+        head = head if isinstance(head, dict) else {}
+        branch = str(head.get("ref") or context_env.get("GITHUB_HEAD_REF", ""))
+        head_sha = str(head.get("sha") or context_env.get("GITHUB_SHA", ""))
+    else:
+        branch = context_env.get("GITHUB_REF_NAME", "")
+        head_sha = context_env.get("GITHUB_SHA", "")
+
+    if not workflow_file:
+        if event_name == "pull_request_target":
+            workflow_file = "dashboard-preview.yml"
+        elif event_name in {"push", "workflow_dispatch"} and branch == "main":
+            workflow_file = "pages.yml"
+
+    mode = "local"
+    if workflow_file == "dashboard-preview.yml":
+        mode = "pr-preview"
+    elif workflow_file == "pages.yml":
+        mode = "production"
+
+    enabled = bool(
+        context_env.get("GITHUB_ACTIONS") == "true"
+        and owner
+        and repo
+        and workflow_file
+        and branch
+        and head_sha
+    )
+    if not enabled:
+        branch = ""
+        head_sha = ""
+        workflow_file = ""
+        mode = "local"
+
+    return {
+        "branch": branch,
+        "enabled": enabled,
+        "head_sha": head_sha,
+        "mode": mode,
+        "owner": owner,
+        "repo": repo,
+        "workflow_file": workflow_file,
+    }
 
 
 @dataclass(frozen=True)
@@ -106,6 +185,10 @@ class Attempt:
     timeline_entries: list[TimelineEntry]
     implementation_time_seconds: int | None
     implementation_time_display: str
+    run_cost_amount: int | float | None
+    run_cost_currency: str
+    run_cost_attribution_status: str
+    run_cost_display: str
     learnings: str
     open_actions: int
     evaluation_metadata: dict[str, object]
@@ -292,6 +375,28 @@ def read_agent_json(agent_file: Path) -> tuple[dict[str, object], str]:
     return agent, json.dumps(agent, indent=2, sort_keys=True)
 
 
+def run_cost_metadata(agent: dict[str, object]) -> tuple[int | float | None, str, str, str]:
+    """Return normalized Cursor cost metadata for dashboard display."""
+
+    run_cost = agent.get("run_cost")
+    if not isinstance(run_cost, dict):
+        return None, "", "", "-"
+
+    amount = run_cost.get("amount")
+    currency = run_cost.get("currency")
+    status = run_cost.get("attribution_status")
+    if (
+        isinstance(amount, bool)
+        or not isinstance(amount, int | float)
+        or amount < 0
+        or currency != "USD"
+        or status != "matched_cloud_agent_id"
+    ):
+        return None, str(currency or ""), str(status or ""), "-"
+
+    return amount, currency, status, f"${amount:.2f}"
+
+
 def file_kind(path: Path) -> str:
     """Return a display-oriented file type."""
     suffix = path.suffix.lower().lstrip(".")
@@ -351,6 +456,13 @@ def collect_attempt_files(
             break
         files.append(read_attempt_file(path, directory, url_prefix))
     return files
+
+
+def attempt_artifact_url_prefix(challenge_slug: str, attempt_name: str) -> str:
+    """Return the public URL prefix for an attempt's copied artifacts."""
+
+    base_url = os.environ.get(ARTIFACT_URL_PREFIX_ENV, ATTEMPT_ARTIFACTS_DIR)
+    return f"{base_url.rstrip('/')}/{challenge_slug}/attempts/{attempt_name}"
 
 
 def redact_known_credentials(text: str) -> str:
@@ -461,6 +573,12 @@ def collect_attempts(
             if key != "score"
         }
         agent, agent_json = read_agent_json(attempt_dir / "agent.json")
+        (
+            run_cost_amount,
+            run_cost_currency,
+            run_cost_attribution_status,
+            run_cost_display,
+        ) = run_cost_metadata(agent)
         timeline = (
             strip_first_heading(timeline_file.read_text(encoding="utf-8"))
             if timeline_file.exists()
@@ -482,9 +600,9 @@ def collect_attempts(
             for _, _, _, status in parse_learning_actions(learnings)
             if status not in COMPLETED_LEARNING_STATUSES
         )
-        artifact_prefix = (
-            f"{ATTEMPT_ARTIFACTS_DIR}/{challenge_dir.name}/attempts/"
-            f"{attempt_dir.name}"
+        artifact_prefix = attempt_artifact_url_prefix(
+            challenge_dir.name,
+            attempt_dir.name,
         )
         attempts.append(
             Attempt(
@@ -515,6 +633,10 @@ def collect_attempts(
                 timeline_entries=timeline_entries,
                 implementation_time_seconds=implementation_seconds,
                 implementation_time_display=format_duration(implementation_seconds),
+                run_cost_amount=run_cost_amount,
+                run_cost_currency=run_cost_currency,
+                run_cost_attribution_status=run_cost_attribution_status,
+                run_cost_display=run_cost_display,
                 learnings=learnings,
                 open_actions=open_actions,
                 evaluation_metadata=evaluation_metadata,
@@ -741,6 +863,10 @@ def export_dashboard(root: Path, dashboard_dir: Path) -> None:
     data_dir.mkdir(parents=True, exist_ok=True)
     (data_dir / "psynetsk.json").write_text(
         json.dumps(data, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+    (data_dir / "workflow_context.json").write_text(
+        json.dumps(workflow_context(), indent=2, sort_keys=True) + "\n",
         encoding="utf-8",
     )
 

@@ -32,6 +32,12 @@ PSYNET_AGENT_REQUIRED_FIELDS = {
     "update_command": str,
     "dirty": bool,
 }
+RUN_COST_ATTRIBUTION_STATUSES = {
+    "matched_cloud_agent_id",
+    "matched_time_window",
+    "ambiguous",
+    "unavailable",
+}
 EMPTY_LEARNINGS_PLACEHOLDER = (
     "# Learnings\n\n"
     "_No learning notes recorded yet. Add compact cards below as concrete lessons "
@@ -220,6 +226,61 @@ def validate_agent_metadata(
         elif expected_type is str and not value.strip():
             problems.append(f"{agent_file}: psynet.{field} must not be empty")
 
+    run_cost = agent.get("run_cost")
+    if run_cost is not None:
+        problems.extend(validate_run_cost_metadata(agent_file, run_cost))
+
+    return problems
+
+
+def validate_run_cost_metadata(agent_file: Path, run_cost: Any) -> list[str]:
+    """Validate optional Cursor run cost metadata."""
+
+    if not isinstance(run_cost, dict):
+        return [f"{agent_file}: run_cost must be a JSON object or null"]
+
+    problems: list[str] = []
+    for field in ("currency", "source", "recorded_at", "attribution_status"):
+        value = run_cost.get(field)
+        if not isinstance(value, str) or not value.strip():
+            problems.append(f"{agent_file}: run_cost.{field} must be a non-empty string")
+
+    currency = run_cost.get("currency")
+    if isinstance(currency, str) and currency != "USD":
+        problems.append(f"{agent_file}: run_cost.currency must be USD")
+
+    amount = run_cost.get("amount")
+    if amount is not None and (
+        isinstance(amount, bool) or not isinstance(amount, int | float) or amount < 0
+    ):
+        problems.append(f"{agent_file}: run_cost.amount must be a non-negative number or null")
+
+    status = run_cost.get("attribution_status")
+    if isinstance(status, str) and status not in RUN_COST_ATTRIBUTION_STATUSES:
+        problems.append(
+            f"{agent_file}: run_cost.attribution_status must be one of "
+            f"{sorted(RUN_COST_ATTRIBUTION_STATUSES)}",
+        )
+
+    matched_ids = run_cost.get("matched_cloud_agent_ids")
+    if matched_ids is not None and (
+        not isinstance(matched_ids, list)
+        or any(not isinstance(value, str) for value in matched_ids)
+    ):
+        problems.append(
+            f"{agent_file}: run_cost.matched_cloud_agent_ids must be a list of strings",
+        )
+
+    notes = run_cost.get("notes")
+    if notes is not None and (
+        not isinstance(notes, list) or any(not isinstance(value, str) for value in notes)
+    ):
+        problems.append(f"{agent_file}: run_cost.notes must be a list of strings")
+
+    usage = run_cost.get("usage")
+    if usage is not None and not isinstance(usage, dict):
+        problems.append(f"{agent_file}: run_cost.usage must be a JSON object")
+
     return problems
 
 
@@ -227,7 +288,7 @@ def has_evaluation_checklist(evaluation_file: Path) -> bool:
     """Return whether an evaluation records criterion-level checklist results."""
 
     for line in evaluation_file.read_text(encoding="utf-8").splitlines():
-        if line.startswith("- [x] ") or line.startswith("- [ ] "):
+        if line.startswith("- [x] ") or line.startswith("- [X] ") or line.startswith("- [ ] "):
             return True
     return False
 

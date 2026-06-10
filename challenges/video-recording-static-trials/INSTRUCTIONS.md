@@ -31,6 +31,7 @@ The participant experience should include:
   a clear message and the experiment should save enough state for the researcher
   to diagnose what happened.
 
+
 The recording and upload behavior should:
 
 - Use PsyNet's native event-based system so that recording commands can be
@@ -51,6 +52,7 @@ The recording and upload behavior should:
 - Save sufficient metadata to associate each video with the participant, trial,
   experiment session, recording start and stop events, upload status, and final
   S3 object location or error state.
+- Make sure that the implemented experiment really use S3 for upload.
 
 The submitted evidence should demonstrate that recordings are captured for
 multiple static trials, uploaded directly to S3 or an equivalent local/test S3
