@@ -4,13 +4,13 @@ Input #0, mov,mp4,m4a,3gp,3g2,mj2, from '../../evidence/participant.mp4':
     minor_version   : 512
     compatible_brands: isomiso2avc1mp41
     encoder         : Lavf60.16.100
-  Duration: 00:03:00.00, start: 0.000000, bitrate: 159 kb/s
-  Stream #0:0[0x1](und): Video: h264 (Constrained Baseline) (avc1 / 0x31637661), yuv420p(progressive), 1280x720, 150 kb/s, 15 fps, 15 tbr, 15360 tbn (default)
+  Duration: 00:03:00.00, start: 0.000000, bitrate: 160 kb/s
+  Stream #0:0[0x1](und): Video: h264 (Constrained Baseline) (avc1 / 0x31637661), yuv420p(progressive), 1280x720, 142 kb/s, 15 fps, 15 tbr, 15360 tbn (default)
     Metadata:
       handler_name    : VideoHandler
       vendor_id       : [0][0][0][0]
       encoder         : Lavc60.31.102 libx264
-  Stream #0:1[0x2](und): Audio: aac (LC) (mp4a / 0x6134706D), 48000 Hz, stereo, fltp, 4 kb/s (default)
+  Stream #0:1[0x2](und): Audio: aac (LC) (mp4a / 0x6134706D), 48000 Hz, stereo, fltp, 13 kb/s (default)
     Metadata:
       handler_name    : SoundHandler
       vendor_id       : [0][0][0][0]
@@ -50,7 +50,7 @@ start_pts=0
 start_time=0.000000
 duration_ts=2764800
 duration=180.000000
-bit_rate=150791
+bit_rate=142309
 max_bit_rate=N/A
 bits_per_raw_sample=8
 nb_frames=2700
@@ -102,7 +102,7 @@ start_pts=0
 start_time=0.000000
 duration_ts=8640000
 duration=180.000000
-bit_rate=4234
+bit_rate=13681
 max_bit_rate=N/A
 bits_per_raw_sample=N/A
 nb_frames=8406
