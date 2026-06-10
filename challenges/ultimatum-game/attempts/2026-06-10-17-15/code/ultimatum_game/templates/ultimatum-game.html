@@ -1,0 +1,355 @@
+{% extends "timeline-page.html" %}
+
+{% block stylesheets %}
+{{ super() }}
+<style>
+    #ultimatum-shell {
+        display: grid;
+        grid-template-columns: minmax(300px, 0.9fr) minmax(420px, 1.4fr);
+        gap: 1rem;
+        min-height: 620px;
+    }
+    #state-panel {
+        background: #f8fafc;
+        border: 1px solid #d9e2ec;
+        border-radius: 12px;
+        padding: 1rem;
+        box-shadow: 0 6px 18px rgba(15, 23, 42, 0.08);
+    }
+    #state-panel h2, #state-panel h3 { margin-top: 0; }
+    #status-line {
+        font-weight: 700;
+        color: #1d4ed8;
+        margin-bottom: 0.75rem;
+    }
+    #timer {
+        display: inline-block;
+        min-width: 4rem;
+        padding: 0.2rem 0.45rem;
+        border-radius: 8px;
+        background: #0f172a;
+        color: white;
+        text-align: center;
+        font-variant-numeric: tabular-nums;
+    }
+    .score-card {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.5rem;
+        margin: 0.75rem 0;
+    }
+    .score-card div {
+        background: white;
+        border: 1px solid #d9e2ec;
+        border-radius: 8px;
+        padding: 0.55rem;
+    }
+    #action-area button { margin: 0.25rem 0.25rem 0.25rem 0; }
+    #offer-slider { width: 100%; }
+    #tabletop-wrap {
+        position: relative;
+        border-radius: 12px;
+        overflow: hidden;
+        min-height: 620px;
+        background: linear-gradient(#c7d2fe, #eef2ff 40%, #1f2937);
+        box-shadow: 0 10px 24px rgba(15, 23, 42, 0.18);
+    }
+    #tabletop-canvas { width: 100%; height: 620px; display: block; }
+    #scene-fallback {
+        position: absolute;
+        inset: 0;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        color: white;
+        background: #1f2937;
+        padding: 2rem;
+    }
+    .pill {
+        display: inline-block;
+        padding: 0.15rem 0.5rem;
+        border-radius: 999px;
+        background: #dbeafe;
+        color: #1e40af;
+        font-size: 0.85rem;
+        font-weight: 700;
+    }
+    @media (max-width: 900px) {
+        #ultimatum-shell { grid-template-columns: 1fr; }
+        #tabletop-wrap, #tabletop-canvas { min-height: 420px; height: 420px; }
+    }
+</style>
+{% endblock %}
+
+{% block main_body %}
+<div id="ultimatum-shell">
+    <section id="state-panel" aria-live="polite">
+        <span class="pill">Live WebSocket round</span>
+        <h2>Ultimatum game</h2>
+        <div id="status-line">Connecting...</div>
+        <p>Round <strong id="round-number">-</strong> / <span id="round-target">-</span> counted rounds</p>
+        <p>Decision time remaining: <span id="timer">--</span></p>
+        <div class="score-card">
+            <div><small>Your role</small><br><strong id="role-label">-</strong></div>
+            <div><small>Your score</small><br><strong id="score-label">0 coins</strong></div>
+            <div><small>Pair timeouts</small><br><strong id="timeout-label">0 / 5</strong></div>
+            <div><small>Offer</small><br><strong id="offer-label">-</strong></div>
+        </div>
+        <div id="action-area"></div>
+        <hr>
+        <div id="feedback-area">Waiting for the pair state...</div>
+    </section>
+    <section id="tabletop-wrap">
+        <canvas id="tabletop-canvas"></canvas>
+        <div id="scene-fallback">Three.js could not be loaded. The game controls remain available in the left panel.</div>
+    </section>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script type="module">
+import * as THREE from "/static/three.module.min.js";
+(function () {
+    var CHANNEL = psynet.var["ultimatum_channel"];
+    var GROUP_ID = psynet.var["ultimatum_group_id"];
+    var MY_ID = Number(psynet.var["ultimatum_participant_id"]);
+    var state = psynet.var["ultimatum_initial_state"];
+    var socket = null;
+    var finalSubmitted = false;
+    var lastFeedbackAckKey = null;
+    var sceneHandles = null;
+
+    initScene();
+    openSocket();
+    render();
+    setInterval(tick, 250);
+
+    function openSocket() {
+        var wsScheme = location.protocol === "https:" ? "wss://" : "ws://";
+        socket = new ReconnectingWebSocket(
+            wsScheme + location.host + "/chat?channel=" + CHANNEL
+            + "&worker_id=" + dallinger.identity.workerId
+            + "&participant_id=" + MY_ID
+        );
+        socket.onopen = function () {
+            send({type: "join"});
+            send({type: "request_state"});
+        };
+        socket.onmessage = function (event) {
+            if (event.data.indexOf(CHANNEL + ":") !== 0) return;
+            var msg;
+            try { msg = JSON.parse(event.data.slice(CHANNEL.length + 1)); }
+            catch (e) { return; }
+            if (Number(msg.group_id) !== Number(GROUP_ID)) return;
+            if (msg.type !== "state_update") return;
+            if (Number(msg.target_participant_id) !== MY_ID) return;
+            state = msg;
+            render();
+        };
+    }
+
+    function send(payload) {
+        payload.group_id = GROUP_ID;
+        payload.participant_id = MY_ID;
+        payload.unique_id = psynet.uniqueId;
+        fetch("/ultimatum_action", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(payload),
+        }).catch(function () {});
+    }
+
+    function tick() {
+        if (!state) return;
+        updateTimer();
+        if ((state.status === "proposal" || state.status === "response") && deadlineRemaining() <= 0) {
+            send({type: "timeout"});
+        }
+        if (state.status === "feedback" && feedbackRemaining() <= 0) {
+            var ackKey = String(state.round_index) + ":" + String(state.counted_rounds) + ":" + String(state.timeout_count);
+            if (ackKey !== lastFeedbackAckKey) {
+                lastFeedbackAckKey = ackKey;
+                send({type: "feedback_ack"});
+            }
+        }
+    }
+
+    function deadlineRemaining() {
+        if (!state || !state.deadline) return Infinity;
+        return (Date.parse(state.deadline) - Date.now()) / 1000;
+    }
+
+    function feedbackRemaining() {
+        if (!state || !state.feedback_until) return Infinity;
+        return (Date.parse(state.feedback_until) - Date.now()) / 1000;
+    }
+
+    function updateTimer() {
+        var timer = document.getElementById("timer");
+        var remaining = state.status === "feedback" ? feedbackRemaining() : deadlineRemaining();
+        if (!isFinite(remaining)) { timer.textContent = "--"; return; }
+        timer.textContent = Math.max(0, Math.ceil(remaining)) + "s";
+    }
+
+    function render() {
+        if (!state) return;
+        document.getElementById("round-number").textContent = state.counted_rounds;
+        document.getElementById("round-target").textContent = state.rounds_required;
+        document.getElementById("role-label").textContent = titleCase(state.role || "waiting");
+        document.getElementById("score-label").textContent = state.total_score + " coins";
+        document.getElementById("timeout-label").textContent = state.timeout_count + " / " + state.max_timeouts;
+        document.getElementById("offer-label").textContent = state.offer === null || state.offer === undefined ? "-" : state.offer + " coins";
+        updateTimer();
+        renderAction();
+        renderFeedback();
+        updateScene();
+        if ((state.status === "complete" || state.status === "failed") && !finalSubmitted) {
+            finalSubmitted = true;
+            setTimeout(function () { psynet.nextPage(state); }, 900);
+        }
+    }
+
+    function renderAction() {
+        var area = document.getElementById("action-area");
+        area.innerHTML = "";
+        if (state.status === "proposal") {
+            if (state.role === "proposer") {
+                document.getElementById("status-line").textContent = "You are the proposer. Choose an offer.";
+                var label = document.createElement("label");
+                label.htmlFor = "offer-slider";
+                label.innerHTML = "Offer to responder: <strong id='slider-value'>5</strong> coins";
+                var slider = document.createElement("input");
+                slider.type = "range"; slider.min = "0"; slider.max = "10"; slider.value = "5"; slider.id = "offer-slider";
+                slider.oninput = function () { document.getElementById("slider-value").textContent = slider.value; };
+                var quickOffers = document.createElement("div");
+                quickOffers.style.marginTop = "0.5rem";
+                [1, 4, 7].forEach(function (offer) {
+                    var quick = document.createElement("button");
+                    quick.className = "btn btn-outline-primary btn-sm";
+                    quick.textContent = "Offer " + offer;
+                    quick.onclick = function () {
+                        slider.value = String(offer);
+                        document.getElementById("slider-value").textContent = String(offer);
+                    };
+                    quickOffers.appendChild(quick);
+                });
+                var button = document.createElement("button");
+                button.className = "btn btn-primary";
+                button.textContent = "Submit offer";
+                button.onclick = function () { send({type: "offer", offer: Number(slider.value)}); button.disabled = true; };
+                area.appendChild(label); area.appendChild(slider); area.appendChild(quickOffers); area.appendChild(button);
+            } else {
+                document.getElementById("status-line").textContent = "Waiting for the proposer to submit an offer.";
+                area.textContent = "The responder controls will appear as soon as the offer arrives.";
+            }
+        } else if (state.status === "response") {
+            if (state.role === "responder") {
+                document.getElementById("status-line").textContent = "You are the responder. Accept or reject the offer.";
+                var accept = document.createElement("button");
+                accept.className = "btn btn-success"; accept.textContent = "Accept " + state.offer + " coins";
+                accept.onclick = function () { send({type: "decision", decision: "accept"}); accept.disabled = reject.disabled = true; };
+                var reject = document.createElement("button");
+                reject.className = "btn btn-danger"; reject.textContent = "Reject offer";
+                reject.onclick = function () { send({type: "decision", decision: "reject"}); accept.disabled = reject.disabled = true; };
+                area.appendChild(accept); area.appendChild(reject);
+            } else {
+                document.getElementById("status-line").textContent = "Offer submitted. Waiting for the responder's decision.";
+                area.textContent = "You offered " + state.offer + " coins.";
+            }
+        } else if (state.status === "feedback") {
+            document.getElementById("status-line").textContent = "Round feedback.";
+            area.textContent = "The next round will start after both browsers acknowledge the feedback.";
+        } else if (state.status === "complete") {
+            document.getElementById("status-line").textContent = "All counted rounds complete.";
+            area.textContent = "Moving to the completion page...";
+        } else if (state.status === "failed") {
+            document.getElementById("status-line").textContent = "Pair failed because of repeated decision timeouts.";
+            area.textContent = "Moving to the completion page...";
+        }
+    }
+
+    function renderFeedback() {
+        var feedback = document.getElementById("feedback-area");
+        var r = state.last_round;
+        if (!r) {
+            feedback.textContent = "No completed round yet.";
+            return;
+        }
+        var myPayoff = r.payoffs ? (r.payoffs[String(MY_ID)] || 0) : 0;
+        if (r.skipped) {
+            feedback.innerHTML = "<strong>Skipped round " + r.round_index + ":</strong> the "
+                + r.timeout_role + " timed out. No coins were awarded and the round did not count.";
+        } else {
+            feedback.innerHTML = "<strong>Round " + r.round_index + ":</strong> You were "
+                + titleCase(r.roles[String(MY_ID)]) + ". The proposer offered " + r.offer
+                + " coins. The responder chose to " + r.decision + ". You earned "
+                + myPayoff + " coins. Your cumulative score is " + state.total_score + ".";
+        }
+    }
+
+    function titleCase(text) {
+        return text ? text.charAt(0).toUpperCase() + text.slice(1) : "";
+    }
+
+    function initScene() {
+        var canvas = document.getElementById("tabletop-canvas");
+        var renderer = new THREE.WebGLRenderer({canvas: canvas, antialias: true});
+        var scene = new THREE.Scene();
+        scene.background = new THREE.Color(0xc7d2fe);
+        var camera = new THREE.PerspectiveCamera(42, 1, 0.1, 100);
+        camera.position.set(0, 5.5, 8);
+        camera.lookAt(0, 0, 0);
+        scene.add(new THREE.HemisphereLight(0xffffff, 0x334155, 1.2));
+        var dir = new THREE.DirectionalLight(0xffffff, 0.7); dir.position.set(3, 8, 5); scene.add(dir);
+        var table = new THREE.Mesh(
+            new THREE.BoxGeometry(7, 0.35, 4.5),
+            new THREE.MeshStandardMaterial({color: 0x8b5a2b, roughness: 0.65})
+        );
+        table.position.y = -0.2; scene.add(table);
+        var nearAvatar = avatar(0x2563eb); nearAvatar.position.set(0, 0.45, 2.2); scene.add(nearAvatar);
+        var farAvatar = avatar(0xef4444); farAvatar.position.set(0, 0.45, -2.0); scene.add(farAvatar);
+        var offerCoins = coinGroup(0.25, 0xfacc15); offerCoins.position.set(-1.5, 0.3, 0); scene.add(offerCoins);
+        var keptCoins = coinGroup(0.25, 0xfbbf24); keptCoins.position.set(1.5, 0.3, 0); scene.add(keptCoins);
+        sceneHandles = {renderer: renderer, scene: scene, camera: camera, offerCoins: offerCoins, keptCoins: keptCoins};
+        resizeScene(); window.addEventListener("resize", resizeScene);
+        (function animate() { requestAnimationFrame(animate); renderer.render(scene, camera); })();
+    }
+
+    function avatar(color) {
+        var group = new THREE.Group();
+        var body = new THREE.Mesh(new THREE.CapsuleGeometry(0.35, 0.75, 8, 16), new THREE.MeshStandardMaterial({color: color}));
+        var head = new THREE.Mesh(new THREE.SphereGeometry(0.32, 24, 24), new THREE.MeshStandardMaterial({color: 0xf8d6b3}));
+        head.position.y = 0.75; group.add(body); group.add(head); return group;
+    }
+
+    function coinGroup(radius, color) {
+        var group = new THREE.Group();
+        for (var i = 0; i < 10; i++) {
+            var coin = new THREE.Mesh(new THREE.CylinderGeometry(radius, radius, 0.06, 24), new THREE.MeshStandardMaterial({color: color, metalness: 0.4, roughness: 0.35}));
+            coin.rotation.x = Math.PI / 2;
+            coin.position.set((i % 5) * 0.18 - 0.36, Math.floor(i / 5) * 0.08, (i % 2) * 0.14 - 0.07);
+            group.add(coin);
+        }
+        return group;
+    }
+
+    function resizeScene() {
+        if (!sceneHandles) return;
+        var canvas = document.getElementById("tabletop-canvas");
+        var rect = canvas.getBoundingClientRect();
+        sceneHandles.renderer.setSize(rect.width, rect.height, false);
+        sceneHandles.camera.aspect = rect.width / rect.height;
+        sceneHandles.camera.updateProjectionMatrix();
+    }
+
+    function updateScene() {
+        if (!sceneHandles) return;
+        var offer = Number(state.offer || 0);
+        sceneHandles.offerCoins.children.forEach(function (coin, i) { coin.visible = i < offer; });
+        sceneHandles.keptCoins.children.forEach(function (coin, i) { coin.visible = i < (10 - offer); });
+    }
+})();
+</script>
+{% endblock %}

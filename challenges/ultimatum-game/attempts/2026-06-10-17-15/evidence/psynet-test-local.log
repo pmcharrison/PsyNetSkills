@@ -1,0 +1,18 @@
+============================= test session starts ==============================
+platform linux -- Python 3.13.13, pytest-9.0.3, pluggy-1.6.0
+rootdir: /workspace/challenges/ultimatum-game/attempts/2026-06-10-17-15/code/ultimatum_game
+configfile: pytest.ini
+plugins: anyio-4.13.0, dallinger-12.2.0, Faker-40.15.0, psynet-13.3.0a0, dependency-0.6.0, mock-3.14.1, test-groups-1.2.1, timeout-2.4.0
+collected 1 item
+
+test.py::test_experiment[/workspace/challenges/ultimatum-game/attempts/2026-06-10-17-15/code/ultimatum_game] 
+-------------------------------- live log call ---------------------------------
+INFO     psynet:experiment.py:1393 Testing experiment with 2 serial bot(s)...
+INFO     psynet:bot.py:74 Waiting for experiment launch to complete....
+INFO     psynet:bot.py:37 Initializing bot with worker ID 354333da-aa4b-4378-a1ab-f13a4c81d9e3.
+INFO     psynet:bot.py:74 Waiting for experiment launch to complete....
+INFO     psynet:bot.py:37 Initializing bot with worker ID 818d51f8-1409-4ec9-ba9b-d9b0cf935c1f.
+INFO     psynet:experiment.py:1369 Mean HTTP request duration: 0.063 seconds
+PASSED                                                                   [100%]
+
+============================== 1 passed in 11.38s ==============================
