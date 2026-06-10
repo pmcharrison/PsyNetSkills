@@ -1,0 +1,106 @@
+{% macro survey_js(params) %}
+<div id="surveyContainer"></div>
+
+<link href="{{ url_for('static', filename='scripts/survey-jquery/defaultV2.min.css') }}" type="text/css" rel="stylesheet">
+
+<script>
+var survey;
+const pageLoadTime = Date.now();
+const eventLog = [];
+const mousePositions = [];
+const mouseSamplingIntervalMs = {{ params.mouse_sampling_interval_ms }};
+const maxMousePositions = {{ params.max_mouse_positions }};
+let lastMouse = { x: null, y: null };
+
+setInterval(function () {
+    if (mousePositions.length >= maxMousePositions) return;
+    if (lastMouse.x !== null) {
+        mousePositions.push([lastMouse.x, lastMouse.y, Date.now() - pageLoadTime]);
+    }
+}, mouseSamplingIntervalMs);
+
+document.addEventListener("mousemove", function (e) {
+    lastMouse.x = e.pageX;
+    lastMouse.y = e.pageY;
+});
+
+function computeMouseStd(positions) {
+    if (positions.length < 2) return { std_x: 0, std_y: 0, std: 0 };
+    const n = positions.length;
+    let sumX = 0, sumY = 0;
+    for (const p of positions) { sumX += p[0]; sumY += p[1]; }
+    const meanX = sumX / n, meanY = sumY / n;
+    let m2X = 0, m2Y = 0;
+    for (const p of positions) {
+        m2X += (p[0] - meanX) ** 2;
+        m2Y += (p[1] - meanY) ** 2;
+    }
+    const varX = m2X / (n - 1), varY = m2Y / (n - 1);
+    return {
+        std_x: Math.sqrt(varX),
+        std_y: Math.sqrt(varY),
+        std: Math.sqrt(varX + varY)
+    };
+}
+
+window.addEventListener("blur", () => eventLog.push({ type: "blur", t: Date.now() - pageLoadTime }));
+document.addEventListener("keydown", (e) => eventLog.push({ type: "keydown", key: e.key, code: e.code, t: Date.now() - pageLoadTime }));
+document.addEventListener("click", (e) => eventLog.push({ type: "click", x: e.pageX, y: e.pageY, t: Date.now() - pageLoadTime }));
+
+function initSurvey() {
+    Survey.StylesManager.applyTheme("defaultV2");
+    const surveyJson = {{ params.design | tojson }};
+    survey = new Survey.Model(surveyJson);
+    survey.focusFirstQuestionAutomatic = false;
+
+    {% if params.use_psynet_next_button %}
+    survey.showNavigationButtons = false;
+
+    psynet.stageResponse = () => {
+        let success = survey.completeLastPage();
+        if (!success) {
+            throw new Error("The participant failed SurveyJS validation checks.");
+        }
+    };
+    {% endif %}
+
+    function handleSurveyCompletion(sender, options) {
+        options.allowComplete = false;
+        options.allowCompleting = false;
+        asyncPostResults(sender);
+    }
+
+    async function asyncPostResults(sender) {
+        survey.onCompleting.remove(handleSurveyCompletion);
+        const payload = {
+            survey: sender.data,
+            events: eventLog,
+            mouse: computeMouseStd(mousePositions),
+            mouse_positions: mousePositions
+        };
+        $("#main-body").hide();
+        const success = await psynet.nextPage(JSON.stringify(payload));
+        if (success) {
+            sender.doComplete();
+        } else {
+            $("#main-body").show();
+            survey.onCompleting.add(handleSurveyCompletion);
+        }
+    }
+
+    survey.onAfterRenderPage.add(() => {
+        $(".sd-navigation__complete-btn").addClass("submit");
+        if (!psynet.trial.events.submitEnable.happened) {
+            $(".sd-navigation__complete-btn").attr("disabled", true);
+        }
+    });
+    survey.onCompleting.add(handleSurveyCompletion);
+
+    $(function() {
+        $("#surveyContainer").Survey({ model: survey });
+    });
+}
+
+document.addEventListener("DOMContentLoaded", initSurvey);
+</script>
+{% endmacro %}

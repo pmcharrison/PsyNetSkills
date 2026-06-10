@@ -1,0 +1,317 @@
+{% macro melody_select_control(config) %}
+<div class="melody-select-control">
+    <div class="market-grid" id="melody-market">
+        {% for proposal in config.proposals_data %}
+        <div class="melody-card"
+             data-proposal-id="{{ proposal.id }}"
+             data-melody='{{ proposal.melody | tojson | safe }}'
+             data-proposed-to="{{ proposal.proposed_to }}"
+             data-adopted-by="{{ proposal.adopted_by }}">
+            <div class="melody-title">Melody {{ proposal.label }}</div>
+            <button type="button" class="play-preview">Play melody</button>
+            <div class="wave-preview" aria-hidden="true">
+                {% for note in proposal.melody %}
+                <span class="wave-bar {{ 'rest' if note is none else '' }}"
+                      style="height: {{ 12 if note is none else 18 + note * 9 }}px"></span>
+                {% endfor %}
+            </div>
+
+            {% if config.display_popularity %}
+            <div class="copy-count">
+                <div class="ratio-circles">
+                    {% if proposal.proposed_to > 0 %}
+                        {% for i in range(proposal.proposed_to) %}
+                            <span class="circle {{ 'filled' if i < proposal.adopted_by else 'empty' }}"></span>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                <div class="ratio-text">
+                    {{ 'Never selected (New)' if proposal.proposed_to == 0 else 'Never selected in the last %s round(s)'|format(proposal.proposed_to) if proposal.adopted_by == 0 else 'Won %s time(s) in the last %s round(s)'|format(proposal.adopted_by, proposal.proposed_to) }}
+                </div>
+            </div>
+            {% endif %}
+
+            {% if config.display_popularity %}
+            <div class="custom-tooltip">
+                This melody has been proposed to {{ proposal.proposed_to }} participant(s), and selected by {{ proposal.adopted_by }}.
+            </div>
+            {% else %}
+            <div class="custom-tooltip">Click the card to select it.</div>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+    <input type="hidden" id="selected-proposal" value="">
+</div>
+
+<script>
+(function () {
+    const pageLoadTime = Date.now();
+    const choices = {{ config.choices | tojson | safe }};
+    const mouseSamplingIntervalMs = Number({{ config.mouse_sampling_interval_ms }});
+    const maxMousePositions = Number({{ config.max_mouse_positions }});
+    const eventLog = [];
+    const mousePositions = [];
+    let lastMouse = { x: null, y: null };
+    let selectedCard = null;
+    let audioContext = null;
+
+    function frequencyForPitch(pitch) {
+        return [261.63, 293.66, 329.63][pitch];
+    }
+
+    function computeMouseStd(positions) {
+        if (positions.length < 2) return { std_x: 0, std_y: 0, std: 0 };
+        const n = positions.length;
+        let sumX = 0, sumY = 0;
+        for (const p of positions) { sumX += p[0]; sumY += p[1]; }
+        const meanX = sumX / n, meanY = sumY / n;
+        let m2X = 0, m2Y = 0;
+        for (const p of positions) {
+            m2X += (p[0] - meanX) ** 2;
+            m2Y += (p[1] - meanY) ** 2;
+        }
+        const varX = m2X / (n - 1), varY = m2Y / (n - 1);
+        return {
+            std_x: Math.sqrt(varX),
+            std_y: Math.sqrt(varY),
+            std: Math.sqrt(varX + varY)
+        };
+    }
+
+    function playMelody(melody) {
+        audioContext = audioContext || new (window.AudioContext || window.webkitAudioContext)();
+        const start = audioContext.currentTime + 0.04;
+        const step = 0.24;
+        melody.forEach((pitch, slot) => {
+            if (pitch === null || pitch === undefined) return;
+            const oscillator = audioContext.createOscillator();
+            const gain = audioContext.createGain();
+            oscillator.type = "sine";
+            oscillator.frequency.value = frequencyForPitch(pitch);
+            gain.gain.setValueAtTime(0.0001, start + slot * step);
+            gain.gain.exponentialRampToValueAtTime(0.18, start + slot * step + 0.02);
+            gain.gain.exponentialRampToValueAtTime(0.0001, start + (slot + 0.82) * step);
+            oscillator.connect(gain).connect(audioContext.destination);
+            oscillator.start(start + slot * step);
+            oscillator.stop(start + (slot + 0.9) * step);
+        });
+    }
+
+    function setSelection(card) {
+        if (selectedCard) selectedCard.classList.remove("selected");
+        selectedCard = card;
+        selectedCard.classList.add("selected");
+        document.getElementById("selected-proposal").value = selectedCard.dataset.proposalId;
+        eventLog.push({ type: "select", proposal_id: Number(selectedCard.dataset.proposalId), t: Date.now() - pageLoadTime });
+    }
+
+    function responseData() {
+        const selectedId = document.getElementById("selected-proposal").value;
+        const id = selectedId && choices.includes(Number(selectedId)) ? Number(selectedId) : null;
+        return {
+            adopt: id,
+            events: eventLog,
+            mouse: computeMouseStd(mousePositions),
+            mouse_positions: mousePositions
+        };
+    }
+
+    setInterval(function () {
+        if (mousePositions.length >= maxMousePositions) return;
+        if (lastMouse.x !== null) {
+            mousePositions.push([lastMouse.x, lastMouse.y, Date.now() - pageLoadTime]);
+        }
+    }, mouseSamplingIntervalMs);
+
+    document.addEventListener("mousemove", function (e) {
+        lastMouse.x = e.pageX;
+        lastMouse.y = e.pageY;
+    });
+    window.addEventListener("blur", () => eventLog.push({ type: "blur", t: Date.now() - pageLoadTime }));
+    document.addEventListener("keydown", (e) => eventLog.push({ type: "keydown", key: e.key, code: e.code, t: Date.now() - pageLoadTime }));
+    document.addEventListener("click", (e) => eventLog.push({ type: "click", x: e.pageX, y: e.pageY, t: Date.now() - pageLoadTime }));
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const market = document.getElementById("melody-market");
+        market.addEventListener("click", function (event) {
+            const playButton = event.target.closest(".play-preview");
+            if (playButton) {
+                const card = playButton.closest(".melody-card");
+                playMelody(JSON.parse(card.dataset.melody));
+                eventLog.push({ type: "play", proposal_id: Number(card.dataset.proposalId), t: Date.now() - pageLoadTime });
+                event.stopPropagation();
+                return;
+            }
+            const card = event.target.closest(".melody-card");
+            if (card && market.contains(card)) setSelection(card);
+        });
+
+        psynet.stageResponse = function () {
+            psynet.response.staged.rawAnswer = responseData();
+        };
+
+        retrieveResponse = function () {
+            return { rawAnswer: responseData() };
+        };
+    });
+})();
+</script>
+
+<style>
+    .melody-select-control {
+        max-width: 920px;
+        margin: 0 auto;
+        padding: 4px 10px;
+    }
+
+    .market-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(145px, 1fr));
+        gap: 14px;
+    }
+
+    .melody-card {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        padding: 12px;
+        background: #f8f9fa;
+        border: 2px solid #dee2e6;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: transform 150ms ease, border-color 150ms ease, background 150ms ease;
+    }
+
+    .melody-card:hover {
+        background: #e9ecef;
+        border-color: #adb5bd;
+        transform: translateY(-2px);
+    }
+
+    .melody-card.selected {
+        background: #d4edda;
+        border-color: #28a745;
+        border-width: 3px;
+    }
+
+    .melody-title {
+        font-weight: 700;
+    }
+
+    .play-preview {
+        border: none;
+        border-radius: 7px;
+        background: #2f80ed;
+        color: white;
+        padding: 7px 10px;
+        cursor: pointer;
+        font-weight: 600;
+    }
+
+    .wave-preview {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 3px;
+        height: 48px;
+        width: 100%;
+        padding: 4px;
+        background: #fff;
+        border: 1px solid #e1e4e8;
+        border-radius: 8px;
+    }
+
+    .wave-bar {
+        width: 7px;
+        background: #6f42c1;
+        border-radius: 999px;
+        opacity: 0.85;
+    }
+
+    .wave-bar.rest {
+        height: 4px !important;
+        background: #ced4da;
+    }
+
+    .copy-count {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        font-size: 12px;
+        font-weight: 600;
+        color: #495057;
+        background: #fff;
+        padding: 5px;
+        border-radius: 12px;
+        border: 1px solid #dee2e6;
+        text-align: center;
+    }
+
+    .ratio-circles {
+        display: flex;
+        gap: 2px;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .circle {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        border: 2px solid #495057;
+        display: inline-block;
+    }
+
+    .circle.filled {
+        background-color: #28a745;
+        border-color: #28a745;
+    }
+
+    .circle.empty {
+        background-color: transparent;
+        border-color: #adb5bd;
+    }
+
+    .ratio-text {
+        font-size: 11px;
+        line-height: 1.2;
+    }
+
+    .custom-tooltip {
+        position: absolute;
+        bottom: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0, 0, 0, 0.9);
+        color: #fff;
+        padding: 8px 12px;
+        border-radius: 6px;
+        font-size: 12px;
+        white-space: nowrap;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.15s ease;
+        margin-bottom: 8px;
+        z-index: 1000;
+    }
+
+    .custom-tooltip::after {
+        content: "";
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        border: 6px solid transparent;
+        border-top-color: rgba(0, 0, 0, 0.9);
+    }
+
+    .melody-card:hover .custom-tooltip {
+        opacity: 1;
+    }
+</style>
+{% endmacro %}

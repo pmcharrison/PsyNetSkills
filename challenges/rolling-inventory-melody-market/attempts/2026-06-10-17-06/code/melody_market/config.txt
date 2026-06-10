@@ -1,0 +1,17 @@
+[Config]
+title = Melody market experiment (Chrome browser, ~11 minutes to complete)
+description = This experiment requires you to compose short melodies that compete in a shared market. Please use a Chrome browser in incognito mode if possible. If you finish the experiment but time out, do not worry; we will review the submission manually.
+contact_email_on_error = computational.audition@example.invalid
+organization_name = Computational Audition Lab
+
+recruiter = generic
+currency = $
+wage_per_hour = 9.0
+show_reward = false
+auto_recruit = false
+
+[Prolific]
+# recruiter = prolific
+# auto_recruit = false
+# prolific_estimated_completion_minutes = 11
+# base_payment = 2.25
