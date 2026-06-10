@@ -1,0 +1,194 @@
+{% macro melody_select_control(config) %}
+<div class="melody-select-control">
+    <div class="pool-grid" id="melody-proposals-pool">
+        {% for proposal in config.proposals_data %}
+        <div class="melody-card"
+             data-proposal-id="{{ proposal.id }}"
+             data-melody='{{ proposal.melody | tojson | safe }}'>
+            <div class="card-heading">Melody {{ proposal.label }}</div>
+            <button type="button" class="play-proposal-btn">Play melody</button>
+            <div class="waveform" aria-hidden="true">
+                {% for step in range(config.n_steps) %}
+                    {% set active = proposal.melody[0][step] + proposal.melody[1][step] + proposal.melody[2][step] %}
+                    <span style="height: {{ 12 + active * 12 }}px"></span>
+                {% endfor %}
+            </div>
+
+            {% if config.display_popularity %}
+            <div class="copy-count">
+                <div class="ratio-circles">
+                    {% if proposal.proposed_to > 0 %}
+                        {% for i in range(proposal.proposed_to) %}
+                            <span class="circle {{ 'filled' if i < proposal.adopted_by else 'empty' }}"></span>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                <div class="ratio-text">
+                    {{ 'Never selected (new)' if proposal.proposed_to == 0 else 'Never selected in the last %s round(s)'|format(proposal.proposed_to) if proposal.adopted_by == 0 else 'Won %s time(s) in the last %s round(s)'|format(proposal.adopted_by, proposal.proposed_to) }}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+    <input type="hidden" id="selected-proposal" value="">
+</div>
+
+<script>
+(function () {
+    const choices = {{ config.choices | tojson | safe }};
+    const noteFrequencies = {{ config.note_frequencies | tojson | safe }};
+    const stepDuration = 0.22;
+    let selectedCard = null;
+    let audioContext = null;
+
+    function ensureAudioContext() {
+        if (!audioContext) {
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        return audioContext;
+    }
+
+    function playMelody(sequence) {
+        const ctx = ensureAudioContext();
+        const start = ctx.currentTime + 0.04;
+        sequence.forEach((rowValues, rowIndex) => {
+            rowValues.forEach((active, stepIndex) => {
+                if (!active) return;
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = "sine";
+                osc.frequency.value = noteFrequencies[rowIndex];
+                gain.gain.setValueAtTime(0.0001, start + stepIndex * stepDuration);
+                gain.gain.exponentialRampToValueAtTime(0.12, start + stepIndex * stepDuration + 0.015);
+                gain.gain.exponentialRampToValueAtTime(0.0001, start + (stepIndex + 0.85) * stepDuration);
+                osc.connect(gain).connect(ctx.destination);
+                osc.start(start + stepIndex * stepDuration);
+                osc.stop(start + (stepIndex + 0.9) * stepDuration);
+            });
+        });
+    }
+
+    function selectCard(card) {
+        if (selectedCard) selectedCard.classList.remove("selected");
+        selectedCard = card;
+        selectedCard.classList.add("selected");
+        document.getElementById("selected-proposal").value = card.dataset.proposalId;
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const pool = document.getElementById("melody-proposals-pool");
+        pool.addEventListener("click", event => {
+            const playButton = event.target.closest(".play-proposal-btn");
+            const card = event.target.closest(".melody-card");
+            if (!card) return;
+            if (playButton) {
+                playMelody(JSON.parse(card.dataset.melody));
+                event.stopPropagation();
+            } else {
+                selectCard(card);
+            }
+        });
+
+        psynet.stageResponse = function () {
+            const selectedId = parseInt(document.getElementById("selected-proposal").value);
+            psynet.response.staged.rawAnswer = {
+                adopt: choices.includes(selectedId) ? selectedId : null
+            };
+        };
+
+        retrieveResponse = function () {
+            const selectedId = parseInt(document.getElementById("selected-proposal").value);
+            return {
+                rawAnswer: {
+                    adopt: choices.includes(selectedId) ? selectedId : null
+                }
+            };
+        };
+    });
+})();
+</script>
+
+<style>
+.melody-select-control {
+    max-width: 960px;
+    margin: 0 auto;
+}
+.pool-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 14px;
+}
+.melody-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 12px;
+    background: #f8f9fa;
+    border: 2px solid #d8dee8;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: transform 150ms ease, border-color 150ms ease, background 150ms ease;
+}
+.melody-card:hover {
+    transform: translateY(-2px);
+    border-color: #8c9bb3;
+}
+.melody-card.selected {
+    background: #dff3e7;
+    border-color: #2c9b55;
+    box-shadow: 0 0 0 2px rgba(44, 155, 85, 0.2);
+}
+.card-heading {
+    font-weight: 800;
+}
+.play-proposal-btn {
+    border: 0;
+    border-radius: 8px;
+    padding: 7px 12px;
+    background: #244f9e;
+    color: #fff;
+    font-weight: 700;
+    cursor: pointer;
+}
+.waveform {
+    height: 52px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 0;
+}
+.waveform span {
+    display: inline-block;
+    width: 8px;
+    background: linear-gradient(180deg, #6b8fd6, #244f9e);
+    border-radius: 999px;
+}
+.copy-count {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    color: #45505f;
+    text-align: center;
+}
+.ratio-circles {
+    display: flex;
+    gap: 2px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.circle {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    border: 2px solid #9ca7b7;
+}
+.circle.filled {
+    background: #2c9b55;
+    border-color: #2c9b55;
+}
+</style>
+{% endmacro %}
