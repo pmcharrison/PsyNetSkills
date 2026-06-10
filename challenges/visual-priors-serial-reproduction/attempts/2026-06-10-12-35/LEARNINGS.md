@@ -1,5 +1,18 @@
 # Learnings
 
+## Prefer native PsyNet Graphics for visual-memory tasks
+
+The evaluator found the custom JavaScript canvas implementation clunky and
+jittery, and requested a more idiomatic PsyNet implementation that stays closer
+to existing PsyNet demos. For visual reproduction tasks, native PsyNet Graphics
+objects should be the default approach unless the required interaction cannot be
+expressed with the framework.
+
+*Actions:*
+- **PsyNetSkills:** Update experiment implementation guidance to emphasize
+  native PsyNet Graphics for dot, shape, and click-coordinate tasks before
+  introducing custom JavaScript. Confidence: high. Status: considering.
+
 ## Bot responses on custom `Page` classes
 
 PsyNet bots submit the value returned by `get_bot_response` as the formatted
