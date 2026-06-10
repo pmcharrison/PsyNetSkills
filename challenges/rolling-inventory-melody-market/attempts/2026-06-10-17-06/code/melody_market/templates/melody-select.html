@@ -46,37 +46,12 @@
 
 <script>
 (function () {
-    const pageLoadTime = Date.now();
     const choices = {{ config.choices | tojson | safe }};
-    const mouseSamplingIntervalMs = Number({{ config.mouse_sampling_interval_ms }});
-    const maxMousePositions = Number({{ config.max_mouse_positions }});
-    const eventLog = [];
-    const mousePositions = [];
-    let lastMouse = { x: null, y: null };
     let selectedCard = null;
     let audioContext = null;
 
     function frequencyForPitch(pitch) {
         return [261.63, 293.66, 329.63][pitch];
-    }
-
-    function computeMouseStd(positions) {
-        if (positions.length < 2) return { std_x: 0, std_y: 0, std: 0 };
-        const n = positions.length;
-        let sumX = 0, sumY = 0;
-        for (const p of positions) { sumX += p[0]; sumY += p[1]; }
-        const meanX = sumX / n, meanY = sumY / n;
-        let m2X = 0, m2Y = 0;
-        for (const p of positions) {
-            m2X += (p[0] - meanX) ** 2;
-            m2Y += (p[1] - meanY) ** 2;
-        }
-        const varX = m2X / (n - 1), varY = m2Y / (n - 1);
-        return {
-            std_x: Math.sqrt(varX),
-            std_y: Math.sqrt(varY),
-            std: Math.sqrt(varX + varY)
-        };
     }
 
     function playMelody(melody) {
@@ -103,34 +78,13 @@
         selectedCard = card;
         selectedCard.classList.add("selected");
         document.getElementById("selected-proposal").value = selectedCard.dataset.proposalId;
-        eventLog.push({ type: "select", proposal_id: Number(selectedCard.dataset.proposalId), t: Date.now() - pageLoadTime });
     }
 
     function responseData() {
         const selectedId = document.getElementById("selected-proposal").value;
         const id = selectedId && choices.includes(Number(selectedId)) ? Number(selectedId) : null;
-        return {
-            adopt: id,
-            events: eventLog,
-            mouse: computeMouseStd(mousePositions),
-            mouse_positions: mousePositions
-        };
+        return { adopt: id };
     }
-
-    setInterval(function () {
-        if (mousePositions.length >= maxMousePositions) return;
-        if (lastMouse.x !== null) {
-            mousePositions.push([lastMouse.x, lastMouse.y, Date.now() - pageLoadTime]);
-        }
-    }, mouseSamplingIntervalMs);
-
-    document.addEventListener("mousemove", function (e) {
-        lastMouse.x = e.pageX;
-        lastMouse.y = e.pageY;
-    });
-    window.addEventListener("blur", () => eventLog.push({ type: "blur", t: Date.now() - pageLoadTime }));
-    document.addEventListener("keydown", (e) => eventLog.push({ type: "keydown", key: e.key, code: e.code, t: Date.now() - pageLoadTime }));
-    document.addEventListener("click", (e) => eventLog.push({ type: "click", x: e.pageX, y: e.pageY, t: Date.now() - pageLoadTime }));
 
     document.addEventListener("DOMContentLoaded", function () {
         const market = document.getElementById("melody-market");
@@ -139,7 +93,6 @@
             if (playButton) {
                 const card = playButton.closest(".melody-card");
                 playMelody(JSON.parse(card.dataset.melody));
-                eventLog.push({ type: "play", proposal_id: Number(card.dataset.proposalId), t: Date.now() - pageLoadTime });
                 event.stopPropagation();
                 return;
             }

@@ -26,9 +26,6 @@ PITCH_COLORS = ["#2f80ed", "#27ae60", "#eb5757"]
 NUM_EDITS = 3
 NUM_EDITS_SEED = MELODY_LENGTH
 
-MOUSE_SAMPLING_INTERVAL_MS = 250
-MAX_MOUSE_POSITIONS = 500
-
 POOL_SIZE = 12
 N_CREATORS_PER_GENERATION = 1
 N_SEED_IMAGES = 1
@@ -138,6 +135,35 @@ class MelodyNode(ChainNode):
         return definition
 
 
+class AudioPreScreenControl(Control):
+    macro = "audio_pre_screen_control"
+    external_template = "audio-pre-screen.html"
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs, bot_response={"played": True, "heard": "yes"})
+
+    def format_answer(self, raw_answer, **kwargs):
+        if not isinstance(raw_answer, dict):
+            return {"played": False, "heard": None}
+        return {
+            "played": bool(raw_answer.get("played")),
+            "heard": raw_answer.get("heard"),
+        }
+
+    def validate(self, response, **kwargs):
+        if not response.answer.get("played"):
+            return FailedValidation("Please play the audio check before continuing.")
+        if response.answer.get("heard") != "yes":
+            return FailedValidation(
+                "You need working audio to continue with this melody task."
+            )
+        return None
+
+    @property
+    def metadata(self):
+        return {"requires_audible_playback": True}
+
+
 class MelodyEditControl(Control):
     macro = "melody_edit_control"
     external_template = "melody-edit.html"
@@ -146,8 +172,6 @@ class MelodyEditControl(Control):
         self,
         prefill_melody=None,
         num_edits: int = NUM_EDITS,
-        mouse_sampling_interval_ms: int = MOUSE_SAMPLING_INTERVAL_MS,
-        max_mouse_positions: int = MAX_MOUSE_POSITIONS,
         **kwargs,
     ):
         self.prefill_melody = validate_melody_shape(prefill_melody) or empty_melody()
@@ -155,11 +179,6 @@ class MelodyEditControl(Control):
         self.melody_length = MELODY_LENGTH
         self.pitch_labels = PITCH_LABELS
         self.pitch_colors = PITCH_COLORS
-        self.mouse_sampling_interval_ms = mouse_sampling_interval_ms
-        self.max_mouse_positions = max_mouse_positions
-        self.user_events = []
-        self.mouse = None
-        self.mouse_positions = None
         super().__init__(**kwargs, bot_response=self.bot_response())
 
     def bot_response(self):
@@ -176,9 +195,6 @@ class MelodyEditControl(Control):
 
     def format_answer(self, raw_answer, **kwargs):
         if isinstance(raw_answer, dict):
-            self.user_events = raw_answer.get("events", [])
-            self.mouse = raw_answer.get("mouse")
-            self.mouse_positions = raw_answer.get("mouse_positions")
             raw_answer = raw_answer.get("edit")
         melody = validate_melody_shape(raw_answer)
         return melody if melody is not None else "INVALID_RESPONSE"
@@ -208,9 +224,6 @@ class MelodyEditControl(Control):
             "pitch_colors": PITCH_COLORS,
             "prefill_melody": self.prefill_melody,
             "num_edits": self.num_edits,
-            "user_events": self.user_events,
-            "mouse": self.mouse,
-            "mouse_positions": self.mouse_positions,
         }
 
 
@@ -224,19 +237,12 @@ class MelodySelectControl(Control):
         choices,
         active_generation,
         display_popularity,
-        mouse_sampling_interval_ms: int = MOUSE_SAMPLING_INTERVAL_MS,
-        max_mouse_positions: int = MAX_MOUSE_POSITIONS,
         **kwargs,
     ):
         self.proposals_data = proposals_data
         self.choices = choices
         self.active_generation = active_generation
         self.display_popularity = display_popularity
-        self.mouse_sampling_interval_ms = mouse_sampling_interval_ms
-        self.max_mouse_positions = max_mouse_positions
-        self.user_events = []
-        self.mouse = None
-        self.mouse_positions = None
         super().__init__(**kwargs, bot_response=self.bot_response())
 
     def bot_response(self):
@@ -248,9 +254,6 @@ class MelodySelectControl(Control):
 
     def format_answer(self, raw_answer, **kwargs):
         if isinstance(raw_answer, dict):
-            self.user_events = raw_answer.get("events", [])
-            self.mouse = raw_answer.get("mouse")
-            self.mouse_positions = raw_answer.get("mouse_positions")
             return raw_answer.get("adopt")
         return raw_answer
 
@@ -266,45 +269,15 @@ class MelodySelectControl(Control):
             "choices": self.choices,
             "active_generation": self.active_generation,
             "display_popularity": self.display_popularity,
-            "user_events": self.user_events,
-            "mouse": self.mouse,
-            "mouse_positions": self.mouse_positions,
         }
 
 
 class CustomSurveyJSControl(SurveyJSControl):
     external_template = "custom_survey_js.html"
 
-    def __init__(
-        self,
-        *args,
-        mouse_sampling_interval_ms: int = MOUSE_SAMPLING_INTERVAL_MS,
-        max_mouse_positions: int = MAX_MOUSE_POSITIONS,
-        **kwargs,
-    ):
-        super().__init__(*args, **kwargs)
-        self.mouse_sampling_interval_ms = mouse_sampling_interval_ms
-        self.max_mouse_positions = max_mouse_positions
-        self.user_events = []
-        self.mouse = None
-        self.mouse_positions = None
-
     def format_answer(self, raw_answer, **kwargs):
         data = json.loads(raw_answer) if isinstance(raw_answer, str) else raw_answer
-        if isinstance(data, dict) and "survey" in data:
-            self.user_events = data.get("events", [])
-            self.mouse = data.get("mouse")
-            self.mouse_positions = data.get("mouse_positions")
-            return data["survey"]
         return data
-
-    @property
-    def metadata(self):
-        return {
-            "user_events": self.user_events,
-            "mouse": self.mouse,
-            "mouse_positions": self.mouse_positions,
-        }
 
 
 class MelodyInputPage(ModularPage):
@@ -488,6 +461,24 @@ trial_maker = MelodyTrialMaker(
 )
 
 
+audio_pre_screen = ModularPage(
+    "audio_pre_screening",
+    Prompt(
+        Markup(
+            "<h3>Audio check</h3>"
+            "<p>This experiment uses sound. Please play the short audio check "
+            "and confirm that you can hear it before continuing.</p>"
+            "<p>If you cannot hear the sound, please check your volume or audio "
+            "output and try again. You cannot continue into the melody market "
+            "unless playback is audible.</p>"
+        )
+    ),
+    AudioPreScreenControl(),
+    time_estimate=20,
+    save_answer="audio_pre_screening",
+)
+
+
 def instructions(popularity_information):
     popularity_clause = (
         " and the popularity history for each melody"
@@ -586,7 +577,9 @@ class Exp(psynet.experiment.Experiment):
         ),
         "description": " ".join(
             [
-                _("This experiment requires you to compose short melodies."),
+                _(
+                    "This experiment requires you to confirm that audio playback works and then compose short melodies."
+                ),
                 _(
                     "We recommend using Chrome in an incognito window, because some browser add-ons can interfere with experiments."
                 ),
@@ -601,6 +594,7 @@ class Exp(psynet.experiment.Experiment):
 
     timeline = Timeline(
         MainConsent(),
+        audio_pre_screen,
         CodeBlock(
             lambda participant: participant.var.set(
                 "condition", "pi" if participant.id % 2 else "npi"

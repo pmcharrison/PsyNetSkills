@@ -19,3 +19,6 @@
 - T+01:12:00 [agent] Recorded seeded adoption flow with audio, verified participant.mp4 streams, exported data.zip, and saved monitor.html.
 - T+01:14:00 [agent] Captured popularity-visible condition screenshot.
 - T+01:15:00 [agent-stop] Implementation and first-pass evidence collection complete.
+- T+01:15:05 [manual] User reported updated experiment instructions and requested attempt update.
+- T+01:15:10 [agent-start] Resumed autonomous implementation work for updated requirements.
+- T+01:25:00 [agent] Added audio pre-screening gate and removed drawing-style mouse/event tracking.

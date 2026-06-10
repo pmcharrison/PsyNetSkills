@@ -48,6 +48,9 @@ met.
   audio playback.
 - [ ] **Must-have:** The market preview does not expose the underlying note
   grid.
+- [ ] **Must-have:** Participants complete an audio pre-screening step before
+  the main task, and participants who cannot confirm audible playback do not
+  continue into the market task.
 - [ ] **Nice-to-have:** Market previews include a waveform or similarly clear
   audio visualization.
 
@@ -59,7 +62,10 @@ met.
   analogous to the reference experiment.
 - [ ] **Must-have:** Saved data are sufficient to reconstruct each submitted
   melody, adoption choice, inventory state updates, popularity counts,
-  condition assignment, and interaction metadata.
+  audio pre-screening outcome, and condition assignment.
+- [ ] **Must-have:** The implementation does not include the reference
+  experiment's mouse movement tracking, stroke event tracking, or drawing-specific
+  interaction logs.
 - [ ] **Must-have:** Instruction pages, recruitment text, and the post-task
   survey are rewritten for melodies rather than drawings while preserving the
   reference debrief structure.
@@ -68,6 +74,7 @@ met.
 
 ### Evidence
 
+- [ ] **Must-have:** Evidence shows the participant audio pre-screening step.
 - [ ] **Must-have:** Evidence shows audio playback during market preview.
 - [ ] **Must-have:** Evidence shows step-sequencer composition or editing with
   **Play melody** working.

@@ -15,16 +15,10 @@
     const prefillMelody = {{ config.prefill_melody | tojson | safe }};
     const maxEdits = Number({{ config.num_edits }});
     const melodyLength = Number({{ config.melody_length }});
-    const mouseSamplingIntervalMs = Number({{ config.mouse_sampling_interval_ms }});
-    const maxMousePositions = Number({{ config.max_mouse_positions }});
-    const pageLoadTime = Date.now();
     const rowPitches = [2, 1, 0];
 
     let melody = prefillMelody.slice();
     const initialMelody = prefillMelody.slice();
-    const eventLog = [];
-    const mousePositions = [];
-    let lastMouse = { x: null, y: null };
     let audioContext = null;
 
     function frequencyForPitch(pitch) {
@@ -39,32 +33,8 @@
         return count;
     }
 
-    function computeMouseStd(positions) {
-        if (positions.length < 2) return { std_x: 0, std_y: 0, std: 0 };
-        const n = positions.length;
-        let sumX = 0, sumY = 0;
-        for (const p of positions) { sumX += p[0]; sumY += p[1]; }
-        const meanX = sumX / n, meanY = sumY / n;
-        let m2X = 0, m2Y = 0;
-        for (const p of positions) {
-            m2X += (p[0] - meanX) ** 2;
-            m2Y += (p[1] - meanY) ** 2;
-        }
-        const varX = m2X / (n - 1), varY = m2Y / (n - 1);
-        return {
-            std_x: Math.sqrt(varX),
-            std_y: Math.sqrt(varY),
-            std: Math.sqrt(varX + varY)
-        };
-    }
-
     function responseData() {
-        return {
-            edit: melody.slice(),
-            events: eventLog,
-            mouse: computeMouseStd(mousePositions),
-            mouse_positions: mousePositions
-        };
+        return { edit: melody.slice() };
     }
 
     function render() {
@@ -120,7 +90,6 @@
             return;
         }
         melody = candidate;
-        eventLog.push({ type: "note-toggle", slot, pitch, value: next, t: Date.now() - pageLoadTime });
         render();
     }
 
@@ -146,30 +115,13 @@
             oscillator.start(start + slot * step);
             oscillator.stop(start + (slot + 0.9) * step);
         });
-        eventLog.push({ type: "play", t: Date.now() - pageLoadTime });
     }
-
-    setInterval(function () {
-        if (mousePositions.length >= maxMousePositions) return;
-        if (lastMouse.x !== null) {
-            mousePositions.push([lastMouse.x, lastMouse.y, Date.now() - pageLoadTime]);
-        }
-    }, mouseSamplingIntervalMs);
-
-    document.addEventListener("mousemove", function (e) {
-        lastMouse.x = e.pageX;
-        lastMouse.y = e.pageY;
-    });
-    window.addEventListener("blur", () => eventLog.push({ type: "blur", t: Date.now() - pageLoadTime }));
-    document.addEventListener("keydown", (e) => eventLog.push({ type: "keydown", key: e.key, code: e.code, t: Date.now() - pageLoadTime }));
-    document.addEventListener("click", (e) => eventLog.push({ type: "click", x: e.pageX, y: e.pageY, t: Date.now() - pageLoadTime }));
 
     document.addEventListener("DOMContentLoaded", function () {
         render();
         document.getElementById("play-melody").addEventListener("click", playMelody);
         document.getElementById("reset-melody").addEventListener("click", function () {
             melody = initialMelody.slice();
-            eventLog.push({ type: "reset", t: Date.now() - pageLoadTime });
             render();
         });
 

@@ -12,7 +12,7 @@ the reference drawing task using short melodies as the artefact domain.
 - Rolling inventory capacity of 12 items.
 - Adoption begins after the first inventory item exists.
 - Market ancestry, proposal counts, adoption counts, condition assignment, and
-  interaction metadata are recorded in trial answers and control metadata.
+  audio pre-screening outcomes are recorded.
 
 ## Music-domain changes
 
@@ -25,6 +25,13 @@ slots, so the edit limits are scaled to the domain:
 
 Melodies are stored as a nine-item list. `null` is a rest, `0` is Do, `1` is Re,
 and `2` is Mi.
+
+Participants complete a WebAudio pre-screening page after consent and before
+the main task. They must play a short tone sequence and confirm that it is
+audible before entering the market.
+
+The reference drawing task's mouse movement tracking, stroke event tracking,
+and drawing-specific interaction logs are intentionally omitted.
 
 ## Local validation
 
