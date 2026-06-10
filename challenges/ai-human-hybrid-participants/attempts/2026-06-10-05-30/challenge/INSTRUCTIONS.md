@@ -5,6 +5,8 @@ difficulty: 7
 authors: [zeroada]
 ---
 
+Adapt PsyNet's Gibbs sampling demo for configurable pure-human, pure-AI, and mixed human-AI participation while preserving the original human task.
+
 Adapt PsyNet's Gibbs sampling demo, starting from
 `~/PsyNet/demos/experiments/gibbs`, so that the experiment can run with pure
 human participants, pure AI participants, or any human-AI mixture.
