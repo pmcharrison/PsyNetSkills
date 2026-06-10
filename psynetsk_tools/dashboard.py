@@ -3,10 +3,12 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import re
 import shutil
+import tempfile
 from collections.abc import Mapping
 from dataclasses import asdict, dataclass
 from pathlib import Path
@@ -50,10 +52,13 @@ TEXT_FILE_EXTENSIONS = {
     ".yml",
 }
 ATTEMPT_ARTIFACTS_DIR = "artifacts/challenges"
+HASHED_ARTIFACTS_DIR = "artifacts/blobs/sha256"
+MONITOR_STATIC_ARTIFACTS_DIR = "artifacts/monitor-static"
 CHALLENGE_REFERENCES_DIR = "challenges"
 ARTIFACT_URL_PREFIX_ENV = "PSYNETSK_ARTIFACT_URL_PREFIX"
 MONITOR_STATIC_ROOT = Path(__file__).parent / "assets" / "monitor-static" / "static"
 STATIC_REF_RE = re.compile(r'(?:href|src)="/static/(?P<path>[^"]+)"')
+CENTRAL_MONITOR_STATIC_REFS = {"vis@4.17.0/dist/vis.min.js"}
 CREDENTIAL_REDACTIONS = (
     (re.compile(r"(?i)(dashboard_password=)[^&\"'\s<)]+"), r"\1[REDACTED]"),
     (re.compile(r"(?i)(dashboard_user=)[^&\"'\s<)]+"), r"\1[REDACTED]"),
@@ -408,6 +413,7 @@ def read_attempt_file(
     path: Path,
     relative_to: Path,
     url_prefix: str,
+    url_overrides: Mapping[str, str] | None = None,
     max_bytes: int = 100_000,
 ) -> AttemptFile:
     """Read display metadata and optional text content for an attempt file."""
@@ -432,7 +438,11 @@ def read_attempt_file(
         )
     return AttemptFile(
         path=relative_path,
-        url=f"{url_prefix}/{relative_path}",
+        url=(
+            url_overrides.get(relative_path)
+            if url_overrides is not None and relative_path in url_overrides
+            else f"{url_prefix}/{relative_path}"
+        ),
         content=content,
         size_bytes=size_bytes,
         kind=file_kind(path),
@@ -443,6 +453,7 @@ def read_attempt_file(
 def collect_attempt_files(
     directory: Path,
     url_prefix: str,
+    url_overrides: Mapping[str, str] | None = None,
     max_files: int = 50,
 ) -> list[AttemptFile]:
     """Collect files from an attempt subdirectory."""
@@ -455,7 +466,7 @@ def collect_attempt_files(
     ):
         if len(files) >= max_files:
             break
-        files.append(read_attempt_file(path, directory, url_prefix))
+        files.append(read_attempt_file(path, directory, url_prefix, url_overrides))
     return files
 
 
@@ -464,6 +475,23 @@ def attempt_artifact_url_prefix(challenge_slug: str, attempt_name: str) -> str:
 
     base_url = os.environ.get(ARTIFACT_URL_PREFIX_ENV, ATTEMPT_ARTIFACTS_DIR)
     return f"{base_url.rstrip('/')}/{challenge_slug}/attempts/{attempt_name}"
+
+
+def hashed_artifact_url(relative_path: str) -> str:
+    """Return the public URL for a content-addressed artifact path."""
+
+    base_url = normalized_hashed_artifact_url_prefix()
+    return f"{base_url.rstrip('/')}/{relative_path}"
+
+
+def normalized_hashed_artifact_url_prefix() -> str:
+    """Return a URL prefix compatible with old and new preview workflows."""
+
+    base_url = os.environ.get(ARTIFACT_URL_PREFIX_ENV, HASHED_ARTIFACTS_DIR).rstrip("/")
+    old_attempt_suffix = f"/{ATTEMPT_ARTIFACTS_DIR}"
+    if base_url.endswith(old_attempt_suffix):
+        return base_url[: -len(old_attempt_suffix)] + f"/{HASHED_ARTIFACTS_DIR}"
+    return base_url
 
 
 def redact_known_credentials(text: str) -> str:
@@ -497,6 +525,15 @@ def sanitize_html_artifact(path: Path) -> None:
     html = html.replace('href="/static/', 'href="./static/')
     html = html.replace('src="/static/', 'src="./static/')
     html = re.sub(r'<script([^>]*)\s*/></script>', r'<script\1></script>', html)
+    for ref in CENTRAL_MONITOR_STATIC_REFS:
+        html = html.replace(
+            f'src="./static/{ref}"',
+            f'src="../../../../monitor-static/{ref}"',
+        )
+        html = html.replace(
+            f'href="./static/{ref}"',
+            f'href="../../../../monitor-static/{ref}"',
+        )
     html = html.replace(
         "</head>",
         """
@@ -521,6 +558,8 @@ def sanitize_html_artifact(path: Path) -> None:
 def copy_monitor_static_assets(html_dir: Path, static_refs: list[str]) -> None:
     """Copy vendored Dallinger monitor assets next to a copied HTML artifact."""
     for ref in static_refs:
+        if ref in CENTRAL_MONITOR_STATIC_REFS:
+            continue
         source = MONITOR_STATIC_ROOT / ref
         if not source.is_file():
             continue
@@ -544,6 +583,7 @@ def disable_live_node_details(script_path: Path) -> None:
 def collect_attempts(
     challenge_dir: Path,
     author_registry: dict[str, Author] | None = None,
+    artifact_urls: Mapping[tuple[str, str, str, str], str] | None = None,
 ) -> list[Attempt]:
     """Collect attempts for a challenge."""
     author_registry = author_registry or {}
@@ -551,6 +591,7 @@ def collect_attempts(
     if not attempts_dir.exists():
         return []
 
+    artifact_urls = artifact_urls or {}
     attempts: list[Attempt] = []
     for attempt_dir in sorted(
         path for path in attempts_dir.iterdir() if path.is_dir()
@@ -651,23 +692,66 @@ def collect_attempts(
                 challenge_files=collect_attempt_files(
                     attempt_dir / "challenge",
                     f"{artifact_prefix}/challenge",
+                    attempt_section_urls(
+                        artifact_urls,
+                        challenge_dir.name,
+                        attempt_dir.name,
+                        "challenge",
+                    ),
                 ),
                 code_files=collect_attempt_files(
                     attempt_dir / "code",
                     f"{artifact_prefix}/code",
+                    attempt_section_urls(
+                        artifact_urls,
+                        challenge_dir.name,
+                        attempt_dir.name,
+                        "code",
+                    ),
                 ),
                 evidence_files=collect_attempt_files(
                     attempt_dir / "evidence",
                     f"{artifact_prefix}/evidence",
+                    attempt_section_urls(
+                        artifact_urls,
+                        challenge_dir.name,
+                        attempt_dir.name,
+                        "evidence",
+                    ),
                 ),
             )
         )
     return attempts
 
 
+def attempt_section_urls(
+    artifact_urls: Mapping[tuple[str, str, str, str], str],
+    challenge_slug: str,
+    attempt_name: str,
+    section: str,
+) -> dict[str, str]:
+    """Return URL overrides for one attempt section."""
+
+    return {
+        relative_path: url
+        for (
+            artifact_challenge,
+            artifact_attempt,
+            artifact_section,
+            relative_path,
+        ), url in artifact_urls.items()
+        if (
+            artifact_challenge == challenge_slug
+            and artifact_attempt == attempt_name
+            and artifact_section == section
+        )
+    }
+
+
 def collect_challenges(
     root: Path,
     author_registry: dict[str, Author] | None = None,
+    artifact_urls: Mapping[tuple[str, str, str, str], str] | None = None,
 ) -> list[Challenge]:
     """Collect challenge summaries."""
     challenges: list[Challenge] = []
@@ -697,17 +781,24 @@ def collect_challenges(
                 instructions=instructions,
                 path=f"challenges/{slug}",
                 url=f"challenges/{slug}/",
-                attempts=collect_attempts(challenge_dir, author_registry),
+                attempts=collect_attempts(
+                    challenge_dir,
+                    author_registry,
+                    artifact_urls,
+                ),
             )
         )
     return challenges
 
 
-def dashboard_data(root: Path) -> dict[str, object]:
+def dashboard_data(
+    root: Path,
+    artifact_urls: Mapping[tuple[str, str, str, str], str] | None = None,
+) -> dict[str, object]:
     """Return all structured data needed by the dashboard."""
     author_registry, _ = read_author_registry(root)
     skills = collect_skills(root, author_registry)
-    challenges = collect_challenges(root, author_registry)
+    challenges = collect_challenges(root, author_registry, artifact_urls)
     return {
         "authors": [asdict(author) for author in author_registry.values()],
         "skills": [asdict(skill) for skill in skills],
@@ -824,15 +915,22 @@ def write_challenge_content(
             )
 
 
-def write_attempt_artifacts(root: Path, dashboard_dir: Path) -> None:
-    """Copy attempt artifacts into Hugo's static directory."""
-    target_root = dashboard_dir / "static" / ATTEMPT_ARTIFACTS_DIR
+def write_attempt_artifacts(
+    root: Path,
+    dashboard_dir: Path,
+) -> dict[tuple[str, str, str, str], str]:
+    """Copy attempt artifacts into Hugo's shared content-addressed store."""
+    target_root = dashboard_dir / "static" / HASHED_ARTIFACTS_DIR
+    shared_static_root = dashboard_dir / "static" / MONITOR_STATIC_ARTIFACTS_DIR
     shutil.rmtree(target_root, ignore_errors=True)
+    shutil.rmtree(shared_static_root, ignore_errors=True)
     target_root.mkdir(parents=True, exist_ok=True)
+    write_shared_monitor_static_assets(shared_static_root)
+    artifact_urls: dict[tuple[str, str, str, str], str] = {}
 
     challenges_dir = root / "challenges"
     if not challenges_dir.exists():
-        return
+        return artifact_urls
 
     for challenge_dir in sorted(
         path for path in challenges_dir.iterdir() if path.is_dir()
@@ -840,20 +938,75 @@ def write_attempt_artifacts(root: Path, dashboard_dir: Path) -> None:
         attempts_dir = challenge_dir / "attempts"
         if not attempts_dir.exists():
             continue
-        target_attempts_dir = target_root / challenge_dir.name / "attempts"
-        shutil.copytree(
-            attempts_dir,
-            target_attempts_dir,
-            dirs_exist_ok=True,
-            ignore=shutil.ignore_patterns(".gitkeep"),
-        )
-        for artifact_file in target_attempts_dir.rglob("*"):
-            if not artifact_file.is_file():
-                continue
-            if artifact_file.suffix.lower() == ".html":
-                sanitize_html_artifact(artifact_file)
-            else:
-                sanitize_text_artifact(artifact_file)
+        for attempt_dir in sorted(
+            path for path in attempts_dir.iterdir() if path.is_dir()
+        ):
+            for section in ("challenge", "code", "evidence"):
+                source_dir = attempt_dir / section
+                if not source_dir.exists():
+                    continue
+                for source_file in sorted(
+                    path for path in source_dir.rglob("*") if path.is_file()
+                ):
+                    if source_file.name == ".gitkeep":
+                        continue
+                    relative_path = source_file.relative_to(source_dir).as_posix()
+                    artifact_urls[
+                        (
+                            challenge_dir.name,
+                            attempt_dir.name,
+                            section,
+                            relative_path,
+                        )
+                    ] = write_hashed_artifact(source_file, target_root)
+    return artifact_urls
+
+
+def write_shared_monitor_static_assets(target_root: Path) -> None:
+    """Write monitor static assets shared by all hashed HTML snapshots."""
+
+    for ref in sorted(CENTRAL_MONITOR_STATIC_REFS):
+        source = MONITOR_STATIC_ROOT / ref
+        if not source.is_file():
+            continue
+        destination = target_root / ref
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(source, destination)
+
+
+def write_hashed_artifact(source_file: Path, target_root: Path) -> str:
+    """Sanitize and write one artifact to the content-addressed store."""
+
+    with tempfile.TemporaryDirectory() as temp_dir:
+        temp_path = Path(temp_dir) / source_file.name
+        shutil.copy2(source_file, temp_path)
+        if temp_path.suffix.lower() == ".html":
+            sanitize_html_artifact(temp_path)
+        else:
+            sanitize_text_artifact(temp_path)
+        digest = hashlib.sha256(temp_path.read_bytes()).hexdigest()
+        digest_dir = target_root / digest[:2]
+
+        if temp_path.suffix.lower() == ".html":
+            blob_dir = digest_dir / digest
+            blob_file = blob_dir / "index.html"
+            if not blob_file.exists():
+                blob_dir.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(temp_path, blob_file)
+                static_dir = temp_path.parent / "static"
+                if static_dir.exists():
+                    shutil.copytree(
+                        static_dir,
+                        blob_dir / "static",
+                        dirs_exist_ok=True,
+                    )
+            return hashed_artifact_url(f"{digest[:2]}/{digest}/index.html")
+
+        blob_file = digest_dir / f"{digest}{temp_path.suffix.lower()}"
+        if not blob_file.exists():
+            digest_dir.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(temp_path, blob_file)
+        return hashed_artifact_url(blob_file.relative_to(target_root).as_posix())
 
 
 def write_challenge_references(root: Path, dashboard_dir: Path) -> None:
@@ -892,7 +1045,8 @@ def write_challenge_references(root: Path, dashboard_dir: Path) -> None:
 def export_dashboard(root: Path, dashboard_dir: Path) -> None:
     """Export JSON data and generated content pages for Hugo."""
     dashboard_dir.mkdir(parents=True, exist_ok=True)
-    data = dashboard_data(root)
+    artifact_urls = write_attempt_artifacts(root, dashboard_dir)
+    data = dashboard_data(root, artifact_urls)
     data_dir = dashboard_dir / "data"
     data_dir.mkdir(parents=True, exist_ok=True)
     (data_dir / "psynetsk.json").write_text(
@@ -930,7 +1084,6 @@ def export_dashboard(root: Path, dashboard_dir: Path) -> None:
             for challenge in data["challenges"]  # type: ignore[union-attr]
         ],
     )
-    write_attempt_artifacts(root, dashboard_dir)
     write_challenge_references(root, dashboard_dir)
 
 

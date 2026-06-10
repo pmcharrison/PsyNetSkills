@@ -42,12 +42,10 @@ jobs:
 
           preview_path="pr-preview/pr-${{ github.event.pull_request.number }}"
           preview_url="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/${preview_path}/"
-          artifact_path="pr-artifacts/pr-${{ github.event.pull_request.number }}"
-          artifact_url="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/${artifact_path}/artifacts/challenges"
+          artifact_url="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/artifacts/blobs/sha256"
 
           echo "path=${preview_path}" >> "${GITHUB_OUTPUT}"
           echo "url=${preview_url}" >> "${GITHUB_OUTPUT}"
-          echo "artifact_path=${artifact_path}" >> "${GITHUB_OUTPUT}"
           echo "artifact_url=${artifact_url}" >> "${GITHUB_OUTPUT}"
           echo "Dashboard preview: ${preview_url}" >> "${GITHUB_STEP_SUMMARY}"
       - run: uv sync --group dev
@@ -65,8 +63,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
           PAGES_BRANCH: gh-pages
-          ARTIFACT_PATH: ${{ steps.preview.outputs.artifact_path }}
           PREVIEW_PATH: ${{ steps.preview.outputs.path }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
         run: |
           set -euo pipefail
 
@@ -85,23 +83,22 @@ jobs:
           git -C "${pages_dir}" config user.name "github-actions[bot]"
           git -C "${pages_dir}" config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          python - "${pages_dir}/${PREVIEW_PATH}" "${pages_dir}/${ARTIFACT_PATH}" <<'PY'
+          python - "${pages_dir}/${PREVIEW_PATH}" <<'PY'
           import shutil
           import sys
           from pathlib import Path
 
           target = Path(sys.argv[1])
-          artifact_target = Path(sys.argv[2])
           if target.exists():
               shutil.rmtree(target)
           target.mkdir(parents=True)
-          if artifact_target.exists():
-              shutil.rmtree(artifact_target)
-          artifact_target.mkdir(parents=True)
           PY
 
           if [ -d public/artifacts ]; then
-            cp -a public/artifacts "${pages_dir}/${ARTIFACT_PATH}/artifacts"
+            mkdir -p "${pages_dir}/artifacts"
+            rm -rf "${pages_dir}/artifacts/challenges"
+            rm -rf "${pages_dir}/pr-artifacts/pr-${PR_NUMBER}"
+            cp -a public/artifacts/. "${pages_dir}/artifacts/"
             rm -rf public/artifacts
           fi
           cp -a public/. "${pages_dir}/${PREVIEW_PATH}/"
@@ -115,6 +112,7 @@ jobs:
             .github/scripts/push-pages-branch.sh "${pages_dir}" "${PAGES_BRANCH}"
           fi
       - name: Comment preview URL
+        continue-on-error: true
         uses: actions/github-script@v7
         with:
           script: |
@@ -232,6 +230,7 @@ jobs:
             .github/scripts/push-pages-branch.sh "${pages_dir}" "${PAGES_BRANCH}"
           fi
       - name: Comment preview cleanup
+        continue-on-error: true
         uses: actions/github-script@v7
         with:
           script: |
