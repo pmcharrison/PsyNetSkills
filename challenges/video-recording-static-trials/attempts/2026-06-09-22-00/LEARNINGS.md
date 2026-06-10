@@ -20,3 +20,17 @@ context avoids a dashboard serialization error without changing exported CSVs.
 - **PsyNetSkills:** Add a note to experiment-attempt guidance that dashboard
   monitor snapshots can exercise a different `get_basic_data` serialization path
   than exports. Confidence: medium. Status: considering.
+
+## Local upload stubs are not enough for S3-centered challenges
+
+The evaluator judged the local/test upload path and simulated 197-byte files as
+an experimental stub, not a real implementation of the challenge. When the core
+task is S3 streaming and bucket preparation, the attempt should either exercise
+real S3 with user-provided local credentials or clearly stop and ask for a safe
+credential workflow instead of presenting local placeholders as sufficient.
+
+*Actions:*
+- **PsyNetSkills:** Update challenge-attempt guidance to require explicit
+  evidence for real external-service integration when it is the central
+  challenge requirement, or to record a blocker before substituting a local stub.
+  Confidence: high. Status: considering.
