@@ -1,7 +1,7 @@
 ---
 title: Rolling inventory melody market
 type: experiment implementation
-difficulty: 9
+difficulty: 4
 authors: [lucasgautheron]
 ---
 
