@@ -48,8 +48,8 @@ experiments, the required components are:
   prompt/stimulus consistency, scheduler behavior, and mocked API calls.
 
 *Actions:*
-- **PsyNetSkills:** Add guidance for hybrid-agent challenges to require active scheduler checks of human count, AI count, total participants, remaining trial capacity, and target proportion during live mixed sessions. Confidence: high. Status: considering.
-- **PsyNetSkills:** Add a reusable checklist for converting pure-human experiments into AI or hybrid human-AI experiments, covering config, validation, bot response, prompt parity, shared stimuli, active scheduling, and tests. Confidence: high. Status: considering.
+- **PsyNetSkills:** Add guidance for hybrid-agent challenges to require active scheduler checks of human count, AI count, total participants, remaining trial capacity, and target proportion during live mixed sessions. Confidence: high. Status: completed. Notes: Added `.cursor/skills/turn-pure-experiment-to-ai-hybrid/SKILL.md`.
+- **PsyNetSkills:** Add a reusable checklist for converting pure-human experiments into AI or hybrid human-AI experiments, covering config, validation, bot response, prompt parity, shared stimuli, active scheduling, and tests. Confidence: high. Status: completed. Notes: Added `.cursor/skills/turn-pure-experiment-to-ai-hybrid/SKILL.md`.
 - **PsyNet:** Consider documenting recommended patterns for active bot scheduling in mixed human-AI experiments, including trial-capacity checks, repeated proportion checks, recruitment stopping rules, and avoiding bulk AI launches. Confidence: medium. Status: considering.
 
 ## Legacy debug exits after completion
