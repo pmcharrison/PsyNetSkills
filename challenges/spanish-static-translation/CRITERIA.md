@@ -7,13 +7,19 @@ criteria.
 
 - Starts from PsyNet's static demo at `~/PsyNet/demos/experiments/static` and
   preserves the original static-trial task behavior.
+- Identifies all participant-facing strings in the static demo, including
+  instructions, prompts, labels, response options, feedback, and completion text.
 - Uses PsyNet's translation conventions consistently, including
-  `_ = get_translator()` and direct `_("<text>")` or contextual `_p(...)`
-  markers for participant-facing strings.
-- Does not use f-strings, string concatenation, or renamed translation wrappers
-  for translatable participant-facing text.
+  `_ = get_translator()` and direct extractor-visible `_("<text>")` calls where
+  appropriate, or contextual `_p(...)` markers where context is needed.
+- Does not use f-strings for translatable participant-facing text. When such
+  text needs variables, it uses literal translation strings with uppercase
+  `.format(...)` placeholders.
+- Avoids string concatenation or renamed translation wrappers for translatable
+  participant-facing text.
 - Updates `locale` and `supported_locales` in the experiment configuration so
-  that Spanish (`es`) is supported and can be selected as the active locale.
+  that Spanish (`es`) is supported and the primary run setting uses Spanish, for
+  example with `locale = es` or the equivalent experiment `config`.
 
 ## Spanish translation
 
@@ -26,7 +32,8 @@ criteria.
   prompts, response options, buttons or labels controlled by the experiment,
   feedback, and completion text.
 - Does not include real or custom translation-service credentials in code,
-  configuration, logs, or evidence.
+  configuration, logs, or evidence, including API keys, Google Translate JSON
+  files, or `.dallingerconfig` secrets.
 
 ## English regression check
 
