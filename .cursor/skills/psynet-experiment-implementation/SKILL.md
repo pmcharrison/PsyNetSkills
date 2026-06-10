@@ -43,6 +43,11 @@ Useful starting points:
 8. Add short comments only where the PsyNet pattern is not obvious.
 9. Regularly use `psynet test local` to test the experiment logic,
    and implement custom assertions to test the experiment's behavior.
+10. When implementing custom `Page` classes, make sure `get_bot_response`
+    returns the same structured, formatted answer that the browser path records.
+    PsyNet bots submit the value returned by `get_bot_response` as the formatted
+    answer, so the bot path can bypass `format_answer` unless you explicitly
+    call it or otherwise match its output.
 
 ## Design guidance
 
