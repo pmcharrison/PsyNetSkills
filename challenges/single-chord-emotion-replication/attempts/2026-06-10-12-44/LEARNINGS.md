@@ -5,7 +5,7 @@
 A long recording added little value for this challenge because the participant flow is highly repetitive once the first rating trial is visible and working.
 
 *Actions:*
-- **PsyNetSkills:** Update the attempt or recording guidance to explicitly allow short representative participant recordings for long repetitive rating experiments, while relying on automated validation for completeness. Confidence: high. Status: considering.
+- **PsyNetSkills:** Update the attempt or recording guidance to explicitly allow short representative participant recordings for long repetitive rating experiments, while relying on automated validation for completeness. Confidence: high. Status: completed. Notes: Added to `record-participant-video` as a general rule for long or repetitive experiments.
 
 ## Local export and dashboard monitor friction in debug mode
 
