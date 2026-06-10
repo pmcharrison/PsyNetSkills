@@ -28,3 +28,4 @@
 - T+01:48:00 [agent] Recorded repeat-back audio pre-screening evidence and verified advancement into instructions.
 - T+01:54:00 [agent] Replaced browser speech synthesis with committed audio-check-five.wav after capture showed speech synthesis was silent in evidence.
 - T+01:58:00 [agent] Reran psynet test local successfully with static audio pre-screen asset.
+- T+02:06:00 [agent] Replaced pre-screen evidence with static WAV repeat-back recording, verified non-silent audio, seeded updated debug run with bots, and refreshed data.zip/monitor.html.

@@ -4,8 +4,8 @@ Input #0, mov,mp4,m4a,3gp,3g2,mj2, from '/workspace/challenges/rolling-inventory
     minor_version   : 512
     compatible_brands: isomiso2avc1mp41
     encoder         : Lavf60.16.100
-  Duration: 00:03:48.39, start: 0.000000, bitrate: 195 kb/s
-  Stream #0:0[0x1](und): Video: h264 (Constrained Baseline) (avc1 / 0x31637661), yuv420p(progressive), 1280x720, 185 kb/s, 30 fps, 30 tbr, 15360 tbn (default)
+  Duration: 00:04:05.15, start: 0.000000, bitrate: 202 kb/s
+  Stream #0:0[0x1](und): Video: h264 (Constrained Baseline) (avc1 / 0x31637661), yuv420p(progressive), 1280x720, 192 kb/s, 30 fps, 30 tbr, 15360 tbn (default)
     Metadata:
       handler_name    : VideoHandler
       vendor_id       : [0][0][0][0]
@@ -48,12 +48,12 @@ avg_frame_rate=30/1
 time_base=1/15360
 start_pts=0
 start_time=0.000000
-duration_ts=3507712
-duration=228.366667
-bit_rate=185535
+duration_ts=3765248
+duration=245.133333
+bit_rate=192059
 max_bit_rate=N/A
 bits_per_raw_sample=8
-nb_frames=6851
+nb_frames=7354
 nb_read_frames=N/A
 nb_read_packets=N/A
 extradata_size=37
@@ -100,12 +100,12 @@ avg_frame_rate=0/0
 time_base=1/48000
 start_pts=62400
 start_time=1.300000
-duration_ts=10900521
-duration=227.094188
-bit_rate=2268
+duration_ts=11705006
+duration=243.854292
+bit_rate=2516
 max_bit_rate=N/A
 bits_per_raw_sample=N/A
-nb_frames=10612
+nb_frames=11398
 nb_read_frames=N/A
 nb_read_packets=N/A
 extradata_size=5

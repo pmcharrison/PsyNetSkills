@@ -4,8 +4,8 @@ Input #0, mov,mp4,m4a,3gp,3g2,mj2, from '/workspace/challenges/rolling-inventory
     minor_version   : 512
     compatible_brands: isomiso2avc1mp41
     encoder         : Lavf60.16.100
-  Duration: 00:03:48.39, start: 0.000000, bitrate: 195 kb/s
-  Stream #0:0[0x1](und): Video: h264 (Constrained Baseline) (avc1 / 0x31637661), yuv420p(progressive), 1280x720, 185 kb/s, 30 fps, 30 tbr, 15360 tbn (default)
+  Duration: 00:04:05.15, start: 0.000000, bitrate: 202 kb/s
+  Stream #0:0[0x1](und): Video: h264 (Constrained Baseline) (avc1 / 0x31637661), yuv420p(progressive), 1280x720, 192 kb/s, 30 fps, 30 tbr, 15360 tbn (default)
     Metadata:
       handler_name    : VideoHandler
       vendor_id       : [0][0][0][0]
@@ -14,7 +14,7 @@ Input #0, mov,mp4,m4a,3gp,3g2,mj2, from '/workspace/challenges/rolling-inventory
     Metadata:
       handler_name    : SoundHandler
       vendor_id       : [0][0][0][0]
-[Parsed_volumedetect_0 @ 0x55a407432b40] n_samples: 0
+[Parsed_volumedetect_0 @ 0x55d736019b40] n_samples: 0
 Stream mapping:
   Stream #0:1 -> #0:0 (aac (native) -> pcm_s16le (native))
 Press [q] to stop, [?] for help
@@ -29,9 +29,42 @@ Output #0, null, to '/tmp/volumedetect-prescreen-null':
       handler_name    : SoundHandler
       vendor_id       : [0][0][0][0]
       encoder         : Lavc60.31.102 pcm_s16le
-size=       0kB time=00:00:01.30 bitrate=   0.0kbits/s speed=N/A    [out#0/null @ 0x55a4071be100] video:0kB audio:42448kB subtitle:0kB other streams:0kB global headers:0kB muxing overhead: unknown
-size=N/A time=00:03:48.38 bitrate=N/A speed= 571x    
-[Parsed_volumedetect_0 @ 0x55a40730e3c0] n_samples: 21733376
-[Parsed_volumedetect_0 @ 0x55a40730e3c0] mean_volume: -91.0 dB
-[Parsed_volumedetect_0 @ 0x55a40730e3c0] max_volume: -91.0 dB
-[Parsed_volumedetect_0 @ 0x55a40730e3c0] histogram_91db: 21733376
+size=       0kB time=00:00:01.30 bitrate=   0.0kbits/s speed=N/A    [out#0/null @ 0x55d735db1d00] video:0kB audio:45592kB subtitle:0kB other streams:0kB global headers:0kB muxing overhead: unknown
+size=N/A time=00:04:05.14 bitrate=N/A speed= 733x    
+[Parsed_volumedetect_0 @ 0x55d735dee500] n_samples: 23343104
+[Parsed_volumedetect_0 @ 0x55d735dee500] mean_volume: -46.8 dB
+[Parsed_volumedetect_0 @ 0x55d735dee500] max_volume: -3.7 dB
+[Parsed_volumedetect_0 @ 0x55d735dee500] histogram_3db: 12
+[Parsed_volumedetect_0 @ 0x55d735dee500] histogram_4db: 118
+[Parsed_volumedetect_0 @ 0x55d735dee500] histogram_5db: 160
+[Parsed_volumedetect_0 @ 0x55d735dee500] histogram_6db: 142
+[Parsed_volumedetect_0 @ 0x55d735dee500] histogram_7db: 132
+[Parsed_volumedetect_0 @ 0x55d735dee500] histogram_8db: 168
+[Parsed_volumedetect_0 @ 0x55d735dee500] histogram_9db: 168
+[Parsed_volumedetect_0 @ 0x55d735dee500] histogram_10db: 320
+[Parsed_volumedetect_0 @ 0x55d735dee500] histogram_11db: 516
+[Parsed_volumedetect_0 @ 0x55d735dee500] histogram_12db: 706
+[Parsed_volumedetect_0 @ 0x55d735dee500] histogram_13db: 800
+[Parsed_volumedetect_0 @ 0x55d735dee500] histogram_14db: 931
+[Parsed_volumedetect_0 @ 0x55d735dee500] histogram_15db: 923
+[Parsed_volumedetect_0 @ 0x55d735dee500] histogram_16db: 970
+[Parsed_volumedetect_0 @ 0x55d735dee500] histogram_17db: 890
+[Parsed_volumedetect_0 @ 0x55d735dee500] histogram_18db: 961
+[Parsed_volumedetect_0 @ 0x55d735dee500] histogram_19db: 1054
+[Parsed_volumedetect_0 @ 0x55d735dee500] histogram_20db: 1071
+[Parsed_volumedetect_0 @ 0x55d735dee500] histogram_21db: 1070
+[Parsed_volumedetect_0 @ 0x55d735dee500] histogram_22db: 886
+[Parsed_volumedetect_0 @ 0x55d735dee500] histogram_23db: 951
+[Parsed_volumedetect_0 @ 0x55d735dee500] histogram_24db: 807
+[Parsed_volumedetect_0 @ 0x55d735dee500] histogram_25db: 709
+[Parsed_volumedetect_0 @ 0x55d735dee500] histogram_26db: 662
+[Parsed_volumedetect_0 @ 0x55d735dee500] histogram_27db: 641
+[Parsed_volumedetect_0 @ 0x55d735dee500] histogram_28db: 663
+[Parsed_volumedetect_0 @ 0x55d735dee500] histogram_29db: 792
+[Parsed_volumedetect_0 @ 0x55d735dee500] histogram_30db: 840
+[Parsed_volumedetect_0 @ 0x55d735dee500] histogram_31db: 851
+[Parsed_volumedetect_0 @ 0x55d735dee500] histogram_32db: 903
+[Parsed_volumedetect_0 @ 0x55d735dee500] histogram_33db: 803
+[Parsed_volumedetect_0 @ 0x55d735dee500] histogram_34db: 991
+[Parsed_volumedetect_0 @ 0x55d735dee500] histogram_35db: 932
+[Parsed_volumedetect_0 @ 0x55d735dee500] histogram_36db: 934
