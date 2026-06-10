@@ -88,6 +88,14 @@ challenge before starting a fresh attempt.
    - When copying a minimal PsyNet demo into `code/`, include the standard
      experiment support files needed by PsyNet local launch checks, especially
      `.gitignore`, rather than copying only Python/config/test files.
+   - Make systematic use of tests: testing experiment logic with `psynet test local`,
+     testing front-end logic with Playwright, and testing visual logic with
+     video testing. When video testing, make sure to be efficient,
+     e.g. by running the experiment in a 'minimal' mode with a small number of trials;
+     long videos are time-consuming to create and to analyze.
+   - Update `LEARNINGS.md` with any generalizable lessons you encounter.
+     This should include mistakes you made when running tests,
+     things that took a long time to find in documentation, etc.
 10. Collect evidence in `evidence/`. Use the `record-participant-video` skill
    when creating `evidence/participant.mp4`, and follow
    `references/attempt-artifacts.md` for challenge-type-specific evidence
@@ -101,9 +109,11 @@ challenge before starting a fresh attempt.
    matches as resolved. Local attempts without a Cloud Agent ID should keep
    `run_cost` as `null` unless a human records a manual cost. Use the
    `cursor-cost-estimation` skill when importing, auditing, or backfilling costs.
-12. Leave `EVALUATION.md` as a template for human evaluators unless the user
+12. Reflect on the timeline of events. Did anything take disproportionately long?
+    Make a note in `LEARNINGS.md` in case this can be optimized later.
+14. Leave `EVALUATION.md` as a template for human evaluators unless the user
    provides evaluation feedback.
-13. In the final response, invite the user to evaluate the attempt
+15. In the final response, invite the user to evaluate the attempt
    conversationally, including a 1-10 score and concise feedback. Use the
    `evaluate-attempt` skill for that conversation and any resulting updates to
    `EVALUATION.md` or `LEARNINGS.md`.
