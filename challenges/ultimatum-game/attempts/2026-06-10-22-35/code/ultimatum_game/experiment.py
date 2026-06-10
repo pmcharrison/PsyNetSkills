@@ -172,7 +172,6 @@ class Exp(psynet.experiment.Experiment):
 
     def test_check_bots(self, bots):
         from psynet.participant import Participant
-        from .game_trial import GameTrial
 
         participants = Participant.query.filter(Participant.id.in_([bot.id for bot in bots])).all()
         assert len(participants) == 2
