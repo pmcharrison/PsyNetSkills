@@ -246,6 +246,49 @@ def test_validate_agent_metadata_accepts_psynet_block(tmp_path: Path) -> None:
     assert validate_agent_metadata(agent_file) == []
 
 
+def test_validate_agent_metadata_accepts_run_cost(tmp_path: Path) -> None:
+    agent_file = tmp_path / "agent.json"
+    metadata = json.loads(agent_json())
+    metadata["run_cost"] = {
+        "currency": "USD",
+        "amount": 1.23,
+        "source": "cursor_usage_csv_batch_import",
+        "recorded_at": "2026-06-10T11:30:00Z",
+        "attribution_status": "matched_cloud_agent_id",
+        "matched_cloud_agent_ids": ["bc-example"],
+        "usage": {"rows": 1},
+        "notes": ["Matched by cursor_conversation_id."],
+    }
+    write(agent_file, json.dumps(metadata) + "\n")
+
+    assert validate_agent_metadata(agent_file) == []
+
+
+def test_validate_agent_metadata_rejects_malformed_run_cost(tmp_path: Path) -> None:
+    agent_file = tmp_path / "agent.json"
+    metadata = json.loads(agent_json())
+    metadata["run_cost"] = {
+        "currency": "EUR",
+        "amount": -1,
+        "source": "",
+        "recorded_at": "",
+        "attribution_status": "guessed",
+        "matched_cloud_agent_ids": [123],
+        "notes": ["ok", 123],
+    }
+    write(agent_file, json.dumps(metadata) + "\n")
+
+    problems = validate_agent_metadata(agent_file)
+
+    assert any("run_cost.currency must be USD" in problem for problem in problems)
+    assert any("run_cost.amount must be" in problem for problem in problems)
+    assert any("run_cost.source must be" in problem for problem in problems)
+    assert any("run_cost.recorded_at must be" in problem for problem in problems)
+    assert any("run_cost.attribution_status must be one of" in problem for problem in problems)
+    assert any("run_cost.matched_cloud_agent_ids must be" in problem for problem in problems)
+    assert any("run_cost.notes must be" in problem for problem in problems)
+
+
 def test_validate_agent_metadata_requires_psynet_block(tmp_path: Path) -> None:
     agent_file = tmp_path / "agent.json"
     write(agent_file, '{"authors": ["pmcharrison"], "model": "test-model"}\n')
@@ -359,3 +402,35 @@ def test_validate_repository_requires_criteria_snapshot_and_checklist(
 
     assert any("missing challenge/CRITERIA.md snapshot" in problem for problem in problems)
     assert any("missing criteria checklist" in problem for problem in problems)
+
+
+def test_validate_repository_accepts_uppercase_criteria_checklist(
+    tmp_path: Path,
+) -> None:
+    minimal_repo(tmp_path)
+    write(tmp_path / "challenges/example/CRITERIA.md", "# Criteria\n\n- Criterion.\n")
+    attempt_dir = tmp_path / "challenges/example/attempts/2026-06-01-10-10"
+    write(attempt_dir / "challenge/INSTRUCTIONS.md", "# Snapshot\n")
+    write(attempt_dir / "challenge/CRITERIA.md", "# Criteria\n\n- Criterion.\n")
+    write(attempt_dir / "agent.json", agent_json())
+    write(attempt_dir / "code/README.md", "# Code\n")
+    write(attempt_dir / "evidence/README.md", "# Evidence\n")
+    write(
+        attempt_dir / "EVALUATION.md",
+        "---\nscore: 7\n---\n\n# Evaluation\n\n- [X] Criterion.\n",
+    )
+    write(
+        attempt_dir / "LEARNINGS.md",
+        "# Learnings\n\n"
+        "## Useful finding\n\n"
+        "*Actions:*\n\n"
+        "- **PsyNetSkills:** Document it. Confidence: high. Status: considering.\n",
+    )
+    write(
+        attempt_dir / "TIMELINE.md",
+        "# Timeline\n\n"
+        "- T+00:00:00 [agent-start] Started.\n"
+        "- T+00:00:01 [agent-stop] Stopped.\n",
+    )
+
+    assert validate_repository(tmp_path) == []

@@ -57,6 +57,15 @@ Useful starting points:
 - In audio experiments, make sure you start with a volume calibration page,
   and generally you should only activate the 'Next' button when the participant
   has finished listening to the trial stimulus.
+- For audio experiments, treat sound playback as a first-class behavior to test:
+  use local committed or generated demo audio, document how real stimuli replace
+  the demo set, check that each audio asset duration matches the task, and add
+  assertions or exported-data checks that prove audio trials ran and responses
+  were saved against the correct stimulus IDs.
+- When an audio task depends on listening quality, include the relevant
+  prescreening or quality-control pages from PsyNet demos, such as volume
+  calibration, headphone screening, and comprehension checks, unless the prompt
+  explicitly excludes them.
 - For participant-facing instructions, payoff tables, lists, headings, and other
   ordinary page structure, prefer `dominate.tags` over raw HTML. Use
   `markupsafe.Markup` only for trusted, static HTML snippets passed directly as

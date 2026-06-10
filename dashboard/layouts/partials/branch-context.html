@@ -1,0 +1,24 @@
+{{ $context := hugo.Data.workflow_context | default dict }}
+{{ $owner := default site.Params.github_owner $context.owner }}
+{{ $repo := default site.Params.github_repo_name $context.repo }}
+{{ $branch := default "" $context.branch }}
+{{ $mode := default "local" $context.mode }}
+{{ $enabled := default false $context.enabled }}
+{{ if and $enabled $branch (ne $branch "main") }}
+  {{ $branchURL := printf "https://github.com/%s/%s/tree/%s" $owner $repo ($branch | urlquery) }}
+  {{ $label := "Draft" }}
+  {{ if ne $mode "pr-preview" }}
+    {{ $label = "Branch" }}
+  {{ end }}
+  <span class="branch-context" aria-label="{{ $label }} branch {{ $branch }}">
+    <span class="branch-context-label-wrap" tabindex="0" aria-describedby="branch-context-popover" data-branch-context-label>
+      <span class="branch-context-label">{{ $label }}:</span>
+      {{ if eq $mode "pr-preview" }}
+        <span class="branch-context-popover" id="branch-context-popover" role="tooltip" hidden>
+          This is a draft preview for the branch. Merge the pull request to release these changes on the main dashboard.
+        </span>
+      {{ end }}
+    </span>
+    <a class="branch-context-link" href="{{ $branchURL | safeURL }}" target="_blank" rel="noopener noreferrer">{{ $branch }}</a>
+  </span>
+{{ end }}

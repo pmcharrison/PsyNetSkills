@@ -24,12 +24,16 @@ because it can miss system audio.
 
 1. Start the PsyNet experiment and open the generated ad page in a browser.
 2. Confirm the browser viewport is sized reasonably, usually 1280x720 or larger.
-3. Start `ffmpeg` screen and audio capture before interacting with the page.
-4. Progress through the participant flow as a real participant would.
-5. Stop recording after the completion page or after the relevant behavior has
+3. For multi-participant flows, use separate browser profiles or Playwright
+   contexts for each participant, for example separate Chrome `--user-data-dir`
+   directories. Do not rely on multiple windows from one shared profile; shared
+   browser/session state can cause misleading grouping or identity failures.
+4. Start `ffmpeg` screen and audio capture before interacting with the page.
+5. Progress through the participant flow as a real participant would.
+6. Stop recording after the completion page or after the relevant behavior has
    been demonstrated.
-6. Save the final file as `evidence/participant.mp4`.
-7. Play the MP4 back, or otherwise inspect it, before treating it as valid
+7. Save the final file as `evidence/participant.mp4`.
+8. Play the MP4 back, or otherwise inspect it, before treating it as valid
    evidence.
 
 If recording fails or audio is missing, do not imply the participant video is
@@ -88,6 +92,11 @@ WebAudio output is routed into the sink:
 export PULSE_SERVER="unix:$XDG_RUNTIME_DIR/pulse/native"
 google-chrome --no-first-run --new-window --window-size=1280,720 "$PARTICIPANT_URL"
 ```
+
+If Chrome was already open before the sink was created or before `PULSE_SERVER`
+was exported, do not reuse that window for audio evidence. Launch a fresh browser
+profile from the routed environment; otherwise the recording can contain a valid
+but silent audio track.
 
 Record the screen and the null-sink monitor:
 

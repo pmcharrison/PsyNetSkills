@@ -44,12 +44,20 @@ challenge before starting a fresh attempt.
    previous attempts. Keep optional `CRITERIA.md` in the snapshot if it exists,
    but do not open it during implementation.
 7. Write `agent.json` with the author key, model/client details you know, the
-   current commit hash of the PsyNetSkills repository, and a `psynet` object
-   recording the refreshed PsyNet checkout. Use this standard shape:
+   current commit hash of the PsyNetSkills repository, Cursor conversation ID if
+   available, and a `psynet` object recording the refreshed PsyNet checkout. Use
+   this standard shape:
 
    ```json
    {
      "authors": ["<github-id>"],
+     "agent": "Cursor Cloud Agent",
+     "client": "cursor",
+     "model": "<model name>",
+     "started_at": "<UTC ISO 8601 timestamp>",
+     "ended_at": null,
+     "cursor_conversation_id": "<CURSOR_CONVERSATION_ID or null>",
+     "skills_commit": "<git rev-parse HEAD>",
      "psynet": {
        "checkout_path": "~/PsyNet",
        "branch": "master",
@@ -59,11 +67,15 @@ challenge before starting a fresh attempt.
        "updated_at": "<UTC ISO 8601 timestamp after pulling>",
        "update_command": "git pull --ff-only origin master",
        "dirty": false
-     }
+     },
+     "run_cost": null
    }
    ```
 
-   Set `dirty` from `git status --short`; it should normally be `false`.
+   Set `dirty` from `git status --short`; it should normally be `false`. In
+   Cursor Cloud, set `cursor_conversation_id` from the
+   `CURSOR_CONVERSATION_ID` environment variable when it is available. This lets
+   later CSV cost imports match the attempt to Cursor's `Cloud Agent ID` exactly.
 8. Start `TIMELINE.md` and initialize `LEARNINGS.md` from the template before
    implementation. Follow `references/attempt-artifacts.md` for timeline and
    learning-note conventions.
@@ -73,13 +85,25 @@ challenge before starting a fresh attempt.
      directory named `code`; Dallinger imports the experiment directory as a
      Python package, and `code` can collide with Python's standard-library
      module of the same name.
+   - When copying a minimal PsyNet demo into `code/`, include the standard
+     experiment support files needed by PsyNet local launch checks, especially
+     `.gitignore`, rather than copying only Python/config/test files.
 10. Collect evidence in `evidence/`. Use the `record-participant-video` skill
    when creating `evidence/participant.mp4`, and follow
    `references/attempt-artifacts.md` for challenge-type-specific evidence
    guidance.
-11. Leave `EVALUATION.md` as a template for human evaluators unless the user
+11. When implementation and first-pass evidence collection are complete, close
+   `TIMELINE.md` with `[agent-stop]` and set `ended_at` in `agent.json` to the
+   matching UTC ISO timestamp. Leave `run_cost` as `null`; maintainers can
+   periodically run `psynetsk-import-cursor-costs <cursor-usage.csv>` to backfill
+   derived cost metadata from Cursor CSV exports without committing the raw CSV.
+   The importer only treats exact `cursor_conversation_id` / `Cloud Agent ID`
+   matches as resolved. Local attempts without a Cloud Agent ID should keep
+   `run_cost` as `null` unless a human records a manual cost. Use the
+   `cursor-cost-estimation` skill when importing, auditing, or backfilling costs.
+12. Leave `EVALUATION.md` as a template for human evaluators unless the user
    provides evaluation feedback.
-12. In the final response, invite the user to evaluate the attempt
+13. In the final response, invite the user to evaluate the attempt
    conversationally, including a 1-10 score and concise feedback. Use the
    `evaluate-attempt` skill for that conversation and any resulting updates to
    `EVALUATION.md` or `LEARNINGS.md`.
@@ -92,6 +116,15 @@ evidence to the challenge type and public instructions. For experiment
 implementation challenges, use the required artifact checklist in
 `references/experiment-evidence.md`. For PsyNet functional and performance
 checks, follow `psynet-experiment-implementation/references/validation.md`.
+
+When a challenge's central requirement depends on an external service or
+integration, such as S3, payment APIs, webhooks, or third-party recruitment
+services, collect explicit evidence that the real integration worked end to end.
+Local mocks, emulators, simulated payloads, placeholder files, and stub endpoints
+can support development, but they must not be presented as satisfying the
+external-service requirement. If safe credentials or access are unavailable,
+record the blocker in `TIMELINE.md` and `EVALUATION.md` before substituting a
+local stub, and explain exactly what remains unverified.
 
 Do not imply a skipped check passed: record what was run, what happened, and why
 any required evidence is missing or blocked in `EVALUATION.md`.

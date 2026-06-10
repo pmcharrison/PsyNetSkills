@@ -1,0 +1,15 @@
+warning: `VIRTUAL_ENV=/home/ubuntu/PsyNet/.venv` does not match the project environment path `.venv` and will be ignored; use `--active` to target the active environment instead
+============================= test session starts ==============================
+platform linux -- Python 3.13.13, pytest-9.0.3, pluggy-1.6.0
+rootdir: /workspace
+configfile: pyproject.toml
+testpaths: tests
+collected 44 items
+
+tests/test_dashboard.py .................                                [ 38%]
+tests/test_giscus.py .                                                   [ 40%]
+tests/test_pr_preview_redirect.py ....                                   [ 50%]
+tests/test_timeline.py ..                                                [ 54%]
+tests/test_validate.py ....................                              [100%]
+
+============================== 44 passed in 0.12s ==============================

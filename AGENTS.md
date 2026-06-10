@@ -8,13 +8,14 @@ PsyNetSkills is a workshop repository (not a multi-service app). Local developme
 
 ### Engineering judgement
 
-While working in this repository, keep an eye out for reasonable opportunities to
-improve maintainability and reliability. When you notice duplicated workflow
-instructions, avoidable complexity, likely bugs, missing robustness checks, or
-useful validation gaps, mention them to the user and suggest a focused follow-up
-when it would help the current work. Keep those suggestions scoped: do not fold
-unrelated refactors or broad cleanups into the current task unless the user asks
-for them or they are needed to finish safely.
+While working in this repository, regularly check for reasonable opportunities
+to improve maintainability and reliability, especially when a feature is nearing
+completion. When you notice duplicated workflow instructions, avoidable
+complexity, likely bugs, missing robustness checks, or useful validation gaps,
+mention them to the user and suggest a focused follow-up when it would help the
+current work. Keep those suggestions scoped: do not fold unrelated refactors or
+broad cleanups into the current task unless the user asks for them or they are
+needed to finish safely.
 
 ### Git and PR workflow
 
@@ -75,6 +76,9 @@ before proceeding. Do not maintain a second editable copy of the skills.
 
 - **uv** — Python env and package management (`~/.local/bin` should be on `PATH`).
 - **Hugo** — Dashboard build/preview (`hugo --source dashboard ...`). CI uses the latest extended Hugo release.
+- **gettext / xgettext** — Required by PsyNet translation extraction (`psynet
+  translate`) for Python strings. On Debian/Ubuntu install the `gettext` system
+  package.
 - **Git LFS** — Required when working with large attempt evidence (videos, zips). Run `git lfs install` once per machine; CI checks out with `lfs: true`. On Cursor Cloud VMs, `git lfs install` may fail because Git hooks are managed by the environment; run `git lfs update --force` instead.
 - **ffmpeg** — Required for participant evidence recordings.
 - **PulseAudio utilities** — Required when recording browser/system audio in
