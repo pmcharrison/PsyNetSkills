@@ -77,9 +77,6 @@ Useful starting points:
   management system where possible. PsyNet Graphics can use event management to
   coordinate object display with events such as `promptEnd`. For more details,
   consult the PsyNet Event Management documentation and the Graphics tutorial.
-  For a deeper understanding of available graphical options, consult the
-  Raphaël documentation:
-  `https://dmitrybaranovskiy.github.io/raphael/reference.html`.
 - For demo extensions, keep the implementation close to PsyNet's native style.
   Prefer built-in pages, controls, events, chatrooms, grouping, and timeline
   constructs over bespoke browser scripts. If custom JavaScript is unavoidable,
