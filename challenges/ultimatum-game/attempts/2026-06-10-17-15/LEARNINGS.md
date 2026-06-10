@@ -20,3 +20,17 @@ The latest Three.js module imports `three.core.min.js`; vendoring only `three.mo
 
 *Actions:*
 - **PsyNetSkills:** For challenges requiring vendored browser libraries, document checking browser network logs for secondary module imports. Confidence: high. Status: considering.
+
+## Evidence must cover negative paths named in the instructions
+
+The public instructions explicitly required timeout behavior evidence, but the submitted participant video only demonstrated successful offer/decision rounds and completion.
+
+*Actions:*
+- **PsyNetSkills:** Consider adding an evidence checklist reminder to record at least one timeout path when a challenge names timeout behavior as a central requirement. Confidence: high. Status: considering.
+
+## Visual requirements need direct review against the prompt sketch
+
+The evaluator judged that the interface did not satisfy the requested 3D tabletop environment, even though the implementation used Three.js elements. Future attempts should compare the rendered UI against the prompt sketch before finalizing evidence.
+
+*Actions:*
+- **PsyNetSkills:** Consider adding a visual-fidelity review step for challenges with explicit interface sketches or 3D scene requirements. Confidence: medium. Status: considering.
