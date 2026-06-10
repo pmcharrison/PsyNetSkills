@@ -1,0 +1,26 @@
+{
+  "authors": [
+    "pmcharrison"
+  ],
+  "agent": "Cursor Cloud Agent",
+  "client": "cursor",
+  "model": "GPT-5.5",
+  "started_at": "2026-06-10T10:23:00Z",
+  "ended_at": "2026-06-10T11:51:00Z",
+  "cursor_conversation_id": "bc-ac8d584e-1afe-412d-8a2a-ce66359dcd4a",
+  "skills_commit": "186696c3e0fcec382ec5f66fe9611e899df10554",
+  "psynet": {
+    "checkout_path": "~/PsyNet",
+    "branch": "master",
+    "commit": "2290ae6a4f25f9e76f9d08f560bccc4f1cbbc4f5",
+    "version": "13.3.0a0",
+    "updated_from": "origin/master",
+    "updated_at": "2026-06-10T05:30:00Z",
+    "update_command": "git pull --ff-only origin master",
+    "dirty": false
+  },
+  "run_cost": null,
+  "notes": [
+    "Stub attempt for validating Cursor cost CSV import by exact Cloud Agent ID."
+  ]
+}
