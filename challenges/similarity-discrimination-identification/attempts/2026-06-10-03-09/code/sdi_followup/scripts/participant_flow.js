@@ -62,7 +62,7 @@ async function completeFlow() {
   let savedSimilarity = false;
   let savedIdentification = false;
 
-  for (let step = 0; step < 160; step += 1) {
+  for (let step = 0; step < 320; step += 1) {
     await pause(page);
     const text = await page.locator("body").innerText().catch(() => "");
 

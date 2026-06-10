@@ -15,10 +15,10 @@ from psynet.prescreen import ColorBlindnessTest
 from psynet.timeline import Timeline
 from psynet.utils import NoArgumentProvided
 
-FIXATION_MS = 500
-PAIR_PRESENTATION_MS = 600
-MEMORY_PRESENTATION_MS = 700
-IDENTIFICATION_DELAY_MS = 600
+FIXATION_MS = 800
+PAIR_PRESENTATION_MS = 900
+MEMORY_PRESENTATION_MS = 1200
+IDENTIFICATION_DELAY_MS = 900
 
 STIMULI = [
     {"id": "S1", "label": "red", "color_hex": "#d73027", "dimensions": {"hue_degrees": 5, "size_px": 68}},
