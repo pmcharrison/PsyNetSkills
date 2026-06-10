@@ -15,6 +15,7 @@
   let timerId = null;
   let inFlight = false;
   let popoverOpen = false;
+  let tapArmed = false;
 
   function setPopoverLines(lines) {
     if (!popover) {
@@ -61,6 +62,7 @@
     popover.style.transform = "";
     statusLink.classList.remove("workflow-tooltip-open");
     popoverOpen = false;
+    tapArmed = false;
   }
 
   function usesTapTooltip() {
@@ -245,11 +247,14 @@
   });
 
   statusLink.addEventListener("click", function (event) {
-    if (!usesTapTooltip() || popoverOpen) {
+    if (!usesTapTooltip()) {
       return;
     }
-    event.preventDefault();
-    showPopover();
+    if (!tapArmed) {
+      event.preventDefault();
+      showPopover();
+      tapArmed = true;
+    }
   });
 
   document.addEventListener("click", function (event) {
