@@ -37,5 +37,5 @@ Copied from `challenge/CRITERIA.md` for human review:
 - Score and feedback should come from a human evaluator, captured
   conversationally when working with Cursor Cloud Agents.
 - Fallback generation was used for automated tests and evidence because no OpenRouter API key/model credentials were configured, consistent with the challenge credential policy.
-- `evidence/participant.mp4` is a visual recording only; the experiment does not produce audio.
+- `evidence/participant.mp4` is a visual recording only; the experiment does not produce audio. It shows three separate participant profiles progressing through first-node creation, second-node improvement, and third-node comparison/instruction flows.
 - `evidence/performance.json` and `evidence/performance-test.log` come from `psynet performance-test local --n-bots 40 --duration-minutes 5 --time-factor 1.0`.
