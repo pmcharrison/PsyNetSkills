@@ -2,6 +2,7 @@ from dominate import tags
 from markupsafe import Markup
 
 import psynet.experiment
+from psynet.bot import advance_past_wait_pages
 from psynet.page import InfoPage, SuccessfulEndPage, UnsuccessfulEndPage
 from psynet.timeline import PageMaker, Timeline
 
@@ -159,8 +160,19 @@ class Exp(psynet.experiment.Experiment):
         for bot in bots:
             assert 'Repeated Ultimatum game' in bot.current_page_text
             bot.take_page()
-        for bot in bots:
-            bot.run_to_completion()
+        for _ in range(400):
+            advance_past_wait_pages(bots)
+            if all(not bot.is_working for bot in bots):
+                break
+            progressed = False
+            for bot in bots:
+                if bot.is_working and bot.current_page_label != 'ultimatum_wait':
+                    bot.take_page()
+                    progressed = True
+            if not progressed:
+                advance_past_wait_pages(bots)
+        else:
+            raise AssertionError('Bots did not complete the synchronized ultimatum flow.')
         assert all(not bot.is_working for bot in bots)
 
     def test_check_bots(self, bots):
