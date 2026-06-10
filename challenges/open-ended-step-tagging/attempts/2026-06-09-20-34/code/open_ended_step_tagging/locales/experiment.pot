@@ -1,0 +1,105 @@
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: experiment.py:128
+msgid "Describe the emotion in this music"
+msgstr ""
+
+#: experiment.py:132
+msgid ""
+"Nobody has added tags for this clip yet. Add one or more native-language "
+"emotion or affect words that describe what the music expresses."
+msgstr ""
+
+#: experiment.py:137
+msgid ""
+"Press Enter after each tag. Tags must be single words, no longer than 15 "
+"characters, and must not be genre labels or lyrics."
+msgstr ""
+
+#: experiment.py:149
+msgid "Rate and refine the current tags"
+msgstr ""
+
+#: experiment.py:153
+msgid "First rate every visible tag for how well it describes the clip."
+msgstr ""
+
+#: experiment.py:158
+msgid ""
+"Click the flag icon for typos, irrelevant terms, genre labels, copied "
+"lyrics, or non-emotion descriptors."
+msgstr ""
+
+#: experiment.py:163
+msgid "Then add any missing single-word emotion tags in your native language."
+msgstr ""
+
+#: experiment.py:173
+msgid "Completed tags"
+msgstr ""
+
+#: experiment.py:174
+msgid "Rate existing tags"
+msgstr ""
+
+#: experiment.py:175
+msgid "Type more tags"
+msgstr ""
+
+#: experiment.py:176
+msgid "Add emotion tags"
+msgstr ""
+
+#: experiment.py:177
+msgid "Next"
+msgstr ""
+
+#: experiment.py:186
+msgid "Please rate or flag every visible tag."
+msgstr ""
+
+#: experiment.py:187
+msgid "Please add at least one emotion tag."
+msgstr ""
+
+#: experiment.py:188
+msgid "Please submit or delete the text still in the tag field."
+msgstr ""
+
+#: experiment.py:189
+msgid "Tags should be single words; remove spaces before submitting."
+msgstr ""
+
+#: experiment.py:216
+msgid "Open-ended music emotion tagging"
+msgstr ""
+
+#: experiment.py:219
+msgid ""
+"You will hear short 15-second music clips. For each clip, describe the "
+"emotions or affective qualities that the music expresses."
+msgstr ""
+
+#: experiment.py:223
+msgid "Use single-word tags in your native language."
+msgstr ""
+
+#: experiment.py:224
+msgid "Do not enter genre labels, artist names, or lyrics."
+msgstr ""
+
+#: experiment.py:227
+msgid ""
+"Flag existing tags that are typos, irrelevant, lyrics, genre labels, or not "
+"valid emotion descriptors."
+msgstr ""
+
+#: experiment.py:261
+msgid "Thank you. Your tags, ratings, and flags have been saved for review."
+msgstr ""

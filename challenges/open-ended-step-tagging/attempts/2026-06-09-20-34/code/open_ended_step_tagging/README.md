@@ -20,6 +20,18 @@ From this directory:
 5. Run a local debug server:
    `psynet debug local`
 
+## Translation
+
+Participant-facing experiment strings are marked with PsyNet's translator
+helper and extracted to `locales/experiment.pot`. The config sets `locale = en`
+and `supported_locales = ["en", "pt", "ko"]` for English, Portuguese, and
+Korean study variants.
+
+To generate machine translations, run `psynet translate pt ko` from this
+directory with local translator credentials configured outside the repository.
+Without those credentials, `psynet translate pt ko --continue-on-error` still
+validates extraction and refreshes the POT template.
+
 ## Stimulus replacement
 
 The demo uses `data/stimuli.csv`, which has `clip_id`, `culture`, `audio_path`,
