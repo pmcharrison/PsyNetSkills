@@ -64,13 +64,102 @@ nav {
 .github-nav-link {
   align-items: center;
   display: inline-flex;
-  margin-left: auto;
 }
 
 .github-nav-icon {
   fill: currentColor;
   height: 1.25rem;
   width: 1.25rem;
+}
+
+.workflow-status-link {
+  align-items: center;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  display: inline-flex;
+  height: 1.35rem;
+  justify-content: center;
+  margin-left: auto;
+  position: relative;
+  width: 1.35rem;
+}
+
+.workflow-status-link.workflow-status-success {
+  background: var(--success-background);
+  border-color: var(--success-border);
+  color: #1a7f37;
+}
+
+.workflow-status-link.workflow-status-running {
+  background: #ddf4ff;
+  border-color: #54aeef;
+  color: #0969da;
+}
+
+.workflow-status-link.workflow-status-failure {
+  background: var(--danger-background);
+  border-color: var(--danger-border);
+  color: #cf222e;
+}
+
+.workflow-status-link.workflow-status-unknown {
+  background: var(--code-background);
+  color: var(--muted);
+}
+
+.workflow-status-link.workflow-status-running .workflow-status-icon {
+  animation: workflow-status-pulse 1.4s ease-in-out infinite;
+}
+
+.workflow-status-icon {
+  font-size: 0.85rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.workflow-freshness-badge {
+  align-items: center;
+  background: var(--warning-background);
+  border: 1px solid var(--warning-border);
+  border-radius: 999px;
+  color: #9a6700;
+  display: none;
+  font-size: 0.65rem;
+  font-weight: 800;
+  height: 0.85rem;
+  justify-content: center;
+  line-height: 1;
+  position: absolute;
+  right: -0.35rem;
+  top: -0.4rem;
+  width: 0.85rem;
+}
+
+.workflow-freshness-stale .workflow-freshness-badge {
+  display: inline-flex;
+}
+
+.visually-hidden {
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
+@keyframes workflow-status-pulse {
+  0%,
+  100% {
+    opacity: 0.45;
+    transform: scale(0.82);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 .page-heading {
@@ -781,6 +870,7 @@ footer {
 }
 
 @media (max-width: 720px) {
+  .workflow-status-link,
   .github-nav-link {
     display: none;
   }

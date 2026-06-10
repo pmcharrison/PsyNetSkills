@@ -1,0 +1,43 @@
+{{ $context := site.Data.workflow_context | default dict }}
+{{ $owner := default site.Params.github_owner $context.owner }}
+{{ $repo := default site.Params.github_repo_name $context.repo }}
+{{ $workflow := default "" $context.workflow_file }}
+{{ $branch := default "" $context.branch }}
+{{ $renderedSha := default "" $context.head_sha }}
+{{ $mode := default "local" $context.mode }}
+{{ $enabled := default false $context.enabled }}
+{{ $pollSeconds := default 60 site.Params.workflow_status_poll_seconds }}
+{{ $hiddenPollSeconds := default 300 site.Params.workflow_status_hidden_poll_seconds }}
+{{ $actionsURL := printf "https://github.com/%s/%s/actions" $owner $repo }}
+{{ if $workflow }}
+  {{ $actionsURL = printf "%s/workflows/%s" $actionsURL $workflow }}
+{{ end }}
+{{ if $branch }}
+  {{ $actionsURL = printf "%s?query=branch%%3A%s" $actionsURL ($branch | urlquery) }}
+{{ end }}
+{{ $label := "Workflow status unavailable for local dashboard builds." }}
+{{ if and $enabled $workflow $branch }}
+  {{ $label = printf "Checking %s workflow status for %s." $workflow $branch }}
+{{ end }}
+<a
+  class="workflow-status-link workflow-status-unknown workflow-freshness-current"
+  href="{{ $actionsURL | safeURL }}"
+  target="_blank"
+  rel="noopener noreferrer"
+  aria-label="{{ $label }}"
+  title="{{ $label }}"
+  data-workflow-status
+  data-enabled="{{ $enabled }}"
+  data-owner="{{ $owner }}"
+  data-repo="{{ $repo }}"
+  data-workflow="{{ $workflow }}"
+  data-branch="{{ $branch }}"
+  data-rendered-sha="{{ $renderedSha }}"
+  data-mode="{{ $mode }}"
+  data-poll-ms="{{ mul $pollSeconds 1000 }}"
+  data-hidden-poll-ms="{{ mul $hiddenPollSeconds 1000 }}"
+>
+  <span class="workflow-status-icon" aria-hidden="true">?</span>
+  <span class="workflow-freshness-badge" aria-hidden="true">!</span>
+  <span class="visually-hidden">Workflow status</span>
+</a>

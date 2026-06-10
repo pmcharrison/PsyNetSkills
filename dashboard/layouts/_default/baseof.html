@@ -27,6 +27,7 @@
           {{ if eq .Section "challenges" }}aria-current="page" class="current"{{ end }}
           href="{{ "challenges/" | relURL }}"
         >Challenges</a>
+        {{ partial "workflow-status.html" . }}
         {{ with site.Params.github_repo_url }}
           <a class="github-nav-link" href="{{ . | safeURL }}" aria-label="PsyNetSkills on GitHub" target="_blank" rel="noopener noreferrer">
             <svg class="github-nav-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
@@ -44,5 +45,6 @@
     {{ end }}
     <footer>
     </footer>
+    <script src="{{ "js/workflow-status.js" | relURL }}" defer></script>
   </body>
 </html>
