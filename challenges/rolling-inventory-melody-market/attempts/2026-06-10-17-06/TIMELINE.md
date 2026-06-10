@@ -7,3 +7,4 @@
 - T+00:25:00 [agent] Implemented initial melody-market experiment and support files.
 - T+00:34:00 [agent] Added standard PsyNet test harness after local test reported missing test.py.
 - T+00:41:00 [agent] Fixed duplicate PsyNet config definitions reported by psynet test local.
+- T+00:47:00 [agent] Added constraints.txt required by PsyNet dependency pre-checks.
