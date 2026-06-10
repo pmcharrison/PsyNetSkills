@@ -9,7 +9,7 @@ so the first extraction run failed before installing it.
 *Actions:*
 - **PsyNetSkills:** Add `gettext`/`xgettext` to the repository's documented
   Cursor Cloud system dependencies for translation-focused work. Confidence:
-  high. Status: considering.
+  high. Status: completed. Notes: Added to `AGENTS.md`.
 
 ## Translation attempts need to check framework-owned pages
 
