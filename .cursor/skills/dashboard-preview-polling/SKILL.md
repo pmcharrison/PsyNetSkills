@@ -43,29 +43,59 @@ a pull request.
    done
    ```
 
-4. If the matching run completes successfully within 75 seconds, tell the user
-   the dashboard preview has been rebuilt for the latest commit and print the
-   preview URL only. Do not print the workflow run link in the user-facing
-   response unless the user asks for it.
+4. If the matching run completes successfully, read the latest `gh-pages` commit
+   SHA and poll the GitHub Pages deployment workflow for that SHA:
 
-5. If no matching run appears within 75 seconds, do not say the preview build was
+   ```bash
+   pages_sha="$(git ls-remote origin gh-pages | awk '{print $1}')"
+   deadline=$((SECONDS + 75))
+   while [ "$SECONDS" -lt "$deadline" ]; do
+     gh run list \
+       --workflow "pages-build-deployment" \
+       --branch "gh-pages" \
+       --limit 10 \
+       --json headSha,status,conclusion,url,createdAt
+     sleep 5
+   done
+   ```
+
+   The Pages deployment can still be in progress after the preview workflow has
+   pushed files to `gh-pages`; during that window the preview URL may return 404.
+
+5. If both the matching preview run and the matching Pages deployment complete
+   successfully within the polling windows, tell the user the dashboard preview
+   has been rebuilt and published for the latest commit and print the preview URL
+   only. Do not print workflow run links in the user-facing response unless the
+   user asks for them.
+
+6. If no matching preview run appears within 75 seconds, do not say the preview build was
    triggered. Tell the user no preview run has appeared yet for the latest
    commit, and print the workflow-runs link.
 
-6. If a matching run appears but does not complete successfully within 75
+7. If a matching preview run appears but does not complete successfully within 75
    seconds, do not imply the preview is current. Tell the user the preview build
    is still pending or not successful for the latest commit, and print the
    workflow-runs link instead of relying on the preview URL.
+
+8. If the matching preview run succeeds but the matching Pages deployment is
+   missing, pending, or unsuccessful, tell the user the preview files were built
+   but may not be published yet. Print the Pages workflow-runs link instead of
+   relying on the preview URL.
 
 ## Rules
 
 - Do not use the commit `/checks` URL as the source of truth for this repository;
   it can show no checks even when pull-request workflow runs exist.
 - Always compare the workflow run `headSha` with `git rev-parse HEAD`.
+- After the preview workflow succeeds, also compare the `pages-build-deployment`
+  run `headSha` with the latest `gh-pages` SHA from `git ls-remote origin
+  gh-pages`.
 - If the matching run is completed with a non-success conclusion, print the
   workflow run URL and conclusion.
 - If no matching run appears, say that no preview run has appeared for the latest
   commit yet.
 - If the workflow run is still queued or in progress after 75 seconds, print the
   branch-filtered workflow-runs link.
-- If the matching run succeeds, print only the dashboard preview URL.
+- If the matching preview run succeeds but Pages deployment is still queued or in
+  progress, print the Pages workflow-runs link.
+- If both matching runs succeed, print only the dashboard preview URL.
