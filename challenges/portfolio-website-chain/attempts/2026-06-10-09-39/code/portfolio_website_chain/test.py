@@ -12,8 +12,11 @@
 # - test_check_bot
 
 import os
+import sys
 
 import pytest
+
+sys.path.insert(0, os.path.dirname(__file__))
 
 from experiment import (
     PORTFOLIO_TASK,

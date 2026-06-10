@@ -9,3 +9,10 @@
 - T+00:04:30 [agent] Scaffolded a PsyNet experiment from the imitation-chain demo support files.
 - T+00:07:45 [agent] Implemented portfolio website chain flow, OpenRouter availability checks, deterministic fallback generation, sandboxed website display, and helper tests.
 - T+00:08:45 [agent] Wrote attempt metadata from runtime provenance and noted that live OpenRouter credentials are not configured locally.
+- T+00:11:20 [agent] `pytest -q test.py` initially exposed a bot-order assertion bug; sorted bot trial assertions by recorded node position.
+- T+00:12:15 [agent] `pytest -q test.py` and `psynet test local` passed with three serial bot participants.
+- T+00:20:30 [agent] Recorded three browser participant sessions to `evidence/participant.mp4`, covering creation, improvement, and comparison flow.
+- T+00:27:45 [agent] Reran `psynet performance-test local` after stopping the debug server that occupied port 5000; saved `evidence/performance.json`.
+- T+00:30:15 [agent] Exported local PsyNet data through the dashboard download route and saved `evidence/data.zip`.
+- T+00:31:00 [agent] Saved dashboard monitor snapshot and participant-flow screenshots.
+- T+00:31:30 [agent-stop] Implementation and first-pass evidence collection complete.

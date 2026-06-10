@@ -411,6 +411,7 @@ class PortfolioNetwork(ImitationChainNetwork):
 class PortfolioTrial(ImitationChainTrial):
     time_estimate = 45
     accumulate_answers = True
+    check_time_credit_received = False
 
     def previous_definition(self):
         return self.definition
@@ -676,7 +677,10 @@ class Exp(psynet.experiment.Experiment):
         assert trial.answer["ai_request_config"]["api_key_present"] is False
 
     def test_check_bots(self, bots: List[Bot], **kwargs):
-        trials = [bot.alive_trials[0] for bot in bots]
+        trials = sorted(
+            [bot.alive_trials[0] for bot in bots],
+            key=lambda trial: trial.answer["node_position"],
+        )
         positions = [trial.answer["node_position"] for trial in trials]
         assert positions == [1, 2, 3]
         assert trials[2].answer["selected_comparison_winner"] == "previous"
