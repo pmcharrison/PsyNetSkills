@@ -35,6 +35,14 @@
     .cell.own-click {
         outline: 3px solid #0d6efd;
     }
+    .cell.reward-win {
+        background: #b7efc5;
+        box-shadow: 0 0 0 3px #2f9e44;
+    }
+    .cell.reward-loss {
+        background: #ffc9c9;
+        box-shadow: 0 0 0 3px #e03131;
+    }
     .heat-cell {
         aspect-ratio: 1 / 1;
         border: 1px solid #d2d6dc;
@@ -103,12 +111,12 @@
 <div id="game-layout">
     <section>
         <h5>Your clickable grid</h5>
-        <p class="small text-muted">Click only when the status says it is your turn. Your signal stays private.</p>
+        <p class="small text-muted">Click only when the status says it is your turn. Your reward stays private.</p>
         <div id="own-grid" class="grid"></div>
     </section>
     <section>
         <h5>Other players' click heatmap</h5>
-        <p class="small text-muted">Darker cells were clicked more often by other players. Signals are not shown.</p>
+        <p class="small text-muted">Darker cells were clicked more often by other players. Rewards are not shown.</p>
         <div id="heatmap-grid" class="grid"></div>
     </section>
 </div>
@@ -135,6 +143,7 @@
     var privateEvents = [];
     var clickedCells = {};
     var countdownTimer = null;
+    var lastRenderedPrivateEventKey = null;
 
     document.getElementById("round-total").textContent = N_ROUNDS;
     document.getElementById("turn-total").textContent = "--";
@@ -319,12 +328,30 @@
                 var accepted = privateEvents.filter(function (event) { return event.accepted; });
                 if (accepted.length > 0) {
                     var last = accepted[accepted.length - 1];
+                    var key = [last.round_index, last.turn_position, last.row, last.col].join(":");
+                    if (key !== lastRenderedPrivateEventKey) {
+                        lastRenderedPrivateEventKey = key;
+                        flashOwnCell(last.row, last.col, last.reward_y);
+                    }
                     document.getElementById("feedback").textContent =
-                        "Your last signal: " + last.signal
+                        "Your reward: y=" + last.reward_y
+                        + (last.bonus_delta > 0 ? " (+$" + last.bonus_delta.toFixed(2) + " bonus)" : " (no bonus)")
                         + " from cell (" + last.row + ", " + last.col + ")";
                 }
             })
             .catch(function () {});
+    }
+
+    function flashOwnCell(row, col, rewardY) {
+        var selector = '.cell[data-row="' + row + '"][data-col="' + col + '"]';
+        var cell = document.querySelector(selector);
+        if (!cell) return;
+        var className = rewardY ? "reward-win" : "reward-loss";
+        cell.classList.remove("reward-win", "reward-loss");
+        cell.classList.add(className);
+        window.setTimeout(function () {
+            cell.classList.remove(className);
+        }, 900);
     }
 
     function updateTimers(state) {
