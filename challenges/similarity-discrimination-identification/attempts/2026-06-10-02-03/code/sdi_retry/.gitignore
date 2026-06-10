@@ -5,6 +5,7 @@
 .pytest_cache/
 __pycache__/
 data/
+dump.rdb
 local/
 node_modules/
 source_code.zip
