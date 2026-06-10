@@ -50,6 +50,27 @@ def melody_change_count(melody, reference):
     return int(np.sum(np.abs(np.array(melody, dtype=int) - np.array(reference, dtype=int))))
 
 
+def melody_to_waveform(melody, samples_per_step=8):
+    """Sample the same sine-note model used by browser playback for preview."""
+    waveform = []
+    step_duration = 0.22
+    melody_array = np.array(melody, dtype=int)
+    for step in range(N_STEPS):
+        active_rows = [row for row in range(N_ROWS) if melody_array[row, step] == 1]
+        for sample in range(samples_per_step):
+            pos = (sample + 0.5) / samples_per_step
+            envelope = np.sin(np.pi * pos)
+            t = (step + pos) * step_duration
+            value = 0.0
+            for row in active_rows:
+                value += np.sin(2 * np.pi * NOTE_FREQUENCIES[row] * t)
+            waveform.append(abs(value) * envelope / max(1, len(active_rows)))
+    peak = max(waveform) if waveform else 0.0
+    if peak <= 0:
+        return [0.0 for _ in waveform]
+    return [round(value / peak, 3) for value in waveform]
+
+
 def latest_melody_from_answer(answer):
     if not isinstance(answer, dict):
         return empty_melody()
@@ -318,10 +339,12 @@ class MelodyCreateTrial(CreateTrialMixin, ImitationChainTrial):
         proposals_data = []
 
         for i, proposal in enumerate(pool):
+            melody = latest_melody_from_answer(proposal.answer)
             proposals_data.append(
                 {
                     "id": proposal.id,
-                    "melody": latest_melody_from_answer(proposal.answer),
+                    "melody": melody,
+                    "waveform": melody_to_waveform(melody),
                     "label": chr(65 + i),
                     "adopted_by": len(self.definition["children"].get(str(proposal.id), [])),
                     "proposed_to": self.definition["proposed"].get(str(proposal.id), 0),
@@ -332,12 +355,10 @@ class MelodyCreateTrial(CreateTrialMixin, ImitationChainTrial):
             label="adopt",
             prompt=Prompt(
                 Markup(
-                    f"""
-                    <h3>Choose a melody to build on</h3>
-                    <p>Listen to the current market melodies{' and review their adoption history' if display_popularity else ''}.</p>
-                    <p>Choose one melody. On the next page, you may change up to {NUM_EDITS} notes.</p>
-                    <p>Your version will enter the rolling inventory and compete to be selected by future participants.</p>
-                    """
+                    f"<h3>Choose a melody to start from</h3>"
+                    f"<p>You can listen to all melodies on the market{' and how many times they were selected by other participants' if display_popularity else ''}.</p>"
+                    f"<p>Choose a melody. On the next page, you will be allowed to change up to {NUM_EDITS} notes.</p>"
+                    "<p>Your creation will be added to the inventory. Try to have it selected by others as many times as possible!</p>"
                 )
             ),
             control=MelodySelectControl(
