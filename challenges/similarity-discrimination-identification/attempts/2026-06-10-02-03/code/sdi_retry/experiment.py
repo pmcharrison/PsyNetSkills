@@ -256,6 +256,7 @@ class Exp(psynet.experiment.Experiment):
         ColorBlindnessTest(
             label="ishihara_color_vision_test",
             time_estimate_per_trial=1.0,
+            performance_threshold=0,
             hide_after=None,
         ),
         ModularPage(
