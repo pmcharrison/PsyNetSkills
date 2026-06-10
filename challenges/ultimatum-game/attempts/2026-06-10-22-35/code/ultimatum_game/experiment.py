@@ -157,7 +157,7 @@ class Exp(psynet.experiment.Experiment):
     )
 
     def test_serial_run_bots(self, bots):
-        wait_labels = {'wait', 'ultimatum_wait'}
+        wait_labels = {'wait'}
         for bot in bots:
             assert 'Repeated Ultimatum game' in bot.current_page_text
             bot.take_page()

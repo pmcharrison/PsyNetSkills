@@ -9,15 +9,15 @@ test.py::test_experiment[/workspace/challenges/ultimatum-game/attempts/2026-06-1
 -------------------------------- live log call ---------------------------------
 INFO     psynet:experiment.py:1393 Testing experiment with 2 serial bot(s)...
 INFO     psynet:bot.py:74 Waiting for experiment launch to complete....
-INFO     psynet:bot.py:37 Initializing bot with worker ID e161d8eb-0930-4c6f-9ec1-6fa35e54d3c6.
+INFO     psynet:bot.py:37 Initializing bot with worker ID 0bd49ab4-3c43-4039-952d-29dcfbe451cb.
 INFO     psynet:bot.py:74 Waiting for experiment launch to complete....
-INFO     psynet:bot.py:37 Initializing bot with worker ID 1c2f215e-a24f-42d0-9a77-71309bdf41ae.
+INFO     psynet:bot.py:37 Initializing bot with worker ID 82ecbdd4-b0e8-4566-8748-00feff76d201.
 FAILED                                                                   [100%]
 
 =================================== FAILURES ===================================
 _ test_experiment[/workspace/challenges/ultimatum-game/attempts/2026-06-10-22-35/code/ultimatum_game] _
 
-launched_experiment = <dallinger_experiment.experiment.Exp object at 0x7fdb96359160>
+launched_experiment = <dallinger_experiment.experiment.Exp object at 0x7fdfc3aad160>
 
     @pytest.mark.parametrize('experiment_directory', [experiment_dir], indirect=True)
     def test_experiment(launched_experiment):
@@ -31,10 +31,11 @@ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
     self.test_serial_run_bots(bots)
 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
 
-self = <dallinger_experiment.experiment.Exp object at 0x7fdb96359160>
-bots = [<psynet.bot.BotDriver object at 0x7fdb94fe38c0>, <psynet.bot.BotDriver object at 0x7fdb94dd9f90>]
+self = <dallinger_experiment.experiment.Exp object at 0x7fdfc3aad160>
+bots = [<psynet.bot.BotDriver object at 0x7fdfc27838c0>, <psynet.bot.BotDriver object at 0x7fdfc257df90>]
 
     def test_serial_run_bots(self, bots):
+        wait_labels = {'wait', 'ultimatum_wait'}
         for bot in bots:
             assert 'Repeated Ultimatum game' in bot.current_page_text
             bot.take_page()
@@ -44,7 +45,7 @@ bots = [<psynet.bot.BotDriver object at 0x7fdb94fe38c0>, <psynet.bot.BotDriver o
                 break
             progressed = False
             for bot in bots:
-                if bot.is_working and bot.current_page_label != 'ultimatum_wait':
+                if bot.is_working and bot.current_page_label not in wait_labels:
                     bot.take_page()
                     progressed = True
             if not progressed:
@@ -53,7 +54,7 @@ bots = [<psynet.bot.BotDriver object at 0x7fdb94fe38c0>, <psynet.bot.BotDriver o
 >           raise AssertionError('Bots did not complete the synchronized ultimatum flow.')
 E           AssertionError: Bots did not complete the synchronized ultimatum flow.
 
-experiment.py:175: AssertionError
+experiment.py:176: AssertionError
 ---------------------------- Captured stdout setup -----------------------------
 Launching experiment in directory '/workspace/challenges/ultimatum-game/attempts/2026-06-10-22-35/code/ultimatum_game'...
 
@@ -65,19 +66,19 @@ Launching experiment in directory '/workspace/challenges/ultimatum-game/attempts
 ✓ no file conflicts
 
 
-❯❯ Experiment UID: 29c780fc-3e36-4a04-5175-4e1071f00408
-Deployment temp directory: /tmp/tmp47_4z7af/29c780fc-3e36-4a04-5175-4e1071f00408
+❯❯ Experiment UID: ceaa78af-94d8-a2c4-0b2f-8d6d1df6046d
+Deployment temp directory: /tmp/tmpij027f61/ceaa78af-94d8-a2c4-0b2f-8d6d1df6046d
 
 ❯❯ Starting up the Heroku Local server...
-10:48:19 PM web.1   |  [2026-06-10 22:48:19 +0000] [11428] [INFO] Starting gunicorn 25.3.0
+10:49:10 PM web.1   |  [2026-06-10 22:49:10 +0000] [12205] [INFO] Starting gunicorn 25.3.0
 
 ❯❯ Server is running on http://localhost:5000. Press Ctrl+C to exit.
 
 ❯❯ Launching the experiment...
 
 ❯❯ Initial recruitment list:
-http://localhost:5000/ad?recruiter=hotair&assignmentId=77N56D&hitId=14UGAZ&workerId=D5D727&mode=debug
-http://localhost:5000/ad?recruiter=hotair&assignmentId=2PIGKK&hitId=IGUJ7H&workerId=66OQIS&mode=debug
+http://localhost:5000/ad?recruiter=hotair&assignmentId=V1KNYF&hitId=XY3JF4&workerId=ZUPQQ2&mode=debug
+http://localhost:5000/ad?recruiter=hotair&assignmentId=ZNC379&hitId=9AXK5V&workerId=QSVHQ1&mode=debug
 Additional details:
 
 Single recruitment link: http://localhost:5000/ad?recruiter=hotair&generate_tokens=1&mode=debug
@@ -89,65 +90,65 @@ Recruitment requests will open browser windows automatically.
 ❯❯ Dashboard user: test_admin password: test_password
 
 ❯❯ Monitoring the Heroku Local server for recruitment or completion...
-10:48:19 PM web.1   |  [2026-06-10 22:48:19 +0000] [11428] [INFO] Listening at: http://0.0.0.0:5000 (11428)
-10:48:19 PM web.1   |  [2026-06-10 22:48:19 +0000] [11428] [INFO] Using worker: gevent
-10:48:19 PM web.1   |  2026-06-10 22:48:19,557 Ready.
-10:48:19 PM web.1   |  [2026-06-10 22:48:19 +0000] [11446] [INFO] Booting worker with pid: 11446
-10:48:19 PM web.1   |  2026-06-10 22:48:19,606 A worker restarted (new pid: 11446). Please check the logs to find out why ⚠️
-10:48:19 PM web.1   |  [2026-06-10 22:48:19 +0000] [11428] [INFO] Control socket listening at /home/ubuntu/.gunicorn/gunicorn.ctl
-10:48:20 PM web.1   |  2026-06-10 22:48:20,738 11446/140387744775232: Subscribed client <dallinger_experiment.experiment.Exp object at 0x7fae91c20cd0> to channel ultimatum_game
-10:48:20 PM web.1   |  2026-06-10 22:48:20,743 Launched experiment "Repeated Ultimatum game" (`8306e586-61dd-4b5e-a552-4134b3ca100a`) locally
-10:48:20 PM web.1   |  2026-06-10 22:48:20,743 11446/140387734756128: Listening on channel ultimatum_game
-10:48:20 PM web.1   |  2026-06-10 22:48:20,743 [1mExperiment dashboard[0m: http://localhost:5000/dashboard
-10:48:20 PM web.1   |  Username: `test_admin`
-10:48:20 PM web.1   |  Password: `test_password`
-10:48:20 PM web.1   |  2026-06-10 22:48:20,743 Experiment launch complete!
-10:48:20 PM web.1   |  2026-06-10 22:48:20,744 New participant requested: http://localhost:5000/ad?recruiter=hotair&assignmentId=77N56D&hitId=14UGAZ&workerId=D5D727&mode=debug
+10:49:10 PM web.1   |  [2026-06-10 22:49:10 +0000] [12205] [INFO] Listening at: http://0.0.0.0:5000 (12205)
+10:49:10 PM web.1   |  [2026-06-10 22:49:10 +0000] [12205] [INFO] Using worker: gevent
+10:49:10 PM web.1   |  2026-06-10 22:49:10,155 Ready.
+10:49:10 PM web.1   |  [2026-06-10 22:49:10 +0000] [12223] [INFO] Booting worker with pid: 12223
+10:49:10 PM web.1   |  2026-06-10 22:49:10,203 A worker restarted (new pid: 12223). Please check the logs to find out why ⚠️
+10:49:10 PM web.1   |  [2026-06-10 22:49:10 +0000] [12205] [INFO] Control socket listening at /home/ubuntu/.gunicorn/gunicorn.ctl
+10:49:11 PM web.1   |  2026-06-10 22:49:11,361 12223/140615359134784: Subscribed client <dallinger_experiment.experiment.Exp object at 0x7fe39081ccd0> to channel ultimatum_game
+10:49:11 PM web.1   |  2026-06-10 22:49:11,366 Launched experiment "Repeated Ultimatum game" (`809ccd1a-636b-411d-a24a-6a82e641886a`) locally
+10:49:11 PM web.1   |  2026-06-10 22:49:11,367 [1mExperiment dashboard[0m: http://localhost:5000/dashboard
+10:49:11 PM web.1   |  Username: `test_admin`
+10:49:11 PM web.1   |  Password: `test_password`
+10:49:11 PM web.1   |  2026-06-10 22:49:11,367 Experiment launch complete!
+10:49:11 PM web.1   |  2026-06-10 22:49:11,367 New participant requested: http://localhost:5000/ad?recruiter=hotair&assignmentId=V1KNYF&hitId=XY3JF4&workerId=ZUPQQ2&mode=debug
 
 ❯❯ new recruitment request!
 
-❯❯ New participant requested:: http://localhost:5000/ad?recruiter=hotair&assignmentId=77N56D&hitId=14UGAZ&workerId=D5D727&mode=debug
-10:48:20 PM web.1   |  2026-06-10 22:48:20,744 New participant requested: http://localhost:5000/ad?recruiter=hotair&assignmentId=2PIGKK&hitId=IGUJ7H&workerId=66OQIS&mode=debug
+❯❯ New participant requested:: http://localhost:5000/ad?recruiter=hotair&assignmentId=V1KNYF&hitId=XY3JF4&workerId=ZUPQQ2&mode=debug
+10:49:11 PM web.1   |  2026-06-10 22:49:11,367 New participant requested: http://localhost:5000/ad?recruiter=hotair&assignmentId=ZNC379&hitId=9AXK5V&workerId=QSVHQ1&mode=debug
 
 ❯❯ new recruitment request!
 
-❯❯ New participant requested:: http://localhost:5000/ad?recruiter=hotair&assignmentId=2PIGKK&hitId=IGUJ7H&workerId=66OQIS&mode=debug
-10:48:20 PM web.1   |  2026-06-10 22:48:20,744 11446/140387744775232: Subscribed client <dallinger_expe
+❯❯ New participant requested:: http://localhost:5000/ad?recruiter=hotair&assignmentId=ZNC379&hitId=9AXK5V&workerId=QSVHQ1&mode=debug
+10:49:11 PM web.1   |  2026-06-10 22:49:11,368 12223/140615359134784: Subscribed client <dallinger_experiment.experiment.Exp object at 0x7fe39081ccd0> to channel psynet_experiment
+10:49:11 PM web.1   |  2026-0
 ------------------------------ Captured log call -------------------------------
 INFO     psynet:experiment.py:1393 Testing experiment with 2 serial bot(s)...
 INFO     psynet:bot.py:74 Waiting for experiment launch to complete....
-INFO     psynet:bot.py:37 Initializing bot with worker ID e161d8eb-0930-4c6f-9ec1-6fa35e54d3c6.
+INFO     psynet:bot.py:37 Initializing bot with worker ID 0bd49ab4-3c43-4039-952d-29dcfbe451cb.
 INFO     psynet:bot.py:74 Waiting for experiment launch to complete....
-INFO     psynet:bot.py:37 Initializing bot with worker ID 1c2f215e-a24f-42d0-9a77-71309bdf41ae.
+INFO     psynet:bot.py:37 Initializing bot with worker ID 82ecbdd4-b0e8-4566-8748-00feff76d201.
 --------------------------- Captured stdout teardown ---------------------------
-riment.experiment.Exp object at 0x7fae91c20cd0> to channel psynet_experiment
-10:48:20 PM web.1   |  2026-06-10 22:48:20,745 11446/140387744775232: Subscribed client <dallinger_experiment.experiment.Exp object at 0x7fae91c20cd0> to channel dallinger_control
-10:48:20 PM web.1   |  127.0.0.1 - - [10/Jun/2026:22:48:20 +0000] "POST /launch HTTP/1.1" 200 460 "-" "python-requests/2.33.1"
-10:48:20 PM web.1   |  2026-06-10 22:48:20,747 11446/140387736032640: Listening on channel dallinger_control
-10:48:20 PM web.1   |  2026-06-10 22:48:20,747 11446/140387744924992: Listening on channel psynet_experiment
-10:48:21 PM web.1   |  127.0.0.1 - - [10/Jun/2026:22:48:21 +0000] "GET /timeline?unique_id=e161d8eb-0930-4c6f-9ec1-6fa35e54d3c6%3Aa1c3613b-6be4-449c-9137-6bfcf732c0a7 HTTP/1.1" 200 74435 "-" "python-requests/2.33.1"
-10:48:21 PM web.1   |  127.0.0.1 - - [10/Jun/2026:22:48:21 +0000] "GET /dashboard/login HTTP/1.1" 200 5106 "-" "python-requests/2.33.1"
-10:48:21 PM web.1   |  /home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/flask_login/login_manager.py:488: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
-10:48:21 PM web.1   |    expires = datetime.utcnow() + duration
-10:48:21 PM web.1   |  127.0.0.1 - - [10/Jun/2026:22:48:21 +0000] "POST /dashboard/login HTTP/1.1" 302 219 "-" "python-requests/2.33.1"
-10:48:21 PM web.1   |  127.0.0.1 - - [10/Jun/2026:22:48:21 +0000] "GET /dashboard/index HTTP/1.1" 200 12071 "-" "python-requests/2.33.1"
-10:48:21 PM web.1   |  127.0.0.1 - - [10/Jun/2026:22:48:21 +0000] "GET /dashboard/index HTTP/1.1" 200 11941 "-" "python-requests/2.33.1"
-10:48:21 PM web.1   |  127.0.0.1 - - [10/Jun/2026:22:48:21 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
-10:48:21 PM web.1   |  127.0.0.1 - - [10/Jun/2026:22:48:21 +0000] "GET /timeline?unique_id=1c2f215e-a24f-42d0-9a77-71309bdf41ae%3A078715dc-9cb2-4110-b877-2d83136ad06c HTTP/1.1" 200 74435 "-" "python-requests/2.33.1"
-10:48:21 PM web.1   |  127.0.0.1 - - [10/Jun/2026:22:48:21 +0000] "GET /participant_status/2 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
-10:48:21 PM web.1   |  2026-06-10 22:48:21,215 Received a response from participant 1 on page d958df52-c328-6210-ec94-cb11b0d82406.
-10:48:21 PM web.1   |  2026-06-10 22:48:21,231 Evaluating while_loop (barrier:chain_grouper) condition: result = True
-10:48:21 PM web.1   |  2026-06-10 22:48:21,231 Task 'advance_page' took 0.010 s
-10:48:21 PM web.1   |  127.0.0.1 - - [10/Jun/2026:22:48:21 +0000] "POST /response HTTP/1.1" 200 305 "-" "python-requests/2.33.1"
-10:48:21 PM web.1   |  127.0.0.1 - - [10/Jun/2026:22:48:21 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
-10:48:21 PM web.1   |  127.0.0.1 - - [10/Jun/2026:22:48:21 +0000] "GET /timeline?unique_id=e161d8eb-0930-4c6f-9ec1-6fa35e54d3c6%3Aa1c3613b-6be4-449c-9137-6bfcf732c0a7 HTTP/1.1" 200 74318 "-" "python-requests/2.33.1"
-10:48:21 PM web.1   |  2026-06-10 22:48:21,450 Received a response from participant 2 on page 82ae912f-97bb-7c13-7c15-a1ef95988e37.
-10:48:21 PM web.1   |  2026-06-10 22:48:21,458 Evaluating while_loop (barrier:chain_grouper) condition: result = True
-10:48:21 PM web.1   |  127.0.0.1 - - [10/Jun/2026:22:48:21 +0000] "POST /response HTTP/1.1" 200 305 "-" "python-requests/2.33.1"
-10:48:21 PM web.1   |  127.0.0.1 - - [10/Jun/2026:22:48:21 +0000] "GET /participant_status/2 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
-10:48:21 PM web.1   |  127.0.0.1 - - [10/Jun/2026:22:48:21 +0000] "GET /timeline?unique_id=1c2f215e-a24f-42d0-9a77-71309bdf41ae%3A078715dc-9cb2-4110-b877-2d83136ad06c HTTP/1.1" 200 74318 "-" "python-requests/2.33.1"
+6-10 22:49:11,368 12223/140615346641696: Listening on channel ultimatum_game
+10:49:11 PM web.1   |  2026-06-10 22:49:11,369 12223/140615359134784: Subscribed client <dallinger_experiment.experiment.Exp object at 0x7fe39081ccd0> to channel dallinger_control
+10:49:11 PM web.1   |  127.0.0.1 - - [10/Jun/2026:22:49:11 +0000] "POST /launch HTTP/1.1" 200 460 "-" "python-requests/2.33.1"
+10:49:11 PM web.1   |  2026-06-10 22:49:11,371 12223/140615348280416: Listening on channel dallinger_control
+10:49:11 PM web.1   |  2026-06-10 22:49:11,371 12223/140615348278656: Listening on channel psynet_experiment
+10:49:11 PM web.1   |  127.0.0.1 - - [10/Jun/2026:22:49:11 +0000] "GET /timeline?unique_id=0bd49ab4-3c43-4039-952d-29dcfbe451cb%3A4b32722a-fb65-442c-9298-4073ddd4616c HTTP/1.1" 200 74435 "-" "python-requests/2.33.1"
+10:49:11 PM web.1   |  127.0.0.1 - - [10/Jun/2026:22:49:11 +0000] "GET /dashboard/login HTTP/1.1" 200 5106 "-" "python-requests/2.33.1"
+10:49:11 PM web.1   |  /home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/flask_login/login_manager.py:488: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+10:49:11 PM web.1   |    expires = datetime.utcnow() + duration
+10:49:11 PM web.1   |  127.0.0.1 - - [10/Jun/2026:22:49:11 +0000] "POST /dashboard/login HTTP/1.1" 302 219 "-" "python-requests/2.33.1"
+10:49:11 PM web.1   |  127.0.0.1 - - [10/Jun/2026:22:49:11 +0000] "GET /dashboard/index HTTP/1.1" 200 12071 "-" "python-requests/2.33.1"
+10:49:11 PM web.1   |  127.0.0.1 - - [10/Jun/2026:22:49:11 +0000] "GET /dashboard/index HTTP/1.1" 200 11941 "-" "python-requests/2.33.1"
+10:49:11 PM web.1   |  127.0.0.1 - - [10/Jun/2026:22:49:11 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+10:49:11 PM web.1   |  127.0.0.1 - - [10/Jun/2026:22:49:11 +0000] "GET /timeline?unique_id=82ecbdd4-b0e8-4566-8748-00feff76d201%3Afacc0a1b-ed9f-4e3a-b845-3bf15460335f HTTP/1.1" 200 74435 "-" "python-requests/2.33.1"
+10:49:11 PM web.1   |  127.0.0.1 - - [10/Jun/2026:22:49:11 +0000] "GET /participant_status/2 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+10:49:11 PM web.1   |  2026-06-10 22:49:11,855 Received a response from participant 1 on page 6e09fe76-23d7-b365-ddcd-a93a734b5f1b.
+10:49:11 PM web.1   |  2026-06-10 22:49:11,871 Evaluating while_loop (barrier:chain_grouper) condition: result = True
+10:49:11 PM web.1   |  2026-06-10 22:49:11,871 Task 'advance_page' took 0.010 s
+10:49:11 PM web.1   |  127.0.0.1 - - [10/Jun/2026:22:49:11 +0000] "POST /response HTTP/1.1" 200 305 "-" "python-requests/2.33.1"
+10:49:11 PM web.1   |  127.0.0.1 - - [10/Jun/2026:22:49:11 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+10:49:12 PM web.1   |  127.0.0.1 - - [10/Jun/2026:22:49:12 +0000] "GET /timeline?unique_id=0bd49ab4-3c43-4039-952d-29dcfbe451cb%3A4b32722a-fb65-442c-9298-4073ddd4616c HTTP/1.1" 200 74318 "-" "python-requests/2.33.1"
+10:49:12 PM web.1   |  2026-06-10 22:49:12,084 Received a response from participant 2 on page 5dd9d93a-2965-5259-1262-0be73f760d7b.
+10:49:12 PM web.1   |  2026-06-10 22:49:12,093 Evaluating while_loop (barrier:chain_grouper) condition: result = True
+10:49:12 PM web.1   |  127.0.0.1 - - [10/Jun/2026:22:49:12 +0000] "POST /response HTTP/1.1" 200 305 "-" "python-requests/2.33.1"
+10:49:12 PM web.1   |  127.0.0.1 - - [10/Jun/2026:22:49:12 +0000] "GET /participant_status/2 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+10:49:12 PM web.1   |  127.0.0.1 - - [10/Jun/2026:22:49:12 +0000] "GET /timeline?unique_id=82ecbdd4-b0e8-4566-8748-00feff76d201%3Afacc0a1b-ed9f-4e3a-b845-3bf15460335f HTTP/1.1" 200 74318 "-" "python-requests/2.33.1"
 ^C
-❯❯ Completed debugging of experiment with id 29c780fc-3e36-4a04-5175-4e1071f00408
+❯❯ Completed debugging of experiment with id ceaa78af-94d8-a2c4-0b2f-8d6d1df6046d
 
 ❯❯ Cleaning up local Heroku process...
 
@@ -156,4 +157,4 @@ riment.experiment.Exp object at 0x7fae91c20cd0> to channel psynet_experiment
 ❯❯ Found 1 remaining PsyNet worker process(es), terminating them now.
 =========================== short test summary info ============================
 FAILED test.py::test_experiment[/workspace/challenges/ultimatum-game/attempts/2026-06-10-22-35/code/ultimatum_game]
-============================== 1 failed in 15.19s ==============================
+============================== 1 failed in 15.72s ==============================
