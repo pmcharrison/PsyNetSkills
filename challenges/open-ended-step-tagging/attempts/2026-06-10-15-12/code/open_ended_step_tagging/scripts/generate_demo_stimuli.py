@@ -3,7 +3,7 @@ import wave
 from pathlib import Path
 
 SAMPLE_RATE = 22050
-DURATION_SECONDS = 3.0
+DURATION_SECONDS = 15.0
 AMPLITUDE = 0.32
 
 STIMULI = {

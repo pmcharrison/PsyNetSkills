@@ -4,6 +4,7 @@ env/
 server.log
 static/assets
 source_code.zip
+dump.rdb
 __pycache__
 *.pyc
 *.DS_Store

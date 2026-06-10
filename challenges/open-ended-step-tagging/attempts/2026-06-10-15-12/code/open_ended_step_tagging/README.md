@@ -3,7 +3,8 @@
 This PsyNet experiment collects open-ended emotion tags for short local audio clips.
 It is prepared for `psynet translate`: participant-facing strings in
 `experiment.py` use PsyNet's `get_translator()` helper, and `config.txt` sets
-`locale = en` with `supported_locales = ["en", "de"]`.
+`locale = en` with `supported_locales = ["en"]`. Add target locales after
+generating the corresponding `.po` files.
 
 ## Run locally
 
@@ -13,12 +14,12 @@ From this directory, with the PsyNet virtual environment active:
    `python scripts/generate_demo_stimuli.py`
 2. Check that the manifest loads:
    `python experiment.py`
-3. Extract or update translations:
+3. Extract or update a target translation:
    `psynet translate de`
 4. Run the functional test:
    `psynet test local`
 
-The committed demo audio is synthetic and intentionally short. Replace it with
+The committed demo audio is synthetic and 15 seconds long. Replace it with real
 15-second study excerpts before running a real study.
 
 ## Replacing stimuli
@@ -31,9 +32,9 @@ Edit `data/stimuli.csv` and put the corresponding `.wav` files under
 - `description`: analyst-facing description;
 - `audio_path`: path relative to this experiment directory.
 
-`TARGET_TRIALS_PER_PARTICIPANT` in `experiment.py` defaults to 15. The demo has
-six clips, so each participant sees all six; with a larger manifest, participants
-see at most 15 clips.
+The demo has six clips, so each participant sees all six. For a larger study
+manifest, set `expected_trials_per_participant` and `max_trials_per_participant`
+to `15` in `experiment.py` to use the requested default subset size.
 
 ## Saved data
 

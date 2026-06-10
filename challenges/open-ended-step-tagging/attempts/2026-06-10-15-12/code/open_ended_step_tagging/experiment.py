@@ -20,7 +20,6 @@ from psynet.utils import get_translator
 _ = get_translator(namespace="experiment")
 
 STIMULUS_MANIFEST = Path("data/stimuli.csv")
-TARGET_TRIALS_PER_PARTICIPANT = 15
 MIN_ITERATIONS_PER_STIMULUS = 5
 MAX_TAG_CHARS = 15
 GENRE_LABELS = {
@@ -41,10 +40,6 @@ GENRE_LABELS = {
 def list_stimuli():
     with STIMULUS_MANIFEST.open(newline="", encoding="utf-8") as handle:
         return list(csv.DictReader(handle))
-
-
-def trials_per_participant():
-    return min(TARGET_TRIALS_PER_PARTICIPANT, len(list_stimuli()))
 
 
 def get_nodes():
@@ -240,7 +235,7 @@ class StepTaggingTrial(StaticTrial):
             AudioPrompt(
                 self.assets["stimulus_audio"],
                 prompt_text,
-                controls={_("Play clip"): _("Play")},
+                controls=["Play"],
             ),
             SurveyJSControl(
                 survey_design(records),
@@ -310,8 +305,8 @@ class Exp(psynet.experiment.Experiment):
             id_="step_tagging",
             trial_class=StepTaggingTrial,
             nodes=get_nodes,
-            expected_trials_per_participant=trials_per_participant(),
-            max_trials_per_participant=trials_per_participant(),
+            expected_trials_per_participant="n_nodes",
+            max_trials_per_participant="n_nodes",
             target_trials_per_node=MIN_ITERATIONS_PER_STIMULUS,
             recruit_mode="n_trials",
             balance_across_nodes=True,

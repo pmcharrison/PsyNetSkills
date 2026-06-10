@@ -4,7 +4,7 @@
   "client": "cursor",
   "model": "GPT-5.5",
   "started_at": "2026-06-10T15:12:49Z",
-  "ended_at": null,
+  "ended_at": "2026-06-10T15:25:58Z",
   "cursor_conversation_id": "bc-5c335ef0-a9be-4194-912b-0fcde9814771",
   "skills_commit": "c07a7be189bf42fc84e723ae1672a88fa3f4c1c1",
   "psynet": {
