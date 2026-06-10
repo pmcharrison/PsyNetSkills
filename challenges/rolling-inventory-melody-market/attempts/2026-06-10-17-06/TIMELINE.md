@@ -8,9 +8,14 @@
 - T+00:34:00 [agent] Added standard PsyNet test harness after local test reported missing test.py.
 - T+00:41:00 [agent] Fixed duplicate PsyNet config definitions reported by psynet test local.
 - T+00:47:00 [agent] Added constraints.txt required by PsyNet dependency pre-checks.
-- T+00:54:00 [agent] Exposed sequencer config as control attributes after Jinja rendering failure.
-- T+01:03:00 [agent] Normalized serialized note values after market preview rendered string notes.
-- T+01:10:00 [agent] Added robust melody extraction for raw and formatted control payloads.
-- T+01:18:00 [agent] Corrected custom-control bot responses to return formatted answers.
-- T+01:32:00 [agent] Added .python-version required by legacy debug launch.
-- T+01:36:00 [agent] Ran psynet test local successfully and collected performance.json with 40 bots and zero bot/request errors.
+- T+00:51:00 [agent] Exposed sequencer config as control attributes after Jinja rendering failure.
+- T+00:54:00 [agent] Normalized serialized note values after market preview rendered string notes.
+- T+00:56:00 [agent] Added robust melody extraction for raw and formatted control payloads.
+- T+00:58:00 [agent] Corrected custom-control bot responses to return formatted answers.
+- T+00:59:00 [agent] Ran psynet test local successfully.
+- T+01:05:00 [agent] Collected performance.json with 40 bots and zero bot/request errors.
+- T+01:06:00 [agent] Added .python-version required by legacy debug launch.
+- T+01:09:00 [agent] Seeded debug experiment with bots to expose later rolling-inventory adoption pages.
+- T+01:12:00 [agent] Recorded seeded adoption flow with audio, verified participant.mp4 streams, exported data.zip, and saved monitor.html.
+- T+01:14:00 [agent] Captured popularity-visible condition screenshot.
+- T+01:15:00 [agent-stop] Implementation and first-pass evidence collection complete.
