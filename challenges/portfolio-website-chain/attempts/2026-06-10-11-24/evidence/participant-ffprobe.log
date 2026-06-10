@@ -4,8 +4,8 @@ Input #0, mov,mp4,m4a,3gp,3g2,mj2, from '/workspace/challenges/portfolio-website
     minor_version   : 512
     compatible_brands: isomiso2avc1mp41
     encoder         : Lavf60.16.100
-  Duration: 00:01:13.60, start: 0.000000, bitrate: 60 kb/s
-  Stream #0:0[0x1](und): Video: h264 (Constrained Baseline) (avc1 / 0x31637661), yuv420p(progressive), 1280x720, 60 kb/s, 15 fps, 15 tbr, 15360 tbn (default)
+  Duration: 00:01:16.67, start: 0.000000, bitrate: 583 kb/s
+  Stream #0:0[0x1](und): Video: h264 (Constrained Baseline) (avc1 / 0x31637661), yuv420p(progressive), 1280x720, 582 kb/s, 15 fps, 15 tbr, 15360 tbn (default)
     Metadata:
       handler_name    : VideoHandler
       vendor_id       : [0][0][0][0]
@@ -44,12 +44,12 @@ avg_frame_rate=15/1
 time_base=1/15360
 start_pts=0
 start_time=0.000000
-duration_ts=1130496
-duration=73.600000
-bit_rate=60299
+duration_ts=1177600
+duration=76.666667
+bit_rate=582982
 max_bit_rate=N/A
 bits_per_raw_sample=8
-nb_frames=1104
+nb_frames=1150
 nb_read_frames=N/A
 nb_read_packets=N/A
 extradata_size=37
