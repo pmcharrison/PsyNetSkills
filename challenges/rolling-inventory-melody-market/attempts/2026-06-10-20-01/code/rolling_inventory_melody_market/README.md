@@ -26,15 +26,10 @@ Reference commit inspected: `617c9893cc78041552f46382e974cf364e3dbecb`.
 - Creation uses WebAudio synthesis for preview and submission-time playback.
 - The original mouse movement, stroke, and drawing-specific event logs are not
   recorded.
-- The audio pre-screen uses an embedded static WAV data URI generated locally
-  with `espeak-ng` saying "five". I checked the local PsyNet demos and the
-  public reference branch for reusable typed "five" screening assets; PsyNet
-  provides reusable audio forced-choice and volume/headphone screening modules,
-  but the public challenge specifically asks for typed `five`/`5` validation,
-  so this attempt uses a small custom page. The WAV is embedded in
-  `experiment.py` rather than committed as `five.wav`, because this repository
-  stores WAV files through Git LFS and missing LFS objects make browser playback
-  fail in ordinary clones.
+- The original typed `five` audio check was removed after adding the stronger
+  listening-only prescreening sequence. This avoids depending on a `five.wav`
+  file, which is fragile in ordinary clones because this repository stores WAV
+  files through Git LFS.
 
 ## Pre-screening choices
 
@@ -54,7 +49,8 @@ experiment's listening-only requirements:
   sequencer melody.
 - The forced-choice custom headphone gate uses hand-rolled JavaScript and remote
   antiphase assets. PsyNet now provides maintained headphone tests, so this
-  attempt uses the framework implementation instead.
+  attempt uses the framework implementation instead. The earlier typed `five`
+  check is no longer needed once this sequence is present.
 
 ## Running locally
 
