@@ -1,76 +1,96 @@
 ---
-score:
+score: 9
+feedback: >-
+  The experiment was translated correctly, which is very impressive. The agent
+  used a sophisticated approach by imitating the translation API calls without
+  actually making them. Local testing with translation credentials could
+  translate the experiment into additional languages. Hebrew exposed
+  right-to-left/logical-Hebrew rendering issues, but this appears to be an
+  underlying PsyNet issue rather than something the agent should necessarily
+  detect or fix. The agent was careful to test that PsyNet logic outside the
+  experiment itself was also translated, leading to a translated debrief page and
+  finish-button workaround. Ideally this workaround should become unnecessary
+  through a PsyNet framework change.
 ---
 
 # Evaluation
 
 ## Summary
 
-Pending human evaluation. The attempt includes a runnable Spanish translation of
-the static demo, Spanish/English participant evidence, translation logs,
-performance output, dashboard snapshot, and exported data.
+Human evaluator score: 9/10. The attempt translated the static demo correctly
+and showed strong care in testing framework-owned participant pages beyond the
+custom trial UI. The remaining concern is not a failure of the attempt: Hebrew
+right-to-left/logical rendering issues appear to require upstream PsyNet support.
 
 ## Strengths
 
-- Pending human evaluator notes.
+- Correct Spanish translation of the experiment and participant flow.
+- Sophisticated translation workflow that prepared translations without
+  committing or relying on local API credentials.
+- Careful testing of PsyNet/Dallinger-owned debrief and completion pages, not
+  only the custom static-trial pages.
 
 ## Weaknesses
 
-- Pending human evaluator notes.
+- Hebrew right-to-left/logical rendering was not resolved when the experiment
+  was translated locally into Hebrew, but the evaluator judged this to be an
+  expected PsyNet-level limitation rather than a clear attempt defect.
+- The local translated debrief/finish workaround may indicate missing upstream
+  PsyNet translation support for framework-owned participant pages.
 
 ## Criteria
 
-Ask the evaluator about each criterion and record the result here.
+Evaluator checklist based on the submitted evidence and feedback.
 
 ### Translation preparation
 
-- [ ] Starts from PsyNet's static demo at `~/PsyNet/demos/experiments/static` and
+- [x] Starts from PsyNet's static demo at `~/PsyNet/demos/experiments/static` and
       preserves the original static-trial task behavior.
-- [ ] Identifies all participant-facing strings in the static demo, including
+- [x] Identifies all participant-facing strings in the static demo, including
       instructions, prompts, labels, response options, feedback, and completion
       text.
-- [ ] Uses PsyNet's translation conventions consistently, including
+- [x] Uses PsyNet's translation conventions consistently, including
       `_ = get_translator()` and direct extractor-visible `_("<text>")` calls
       where appropriate, or contextual `_p(...)` markers where context is needed.
-- [ ] Does not use f-strings for translatable participant-facing text. When such
+- [x] Does not use f-strings for translatable participant-facing text. When such
       text needs variables, it uses literal translation strings with uppercase
       `.format(...)` placeholders.
-- [ ] Avoids string concatenation or renamed translation wrappers for
+- [x] Avoids string concatenation or renamed translation wrappers for
       translatable participant-facing text.
-- [ ] Updates `locale` and `supported_locales` in the experiment configuration
+- [x] Updates `locale` and `supported_locales` in the experiment configuration
       so that Spanish (`es`) is supported and the primary run setting uses
       Spanish.
 
 ### Spanish translation
 
-- [ ] Runs `psynet translate` for Spanish from the experiment directory and
+- [x] Runs `psynet translate` for Spanish from the experiment directory and
       commits the generated `locales/es/LC_MESSAGES/experiment.po` file and
       related translation template/output files.
-- [ ] Provides evidence that the participant-facing experiment runs in Spanish
+- [x] Provides evidence that the participant-facing experiment runs in Spanish
       after the Spanish locale setting is applied.
-- [ ] Translates the complete participant interface, including instructions,
+- [x] Translates the complete participant interface, including instructions,
       prompts, response options, buttons or labels controlled by the experiment,
       feedback, and completion text.
-- [ ] Does not include real or custom translation-service credentials in code,
+- [x] Does not include real or custom translation-service credentials in code,
       configuration, logs, or evidence, including API keys, Google Translate JSON
       files, or `.dallingerconfig` secrets.
 
 ### English regression check
 
-- [ ] Demonstrates that changing the locale back to English restores the
+- [x] Demonstrates that changing the locale back to English restores the
       original English participant-facing interface.
-- [ ] Shows that translation preparation did not alter trial order, stimuli,
+- [x] Shows that translation preparation did not alter trial order, stimuli,
       response collection, scoring, or saved-data semantics.
-- [ ] Includes enough comparison evidence to verify that the English interface is
+- [x] Includes enough comparison evidence to verify that the English interface is
       unchanged except for non-visible translation plumbing.
 
 ### Evidence
 
-- [ ] Includes command output or logs showing successful translation extraction
+- [x] Includes command output or logs showing successful translation extraction
       and Spanish translation generation.
-- [ ] Includes participant-facing evidence for the Spanish run and the English
+- [x] Includes participant-facing evidence for the Spanish run and the English
       regression run.
-- [ ] Records any environment limitation honestly if translation-service access
+- [x] Records any environment limitation honestly if translation-service access
       is unavailable, while still showing that extraction and locale
       configuration were prepared correctly.
 
@@ -84,5 +104,6 @@ Ask the evaluator about each criterion and record the result here.
   final recruiter exit page. The attempt addresses this with a local translated
   debrief-button patch and `templates/exit_recruiter.html` override, then
   records final Spanish and English regression screenshots.
-- Score and feedback should come from a human evaluator, captured
-  conversationally when working with Cursor Cloud Agents.
+- The evaluator independently confirmed that local translation credentials could
+  translate the experiment into additional languages. Hebrew exposed
+  right-to-left/logical rendering issues that likely belong in PsyNet itself.

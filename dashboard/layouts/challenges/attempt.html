@@ -113,6 +113,15 @@
         <dd>{{ $attempt.implementation_time_display }}</dd>
       </div>
       <div>
+        <dt>Cursor cost</dt>
+        <dd>
+          {{ $attempt.run_cost_display }}
+          {{ if eq $attempt.run_cost_attribution_status "matched_cloud_agent_id" }}
+            <span class="metadata-note">Matched by Cloud Agent ID</span>
+          {{ end }}
+        </dd>
+      </div>
+      <div>
         <dt>Attempt path</dt>
         <dd><code>{{ $attempt.path }}</code></dd>
       </div>

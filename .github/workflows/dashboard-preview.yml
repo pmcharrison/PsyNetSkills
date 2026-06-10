@@ -10,8 +10,8 @@ permissions:
   pull-requests: write
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.head.repo.full_name }}-${{ github.event.pull_request.head.ref }}
-  cancel-in-progress: true
+  group: dashboard-gh-pages-publication
+  cancel-in-progress: false
 
 jobs:
   deploy-preview:
@@ -42,13 +42,19 @@ jobs:
 
           preview_path="pr-preview/pr-${{ github.event.pull_request.number }}"
           preview_url="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/${preview_path}/"
+          artifact_path="pr-artifacts/pr-${{ github.event.pull_request.number }}"
+          artifact_url="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/${artifact_path}/artifacts/challenges"
 
           echo "path=${preview_path}" >> "${GITHUB_OUTPUT}"
           echo "url=${preview_url}" >> "${GITHUB_OUTPUT}"
+          echo "artifact_path=${artifact_path}" >> "${GITHUB_OUTPUT}"
+          echo "artifact_url=${artifact_url}" >> "${GITHUB_OUTPUT}"
           echo "Dashboard preview: ${preview_url}" >> "${GITHUB_STEP_SUMMARY}"
       - run: uv sync --group dev
       - run: uv run psynetsk-validate
       - run: uv run psynetsk-export-dashboard-data
+        env:
+          PSYNETSK_ARTIFACT_URL_PREFIX: ${{ steps.preview.outputs.artifact_url }}
       - run: >
           hugo
           --source dashboard
@@ -59,6 +65,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
           PAGES_BRANCH: gh-pages
+          ARTIFACT_PATH: ${{ steps.preview.outputs.artifact_path }}
           PREVIEW_PATH: ${{ steps.preview.outputs.path }}
         run: |
           set -euo pipefail
@@ -78,17 +85,25 @@ jobs:
           git -C "${pages_dir}" config user.name "github-actions[bot]"
           git -C "${pages_dir}" config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          python - "${pages_dir}/${PREVIEW_PATH}" <<'PY'
+          python - "${pages_dir}/${PREVIEW_PATH}" "${pages_dir}/${ARTIFACT_PATH}" <<'PY'
           import shutil
           import sys
           from pathlib import Path
 
           target = Path(sys.argv[1])
+          artifact_target = Path(sys.argv[2])
           if target.exists():
               shutil.rmtree(target)
           target.mkdir(parents=True)
+          if artifact_target.exists():
+              shutil.rmtree(artifact_target)
+          artifact_target.mkdir(parents=True)
           PY
 
+          if [ -d public/artifacts ]; then
+            cp -a public/artifacts "${pages_dir}/${ARTIFACT_PATH}/artifacts"
+            rm -rf public/artifacts
+          fi
           cp -a public/. "${pages_dir}/${PREVIEW_PATH}/"
           touch "${pages_dir}/.nojekyll"
 
@@ -168,9 +183,10 @@ jobs:
       - name: Finalize preview on gh-pages
         env:
           GITHUB_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ github.token }}
           MERGED: ${{ github.event.pull_request.merged }}
           PAGES_BRANCH: gh-pages
-          PREVIEW_PATH: ${{ steps.preview.outputs.path }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
           PRODUCTION_URL: ${{ steps.preview.outputs.production_url }}
         run: |
           set -euo pipefail
@@ -190,33 +206,29 @@ jobs:
           git -C "${pages_dir}" config user.name "github-actions[bot]"
           git -C "${pages_dir}" config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          if [ "${MERGED}" = "true" ]; then
-            uv run python -m psynetsk_tools.pr_preview_redirect "${pages_dir}/${PREVIEW_PATH}" "${PRODUCTION_URL}"
-          else
-            python - "${pages_dir}/${PREVIEW_PATH}" <<'PY'
-          import shutil
+          states_json="${RUNNER_TEMP}/dashboard-preview-pr-states.json"
+          gh pr list --state all --limit 1000 --json number,state > "${states_json}"
+          python - "${states_json}" "${PR_NUMBER}" "${MERGED}" <<'PY'
+          import json
           import sys
-          from pathlib import Path
 
-          target = Path(sys.argv[1])
-          if target.exists():
-              shutil.rmtree(target)
+          path = sys.argv[1]
+          pr_number = int(sys.argv[2])
+          state = "MERGED" if sys.argv[3] == "true" else "CLOSED"
+          with open(path, encoding="utf-8") as f:
+              states = json.load(f)
+          if not any(int(item["number"]) == pr_number for item in states):
+              states.append({"number": pr_number, "state": state})
+          with open(path, "w", encoding="utf-8") as f:
+              json.dump(states, f)
           PY
-          fi
+          uv run python -m psynetsk_tools.pr_preview_cleanup "${pages_dir}/pr-preview" "${PRODUCTION_URL}" "${states_json}" --artifact-root "${pages_dir}/pr-artifacts"
 
           git -C "${pages_dir}" add -A
           if git -C "${pages_dir}" diff --cached --quiet; then
-            if [ "${MERGED}" = "true" ]; then
-              echo "Dashboard preview redirect is already up to date."
-            else
-              echo "No dashboard preview exists for this PR."
-            fi
+            echo "Dashboard preview cleanup is already up to date."
           else
-            if [ "${MERGED}" = "true" ]; then
-              git -C "${pages_dir}" commit -m "Redirect dashboard preview for PR #${{ github.event.pull_request.number }}"
-            else
-              git -C "${pages_dir}" commit -m "Remove dashboard preview for PR #${{ github.event.pull_request.number }}"
-            fi
+            git -C "${pages_dir}" commit -m "Clean dashboard previews after PR #${{ github.event.pull_request.number }}"
             .github/scripts/push-pages-branch.sh "${pages_dir}" "${PAGES_BRANCH}"
           fi
       - name: Comment preview cleanup
