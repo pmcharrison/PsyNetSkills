@@ -25,6 +25,7 @@ from experiment import (
     check_model_available,
     normalize_website_html,
     openrouter_config,
+    validate_instruction,
 )
 
 pytest_plugins = ["pytest_dallinger", "pytest_psynet"]
@@ -82,3 +83,8 @@ def test_build_messages_uses_selected_context():
     assert messages[0]["role"] == "system"
     assert "Improve contrast." in messages[1]["content"]
     assert "selected website" in messages[1]["content"]
+
+
+def test_blank_instruction_is_rejected():
+    assert validate_instruction("") == "Please write at least one specific sentence for the AI."
+    assert validate_instruction("Improve the contact section.") is None

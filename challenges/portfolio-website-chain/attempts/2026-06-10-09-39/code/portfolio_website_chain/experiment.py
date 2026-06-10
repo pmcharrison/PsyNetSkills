@@ -15,7 +15,7 @@ from markupsafe import Markup
 from psynet.bot import Bot
 from psynet.modular_page import ModularPage, RadioButtonControl, TextControl
 from psynet.page import InfoPage
-from psynet.timeline import FailedValidation, PageMaker, Timeline, join
+from psynet.timeline import PageMaker, Timeline, join
 from psynet.trial.imitation_chain import (
     ImitationChainNetwork,
     ImitationChainNode,
@@ -378,6 +378,12 @@ def instruction_for_bot(position: int) -> str:
     return "Keep the clearer project outcomes and improve the contact section."
 
 
+def validate_instruction(answer, **kwargs):
+    if not answer or len(answer.strip()) < 10:
+        return "Please write at least one specific sentence for the AI."
+    return None
+
+
 class InstructionPage(ModularPage):
     def __init__(self, label: str, prompt: Markup, time_estimate: float, bot_response):
         super().__init__(
@@ -390,17 +396,11 @@ class InstructionPage(ModularPage):
                 bot_response=bot_response,
             ),
             time_estimate=time_estimate,
+            validate=validate_instruction,
         )
 
     def format_answer(self, raw_answer, **kwargs):
         return (raw_answer or "").strip()
-
-    def validate(self, response, **kwargs):
-        if not response.answer or len(response.answer.strip()) < 10:
-            return FailedValidation(
-                "Please write at least one specific sentence for the AI."
-            )
-        return None
 
 
 class PortfolioNetwork(ImitationChainNetwork):
