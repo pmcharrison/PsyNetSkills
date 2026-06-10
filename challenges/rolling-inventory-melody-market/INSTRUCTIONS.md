@@ -12,15 +12,23 @@ domain instead of binary grid drawings.
 
 The new experiment should preserve the original's participant flow, network
 logic, rolling inventory behaviour, condition structure, timing, validation,
-and data-recording conventions. Only the adoption and creation interfaces, the
-market previews, and the participant-facing wording should change to suit music
-creation.
+and core data-recording conventions. Only the adoption and creation interfaces,
+the market previews, participant-facing wording, and audio-specific screening
+should change to suit music creation. Do not carry over the original
+experiment's mouse movement or stroke event tracking features.
 
 ## Procedure
 
 Participants should complete informed consent and brief instructions explaining
-that they will compose short melodies that compete on a shared market. Each
-round should consist of two steps:
+that they will compose short melodies that compete on a shared market. Before
+participants enter the main task, include a short audio pre-screening step that
+plays a static sound clip containing a human voice saying "five". Participants
+must prove that they can hear the clip by typing what was said. Accept the
+answer if it is `five` or `5`, ignoring letter case and leading or trailing
+whitespace. Participants who cannot pass the audio check should not continue
+into the market task.
+
+Each round should consist of two steps:
 
 1. **Adoption step.** When the market already contains items, participants
    browse the current inventory and select one melody to build on. When the
@@ -54,7 +62,8 @@ sketch:
 
 - Three pitch rows labelled **Do**, **Re**, and **Mi**.
 - Nine time slots.
-- At most one active pitch per time slot.
+- Overlapping notes are allowed: more than one pitch row may be active in the
+  same time slot.
 - Distinct colours for each pitch row.
 - A **Play melody** button that audibly previews the current sequence.
 
@@ -78,9 +87,11 @@ allowed number of note changes.
 ### Instructions and debrief
 
 Rewrite the instruction pages, recruitment text, and post-task survey so they
-describe melodies rather than drawings. Preserve the original two-condition
-design and the overall structure of the debrief questions, adapting wording to
-music creation and adoption strategies.
+describe melodies rather than drawings. Any screenshots of the original game
+that appear in the instructions should also be replaced or adapted so they show
+the melody market and step-sequencer interface rather than the drawing task.
+Preserve the original two-condition design and the overall structure of the
+debrief questions, adapting wording to music creation and adoption strategies.
 
 ## Implementation requirements
 
@@ -92,8 +103,10 @@ music creation and adoption strategies.
   impossible. If a parameter must change, document the reason in the attempt
   README.
 - Record enough metadata to reconstruct each submitted melody, the selected
-  adoption target, inventory updates, popularity counts, mouse or interaction
-  events, and condition assignment.
+  adoption target, inventory updates, popularity counts, audio pre-screening
+  outcome, and condition assignment.
+- Do not implement or require the original experiment's mouse movement tracking,
+  stroke event tracking, or drawing-specific interaction logs.
 - Include bot tests that can complete adoption and creation rounds locally.
 - Run successfully with `psynet test local` using only local PsyNet defaults.
   Do not require real Prolific credentials, AWS secrets, or other production
@@ -103,6 +116,7 @@ music creation and adoption strategies.
 
 Submitted evidence should demonstrate:
 
+- Participants encounter an audio pre-screening step before the main market task.
 - A participant can preview market melodies with audio playback.
 - A participant can compose or edit a melody in the step-sequencer interface
   and hear it with **Play melody**.

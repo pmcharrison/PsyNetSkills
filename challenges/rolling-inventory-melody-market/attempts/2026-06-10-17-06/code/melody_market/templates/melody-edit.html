@@ -17,8 +17,8 @@
     const melodyLength = Number({{ config.melody_length }});
     const rowPitches = [2, 1, 0];
 
-    let melody = prefillMelody.slice();
-    const initialMelody = prefillMelody.slice();
+    let melody = prefillMelody.map((slot) => Array.isArray(slot) ? slot.slice() : []);
+    const initialMelody = melody.map((slot) => slot.slice());
     let audioContext = null;
 
     function frequencyForPitch(pitch) {
@@ -28,13 +28,15 @@
     function diffCount(a, b) {
         let count = 0;
         for (let i = 0; i < melodyLength; i++) {
-            if (a[i] !== b[i]) count += 1;
+            for (let pitch = 0; pitch < pitchLabels.length; pitch++) {
+                if (a[i].includes(pitch) !== b[i].includes(pitch)) count += 1;
+            }
         }
         return count;
     }
 
     function responseData() {
-        return { edit: melody.slice() };
+        return { edit: melody.map((slot) => slot.slice()) };
     }
 
     function render() {
@@ -67,7 +69,7 @@
                 cell.dataset.slot = String(slot);
                 cell.style.setProperty("--pitch-color", pitchColors[pitch]);
                 cell.setAttribute("aria-label", pitchLabels[pitch] + " slot " + (slot + 1));
-                if (melody[slot] === pitch) cell.classList.add("active");
+                if (melody[slot].includes(pitch)) cell.classList.add("active");
                 cell.addEventListener("click", () => toggleNote(slot, pitch));
                 sequencer.appendChild(cell);
             }
@@ -77,10 +79,13 @@
     }
 
     function toggleNote(slot, pitch) {
-        const previous = melody[slot];
-        const next = previous === pitch ? null : pitch;
-        const candidate = melody.slice();
-        candidate[slot] = next;
+        const candidate = melody.map((notes) => notes.slice());
+        if (candidate[slot].includes(pitch)) {
+            candidate[slot] = candidate[slot].filter((note) => note !== pitch);
+        } else {
+            candidate[slot].push(pitch);
+            candidate[slot].sort();
+        }
         if (diffCount(candidate, initialMelody) > maxEdits) {
             const cell = document.querySelector(`.note-cell[data-slot="${slot}"][data-pitch="${pitch}"]`);
             if (cell) {
@@ -102,18 +107,19 @@
         audioContext = audioContext || new (window.AudioContext || window.webkitAudioContext)();
         const start = audioContext.currentTime + 0.04;
         const step = 0.24;
-        melody.forEach((pitch, slot) => {
-            if (pitch === null || pitch === undefined) return;
-            const oscillator = audioContext.createOscillator();
-            const gain = audioContext.createGain();
-            oscillator.type = "sine";
-            oscillator.frequency.value = frequencyForPitch(pitch);
-            gain.gain.setValueAtTime(0.0001, start + slot * step);
-            gain.gain.exponentialRampToValueAtTime(0.18, start + slot * step + 0.02);
-            gain.gain.exponentialRampToValueAtTime(0.0001, start + (slot + 0.82) * step);
-            oscillator.connect(gain).connect(audioContext.destination);
-            oscillator.start(start + slot * step);
-            oscillator.stop(start + (slot + 0.9) * step);
+        melody.forEach((notes, slot) => {
+            notes.forEach((pitch) => {
+                const oscillator = audioContext.createOscillator();
+                const gain = audioContext.createGain();
+                oscillator.type = "sine";
+                oscillator.frequency.value = frequencyForPitch(pitch);
+                gain.gain.setValueAtTime(0.0001, start + slot * step);
+                gain.gain.exponentialRampToValueAtTime(0.12, start + slot * step + 0.02);
+                gain.gain.exponentialRampToValueAtTime(0.0001, start + (slot + 0.82) * step);
+                oscillator.connect(gain).connect(audioContext.destination);
+                oscillator.start(start + slot * step);
+                oscillator.stop(start + (slot + 0.9) * step);
+            });
         });
     }
 
@@ -121,7 +127,7 @@
         render();
         document.getElementById("play-melody").addEventListener("click", playMelody);
         document.getElementById("reset-melody").addEventListener("click", function () {
-            melody = initialMelody.slice();
+            melody = initialMelody.map((slot) => slot.slice());
             render();
         });
 

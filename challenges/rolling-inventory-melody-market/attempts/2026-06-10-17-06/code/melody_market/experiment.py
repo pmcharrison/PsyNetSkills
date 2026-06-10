@@ -44,11 +44,11 @@ DURATION_ESTIMATE = 11 * 60
 PAYMENT = 2.25
 
 
-def empty_melody() -> list[int | None]:
-    return [None for _ in range(MELODY_LENGTH)]
+def empty_melody() -> list[list[int]]:
+    return [[] for _ in range(MELODY_LENGTH)]
 
 
-def validate_melody_shape(melody: Any) -> list[int | None] | None:
+def validate_melody_shape(melody: Any) -> list[list[int]] | None:
     if isinstance(melody, dict):
         melody = melody.get("edit")
 
@@ -58,38 +58,51 @@ def validate_melody_shape(melody: Any) -> list[int | None] | None:
     validated = []
     for value in melody:
         if value in (None, "", -1, "None", "null"):
-            validated.append(None)
-        elif value in (0, 1, 2, "0", "1", "2"):
-            validated.append(int(value))
-        else:
-            return None
+            validated.append([])
+            continue
+
+        raw_notes = value if isinstance(value, list) else [value]
+        notes = set()
+        for note in raw_notes:
+            if note in (0, 1, 2, "0", "1", "2"):
+                notes.add(int(note))
+            else:
+                return None
+        validated.append(sorted(notes))
     return validated
 
 
-def melody_edit_distance(a: list[int | None], b: list[int | None]) -> int:
-    return sum(1 for x, y in zip(a, b) if x != y)
+def melody_edit_distance(a: list[list[int]], b: list[list[int]]) -> int:
+    return sum(
+        1
+        for slot_a, slot_b in zip(a, b)
+        for pitch in range(len(PITCH_LABELS))
+        if (pitch in slot_a) != (pitch in slot_b)
+    )
 
 
-def melody_is_empty(melody: list[int | None]) -> bool:
-    return all(note is None for note in melody)
+def melody_is_empty(melody: list[list[int]]) -> bool:
+    return all(len(slot) == 0 for slot in melody)
 
 
-def melody_from_trial_answer(answer: dict[str, Any]) -> list[int | None] | None:
+def melody_from_trial_answer(answer: dict[str, Any]) -> list[list[int]] | None:
     melody_answers = {key: answer[key] for key in answer if "edit" in key}
     if not melody_answers:
         return None
     return validate_melody_shape(melody_answers[sorted(melody_answers.keys())[-1]])
 
 
-def mutate_melody(melody: list[int | None]) -> list[int | None]:
-    edited = list(melody)
+def mutate_melody(melody: list[list[int]]) -> list[list[int]]:
+    edited = [list(slot) for slot in melody]
     slot = random.randrange(MELODY_LENGTH)
-    current = edited[slot]
-    choices = [None, 0, 1, 2]
-    choices.remove(current)
-    edited[slot] = random.choice(choices)
+    pitch = random.choice([0, 1, 2])
+    if pitch in edited[slot]:
+        edited[slot].remove(pitch)
+    else:
+        edited[slot].append(pitch)
+        edited[slot].sort()
     if melody_is_empty(edited):
-        edited[slot] = random.choice([0, 1, 2])
+        edited[slot] = [pitch]
     return edited
 
 
@@ -191,7 +204,7 @@ class MelodyEditControl(Control):
         if melody_is_empty(self.prefill_melody):
             melody = empty_melody()
             for slot in random.sample(range(MELODY_LENGTH), 4):
-                melody[slot] = random.choice([0, 1, 2])
+                melody[slot] = [random.choice([0, 1, 2])]
             return melody
         return mutate_melody(self.prefill_melody)
 
@@ -403,7 +416,7 @@ class MelodyCreateTrial(ImitationChainTrial):
         if empty:
             prompt = Markup(
                 "<h3>Compose a melody</h3>"
-                f"<p>Click the sequencer cells to add up to {MELODY_LENGTH} notes. "
+                f"<p>Click the sequencer cells to add up to {MELODY_LENGTH} notes or overlapping note layers. "
                 "Try to make a melody that future participants will want to build on.</p>"
             )
             max_edits = NUM_EDITS_SEED
@@ -512,7 +525,7 @@ def instructions(popularity_information):
             Markup(
                 "<h4>Creation step</h4>"
                 "<p>The melody editor has three pitch rows: Mi, Re, and Do. "
-                "Each of the nine time slots can contain at most one note.</p>"
+                "Each of the nine time slots can contain one note, several overlapping notes, or a rest.</p>"
                 "<p>Use <strong>Play melody</strong> to hear your current sequence before submitting. "
                 "Your submitted melody enters the market, and the oldest market item drops out once the inventory is full.</p>"
             ),

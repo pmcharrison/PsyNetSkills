@@ -20,17 +20,20 @@ The original drawing task used a 16 by 16 binary grid with 24 edits for adopted
 items and 32 edits for seed creations. The melody editor has only nine time
 slots, so the edit limits are scaled to the domain:
 
-- from scratch: up to nine note changes, allowing any slot to be filled;
+- from scratch: up to nine note changes, allowing a participant to fill slots
+  or add overlapping notes;
 - adopted melody: up to three note changes, preserving a stricter edit regime.
 
-Melodies are stored as a nine-item list. `null` is a rest, `0` is Do, `1` is Re,
-and `2` is Mi.
+Melodies are stored as a nine-item list. Each time slot stores a list of active
+pitches; an empty list is a rest, `0` is Do, `1` is Re, and `2` is Mi. Multiple
+pitches in the same slot are overlapping notes.
 
-Participants complete a WebAudio pre-screening page after consent and before
-the main task. The page speaks the number "five" and asks participants to type
-what they heard. Incorrect responses route to PsyNet's unsuccessful end branch
-with `performance_check` and `audio_pre_screening` failure tags, matching PsyNet
-prescreen patterns used by recruiter/payment integrations.
+Participants complete an audio pre-screening page after consent and before the
+main task. The page plays a committed static voice clip saying "five" and asks
+participants to type what they heard. Incorrect responses route to PsyNet's
+unsuccessful end branch with `performance_check` and `audio_pre_screening`
+failure tags, matching PsyNet prescreen patterns used by recruiter/payment
+integrations.
 
 The reference drawing task's mouse movement tracking, stroke event tracking,
 and drawing-specific interaction logs are intentionally omitted.

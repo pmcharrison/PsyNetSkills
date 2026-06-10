@@ -10,9 +10,11 @@
             <div class="melody-title">Melody {{ proposal.label }}</div>
             <button type="button" class="play-preview">Play melody</button>
             <div class="wave-preview" aria-hidden="true">
-                {% for note in proposal.melody %}
-                <span class="wave-bar {{ 'rest' if note is none else '' }}"
-                      style="height: {{ 12 if note is none else 18 + (note | int) * 9 }}px"></span>
+                {% for notes in proposal.melody %}
+                {% set slot_notes = notes if notes is sequence and notes is not string else [] %}
+                {% set max_note = (slot_notes | max) if slot_notes else none %}
+                <span class="wave-bar {{ 'rest' if not slot_notes else '' }}"
+                      style="height: {{ 4 if not slot_notes else 18 + (max_note | int) * 9 + ((slot_notes | length) - 1) * 5 }}px"></span>
                 {% endfor %}
             </div>
 
@@ -58,18 +60,20 @@
         audioContext = audioContext || new (window.AudioContext || window.webkitAudioContext)();
         const start = audioContext.currentTime + 0.04;
         const step = 0.24;
-        melody.forEach((pitch, slot) => {
-            if (pitch === null || pitch === undefined) return;
-            const oscillator = audioContext.createOscillator();
-            const gain = audioContext.createGain();
-            oscillator.type = "sine";
-            oscillator.frequency.value = frequencyForPitch(pitch);
-            gain.gain.setValueAtTime(0.0001, start + slot * step);
-            gain.gain.exponentialRampToValueAtTime(0.18, start + slot * step + 0.02);
-            gain.gain.exponentialRampToValueAtTime(0.0001, start + (slot + 0.82) * step);
-            oscillator.connect(gain).connect(audioContext.destination);
-            oscillator.start(start + slot * step);
-            oscillator.stop(start + (slot + 0.9) * step);
+        melody.forEach((notes, slot) => {
+            if (!Array.isArray(notes)) return;
+            notes.forEach((pitch) => {
+                const oscillator = audioContext.createOscillator();
+                const gain = audioContext.createGain();
+                oscillator.type = "sine";
+                oscillator.frequency.value = frequencyForPitch(pitch);
+                gain.gain.setValueAtTime(0.0001, start + slot * step);
+                gain.gain.exponentialRampToValueAtTime(0.12, start + slot * step + 0.02);
+                gain.gain.exponentialRampToValueAtTime(0.0001, start + (slot + 0.82) * step);
+                oscillator.connect(gain).connect(audioContext.destination);
+                oscillator.start(start + slot * step);
+                oscillator.stop(start + (slot + 0.9) * step);
+            });
         });
     }
 

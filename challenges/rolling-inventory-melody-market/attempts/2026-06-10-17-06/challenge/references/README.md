@@ -27,7 +27,8 @@ The music creation interface should resemble the attached step-sequencer mock-up
 
 - Three pitch rows labelled **Mi**, **Re**, and **Do** (top to bottom).
 - Nine time slots labelled **1** through **9**.
-- One active note per time slot at most.
+- Overlapping notes are allowed; multiple pitch rows may be active in the same
+  time slot.
 - Colour coding: Mi = red, Re = green, Do = blue.
 - A **Play melody** control that previews the current sequence before submission.
 
@@ -38,4 +39,6 @@ playback. Showing the underlying note grid is not required. A waveform display
 is optional but encouraged if it can be implemented cleanly.
 
 Before the main task begins, participants should complete a short audio
-pre-screening step that confirms they can play and hear experiment audio.
+pre-screening step using a static voice clip saying "five". Participants should
+continue only after typing `five` or `5`, ignoring letter case and surrounding
+whitespace.

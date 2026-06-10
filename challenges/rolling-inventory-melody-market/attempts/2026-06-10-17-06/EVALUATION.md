@@ -40,8 +40,8 @@ met.
 ### Music-domain interfaces
 
 - [ ] **Must-have:** The creation interface is a 3x9 step sequencer with Do,
-  Re, and Mi rows, at most one active pitch per time slot, distinct row colours,
-  and clickable note toggling.
+  Re, and Mi rows, distinct row colours, clickable note toggling, and support
+  for overlapping notes within the same time slot.
 - [ ] **Must-have:** The creation page includes a working **Play melody**
   control that audibly previews the current sequence before submission.
 - [ ] **Must-have:** Market previews let participants listen to each melody via
@@ -49,8 +49,9 @@ met.
 - [ ] **Must-have:** The market preview does not expose the underlying note
   grid.
 - [ ] **Must-have:** Participants complete an audio pre-screening step before
-  the main task, and participants who cannot confirm audible playback do not
-  continue into the market task.
+  the main task by hearing a static voice clip saying "five" and typing the
+  answer; `five` and `5` are accepted irrespective of letter case, and
+  participants who cannot pass do not continue into the market task.
 - [ ] **Nice-to-have:** Market previews include a waveform or similarly clear
   audio visualization.
 
@@ -66,9 +67,9 @@ met.
 - [ ] **Must-have:** The implementation does not include the reference
   experiment's mouse movement tracking, stroke event tracking, or drawing-specific
   interaction logs.
-- [ ] **Must-have:** Instruction pages, recruitment text, and the post-task
-  survey are rewritten for melodies rather than drawings while preserving the
-  reference debrief structure.
+- [ ] **Must-have:** Instruction pages, recruitment text, post-task survey, and
+  any instruction screenshots are adapted for melodies rather than drawings
+  while preserving the reference debrief structure.
 - [ ] **Must-have:** `psynet test local` passes with local defaults and no real
   production credentials.
 
