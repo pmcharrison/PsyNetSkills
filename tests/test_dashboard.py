@@ -71,10 +71,10 @@ def test_workflow_context_reports_production_build() -> None:
     context = workflow_context(
         {
             "GITHUB_ACTIONS": "true",
+            "GITHUB_EVENT_NAME": "push",
             "GITHUB_REPOSITORY": "pmcharrison/PsyNetSkills",
             "GITHUB_REF_NAME": "main",
             "GITHUB_SHA": "abc123",
-            "GITHUB_WORKFLOW": "Deploy dashboard to GitHub Pages",
         },
     )
 
@@ -108,11 +108,11 @@ def test_workflow_context_reports_pr_preview_head(tmp_path: Path) -> None:
     context = workflow_context(
         {
             "GITHUB_ACTIONS": "true",
+            "GITHUB_EVENT_NAME": "pull_request_target",
             "GITHUB_EVENT_PATH": str(event_path),
             "GITHUB_REPOSITORY": "pmcharrison/PsyNetSkills",
             "GITHUB_REF_NAME": "main",
             "GITHUB_SHA": "base123",
-            "GITHUB_WORKFLOW": "Deploy dashboard PR preview",
         },
     )
 

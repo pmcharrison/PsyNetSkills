@@ -89,6 +89,7 @@ def workflow_context(env: Mapping[str, str] | None = None) -> dict[str, object]:
     context_env = os.environ if env is None else env
     repository = context_env.get("GITHUB_REPOSITORY", WORKFLOW_CONTEXT_REPOSITORY)
     owner, _, repo = repository.partition("/")
+    event_name = context_env.get("GITHUB_EVENT_NAME", "")
     workflow_file = WORKFLOW_CONTEXT_FILES_BY_NAME.get(
         context_env.get("GITHUB_WORKFLOW", ""),
         "",
@@ -104,6 +105,12 @@ def workflow_context(env: Mapping[str, str] | None = None) -> dict[str, object]:
     else:
         branch = context_env.get("GITHUB_REF_NAME", "")
         head_sha = context_env.get("GITHUB_SHA", "")
+
+    if not workflow_file:
+        if event_name == "pull_request_target":
+            workflow_file = "dashboard-preview.yml"
+        elif event_name in {"push", "workflow_dispatch"} and branch == "main":
+            workflow_file = "pages.yml"
 
     mode = "local"
     if workflow_file == "dashboard-preview.yml":
