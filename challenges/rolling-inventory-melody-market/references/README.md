@@ -17,6 +17,10 @@ Implementers with access to the workshop GitLab token should read that branch
 directly and preserve all non-domain experiment logic unless the challenge
 instructions explicitly call for a music-specific change.
 
+The melody version should intentionally omit the drawing experiment's mouse
+movement tracking, stroke event tracking, and other drawing-specific interaction
+logs.
+
 ## Creation interface sketch
 
 The music creation interface should resemble the attached step-sequencer mock-up:
@@ -32,3 +36,6 @@ The music creation interface should resemble the attached step-sequencer mock-up
 During adoption, market items should be previewed primarily through audio
 playback. Showing the underlying note grid is not required. A waveform display
 is optional but encouraged if it can be implemented cleanly.
+
+Before the main task begins, participants should complete a short audio
+pre-screening step that confirms they can play and hear experiment audio.
