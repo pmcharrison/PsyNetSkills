@@ -63,8 +63,12 @@ data.zip
 analyses/
 ```
 
-`participant.mp4` records the participant experience. `performance.json` stores
-the output of `psynet performance-test` or an equivalent performance check.
+`participant.mp4` records the participant experience. Keep it as a concise
+review artifact: it must be no longer than 3 minutes and no larger than
+1280x720. Prefer 15 fps, H.264 with CRF 30-34, AAC audio when needed, and
+`+faststart` metadata for streaming. Trim or re-encode recordings before
+committing if they exceed these limits. `performance.json` stores the output of
+`psynet performance-test` or an equivalent performance check.
 
 For challenge attempts, treat `psynet test local` and `psynet performance-test
 local` as separate checks. Functional tests can stay fast; performance evidence
@@ -87,6 +91,12 @@ complete performance evidence.
 `monitor.html` snapshots the PsyNet dashboard monitor view. `data.zip` contains
 exported experiment data. `analyses/` contains challenge-specific scientific
 checks, typically figures or concise reports.
+
+The dashboard publishes `evidence/data.zip`, but it does not publish other ZIP
+files from attempt `evidence/`, generated `code/`, or attempt `challenge/`
+snapshot directories. Those ZIPs remain listed with size metadata so reviewers
+know they exist, but the static dashboard omits the bytes to avoid duplicating
+large implementation bundles and top-level challenge reference assets.
 
 Command logs may also be included in `evidence/` when they help reviewers
 understand what ran and what failed. Keep logs concise when practical, and do

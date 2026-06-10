@@ -10,7 +10,9 @@ Provide these artifacts or document the blocker in `EVALUATION.md`:
 
 - `code/` contains the runnable, self-contained experiment.
 - `evidence/participant.mp4` records the participant flow. Use the
-  `record-participant-video` skill to create and verify it.
+  `record-participant-video` skill to create and verify it. Do not commit or
+  publish participant videos longer than 3 minutes or larger than 1280x720; trim
+  and re-encode them before adding them to the attempt.
 - `evidence/performance.json` contains `psynet performance-test` JSON output, or
   `evidence/performance-test.log` plus an `EVALUATION.md` blocker explains why
   the performance test could not run. Use

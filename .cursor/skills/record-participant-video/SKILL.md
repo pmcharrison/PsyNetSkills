@@ -20,6 +20,16 @@ Create an MP4 recording of the participant-facing PsyNet flow that includes:
 Use `ffmpeg` for recording. Do not use browser-only video capture as the default
 because it can miss system audio.
 
+Participant videos must be short, review-focused evidence artifacts. Do not
+commit or publish videos longer than 3 minutes. If the full experiment flow takes
+longer, record or edit a concise excerpt that demonstrates the instructions,
+representative trials, responses, and completion state.
+
+Published `evidence/participant.mp4` files must be no larger than 1280x720.
+Prefer 15 fps for UI walkthrough evidence unless smooth motion is essential.
+Use H.264 with CRF 30-34, AAC audio when audio is needed, and `+faststart` so
+the dashboard can stream the file promptly.
+
 ## Workflow
 
 1. Start the PsyNet experiment and open the generated ad page in a browser.
@@ -57,7 +67,9 @@ dedicated display or window size so the recording contains only the experiment.
 ffmpeg -y \
   -video_size 1280x720 -framerate 30 -f x11grab -i "$DISPLAY" \
   -f pulse -i "$(pactl get-default-sink).monitor" \
-  -c:v libx264 -pix_fmt yuv420p -c:a aac -shortest \
+  -t 180 -vf "scale='trunc(min(1,min(1280/iw,720/ih))*iw/2)*2':'trunc(min(1,min(1280/iw,720/ih))*ih/2)*2',fps=15" \
+  -c:v libx264 -preset medium -crf 32 -pix_fmt yuv420p \
+  -c:a aac -b:a 96k -movflags +faststart -shortest \
   evidence/participant.mp4
 ```
 
@@ -104,7 +116,9 @@ Record the screen and the null-sink monitor:
 ffmpeg -y \
   -video_size 1280x720 -framerate 30 -f x11grab -i "$DISPLAY" \
   -f pulse -i psynet_rec.monitor \
-  -c:v libx264 -pix_fmt yuv420p -c:a aac -shortest \
+  -t 180 -vf "scale='trunc(min(1,min(1280/iw,720/ih))*iw/2)*2':'trunc(min(1,min(1280/iw,720/ih))*ih/2)*2',fps=15" \
+  -c:v libx264 -preset medium -crf 32 -pix_fmt yuv420p \
+  -c:a aac -b:a 96k -movflags +faststart -shortest \
   evidence/participant.mp4
 ```
 
@@ -120,6 +134,7 @@ ffmpeg -y \
   -thread_queue_size 4096 \
   -video_size 1280x720 -framerate 30 -f x11grab -i "$DISPLAY" \
   -thread_queue_size 4096 -isync 0 -f pulse -i psynet_rec.monitor \
+  -t 180 \
   -fps_mode cfr \
   -c:v libx264 -preset ultrafast -tune zerolatency -pix_fmt yuv420p \
   -c:a aac -shortest \
@@ -135,8 +150,11 @@ ffmpeg -y \
 
 ```bash
 ffmpeg -y -i evidence/participant_raw.mp4 \
-  -filter_complex "[0:a]adelay=<delay_ms>|<delay_ms>[a]" \
-  -map 0:v:0 -map "[a]" -c:v copy -c:a aac \
+  -t 180 \
+  -filter_complex "[0:v]scale='trunc(min(1,min(1280/iw,720/ih))*iw/2)*2':'trunc(min(1,min(1280/iw,720/ih))*ih/2)*2',fps=15[v];[0:a]adelay=<delay_ms>|<delay_ms>[a]" \
+  -map "[v]" -map "[a]" \
+  -c:v libx264 -preset medium -crf 32 -pix_fmt yuv420p \
+  -c:a aac -b:a 96k -movflags +faststart \
   evidence/participant.mp4
 ```
 
@@ -169,7 +187,9 @@ ffmpeg -f avfoundation -list_devices true -i ""
 ```bash
 ffmpeg -y \
   -f avfoundation -framerate 30 -i "1:BlackHole 2ch" \
-  -c:v libx264 -pix_fmt yuv420p -c:a aac \
+  -t 180 -vf "scale='trunc(min(1,min(1280/iw,720/ih))*iw/2)*2':'trunc(min(1,min(1280/iw,720/ih))*ih/2)*2',fps=15" \
+  -c:v libx264 -preset medium -crf 32 -pix_fmt yuv420p \
+  -c:a aac -b:a 96k -movflags +faststart \
   evidence/participant.mp4
 ```
 
@@ -179,6 +199,8 @@ than assuming `1` is correct.
 ## Evidence notes
 
 - Prefer a short successful recording over a long unfocused one.
+- Keep participant videos at or below 3 minutes and 1280x720. Re-encode or trim
+  before committing if the recording exceeds either limit.
 - If system audio capture cannot be configured, include the visual recording if
   possible and explicitly document the missing audio in `EVALUATION.md`.
 - For audio-focused experiments, add supporting evidence such as generated

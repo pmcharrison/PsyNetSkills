@@ -610,6 +610,11 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
         "---\n\n"
         "Implement the exported snapshot.\n",
     )
+    write_bytes(
+        tmp_path
+        / "challenges/example/attempts/2026-06-01-10-10/challenge/references/bundle.zip",
+        b"snapshot reference bundle",
+    )
     write(
         tmp_path / "challenges/example/attempts/2026-06-01-10-10/agent.json",
         json.dumps(
@@ -649,10 +654,25 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
         / "challenges/example/attempts/2026-06-01-10-10/code/README.md",
         "# Code notes\n",
     )
+    write_bytes(
+        tmp_path
+        / "challenges/example/attempts/2026-06-01-10-10/code/bundle.zip",
+        b"implementation bundle",
+    )
     write(
         tmp_path
         / "challenges/example/attempts/2026-06-01-10-10/evidence/README.md",
         "# Evidence notes\n",
+    )
+    write_bytes(
+        tmp_path
+        / "challenges/example/attempts/2026-06-01-10-10/evidence/data.zip",
+        b"exported experiment data",
+    )
+    write_bytes(
+        tmp_path
+        / "challenges/example/attempts/2026-06-01-10-10/evidence/archive.zip",
+        b"extra evidence archive",
     )
     write(
         tmp_path
@@ -743,6 +763,9 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
     attempt_page_text = attempt_page.read_text(encoding="utf-8")
     assert 'layout: "attempt"' in attempt_page_text
     exported_attempt = parsed_data["challenges"][0]["attempts"][0]
+    challenge_by_path = {
+        file["path"]: file for file in exported_attempt["challenge_files"]
+    }
     evidence_by_path = {
         file["path"]: file for file in exported_attempt["evidence_files"]
     }
@@ -762,6 +785,25 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
     assert code_by_path["README.md"]["url"].startswith(
         "artifacts/blobs/sha256/",
     )
+    assert challenge_by_path["references/bundle.zip"]["published"] is False
+    assert challenge_by_path["references/bundle.zip"]["url"] == ""
+    assert "top-level challenge reference" in challenge_by_path[
+        "references/bundle.zip"
+    ]["publication_note"]
+    assert code_by_path["bundle.zip"]["published"] is False
+    assert code_by_path["bundle.zip"]["url"] == ""
+    assert "generated implementation code" in code_by_path["bundle.zip"][
+        "publication_note"
+    ]
+    assert evidence_by_path["data.zip"]["published"] is True
+    assert evidence_by_path["data.zip"]["url"].startswith(
+        "artifacts/blobs/sha256/",
+    )
+    assert evidence_by_path["archive.zip"]["published"] is False
+    assert evidence_by_path["archive.zip"]["url"] == ""
+    assert "evidence/data.zip" in evidence_by_path["archive.zip"][
+        "publication_note"
+    ]
 
     monitor_blob = (
         tmp_path / "dashboard/static" / evidence_by_path["monitor.html"]["url"]

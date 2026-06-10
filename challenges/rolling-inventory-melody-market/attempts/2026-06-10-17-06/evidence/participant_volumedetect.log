@@ -1,0 +1,47 @@
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from '/workspace/challenges/rolling-inventory-melody-market/attempts/2026-06-10-17-06/evidence/participant.mp4':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 512
+    compatible_brands: isomiso2avc1mp41
+    encoder         : Lavf60.16.100
+  Duration: 00:08:06.23, start: 0.000000, bitrate: 195 kb/s
+  Stream #0:0[0x1](und): Video: h264 (Constrained Baseline) (avc1 / 0x31637661), yuv420p(progressive), 1280x720, 184 kb/s, 30 fps, 30 tbr, 15360 tbn (default)
+    Metadata:
+      handler_name    : VideoHandler
+      vendor_id       : [0][0][0][0]
+      encoder         : Lavc60.31.102 libx264
+  Stream #0:1[0x2](und): Audio: aac (LC) (mp4a / 0x6134706D), 48000 Hz, stereo, fltp, 4 kb/s (default)
+    Metadata:
+      handler_name    : SoundHandler
+      vendor_id       : [0][0][0][0]
+[Parsed_volumedetect_0 @ 0x55e97d6928c0] n_samples: 0
+Stream mapping:
+  Stream #0:1 -> #0:0 (aac (native) -> pcm_s16le (native))
+Press [q] to stop, [?] for help
+Output #0, null, to '/tmp/volumedetect-null':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 512
+    compatible_brands: isomiso2avc1mp41
+    encoder         : Lavf60.16.100
+  Stream #0:0(und): Audio: pcm_s16le, 48000 Hz, stereo, s16, 1536 kb/s (default)
+    Metadata:
+      handler_name    : SoundHandler
+      vendor_id       : [0][0][0][0]
+      encoder         : Lavc60.31.102 pcm_s16le
+size=       0kB time=00:00:01.29 bitrate=   0.0kbits/s speed=N/A    size=N/A time=00:05:11.46 bitrate=N/A speed= 623x    [out#0/null @ 0x55e97d266280] video:0kB audio:90796kB subtitle:0kB other streams:0kB global headers:0kB muxing overhead: unknown
+size=N/A time=00:08:06.21 bitrate=N/A speed= 625x    
+[Parsed_volumedetect_0 @ 0x55e97d3c1e00] n_samples: 46487552
+[Parsed_volumedetect_0 @ 0x55e97d3c1e00] mean_volume: -48.4 dB
+[Parsed_volumedetect_0 @ 0x55e97d3c1e00] max_volume: -13.3 dB
+[Parsed_volumedetect_0 @ 0x55e97d3c1e00] histogram_13db: 76
+[Parsed_volumedetect_0 @ 0x55e97d3c1e00] histogram_14db: 194
+[Parsed_volumedetect_0 @ 0x55e97d3c1e00] histogram_15db: 1894
+[Parsed_volumedetect_0 @ 0x55e97d3c1e00] histogram_16db: 3914
+[Parsed_volumedetect_0 @ 0x55e97d3c1e00] histogram_17db: 4444
+[Parsed_volumedetect_0 @ 0x55e97d3c1e00] histogram_18db: 4990
+[Parsed_volumedetect_0 @ 0x55e97d3c1e00] histogram_19db: 5500
+[Parsed_volumedetect_0 @ 0x55e97d3c1e00] histogram_20db: 5816
+[Parsed_volumedetect_0 @ 0x55e97d3c1e00] histogram_21db: 6862
+[Parsed_volumedetect_0 @ 0x55e97d3c1e00] histogram_22db: 6900
+[Parsed_volumedetect_0 @ 0x55e97d3c1e00] histogram_23db: 6998

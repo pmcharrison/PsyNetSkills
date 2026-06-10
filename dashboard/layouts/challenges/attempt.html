@@ -419,8 +419,12 @@
                 {{ end }}
               {{ else }}
                 <p class="file-preview binary-preview">
-                  Preview is not available.
-                  <a href="{{ $file.url | relURL }}">Open artifact</a>.
+                  {{ if eq $file.published false }}
+                    {{ $file.publication_note }}
+                  {{ else }}
+                    Preview is not available.
+                    <a href="{{ $file.url | relURL }}">Open artifact</a>.
+                  {{ end }}
                 </p>
               {{ end }}
             </details>
@@ -458,8 +462,12 @@
                 {{ end }}
               {{ else }}
                 <p class="file-preview binary-preview">
-                  Preview is not available.
-                  <a href="{{ $file.url | relURL }}">Open artifact</a>.
+                  {{ if eq $file.published false }}
+                    {{ $file.publication_note }}
+                  {{ else }}
+                    Preview is not available.
+                    <a href="{{ $file.url | relURL }}">Open artifact</a>.
+                  {{ end }}
                 </p>
               {{ end }}
             </section>

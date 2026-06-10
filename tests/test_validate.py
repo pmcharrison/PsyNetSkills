@@ -5,6 +5,7 @@ from psynetsk_tools.validate import (
     EMPTY_LEARNINGS_PLACEHOLDER,
     parse_evaluation_score,
     validate_agent_metadata,
+    validate_evidence_video,
     validate_learnings_file,
     validate_repository,
     validate_timeline_file,
@@ -244,6 +245,86 @@ def test_validate_agent_metadata_accepts_psynet_block(tmp_path: Path) -> None:
     write(agent_file, agent_json())
 
     assert validate_agent_metadata(agent_file) == []
+
+
+def test_validate_evidence_video_rejects_long_video(
+    tmp_path: Path,
+    monkeypatch,
+) -> None:
+    video_file = tmp_path / "participant.mp4"
+    video_file.write_bytes(b"mp4")
+
+    monkeypatch.setattr(
+        "psynetsk_tools.validate.video_metadata",
+        lambda _: {
+            "format": {"duration": "181.0"},
+            "streams": [
+                {"codec_type": "video", "width": 1280, "height": 720},
+            ],
+        },
+    )
+
+    problems = validate_evidence_video(video_file)
+
+    assert any("at most 180 seconds" in problem for problem in problems)
+
+
+def test_validate_evidence_video_rejects_large_dimensions(
+    tmp_path: Path,
+    monkeypatch,
+) -> None:
+    video_file = tmp_path / "participant.mp4"
+    video_file.write_bytes(b"mp4")
+
+    monkeypatch.setattr(
+        "psynetsk_tools.validate.video_metadata",
+        lambda _: {
+            "format": {"duration": "60.0"},
+            "streams": [
+                {"codec_type": "video", "width": 1920, "height": 1200},
+            ],
+        },
+    )
+
+    problems = validate_evidence_video(video_file)
+
+    assert any("at most 1280x720" in problem for problem in problems)
+
+
+def test_validate_evidence_video_allows_unfetched_lfs_pointer(
+    tmp_path: Path,
+) -> None:
+    video_file = tmp_path / "participant.mp4"
+    write(
+        video_file,
+        "version https://git-lfs.github.com/spec/v1\n"
+        "oid sha256:abc123\n"
+        "size 123\n",
+    )
+
+    assert validate_evidence_video(video_file) == []
+
+
+def test_validate_evidence_video_allows_crlf_lfs_pointer(
+    tmp_path: Path,
+) -> None:
+    video_file = tmp_path / "participant.mp4"
+    video_file.write_bytes(
+        b"version https://git-lfs.github.com/spec/v1\r\n"
+        b"oid sha256:abc123\r\n"
+        b"size 123\r\n",
+    )
+
+    assert validate_evidence_video(video_file) == []
+
+
+def test_validate_evidence_video_allows_small_unfetched_placeholder(
+    tmp_path: Path,
+) -> None:
+    video_file = tmp_path / "participant.mp4"
+    video_file.write_bytes(b"")
+
+    assert validate_evidence_video(video_file) == []
 
 
 def test_validate_agent_metadata_accepts_run_cost(tmp_path: Path) -> None:

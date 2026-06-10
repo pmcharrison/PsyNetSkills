@@ -207,4 +207,5 @@ evidence, interactive UI behavior, or a user-requested manual test artifact.
 
 When users mention a private repository from our GitLab group (https://gitlab.com/computational-audition-lab),
 you may access the code using the GITLAB_TOKEN_CAL access token.
+For global searches in the group codebase, you may only use `search_type=basic`.
 
