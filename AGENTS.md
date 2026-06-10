@@ -72,10 +72,28 @@ that they were attached to your session. If they are not registered, symlink or
 copy `.cursor/skills/` into the skills directory required by your agent runtime
 before proceeding. Do not maintain a second editable copy of the skills.
 
+### VM service startup (before PsyNet commands)
+
+On fresh Cursor Cloud VMs, `policy-rc.d` blocks `service postgresql start` /
+`service redis-server start`. Use:
+
+```bash
+sudo pg_ctlcluster 16 main start
+redis-server --daemonize yes
+```
+
+On first PostgreSQL install, create the Dallinger role/database if missing:
+
+```bash
+sudo -u postgres createuser -s dallinger
+sudo -u postgres createdb -O dallinger dallinger
+sudo -u postgres psql -c "ALTER USER dallinger WITH PASSWORD 'dallinger';"
+```
+
 ### System dependencies (not managed by `uv sync`)
 
 - **uv** — Python env and package management (`~/.local/bin` should be on `PATH`).
-- **Hugo** — Dashboard build/preview (`hugo --source dashboard ...`). CI uses the latest extended Hugo release.
+- **Hugo extended** — Dashboard build/preview (`hugo --source dashboard ...`). Install the latest extended release `.deb` from [gohugoio/hugo releases](https://github.com/gohugoio/hugo/releases) when the VM image does not include it.
 - **Git LFS** — Required when working with large attempt evidence (videos, zips). Run `git lfs install` once per machine; CI checks out with `lfs: true`. On Cursor Cloud VMs, `git lfs install` may fail because Git hooks are managed by the environment; run `git lfs update --force` instead.
 - **ffmpeg** — Required for participant evidence recordings.
 - **PulseAudio utilities** — Required when recording browser/system audio in
