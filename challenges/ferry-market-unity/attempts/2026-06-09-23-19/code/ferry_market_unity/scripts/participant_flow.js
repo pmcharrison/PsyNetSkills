@@ -117,25 +117,19 @@ async function runCanvasActions(page, canvas) {
       const sideEvery = action.sideEvery || 10;
       let sidePresses = 0;
       let forwardPresses = 0;
-      for (let i = 1; i <= steps; i += 1) {
-        const key =
-          i % sideEvery === 0
-            ? (Math.floor(i / sideEvery) % 2 === 0 ? "ArrowLeft" : "ArrowRight")
-            : "ArrowUp";
-        await page.keyboard.press(key);
-        if (key === "ArrowUp") {
+      await page.keyboard.down("ArrowUp");
+      try {
+        for (let i = 1; i <= steps; i += 1) {
           forwardPresses += 1;
-        } else {
-          sidePresses += 1;
-        }
-        if (i % 30 === 0) {
-          const box = await canvas.boundingBox();
-          if (box) {
-            await page.mouse.click(box.x + box.width * 0.5, box.y + box.height * 0.5);
-            record("canvas-click", { label: "periodic center click while driving", x: 0.5, y: 0.5, step: i });
+          if (i % sideEvery === 0) {
+            const sideKey = Math.floor(i / sideEvery) % 2 === 0 ? "ArrowLeft" : "ArrowRight";
+            await page.keyboard.press(sideKey);
+            sidePresses += 1;
           }
+          await page.waitForTimeout(action.waitMs || 120);
         }
-        await page.waitForTimeout(action.waitMs || 120);
+      } finally {
+        await page.keyboard.up("ArrowUp");
       }
       record("drive-to-ferry", { label: action.label, steps, forwardPresses, sidePresses });
     } else {
