@@ -21,3 +21,18 @@ already committed under `code/`.
 *Actions:*
 - **PsyNetSkills:** Consider documenting absolute export paths and `--no-source`
   for local attempt evidence exports. Confidence: medium. Status: considering.
+
+## Evidence quality needs stricter interpretation
+
+The evaluator found that the participant video did not convincingly show an
+agent attempting the experiment, and the performance test was overstated despite
+only 4 of 44 started bots succeeding.
+
+*Actions:*
+- **PsyNetSkills:** Consider requiring attempt summaries to report bot
+  completion counts alongside error counts, and to treat low-completion
+  performance tests as weak evidence even when request errors are zero.
+  Confidence: high. Status: considering.
+- **PsyNetSkills:** Consider adding an evidence-review checkpoint that verifies
+  participant recordings show meaningful task progression before they are
+  described as successful. Confidence: high. Status: considering.
