@@ -26,12 +26,15 @@ Reference commit inspected: `617c9893cc78041552f46382e974cf364e3dbecb`.
 - Creation uses WebAudio synthesis for preview and submission-time playback.
 - The original mouse movement, stroke, and drawing-specific event logs are not
   recorded.
-- The audio pre-screen uses a committed static WAV generated locally with
-  `espeak-ng` saying "five". I checked the local PsyNet demos and the public
-  reference branch for reusable typed "five" screening assets; PsyNet provides
-  reusable audio forced-choice and volume/headphone screening modules, but the
-  public challenge specifically asks for typed `five`/`5` validation, so this
-  attempt uses a small custom page.
+- The audio pre-screen uses an embedded static WAV data URI generated locally
+  with `espeak-ng` saying "five". I checked the local PsyNet demos and the
+  public reference branch for reusable typed "five" screening assets; PsyNet
+  provides reusable audio forced-choice and volume/headphone screening modules,
+  but the public challenge specifically asks for typed `five`/`5` validation,
+  so this attempt uses a small custom page. The WAV is embedded in
+  `experiment.py` rather than committed as `five.wav`, because this repository
+  stores WAV files through Git LFS and missing LFS objects make browser playback
+  fail in ordinary clones.
 
 ## Running locally
 
