@@ -12,3 +12,5 @@
 - T+01:03:00 [agent] Normalized serialized note values after market preview rendered string notes.
 - T+01:10:00 [agent] Added robust melody extraction for raw and formatted control payloads.
 - T+01:18:00 [agent] Corrected custom-control bot responses to return formatted answers.
+- T+01:32:00 [agent] Added .python-version required by legacy debug launch.
+- T+01:36:00 [agent] Ran psynet test local successfully and collected performance.json with 40 bots and zero bot/request errors.
