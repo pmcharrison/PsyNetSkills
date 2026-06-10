@@ -15,4 +15,8 @@
 - T+00:27:45 [agent] Reran `psynet performance-test local` after stopping the debug server that occupied port 5000; saved `evidence/performance.json`.
 - T+00:30:15 [agent] Exported local PsyNet data through the dashboard download route and saved `evidence/data.zip`.
 - T+00:31:00 [agent] Saved dashboard monitor snapshot and participant-flow screenshots.
-- T+00:31:30 [agent-stop] Implementation and first-pass evidence collection complete.
+- T+00:34:00 [agent] Video review found that the third participant could continue after a blank instruction; added explicit instruction validation and a regression test.
+- T+00:37:00 [agent] Reran `pytest -q test.py` and `psynet test local`; both passed with the blank-instruction regression covered.
+- T+00:45:00 [agent] Re-recorded participant evidence, including the blank-instruction validation message and final completion.
+- T+00:51:00 [agent] Refreshed data export, monitor snapshot, screenshots, and final 40-bot performance evidence.
+- T+00:51:30 [agent-stop] Implementation and first-pass evidence collection complete.

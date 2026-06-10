@@ -54,5 +54,5 @@ Summarize the human evaluator's overall judgment.
 - `evidence/participant.mp4` is video-only; the experiment does not produce
   audio, so no experiment audio stream is expected.
 - `evidence/performance.json` was generated with 40 concurrent bots for 5
-  minutes. The run reported zero bot errors and 1.806s p95 HTTP response time,
+  minutes. The final run reported zero bot errors and 1.557s p95 HTTP response time,
   with some bots still running when the fixed-duration test ended.
