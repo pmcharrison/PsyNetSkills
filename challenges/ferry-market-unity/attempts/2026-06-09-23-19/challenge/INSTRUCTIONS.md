@@ -1,5 +1,5 @@
 ---
-title: Ferry market Unity game
+title: Unity ferry game challenge
 type: experiment implementation
 difficulty: 5
 authors: [ofer]
