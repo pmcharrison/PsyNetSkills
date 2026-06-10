@@ -14,7 +14,7 @@ concurrency:
 
 jobs:
   build:
-    name: Build dashboard
+    name: Build and deploy dashboard
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -39,32 +39,30 @@ jobs:
           --destination ../public
           --cleanDestinationDir
           --baseURL "https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/"
-      - uses: actions/upload-artifact@v4
-        with:
-          name: dashboard-public
-          path: public
-          if-no-files-found: error
-
-  deploy:
-    name: Deploy dashboard
-    needs: build
-    runs-on: ubuntu-latest
-    concurrency:
-      group: github-pages-branch
-      cancel-in-progress: false
-      queue: max
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/download-artifact@v4
-        with:
-          name: dashboard-public
-          path: public
       - name: Deploy production site to gh-pages
         env:
           GITHUB_TOKEN: ${{ github.token }}
           PAGES_BRANCH: gh-pages
         run: |
           set -euo pipefail
+
+          push_pages_branch() {
+            for attempt in 1 2 3 4 5; do
+              if git -C "${pages_dir}" push origin "HEAD:${PAGES_BRANCH}"; then
+                return 0
+              fi
+              if [ "${attempt}" = "5" ]; then
+                echo "Failed to push ${PAGES_BRANCH} after ${attempt} attempts."
+                return 1
+              fi
+              echo "Push to ${PAGES_BRANCH} failed; rebasing on latest remote before retry."
+              if git ls-remote --exit-code --heads origin "${PAGES_BRANCH}" >/dev/null 2>&1; then
+                git -C "${pages_dir}" fetch origin "${PAGES_BRANCH}"
+                git -C "${pages_dir}" rebase FETCH_HEAD
+              fi
+              sleep $((attempt * 2))
+            done
+          }
 
           pages_dir="$(mktemp -d)"
           origin_url="https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
@@ -104,5 +102,5 @@ jobs:
             echo "No production dashboard changes to deploy."
           else
             git -C "${pages_dir}" commit -m "Deploy production dashboard"
-            git -C "${pages_dir}" push origin "HEAD:${PAGES_BRANCH}"
+            push_pages_branch
           fi

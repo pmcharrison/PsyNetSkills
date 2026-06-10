@@ -14,15 +14,12 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build-preview:
-    name: Build PR preview
+  deploy-preview:
+    name: Build and deploy PR preview
     if: >
       github.event.action != 'closed' &&
       github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
-    outputs:
-      preview-path: ${{ steps.preview.outputs.path }}
-      preview-url: ${{ steps.preview.outputs.url }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -58,36 +55,31 @@ jobs:
           --destination ../public
           --cleanDestinationDir
           --baseURL "${{ steps.preview.outputs.url }}"
-      - uses: actions/upload-artifact@v4
-        with:
-          name: dashboard-preview
-          path: public
-          if-no-files-found: error
-
-  deploy-preview:
-    name: Deploy PR preview
-    needs: build-preview
-    if: >
-      github.event.action != 'closed' &&
-      github.event.pull_request.head.repo.full_name == github.repository
-    runs-on: ubuntu-latest
-    concurrency:
-      group: github-pages-branch
-      cancel-in-progress: false
-      queue: max
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/download-artifact@v4
-        with:
-          name: dashboard-preview
-          path: public
       - name: Deploy preview to gh-pages
         env:
           GITHUB_TOKEN: ${{ github.token }}
           PAGES_BRANCH: gh-pages
-          PREVIEW_PATH: ${{ needs.build-preview.outputs.preview-path }}
+          PREVIEW_PATH: ${{ steps.preview.outputs.path }}
         run: |
           set -euo pipefail
+
+          push_pages_branch() {
+            for attempt in 1 2 3 4 5; do
+              if git -C "${pages_dir}" push origin "HEAD:${PAGES_BRANCH}"; then
+                return 0
+              fi
+              if [ "${attempt}" = "5" ]; then
+                echo "Failed to push ${PAGES_BRANCH} after ${attempt} attempts."
+                return 1
+              fi
+              echo "Push to ${PAGES_BRANCH} failed; rebasing on latest remote before retry."
+              if git ls-remote --exit-code --heads origin "${PAGES_BRANCH}" >/dev/null 2>&1; then
+                git -C "${pages_dir}" fetch origin "${PAGES_BRANCH}"
+                git -C "${pages_dir}" rebase FETCH_HEAD
+              fi
+              sleep $((attempt * 2))
+            done
+          }
 
           pages_dir="$(mktemp -d)"
           origin_url="https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
@@ -123,14 +115,14 @@ jobs:
             echo "No dashboard preview changes to deploy."
           else
             git -C "${pages_dir}" commit -m "Deploy dashboard preview for PR #${{ github.event.pull_request.number }}"
-            git -C "${pages_dir}" push origin "HEAD:${PAGES_BRANCH}"
+            push_pages_branch
           fi
       - name: Comment preview URL
         uses: actions/github-script@v7
         with:
           script: |
             const marker = '<!-- psynetsk-dashboard-preview -->';
-            const previewUrl = '${{ needs.build-preview.outputs.preview-url }}';
+            const previewUrl = '${{ steps.preview.outputs.url }}';
             const body = [
               marker,
               `Dashboard preview: ${previewUrl}`,
@@ -169,10 +161,6 @@ jobs:
       github.event.action == 'closed' &&
       github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
-    concurrency:
-      group: github-pages-branch
-      cancel-in-progress: false
-      queue: max
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -204,6 +192,24 @@ jobs:
           PRODUCTION_URL: ${{ steps.preview.outputs.production_url }}
         run: |
           set -euo pipefail
+
+          push_pages_branch() {
+            for attempt in 1 2 3 4 5; do
+              if git -C "${pages_dir}" push origin "HEAD:${PAGES_BRANCH}"; then
+                return 0
+              fi
+              if [ "${attempt}" = "5" ]; then
+                echo "Failed to push ${PAGES_BRANCH} after ${attempt} attempts."
+                return 1
+              fi
+              echo "Push to ${PAGES_BRANCH} failed; rebasing on latest remote before retry."
+              if git ls-remote --exit-code --heads origin "${PAGES_BRANCH}" >/dev/null 2>&1; then
+                git -C "${pages_dir}" fetch origin "${PAGES_BRANCH}"
+                git -C "${pages_dir}" rebase FETCH_HEAD
+              fi
+              sleep $((attempt * 2))
+            done
+          }
 
           origin_url="https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
           git remote set-url origin "${origin_url}"
@@ -247,7 +253,7 @@ jobs:
             else
               git -C "${pages_dir}" commit -m "Remove dashboard preview for PR #${{ github.event.pull_request.number }}"
             fi
-            git -C "${pages_dir}" push origin "HEAD:${PAGES_BRANCH}"
+            push_pages_branch
           fi
       - name: Comment preview cleanup
         uses: actions/github-script@v7
