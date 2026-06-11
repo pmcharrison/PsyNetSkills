@@ -1,0 +1,26 @@
+{
+  "authors": [
+    "pmcharrison"
+  ],
+  "agent": "Cursor Cloud Agent",
+  "client": "cursor",
+  "model": "GPT-5.5",
+  "started_at": "2026-06-11T17:19:00Z",
+  "ended_at": "2026-06-11T17:35:00Z",
+  "cursor_conversation_id": null,
+  "skills_commit": "example-fixture",
+  "psynet": {
+    "checkout_path": "~/PsyNet",
+    "branch": "not-used",
+    "commit": "not-used-static-fixture",
+    "version": "not-used-static-fixture",
+    "updated_from": "not-used-static-fixture",
+    "updated_at": "2026-06-11T17:19:00Z",
+    "update_command": "not run; static evidence workflow fixture",
+    "dirty": false
+  },
+  "run_cost": null,
+  "notes": [
+    "Illustrative example attempt for dashboard evidence workflow, not a real challenge solution."
+  ]
+}

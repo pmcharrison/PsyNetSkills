@@ -74,6 +74,9 @@ Trim or re-encode recordings before committing if they exceed these limits.
 participant-facing states, such as instructions, representative trials,
 feedback, validation errors, and completion pages. `performance.json` stores the
 output of `psynet performance-test` or an equivalent performance check.
+Store the Playwright participant-flow test with the experiment code, typically
+under `code/<slug>/tests/participant-flow.spec.js`, and make it assert the
+behavior shown in the screenshots or recording.
 
 For challenge attempts, treat `psynet test local` and `psynet performance-test
 local` as separate checks. Functional tests can stay fast; performance evidence

@@ -41,6 +41,10 @@ Prefer a hybrid workflow when feasible:
 - Use Playwright screenshots as the primary review artifact for static UI
   states: instructions, labels, button states, representative trials, feedback,
   validation errors, and completion pages.
+- Keep the Playwright participant-flow test with the experiment code, for
+  example `code/<experiment_slug>/tests/participant-flow.spec.js`. The committed
+  test should include assertions for the behavior it demonstrates, not just
+  screenshot commands.
 - Use a scripted browser runner for the canonical full-flow recording when video
   is useful. Prefer JavaScript Playwright, and use human-readable pacing such as
   deliberate waits, `slowMo`, or experiment `time_factor` settings so reviewers

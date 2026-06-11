@@ -61,11 +61,20 @@ For Playwright evidence scripts:
 
 - Use JavaScript Playwright when practical, because it is easy to install and
   run locally in attempt folders.
+- Store the Playwright participant-flow test with the experiment code, typically
+  `code/<experiment_slug>/tests/participant-flow.spec.js`, and commit the
+  corresponding `package.json`/lockfile when the test depends on npm packages.
 - Reuse one script for screenshots, assertions, and the participant recording
   when possible.
+- Include behavioral assertions in the Playwright flow. The test should prove
+  important participant behavior such as disabled/enabled controls, trial
+  transitions, validation or feedback text, completion state, and saved response
+  data, not only click through pages.
 - Pace the recording with explicit waits, `slowMo`, or experiment `time_factor`
   settings so the actions remain understandable. Do not blast through the flow,
   but do not wait for agent-speed browser control either.
+- Write screenshots and logs from that test to `evidence/`, not only to
+  Playwright's default transient output folders.
 - Keep the canonical experiment path unchanged. Use a documented minimal visual
   review profile only to make screenshots or short recordings reviewable.
 
