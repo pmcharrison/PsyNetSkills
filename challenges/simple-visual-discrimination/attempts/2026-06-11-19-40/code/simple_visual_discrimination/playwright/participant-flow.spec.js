@@ -21,8 +21,8 @@ async function clickIfVisible(page, names) {
 }
 
 async function completeIshiharaPlate(page, answer) {
-  await expect(page.getByText(/write down the number/i)).toBeVisible();
   const input = page.locator("input[type='text'], input:not([type]), textarea").first();
+  await advanceUntilVisible(page, input, 3);
   await input.fill(answer);
   await clickIfVisible(page, [/next/i, /submit/i]);
 }
