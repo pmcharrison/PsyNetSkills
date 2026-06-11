@@ -68,3 +68,4 @@ def test_push_pages_branch_rebases_changes_onto_latest_remote(tmp_path: Path) ->
     assert (
         final / "pr-preview/pr-2/index.html"
     ).read_text(encoding="utf-8") == "preview 2\n"
+    assert len(git("rev-list", "--parents", "-n", "1", "HEAD", cwd=final).split()) == 1
