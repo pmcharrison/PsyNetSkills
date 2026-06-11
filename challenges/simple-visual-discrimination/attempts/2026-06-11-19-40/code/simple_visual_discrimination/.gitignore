@@ -4,3 +4,9 @@ __pycache__/
 .dallinger/
 *.egg-info/
 source_code.zip
+node_modules/
+.deploy/
+Dockertag
+static/
+playwright-report/
+test-results/

@@ -1,6 +1,7 @@
 # pylint: disable=unused-argument,abstract-method
 """Simple two-alternative same-different color discrimination experiment."""
 
+import os
 import random
 from datetime import datetime, timedelta, timezone
 
@@ -48,7 +49,8 @@ COLORS = [
     "#355070",
 ]
 
-N_TRIALS = 10
+MINIMAL_PROFILE = os.environ.get("PSYNET_PROFILE") == "minimal"
+N_TRIALS = 3 if MINIMAL_PROFILE else 10
 SAME_RESPONSE = "same"
 DIFFERENT_RESPONSE = "different"
 
@@ -199,7 +201,8 @@ class Exp(psynet.experiment.Experiment):
     timeline = Timeline(
         NoConsent(),
         InfoPage(
-            "In this experiment you will see two colored circles on each trial. "
+            f"In this experiment you will complete {N_TRIALS} trials. "
+            "You will see two colored circles on each trial. "
             "After they disappear, decide whether they were the same color or different colors. "
             "Use the S and D keys, or click the corresponding buttons.",
             time_estimate=8,
