@@ -90,9 +90,25 @@ challenge before starting a fresh attempt.
      directory named `code`; Dallinger imports the experiment directory as a
      Python package, and `code` can collide with Python's standard-library
      module of the same name.
-   - When copying a minimal PsyNet demo into `code/`, include the standard
-     experiment support files needed by PsyNet local launch checks, especially
-     `.gitignore`, rather than copying only Python/config/test files.
+   - When copying a minimal PsyNet demo into `code/`, copy a complete runnable
+     experiment template first, then simplify it. Include standard support files
+     needed by PsyNet local launch checks, especially `test.py`,
+     `constraints.txt`, `.python-version`, and `.gitignore`, rather than copying
+     only Python/config/template files.
+   - For runnable PsyNet experiments, make sure the experiment `.gitignore`
+     covers local launch and packaging by including at least:
+
+     ```gitignore
+     .venv/
+     .deploy/
+     .pytest_cache/
+     exports/
+     deploy_logs/
+     source_code.zip
+     static/assets
+     *.log
+     ```
+
    - For cross-cultural, cross-national, multilingual, or international
      experiments, follow `prepare-for-translation/SKILL.md` during this
      implementation step so translation-marked strings are part of the first
