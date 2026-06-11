@@ -42,6 +42,10 @@ def rating_from_answer(answer):
         return None
 
 
+def serialize_answer(answer):
+    return json.dumps(answer, default=str)
+
+
 def simulated_bot_rating(condition, stimulus_id):
     # Deterministic pseudo-behaviour for reproducible local bot demonstrations.
     surprising_ratings = {
@@ -154,7 +158,7 @@ class Exp(psynet.experiment.Experiment):
                 "stimulus_text": trial.definition.get("text"),
                 "condition": trial.definition.get("condition"),
                 "curiosity_rating": rating_from_answer(trial.answer),
-                "raw_answer": trial.answer,
+                "raw_answer": serialize_answer(trial.answer),
             }
             for trial in CuriosityTrial.query.all()
         ]
