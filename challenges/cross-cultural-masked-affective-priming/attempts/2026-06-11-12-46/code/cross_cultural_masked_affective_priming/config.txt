@@ -1,0 +1,9 @@
+[Config]
+title = Cross-cultural masked affective priming demo
+description = Classify ambiguous facial expressions following masked emotional primes. Local demonstration only.
+contact_email_on_error = researcher@example.invalid
+organization_name = PsyNetSkills
+
+recruiter = generic
+currency = $
+wage_per_hour = 12.0
