@@ -20,6 +20,7 @@ from psynetsk_tools.actions import (
     mark_open_learning_actions_in_markdown,
     open_learning_actions_from_markdown,
     read_actions_review,
+    sorted_learning_actions_for_dashboard,
 )
 from psynetsk_tools.authors import (
     Author,
@@ -972,7 +973,9 @@ def dashboard_data(
     author_registry, _ = read_author_registry(root)
     skills = collect_skills(root, author_registry)
     challenges = collect_challenges(root, author_registry, artifact_publications)
-    actions = collect_open_learning_actions(root, challenges)
+    actions = sorted_learning_actions_for_dashboard(
+        collect_open_learning_actions(root, challenges),
+    )
     return {
         "authors": [asdict(author) for author in author_registry.values()],
         "skills": [asdict(skill) for skill in skills],

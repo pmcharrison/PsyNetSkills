@@ -15,6 +15,7 @@ from psynetsk_tools.dashboard import (
 from psynetsk_tools.actions import (
     format_action_copy_markdown,
     open_learning_actions_from_markdown,
+    sorted_learning_actions_for_dashboard,
 )
 
 
@@ -447,6 +448,37 @@ def test_format_action_copy_markdown_includes_context_and_notes() -> None:
     assert "Notes:\nPreserve this note." in brief
     assert "## Do the second thing." in brief
     assert "Repository target: psynet" in brief
+
+
+def test_sorted_learning_actions_for_dashboard_prioritizes_signals() -> None:
+    actions = open_learning_actions_from_markdown(
+        "# Learnings\n\n"
+        "## Sorting\n\n"
+        "Sorting context.\n\n"
+        "*Actions:*\n\n"
+        "- **PsyNet:** Lower confidence framework item. Confidence: medium. "
+        "Impact: high. Status: considering.\n"
+        "- **PsyNetSkills:** Higher confidence skills item. Confidence: high. "
+        "Impact: high. Status: considering.\n"
+        "- **PsyNet:** Lower impact framework item. Confidence: high. "
+        "Impact: medium. Status: considering.\n"
+        "- **PsyNetSkills:** Same priority skills item. Confidence: high. "
+        "Impact: high. Status: planned.\n",
+        challenge_slug="example",
+        challenge_title="Example challenge",
+        attempt_name="2026-06-01-10-10",
+        attempt_url="challenges/example/2026-06-01-10-10/",
+        source_path="challenges/example/attempts/2026-06-01-10-10/LEARNINGS.md",
+    )
+
+    sorted_actions = sorted_learning_actions_for_dashboard(actions)
+
+    assert [action.proposal for action in sorted_actions] == [
+        "Higher confidence skills item.",
+        "Same priority skills item.",
+        "Lower confidence framework item.",
+        "Lower impact framework item.",
+    ]
 
 
 def test_collect_challenges_reports_binary_and_nested_attempt_files(

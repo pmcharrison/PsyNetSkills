@@ -1,5 +1,15 @@
 {{ $statusClass := replace .status "_" "-" }}
-<div class="action-card-row" data-action-card-row>
+<div
+  class="action-card-row"
+  data-action-card-row
+  data-action-id="{{ .id }}"
+  data-action-repository="{{ .repository }}"
+  data-action-confidence="{{ .confidence }}"
+  data-action-impact="{{ .impact }}"
+  data-action-status="{{ .status }}"
+  data-action-challenge="{{ .challenge_title }}"
+  data-action-attempt="{{ .attempt_name }}"
+>
   <input
     class="action-card-checkbox"
     type="checkbox"
