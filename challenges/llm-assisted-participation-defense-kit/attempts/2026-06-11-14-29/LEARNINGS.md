@@ -19,3 +19,14 @@ limit.
 *Actions:*
 
 - **PsyNetSkills:** Add a short example to the `record-participant-video` skill showing how to record a longer raw run, speed it up with `setpts`, verify the accelerated copy, and remove the raw file before committing. Confidence: medium. Status: considering.
+
+## Validate probe and profile realism separately from kit mechanics
+
+The attempt demonstrates the mechanics of ECLAIR-style probes and LLM-assisted
+profile flagging, but the evaluator noted that richer response distributions
+would be needed before treating those probes and profile fixtures as calibrated
+research instruments.
+
+*Actions:*
+
+- **PsyNetSkills:** For future AI-assistance review challenges, distinguish implementation-mechanics evidence from validation evidence for ECLAIR-style probes and LLM-assisted profile fixtures, and ask for richer real or experimentally controlled response distributions when calibration is part of the challenge goal. Confidence: high. Status: considering.
