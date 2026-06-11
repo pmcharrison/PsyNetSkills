@@ -1,4 +1,4 @@
-generated_at: "2026-06-11T10:45:00Z"
+generated_at: "2026-06-11T15:59:39Z"
 model: GPT-5.5
 scope: open_actions
 sections:
@@ -149,8 +149,6 @@ sections:
       setup-contract failures rather than core experiment-design failures.
     actions:
       - cross-cultural-decision-making/2026-06-11-00-32/action-004
-      - rolling-inventory-melody-market/2026-06-10-17-06/action-001
-      - similarity-discrimination-identification/2026-06-10-00-38/action-001
       - ultimatum-game/2026-06-10-17-15/action-001
   - title: Agent skills and workflow guidance
     summary: >-
