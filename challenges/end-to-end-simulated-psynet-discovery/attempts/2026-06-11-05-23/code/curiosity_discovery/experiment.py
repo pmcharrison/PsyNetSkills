@@ -98,9 +98,9 @@ class CuriosityTrial(StaticTrial):
                 ],
                 name="curiosity",
                 arrange_vertically=True,
-                bot_response=lambda: simulated_bot_rating(condition, stimulus_id),
             ),
             time_estimate=self.time_estimate,
+            bot_response=lambda: simulated_bot_rating(condition, stimulus_id),
         )
 
 
