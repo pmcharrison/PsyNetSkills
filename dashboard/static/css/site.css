@@ -819,19 +819,21 @@ td {
 }
 
 .action-copy-toolbar {
+  align-items: center;
   background: var(--background);
   border: 1px solid var(--border);
   border-radius: 0.55rem;
   box-shadow: 0 0.45rem 1.2rem rgb(15 23 42 / 0.08);
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 0.6rem;
   padding: 0.7rem 0.85rem;
   position: fixed;
-  right: max(1rem, calc((100vw - 960px) / 2 - 13rem));
-  top: 50%;
-  transform: translateY(-50%);
-  width: 10rem;
+  bottom: 1rem;
+  left: 50%;
+  max-width: calc(100vw - 2rem);
+  transform: translateX(-50%);
+  width: max-content;
   z-index: 20;
 }
 
@@ -842,7 +844,7 @@ td {
 .action-copy-count {
   color: var(--muted);
   font-weight: 700;
-  text-align: center;
+  white-space: nowrap;
 }
 
 .action-preview-button,
@@ -856,7 +858,7 @@ td {
   font: inherit;
   font-weight: 700;
   padding: 0.35rem 0.7rem;
-  width: 100%;
+  width: auto;
 }
 
 .action-preview-button {
@@ -920,9 +922,9 @@ td {
   max-height: min(72vh, 42rem);
   padding: 0.85rem;
   position: absolute;
-  right: calc(100% + 0.8rem);
-  top: 50%;
-  transform: translateY(-50%);
+  bottom: calc(100% + 0.8rem);
+  left: 50%;
+  transform: translateX(-50%);
   width: min(42rem, calc(100vw - 18rem));
   z-index: 35;
 }
@@ -1063,11 +1065,8 @@ td {
   }
 
   .action-copy-toolbar {
-    bottom: 1rem;
-    flex-direction: row;
     left: 1rem;
     right: 1rem;
-    top: auto;
     transform: none;
     width: auto;
   }
