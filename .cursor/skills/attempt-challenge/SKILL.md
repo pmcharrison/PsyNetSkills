@@ -23,6 +23,11 @@ challenge before starting a fresh attempt.
   `references/experiment-evidence.md` and
   `psynet-experiment-implementation/references/validation.md` before finalizing
   functional or performance evidence.
+- If the challenge is explicitly cross-cultural, cross-national, multilingual,
+  international, or compares cultures/regions/language groups, read and apply
+  `prepare-for-translation/SKILL.md` while implementing the experiment. Mark
+  participant-facing strings and verify translation readiness before collecting
+  final evidence; do not treat this as an optional post-attempt cleanup.
 
 ## Workflow
 
@@ -88,6 +93,10 @@ challenge before starting a fresh attempt.
    - When copying a minimal PsyNet demo into `code/`, include the standard
      experiment support files needed by PsyNet local launch checks, especially
      `.gitignore`, rather than copying only Python/config/test files.
+   - For cross-cultural, cross-national, multilingual, or international
+     experiments, follow `prepare-for-translation/SKILL.md` during this
+     implementation step so translation-marked strings are part of the first
+     runnable version.
    - Make systematic use of tests: testing experiment logic with `psynet test local`,
      testing front-end logic with Playwright, and testing visual logic with
      video testing. When video testing, make sure to be efficient,

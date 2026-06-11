@@ -33,3 +33,17 @@ angry targets.
 - **PsyNetSkills:** Encourage challenge attempts to inspect analysis summaries
   for condition coverage, not only whether scripts run successfully. Confidence:
   high. Status: considering.
+
+## Cross-cultural experiments should trigger translation readiness during implementation
+
+The experiment was described as cross-cultural, but participant-facing strings
+were not marked for translation during the first implementation pass. The
+existing `prepare-for-translation` skill owned the detailed workflow, but the
+attempt and implementation skills did not make that trigger hard to miss.
+
+*Actions:*
+- **PsyNetSkills:** Added pointer rules to `attempt-challenge` and
+  `psynet-experiment-implementation` so cross-cultural, cross-national,
+  multilingual, and international experiments invoke translation readiness while
+  the experiment is being implemented, before final evidence collection.
+  Confidence: high. Status: completed.
