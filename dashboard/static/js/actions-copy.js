@@ -1,14 +1,12 @@
 (function () {
   const dataElement = document.getElementById("action-copy-data");
-  if (!dataElement) {
-    return;
-  }
-
   let actions = [];
-  try {
-    actions = JSON.parse(dataElement.textContent || "[]");
-  } catch (_error) {
-    actions = [];
+  if (dataElement) {
+    try {
+      actions = JSON.parse(dataElement.textContent || "[]");
+    } catch (_error) {
+      actions = [];
+    }
   }
 
   const actionsById = new Map(actions.map((action) => [action.id, action]));
@@ -31,10 +29,9 @@
   const previewClose = document.querySelector("[data-action-preview-close]");
   const deselectButton = document.querySelector("[data-action-deselect-button]");
   const statusElement = document.querySelector("[data-action-copy-status]");
-
-  if (!toolbar || !countElement || !button || checkboxes.length === 0) {
-    return;
-  }
+  const copyEnabled = Boolean(
+    dataElement && toolbar && countElement && button && checkboxes.length > 0,
+  );
 
   const impactRank = new Map([
     ["high", 0],
@@ -113,6 +110,9 @@
   }
 
   function updateState() {
+    if (!copyEnabled) {
+      return;
+    }
     const count = selectedActions().length;
     toolbar.hidden = count === 0;
     countElement.textContent = `${count} selected`;
@@ -350,59 +350,61 @@
     return Boolean(selection && !selection.isCollapsed && selection.toString());
   }
 
-  checkboxes.forEach((checkbox) => {
-    checkbox.addEventListener("change", updateState);
-  });
-
-  document.querySelectorAll("[data-action-card-row]").forEach((row) => {
-    row.addEventListener("click", (event) => {
-      if (event.target.closest("a, button, input, label")) {
-        return;
-      }
-
-      const checkbox = row.querySelector("[data-action-copy-checkbox]");
-      if (!checkbox) {
-        return;
-      }
-      checkbox.checked = !checkbox.checked;
-      checkbox.dispatchEvent(new Event("change", { bubbles: true }));
+  if (copyEnabled) {
+    checkboxes.forEach((checkbox) => {
+      checkbox.addEventListener("change", updateState);
     });
-  });
 
-  document.querySelectorAll(".learning-action").forEach((action) => {
-    action.addEventListener("click", (event) => {
-      if (event.target.closest("a, button, input, label")) {
-        return;
-      }
+    document.querySelectorAll("[data-action-card-row]").forEach((row) => {
+      row.addEventListener("click", (event) => {
+        if (event.target.closest("a, button, input, label")) {
+          return;
+        }
 
-      const checkbox = action.querySelector("[data-action-copy-checkbox]");
-      if (!checkbox) {
-        return;
-      }
-      checkbox.checked = !checkbox.checked;
-      checkbox.dispatchEvent(new Event("change", { bubbles: true }));
+        const checkbox = row.querySelector("[data-action-copy-checkbox]");
+        if (!checkbox) {
+          return;
+        }
+        checkbox.checked = !checkbox.checked;
+        checkbox.dispatchEvent(new Event("change", { bubbles: true }));
+      });
     });
-  });
 
-  button.addEventListener("click", async () => {
-    await copySelectedActions();
-  });
+    document.querySelectorAll(".learning-action").forEach((action) => {
+      action.addEventListener("click", (event) => {
+        if (event.target.closest("a, button, input, label")) {
+          return;
+        }
 
-  if (previewButton && previewPopover && previewText) {
-    previewButton.addEventListener("click", () => {
-      updatePreview();
-      previewPopover.hidden = false;
+        const checkbox = action.querySelector("[data-action-copy-checkbox]");
+        if (!checkbox) {
+          return;
+        }
+        checkbox.checked = !checkbox.checked;
+        checkbox.dispatchEvent(new Event("change", { bubbles: true }));
+      });
     });
-  }
 
-  if (previewClose) {
-    previewClose.addEventListener("click", closePreview);
-  }
-
-  if (deselectButton) {
-    deselectButton.addEventListener("click", () => {
-      clearSelections();
+    button.addEventListener("click", async () => {
+      await copySelectedActions();
     });
+
+    if (previewButton && previewPopover && previewText) {
+      previewButton.addEventListener("click", () => {
+        updatePreview();
+        previewPopover.hidden = false;
+      });
+    }
+
+    if (previewClose) {
+      previewClose.addEventListener("click", closePreview);
+    }
+
+    if (deselectButton) {
+      deselectButton.addEventListener("click", () => {
+        clearSelections();
+      });
+    }
   }
 
   actionFilters.forEach((filter) => {
@@ -425,40 +427,42 @@
     });
   }
 
-  document.addEventListener("click", (event) => {
-    if (selectedActions().length === 0) {
-      return;
-    }
-    if (
-      event.target.closest(
-        "[data-action-card-row], [data-action-copy-toolbar], .learning-action",
-      )
-    ) {
-      return;
-    }
-    clearSelections();
-  });
-
-  document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape") {
-      closePreview();
-      return;
-    }
-
-    if (
-      event.key.toLowerCase() === "c" &&
-      (event.metaKey || event.ctrlKey) &&
-      !event.altKey &&
-      !isTextEditableTarget(event.target) &&
-      !hasTextSelection()
-    ) {
+  if (copyEnabled) {
+    document.addEventListener("click", (event) => {
       if (selectedActions().length === 0) {
         return;
       }
-      event.preventDefault();
-      copySelectedActions();
-    }
-  });
+      if (
+        event.target.closest(
+          "[data-action-card-row], [data-action-copy-toolbar], .learning-action",
+        )
+      ) {
+        return;
+      }
+      clearSelections();
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        closePreview();
+        return;
+      }
+
+      if (
+        event.key.toLowerCase() === "c" &&
+        (event.metaKey || event.ctrlKey) &&
+        !event.altKey &&
+        !isTextEditableTarget(event.target) &&
+        !hasTextSelection()
+      ) {
+        if (selectedActions().length === 0) {
+          return;
+        }
+        event.preventDefault();
+        copySelectedActions();
+      }
+    });
+  }
 
   updateFilterState();
 })();

@@ -1008,10 +1008,7 @@ td {
 }
 
 .action-card-row {
-  align-items: center;
   display: grid;
-  gap: 0.7rem;
-  grid-template-columns: auto minmax(0, 1fr);
 }
 
 .action-card-checkbox {
@@ -1021,7 +1018,7 @@ td {
 .action-card {
   border: 1px solid var(--border);
   border-radius: 0.55rem;
-  cursor: pointer;
+  cursor: default;
   padding: 0.85rem 1rem;
   scroll-margin-top: 1rem;
 }
