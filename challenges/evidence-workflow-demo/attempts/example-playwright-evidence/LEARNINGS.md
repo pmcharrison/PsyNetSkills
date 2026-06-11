@@ -6,4 +6,4 @@ Using one committed Playwright flow for assertions, screenshots, and paced recor
 
 *Actions:*
 
-- [ ] [action-001] Store participant-flow Playwright tests with experiment code and make them assert the behavior shown in screenshots or videos. Confidence: high. Status: planned.
+- **PsyNetSkills:** Store participant-flow Playwright tests with experiment code and make them assert the behavior shown in screenshots or videos. Confidence: high. Status: planned.
