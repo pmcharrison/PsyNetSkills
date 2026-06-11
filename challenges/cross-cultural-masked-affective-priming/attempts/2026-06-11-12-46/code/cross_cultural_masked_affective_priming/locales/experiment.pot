@@ -1,0 +1,100 @@
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: experiment.py:87
+msgid "Happy"
+msgstr ""
+
+#: experiment.py:87
+msgid "Angry"
+msgstr ""
+
+#: experiment.py:128
+msgid "Practice"
+msgstr ""
+
+#: experiment.py:128
+msgid "Main"
+msgstr ""
+
+#: experiment.py:129
+#, python-brace-format
+msgid "{BLOCK} trial {TRIAL_NUMBER}."
+msgstr ""
+
+#: experiment.py:133
+#, python-brace-format
+msgid "Was the target expression closer to {HAPPY} or {ANGRY}?"
+msgstr ""
+
+#: experiment.py:134
+msgid "happy"
+msgstr ""
+
+#: experiment.py:135
+msgid "angry"
+msgstr ""
+
+#: experiment.py:137
+msgid "Classify the target face after the rapid display."
+msgstr ""
+
+#: experiment.py:138
+msgid "forward mask"
+msgstr ""
+
+#: experiment.py:139
+msgid "masked prime"
+msgstr ""
+
+#: experiment.py:140
+msgid "backward mask"
+msgstr ""
+
+#: experiment.py:141
+msgid "ambiguous target face"
+msgstr ""
+
+#: experiment.py:226
+msgid "Short pause before the next rapid display."
+msgstr ""
+
+#: experiment.py:240
+msgid "Cross-cultural masked affective priming demo"
+msgstr ""
+
+#: experiment.py:242
+msgid ""
+"Classify ambiguous facial expressions following masked emotional primes. "
+"Local demonstration only."
+msgstr ""
+
+#: experiment.py:250
+msgid ""
+"Welcome. In this study you will see rapid visual displays and then classify "
+"the expression on a target face. Some images appear very briefly; please "
+"focus on the final target face and respond as accurately as you can."
+msgstr ""
+
+#: experiment.py:259
+msgid ""
+"You will first complete two practice trials. Each trial shows a fixation "
+"cross, a mask, a brief image, another mask, and then an ambiguous target "
+"face. Choose whether the target looks closer to happy or angry."
+msgstr ""
+
+#: experiment.py:278
+msgid ""
+"The main block starts now. Continue classifying the target expression; the "
+"brief images before the target are not the task."
+msgstr ""
+
+#: experiment.py:294
+msgid ""
+"Thank you. Your responses have been recorded for this local demonstration."
+msgstr ""
