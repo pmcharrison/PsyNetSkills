@@ -14,7 +14,8 @@ standard evidence checklist. Do not add experiment-specific artifacts to other
 challenge types unless they are relevant to that challenge.
 
 For challenges with a participant-facing flow, use the `record-participant-video`
-skill when creating `evidence/participant.mp4`.
+skill when creating `evidence/participant.mp4` or
+`evidence/screenshots/` visual review artifacts.
 
 ## Timeline notes
 

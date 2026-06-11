@@ -455,6 +455,43 @@ def test_collect_challenges_reports_binary_and_nested_attempt_files(
     )
 
 
+def test_export_dashboard_publishes_attempt_screenshots(tmp_path: Path) -> None:
+    write(tmp_path / "authors.yaml", authors_yaml())
+    write(tmp_path / "README.md", "# PsyNetSkills\n")
+    write(
+        tmp_path / ".cursor/skills/example-skill/SKILL.md",
+        "---\n"
+        "name: example-skill\n"
+        "description: Use when testing dashboard generation.\n"
+        "---\n\n"
+        "# Example skill\n",
+    )
+    write(tmp_path / "challenges/example/INSTRUCTIONS.md", challenge_instructions())
+    attempt_dir = tmp_path / "challenges/example/attempts/2026-06-01-10-10"
+    write(attempt_dir / "agent.json", "{}\n")
+    screenshot_data = b"\x89PNG\r\n\x1a\nexample"
+    write_bytes(
+        attempt_dir / "evidence/screenshots/01-instructions.png",
+        screenshot_data,
+    )
+
+    export_dashboard(tmp_path, tmp_path / "dashboard")
+    data = json.loads(
+        (tmp_path / "dashboard/data/psynetsk.json").read_text(encoding="utf-8"),
+    )
+    evidence_by_path = {
+        file["path"]: file
+        for file in data["challenges"][0]["attempts"][0]["evidence_files"]
+    }
+    screenshot = evidence_by_path["screenshots/01-instructions.png"]
+
+    assert screenshot["kind"] == "png"
+    assert screenshot["url"].startswith("artifacts/blobs/sha256/")
+    screenshot_blob = tmp_path / "dashboard/static" / screenshot["url"]
+    assert screenshot_blob.exists()
+    assert screenshot_blob.read_bytes() == screenshot_data
+
+
 def test_collect_challenges_uses_agent_timestamp_for_example_attempt(
     tmp_path: Path,
 ) -> None:

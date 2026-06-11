@@ -1042,6 +1042,49 @@ td {
   margin-bottom: 0;
 }
 
+.screenshot-gallery {
+  border-top: 1px solid var(--border);
+  margin-top: 1rem;
+  padding-top: 1rem;
+}
+
+.screenshot-gallery h3 {
+  margin: 0 0 0.25rem;
+}
+
+.screenshot-carousel {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.85rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+  scroll-snap-type: x mandatory;
+}
+
+.screenshot-card {
+  border: 1px solid var(--border);
+  border-radius: 0.55rem;
+  flex: 0 0 min(100%, 32rem);
+  margin: 0;
+  overflow: hidden;
+  scroll-snap-align: start;
+}
+
+.screenshot-card img {
+  background: var(--code-background);
+  display: block;
+  max-height: 26rem;
+  object-fit: contain;
+  width: 100%;
+}
+
+.screenshot-card figcaption {
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 0.9rem;
+  padding: 0.55rem 0.7rem;
+}
+
 .evidence-actions,
 .artifact-checklist {
   list-style: none;
