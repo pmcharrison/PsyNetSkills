@@ -15,7 +15,7 @@
 - `psynet performance-test local --n-bots 40 --duration-minutes 5 --time-factor 1.0 --json-output ../../evidence/performance.json`
   - Passed with 0 bot errors, 3271 requests, 10.73 requests/s, and 1.331s P95 response time.
 - `ffprobe -v error -show_entries format=duration,size -show_entries stream=codec_name,width,height,avg_frame_rate -of json evidence/participant.mp4`
-  - Confirmed `participant.mp4` is H.264, 1280x720, 15 fps, 13.6 seconds, 402841 bytes.
+  - Confirmed `participant.mp4` is H.264, 1280x720, 15 fps, 31.3 seconds, 494335 bytes.
 
 ## Manual/visual evidence
 
