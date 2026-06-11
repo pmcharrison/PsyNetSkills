@@ -13,9 +13,12 @@ from psynet.modular_page import ModularPage, TimedPushButtonControl
 from psynet.page import InfoPage
 from psynet.timeline import Timeline
 from psynet.trial.static import StaticNode, StaticTrial, StaticTrialMaker
+from psynet.utils import get_translator
 
 MANIFEST_PATH = Path("data/manifest.json")
 CHOICES = ["happy", "angry"]
+
+_ = get_translator()
 
 
 def load_manifest() -> dict:
@@ -81,7 +84,7 @@ class ClassificationTimedControl(TimedPushButtonControl):
         self.expected_response = expected_response
         super().__init__(
             choices=CHOICES,
-            labels=["Happy", "Angry"],
+            labels=[_("Happy"), _("Angry")],
             arrange_vertically=False,
             button_highlight_duration=0.25,
         )
@@ -122,6 +125,20 @@ class MaskedPrimingTrial(StaticTrial):
             + timings["prime"]
             + timings["backward_mask"]
         )
+        block_label = _("Practice") if definition["block"] == "practice" else _("Main")
+        trial_heading = _("{BLOCK} trial {TRIAL_NUMBER}.").format(
+            BLOCK=block_label,
+            TRIAL_NUMBER=self.position + 1,
+        )
+        target_question = _("Was the target expression closer to {HAPPY} or {ANGRY}?").format(
+            HAPPY=_("happy"),
+            ANGRY=_("angry"),
+        )
+        classification_instruction = _("Classify the target face after the rapid display.")
+        forward_mask_alt = _("forward mask")
+        prime_alt = _("masked prime")
+        backward_mask_alt = _("backward mask")
+        target_alt = _("ambiguous target face")
         prompt = Markup(
             f"""
             <style>
@@ -153,18 +170,18 @@ class MaskedPrimingTrial(StaticTrial):
               }}
             </style>
             <div class="classification-cue">
-              <strong>{definition['block'].title()} trial {self.position + 1}.</strong>
-              Classify the target face after the rapid display.
+              <strong>{trial_heading}</strong>
+              {classification_instruction}
             </div>
             <div class="priming-stage" aria-live="polite">
               <div id="fixation" class="priming-frame" style="display: block;">+</div>
-              <img id="forward-mask" class="priming-frame" src="{self.assets['forward_mask'].url}" alt="forward mask">
-              <img id="prime" class="priming-frame" src="{self.assets['prime'].url}" alt="masked prime">
-              <img id="backward-mask" class="priming-frame" src="{self.assets['backward_mask'].url}" alt="backward mask">
-              <img id="target" class="priming-frame" src="{self.assets['target'].url}" alt="ambiguous target face">
+              <img id="forward-mask" class="priming-frame" src="{self.assets['forward_mask'].url}" alt="{forward_mask_alt}">
+              <img id="prime" class="priming-frame" src="{self.assets['prime'].url}" alt="{prime_alt}">
+              <img id="backward-mask" class="priming-frame" src="{self.assets['backward_mask'].url}" alt="{backward_mask_alt}">
+              <img id="target" class="priming-frame" src="{self.assets['target'].url}" alt="{target_alt}">
             </div>
             <p id="target-question" style="text-align: center; visibility: hidden;">
-              Was the target expression closer to <strong>happy</strong> or <strong>angry</strong>?
+              {target_question}
             </p>
             <script>
               (function() {{
@@ -206,7 +223,7 @@ class MaskedPrimingTrial(StaticTrial):
 
     def show_feedback(self, experiment, participant):
         return InfoPage(
-            "Short pause before the next rapid display.",
+            _("Short pause before the next rapid display."),
             time_estimate=self.definition["timings_ms"]["inter_trial"] / 1000,
         )
 
@@ -219,24 +236,31 @@ class MaskedPrimingTrial(StaticTrial):
 class Exp(psynet.experiment.Experiment):
     label = "Cross-cultural masked affective priming"
     test_n_bots = 2
+    config = {
+        "title": _("Cross-cultural masked affective priming demo"),
+        "description": _(
+            "Classify ambiguous facial expressions following masked emotional primes. "
+            "Local demonstration only."
+        ),
+    }
 
     timeline = Timeline(
         InfoPage(
-            """
-            Welcome. In this study you will see rapid visual displays and then
-            classify the expression on a target face. Some images appear very
-            briefly; please focus on the final target face and respond as
-            accurately as you can.
-            """,
+            _(
+                "Welcome. In this study you will see rapid visual displays and then "
+                "classify the expression on a target face. Some images appear very "
+                "briefly; please focus on the final target face and respond as "
+                "accurately as you can."
+            ),
             time_estimate=8,
         ),
         InfoPage(
-            """
-            You will first complete two practice trials. Each trial shows a
-            fixation cross, a mask, a brief image, another mask, and then an
-            ambiguous target face. Choose whether the target looks closer to
-            happy or angry.
-            """,
+            _(
+                "You will first complete two practice trials. Each trial shows a "
+                "fixation cross, a mask, a brief image, another mask, and then an "
+                "ambiguous target face. Choose whether the target looks closer to "
+                "happy or angry."
+            ),
             time_estimate=8,
         ),
         StaticTrialMaker(
@@ -250,10 +274,10 @@ class Exp(psynet.experiment.Experiment):
             recruit_mode="n_participants",
         ),
         InfoPage(
-            """
-            The main block starts now. Continue classifying the target expression;
-            the brief images before the target are not the task.
-            """,
+            _(
+                "The main block starts now. Continue classifying the target expression; "
+                "the brief images before the target are not the task."
+            ),
             time_estimate=5,
         ),
         StaticTrialMaker(
@@ -267,7 +291,7 @@ class Exp(psynet.experiment.Experiment):
             recruit_mode="n_participants",
         ),
         InfoPage(
-            "Thank you. Your responses have been recorded for this local demonstration.",
+            _("Thank you. Your responses have been recorded for this local demonstration."),
             time_estimate=5,
         ),
     )
