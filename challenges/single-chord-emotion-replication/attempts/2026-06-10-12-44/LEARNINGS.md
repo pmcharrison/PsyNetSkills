@@ -33,5 +33,5 @@ The evaluator judged the additive-synthesis piano and strings timbres as too poo
 The evaluator expected the attempt to lean on PsyNet's native simulation capabilities and to invest more in analysis outputs, including installed dependencies, figures, and ideally a notebook-style report.
 
 *Actions:*
-- **PsyNetSkills:** Clarify in experiment-replication guidance that custom simulation scripts should be a fallback, not the default, when PsyNet already provides a suitable simulation path. Confidence: medium. Status: considering.
-- **PsyNetSkills:** Raise the default analysis bar for replication attempts to include dependency installation when needed, figure generation, and a notebook or notebook-like report when the challenge asks for close analytical replication. Confidence: high. Status: considering.
+- **PsyNetSkills:** Clarify in experiment-replication guidance that custom simulation scripts should be a fallback, not the default, when PsyNet already provides a suitable simulation path. Confidence: medium. Status: planned. Notes: Include in the planned revision to implement-experiment guidance; prefer PsyNet-native simulation before custom scripts.
+- **PsyNetSkills:** Raise the default analysis bar for replication attempts to include dependency installation when needed, figure generation, and a notebook or notebook-like report when the challenge asks for close analytical replication. Confidence: high. Status: planned. Notes: Include in the planned revision to implement-experiment guidance; treat replication analyses as reviewable deliverables.
