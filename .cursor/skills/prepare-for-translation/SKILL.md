@@ -1,6 +1,6 @@
 ---
 name: prepare-for-translation
-description: Prepare an existing PsyNet experiment for translation by marking participant-facing text, validating gettext extraction, and reporting translation readiness.
+description: Prepare an existing PsyNet experiment for translation by marking participant-facing text, updating locale configuration, validating gettext extraction, and reporting translation readiness.
 authors: [jacobyn]
 ---
 
