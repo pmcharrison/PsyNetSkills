@@ -334,3 +334,7 @@ recruiters, bonuses, exports, and bot tests. The plan therefore separates
 science, design, and implementation oversight so that human researchers can own
 the scientific and participant-facing intent while agents use PsyNet-native
 implementation patterns to realize it.
+
+---
+
+*Authors: [pmcharrison](https://github.com/pmcharrison), [zeroada](https://github.com/zeroada)*
