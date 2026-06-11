@@ -27,6 +27,7 @@ from psynet.trial.imitation_chain import (
 
 CANVAS_SIZE = 100
 DOT_RADIUS = 2
+PRE_DOT_FIXATION_SECONDS = 0.8
 MEMORY_DISPLAY_SECONDS = 1.5
 RETENTION_DELAY_SECONDS = 1.0
 
@@ -198,6 +199,20 @@ class SpatialMemoryTrial(ImitationChainTrial):
                     frames=[
                         Frame(
                             [
+                                outline(shape_name, id_="pre_dot_outline"),
+                                Path(
+                                    "pre_dot_fixation",
+                                    "M46,50 L54,50 M50,46 L50,54",
+                                    attributes={
+                                        "stroke": "#777777",
+                                        "stroke-width": 1.5,
+                                    },
+                                ),
+                            ],
+                            duration=PRE_DOT_FIXATION_SECONDS,
+                        ),
+                        Frame(
+                            [
                                 outline(shape_name),
                                 dot(definition["x"], definition["y"]),
                             ],
@@ -219,7 +234,11 @@ class SpatialMemoryTrial(ImitationChainTrial):
                         ),
                     ],
                 ),
-                time_estimate=MEMORY_DISPLAY_SECONDS + RETENTION_DELAY_SECONDS,
+                time_estimate=(
+                    PRE_DOT_FIXATION_SECONDS
+                    + MEMORY_DISPLAY_SECONDS
+                    + RETENTION_DELAY_SECONDS
+                ),
             ),
             ModularPage(
                 "reproduce_location",

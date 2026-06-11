@@ -13,3 +13,4 @@
 - T+00:32:48 [agent-stop] Implementation and first-pass evidence collection complete.
 - T+00:41:10 [agent-start] Resumed after video review found the circle trial dot was not visible in the participant recording.
 - T+00:42:00 [agent] Increased dot study duration for clearer participant-facing evidence.
+- T+00:49:30 [agent] Added a pre-dot fixation frame after a replacement recording still missed the target dot frames.
