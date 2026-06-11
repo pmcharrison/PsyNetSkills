@@ -39,11 +39,14 @@ user explicitly asks for them.
 3. Add `from psynet.utils import get_translator` where needed, then define
    `_ = get_translator()` at module scope. If contextual translations are needed,
    also define `_p = get_translator(context=True)`.
-4. Review experiment configuration. Set or preserve the source `locale` when
-   needed. Do not add target locales to `supported_locales` unless the matching
-   `locales/<locale>/LC_MESSAGES/experiment.po` files already exist or the user
-   explicitly asked you to generate them; listing untranslated locales can make
-   local launch checks fail.
+4. Review experiment configuration so `psynet translate` knows the intended
+   locale set. Add or update `locale` and `supported_locales` in the experiment
+   config or `config.txt`; include the source locale plus each requested target
+   locale when target locales are part of the request or otherwise known. If
+   older code uses `language`, align it with current PsyNet documentation or
+   migrate it to `locale` rather than adding stale duplicate settings. If no
+   target locales have been requested, keep the experiment source-locale-ready
+   and state that target locales can be added during the localization phase.
 
 ### Phase 2 - Participant-facing string audit
 
