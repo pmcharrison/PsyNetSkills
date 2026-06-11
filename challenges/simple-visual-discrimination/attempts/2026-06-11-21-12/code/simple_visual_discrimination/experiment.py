@@ -112,8 +112,8 @@ class ColorDiscriminationTrial(StaticTrial):
 
         prompt = GraphicPrompt(
             text="",
-            dimensions=[100, 100],
-            viewport_width=0.55,
+            dimensions=[100, 70],
+            viewport_width=0.35,
             prevent_control_response=True,
             prevent_control_submit=True,
             frames=[
@@ -123,7 +123,7 @@ class ColorDiscriminationTrial(StaticTrial):
                             "fixation",
                             "+",
                             50,
-                            50,
+                            35,
                             attributes={"font-size": 34, "font-weight": "bold"},
                         )
                     ],
@@ -134,7 +134,7 @@ class ColorDiscriminationTrial(StaticTrial):
                         Circle(
                             "left_circle",
                             32,
-                            50,
+                            35,
                             12,
                             attributes={
                                 "fill": definition["left_color"],
@@ -145,7 +145,7 @@ class ColorDiscriminationTrial(StaticTrial):
                         Circle(
                             "right_circle",
                             68,
-                            50,
+                            35,
                             12,
                             attributes={
                                 "fill": definition["right_color"],
@@ -161,17 +161,17 @@ class ColorDiscriminationTrial(StaticTrial):
                     [
                         Text(
                             "response_question",
-                            "Were the circles the same or different?",
+                            "Same or different?",
                             50,
-                            43,
-                            attributes={"font-size": 8},
+                            28,
+                            attributes={"font-size": 6},
                         ),
                         Text(
                             "response_keys",
                             "Press F for Same or J for Different",
                             50,
-                            58,
-                            attributes={"font-size": 6, "fill": "#555555"},
+                            42,
+                            attributes={"font-size": 4, "fill": "#555555"},
                         ),
                     ],
                     activate_control_response=True,

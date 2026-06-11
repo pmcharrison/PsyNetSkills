@@ -14,3 +14,10 @@
 - T+00:40:00 [agent] Saved dashboard monitor HTML and `data.zip` from the local debug dashboard.
 - T+00:86:00 [agent] Completed a 40-bot, 5-minute `psynet performance-test local` run with zero bot errors and zero request errors.
 - T+01:30:39 [agent-stop] Implementation and first-pass evidence collection complete.
+- T+01:31:00 [agent-start] Reopened implementation after video review found clipped response text and out-of-view response buttons.
+- T+01:32:00 [agent] Reduced the graphics viewport and simplified the response prompt so the question and Same/Different buttons are visible together.
+- T+01:35:00 [agent] Confirmed `python experiment.py`, `psynet test local`, and Playwright participant-flow assertions still passed after the layout fix.
+- T+01:37:00 [agent] Re-recorded `evidence/participant.mp4`; video review confirmed the clipped text and missing-button evidence issues were resolved.
+- T+01:38:30 [agent] Regenerated `monitor.html` and `data.zip` from the fixed debug server.
+- T+01:46:30 [agent] Re-ran the 40-bot, 5-minute performance test on the fixed source with zero bot errors and zero request errors.
+- T+01:46:32 [agent-stop] Implementation and first-pass evidence collection complete after visual evidence fix and performance retest.
