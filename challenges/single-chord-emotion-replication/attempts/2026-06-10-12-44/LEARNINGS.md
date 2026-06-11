@@ -26,7 +26,7 @@ The evaluator wanted each implemented questionnaire to be backed by a downloaded
 The evaluator judged the additive-synthesis piano and strings timbres as too poor to count as adequate analogues of the original stimuli. When realistic sound fonts or sample libraries are unavailable, the attempt workflow should favor an explicit discussion with the user over quietly proceeding with obviously weak substitutes.
 
 *Actions:*
-- **PsyNetSkills:** Add a rule for experiment-replication attempts: if the requested stimulus fidelity depends on unavailable local assets, stop and discuss acceptable fallback options with the user before finalizing the implementation. Confidence: high. Status: considering.
+- **PsyNetSkills:** Add a rule for experiment-replication attempts: if a core fidelity requirement depends on unavailable external assets or materials, stop and discuss acceptable fallback options with the user before finalizing the implementation. Confidence: high. Status: planned. Notes: Include this in the planned revision to implement-experiment guidance for external materials.
 
 ## Prefer built-in simulation and richer analysis deliverables
 
