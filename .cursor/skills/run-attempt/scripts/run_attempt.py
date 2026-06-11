@@ -48,7 +48,8 @@ class HandoffState:
     password: str | None = None
     local_participant_url: str | None = None
     public_tunnel_url: str | None = None
-    announced: bool = False
+    local_announced: bool = False
+    public_announced: bool = False
 
     def update_from_line(self, line: str) -> None:
         """Extract dashboard credentials from PsyNet output."""
@@ -78,10 +79,38 @@ class HandoffState:
         self.public_tunnel_url = url.rstrip("/")
 
     def maybe_print(self) -> None:
-        """Print the complete handoff block once all required values are known."""
+        """Print complete local and public handoff blocks once they are known."""
 
-        if self.announced or not self.is_complete:
-            return
+        if not self.local_announced and self.is_local_complete:
+            self.print_local_handoff()
+        if not self.public_announced and self.is_public_complete:
+            self.print_public_handoff()
+
+    def print_local_handoff(self) -> None:
+        """Print local review links and credentials."""
+
+        assert self.local_participant_url is not None
+        assert self.username is not None
+        assert self.password is not None
+
+        dashboard_url = with_userinfo(
+            with_path(self.local_participant_url, "/dashboard/develop"),
+            username=self.username,
+            password=self.password,
+        )
+
+        print("\n=== Run attempt handoff ===")
+        print(f"Start new participant (local): {self.local_participant_url}")
+        print(f"Dashboard (local): {dashboard_url}")
+        print("Credentials:")
+        print(f"  Username: {self.username}")
+        print(f"  Password: {self.password}")
+        print("Public tunnel: not started by default. Ask the user whether they want one.")
+        print("=== End run attempt handoff ===\n", flush=True)
+        self.local_announced = True
+
+    def print_public_handoff(self) -> None:
+        """Print public tunnel links once a tunnel is available."""
 
         assert self.local_participant_url is not None
         assert self.public_tunnel_url is not None
@@ -99,29 +128,33 @@ class HandoffState:
             password=self.password,
         )
 
-        print("\n=== Run attempt handoff ===")
-        print(f"Start new participant (local): {self.local_participant_url}")
+        print("\n=== Run attempt public tunnel ===")
         print(f"Add new participant (public tunnel): {public_participant_url}")
         print(f"Dashboard (public tunnel): {public_dashboard_url}")
         print("Credentials:")
         print(f"  Username: {self.username}")
         print(f"  Password: {self.password}")
         print("Open the public dashboard link in Cursor Desktop and leave it ready.")
-        print("=== End run attempt handoff ===\n", flush=True)
-        self.announced = True
+        print("=== End run attempt public tunnel ===\n", flush=True)
+        self.public_announced = True
 
     @property
-    def is_complete(self) -> bool:
-        """Return whether all required handoff values are available."""
+    def is_local_complete(self) -> bool:
+        """Return whether local review links and credentials are available."""
 
         return all(
             [
                 self.username,
                 self.password,
                 self.local_participant_url,
-                self.public_tunnel_url,
             ]
         )
+
+    @property
+    def is_public_complete(self) -> bool:
+        """Return whether public tunnel links and credentials are available."""
+
+        return self.is_local_complete and self.public_tunnel_url is not None
 
 
 class PublicTunnel:
@@ -328,6 +361,14 @@ def with_path(url: str, path: str) -> str:
 
     parsed = urlsplit(strip_userinfo(url))
     return urlunsplit((parsed.scheme, parsed.netloc, path, "", ""))
+
+
+def with_userinfo(url: str, username: str, password: str) -> str:
+    """Return a copy of a URL with embedded userinfo credentials."""
+
+    parsed = urlsplit(strip_userinfo(url))
+    netloc = f"{quote(username, safe='')}:{quote(password, safe='')}@{parsed.netloc}"
+    return urlunsplit((parsed.scheme, netloc, parsed.path, parsed.query, parsed.fragment))
 
 
 def is_local_url(url: str) -> bool:
@@ -540,15 +581,20 @@ def build_parser() -> argparse.ArgumentParser:
         help="Skip best-effort PostgreSQL and Redis startup.",
     )
     parser.add_argument(
+        "--public-tunnel",
+        action="store_true",
+        help="Start localtunnel and print public review links in addition to local links.",
+    )
+    parser.add_argument(
         "--no-public-tunnel",
         action="store_true",
-        help="Skip the default localtunnel process for public review links.",
+        help=argparse.SUPPRESS,
     )
     parser.add_argument(
         "--public-tunnel-port",
         type=int,
         default=5000,
-        help="Local PsyNet port exposed by the default public tunnel.",
+        help="Local PsyNet port exposed when --public-tunnel is used.",
     )
     return parser
 
@@ -567,7 +613,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             ensure_services()
         return run_server(
             run,
-            public_tunnel=not args.no_public_tunnel,
+            public_tunnel=args.public_tunnel and not args.no_public_tunnel,
             public_tunnel_port=args.public_tunnel_port,
         )
     except RunAttemptError as error:
