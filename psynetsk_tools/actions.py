@@ -19,6 +19,9 @@ from psynetsk_tools.learnings import (
 
 ACTION_REVIEW_FILE = "actions-review.yaml"
 ACTION_REVIEW_SCOPE = "open_actions"
+ACTION_CONFIDENCE_ORDER = {"high": 0, "medium": 1, "low": 2}
+ACTION_IMPACT_ORDER = {"high": 0, "medium": 1, "low": 2}
+ACTION_REPOSITORY_ORDER = {"psynetskills": 0, "psynet": 1}
 
 
 @dataclass(frozen=True)
@@ -81,6 +84,27 @@ def action_copy_context(action: LearningAction) -> dict[str, str]:
         "action": action.proposal,
         "notes": action.notes,
     }
+
+
+def action_priority_sort_key(action: LearningAction) -> tuple[object, ...]:
+    """Return the default dashboard priority order for an action."""
+
+    return (
+        ACTION_IMPACT_ORDER.get(action.impact, len(ACTION_IMPACT_ORDER)),
+        ACTION_CONFIDENCE_ORDER.get(action.confidence, len(ACTION_CONFIDENCE_ORDER)),
+        ACTION_REPOSITORY_ORDER.get(action.repository, len(ACTION_REPOSITORY_ORDER)),
+        action.challenge_title.casefold(),
+        action.attempt_name.casefold(),
+        action.id,
+    )
+
+
+def sorted_learning_actions_for_dashboard(
+    actions: list[LearningAction],
+) -> list[LearningAction]:
+    """Return actions ordered by default dashboard priority."""
+
+    return sorted(actions, key=action_priority_sort_key)
 
 
 def format_action_copy_markdown(

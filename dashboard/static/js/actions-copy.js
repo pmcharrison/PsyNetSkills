@@ -15,6 +15,13 @@
   const checkboxes = Array.from(
     document.querySelectorAll("[data-action-copy-checkbox]"),
   );
+  const actionRows = Array.from(document.querySelectorAll("[data-action-card-row]"));
+  const actionList = document.querySelector("[data-action-list]");
+  const actionFilters = Array.from(document.querySelectorAll("[data-action-filter]"));
+  const actionSort = document.querySelector("[data-action-sort]");
+  const clearFiltersButton = document.querySelector("[data-action-clear-filters]");
+  const filterStatusElement = document.querySelector("[data-action-filter-status]");
+  const emptyStateElement = document.querySelector("[data-action-empty-state]");
   const toolbar = document.querySelector("[data-action-copy-toolbar]");
   const countElement = document.querySelector("[data-action-copy-count]");
   const button = document.querySelector("[data-action-copy-button]");
@@ -29,9 +36,36 @@
     return;
   }
 
+  const impactRank = new Map([
+    ["high", 0],
+    ["medium", 1],
+    ["low", 2],
+  ]);
+  const confidenceRank = new Map([
+    ["high", 0],
+    ["medium", 1],
+    ["low", 2],
+  ]);
+  const repositoryRank = new Map([
+    ["psynetskills", 0],
+    ["psynet", 1],
+  ]);
+  const statusRank = new Map([
+    ["considering", 0],
+    ["in_progress", 1],
+    ["planned", 2],
+  ]);
+
+  function actionRowForCheckbox(checkbox) {
+    return checkbox.closest("[data-action-card-row], .learning-action");
+  }
+
   function selectedActions() {
     return checkboxes
-      .filter((checkbox) => checkbox.checked)
+      .filter((checkbox) => {
+        const row = actionRowForCheckbox(checkbox);
+        return checkbox.checked && !(row && row.hidden);
+      })
       .map((checkbox) => actionsById.get(checkbox.value))
       .filter(Boolean);
   }
@@ -93,6 +127,123 @@
       statusElement.textContent = "";
     }
     updatePreview();
+  }
+
+  function getActionValue(row, name) {
+    return (row.getAttribute(`data-action-${name}`) || "").toLowerCase();
+  }
+
+  function rankValue(rank, value) {
+    return rank.has(value) ? rank.get(value) : rank.size;
+  }
+
+  function textCompare(left, right) {
+    return left.localeCompare(right, undefined, { sensitivity: "base" });
+  }
+
+  function compareByRankThenText(rank, name, left, right) {
+    const leftValue = getActionValue(left, name);
+    const rightValue = getActionValue(right, name);
+    return (
+      rankValue(rank, leftValue) - rankValue(rank, rightValue) ||
+      textCompare(leftValue, rightValue)
+    );
+  }
+
+  function comparePriority(left, right) {
+    return (
+      compareByRankThenText(impactRank, "impact", left, right) ||
+      compareByRankThenText(confidenceRank, "confidence", left, right) ||
+      compareByRankThenText(repositoryRank, "repository", left, right) ||
+      textCompare(getActionValue(left, "challenge"), getActionValue(right, "challenge")) ||
+      textCompare(getActionValue(left, "attempt"), getActionValue(right, "attempt")) ||
+      textCompare(getActionValue(left, "id"), getActionValue(right, "id"))
+    );
+  }
+
+  function compareActions(left, right) {
+    const sortValue = actionSort ? actionSort.value : "priority";
+    if (sortValue === "impact") {
+      return (
+        compareByRankThenText(impactRank, "impact", left, right) ||
+        comparePriority(left, right)
+      );
+    }
+    if (sortValue === "confidence") {
+      return (
+        compareByRankThenText(confidenceRank, "confidence", left, right) ||
+        comparePriority(left, right)
+      );
+    }
+    if (sortValue === "repository") {
+      return (
+        compareByRankThenText(repositoryRank, "repository", left, right) ||
+        comparePriority(left, right)
+      );
+    }
+    if (sortValue === "status") {
+      return (
+        compareByRankThenText(statusRank, "status", left, right) ||
+        comparePriority(left, right)
+      );
+    }
+    if (sortValue === "challenge") {
+      return (
+        textCompare(getActionValue(left, "challenge"), getActionValue(right, "challenge")) ||
+        comparePriority(left, right)
+      );
+    }
+    return comparePriority(left, right);
+  }
+
+  function rowMatchesFilters(row) {
+    return actionFilters.every((filter) => {
+      const value = filter.value;
+      return !value || getActionValue(row, filter.getAttribute("data-action-filter")) === value;
+    });
+  }
+
+  function hasActiveFilters() {
+    return actionFilters.some((filter) => filter.value) ||
+      (actionSort && actionSort.value !== "priority");
+  }
+
+  function updateFilterState() {
+    if (!actionRows.length) {
+      updateState();
+      return;
+    }
+
+    const sortedRows = [...actionRows].sort(compareActions);
+    if (actionList) {
+      sortedRows.forEach((row) => {
+        actionList.appendChild(row);
+      });
+    }
+
+    let visibleCount = 0;
+    actionRows.forEach((row) => {
+      const visible = rowMatchesFilters(row);
+      row.hidden = !visible;
+      if (visible) {
+        visibleCount += 1;
+      }
+    });
+
+    if (filterStatusElement) {
+      const actionLabel = visibleCount === 1 ? "action" : "actions";
+      filterStatusElement.textContent =
+        visibleCount === actionRows.length
+          ? `Showing all ${visibleCount} ${actionLabel}.`
+          : `Showing ${visibleCount} of ${actionRows.length} actions.`;
+    }
+    if (emptyStateElement) {
+      emptyStateElement.hidden = visibleCount !== 0;
+    }
+    if (clearFiltersButton) {
+      clearFiltersButton.disabled = !hasActiveFilters();
+    }
+    updateState();
   }
 
   function clearSelections() {
@@ -254,6 +405,26 @@
     });
   }
 
+  actionFilters.forEach((filter) => {
+    filter.addEventListener("change", updateFilterState);
+  });
+
+  if (actionSort) {
+    actionSort.addEventListener("change", updateFilterState);
+  }
+
+  if (clearFiltersButton) {
+    clearFiltersButton.addEventListener("click", () => {
+      actionFilters.forEach((filter) => {
+        filter.value = "";
+      });
+      if (actionSort) {
+        actionSort.value = "priority";
+      }
+      updateFilterState();
+    });
+  }
+
   document.addEventListener("click", (event) => {
     if (selectedActions().length === 0) {
       return;
@@ -289,5 +460,5 @@
     }
   });
 
-  updateState();
+  updateFilterState();
 })();

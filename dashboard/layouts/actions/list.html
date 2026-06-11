@@ -3,83 +3,95 @@
   {{ $review := hugo.Data.psynetsk.action_review }}
 
   <article class="prose actions-page">
-    <div class="actions-layout">
-      {{ if $review.sections }}
-        <aside class="actions-sidebar" aria-label="Action review sections">
-          <h2>Sections</h2>
-          <nav>
-            <ol>
-              {{ range $review.sections }}
-                <li>
-                  <a href="#{{ .title | anchorize }}">{{ .title }}</a>
-                </li>
-              {{ end }}
-              {{ with $review.unreviewed_actions }}
-                <li><a href="#unfiled-actions">Unfiled actions</a></li>
-              {{ end }}
-            </ol>
-          </nav>
-        </aside>
-      {{ end }}
+    <div class="actions-main">
+      <h1>{{ .Title }}</h1>
+      {{ .Content }}
 
-      <div class="actions-main">
-        <h1>{{ .Title }}</h1>
-        {{ .Content }}
+      <p class="action-review-meta">
+        <strong>{{ len $actions }}</strong> open action{{ if ne (len $actions) 1 }}s{{ end }}
+        {{ with $review.generated_at }}
+          · Review generated {{ . }}
+        {{ end }}
+        {{ with $review.model }}
+          · {{ . }}
+        {{ end }}
+        · Regenerate with <code>/compile-actions-review</code>
+      </p>
+      {{ partial "action-copy-toolbar.html" . }}
+      {{ partial "action-copy-data.html" $actions }}
 
-        <p class="action-review-meta">
-          <strong>{{ len $actions }}</strong> open action{{ if ne (len $actions) 1 }}s{{ end }}
-          {{ with $review.generated_at }}
-            · Review generated {{ . }}
-          {{ end }}
-          {{ with $review.model }}
-            · {{ . }}
-          {{ end }}
-          · Regenerate with <code>/compile-actions-review</code>
+      <section class="action-controls" aria-labelledby="action-controls-heading">
+        <div>
+          <h2 id="action-controls-heading">Find the next action</h2>
+          <p>Filter the full list, then sort by the priority signal that matters.</p>
+        </div>
+        <form class="action-filter-form" data-action-filter-form>
+          <label>
+            <span>Repository</span>
+            <select data-action-filter="repository">
+              <option value="">All repositories</option>
+              <option value="psynetskills">PsyNetSkills</option>
+              <option value="psynet">PsyNet</option>
+            </select>
+          </label>
+          <label>
+            <span>Impact</span>
+            <select data-action-filter="impact">
+              <option value="">All impacts</option>
+              <option value="high">High</option>
+              <option value="medium">Medium</option>
+              <option value="low">Low</option>
+            </select>
+          </label>
+          <label>
+            <span>Confidence</span>
+            <select data-action-filter="confidence">
+              <option value="">All confidence</option>
+              <option value="high">High</option>
+              <option value="medium">Medium</option>
+              <option value="low">Low</option>
+            </select>
+          </label>
+          <label>
+            <span>Status</span>
+            <select data-action-filter="status">
+              <option value="">All statuses</option>
+              <option value="considering">Considering</option>
+              <option value="in_progress">In progress</option>
+              <option value="planned">Planned</option>
+            </select>
+          </label>
+          <label class="action-sort-field">
+            <span>Sort</span>
+            <select data-action-sort>
+              <option value="priority">Priority: impact, confidence, repository</option>
+              <option value="impact">Impact, high to low</option>
+              <option value="confidence">Confidence, high to low</option>
+              <option value="repository">Repository, PsyNetSkills first</option>
+              <option value="status">Status</option>
+              <option value="challenge">Challenge, A to Z</option>
+            </select>
+          </label>
+          <button type="button" class="action-clear-filters" data-action-clear-filters>
+            Clear filters
+          </button>
+        </form>
+        <p class="action-filter-status" data-action-filter-status role="status" aria-live="polite">
+          Showing {{ len $actions }} action{{ if ne (len $actions) 1 }}s{{ end }}.
         </p>
-        {{ partial "action-copy-toolbar.html" . }}
-        {{ partial "action-copy-data.html" $actions }}
+      </section>
 
-        {{ if $review.sections }}
-          {{ range $review.sections }}
-        <section class="action-review-section" id="{{ .title | anchorize }}">
-          <h2>{{ .title }}</h2>
-          {{ if .missing_action_ids }}
-            <p class="action-review-warning">
-              This section references action IDs that no longer match open actions:
-              {{ delimit .missing_action_ids ", " }}.
-            </p>
+      <section class="action-review-section" aria-labelledby="open-actions-heading">
+        <h2 id="open-actions-heading" class="visually-hidden">Open actions</h2>
+        <div class="action-card-grid" data-action-list>
+          {{ range $actions }}
+            {{ partial "action-card.html" . }}
           {{ end }}
-          {{ if .actions }}
-            <div class="action-card-grid">
-              {{ range .actions }}
-                {{ partial "action-card.html" . }}
-              {{ end }}
-            </div>
-          {{ end }}
-        </section>
-          {{ end }}
-        {{ else }}
-          <section class="action-review-section">
-            <h2>Review not generated yet</h2>
-            <p>
-              Add <code>actions-review.yaml</code> to group these action points into
-              LLM-reviewed themes. Until then, all open actions are listed below.
-            </p>
-          </section>
-        {{ end }}
-
-        {{ with $review.unreviewed_actions }}
-          <section class="action-review-section" id="unfiled-actions">
-            <h2>Unfiled actions</h2>
-            <p>These open actions are not referenced by the generated review.</p>
-            <div class="action-card-grid">
-              {{ range . }}
-                {{ partial "action-card.html" . }}
-              {{ end }}
-            </div>
-          </section>
-        {{ end }}
-      </div>
+        </div>
+        <p class="action-empty-state" data-action-empty-state hidden>
+          No actions match those filters.
+        </p>
+      </section>
     </div>
   </article>
 {{ end }}
