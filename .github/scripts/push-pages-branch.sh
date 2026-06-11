@@ -10,31 +10,60 @@ pages_dir="$1"
 pages_branch="$2"
 remote_ref="refs/heads/${pages_branch}"
 message_file="$(mktemp)"
-publish_branch="publish-${pages_branch//\//-}-$$"
+patch_file="$(mktemp)"
+remote_url="$(git -C "${pages_dir}" remote get-url origin)"
 
 git -C "${pages_dir}" log -1 --format=%B > "${message_file}"
-
-if git -C "${pages_dir}" ls-remote --exit-code --heads origin "${pages_branch}" >/dev/null 2>&1; then
-  expected_remote="$(git -C "${pages_dir}" ls-remote origin "${pages_branch}" | awk '{print $1}')"
-  lease_arg="--force-with-lease=${remote_ref}:${expected_remote}"
+intended_commit="$(git -C "${pages_dir}" rev-parse HEAD)"
+if base_commit="$(git -C "${pages_dir}" rev-parse "${intended_commit}^" 2>/dev/null)"; then
+  git -C "${pages_dir}" diff --binary --full-index "${base_commit}" "${intended_commit}" > "${patch_file}"
 else
-  lease_arg="--force"
+  git -C "${pages_dir}" diff --binary --full-index --root "${intended_commit}" > "${patch_file}"
 fi
 
-git -C "${pages_dir}" checkout --orphan "${publish_branch}"
-git -C "${pages_dir}" add -A
-git -C "${pages_dir}" commit -F "${message_file}"
-
 for attempt in 1 2 3 4 5; do
-  if git -C "${pages_dir}" push "${lease_arg}" origin "HEAD:${pages_branch}"; then
+  publish_dir="$(mktemp -d)"
+
+  if git -C "${pages_dir}" ls-remote --exit-code --heads origin "${pages_branch}" >/dev/null 2>&1; then
+    expected_remote="$(git -C "${pages_dir}" ls-remote origin "${pages_branch}" | awk '{print $1}')"
+    lease_arg="--force-with-lease=${remote_ref}:${expected_remote}"
+    git -C "${pages_dir}" fetch origin "${pages_branch}"
+    git -C "${pages_dir}" worktree add --detach "${publish_dir}" "${expected_remote}"
+  else
+    lease_arg="--force"
+    git -c init.defaultBranch="${pages_branch}" init "${publish_dir}"
+    git -C "${publish_dir}" remote add origin "${remote_url}"
+  fi
+
+  git -C "${publish_dir}" config user.name "github-actions[bot]"
+  git -C "${publish_dir}" config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+  if ! git -C "${publish_dir}" apply --index --3way "${patch_file}"; then
+    git -C "${pages_dir}" worktree remove --force "${publish_dir}" >/dev/null 2>&1 || rm -rf "${publish_dir}"
+    echo "Failed to apply ${pages_branch} changes to the latest remote state." >&2
+    exit 1
+  fi
+
+  if git -C "${publish_dir}" diff --cached --quiet; then
+    git -C "${pages_dir}" worktree remove --force "${publish_dir}" >/dev/null 2>&1 || rm -rf "${publish_dir}"
+    echo "${pages_branch} already contains the requested changes."
     exit 0
   fi
+
+  git -C "${publish_dir}" commit -F "${message_file}"
+
+  if git -C "${publish_dir}" push "${lease_arg}" origin "HEAD:${pages_branch}"; then
+    git -C "${pages_dir}" worktree remove --force "${publish_dir}" >/dev/null 2>&1 || rm -rf "${publish_dir}"
+    exit 0
+  fi
+
+  git -C "${pages_dir}" worktree remove --force "${publish_dir}" >/dev/null 2>&1 || rm -rf "${publish_dir}"
 
   if [ "${attempt}" = "5" ]; then
     echo "Failed to publish ${pages_branch} snapshot after ${attempt} attempts." >&2
     exit 1
   fi
 
-  echo "Push to ${pages_branch} failed; retrying with the same remote lease."
+  echo "Push to ${pages_branch} failed; retrying on top of the latest remote state."
   sleep $((attempt * 2))
 done

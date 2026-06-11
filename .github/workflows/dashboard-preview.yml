@@ -10,8 +10,8 @@ permissions:
   pull-requests: write
 
 concurrency:
-  group: dashboard-gh-pages-publication
-  cancel-in-progress: false
+  group: dashboard-preview-pr-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
 
 jobs:
   deploy-preview:
