@@ -168,9 +168,9 @@ class Exp(psynet.experiment.Experiment):
         trials = GameTrial.query.filter_by(failed=False).all()
         assert len(trials) == 2
         assert all(trial.answer for trial in trials)
-        node_summaries = [trial.definition.get('summary') for trial in trials if trial.definition.get('summary')]
-        assert node_summaries
-        assert max(summary['counted_rounds'] for summary in node_summaries) == ROUNDS_REQUIRED
+        assert all(isinstance(trial.node, GameNode) for trial in trials)
+        assert {trial.trial_maker_id for trial in trials} == {'ultimatum_trial_maker'}
+        assert max(trial.answer['counted_rounds'] for trial in trials) == ROUNDS_REQUIRED
 
         state = {
             'group_id': 999999,
