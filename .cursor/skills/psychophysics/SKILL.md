@@ -11,6 +11,7 @@ Use this skill when creating or revising PsyNet experiments that measure percept
 ## Required reads
 
 - Read `psynet-experiment-implementation/SKILL.md` for the general PsyNet implementation workflow, demo-first development, and validation expectations.
+- Read `task-specific-prescreening/SKILL.md` when the experiment needs participant eligibility, modality, device, language, comprehension, or recruiter qualification checks.
 - For challenge attempts, read `attempt-challenge/SKILL.md` and its evidence references before collecting review artifacts.
 - Inspect the closest PsyNet demos and framework APIs for the relevant modality before adding custom frontend code.
 
@@ -22,7 +23,7 @@ Use this skill when creating or revising PsyNet experiments that measure percept
 4. Fix and record timing. Define presentation and delay durations as constants, keep them consistent within a task unless adaptivity is part of the design, and record the values in trial metadata. Delays used for memory or retention should normally be at least 500 ms unless the specification says otherwise.
 5. Store enough metadata to reconstruct every trial. Include stimulus IDs, perceptual dimensions, display positions, block labels, trial condition, correct answer or scoring target, participant response, accuracy, and reaction time.
 6. Document sampling and balancing. State how stimulus pairs, set sizes, positions, target-present trials, lures, repeats, or adaptive staircases are chosen. Use deterministic manifests when the stimulus space is nontrivial.
-7. Include modality-appropriate prescreeners. Use PsyNet's Ishihara-style `ColorBlindnessTest` for color-critical tasks; use PsyNet volume, headphone, hearing, or audio checks when sound perception matters; add comprehension or practice checks for unfamiliar tasks. Decide explicitly whether each prescreener should exclude participants, stratify them, or serve only as a post hoc covariate.
+7. Include modality-appropriate prescreeners using `task-specific-prescreening/SKILL.md`. For psychophysics, decide explicitly whether each color, audio, hearing, language, comprehension, or practice check should exclude participants, stratify them, or serve only as a post hoc covariate.
 8. Keep response paths comparable. Ensure bot responses, formatted answers, and scoring use the same response representation as the participant-facing path.
 9. Center response controls that belong to a centered task display, especially Likert/rating scales and numbered identification buttons. Check the rendered page rather than assuming the control will be centered by default.
 10. Analyze at the trial level. Provide analysis code that can consume exported data or a documented simulated dataset and summarize psychophysical outcomes such as accuracy, confusion probabilities, thresholds, similarity matrices, and reaction-time distributions.

@@ -33,22 +33,25 @@ Useful starting points:
    mechanisms can express the behavior. Custom JavaScript should be a last
    resort, used only when the required functionality cannot be achieved through
    PsyNet pages, controls, timelines, events, modules, or native helpers.
-5. If the experiment is cross-cultural, cross-national, multilingual,
+5. If the experiment needs participant eligibility, capability, device,
+   comprehension, or recruiter qualification checks, read
+   `task-specific-prescreening/SKILL.md` before coding those gates.
+6. If the experiment is cross-cultural, cross-national, multilingual,
    international, or compares cultures/regions/language groups, read
    `prepare-for-translation/SKILL.md` now and mark participant-facing strings as
    you implement them. Do not wait until after evidence collection to make the
    experiment translation-ready.
-6. Put generated experiment files in the requested output directory.
-7. If the experiment has a `requirements.txt`, pin PsyNet to the local checkout
+7. Put generated experiment files in the requested output directory.
+8. If the experiment has a `requirements.txt`, pin PsyNet to the local checkout
    commit used for the implementation, for example:
    `psynet@git+https://gitlab.com/PsyNetDev/PsyNet@<commit>#egg=psynet`.
-8. Generate `constraints.txt` from that pinned `requirements.txt` using the
+9. Generate `constraints.txt` from that pinned `requirements.txt` using the
    PsyNet/Dallinger environment, typically `dallinger constraints generate`.
    Do not copy a constraints file that still points to `master`.
-9. Add short comments only where the PsyNet pattern is not obvious.
-10. Regularly use `psynet test local` to test the experiment logic,
+10. Add short comments only where the PsyNet pattern is not obvious.
+11. Regularly use `psynet test local` to test the experiment logic,
    and implement custom assertions to test the experiment's behavior.
-11. When implementing custom `Page` classes, make sure `get_bot_response`
+12. When implementing custom `Page` classes, make sure `get_bot_response`
     returns the same structured, formatted answer that the browser path records.
     PsyNet bots submit the value returned by `get_bot_response` as the formatted
     answer, so the bot path can bypass `format_answer` unless you explicitly
@@ -72,10 +75,9 @@ Useful starting points:
   the demo set, check that each audio asset duration matches the task, and add
   assertions or exported-data checks that prove audio trials ran and responses
   were saved against the correct stimulus IDs.
-- When an audio task depends on listening quality, include the relevant
-  prescreening or quality-control pages from PsyNet demos, such as volume
-  calibration, headphone screening, and comprehension checks, unless the prompt
-  explicitly excludes them.
+- When an audio, visual, language, comprehension, or device requirement affects
+  eligibility or data quality, use `task-specific-prescreening/SKILL.md` to
+  choose and validate the gate rather than adding a generic check by habit.
 - For participant-facing instructions, payoff tables, lists, headings, and other
   ordinary page structure, prefer `dominate.tags` over raw HTML. Use
   `markupsafe.Markup` only for trusted, static HTML snippets passed directly as
