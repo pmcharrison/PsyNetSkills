@@ -53,6 +53,7 @@
       `Dashboard link: ${absoluteDashboardUrl(context.dashboard_path || action.source_url)}`,
       `Repository target: ${context.repository || action.repository}`,
       `Confidence: ${context.confidence || action.confidence}`,
+      `Impact: ${context.impact || action.impact}`,
       `Status: ${context.status || action.status}`,
       "",
       "Learning context:",

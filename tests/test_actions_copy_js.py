@@ -177,6 +177,7 @@ def test_action_copy_shortcut_works_from_focused_checkbox(tmp_path: Path) -> Non
                 source_url: "/one",
                 repository: "psynetskills",
                 confidence: "high",
+                impact: "high",
                 status: "considering",
                 learning_context: "Context one",
                 proposal: "Fix action one",
@@ -191,6 +192,7 @@ def test_action_copy_shortcut_works_from_focused_checkbox(tmp_path: Path) -> Non
                 source_url: "/two",
                 repository: "psynet",
                 confidence: "medium",
+                impact: "low",
                 status: "considering",
                 learning_context: "Context two",
                 proposal: "Fix action two",
@@ -265,6 +267,9 @@ def test_action_copy_shortcut_works_from_focused_checkbox(tmp_path: Path) -> Non
               }
               if (!copiedText.includes("## Fix action one")) {
                 throw new Error("Focused checkbox shortcut did not use the action point as the heading.");
+              }
+              if (!copiedText.includes("Impact: high")) {
+                throw new Error("Focused checkbox shortcut did not copy the action impact.");
               }
               if (copiedText.includes("Action point:")) {
                 throw new Error("Focused checkbox shortcut duplicated the action point text.");

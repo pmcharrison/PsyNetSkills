@@ -199,7 +199,7 @@ def test_collect_challenges_reports_attempt_metadata(tmp_path: Path) -> None:
         "## Useful finding\n\n"
         "Useful finding.\n\n"
         "*Actions:*\n\n"
-        "- **PsyNetSkills:** Document it. Confidence: high. Status: considering.\n",
+        "- **PsyNetSkills:** Document it. Confidence: high. Impact: medium. Status: considering.\n",
     )
     write(
         attempt_dir / "challenge/INSTRUCTIONS.md",
@@ -302,17 +302,18 @@ def test_parse_learning_actions_accepts_optional_notes() -> None:
     markdown = (
         "*Actions:*\n\n"
         "- **PsyNetSkills:** Add reviewed-action notes. Confidence: high. "
-        "Status: completed. Notes: Implemented in the dashboard parser.\n"
+        "Impact: medium. Status: completed. Notes: Implemented in the dashboard parser.\n"
         "- **PsyNet:** Keep related framework behavior unchanged. Confidence: "
-        "medium. Status: dismissed. Notes: The repository convention is enough "
-        "for now.\n"
+        "medium. Impact: low. Status: dismissed. Notes: The repository "
+        "convention is enough for now.\n"
     )
 
     assert parse_learning_actions(markdown) == [
-        ("psynetskills", "high", "Add reviewed-action notes.", "completed"),
+        ("psynetskills", "high", "medium", "Add reviewed-action notes.", "completed"),
         (
             "psynet",
             "medium",
+            "low",
             "Keep related framework behavior unchanged.",
             "dismissed",
         ),
@@ -339,20 +340,20 @@ def test_dashboard_data_reports_open_learning_actions(tmp_path: Path) -> None:
         "This explains why the action matters.\n\n"
         "*Actions:*\n\n"
         "- **PsyNetSkills:** Document the behavior in the attempt guide. "
-        "Confidence: high. Status: completed.\n"
+        "Confidence: high. Impact: medium. Status: completed.\n"
         "- **PsyNet:** Clarify the underlying framework behavior across\n"
         "  the relevant API docs. Confidence: medium.\n"
-        "  Status: considering. Notes: Waiting for a framework maintainer to review.\n"
+        "  Impact: high. Status: considering. Notes: Waiting for a framework maintainer to review.\n"
         "- **PsyNetSkills:** Work on the active repository update. "
-        "Confidence: high. Status: in_progress.\n"
+        "Confidence: high. Impact: medium. Status: in_progress.\n"
         "- **PsyNetSkills:** Plan the repository update. "
-        "Confidence: low. Status: planned.\n"
+        "Confidence: low. Impact: low. Status: planned.\n"
         "- **PsyNet:** Mark the framework follow-up completed. "
-        "Confidence: high. Status: completed.\n"
+        "Confidence: high. Impact: medium. Status: completed.\n"
         "- **PsyNetSkills:** Dismiss the duplicate proposal. "
-        "Confidence: medium. Status: dismissed. Notes: Covered by the repository update.\n"
+        "Confidence: medium. Impact: medium. Status: dismissed. Notes: Covered by the repository update.\n"
         "- **PsyNet:** Supersede the old framework proposal. "
-        "Confidence: medium. Status: superseded.\n",
+        "Confidence: medium. Impact: medium. Status: superseded.\n",
     )
 
     data = dashboard_data(tmp_path)
@@ -375,7 +376,9 @@ def test_dashboard_data_reports_open_learning_actions(tmp_path: Path) -> None:
     assert data["actions"][0]["notes"] == (
         "Waiting for a framework maintainer to review."
     )
+    assert data["actions"][0]["impact"] == "high"
     assert data["actions"][0]["copy_context"]["learning_title"] == "Useful finding"
+    assert data["actions"][0]["copy_context"]["impact"] == "high"
     assert data["actions"][0]["copy_context"]["notes"] == (
         "Waiting for a framework maintainer to review."
     )
@@ -395,11 +398,11 @@ def test_format_action_copy_markdown_includes_context_and_notes() -> None:
         "The first learning context.\n\n"
         "*Actions:*\n\n"
         "- **PsyNetSkills:** Do the first thing. Confidence: high. "
-        "Status: considering. Notes: Preserve this note.\n\n"
+        "Impact: high. Status: considering. Notes: Preserve this note.\n\n"
         "## Second learning\n\n"
         "The second learning context.\n\n"
         "*Actions:*\n\n"
-        "- **PsyNet:** Do the second thing. Confidence: medium. Status: planned.\n",
+        "- **PsyNet:** Do the second thing. Confidence: medium. Impact: medium. Status: planned.\n",
         challenge_slug="example",
         challenge_title="Example challenge",
         attempt_name="2026-06-01-10-10",
@@ -422,6 +425,7 @@ def test_format_action_copy_markdown_includes_context_and_notes() -> None:
         "2026-06-01-10-10/#example-2026-06-01-10-10-action-001"
     ) in brief
     assert "Learning context:\nThe first learning context." in brief
+    assert "Impact: high" in brief
     assert "Action point:" not in brief
     assert "Notes:\nPreserve this note." in brief
     assert "## Do the second thing." in brief
@@ -762,7 +766,7 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
         "## Useful finding\n\n"
         "Useful finding.\n\n"
         "*Actions:*\n\n"
-        "- **PsyNetSkills:** Document it. Confidence: high. Status: considering.\n",
+        "- **PsyNetSkills:** Document it. Confidence: high. Impact: medium. Status: considering.\n",
     )
     write(
         tmp_path

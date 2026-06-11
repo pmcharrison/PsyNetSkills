@@ -665,6 +665,7 @@ td {
 }
 
 .learning-chip-confidence-high,
+.learning-chip-impact-low,
 .learning-chip-status-completed,
 .learning-chip-status-implemented {
   background: var(--success-background);
@@ -672,6 +673,7 @@ td {
 }
 
 .learning-chip-confidence-medium,
+.learning-chip-impact-medium,
 .learning-chip-status-considering,
 .learning-chip-status-in-progress,
 .learning-chip-status-planned {
@@ -684,6 +686,11 @@ td {
 .learning-chip-status-dismissed,
 .learning-chip-status-superseded {
   background: var(--code-background);
+}
+
+.learning-chip-impact-high {
+  background: var(--danger-background);
+  border-color: var(--danger-border);
 }
 
 .learning-markdown li .learning-chip {

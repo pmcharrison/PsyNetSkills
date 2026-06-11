@@ -12,6 +12,11 @@ CANONICAL_LEARNING_STATUSES = {
     "dismissed",
     "superseded",
 }
+CANONICAL_LEARNING_IMPACTS = {
+    "high",
+    "low",
+    "medium",
+}
 COMPLETED_LEARNING_STATUSES = {
     "completed",
     "dismissed",
@@ -20,6 +25,9 @@ COMPLETED_LEARNING_STATUSES = {
 LEARNING_ACTION_RE = re.compile(
     r"^- (?P<target>\*\*(?P<repository>PsyNetSkills|PsyNet):\*\*) "
     r"(?P<proposal>.+) Confidence: (?P<confidence>high|medium|low)\. "
+    r"Impact: (?P<impact>"
+    + "|".join(sorted(CANONICAL_LEARNING_IMPACTS))
+    + r")\. "
     r"Status: (?P<status>"
     + "|".join(sorted(CANONICAL_LEARNING_STATUSES))
     + r")(?:\. Notes: (?P<notes>.+))?\.$",
@@ -80,19 +88,19 @@ def learning_action_bullets(lines: list[str]) -> list[str]:
 
 def parse_learning_action_bullet(
     bullet: str,
-) -> tuple[str, str, str, str] | None:
+) -> tuple[str, str, str, str, str] | None:
     """Parse one normalized learning action bullet."""
 
     parsed = parse_learning_action_bullet_with_notes(bullet)
     if parsed is None:
         return None
-    repository, confidence, proposal, status, _ = parsed
-    return repository, confidence, proposal, status
+    repository, confidence, impact, proposal, status, _ = parsed
+    return repository, confidence, impact, proposal, status
 
 
 def parse_learning_action_bullet_with_notes(
     bullet: str,
-) -> tuple[str, str, str, str, str] | None:
+) -> tuple[str, str, str, str, str, str] | None:
     """Parse one normalized learning action bullet, including optional notes."""
 
     normalized = re.sub(r"\s+", " ", bullet).strip()
@@ -107,13 +115,14 @@ def parse_learning_action_bullet_with_notes(
     return (
         match.group("repository").strip().lower(),
         match.group("confidence").strip().lower(),
+        match.group("impact").strip().lower(),
         match.group("proposal").strip(),
         match.group("status").strip().lower(),
         notes,
     )
 
 
-def parse_learning_actions(markdown: str) -> list[tuple[str, str, str, str]]:
+def parse_learning_actions(markdown: str) -> list[tuple[str, str, str, str, str]]:
     """Parse structured learning actions from a ``LEARNINGS.md`` body."""
 
     actions: list[tuple[str, str, str, str]] = []

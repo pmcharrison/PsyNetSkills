@@ -11,9 +11,8 @@ within the fixed 5-minute performance window.
 *Actions:*
 - **PsyNetSkills:** Consider documenting client-side block pages as an option
   for high-trial-count visual tasks, with a warning that exported data must
-  reconstruct trial-level rows explicitly. Confidence: medium. Status:
+  reconstruct trial-level rows explicitly. Confidence: medium. Impact: medium. Status:
   considering.
-
 ## Page-level progress can mislead for block pages
 
 PsyNet's page-level progress bar froze or jumped during multi-trial client-side
@@ -23,8 +22,7 @@ page. The final retry disables the progress bar to avoid misleading evidence.
 *Actions:*
 - **PsyNetSkills:** Consider adding a review checklist item for whether progress
   indicators remain meaningful when custom client-side trial loops are used.
-  Confidence: high. Status: considering.
-
+  Confidence: high. Impact: medium. Status: considering.
 ## Non-excluding color-vision checks for end questionnaires
 
 The participant video initially terminated before demographics after the
@@ -34,8 +32,7 @@ the flow without excluding participants before required end questionnaires.
 *Actions:*
 - **PsyNetSkills:** Consider advising challenge attempts to make end-of-study
   screening measures non-excluding unless exclusion is explicitly required by
-  the challenge. Confidence: medium. Status: considering.
-
+  the challenge. Confidence: medium. Impact: medium. Status: considering.
 ## Fixation alignment needs visual review
 
 The evaluator found that the fixation cross was centered relative to the whole
@@ -45,8 +42,7 @@ identification showed two fixation crosses.
 *Actions:*
 - **PsyNetSkills:** Consider adding a participant-video review item that checks
   fixation alignment against the stimulus display area, not against surrounding
-  question text or controls. Confidence: high. Status: considering.
-
+  question text or controls. Confidence: high. Impact: high. Status: considering.
 ## Analysis evidence should include plots
 
 CSV summaries were useful but not enough for review; the evaluator requested
@@ -54,5 +50,4 @@ visualizations of response distributions and similarity matrices.
 
 *Actions:*
 - **PsyNetSkills:** Consider recommending both table and image outputs for
-  analysis evidence in experiment implementation attempts. Confidence: medium.
-  Status: considering.
+  analysis evidence in experiment implementation attempts. Confidence: medium. Impact: high. Status: considering.

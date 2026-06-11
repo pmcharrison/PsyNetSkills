@@ -250,11 +250,16 @@ What happened during implementation or testing.
 *Actions:*
 
 - **PsyNetSkills:** A repo, skill, docs, validation, dashboard, or evidence workflow
-  change. Confidence: high. Status: considering. Notes: Optional decision
-  rationale after review.
+  change. Confidence: high. Impact: medium. Status: considering. Notes: Optional
+  decision rationale after review.
 - **PsyNet:** A PsyNet framework, documentation, or command-line change. Confidence:
-  medium. Status: considering.
+  medium. Impact: low. Status: considering.
 ```
+
+Use `Impact: low` for quick recoveries or nice-to-have improvements,
+`Impact: medium` for issues the agent fixed after meaningful friction, and
+`Impact: high` for fixes that would prevent a stuck attempt, major evidence gap,
+or serious participant-facing/research-validity failure.
 
 Keep learning notes concise and grounded in what happened. Useful topics include
 PsyNet or Dallinger API gotchas, ambiguous instructions, evidence collection
