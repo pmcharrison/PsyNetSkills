@@ -16,5 +16,5 @@ from the authenticated local dashboard route worked while the debug server was
 running.
 
 *Actions:*
-- **PsyNetSkills:** Document the dashboard download-route fallback for local `data.zip` evidence when `psynet export local` cannot read live credentials. Confidence: medium. Status: considering.
-- **PsyNet:** Check whether `psynet export local` should honor its CLI password option before reading `dashboard_password` from config. Confidence: medium. Status: considering.
+- **PsyNetSkills:** Document the dashboard download-route fallback for local `data.zip` evidence when `psynet export local` cannot read live credentials. Confidence: medium. Status: superseded. Notes: Superseded by the upstream fix in https://gitlab.com/PsyNetDev/PsyNet/-/merge_requests/1081; the dashboard download fallback is no longer needed for this failure mode.
+- **PsyNet:** Check whether `psynet export local` should honor its CLI password option before reading `dashboard_password` from config. Confidence: medium. Status: completed. Notes: Fixed upstream in https://gitlab.com/PsyNetDev/PsyNet/-/merge_requests/1081.

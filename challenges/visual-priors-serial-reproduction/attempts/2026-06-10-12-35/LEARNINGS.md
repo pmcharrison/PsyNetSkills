@@ -33,4 +33,5 @@ response would produce.
 
 *Actions:*
 - **PsyNet:** Check whether `psynet export local` should honor the CLI password
-  option before falling back to config. Confidence: medium. Status: considering.
+  option before falling back to config. Confidence: medium. Status: completed.
+  Notes: Fixed upstream in https://gitlab.com/PsyNetDev/PsyNet/-/merge_requests/1081.
