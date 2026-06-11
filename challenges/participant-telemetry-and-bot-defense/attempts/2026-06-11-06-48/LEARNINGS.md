@@ -24,3 +24,16 @@ before the experiment starts.
 - **PsyNetSkills:** Consider expanding the attempt-challenge reminder about
   copying standard support files to name `source_code.zip` and `static/assets`
   ignore rules explicitly. Confidence: high. Status: considering.
+
+## Use richer ambiguity in telemetry challenge simulations
+
+The evaluation noted that future telemetry attempts would be stronger if the
+task and simulated profiles created more realistic ambiguity, for example a
+richer real experimental task or subtler LLM-style response profiles rather than
+only obvious fast, uniform, or failed-check profiles.
+
+*Actions:*
+- **PsyNetSkills:** Consider updating this challenge's public examples or future
+  attempt guidance to encourage nuanced simulated profiles that test review
+  rules under ambiguous but still local and ethical conditions. Confidence:
+  medium. Status: considering.
