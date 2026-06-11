@@ -415,16 +415,16 @@ def test_format_action_copy_markdown_includes_context_and_notes() -> None:
     assert brief.startswith("# PsyNetSkills action points\n")
     assert "clearly separate pieces of work" in brief
     assert "getting confirmation before continuing" in brief
-    assert "## 1. First learning" in brief
+    assert "## Do the first thing." in brief
     assert "Action ID: example/2026-06-01-10-10/action-001" in brief
     assert (
         "Dashboard link: https://example.test/dashboard/challenges/example/"
         "2026-06-01-10-10/#example-2026-06-01-10-10-action-001"
     ) in brief
     assert "Learning context:\nThe first learning context." in brief
-    assert "Action point:\nDo the first thing." in brief
+    assert "Action point:" not in brief
     assert "Notes:\nPreserve this note." in brief
-    assert "## 2. Second learning" in brief
+    assert "## Do the second thing." in brief
     assert "Repository target: psynet" in brief
 
 

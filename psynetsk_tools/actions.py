@@ -103,7 +103,7 @@ def format_action_copy_markdown(
         lines.extend(
             [
                 "",
-                f"## {index}. {action.source_section}",
+                f"## {action.proposal}",
                 "",
                 f"Action ID: {action.id}",
                 f"Challenge: {action.challenge_title}",
@@ -116,9 +116,6 @@ def format_action_copy_markdown(
                 "",
                 "Learning context:",
                 action.learning_context or "(No learning context recorded.)",
-                "",
-                "Action point:",
-                action.proposal,
             ],
         )
         if action.notes:
