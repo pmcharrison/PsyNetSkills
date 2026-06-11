@@ -28,7 +28,7 @@ forwarded local port.
    `python .cursor/skills/run-attempt/scripts/run_attempt.py <attempt> --dry-run`
 4. If the dry run resolves exactly one experiment directory, start the live
    server in a tmux session so the user can continue using the agent:
-   `python .cursor/skills/run-attempt/scripts/run_attempt.py <attempt>`
+   `tmux -f /exec-daemon/tmux.portal.conf new-session -d -s run-attempt -- python .cursor/skills/run-attempt/scripts/run_attempt.py <attempt>`
 5. Watch the output for the generated PsyNet ad/participant URL and report it to
    the user. Also tell them which terminal/tmux session is running the server.
 6. If Cursor forwards the port, tell the user they can open the forwarded URL

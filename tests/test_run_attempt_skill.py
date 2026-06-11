@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import importlib.util
+import sys
 from pathlib import Path
 
 
@@ -19,6 +20,7 @@ def load_run_attempt_module():
     assert spec is not None
     assert spec.loader is not None
     module = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = module
     spec.loader.exec_module(module)
     return module
 
@@ -54,7 +56,7 @@ def test_run_attempt_dry_run_resolves_slug_and_attempt(
     assert "Command: psynet debug local" in output.out
 
 
-def test_run_attempt_dry_run_inferrs_attempt_from_cwd(
+def test_run_attempt_dry_run_infers_attempt_from_cwd(
     tmp_path: Path,
     monkeypatch,
     capsys,
