@@ -19,3 +19,14 @@ selection, rating, and completion.
 
 *Actions:*
 - **PsyNetSkills:** Extend the attempt challenge scaffold reminder to include these local PsyNet generated paths when copying a minimal experiment rather than the full demo template. Confidence: high. Status: considering.
+
+## Separate evaluator experiments and full-browser recordings
+
+Evaluation feedback identified two evidence/design gaps: similarity ratings
+should be conducted by an individual experiment rather than embedded in the same
+participant flow, and screen recordings must show the full browser viewport and
+all generated SVG candidates clearly enough for review.
+
+*Actions:*
+- **PsyNetSkills:** Add challenge guidance for independent evaluator tasks to be implemented as a separate runnable experiment when the instructions ask for an independent rating task. Confidence: high. Status: considering.
+- **PsyNetSkills:** Update participant-recording guidance to require a quick playback check that all compared stimuli are visible in the saved recording, not just in screenshots. Confidence: high. Status: considering.
