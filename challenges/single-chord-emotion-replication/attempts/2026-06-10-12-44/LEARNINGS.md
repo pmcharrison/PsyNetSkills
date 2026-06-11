@@ -19,7 +19,7 @@ The experiment itself ran locally, but `psynet export local` depended on dashboa
 The evaluator wanted each implemented questionnaire to be backed by a downloaded source paper or instrument reference stored inside the attempt, so a reviewer can verify wording and scoring decisions without chasing external links.
 
 *Actions:*
-- **PsyNetSkills:** Update replication-oriented attempt guidance to require a local reference file for each reconstructed questionnaire or scoring instrument when licensing allows it, plus explicit cross-references in the methods note. Confidence: high. Status: considering.
+- **PsyNetSkills:** Update replication-oriented attempt guidance to require a local reference file for each reconstructed questionnaire or scoring instrument when licensing allows it, plus explicit cross-references in the methods note. Confidence: high. Status: planned. Notes: Maintainer confirmed this should be added to implement-experiment guidance later, under instructions for handling external materials.
 
 ## Escalate when stimulus fidelity is below the requested bar
 
