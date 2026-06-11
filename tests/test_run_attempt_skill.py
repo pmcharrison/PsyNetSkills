@@ -129,11 +129,10 @@ def test_run_attempt_builds_public_urls() -> None:
     assert dashboard_url == "https://admin:p%40%20ss@example.loca.lt/dashboard/develop"
 
 
-def test_run_attempt_handoff_prints_three_links(capsys) -> None:
+def test_run_attempt_handoff_prints_local_links_by_default(capsys) -> None:
     module = load_run_attempt_module()
     handoff = module.HandoffState()
 
-    handoff.set_public_tunnel_url("https://example.loca.lt")
     handoff.update_from_line("Username: `admin`\n")
     handoff.update_from_line("Password: `secret`\n")
     handoff.update_from_url(
@@ -144,10 +143,36 @@ def test_run_attempt_handoff_prints_three_links(capsys) -> None:
 
     output = capsys.readouterr().out
     assert output.count("=== Run attempt handoff ===") == 1
+    assert "=== Run attempt public tunnel ===" not in output
     assert (
         "Start new participant (local): "
         "http://127.0.0.1:5000/ad?recruiter=hotair&assignmentId=A1"
     ) in output
+    assert (
+        "Dashboard (local): "
+        "http://admin:secret@127.0.0.1:5000/dashboard/develop"
+    ) in output
+    assert "Username: admin" in output
+    assert "Password: secret" in output
+    assert "Public tunnel: not started by default" in output
+
+
+def test_run_attempt_handoff_prints_public_links_when_tunnel_is_set(capsys) -> None:
+    module = load_run_attempt_module()
+    handoff = module.HandoffState()
+
+    handoff.update_from_line("Username: `admin`\n")
+    handoff.update_from_line("Password: `secret`\n")
+    handoff.update_from_url(
+        "http://127.0.0.1:5000/ad?recruiter=hotair&assignmentId=A1"
+    )
+    handoff.set_public_tunnel_url("https://example.loca.lt")
+    handoff.maybe_print()
+    handoff.maybe_print()
+
+    output = capsys.readouterr().out
+    assert output.count("=== Run attempt handoff ===") == 1
+    assert output.count("=== Run attempt public tunnel ===") == 1
     assert (
         "Add new participant (public tunnel): "
         "https://example.loca.lt/ad?recruiter=hotair&assignmentId=A1"
@@ -158,3 +183,68 @@ def test_run_attempt_handoff_prints_three_links(capsys) -> None:
     ) in output
     assert "Username: admin" in output
     assert "Password: secret" in output
+
+
+def test_run_attempt_public_tunnel_is_disabled_by_default(
+    monkeypatch,
+    tmp_path: Path,
+) -> None:
+    module = load_run_attempt_module()
+    run = module.AttemptRun(
+        repo_root=tmp_path,
+        attempt_dir=tmp_path,
+        experiment_dir=tmp_path,
+        psynet_command="psynet",
+    )
+    captured = {}
+
+    monkeypatch.setattr(module, "resolve_run", lambda args: run)
+    monkeypatch.setattr(
+        module,
+        "run_server",
+        lambda run_arg, *, public_tunnel, public_tunnel_port: captured.update(
+            public_tunnel=public_tunnel,
+            public_tunnel_port=public_tunnel_port,
+        )
+        or 0,
+    )
+
+    exit_code = module.main(["example/2026-06-11-18-30", "--no-start-services"])
+
+    assert exit_code == 0
+    assert captured == {"public_tunnel": False, "public_tunnel_port": 5000}
+
+
+def test_run_attempt_public_tunnel_is_opt_in(monkeypatch, tmp_path: Path) -> None:
+    module = load_run_attempt_module()
+    run = module.AttemptRun(
+        repo_root=tmp_path,
+        attempt_dir=tmp_path,
+        experiment_dir=tmp_path,
+        psynet_command="psynet",
+    )
+    captured = {}
+
+    monkeypatch.setattr(module, "resolve_run", lambda args: run)
+    monkeypatch.setattr(
+        module,
+        "run_server",
+        lambda run_arg, *, public_tunnel, public_tunnel_port: captured.update(
+            public_tunnel=public_tunnel,
+            public_tunnel_port=public_tunnel_port,
+        )
+        or 0,
+    )
+
+    exit_code = module.main(
+        [
+            "example/2026-06-11-18-30",
+            "--no-start-services",
+            "--public-tunnel",
+            "--public-tunnel-port",
+            "5001",
+        ]
+    )
+
+    assert exit_code == 0
+    assert captured == {"public_tunnel": True, "public_tunnel_port": 5001}
