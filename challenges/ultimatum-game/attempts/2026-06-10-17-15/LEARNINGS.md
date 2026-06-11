@@ -12,7 +12,7 @@ The shell does not expose `python`, so setup scripts that assume it can fail bef
 The live UI rendered and grouped participants, but manual testing showed action clicks could be lost when they depended solely on a ready WebSocket. Posting authenticated actions to a normal experiment route while keeping WebSockets for broadcasts made the participant path reliable.
 
 *Actions:*
-- **PsyNetSkills:** Consider adding this HTTP-action-plus-WebSocket-broadcast pattern to synchronous challenge guidance. Confidence: medium. Status: considering.
+- **PsyNetSkills:** Consider adding a synchronous challenge pattern that posts participant actions to authenticated HTTP routes while using WebSockets only for state broadcasts. Confidence: medium. Status: considering.
 
 ## Vendored ES modules may require sibling build files
 

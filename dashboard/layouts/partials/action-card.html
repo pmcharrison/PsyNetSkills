@@ -1,0 +1,29 @@
+{{ $statusClass := replace .status "_" "-" }}
+<div class="action-card-row" data-action-card-row>
+  <input
+    class="action-card-checkbox"
+    type="checkbox"
+    value="{{ .id }}"
+    data-action-copy-checkbox
+    aria-label="Select action {{ .id }} for copying"
+  >
+  <article class="action-card" id="{{ .anchor_id }}">
+    <div class="action-card-meta">
+      <span class="learning-chip learning-chip-repository">
+        <span class="learning-chip-label">Repository</span> {{ .repository }}
+      </span>
+      <span class="learning-chip learning-chip-confidence learning-chip-confidence-{{ .confidence }}">
+        <span class="learning-chip-label">Confidence</span> {{ .confidence }}
+      </span>
+      <span class="learning-chip learning-chip-status learning-chip-status-{{ $statusClass }}">
+        <span class="learning-chip-label">Status</span> {{ replace .status "_" " " }}
+      </span>
+    </div>
+    <p class="action-card-proposal">{{ .proposal }}</p>
+    <p class="action-card-source">
+      <a href="{{ .source_url | relURL }}">{{ .challenge_title }} / {{ .attempt_name }}</a>
+      <span>· {{ .source_section }}</span>
+    </p>
+    <p class="action-card-path"><code>{{ .source_path }}</code></p>
+  </article>
+</div>

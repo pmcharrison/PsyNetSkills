@@ -13,6 +13,14 @@ from collections.abc import Mapping
 from dataclasses import asdict, dataclass
 from pathlib import Path
 
+from psynetsk_tools.actions import (
+    ACTION_REVIEW_SCOPE,
+    LearningAction,
+    action_review_referenced_ids,
+    mark_open_learning_actions_in_markdown,
+    open_learning_actions_from_markdown,
+    read_actions_review,
+)
 from psynetsk_tools.authors import (
     Author,
     author_ids_from_value,
@@ -242,6 +250,17 @@ class Challenge:
     def open_actions(self) -> int:
         """Return the number of unresolved learning actions."""
         return sum(attempt.open_actions for attempt in self.attempts)
+
+
+@dataclass(frozen=True)
+class ActionReviewSection:
+    """A generated review section grouping related action points."""
+
+    title: str
+    summary: str
+    action_ids: list[str]
+    actions: list[LearningAction]
+    missing_action_ids: list[str]
 
 
 def title_from_markdown(markdown: str, fallback: str) -> str:
@@ -645,18 +664,21 @@ def collect_attempts(
         )
         timeline_entries = parse_timeline_entries(timeline)
         implementation_seconds = implementation_time_seconds(timeline_entries)
-        learnings = (
-            demote_markdown_headings(
-                strip_first_heading(
-                    learnings_file.read_text(encoding="utf-8")
-                )
+        learnings_source = ""
+        learnings = ""
+        if learnings_file.exists():
+            learnings_source = strip_first_heading(
+                learnings_file.read_text(encoding="utf-8"),
             )
-            if learnings_file.exists()
-            else ""
-        )
+            learnings = mark_open_learning_actions_in_markdown(
+                learnings_source,
+                challenge_slug=challenge_dir.name,
+                attempt_name=attempt_dir.name,
+            )
+            learnings = demote_markdown_headings(learnings)
         open_actions = sum(
             1
-            for _, _, _, status in parse_learning_actions(learnings)
+            for _, _, _, status in parse_learning_actions(learnings_source)
             if status not in COMPLETED_LEARNING_STATUSES
         )
         artifact_prefix = attempt_artifact_url_prefix(
@@ -814,6 +836,82 @@ def collect_challenges(
     return challenges
 
 
+def collect_open_learning_actions(
+    root: Path,
+    challenges: list[Challenge],
+) -> list[LearningAction]:
+    """Collect open learning actions across all challenge attempts."""
+
+    actions: list[LearningAction] = []
+    for challenge in challenges:
+        for attempt in challenge.attempts:
+            learnings_file = root / attempt.path / "LEARNINGS.md"
+            if not learnings_file.exists():
+                continue
+            actions.extend(
+                open_learning_actions_from_markdown(
+                    learnings_file.read_text(encoding="utf-8"),
+                    challenge_slug=challenge.slug,
+                    challenge_title=challenge.title,
+                    attempt_name=attempt.name,
+                    attempt_url=attempt.url,
+                    source_path=f"{attempt.path}/LEARNINGS.md",
+                ),
+            )
+    return actions
+
+
+def action_review_data(
+    root: Path,
+    actions: list[LearningAction],
+) -> dict[str, object]:
+    """Return dashboard-ready generated action review data."""
+
+    review = read_actions_review(root)
+    actions_by_id = {action.id: action for action in actions}
+    referenced_ids = set(action_review_referenced_ids(review))
+    sections: list[ActionReviewSection] = []
+
+    raw_sections = review.get("sections", [])
+    if isinstance(raw_sections, list):
+        for raw_section in raw_sections:
+            if not isinstance(raw_section, dict):
+                continue
+            raw_action_ids = raw_section.get("actions", [])
+            if not isinstance(raw_action_ids, list):
+                raw_action_ids = []
+            action_ids = [str(action_id) for action_id in raw_action_ids]
+            sections.append(
+                ActionReviewSection(
+                    title=str(raw_section.get("title") or "Untitled section"),
+                    summary=str(raw_section.get("summary") or ""),
+                    action_ids=action_ids,
+                    actions=[
+                        actions_by_id[action_id]
+                        for action_id in action_ids
+                        if action_id in actions_by_id
+                    ],
+                    missing_action_ids=[
+                        action_id
+                        for action_id in action_ids
+                        if action_id not in actions_by_id
+                    ],
+                ),
+            )
+
+    return {
+        "generated_at": str(review.get("generated_at") or ""),
+        "model": str(review.get("model") or ""),
+        "scope": str(review.get("scope") or ACTION_REVIEW_SCOPE),
+        "sections": [asdict(section) for section in sections],
+        "unreviewed_actions": [
+            asdict(action)
+            for action in actions
+            if action.id not in referenced_ids
+        ],
+    }
+
+
 def dashboard_data(
     root: Path,
     artifact_publications: Mapping[
@@ -825,6 +923,7 @@ def dashboard_data(
     author_registry, _ = read_author_registry(root)
     skills = collect_skills(root, author_registry)
     challenges = collect_challenges(root, author_registry, artifact_publications)
+    actions = collect_open_learning_actions(root, challenges)
     return {
         "authors": [asdict(author) for author in author_registry.values()],
         "skills": [asdict(skill) for skill in skills],
@@ -836,9 +935,12 @@ def dashboard_data(
             }
             for challenge in challenges
         ],
+        "actions": [asdict(action) for action in actions],
+        "action_review": action_review_data(root, actions),
         "counts": {
             "skills": len(skills),
             "challenges": len(challenges),
+            "actions": len(actions),
         },
     }
 
@@ -901,6 +1003,23 @@ def write_skill_content(
             page,
             encoding="utf-8",
         )
+
+
+def write_actions_content(dashboard_dir: Path) -> None:
+    """Write the generated Hugo content page for action reviews."""
+
+    actions_dir = dashboard_dir / "content" / "actions"
+    shutil.rmtree(actions_dir, ignore_errors=True)
+    actions_dir.mkdir(parents=True, exist_ok=True)
+    (actions_dir / "_index.md").write_text(
+        write_frontmatter(
+            "Actions",
+            "This page compiles unresolved action points from previous attempts. "
+            "You can select multiple action points at a time and copy them as "
+            "instructions for a new agent to resolve.\n",
+        ),
+        encoding="utf-8",
+    )
 
 
 def write_challenge_content(
@@ -1137,6 +1256,7 @@ def export_dashboard(root: Path, dashboard_dir: Path) -> None:
         dashboard_dir,
         [Skill(**skill) for skill in data["skills"]],  # type: ignore[arg-type]
     )
+    write_actions_content(dashboard_dir)
     write_challenge_content(
         dashboard_dir,
         [

@@ -7,7 +7,7 @@ the participant timeline. Overriding `consume` and `render` as no-ops prevents
 bot/test participants from hitting the abstract base `Elt.consume`.
 
 *Actions:*
-- **PsyNetSkills:** Add this gotcha to experiment implementation guidance for custom realtime channels. Confidence: medium. Status: considering.
+- **PsyNetSkills:** Add guidance that handler-only custom `WebSocketElt` subclasses for realtime channels should implement no-op `consume` and `render` methods so bots and tests do not hit abstract base methods. Confidence: medium. Status: considering.
 
 ## Bot fallback scoring requires saved round-page answers
 

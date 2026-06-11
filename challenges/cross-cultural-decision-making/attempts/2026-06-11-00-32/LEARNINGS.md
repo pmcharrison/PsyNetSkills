@@ -14,9 +14,7 @@ This also makes the exported data locale-independent.
 
 *Actions:*
 
-- **PsyNetSkills:** Add this gotcha to the `prepare-for-translation` skill:
-  trial-maker node definitions must store stable keys, with translation applied
-  in `show_trial`, not at node-definition time. Confidence: high. Status:
+- **PsyNetSkills:** Update the `prepare-for-translation` skill to warn that trial-maker node definitions must store stable locale-independent keys, with translation applied in `show_trial`, not at node-definition time. Confidence: high. Status:
   considering.
 - **PsyNet:** Document in the internationalization tutorial that translated
   strings must not be baked into node/trial definitions, or make node-creation

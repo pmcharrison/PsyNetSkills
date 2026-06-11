@@ -95,7 +95,9 @@ challenge before starting a fresh attempt.
      long videos are time-consuming to create and to analyze.
    - Update `LEARNINGS.md` with any generalizable lessons you encounter.
      This should include mistakes you made when running tests,
-     things that took a long time to find in documentation, etc.
+     things that took a long time to find in documentation, etc. Write each
+     action bullet as a standalone instruction that remains understandable when
+     copied into the Actions dashboard for another agent.
 10. Collect evidence in `evidence/`. Use the `record-participant-video` skill
    when creating `evidence/participant.mp4`, and follow
    `references/attempt-artifacts.md` for challenge-type-specific evidence

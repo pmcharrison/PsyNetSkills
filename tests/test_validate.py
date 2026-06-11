@@ -66,6 +66,34 @@ def minimal_repo(root: Path) -> None:
     write(root / "challenges/example/attempts/.gitkeep", "")
 
 
+def write_valid_attempt(
+    root: Path,
+    *,
+    action_status: str = "considering",
+) -> None:
+    """Write a minimal real attempt with one learning action."""
+
+    attempt_dir = root / "challenges/example/attempts/2026-06-01-10-10"
+    write(attempt_dir / "challenge/INSTRUCTIONS.md", "# Snapshot\n")
+    write(attempt_dir / "agent.json", agent_json())
+    write(attempt_dir / "code/README.md", "# Code\n")
+    write(attempt_dir / "evidence/README.md", "# Evidence\n")
+    write(attempt_dir / "EVALUATION.md", "---\nscore:\n---\n")
+    write(
+        attempt_dir / "LEARNINGS.md",
+        "# Learnings\n\n"
+        "## Useful finding\n\n"
+        "*Actions:*\n\n"
+        "- **PsyNetSkills:** Document it. Confidence: high. "
+        f"Status: {action_status}.\n",
+    )
+    write(
+        attempt_dir / "TIMELINE.md",
+        "# Timeline\n\n"
+        "- T+00:00:00 [agent-start] Started.\n",
+    )
+
+
 def test_validate_repository_accepts_minimal_structure(tmp_path: Path) -> None:
     minimal_repo(tmp_path)
 
@@ -187,6 +215,74 @@ def test_validate_repository_requires_learnings_for_real_attempt(
     problems = validate_repository(tmp_path)
 
     assert any("missing LEARNINGS.md" in problem for problem in problems)
+
+
+def test_validate_repository_accepts_actions_review_for_open_action(
+    tmp_path: Path,
+) -> None:
+    minimal_repo(tmp_path)
+    write_valid_attempt(tmp_path)
+    write(
+        tmp_path / "actions-review.yaml",
+        "generated_at: '2026-06-11T10:00:00Z'\n"
+        "model: test-model\n"
+        "scope: open_actions\n"
+        "sections:\n"
+        "  - title: Documentation follow-ups\n"
+        "    summary: Keep documentation aligned with attempt learnings.\n"
+        "    actions:\n"
+        "      - example/2026-06-01-10-10/action-001\n",
+    )
+
+    assert validate_repository(tmp_path) == []
+
+
+def test_validate_repository_rejects_stale_actions_review_reference(
+    tmp_path: Path,
+) -> None:
+    minimal_repo(tmp_path)
+    write_valid_attempt(tmp_path, action_status="completed")
+    write(
+        tmp_path / "actions-review.yaml",
+        "generated_at: '2026-06-11T10:00:00Z'\n"
+        "model: test-model\n"
+        "scope: open_actions\n"
+        "sections:\n"
+        "  - title: Documentation follow-ups\n"
+        "    summary: Keep documentation aligned with attempt learnings.\n"
+        "    actions:\n"
+        "      - example/2026-06-01-10-10/action-001\n",
+    )
+
+    problems = validate_repository(tmp_path)
+
+    assert any("does not match a currently open action" in problem for problem in problems)
+
+
+def test_validate_repository_rejects_duplicate_actions_review_reference(
+    tmp_path: Path,
+) -> None:
+    minimal_repo(tmp_path)
+    write_valid_attempt(tmp_path)
+    write(
+        tmp_path / "actions-review.yaml",
+        "generated_at: '2026-06-11T10:00:00Z'\n"
+        "model: test-model\n"
+        "scope: open_actions\n"
+        "sections:\n"
+        "  - title: Documentation follow-ups\n"
+        "    summary: Keep documentation aligned with attempt learnings.\n"
+        "    actions:\n"
+        "      - example/2026-06-01-10-10/action-001\n"
+        "  - title: Repeated follow-ups\n"
+        "    summary: This repeats the same action reference.\n"
+        "    actions:\n"
+        "      - example/2026-06-01-10-10/action-001\n",
+    )
+
+    problems = validate_repository(tmp_path)
+
+    assert any("referenced more than once" in problem for problem in problems)
 
 
 def test_validate_timeline_accepts_expected_format(tmp_path: Path) -> None:

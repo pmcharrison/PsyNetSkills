@@ -12,13 +12,25 @@ from typing import Any
 
 import yaml
 
+from psynetsk_tools.actions import (
+    ACTION_REVIEW_FILE,
+    ACTION_REVIEW_SCOPE,
+    action_review_referenced_ids,
+    open_learning_actions_from_markdown,
+    read_actions_review,
+)
 from psynetsk_tools.authors import (
     Author,
     validate_author_references,
     validate_authors,
     validate_yaml_mapping,
 )
-from psynetsk_tools.learnings import LEARNING_ACTION_RE, learning_action_bullets
+from psynetsk_tools.learnings import (
+    LEARNING_ACTION_RE,
+    is_learning_actions_heading,
+    iter_learning_sections,
+    learning_action_bullets,
+)
 from psynetsk_tools.timeline import TIMELINE_ENTRY_RE
 
 SKILLS_ROOT = Path(".cursor") / "skills"
@@ -103,32 +115,6 @@ def parse_evaluation_score(evaluation_file: Path) -> int | float | None:
     except ValueError:
         return None
     return int(parsed) if parsed.is_integer() else parsed
-
-
-def iter_learning_sections(text: str) -> list[tuple[str, list[str]]]:
-    """Split LEARNINGS.md into second-level learning sections."""
-    sections: list[tuple[str, list[str]]] = []
-    current_title: str | None = None
-    current_lines: list[str] = []
-
-    for line in text.splitlines():
-        if line.startswith("## "):
-            if current_title is not None:
-                sections.append((current_title, current_lines))
-            current_title = line[3:].strip()
-            current_lines = []
-        elif current_title is not None:
-            current_lines.append(line)
-
-    if current_title is not None:
-        sections.append((current_title, current_lines))
-
-    return sections
-
-
-def is_learning_actions_heading(line: str) -> bool:
-    """Return whether a line is the Actions heading for a learning card."""
-    return line.strip() == "*Actions:*"
 
 
 def validate_learnings_file(learnings_file: Path) -> list[str]:
@@ -550,6 +536,110 @@ def validate_docs(root: Path) -> list[str]:
     return []
 
 
+def collect_reviewable_learning_action_ids(root: Path) -> set[str]:
+    """Return IDs for currently open learning actions."""
+
+    action_ids: set[str] = set()
+    challenges_dir = root / "challenges"
+    if not challenges_dir.exists():
+        return action_ids
+
+    for challenge_dir in sorted(path for path in challenges_dir.iterdir() if path.is_dir()):
+        instructions_file = challenge_dir / "INSTRUCTIONS.md"
+        challenge_title = challenge_dir.name
+        if instructions_file.exists():
+            frontmatter, _ = read_markdown_frontmatter(instructions_file)
+            challenge_title = str(frontmatter.get("title") or challenge_title)
+        attempts_dir = challenge_dir / "attempts"
+        if not attempts_dir.exists():
+            continue
+        for attempt_dir in sorted(path for path in attempts_dir.iterdir() if path.is_dir()):
+            learnings_file = attempt_dir / "LEARNINGS.md"
+            if not learnings_file.exists():
+                continue
+            action_ids.update(
+                action.id
+                for action in open_learning_actions_from_markdown(
+                    learnings_file.read_text(encoding="utf-8"),
+                    challenge_slug=challenge_dir.name,
+                    challenge_title=challenge_title,
+                    attempt_name=attempt_dir.name,
+                    attempt_url=f"challenges/{challenge_dir.name}/{attempt_dir.name}/",
+                    source_path=(
+                        f"challenges/{challenge_dir.name}/attempts/"
+                        f"{attempt_dir.name}/LEARNINGS.md"
+                    ),
+                )
+            )
+
+    return action_ids
+
+
+def validate_actions_review(root: Path) -> list[str]:
+    """Validate the optional generated action review artifact."""
+
+    review_file = root / ACTION_REVIEW_FILE
+    if not review_file.exists():
+        return []
+
+    problems: list[str] = []
+    try:
+        review = read_actions_review(root)
+    except yaml.YAMLError as exc:
+        return [f"{review_file}: invalid YAML: {exc}"]
+
+    if not isinstance(review, dict):
+        return [f"{review_file}: review must be a YAML mapping"]
+
+    for field in ("generated_at", "model", "scope"):
+        value = review.get(field)
+        if not isinstance(value, str) or not value.strip():
+            problems.append(f"{review_file}: {field} must be a non-empty string")
+
+    if review.get("scope") != ACTION_REVIEW_SCOPE:
+        problems.append(f"{review_file}: scope must be {ACTION_REVIEW_SCOPE!r}")
+
+    sections = review.get("sections")
+    if not isinstance(sections, list):
+        problems.append(f"{review_file}: sections must be a list")
+        return problems
+
+    for index, section in enumerate(sections, start=1):
+        if not isinstance(section, dict):
+            problems.append(f"{review_file}: section {index} must be a mapping")
+            continue
+        for field in ("title", "summary"):
+            value = section.get(field)
+            if not isinstance(value, str) or not value.strip():
+                problems.append(
+                    f"{review_file}: section {index} {field} must be a non-empty string"
+                )
+        actions = section.get("actions")
+        if not isinstance(actions, list) or not actions:
+            problems.append(f"{review_file}: section {index} actions must be a non-empty list")
+        elif any(not isinstance(action_id, str) or not action_id for action_id in actions):
+            problems.append(
+                f"{review_file}: section {index} actions must contain non-empty strings"
+            )
+
+    referenced_ids = action_review_referenced_ids(review)
+    duplicate_ids = sorted(
+        action_id
+        for action_id in set(referenced_ids)
+        if referenced_ids.count(action_id) > 1
+    )
+    for action_id in duplicate_ids:
+        problems.append(f"{review_file}: action {action_id!r} is referenced more than once")
+
+    valid_ids = collect_reviewable_learning_action_ids(root)
+    for action_id in sorted(set(referenced_ids) - valid_ids):
+        problems.append(
+            f"{review_file}: action {action_id!r} does not match a currently open action"
+        )
+
+    return problems
+
+
 def validate_repository(root: Path) -> list[str]:
     """Validate the repository structure."""
     problems: list[str] = []
@@ -558,6 +648,7 @@ def validate_repository(root: Path) -> list[str]:
     problems.extend(validate_docs(root))
     problems.extend(validate_skills(root, registry))
     problems.extend(validate_challenges(root, registry))
+    problems.extend(validate_actions_review(root))
     return problems
 
 
