@@ -1,0 +1,9 @@
+[Config]
+title = Replication memory simulation study
+description = Local PsyNet word-pair memory experiment for simulated participant replication-loop validation.
+contact_email_on_error = local@example.invalid
+organization_name = PsyNetSkills
+
+recruiter = generic
+currency = $
+wage_per_hour = 12.0
