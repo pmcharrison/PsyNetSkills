@@ -12,26 +12,20 @@
 # - test_check_bot
 
 import os
+import sys
 
 import pytest
 
-from experiment import (
-    bot_response,
-    build_color_stimulus,
-    build_human_prompt_html,
-    format_ai_prompt,
-    get_hybrid_config,
-    parse_ai_slider_response,
-    plan_ai_launches,
-    request_openrouter_content,
-)
+experiment_dir = os.path.dirname(__file__)
+sys.path.insert(0, experiment_dir)
+
+import hybrid
 
 pytest_plugins = ["pytest_dallinger", "pytest_psynet"]
-experiment_dir = os.path.dirname(__file__)
 
 
 def test_hybrid_config_validation(monkeypatch):
-    settings = get_hybrid_config(
+    settings = hybrid.get_hybrid_config(
         {
             "ai_participant_proportion": "50",
             "ai_total_participant_target": "8",
@@ -47,18 +41,18 @@ def test_hybrid_config_validation(monkeypatch):
     assert settings["openrouter_mock_mode"] is True
 
     with pytest.raises(ValueError, match="between 0 and 100"):
-        get_hybrid_config({**settings, "ai_participant_proportion": 101})
+        hybrid.get_hybrid_config({**settings, "ai_participant_proportion": 101})
 
     with pytest.raises(ValueError, match="requires the configured API key"):
-        get_hybrid_config({**settings, "openrouter_mock_mode": False})
+        hybrid.get_hybrid_config({**settings, "openrouter_mock_mode": False})
 
     monkeypatch.setenv("OPENROUTER_API_KEY", "test-key")
-    assert get_hybrid_config({**settings, "openrouter_mock_mode": False})
+    assert hybrid.get_hybrid_config({**settings, "openrouter_mock_mode": False})
 
 
 def test_scheduler_plans_pure_human_mixed_and_all_ai():
     assert (
-        plan_ai_launches(
+        hybrid.plan_ai_launches(
             human_count=4,
             ai_count=0,
             ai_running=0,
@@ -68,7 +62,7 @@ def test_scheduler_plans_pure_human_mixed_and_all_ai():
         == 0
     )
     assert (
-        plan_ai_launches(
+        hybrid.plan_ai_launches(
             human_count=1,
             ai_count=0,
             ai_running=0,
@@ -78,7 +72,7 @@ def test_scheduler_plans_pure_human_mixed_and_all_ai():
         == 1
     )
     assert (
-        plan_ai_launches(
+        hybrid.plan_ai_launches(
             human_count=1,
             ai_count=1,
             ai_running=0,
@@ -88,7 +82,7 @@ def test_scheduler_plans_pure_human_mixed_and_all_ai():
         == 0
     )
     assert (
-        plan_ai_launches(
+        hybrid.plan_ai_launches(
             human_count=0,
             ai_count=0,
             ai_running=0,
@@ -98,7 +92,7 @@ def test_scheduler_plans_pure_human_mixed_and_all_ai():
         == 6
     )
     assert (
-        plan_ai_launches(
+        hybrid.plan_ai_launches(
             human_count=3,
             ai_count=0,
             ai_running=0,
@@ -110,14 +104,14 @@ def test_scheduler_plans_pure_human_mixed_and_all_ai():
 
 
 def test_prompt_uses_same_stimulus_as_human_display():
-    stimulus = build_color_stimulus(
+    stimulus = hybrid.build_color_stimulus(
         target="tree",
         participant_group="A",
         active_index=1,
         starting_values=[10, 20, 30],
     )
-    human_prompt = build_human_prompt_html(stimulus)
-    ai_prompt = format_ai_prompt(stimulus)
+    human_prompt = hybrid.build_human_prompt_html(stimulus)
+    ai_prompt = hybrid.format_ai_prompt(stimulus)
 
     assert "Participant group = A" in human_prompt
     assert "Participant group = A" in ai_prompt
@@ -128,21 +122,21 @@ def test_prompt_uses_same_stimulus_as_human_display():
 
 
 def test_ai_response_parsing_and_mock_bot_response():
-    assert parse_ai_slider_response('{"value": 127}') == 127
-    assert parse_ai_slider_response("value: 42") == 42
+    assert hybrid.parse_ai_slider_response('{"value": 127}') == 127
+    assert hybrid.parse_ai_slider_response("value: 42") == 42
 
     with pytest.raises(ValueError):
-        parse_ai_slider_response('{"value": 300}')
+        hybrid.parse_ai_slider_response('{"value": 300}')
     with pytest.raises(ValueError):
-        parse_ai_slider_response('{"value": 10, "extra": true}')
+        hybrid.parse_ai_slider_response('{"value": 10, "extra": true}')
 
-    stimulus = build_color_stimulus(
+    stimulus = hybrid.build_color_stimulus(
         target="banana",
         participant_group="B",
         active_index=2,
         starting_values=[1, 2, 3],
     )
-    response = bot_response(stimulus, {"openrouter_mock_mode": True})
+    response = hybrid.bot_response(stimulus, {"openrouter_mock_mode": True})
     assert 0 <= response.answer <= 255
     assert response.metadata["participant_role"] == "ai"
     assert response.metadata["ai_stimulus"]["target"] == "banana"
@@ -150,7 +144,7 @@ def test_ai_response_parsing_and_mock_bot_response():
 
 def test_openrouter_request_wrapper_parses_stub(monkeypatch):
     monkeypatch.setenv("OPENROUTER_API_KEY", "test-key")
-    settings = get_hybrid_config({"openrouter_mock_mode": False})
+    settings = hybrid.get_hybrid_config({"openrouter_mock_mode": False})
 
     def stub(request, timeout):
         assert request.full_url == settings["openrouter_base_url"]
@@ -158,8 +152,8 @@ def test_openrouter_request_wrapper_parses_stub(monkeypatch):
         assert request.headers["Authorization"] == "Bearer test-key"
         return {"choices": [{"message": {"content": '{"value": 9}'}}]}
 
-    content = request_openrouter_content("prompt", settings, request_fn=stub)
-    assert parse_ai_slider_response(content) == 9
+    content = hybrid.request_openrouter_content("prompt", settings, request_fn=stub)
+    assert hybrid.parse_ai_slider_response(content) == 9
 
 
 @pytest.mark.parametrize("experiment_directory", [experiment_dir], indirect=True)
