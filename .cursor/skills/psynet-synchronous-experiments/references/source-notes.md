@@ -83,6 +83,46 @@ That project is a collective create/rate-style PsyNet study with practical
 lessons around preserving network logic, condition structure, timing,
 validation, and data-recording conventions when porting collective designs.
 
+### Lucas rolling-inventory sync branch
+
+The branch
+`computational-audition-lab/niche-lucas@rolling-inventory-sync-sim` contains a
+synchronous collective drawing experiment. Reusable implementation lessons:
+
+- It combines `SimpleGrouper(..., group_type="chain")`, a chain trial maker with
+  `sync_group_type="chain"`, and in-trial `GroupBarrier`s for instructions,
+  adoption/selection, and final drawing submission.
+- Its custom node readiness checks the active sync group size before spawning
+  the next generation. This protects rolling-inventory chain growth from
+  advancing after only a fixed subset of group members has submitted.
+- The rolling inventory is stored in node definitions with explicit
+  `generation`, `condition`, `options`, `children`, `proposed`,
+  `parent_network_id`, and `original_network_id` fields. This makes concurrent
+  market state and ancestry reconstructable from exports.
+- Selection/adoption scoring is done in a barrier `on_release` callback. The
+  callback collects every participant's selected trial ID, ignores self
+  selections for bonus increments, locks creator participant rows, updates
+  participant vars, and adds performance reward.
+- Its waiting UI shows anonymous per-group member names with `Done`/`Pending`
+  status by querying waiting participants for the current barrier. This is a
+  useful pattern for long synchronous phases where participants can otherwise
+  wonder whether the experiment is stuck.
+- The experiment uses timed adopt/edit pages with forced responses and
+  participant timeout/kick behavior. Before copying that exact API, verify the
+  target PsyNet version supports the timeout arguments; otherwise implement the
+  same policy with current PsyNet timeout/failure hooks.
+- It includes filler personality trials while participants wait to be grouped,
+  with repeated nodes allowed in the waiting trial maker to avoid exhausting
+  filler content.
+- For local one-human testing, it exposes a route that creates companion bots and
+  runs them via `WorkerAsyncProcess`. This is useful for manual sync debugging,
+  but future implementations should guard or remove such routes before launch.
+- The analysis scripts keep ancestry components, choose the longest network per
+  ancestry, reconstruct market nodes by generation, and compute selection
+  summaries split by condition, self selections, and prior popularity. That is a
+  reminder to design export metadata for the analyses the researcher will need,
+  not only for participant display.
+
 ## Recruitment platform notes
 
 ### Prolific
