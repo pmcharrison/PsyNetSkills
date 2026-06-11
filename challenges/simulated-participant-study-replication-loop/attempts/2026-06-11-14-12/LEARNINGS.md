@@ -27,3 +27,12 @@ instructions and representative states.
 
 *Actions:*
 - **PsyNetSkills:** Extend the `record-participant-video` skill with a fast-path recipe for simple button-based PsyNet flows using `xdotool` after one manual dry run verifies the tab/click sequence. Confidence: medium. Status: considering.
+
+## Simulated evidence needs explicit scope
+
+The human evaluation emphasized that mock participant profiles validate the
+workflow and simulation behavior, not real human memory or real LLM participant
+behavior.
+
+*Actions:*
+- **PsyNetSkills:** Keep challenge reports and evaluation templates explicit that simulated participant results are workflow/simulation evidence, not human-subject or real-provider behavioral evidence unless those external populations or providers were actually tested. Confidence: high. Status: considering.
