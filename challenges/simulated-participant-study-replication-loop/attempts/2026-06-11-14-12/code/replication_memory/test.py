@@ -1,4 +1,11 @@
+import os
+
+import pytest
+
 from experiment import WORD_PAIRS, Exp
+
+pytest_plugins = ["pytest_dallinger", "pytest_psynet"]
+experiment_dir = os.path.dirname(__file__)
 
 
 def test_stimulus_manifest_is_balanced():
@@ -9,3 +16,8 @@ def test_stimulus_manifest_is_balanced():
 
 def test_experiment_has_expected_bot_count():
     assert Exp.test_n_bots == 4
+
+
+@pytest.mark.parametrize("experiment_directory", [experiment_dir], indirect=True)
+def test_experiment(launched_experiment):
+    launched_experiment.test_experiment()

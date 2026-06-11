@@ -1,5 +1,3 @@
-from itertools import cycle
-
 import pandas as pd
 from dominate import tags
 
@@ -10,7 +8,10 @@ from psynet.participant import Participant
 from psynet.timeline import Timeline
 from psynet.trial.static import StaticNode, StaticTrial, StaticTrialMaker
 
-from stimuli import PROFILE_DESCRIPTIONS, WORD_PAIRS, choices_for_trial, role_for_answer
+try:
+    from .stimuli import PROFILE_DESCRIPTIONS, WORD_PAIRS, choices_for_trial, role_for_answer
+except ImportError:
+    from stimuli import PROFILE_DESCRIPTIONS, WORD_PAIRS, choices_for_trial, role_for_answer
 
 
 def build_nodes():
@@ -91,8 +92,6 @@ class Exp(psynet.experiment.Experiment):
         "min_accumulated_reward_for_abort": 0.0,
     }
 
-    profiles = cycle(PROFILE_DESCRIPTIONS.keys())
-
     timeline = Timeline(
         InfoPage(
             tags.div(
@@ -109,7 +108,7 @@ class Exp(psynet.experiment.Experiment):
     )
 
     def initialize_bot(self, bot):
-        bot.var.profile = next(self.profiles)
+        bot.var.profile = "psynet_bot_rule"
 
     def test_check_bot(self, bot, **kwargs):
         assert not bot.failed

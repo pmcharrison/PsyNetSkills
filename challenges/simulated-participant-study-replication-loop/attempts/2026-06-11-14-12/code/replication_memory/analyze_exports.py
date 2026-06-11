@@ -65,7 +65,7 @@ def summarize(trials):
     return rows
 
 
-def expectation_flags(summary_rows):
+def expectation_flags(summary_rows, revision):
     flags = []
     lookup = {
         (row["profile"], row["condition"]): row
@@ -84,8 +84,10 @@ def expectation_flags(summary_rows):
         flags.append("Scripted noisy profile looked too accurate to stress-test the task.")
 
     llm_interference = lookup.get(("mock_llm_memory_limited", "interference"))
-    if llm_interference and llm_interference["recent_lure"] <= llm_interference["target"]:
-        flags.append("Mock LLM memory-limited profile did not show a recent-lure vulnerability.")
+    if llm_interference and revision == "initial" and llm_interference["recent_lure"] <= llm_interference["target"]:
+        flags.append("Mock LLM memory-limited profile did not show the preregistered initial recent-lure vulnerability.")
+    if llm_interference and revision == "revised" and llm_interference["recent_lure"] >= llm_interference["target"]:
+        flags.append("Revision did not reduce the mock LLM recent-lure vulnerability below target responses.")
 
     semantic_interference = lookup.get(("semantic_bias", "interference"))
     if semantic_interference and semantic_interference["semantic_lure"] <= semantic_interference["target"]:
@@ -178,7 +180,7 @@ def main():
         initial_metadata,
         initial_participants,
         initial_rows,
-        expectation_flags(initial_rows),
+        expectation_flags(initial_rows, initial_metadata["revision"]),
     )
 
     if args.revised_zip:
@@ -191,7 +193,7 @@ def main():
             revised_metadata,
             revised_participants,
             revised_rows,
-            expectation_flags(revised_rows),
+            expectation_flags(revised_rows, revised_metadata["revision"]),
         )
         compare_runs(initial_rows, revised_rows, args.output_dir / "comparison.md")
 
