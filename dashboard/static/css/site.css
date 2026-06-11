@@ -1073,7 +1073,7 @@ td {
 .screenshot-card img {
   background: var(--code-background);
   display: block;
-  max-height: 26rem;
+  max-height: 20rem;
   object-fit: contain;
   width: 100%;
 }
