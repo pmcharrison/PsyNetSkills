@@ -106,7 +106,9 @@ challenge before starting a fresh attempt.
      This should include mistakes you made when running tests,
      things that took a long time to find in documentation, etc. Write each
      action bullet as a standalone instruction that remains understandable when
-     copied into the Actions dashboard for another agent.
+     copied into the Actions dashboard for another agent. Copy the action shape
+     from `assets/attempt-template/LEARNING_CARD.md` so bullets include the
+     required `Confidence`, `Impact`, and `Status` fields.
 10. Collect evidence in `evidence/`. Use the `record-participant-video` skill
    when creating participant-flow screenshots or `evidence/participant.mp4`, and follow
    `references/attempt-artifacts.md` for challenge-type-specific evidence
@@ -162,7 +164,9 @@ safer workflow rather than committing or publishing them.
 ## Templates
 
 Use the files in `assets/attempt-template/` as the starting point for attempt
-metadata, timeline, learnings, and evaluation notes.
+metadata, timeline, learnings, and evaluation notes. Use
+`assets/attempt-template/LEARNING_CARD.md` when replacing the initialized
+`LEARNINGS.md` placeholder with concrete learning cards.
 
 ## Notes
 
