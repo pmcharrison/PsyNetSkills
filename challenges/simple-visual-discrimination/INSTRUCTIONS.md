@@ -21,9 +21,14 @@ The stimulus set consisted of 30 simple colors, each presented as a colored circ
 4. After stimulus offset, a blank screen was presented for 500 ms.
 5. Next a two-alternative response asking participants to indicate whether the stimuli were the same or different.
 6. Participants complete a set of 10 trials each.
-7. At the end, participants complete an Ishihara color blindness test, their results are recorded but the participants are not failed. This is followed by a simple demographics survey collecting age, gender, and mother tongue.
 
 ## Implementation details
 
 1. Measure reaction time and store this information for every trial.
 2. Allow participants in the forced choice to respond by pressing a button on keyboard.
+
+## Additional details
+
+Use record-participant-video skills in addition to the following additional remark:
+
+Make systematic use of tests: testing experiment logic with psynet test local, testing front-end logic with Playwright, and testing visual logic with video testing. When video testing, make sure to be efficient, e.g. by running the experiment in a ‘minimal’ mode with a small number of trials; long videos are time-consuming to create and to analyze.
