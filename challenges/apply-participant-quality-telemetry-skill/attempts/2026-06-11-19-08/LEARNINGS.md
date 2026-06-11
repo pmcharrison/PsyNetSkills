@@ -26,3 +26,13 @@ because the fixed-duration capture stopped before the completion page.
 
 *Actions:*
 - **PsyNetSkills:** Keep the `videoReview` verification step for participant evidence and prefer stopping `ffmpeg` immediately after completion rather than relying on a tight fixed-duration cap. Confidence: high. Status: considering.
+
+## Stress-test telemetry rules with ambiguous profiles
+
+The evaluation noted that the attempt validated the telemetry skill well, but
+the simulated profiles were cleanly separated. Richer experimental paradigms and
+more ambiguous participant profiles would better test whether manual-review
+rules remain conservative under realistic uncertainty.
+
+*Actions:*
+- **PsyNetSkills:** Add a future participant-quality telemetry challenge or example that uses a richer real experimental paradigm with ambiguous participant profiles, so review rules are tested against overlapping quality signals rather than clearly separated attentive and suspicious fixtures. Confidence: medium. Status: considering.
