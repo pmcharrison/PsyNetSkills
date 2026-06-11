@@ -1,5 +1,7 @@
 {
-  "authors": ["ww577"],
+  "authors": [
+    "ww577"
+  ],
   "agent": "Cursor Cloud Agent",
   "client": "cursor",
   "model": "GPT-5.5",
@@ -17,5 +19,41 @@
     "update_command": "git pull --ff-only origin master",
     "dirty": false
   },
-  "run_cost": null
+  "run_cost": {
+    "currency": "USD",
+    "amount": 11.42,
+    "source": "cursor_usage_csv_batch_import",
+    "recorded_at": "2026-06-11T14:46:39.998322Z",
+    "attribution_status": "matched_cloud_agent_id",
+    "window_started_at": "2026-06-11T06:48:08Z",
+    "window_ended_at": "2026-06-11T07:10:37Z",
+    "matched_started_at": "2026-06-11T06:45:32.563000Z",
+    "matched_ended_at": "2026-06-11T06:45:32.563000Z",
+    "matched_cloud_agent_ids": [
+      "bc-39f140e7-222f-4cff-a30b-ebd343b80a51"
+    ],
+    "usage": {
+      "rows": 1,
+      "input_with_cache_write": 67011,
+      "input_without_cache_write": 277518,
+      "cache_read": 11966058,
+      "output_tokens": 48411,
+      "total_tokens": 12358998,
+      "models": {
+        "gpt-5.5-high": {
+          "rows": 1,
+          "input_with_cache_write": 67011,
+          "input_without_cache_write": 277518,
+          "cache_read": 11966058,
+          "output_tokens": 48411,
+          "total_tokens": 12358998,
+          "cost": 11.42
+        }
+      }
+    },
+    "notes": [
+      "Matched Cursor CSV rows by cursor_conversation_id.",
+      "Applied attempt time window plus padding."
+    ]
+  }
 }
