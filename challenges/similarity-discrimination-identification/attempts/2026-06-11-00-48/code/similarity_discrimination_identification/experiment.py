@@ -21,9 +21,10 @@ CANVAS_SIZE = 100
 CENTER = 50
 STIMULUS_RADIUS = 7
 MINIMAL_PROFILE = os.environ.get("PSYNET_PROFILE") == "minimal"
-FIXATION_DURATION = 0.75 if MINIMAL_PROFILE else 0.5
-STIMULUS_DURATION = 2.5 if MINIMAL_PROFILE else 1.0
-RETENTION_DELAY = 1.0 if MINIMAL_PROFILE else 0.75
+FIXATION_DURATION = 0.5
+STIMULUS_DURATION = 1.2 if MINIMAL_PROFILE else 1.0
+RETENTION_DELAY = 0.75
+GRAPHIC_VIEWPORT_WIDTH = 0.28
 
 STIMULI = [
     {"id": "red", "dimensions": {"color": "#d73027", "hue_deg": 5, "size": STIMULUS_RADIUS}},
@@ -73,6 +74,10 @@ def empty_delay_frame():
 
 
 class NonExcludingColorBlindnessTest(ColorBlindnessTest):
+    def get_nodes(self, media_url: str):
+        nodes = super().get_nodes(media_url)
+        return nodes[:1] if MINIMAL_PROFILE else nodes
+
     def performance_check(self, experiment, participant, participant_trials):
         result = super().performance_check(experiment, participant, participant_trials)
         return {**result, "passed": True}
@@ -161,7 +166,7 @@ def same_different_definitions():
         ]
     )
     if MINIMAL_PROFILE:
-        pairs = pairs[:3]
+        pairs = pairs[:1]
     return [
         {
             "block": "same_different",
@@ -182,7 +187,7 @@ def same_different_definitions():
 def similarity_definitions():
     pairs = list(itertools.combinations_with_replacement([stim["id"] for stim in STIMULI], 2))
     if MINIMAL_PROFILE:
-        pairs = pairs[:4]
+        pairs = pairs[:1]
     return [
         {
             "block": "similarity",
@@ -254,7 +259,7 @@ def identification_definitions():
                     "sampling_note": "Four documented displays per set size, alternating probe-present and probe-absent lure trials.",
                 }
             )
-    return definitions[:3] if MINIMAL_PROFILE else definitions
+    return definitions[:1] if MINIMAL_PROFILE else definitions
 
 
 def make_nodes(definitions, block):
@@ -270,7 +275,7 @@ class SameDifferentTrial(StaticTrial):
             GraphicPrompt(
                 text="Are the two circles identical or different?",
                 dimensions=[CANVAS_SIZE, CANVAS_SIZE],
-                viewport_width=0.45,
+                viewport_width=GRAPHIC_VIEWPORT_WIDTH,
                 frames=pair_graphic_frames(
                     self.definition["stimulus_a"]["id"],
                     self.definition["stimulus_b"]["id"],
@@ -300,7 +305,7 @@ class SimilarityTrial(StaticTrial):
             GraphicPrompt(
                 text="Rate how similar the two circles are.",
                 dimensions=[CANVAS_SIZE, CANVAS_SIZE],
-                viewport_width=0.45,
+                viewport_width=GRAPHIC_VIEWPORT_WIDTH,
                 frames=pair_graphic_frames(
                     self.definition["stimulus_a"]["id"],
                     self.definition["stimulus_b"]["id"],
@@ -330,7 +335,7 @@ class IdentificationTrial(StaticTrial):
             GraphicPrompt(
                 text="Remember the numbered circles. Then choose the number most similar to the probe.",
                 dimensions=[CANVAS_SIZE, CANVAS_SIZE],
-                viewport_width=0.5,
+                viewport_width=GRAPHIC_VIEWPORT_WIDTH,
                 frames=identification_frames(self.definition),
                 prevent_control_response=True,
                 prevent_control_submit=True,
