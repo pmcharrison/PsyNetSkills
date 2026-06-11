@@ -414,7 +414,7 @@ class Exp(psynet.experiment.Experiment):
             expected_trials_per_participant="n_nodes",
             max_trials_per_participant="n_nodes",
         ),
-        ColorBlindnessTest(),
+        ColorBlindnessTest(hide_after=None),
         BasicDemography(),
         InfoPage("Thank you for completing the experiment.", time_estimate=5),
     )
