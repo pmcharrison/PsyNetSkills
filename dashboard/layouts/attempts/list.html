@@ -10,6 +10,7 @@
           <th>Model</th>
           <th>Score</th>
           <th>Implementation time</th>
+          <th>Interventions</th>
           <th>Cost</th>
           <th>Open actions</th>
         </tr>
@@ -29,6 +30,7 @@
             <td>{{ .model }}</td>
             <td>{{ with .score }}{{ . }}{{ else }}Not scored{{ end }}</td>
             <td>{{ .implementation_time_display }}</td>
+            <td>{{ .human_intervention_display }}</td>
             <td>{{ .run_cost_display }}</td>
             <td><span class="open-actions-count {{ $openActionsClass }}">{{ $openActions }}</span></td>
           </tr>

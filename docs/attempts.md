@@ -35,9 +35,10 @@ PsyNet checkout metadata, and optional derived cost metadata. `code/` contains
 the generated implementation. `evidence/` contains the materials used to
 evaluate whether the implementation worked.
 `TIMELINE.md` records major attempt events with timestamps relative to the start
-of the attempt, including manual user interventions or corrective guidance. The
+of the attempt, including manual events and explicit intervention tags. The
 dashboard derives implementation time from completed `[agent-start]` to
-`[agent-stop]` intervals and excludes manual gaps between those intervals.
+`[agent-stop]` intervals, excludes manual gaps between those intervals, and
+counts human interventions from `[manual] [intervention]` entries.
 `EVALUATION.md` records human evaluation feedback and the score.
 `LEARNINGS.md` is initialized when the attempt is created, then records
 implementation findings and confidence-labelled improvement ideas as the attempt
@@ -176,7 +177,7 @@ relative timestamps that include seconds:
 - T+00:00:30 [agent] Read public challenge instructions.
 - T+00:12:10 [agent] Implemented initial experiment scaffold.
 - T+00:25:45 [agent-stop] Work paused while an interactive command waited for input.
-- T+00:26:05 [manual] User interrupted the command and clarified the next step.
+- T+00:26:05 [manual] [intervention] User interrupted the command and clarified the next step.
 - T+00:27:20 [agent-start] Resumed autonomous implementation work.
 - T+00:45:00 [agent-stop] Experiment implementation and first-pass evidence collection complete.
 ```
@@ -188,6 +189,13 @@ milestones, `[manual]` for user interventions or corrective guidance, and
 experiment implementation and first-pass evidence collection are complete. Do
 not include later repository-process discussions unless they directly change the
 experiment implementation.
+
+Add `[intervention]` after `[manual]` only when the human changes the
+implementation path, corrects the agent, or supplies guidance that affects what
+the agent builds or tests. Do not add `[intervention]` for passive approvals,
+status requests, final evaluations, or repository process discussion that does
+not change the implementation. The dashboard's human intervention count is the
+number of structured `[manual] [intervention]` entries.
 
 Close every active implementation segment with `[agent-stop]`. If a timeline has
 no completed start/stop segment, or if the final segment is left open, the

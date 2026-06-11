@@ -9,7 +9,8 @@
 - T+00:50:00 [agent] Revised the participant runner to hold `ArrowUp` continuously while tapping side keys about 10% of the time.
 - T+01:05:00 [agent] Tested repeated-up and held-up navigation; Unity accepted input but did not complete.
 - T+01:08:00 [agent-stop] Implementation and first-pass evidence collection stopped with participant-flow blocker documented.
-- T+01:12:00 [agent-start] Resumed after user clarified that `ArrowUp` must be pressed about 10x faster and the experiment should run three Unity trials.
+- T+01:11:30 [manual] [intervention] User clarified that `ArrowUp` must be pressed about 10x faster and the experiment should run three Unity trials.
+- T+01:12:00 [agent-start] Resumed autonomous implementation work.
 - T+01:14:00 [agent] Refactored the experiment to use a `StaticTrialMaker` with `max_trials_per_participant=3`.
 - T+01:16:00 [agent] Updated the participant runner to send rapid `ArrowUp` keypresses with side corrections every tenth keypress.
 - T+01:20:00 [agent] GUI participant run completed all three Unity trials using rapid `ArrowUp` bursts and sparse side-key corrections.

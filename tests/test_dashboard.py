@@ -191,7 +191,11 @@ def test_collect_challenges_reports_attempt_metadata(tmp_path: Path) -> None:
         attempt_dir / "TIMELINE.md",
         "# Timeline\n\n"
         "- T+00:00:00 [agent-start] Started.\n"
-        "- T+00:12:05 [agent-stop] Finished.\n",
+        "- T+00:05:00 [agent-stop] Paused for feedback.\n"
+        "- T+00:06:00 [manual] [intervention] User redirected the implementation.\n"
+        "- T+00:06:30 [manual] User acknowledged the updated plan.\n"
+        "- T+00:07:00 [agent-start] Resumed.\n"
+        "- T+00:14:05 [agent-stop] Finished.\n",
     )
     write(
         attempt_dir / "LEARNINGS.md",
@@ -223,14 +227,27 @@ def test_collect_challenges_reports_attempt_metadata(tmp_path: Path) -> None:
     assert attempt.evaluation == "Attempt body.\n"
     assert attempt.timeline == (
         "- T+00:00:00 [agent-start] Started.\n"
-        "- T+00:12:05 [agent-stop] Finished.\n"
+        "- T+00:05:00 [agent-stop] Paused for feedback.\n"
+        "- T+00:06:00 [manual] [intervention] User redirected the implementation.\n"
+        "- T+00:06:30 [manual] User acknowledged the updated plan.\n"
+        "- T+00:07:00 [agent-start] Resumed.\n"
+        "- T+00:14:05 [agent-stop] Finished.\n"
     )
-    assert len(attempt.timeline_entries) == 2
+    assert len(attempt.timeline_entries) == 6
     assert attempt.timeline_entries[0].timestamp == "T+00:00:00"
     assert attempt.timeline_entries[0].actor == "agent-start"
     assert attempt.timeline_entries[0].description == "Started."
+    assert attempt.timeline_entries[2].actor == "manual"
+    assert attempt.timeline_entries[2].description == "User redirected the implementation."
+    assert attempt.timeline_entries[2].tags == ["intervention"]
+    assert attempt.timeline_entries[3].actor == "manual"
+    assert attempt.timeline_entries[3].tags == []
+    assert attempt.timeline_entries[4].actor == "agent-start"
+    assert attempt.timeline_entries[4].tags == []
     assert attempt.implementation_time_seconds == 725
     assert attempt.implementation_time_display == "12m 5s"
+    assert attempt.human_intervention_count == 1
+    assert attempt.human_intervention_display == "1"
     assert attempt.run_cost_amount == 22.56
     assert attempt.run_cost_currency == "USD"
     assert attempt.run_cost_attribution_status == "matched_cloud_agent_id"
@@ -1018,15 +1035,19 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
             "timestamp": "T+00:00:00",
             "actor": "agent-start",
             "description": "Started.",
+            "tags": [],
         },
         {
             "timestamp": "T+00:12:05",
             "actor": "agent-stop",
             "description": "Finished.",
+            "tags": [],
         },
     ]
     assert exported_attempt["implementation_time_seconds"] == 725
     assert exported_attempt["implementation_time_display"] == "12m 5s"
+    assert exported_attempt["human_intervention_count"] == 0
+    assert exported_attempt["human_intervention_display"] == "0"
     assert exported_attempt["run_cost_amount"] == 22.56
     assert exported_attempt["run_cost_currency"] == "USD"
     assert exported_attempt["run_cost_attribution_status"] == "matched_cloud_agent_id"
