@@ -11,3 +11,5 @@
 - T+00:28:15 [agent] Recorded participant flow through square, triangle, and circle trials.
 - T+00:32:45 [agent] Exported local data, dashboard monitor HTML, and chain summary evidence.
 - T+00:32:48 [agent-stop] Implementation and first-pass evidence collection complete.
+- T+00:41:10 [agent-start] Resumed after video review found the circle trial dot was not visible in the participant recording.
+- T+00:42:00 [agent] Increased dot study duration for clearer participant-facing evidence.
