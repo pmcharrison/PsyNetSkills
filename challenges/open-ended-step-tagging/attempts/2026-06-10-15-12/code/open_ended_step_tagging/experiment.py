@@ -39,6 +39,7 @@ if os.environ.get("PSYNET_CINT_LOCAL_MOCK") == "1":
     recruiter_settings = {
         **recruiter_settings,
         "recruiter": "generic",
+        "debug_recruiter": "HotAirRecruiter",
         "currency": "$",
     }
 
