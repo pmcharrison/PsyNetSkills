@@ -1,0 +1,9 @@
+[Config]
+title = LLM-assisted participation defense kit (local demo, about 5 minutes)
+description = A local text-heavy PsyNet demo that records in-study quality-review signals. Use a Chrome browser. The signals support manual review only and do not prove AI use, automation, or platform fraud.
+contact_email_on_error = local-demo@example.invalid
+organization_name = Local PsyNetSkills demo
+
+recruiter = generic
+currency = $
+wage_per_hour = 12.0
