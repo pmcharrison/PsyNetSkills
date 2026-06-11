@@ -23,6 +23,8 @@ _ = get_translator(namespace="experiment")
 LANGUAGE = "ENG"
 COUNTRY = "US"
 LUCID_CONFIG_PATH = f"qualifications/lucid/mock-lucid-{LANGUAGE}-{COUNTRY}.json"
+LOCAL_MOCK_LUCID_API_KEY = "mock-local-lucid-api-key"
+LOCAL_MOCK_LUCID_SHA1_HASHING_KEY = "mock-local-lucid-sha1-hashing-key"
 
 recruiter_settings = get_lucid_settings(
     lucid_recruitment_config_path=LUCID_CONFIG_PATH,
@@ -303,6 +305,8 @@ class Exp(psynet.experiment.Experiment):
         **recruiter_settings,
         "wage_per_hour": 12.0,
         "publish_experiment": True,
+        "lucid_api_key": LOCAL_MOCK_LUCID_API_KEY,
+        "lucid_sha1_hashing_key": LOCAL_MOCK_LUCID_SHA1_HASHING_KEY,
     }
 
     timeline = Timeline(

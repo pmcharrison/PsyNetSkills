@@ -83,6 +83,12 @@ If no real target is known, use clearly marked placeholder values only when the
 experiment must import locally, and report that the experiment is Cint-parameter
 ready but not target-ready.
 
+PsyNet's dev Lucid recruiter may still require `lucid_api_key` and
+`lucid_sha1_hashing_key` config keys to exist during local tests. If needed, use
+obviously fake non-secret values such as `mock-local-lucid-api-key` in
+`Exp.config`, never in `config.txt`, and report that real credentials must be
+provided through the deployment environment before any live Cint run.
+
 ### Phase 4 - Create qualification tooling
 
 Prefer a script named `create_qualifications.py`. If the experiment already uses
@@ -139,7 +145,9 @@ End with a concise report:
 - Do not configure, inspect, print, or commit real AWS, Cint, Lucid, Prolific, or
   other production credentials.
 - Do not use custom or real service credentials for local readiness work unless
-  the user explicitly provides a safe deployment workflow.
+  the user explicitly provides a safe deployment workflow. Clearly fake
+  `mock-local-*` placeholders are allowed only when required for local dev
+  recruiter checks.
 - Do not create fake real-looking Lucid files. Mock files must be visibly named
   and documented as not deployable.
 - Do not treat missing locales, wages, or qualification decisions as optional;
