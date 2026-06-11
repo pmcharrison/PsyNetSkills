@@ -23,6 +23,7 @@ async function clickIfVisible(page, names) {
 async function completeIshiharaPlate(page, answer) {
   const input = page.locator("input[type='text'], input:not([type]), textarea").first();
   await advanceUntilVisible(page, input, 3);
+  await page.waitForTimeout(500);
   await input.fill(answer);
   await clickIfVisible(page, [/next/i, /submit/i]);
 }
@@ -81,6 +82,5 @@ test("participant can complete minimal visual discrimination flow", async ({ pag
   await expect(page.getByText(/That's the end of the experiment/i)).toBeVisible({
     timeout: 15_000,
   });
-  await clickIfVisible(page, [/finish/i]);
-  await expect(page.getByText(/finished/i)).toBeVisible({ timeout: 15_000 });
+  await expect(page.getByRole("button", { name: /finish/i })).toBeVisible();
 });

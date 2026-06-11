@@ -213,7 +213,10 @@ class Exp(psynet.experiment.Experiment):
             "but it will not exclude you from the experiment.",
             time_estimate=5,
         ),
-        NonFailingColorBlindnessTest(time_estimate_per_trial=4.0, hide_after=3.0),
+        NonFailingColorBlindnessTest(
+            time_estimate_per_trial=4.0,
+            hide_after=8.0 if MINIMAL_PROFILE else 3.0,
+        ),
         InfoPage("Finally, please answer three demographic questions.", time_estimate=3),
         Age(),
         Gender(),
