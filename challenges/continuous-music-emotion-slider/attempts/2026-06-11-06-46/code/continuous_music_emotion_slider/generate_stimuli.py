@@ -14,7 +14,7 @@ STIMULI = {
     "bright_rise": ("static/stimuli/bright_rise.wav", [293.66, 369.99, 440.00]),
 }
 SAMPLE_RATE = 16000
-DURATION = 3.0
+DURATION = 12.0
 
 
 def synthesize(stimulus_id: str, rel_path: str, freqs: list[float]) -> None:

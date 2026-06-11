@@ -93,8 +93,7 @@ def simulate_trials(metadata_path: Path, output_path: Path, n_bots: int = 3, sam
                         "samples": samples,
                     },
                 }
-                f.write(json.dumps(record) + "
-")
+                f.write(json.dumps(record) + "\n")
                 trial_id += 1
 
 
@@ -207,9 +206,7 @@ def write_report(path: Path, samples: list[dict], trajectory_rows: list[dict], s
         lines.append(
             f"| {row['stimulus_id']} | {row['dimension']} | {row['elapsed_time_sec']} | {row['mean_rating']} | {row['n_samples']} |"
         )
-    path.write_text("
-".join(lines) + "
-")
+    path.write_text("\n".join(lines) + "\n")
 
 
 def main() -> None:

@@ -1,4 +1,4 @@
 stimulus_id,audio_path,condition,excerpt_type,intended_affect,duration_seconds
-warm_major,static/stimuli/warm_major.wav,generated,major_chord_pulse,positive_energetic,3.0
-dark_minor,static/stimuli/dark_minor.wav,generated,minor_chord_pulse,negative_calm,3.0
-bright_rise,static/stimuli/bright_rise.wav,generated,rising_tone_cluster,positive_rising_arousal,3.0
+warm_major,static/stimuli/warm_major.wav,generated,major_chord_pulse,positive_energetic,12.0
+dark_minor,static/stimuli/dark_minor.wav,generated,minor_chord_pulse,negative_calm,12.0
+bright_rise,static/stimuli/bright_rise.wav,generated,rising_tone_cluster,positive_rising_arousal,12.0

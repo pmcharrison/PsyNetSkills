@@ -122,8 +122,11 @@
       emotionSamplingTimer = null;
     }
     collectEmotionSample("prompt_end");
+    for (const dimension of emotionTrajectoryConfig.dimensions) {
+      document.getElementById(`emotion-slider-${dimension.name}`).disabled = true;
+    }
     document.getElementById("emotion-status").textContent =
-      `Rating window complete. You may continue. Recorded ${emotionSamples.length} trajectory rows.`;
+      `Rating window complete. Sliders are locked and you may continue. Recorded ${emotionSamples.length} trajectory rows.`;
   }
 
   for (const dimension of emotionTrajectoryConfig.dimensions) {

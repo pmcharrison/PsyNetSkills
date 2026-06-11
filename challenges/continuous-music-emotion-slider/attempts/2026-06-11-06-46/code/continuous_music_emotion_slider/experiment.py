@@ -13,9 +13,9 @@ from psynet.timeline import Event, Timeline
 from psynet.trial.main import Trial
 from psynet.trial.static import StaticNode, StaticTrial, StaticTrialMaker
 
-try:
+if __package__:
     from .control import EmotionTrajectoryControl
-except ImportError:  # Allows direct `python experiment.py` checks from this folder.
+else:  # Allows direct `python experiment.py` checks from this folder.
     from control import EmotionTrajectoryControl
 
 STIMULUS_METADATA = Path("stimulus_metadata.csv")
