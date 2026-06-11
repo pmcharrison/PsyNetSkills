@@ -5,7 +5,7 @@
 `psynet export local --username ... --password ...` still attempted to read `dashboard_password` from config in this environment. Directly downloading `/dashboard/export/download?type=psynet&anonymize=no&assets=none` with the local dashboard credentials produced the expected export ZIP.
 
 *Actions:*
-- **PsyNet:** Check whether `psynet export local` should honor explicit `--username`/`--password` before reading dashboard credentials from config. Confidence: medium. Status: considering.
+- **PsyNet:** Check whether `psynet export local` should honor explicit `--username`/`--password` before reading dashboard credentials from config. Confidence: medium. Status: completed. Notes: Fixed upstream in https://gitlab.com/PsyNetDev/PsyNet/-/merge_requests/1081.
 
 ## Participant recording path discipline
 
