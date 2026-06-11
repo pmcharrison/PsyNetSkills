@@ -26,6 +26,34 @@ LEARNING_ACTION_RE = re.compile(
 )
 
 
+def iter_learning_sections(text: str) -> list[tuple[str, list[str]]]:
+    """Split ``LEARNINGS.md`` text into second-level learning sections."""
+
+    sections: list[tuple[str, list[str]]] = []
+    current_title: str | None = None
+    current_lines: list[str] = []
+
+    for line in text.splitlines():
+        if line.startswith("## "):
+            if current_title is not None:
+                sections.append((current_title, current_lines))
+            current_title = line[3:].strip()
+            current_lines = []
+        elif current_title is not None:
+            current_lines.append(line)
+
+    if current_title is not None:
+        sections.append((current_title, current_lines))
+
+    return sections
+
+
+def is_learning_actions_heading(line: str) -> bool:
+    """Return whether a line is the Actions heading for a learning card."""
+
+    return line.strip() == "*Actions:*"
+
+
 def learning_action_bullets(lines: list[str]) -> list[str]:
     """Return action bullets, joining indented continuation lines."""
 
@@ -55,15 +83,33 @@ def parse_learning_action_bullet(
 ) -> tuple[str, str, str, str] | None:
     """Parse one normalized learning action bullet."""
 
+    parsed = parse_learning_action_bullet_with_notes(bullet)
+    if parsed is None:
+        return None
+    repository, confidence, proposal, status, _ = parsed
+    return repository, confidence, proposal, status
+
+
+def parse_learning_action_bullet_with_notes(
+    bullet: str,
+) -> tuple[str, str, str, str, str] | None:
+    """Parse one normalized learning action bullet, including optional notes."""
+
     normalized = re.sub(r"\s+", " ", bullet).strip()
     match = LEARNING_ACTION_RE.fullmatch(normalized)
     if match is None:
         return None
+    notes = match.group("notes")
+    if notes:
+        notes = f"{notes.strip()}."
+    else:
+        notes = ""
     return (
         match.group("repository").strip().lower(),
         match.group("confidence").strip().lower(),
         match.group("proposal").strip(),
         match.group("status").strip().lower(),
+        notes,
     )
 
 

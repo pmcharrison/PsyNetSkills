@@ -69,6 +69,7 @@
     {{ end }}
   {{ end }}
   {{ $hasTimeline := gt (len $attempt.timeline_entries) 0 }}
+  {{ $attemptActions := where (where hugo.Data.psynetsk.actions "challenge_slug" $challengeSlug) "attempt_name" $attemptName }}
 
   <article class="prose attempt-detail">
     <p class="back-link"><a href="{{ $challenge.url | relURL }}">Back to {{ $challenge.title }}</a></p>
@@ -193,6 +194,10 @@
             {{ partial "edit-in-github.html" (printf "%s/LEARNINGS.md" .) }}
           {{ end }}
         </div>
+        {{ if $attemptActions }}
+          {{ partial "action-copy-toolbar.html" . }}
+          {{ partial "action-copy-data.html" $attemptActions }}
+        {{ end }}
         <div class="attempt-markdown learning-markdown">
           {{ $learningHtml := . | markdownify }}
           {{ $learningHtml = replaceRE `Confidence:\s+(high|medium|low)\.` `<span class="learning-chip learning-chip-confidence learning-chip-confidence-$1"><span class="learning-chip-label">Confidence</span> $1</span>` $learningHtml }}
@@ -204,6 +209,11 @@
           {{ $learningHtml = replaceRE `Status:\s+superseded\.` `<span class="learning-chip learning-chip-status learning-chip-status-superseded"><span class="learning-chip-label">Status</span> superseded</span>` $learningHtml }}
           {{ $learningHtml = replace $learningHtml `<p><em>Actions:</em></p>` `` }}
           {{ $learningHtml = replace $learningHtml `<li>` `<li class="learning-action">` }}
+          {{ range $attemptActions }}
+            {{ $marker := printf `<li class="learning-action">%s ` .anchor_marker }}
+            {{ $replacement := printf `<li class="learning-action" id="%s"><input class="learning-action-select" type="checkbox" value="%s" data-action-copy-checkbox aria-label="Select action %s for copying">` .anchor_id .id .id }}
+            {{ $learningHtml = replace $learningHtml $marker $replacement }}
+          {{ end }}
           {{ $learningHtml = replace $learningHtml `<h3` `</div><div class="learning-card"><h3` }}
           {{ $learningHtml = replaceRE `^\s*</div>` `` $learningHtml }}
           {{ if in $learningHtml `learning-card` }}

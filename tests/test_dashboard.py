@@ -12,6 +12,10 @@ from psynetsk_tools.dashboard import (
     strip_frontmatter,
     workflow_context,
 )
+from psynetsk_tools.actions import (
+    format_action_copy_markdown,
+    open_learning_actions_from_markdown,
+)
 
 
 def write(path: Path, text: str = "") -> None:
@@ -332,6 +336,7 @@ def test_dashboard_data_reports_open_learning_actions(tmp_path: Path) -> None:
         attempt_dir / "LEARNINGS.md",
         "# Learnings\n\n"
         "## Useful finding\n\n"
+        "This explains why the action matters.\n\n"
         "*Actions:*\n\n"
         "- **PsyNetSkills:** Document the behavior in the attempt guide. "
         "Confidence: high. Status: completed.\n"
@@ -354,6 +359,73 @@ def test_dashboard_data_reports_open_learning_actions(tmp_path: Path) -> None:
 
     assert data["challenges"][0]["open_actions"] == 3
     assert data["challenges"][0]["attempts"][0]["open_actions"] == 3
+    assert data["counts"]["actions"] == 3
+    assert [action["id"] for action in data["actions"]] == [
+        "example/2026-06-01-10-10/action-002",
+        "example/2026-06-01-10-10/action-003",
+        "example/2026-06-01-10-10/action-004",
+    ]
+    assert data["actions"][0]["source_section"] == "Useful finding"
+    assert data["actions"][0]["proposal"] == (
+        "Clarify the underlying framework behavior across the relevant API docs."
+    )
+    assert data["actions"][0]["learning_context"] == (
+        "This explains why the action matters."
+    )
+    assert data["actions"][0]["notes"] == (
+        "Waiting for a framework maintainer to review."
+    )
+    assert data["actions"][0]["copy_context"]["learning_title"] == "Useful finding"
+    assert data["actions"][0]["copy_context"]["notes"] == (
+        "Waiting for a framework maintainer to review."
+    )
+    assert data["actions"][0]["anchor_id"] == (
+        "example-2026-06-01-10-10-action-002"
+    )
+    assert data["actions"][0]["source_url"] == (
+        "challenges/example/2026-06-01-10-10/"
+        "#example-2026-06-01-10-10-action-002"
+    )
+
+
+def test_format_action_copy_markdown_includes_context_and_notes() -> None:
+    actions = open_learning_actions_from_markdown(
+        "# Learnings\n\n"
+        "## First learning\n\n"
+        "The first learning context.\n\n"
+        "*Actions:*\n\n"
+        "- **PsyNetSkills:** Do the first thing. Confidence: high. "
+        "Status: considering. Notes: Preserve this note.\n\n"
+        "## Second learning\n\n"
+        "The second learning context.\n\n"
+        "*Actions:*\n\n"
+        "- **PsyNet:** Do the second thing. Confidence: medium. Status: planned.\n",
+        challenge_slug="example",
+        challenge_title="Example challenge",
+        attempt_name="2026-06-01-10-10",
+        attempt_url="challenges/example/2026-06-01-10-10/",
+        source_path="challenges/example/attempts/2026-06-01-10-10/LEARNINGS.md",
+    )
+
+    brief = format_action_copy_markdown(
+        actions,
+        dashboard_base_url="https://example.test/dashboard",
+    )
+
+    assert brief.startswith("# PsyNetSkills action points\n")
+    assert "clearly separate pieces of work" in brief
+    assert "getting confirmation before continuing" in brief
+    assert "## 1. First learning" in brief
+    assert "Action ID: example/2026-06-01-10-10/action-001" in brief
+    assert (
+        "Dashboard link: https://example.test/dashboard/challenges/example/"
+        "2026-06-01-10-10/#example-2026-06-01-10-10-action-001"
+    ) in brief
+    assert "Learning context:\nThe first learning context." in brief
+    assert "Action point:\nDo the first thing." in brief
+    assert "Notes:\nPreserve this note." in brief
+    assert "## 2. Second learning" in brief
+    assert "Repository target: psynet" in brief
 
 
 def test_collect_challenges_reports_binary_and_nested_attempt_files(
@@ -472,7 +544,7 @@ def test_dashboard_data_reports_counts(tmp_path: Path) -> None:
 
     data = dashboard_data(tmp_path)
 
-    assert data["counts"] == {"skills": 1, "challenges": 1}
+    assert data["counts"] == {"skills": 1, "challenges": 1, "actions": 0}
     assert data["authors"][0]["id"] == "pmcharrison"
     assert data["skills"][0]["authors"][0]["name"] == "Peter Harrison"
     assert data["challenges"][0]["authors"][0]["url"] == (
@@ -715,6 +787,17 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
         tmp_path / "challenges/example/references/interface-sketch.svg",
         "<svg><title>Example sketch</title></svg>",
     )
+    write(
+        tmp_path / "actions-review.yaml",
+        "generated_at: '2026-06-11T10:00:00Z'\n"
+        "model: test-model\n"
+        "scope: open_actions\n"
+        "sections:\n"
+        "  - title: Documentation follow-ups\n"
+        "    summary: Document the behavior so future attempts can find it.\n"
+        "    actions:\n"
+        "      - example/2026-06-01-10-10/action-001\n",
+    )
 
     export_dashboard(tmp_path, tmp_path / "dashboard")
 
@@ -726,6 +809,11 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
         "Repeat useful challenge attempts.\n"
     )
     assert not (tmp_path / "dashboard/content/docs").exists()
+    actions_index = tmp_path / "dashboard/content/actions/_index.md"
+    assert actions_index.exists()
+    assert "This page compiles unresolved action points" in actions_index.read_text(
+        encoding="utf-8",
+    )
     assert (tmp_path / "dashboard/content/skills/_index.md").exists()
     skills_index = (
         tmp_path / "dashboard/content/skills/_index.md"
@@ -749,6 +837,18 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
     )
     parsed_data = json.loads(data)
     assert "docs" not in parsed_data
+    assert parsed_data["actions"][0]["id"] == "example/2026-06-01-10-10/action-001"
+    assert parsed_data["actions"][0]["source_url"] == (
+        "challenges/example/2026-06-01-10-10/"
+        "#example-2026-06-01-10-10-action-001"
+    )
+    assert parsed_data["actions"][0]["learning_context"] == "Useful finding."
+    assert parsed_data["actions"][0]["notes"] == ""
+    assert parsed_data["actions"][0]["copy_context"]["action"] == "Document it."
+    review_section = parsed_data["action_review"]["sections"][0]
+    assert review_section["title"] == "Documentation follow-ups"
+    assert review_section["missing_action_ids"] == []
+    assert review_section["actions"][0]["proposal"] == "Document it."
     assert '"title": "Example skill"' in data
     challenge_page = (
         tmp_path / "dashboard/content/challenges/example/_index.md"

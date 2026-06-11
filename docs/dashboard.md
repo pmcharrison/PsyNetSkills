@@ -7,6 +7,8 @@ The dashboard is a Hugo static site generated from repository files. It renders:
 - Challenge summaries from `challenges/*`.
 - Attempt histories and latest scores when evaluations exist.
 - Open learning-action counts from attempt `LEARNINGS.md` files.
+- An Actions tab that groups open learning actions through a committed
+  `actions-review.yaml` review artifact.
 
 Build it locally with:
 
@@ -20,6 +22,11 @@ The Python command exports structured repository data to
 creates lightweight Hugo content stubs for skills and challenges. Hugo then
 renders the workflow overview, generated content, layouts, and final HTML into
 `public/`. The GitHub Pages workflow builds the same output in CI.
+
+`actions-review.yaml` is optional. When present, it records an offline
+LLM-generated review of currently open learning actions, grouped into thematic
+sections that reference stable action IDs. Dashboard builds never call an LLM;
+they only parse repository files and render the committed review.
 
 Attempt pages are reviewer-facing artifacts. They may show evaluation criteria
 so reviewers can compare the implementation against the rubric, but agents must

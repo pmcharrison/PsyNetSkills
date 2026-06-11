@@ -1,0 +1,198 @@
+generated_at: "2026-06-11T10:45:00Z"
+model: GPT-5.5
+scope: open_actions
+sections:
+  - title: Translation and internationalization readiness
+    summary: >-
+      These actions point to a coherent translation track: keep node definitions
+      language-neutral, make framework-owned participant text translatable,
+      validate extraction with completed PO files, and exercise right-to-left
+      rendering. The common theme is that translation should be an experiment
+      invariant rather than a late surface-level pass.
+    actions:
+      - cross-cultural-decision-making/2026-06-11-00-32/action-001
+      - cross-cultural-decision-making/2026-06-11-00-32/action-002
+      - cross-cultural-decision-making/2026-06-11-00-32/action-003
+      - cross-cultural-decision-making/2026-06-11-00-32/action-005
+      - cross-cultural-decision-making/2026-06-11-00-32/action-006
+      - cross-cultural-decision-making/2026-06-11-00-32/action-007
+      - open-ended-step-tagging/2026-06-09-20-34/action-003
+      - translate-static-experiment/2026-06-10-00-45/action-003
+      - translate-static-experiment/2026-06-10-00-45/action-004
+  - title: Deployment, dashboards, and export safety
+    summary: >-
+      This group concentrates on operational safety around deployment lifecycle
+      work: clearer criteria for audits and reconstructions, safer dashboard and
+      debug-mode expectations, export manifests, and publication rules for
+      generated artifacts. The actions suggest that operations-style challenges
+      need explicit evidence boundaries and reusable checks for data export and
+      teardown phases.
+    actions:
+      - ai-human-hybrid-participants/2026-06-10-05-30/action-006
+      - audio-memory-sequence/2026-06-08-09-29/action-008
+      - deployment-lifecycle-monitoring-and-export/2026-06-11-05-19/action-001
+      - deployment-lifecycle-monitoring-and-export/2026-06-11-05-19/action-002
+      - deployment-log-reconstruction/2026-06-10-00-29/action-001
+      - deployment-log-reconstruction/2026-06-10-00-29/action-002
+      - deployment-readiness-audit/2026-06-10-00-29/action-001
+      - deployment-readiness-audit/2026-06-10-00-29/action-002
+      - end-to-end-simulated-psynet-discovery/2026-06-11-05-23/action-002
+      - export-before-teardown-safety/2026-06-10-00-29/action-001
+      - export-before-teardown-safety/2026-06-10-00-29/action-002
+      - portfolio-website-chain/2026-06-10-09-39/action-002
+      - portfolio-website-chain/2026-06-10-09-39/action-003
+      - portfolio-website-chain/2026-06-10-11-24/action-001
+      - primary-color-rating/2026-06-06-05-58/action-005
+      - primary-color-rating/2026-06-06-05-58/action-006
+      - primary-color-rating/2026-06-06-05-58/action-007
+      - primary-color-rating/2026-06-06-05-58/action-008
+      - real-time-synchronous-game/2026-06-09-15-51/action-002
+      - real-time-synchronous-game/2026-06-09-19-01/action-002
+      - similarity-discrimination-identification/2026-06-10-00-38/action-002
+      - similarity-discrimination-identification/2026-06-10-02-03/action-001
+      - video-recording-static-trials/2026-06-09-22-00/action-002
+      - visual-priors-serial-reproduction/2026-06-10-12-35/action-003
+  - title: Evidence collection and participant-flow review
+    summary: >-
+      These items all strengthen review evidence. They ask for repeatable
+      participant-flow procedures, clearer standards for recordings and
+      screenshots, better manual-test expectations, and challenge-specific
+      validation of payoffs, instructions, and completion states. Together they
+      argue for evidence guidance that is less ad hoc and more tied to the
+      behavior reviewers need to inspect.
+    actions:
+      - ai-human-hybrid-participants/2026-06-10-10-05/action-002
+      - ai-human-hybrid-participants/2026-06-10-10-05/action-004
+      - audio-memory-sequence/2026-06-07-22-41/action-006
+      - common-pool-resources/2026-06-09-19-02/action-002
+      - end-to-end-simulated-psynet-discovery/2026-06-11-05-23/action-003
+      - portfolio-website-chain/2026-06-10-11-24/action-004
+      - real-time-synchronous-game/2026-06-09-15-51/action-001
+      - real-time-synchronous-game/2026-06-09-15-51/action-003
+      - real-time-synchronous-game/2026-06-09-19-01/action-001
+      - real-time-synchronous-game/2026-06-09-19-01/action-003
+      - real-time-synchronous-game/2026-06-09-21-35/action-001
+      - rolling-inventory-melody-market/2026-06-10-20-01/action-003
+      - similarity-discrimination-identification/2026-06-10-00-38/action-003
+      - similarity-discrimination-identification/2026-06-10-00-38/action-004
+      - similarity-discrimination-identification/2026-06-10-02-03/action-004
+      - similarity-discrimination-identification/2026-06-10-02-03/action-005
+      - similarity-discrimination-identification/2026-06-10-03-09/action-002
+      - similarity-discrimination-identification/2026-06-10-03-09/action-003
+      - ultimatum-game/2026-06-09-21-32/action-003
+      - ultimatum-game/2026-06-10-17-15/action-002
+      - ultimatum-game/2026-06-10-17-15/action-004
+      - ultimatum-game/2026-06-10-17-15/action-006
+      - video-recording-static-trials/2026-06-09-22-00/action-001
+  - title: AI and hybrid participant design
+    summary: >-
+      The hybrid and AI actions cluster around active scheduling, prompt parity,
+      configuration, and limits on automated participants. They point toward
+      guidance that treats AI participants as first-class experiment actors with
+      explicit capacity checks, concurrency caps, recruitment rules, and parity
+      between human-facing instructions and model prompts.
+    actions:
+      - ai-human-hybrid-participants/2026-06-10-05-30/action-001
+      - ai-human-hybrid-participants/2026-06-10-05-30/action-002
+      - ai-human-hybrid-participants/2026-06-10-05-30/action-005
+      - ai-human-hybrid-participants/2026-06-10-10-05/action-001
+      - ai-human-hybrid-participants/2026-06-10-10-05/action-003
+      - ai-human-hybrid-participants/2026-06-10-10-05/action-005
+      - audio-memory-sequence/2026-06-08-09-29/action-017
+      - end-to-end-simulated-psynet-discovery/2026-06-11-05-23/action-001
+      - portfolio-website-chain/2026-06-10-09-39/action-001
+      - portfolio-website-chain/2026-06-10-11-24/action-002
+      - portfolio-website-chain/2026-06-10-11-24/action-003
+      - ultimatum-game/2026-06-09-21-32/action-002
+      - visual-priors-serial-reproduction/2026-06-10-12-35/action-002
+  - title: Stimulus, media, and trial asset patterns
+    summary: >-
+      This section groups actions about building reliable stimuli and trial
+      assets: deterministic audio generation, manifest-driven static trials,
+      retryable media preparation, helper-module import context, and reusable
+      controls for ordered or timed responses. The theme is to make assets
+      reproducible, locally reviewable, and packaged in ways that survive PsyNet
+      and Dallinger execution contexts.
+    actions:
+      - aesthetics-tinder/2026-06-09-20-31/action-001
+      - audio-memory-sequence/2026-06-07-22-41/action-002
+      - audio-memory-sequence/2026-06-07-22-41/action-008
+      - audio-memory-sequence/2026-06-07-22-41/action-011
+      - audio-memory-sequence/2026-06-07-22-41/action-012
+      - audio-memory-sequence/2026-06-07-22-41/action-014
+      - audio-memory-sequence/2026-06-08-09-29/action-001
+      - audio-memory-sequence/2026-06-08-09-29/action-002
+      - audio-memory-sequence/2026-06-08-09-29/action-003
+      - audio-memory-sequence/2026-06-08-09-29/action-004
+      - audio-memory-sequence/2026-06-08-09-29/action-005
+      - audio-memory-sequence/2026-06-08-09-29/action-006
+      - audio-memory-sequence/2026-06-08-09-29/action-007
+      - audio-memory-sequence/2026-06-08-09-29/action-009
+      - audio-memory-sequence/2026-06-08-09-29/action-010
+      - audio-memory-sequence/2026-06-08-09-29/action-012
+      - audio-memory-sequence/2026-06-08-09-29/action-013
+      - audio-memory-sequence/2026-06-08-09-29/action-014
+      - ferry-market-unity/2026-06-09-23-19/action-001
+      - open-ended-step-tagging/2026-06-09-20-34/action-004
+      - open-ended-step-tagging/2026-06-09-20-34/action-006
+      - primary-color-rating/2026-06-06-05-58/action-003
+      - primary-color-rating/2026-06-06-05-58/action-004
+      - rolling-inventory-melody-market/2026-06-10-20-01/action-001
+      - similarity-discrimination-identification/2026-06-10-03-09/action-001
+      - single-chord-emotion-replication/2026-06-10-12-44/action-004
+  - title: Testing, validation, and local execution ergonomics
+    summary: >-
+      These actions focus on reducing local-run friction and catching failures
+      earlier: constraints generation, custom config registration, `.gitignore`
+      and `.python-version` hygiene, Python invocation details, minimal profiles,
+      and validation hooks. They indicate that many attempt failures are
+      setup-contract failures rather than core experiment-design failures.
+    actions:
+      - cross-cultural-decision-making/2026-06-11-00-32/action-004
+      - rolling-inventory-melody-market/2026-06-10-17-06/action-001
+      - similarity-discrimination-identification/2026-06-10-00-38/action-001
+      - ultimatum-game/2026-06-10-17-15/action-001
+  - title: Agent skills and workflow guidance
+    summary: >-
+      This group captures updates to skills, checklists, and challenge
+      instructions that would help future agents choose the right implementation
+      path sooner. The recurring pattern is to encode hard-won gotchas as
+      concise workflow guidance, especially where native PsyNet affordances or
+      challenge-specific expectations should be preferred over custom fallback
+      code.
+    actions:
+      - common-pool-resources/2026-06-09-19-02/action-001
+      - open-ended-step-tagging/2026-06-09-20-34/action-001
+      - open-ended-step-tagging/2026-06-09-20-34/action-005
+      - rolling-inventory-melody-market/2026-06-10-20-01/action-002
+      - similarity-discrimination-identification/2026-06-10-02-03/action-002
+      - single-chord-emotion-replication/2026-06-10-12-44/action-003
+      - single-chord-emotion-replication/2026-06-10-12-44/action-005
+      - ultimatum-game/2026-06-09-21-32/action-001
+      - ultimatum-game/2026-06-10-17-15/action-003
+      - visual-priors-serial-reproduction/2026-06-10-12-35/action-001
+  - title: PsyNet framework affordances and API documentation
+    summary: >-
+      These actions are framework-facing rather than repository-process-facing.
+      They ask for stronger PsyNet documentation or affordances around timed
+      chat/page helpers, Dallinger import behavior, bot scheduling, translation
+      ownership, and reusable trial patterns. The common thread is that a small
+      upstream API or documentation improvement could eliminate repeated
+      workaround knowledge in attempts.
+    actions:
+      - primary-color-rating/2026-06-06-05-58/action-002
+      - rps-chat-deliberation/2026-06-09-17-18/action-003
+  - title: Experiment design and state-management patterns
+    summary: >-
+      The remaining implementation actions concern experiment architecture:
+      realtime state transitions, private payload boundaries, timeout behavior,
+      and task-specific design constraints. These should become reusable design
+      notes for classes of experiments where correctness depends on server
+      authority, participant isolation, or precise state progression.
+    actions:
+      - real-time-synchronous-game/2026-06-09-19-01/action-004
+      - real-time-synchronous-game/2026-06-09-20-30/action-001
+      - real-time-synchronous-game/2026-06-09-21-35/action-002
+      - similarity-discrimination-identification/2026-06-10-02-03/action-003
+      - single-chord-emotion-replication/2026-06-10-12-44/action-006
+      - ultimatum-game/2026-06-10-17-15/action-005
