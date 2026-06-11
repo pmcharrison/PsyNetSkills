@@ -25,5 +25,6 @@ The stimulus set consisted of 30 simple colors, each presented as a colored circ
 
 ## Implementation details
 
-1. Measure reaction time and store this information for every trial.
-2. Allow participants in the forced choice to respond by pressing a button on keyboard.
+1. Use psychophysics skill.
+2. Measure reaction time and store this information for every trial.
+3. Allow participants in the forced choice to respond by pressing a button on keyboard.
