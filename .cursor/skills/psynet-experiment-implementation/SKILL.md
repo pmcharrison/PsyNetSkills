@@ -35,7 +35,7 @@ Useful starting points:
    PsyNet pages, controls, timelines, events, modules, or native helpers.
 5. If the experiment needs participant eligibility, capability, device,
    comprehension, or recruiter qualification checks, read
-   `task-specific-prescreening/SKILL.md` before coding those gates.
+   `participant-filtering-and-prescreening/SKILL.md` before coding those gates.
 6. If the experiment is cross-cultural, cross-national, multilingual,
    international, or compares cultures/regions/language groups, read
    `prepare-for-translation/SKILL.md` now and mark participant-facing strings as
@@ -76,8 +76,9 @@ Useful starting points:
   assertions or exported-data checks that prove audio trials ran and responses
   were saved against the correct stimulus IDs.
 - When an audio, visual, language, comprehension, or device requirement affects
-  eligibility or data quality, use `task-specific-prescreening/SKILL.md` to
-  choose and validate the gate rather than adding a generic check by habit.
+  eligibility or data quality, use
+  `participant-filtering-and-prescreening/SKILL.md` to choose and validate the
+  gate rather than adding a generic check by habit.
 - For participant-facing instructions, payoff tables, lists, headings, and other
   ordinary page structure, prefer `dominate.tags` over raw HTML. Use
   `markupsafe.Markup` only for trusted, static HTML snippets passed directly as

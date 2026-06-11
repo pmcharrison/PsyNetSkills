@@ -1,5 +1,5 @@
 ---
-name: task-specific-prescreening
+name: participant-filtering-and-prescreening
 description: Design, implement, and validate task-specific pre-screening for PsyNet experiments, including recruiter/platform alignment and pass/fail handling.
 authors: [lucasgautheron]
 ---

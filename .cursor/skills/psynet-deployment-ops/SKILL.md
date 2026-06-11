@@ -33,8 +33,8 @@ Check that the experiment folder has:
   `deploy_logs/`, source archives, and generated logs
 - recruiter/qualification JSON files when a recruiter requires them
 - qualification files and recruiter settings that match any in-experiment
-  prescreeners; use `task-specific-prescreening/SKILL.md` when the mapping is
-  unclear
+  prescreeners; use `participant-filtering-and-prescreening/SKILL.md` when the
+  mapping is unclear
 - local assets or manifests present and deployable
 - no broken symlinks to local user paths
 - no stale app/server/study names copied from another template
