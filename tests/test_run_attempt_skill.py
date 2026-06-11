@@ -129,7 +129,7 @@ def test_run_attempt_builds_public_urls() -> None:
     assert dashboard_url == "https://admin:p%40%20ss@example.loca.lt/dashboard/develop"
 
 
-def test_run_attempt_handoff_prints_local_links_by_default(capsys) -> None:
+def test_run_attempt_handoff_focuses_cloud_desktop_by_default(capsys) -> None:
     module = load_run_attempt_module()
     handoff = module.HandoffState()
 
@@ -142,19 +142,15 @@ def test_run_attempt_handoff_prints_local_links_by_default(capsys) -> None:
     handoff.maybe_print()
 
     output = capsys.readouterr().out
-    assert output.count("=== Run attempt handoff ===") == 1
+    assert output.count("=== Run attempt Cloud Desktop handoff ===") == 1
     assert "=== Run attempt public tunnel ===" not in output
-    assert (
-        "Start new participant (local): "
-        "http://127.0.0.1:5000/ad?recruiter=hotair&assignmentId=A1"
-    ) in output
-    assert (
-        "Dashboard (local): "
-        "http://admin:secret@127.0.0.1:5000/dashboard/develop"
-    ) in output
+    assert "http://127.0.0.1:5000" not in output
+    assert "Start new participant" not in output
+    assert "Dashboard (local)" not in output
+    assert "Dashboard/develop is ready for Cloud Desktop review." in output
     assert "Username: admin" in output
     assert "Password: secret" in output
-    assert "Public tunnel: not started by default" in output
+    assert "Public links are shown only after a requested tunnel is ready." in output
 
 
 def test_run_attempt_handoff_prints_public_links_when_tunnel_is_set(capsys) -> None:
@@ -171,8 +167,9 @@ def test_run_attempt_handoff_prints_public_links_when_tunnel_is_set(capsys) -> N
     handoff.maybe_print()
 
     output = capsys.readouterr().out
-    assert output.count("=== Run attempt handoff ===") == 1
+    assert output.count("=== Run attempt Cloud Desktop handoff ===") == 1
     assert output.count("=== Run attempt public tunnel ===") == 1
+    assert "http://127.0.0.1:5000" not in output
     assert (
         "Add new participant (public tunnel): "
         "https://example.loca.lt/ad?recruiter=hotair&assignmentId=A1"
