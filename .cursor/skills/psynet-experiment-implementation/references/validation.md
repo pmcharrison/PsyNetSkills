@@ -32,7 +32,10 @@ For interactive flow checks:
 psynet debug local
 ```
 
-Then open the generated ad page URL and progress through the participant flow.
+Then capture the generated ad page URL and use Playwright to progress through
+the participant flow when feasible. Browser control is useful for quick
+exploration, but Playwright should drive repeatable screenshots, assertions, and
+participant recordings.
 For grouped experiments, set explicit `max_wait_time` values on groupers and
 barriers before recording participant flows; browser windows and headed
 automation often enter sequentially, and default waits can be too short for

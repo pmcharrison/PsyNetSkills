@@ -24,6 +24,25 @@
   {{ if $hasParticipantVideo }}
     {{ $participantVideo = index $participantVideos 0 }}
   {{ end }}
+  {{ $screenshotExts := slice "gif" "jpeg" "jpg" "png" "webp" }}
+  {{ $screenshotFiles := slice }}
+  {{ range $attempt.evidence_files }}
+    {{ if and (strings.HasPrefix .path "screenshots/") (in $screenshotExts .kind) }}
+      {{ $screenshotFiles = $screenshotFiles | append . }}
+    {{ end }}
+  {{ end }}
+  {{ $hasScreenshots := gt (len $screenshotFiles) 0 }}
+  {{ $screenshotCaptionFiles := where $attempt.evidence_files "path" "screenshots/manifest.json" }}
+  {{ $screenshotCaptions := dict }}
+  {{ if gt (len $screenshotCaptionFiles) 0 }}
+    {{ $screenshotCaptionFile := index $screenshotCaptionFiles 0 }}
+    {{ with $screenshotCaptionFile.content }}
+      {{ $screenshotManifest := . | transform.Unmarshal }}
+      {{ with $screenshotManifest.captions }}
+        {{ $screenshotCaptions = . }}
+      {{ end }}
+    {{ end }}
+  {{ end }}
   {{ $performanceFiles := where $attempt.evidence_files "path" "performance.json" }}
   {{ $performanceFile := dict }}
   {{ if gt (len $performanceFiles) 0 }}
@@ -64,7 +83,9 @@
   {{ end }}
   {{ $visibleEvidenceFiles := slice }}
   {{ range $attempt.evidence_files }}
-    {{ if ne .path "participant.mp4" }}
+    {{ $isScreenshot := and (strings.HasPrefix .path "screenshots/") (in $screenshotExts .kind) }}
+    {{ $isScreenshotManifest := or (eq .path "screenshots/manifest.json") (eq .path "screenshots/README.md") }}
+    {{ if and (ne .path "participant.mp4") (not $isScreenshot) (not $isScreenshotManifest) }}
       {{ $visibleEvidenceFiles = $visibleEvidenceFiles | append . }}
     {{ end }}
   {{ end }}
@@ -243,6 +264,42 @@
         <p>No participant recording was found.</p>
       {{ end }}
 
+      {{ if $hasScreenshots }}
+        <section class="screenshot-gallery" aria-labelledby="screenshot-gallery-heading">
+          <div class="screenshot-gallery-header">
+            <h3 id="screenshot-gallery-heading">Screenshot walkthrough</h3>
+            <p class="artifact-note">
+              Targeted participant-facing states captured with Playwright.
+            </p>
+          </div>
+          <div class="screenshot-frame">
+            <div class="screenshot-carousel" data-screenshot-gallery tabindex="0">
+              {{ range $index, $file := $screenshotFiles }}
+                {{ $caption := replaceRE "\\.[^.]+$" "" (replaceRE "^.*/" "" .path) }}
+                {{ $caption = replace $caption "-" " " }}
+                {{ $caption = replace $caption "_" " " }}
+                {{ with index $screenshotCaptions .path }}
+                  {{ $caption = . }}
+                {{ end }}
+                <figure class="screenshot-card" data-screenshot-card data-screenshot-caption-text="{{ $caption }}"{{ if ne $index 0 }} hidden{{ end }}>
+                  <a href="{{ .url | relURL }}" aria-label="Open full-size screenshot">
+                    <img src="{{ .url | relURL }}" alt="{{ $caption }}">
+                  </a>
+                </figure>
+              {{ end }}
+            </div>
+            <div class="screenshot-caption-panel">
+              <div class="screenshot-controls" aria-label="Screenshot navigation">
+                <button class="screenshot-nav" type="button" data-screenshot-prev aria-label="Previous screenshot">‹</button>
+                <span class="screenshot-counter" data-screenshot-counter>1 / {{ len $screenshotFiles }}</span>
+                <button class="screenshot-nav" type="button" data-screenshot-next aria-label="Next screenshot">›</button>
+              </div>
+              <p class="screenshot-caption" data-screenshot-caption></p>
+            </div>
+          </div>
+        </section>
+      {{ end }}
+
       <ul class="evidence-actions">
         <li>
           {{ if $hasMonitor }}
@@ -399,6 +456,7 @@
         <li class="{{ if $hasTimeline }}present{{ else }}missing{{ end }}">TIMELINE.md <span>{{ if $hasTimeline }}present{{ else }}missing{{ end }}</span></li>
         <li class="{{ if $hasExperiment }}present{{ else }}missing{{ end }}">code/experiment.py <span>{{ if $hasExperiment }}present{{ else }}missing{{ end }}</span></li>
         <li class="{{ if $hasParticipantVideo }}present{{ else }}missing{{ end }}">evidence/participant.mp4 <span>{{ if $hasParticipantVideo }}present{{ else }}missing{{ end }}</span></li>
+        <li class="{{ if $hasScreenshots }}present{{ else }}missing{{ end }}">evidence/screenshots/ <span>{{ if $hasScreenshots }}{{ len $screenshotFiles }} image{{ if ne (len $screenshotFiles) 1 }}s{{ end }}{{ else }}missing{{ end }}</span></li>
         <li class="{{ if $hasPerformance }}present{{ else }}missing{{ end }}">evidence/performance.json <span>{{ if $hasPerformance }}present{{ else }}missing{{ end }}</span></li>
         <li class="{{ if $hasMonitor }}present{{ else }}missing{{ end }}">evidence/monitor.html <span>{{ if $hasMonitor }}present{{ else }}missing{{ end }}</span></li>
         <li class="{{ if $hasData }}present{{ else }}missing{{ end }}">evidence/data.zip <span>{{ if $hasData }}present{{ else }}missing{{ end }}</span></li>

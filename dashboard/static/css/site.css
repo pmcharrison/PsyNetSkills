@@ -1042,6 +1042,115 @@ td {
   margin-bottom: 0;
 }
 
+.screenshot-gallery {
+  border-top: 1px solid var(--border);
+  margin-top: 1rem;
+  padding-top: 1rem;
+}
+
+.screenshot-gallery-header {
+  margin-bottom: 0.85rem;
+}
+
+.screenshot-controls {
+  align-items: center;
+  display: inline-flex;
+  gap: 0.45rem;
+  justify-content: center;
+}
+
+.screenshot-nav {
+  align-items: center;
+  background: var(--background);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--muted);
+  cursor: pointer;
+  display: inline-flex;
+  font-size: 1.1rem;
+  font-weight: 700;
+  height: 1.8rem;
+  justify-content: center;
+  line-height: 1;
+  padding: 0;
+  transition:
+    background 120ms ease,
+    color 120ms ease,
+    border-color 120ms ease;
+  width: 1.8rem;
+}
+
+.screenshot-nav:hover,
+.screenshot-nav:focus {
+  background: var(--code-background);
+  border-color: var(--muted-light);
+  color: var(--foreground);
+}
+
+.screenshot-nav:focus {
+  outline: 2px solid var(--link);
+  outline-offset: 2px;
+}
+
+.screenshot-nav:disabled {
+  cursor: default;
+  opacity: 0.35;
+}
+
+.screenshot-counter {
+  color: var(--muted);
+  font-size: 0.85rem;
+  min-width: 2.7rem;
+  text-align: center;
+}
+
+.screenshot-carousel {
+  display: grid;
+}
+
+.screenshot-frame {
+  border: 1px solid var(--border);
+  border-radius: 0.55rem;
+  overflow: hidden;
+}
+
+.screenshot-card {
+  margin: 0;
+}
+
+.screenshot-card[hidden] {
+  display: none;
+}
+
+.screenshot-card a {
+  align-items: center;
+  background: var(--code-background);
+  display: flex;
+  height: min(52vw, 20rem);
+  justify-content: center;
+}
+
+.screenshot-card img {
+  display: block;
+  height: 100%;
+  object-fit: contain;
+  width: 100%;
+}
+
+.screenshot-caption-panel {
+  border-top: 1px solid var(--border);
+  background: var(--background);
+  color: var(--foreground);
+  font-size: 0.95rem;
+  padding: 0.65rem 0.9rem 0.75rem;
+  text-align: center;
+}
+
+.screenshot-caption {
+  margin: 0.45rem auto 0;
+  max-width: 42rem;
+}
+
 .evidence-actions,
 .artifact-checklist {
   list-style: none;

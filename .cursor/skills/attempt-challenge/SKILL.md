@@ -97,18 +97,18 @@ challenge before starting a fresh attempt.
      experiments, follow `prepare-for-translation/SKILL.md` during this
      implementation step so translation-marked strings are part of the first
      runnable version.
-   - Make systematic use of tests: testing experiment logic with `psynet test local`,
-     testing front-end logic with Playwright, and testing visual logic with
-     video testing. When video testing, make sure to be efficient,
-     e.g. by running the experiment in a 'minimal' mode with a small number of trials;
-     long videos are time-consuming to create and to analyze.
+   - Make systematic use of tests: testing experiment logic with
+     `psynet test local`, testing front-end logic with Playwright assertions,
+     and testing visual states with targeted Playwright screenshots. Use video
+     for behavior that screenshots cannot prove well, such as audio, timing,
+     animation, or continuous interaction.
    - Update `LEARNINGS.md` with any generalizable lessons you encounter.
      This should include mistakes you made when running tests,
      things that took a long time to find in documentation, etc. Write each
      action bullet as a standalone instruction that remains understandable when
      copied into the Actions dashboard for another agent.
 10. Collect evidence in `evidence/`. Use the `record-participant-video` skill
-   when creating `evidence/participant.mp4`, and follow
+   when creating participant-flow screenshots or `evidence/participant.mp4`, and follow
    `references/attempt-artifacts.md` for challenge-type-specific evidence
    guidance.
 11. When implementation and first-pass evidence collection are complete, close

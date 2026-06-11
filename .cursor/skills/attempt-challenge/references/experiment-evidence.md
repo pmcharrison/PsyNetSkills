@@ -9,10 +9,13 @@ the general guidance in `attempt-artifacts.md`.
 Provide these artifacts or document the blocker in `EVALUATION.md`:
 
 - `code/` contains the runnable, self-contained experiment.
-- `evidence/participant.mp4` records the participant flow. Use the
-  `record-participant-video` skill to create and verify it. Do not commit or
-  publish participant videos longer than 3 minutes or larger than 1280x720; trim
-  and re-encode them before adding them to the attempt.
+- `evidence/participant.mp4` records the participant flow when video is needed.
+  Use the `record-participant-video` skill to create and verify it with
+  Playwright-driven interaction and `ffmpeg` capture. Do not commit or publish
+  participant videos longer than 3 minutes or larger than 1280x720; trim and
+  re-encode them before adding them to the attempt.
+- `evidence/screenshots/` contains targeted Playwright screenshots of the
+  participant-facing states reviewers should inspect.
 - `evidence/performance.json` contains `psynet performance-test` JSON output, or
   `evidence/performance-test.log` plus an `EVALUATION.md` blocker explains why
   the performance test could not run. Use
@@ -35,13 +38,25 @@ implementation challenge needs analysis beyond the standard artifacts.
 
 Prefer a hybrid workflow when feasible:
 
-- Use a short visual review run to inspect the interface, instructions, labels,
-  button states, and completion page. If the experiment supports
-  `PSYNET_PROFILE=minimal`, use that profile for this visual review and save a
-  few targeted screenshots.
-- Use a scripted browser runner for the canonical full-flow recording. Prefer
-  JavaScript Playwright, and use a human-time pacing option for illustrative
-  recordings so reviewers can see individual actions and hear audio without
-  watching a slow agent-driven session.
+- Use Playwright screenshots as the primary review artifact for static UI
+  states: instructions, labels, button states, representative trials, feedback,
+  validation errors, and completion pages.
+- Add `evidence/screenshots/manifest.json` when filenames are not enough for
+  reviewers. Use a `captions` object that maps screenshot paths to short
+  descriptions of the experiment state shown.
+- Keep the Playwright participant-flow test with the experiment code, for
+  example `code/<experiment_slug>/tests/participant-flow.spec.js`. The committed
+  test should include assertions for the behavior it demonstrates, not just
+  screenshot commands.
+- Use a scripted browser runner for the canonical full-flow recording when video
+  is useful. Prefer JavaScript Playwright, and use human-readable pacing such as
+  deliberate waits, `slowMo`, or experiment `time_factor` settings so reviewers
+  can see individual actions and hear audio without watching a slow
+  agent-driven session.
+- Use focused short clips for timing, animation, audio, masking, continuous
+  interaction, or new trial types. Do not analyze a long video when screenshots
+  and Playwright assertions answer the review question.
+- If the experiment supports `PSYNET_PROFILE=minimal`, use that profile for
+  visual review screenshots or concise recordings.
 - Keep the default experiment path canonical; minimal profile is for review only
   and should be visibly documented in evidence.

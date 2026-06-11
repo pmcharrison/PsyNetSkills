@@ -32,9 +32,9 @@ Use this skill when creating or revising PsyNet experiments that measure percept
 
 - Run `python experiment.py` or an equivalent construction check to verify stimulus manifests and node counts.
 - Run `psynet test local` for PsyNet experiments, using a short documented profile only for visual review when the full design is long.
-- Inspect participant-facing pages in a browser or recording for fixation placement, stimulus centering, labels, endpoint text, button states, and escaped HTML.
-- Keep visual evidence profiles representative but short. They should include enough trials per block to demonstrate the task structure, often around three trials per block, not just one token trial. Prefer direct short recordings over long raw recordings that need expensive multi-segment editing.
-- Record evidence with one centered browser window. Close or hide unused windows, and verify the final artifact renders correctly in the attempt dashboard page.
+- Inspect participant-facing pages with Playwright screenshots or concise recordings for fixation placement, stimulus centering, labels, endpoint text, button states, and escaped HTML.
+- Keep visual evidence profiles representative but short. They should include enough trials per block to demonstrate the task structure, often around three trials per block, not just one token trial. Prefer targeted screenshots or direct short clips over long raw recordings that need expensive multi-segment editing.
+- Record video evidence with one centered browser window. Close or hide unused windows, and verify the final artifacts render correctly in the attempt dashboard page.
 - Treat low bot completion rates as a performance issue even when request error counts are zero. If most bots time out, either adjust the performance-test duration/profile or record the limitation explicitly.
 - For challenge attempts, collect participant video, exported data, monitor, and performance evidence according to the attempt evidence references.
 
