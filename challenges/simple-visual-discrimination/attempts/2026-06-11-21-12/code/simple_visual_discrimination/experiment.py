@@ -82,7 +82,6 @@ class SameDifferentControl(KeyboardPushButtonControl):
         trial = bot.current_trial
         correct_response = trial.definition["condition"]
         return BotResponse(
-            raw_answer=correct_response,
             answer={
                 "choice": correct_response,
                 "rt": 0.35,
@@ -201,7 +200,7 @@ trial_maker = StaticTrialMaker(
     id_="color_discrimination",
     trial_class=ColorDiscriminationTrial,
     nodes=[
-        StaticNode({"condition": condition, "trial_index": index})
+        StaticNode(definition={"condition": condition, "trial_index": index})
         for index, condition in enumerate(TRIAL_CONDITIONS)
     ],
     expected_trials_per_participant="n_nodes",
