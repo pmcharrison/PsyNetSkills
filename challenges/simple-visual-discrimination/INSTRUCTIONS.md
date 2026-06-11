@@ -24,11 +24,10 @@ The stimulus set consisted of 30 simple colors, each presented as a colored circ
 
 ## Implementation details
 
-1. Measure reaction time and store this information for every trial.
-2. Allow participants in the forced choice to respond by pressing a button on keyboard.
+1. Use psychophysics skills.
+2. Measure reaction time and store this information for every trial.
+3. Allow participants in the forced choice to respond by pressing a button on keyboard.
 
-## Additional details
+## Additional comments
 
-Use record-participant-video skills in addition to the following additional remark:
-
-Make systematic use of tests: testing experiment logic with psynet test local, testing front-end logic with Playwright, and testing visual logic with video testing. When video testing, make sure to be efficient, e.g. by running the experiment in a ‘minimal’ mode with a small number of trials; long videos are time-consuming to create and to analyze.
+Use record-participant-video skills.
