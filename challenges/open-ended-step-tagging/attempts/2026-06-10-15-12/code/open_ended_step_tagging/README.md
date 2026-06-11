@@ -22,6 +22,28 @@ From this directory, with the PsyNet virtual environment active:
 The committed demo audio is synthetic and 15 seconds long. Replace it with real
 15-second study excerpts before running a real study.
 
+## Cint/Lucid readiness
+
+`experiment.py` includes Cint/Lucid recruiter settings and a class-level
+`Exp.config` with `locale`, `wage_per_hour`, `publish_experiment`, and
+`recruiter_settings`. Because real deployment targets have not been chosen yet,
+the current Lucid config path points to
+`qualifications/lucid/mock-lucid-ENG-US.json`, which is only for local import and
+test checks.
+
+To prepare real Cint qualifications:
+
+1. Choose deployment language-country pairs.
+2. Verify each Lucid tag pair with `psynet lucid locale`.
+3. Verify `locales/<locale>/LC_MESSAGES/experiment.po` exists for each target.
+4. Update `create_qualifications.py` by uncommenting only requested
+   `country_language_tags` and qualification filters.
+5. Run `python create_qualifications.py`.
+6. Update `LANGUAGE`, `COUNTRY`, `LUCID_CONFIG_PATH`, `locale`, and
+   `wage_per_hour` in `experiment.py` for the active deployment target.
+
+The mock Lucid file is not deployable.
+
 ## Replacing stimuli
 
 Edit `data/stimuli.csv` and put the corresponding `.wav` files under

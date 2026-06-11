@@ -13,11 +13,26 @@ from psynet.asset import asset
 from psynet.consent import NoConsent
 from psynet.modular_page import AudioPrompt, ModularPage, SurveyJSControl
 from psynet.page import InfoPage
+from psynet.recruiters import get_lucid_settings
 from psynet.timeline import Event, Timeline
 from psynet.trial.static import StaticNode, StaticTrial, StaticTrialMaker
 from psynet.utils import get_translator
 
 _ = get_translator(namespace="experiment")
+
+LANGUAGE = "ENG"
+COUNTRY = "US"
+LUCID_CONFIG_PATH = f"qualifications/lucid/mock-lucid-{LANGUAGE}-{COUNTRY}.json"
+
+recruiter_settings = get_lucid_settings(
+    lucid_recruitment_config_path=LUCID_CONFIG_PATH,
+    termination_time_in_s=120 * 60,
+    debug_recruiter=False,
+    initial_response_within_s=180,
+    inactivity_timeout_in_s=15 * 60,
+    no_focus_timeout_in_s=10 * 60,
+    bid_incidence=66,
+)
 
 STIMULUS_MANIFEST = Path("data/stimuli.csv")
 MIN_ITERATIONS_PER_STIMULUS = 5
@@ -280,6 +295,15 @@ class StepTaggingTrial(StaticTrial):
 
 class Exp(psynet.experiment.Experiment):
     label = "Open-ended STEP tagging"
+
+    config = {
+        "recruiter": "lucid",
+        "locale": "en",
+        "supported_locales": ["en"],
+        **recruiter_settings,
+        "wage_per_hour": 12.0,
+        "publish_experiment": True,
+    }
 
     timeline = Timeline(
         NoConsent(),

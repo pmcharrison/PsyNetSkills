@@ -1,0 +1,17 @@
+{
+    "mock_only": true,
+    "survey": {
+        "CountryLanguageID": 9,
+        "FulcrumExchangeAllocation": 0,
+        "FulcrumExchangeHedgeAccess": true,
+        "IndustryID": 30,
+        "StudyTypeID": 1,
+        "UniqueIPAddress": true,
+        "UniquePID": true,
+        "BidIncidence": 66,
+        "CollectsPII": false
+    },
+    "qualifications": [],
+    "country": "US",
+    "language": "ENG"
+}
