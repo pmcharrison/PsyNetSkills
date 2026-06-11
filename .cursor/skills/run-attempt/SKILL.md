@@ -1,6 +1,6 @@
 ---
 name: run-attempt
-description: Start a runnable PsyNet challenge attempt with psynet debug local, local review links, credentials, and an opened dashboard for live review.
+description: Start a runnable PsyNet challenge attempt with psynet debug local, an opened Cloud Desktop dashboard, credentials, and optional public tunnel links for live review.
 authors: [pmcharrison]
 disable-model-invocation: true
 ---
@@ -12,11 +12,13 @@ asks to start an existing attempt for live interactive review.
 
 ## Goal
 
-Start the PsyNet experiment stored in an existing challenge attempt, create
-clickable local review links, open the live experiment dashboard/develop page in
-the Cursor Desktop browser or remote desktop, show the dashboard credentials, and
-leave the server running so the user can take control. Do not start a public
-tunnel unless the user asks for one after seeing the local handoff.
+Start the PsyNet experiment stored in an existing challenge attempt, open the
+live experiment dashboard/develop page in the Cursor Desktop browser or remote
+desktop, show the dashboard credentials, and leave the server running so the user
+can take control there. Do not show local `127.0.0.1` review links in the user
+handoff, because they are only useful inside the Cloud Desktop environment. Do
+not start or show public links unless the user asks for a tunnel and it has been
+created successfully.
 
 ## Workflow
 
@@ -32,19 +34,17 @@ tunnel unless the user asks for one after seeing the local handoff.
    server in a tmux session so the user can continue using the agent:
    `tmux -f /exec-daemon/tmux.portal.conf new-session -d -s run-attempt -- uv run python .cursor/skills/run-attempt/scripts/run_attempt.py <attempt>`
 5. By default, the helper does not start a public tunnel. Watch the output for
-   the `Run attempt handoff` block. It must include:
-   - the local link to start a new participant;
-   - the local dashboard/develop link;
-   - the dashboard username and password.
-6. Open the local dashboard/develop URL from the handoff block in the Cursor
-   Desktop browser or remote desktop. If a login form appears instead of using
-   the embedded URL credentials, log in automatically with the printed username
-   and password. Do not ask the user to perform this login manually unless
-   automatic login fails.
+   the `Run attempt Cloud Desktop handoff` block. It must include the dashboard
+   username and password, but it must not include local participant or dashboard
+   review links.
+6. Open `http://127.0.0.1:5000/dashboard/develop` in the Cursor Desktop browser
+   or remote desktop. If a login form appears, log in automatically with the
+   printed username and password. Do not ask the user to perform this login
+   manually unless automatic login fails.
 7. After login, leave the browser on the dashboard/develop page. Tell the user
-   which tmux session is running the server and provide the local participant
-   link, local dashboard link, and credentials. Ask whether they would like a
-   public tunnel as well.
+   which tmux session is running the server, confirm that Cloud Desktop control
+   is ready, and show the credentials. Do not provide local participant or
+   dashboard links. Ask whether they would like a public tunnel as well.
 8. If the user wants a public tunnel, keep the `run-attempt` tmux session
    running and start a separate tunnel for port `5000`:
    `tmux -f /exec-daemon/tmux.portal.conf new-session -d -s run-attempt-tunnel -- npx -y localtunnel --port 5000 --local-host 127.0.0.1`
@@ -69,8 +69,8 @@ Useful options:
 - `--no-start-services` skips the best-effort PostgreSQL/Redis startup step.
 - `--psynet-command <path-or-command>` overrides the detected PsyNet executable.
 - `--public-tunnel` starts localtunnel with the server and prints public links
-  in addition to local links. Use this only when the user has already requested
-  a public tunnel.
+  once the tunnel URL is available. Use this only when the user has already
+  requested a public tunnel.
 - `--public-tunnel-port <port>` changes the local port exposed when
   `--public-tunnel` is used; PsyNet normally uses `5000`.
 
@@ -89,6 +89,6 @@ Useful options:
 - If a requested public tunnel produces no URL, verify `npx --version`, then
   start the tunnel in a separate tmux session while leaving PsyNet running. If
   `localtunnel` still hangs silently, report that public tunnel creation is
-  blocked and use the local links through Cursor's forwarded-port UI.
+  blocked and use Cloud Desktop control instead.
 - Use only local, ephemeral dashboard credentials. Do not add real service
   credentials just to make a review run succeed.

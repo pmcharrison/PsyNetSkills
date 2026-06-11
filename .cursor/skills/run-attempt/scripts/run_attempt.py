@@ -42,7 +42,7 @@ class AttemptRun:
 
 @dataclass
 class HandoffState:
-    """Collect and print the links needed for live review."""
+    """Collect and print the state needed for live review."""
 
     username: str | None = None
     password: str | None = None
@@ -79,34 +79,27 @@ class HandoffState:
         self.public_tunnel_url = url.rstrip("/")
 
     def maybe_print(self) -> None:
-        """Print complete local and public handoff blocks once they are known."""
+        """Print complete Cloud Desktop and public handoff blocks once known."""
 
         if not self.local_announced and self.is_local_complete:
-            self.print_local_handoff()
+            self.print_cloud_desktop_handoff()
         if not self.public_announced and self.is_public_complete:
             self.print_public_handoff()
 
-    def print_local_handoff(self) -> None:
-        """Print local review links and credentials."""
+    def print_cloud_desktop_handoff(self) -> None:
+        """Print Cloud Desktop guidance and credentials without local URLs."""
 
-        assert self.local_participant_url is not None
         assert self.username is not None
         assert self.password is not None
 
-        dashboard_url = with_userinfo(
-            with_path(self.local_participant_url, "/dashboard/develop"),
-            username=self.username,
-            password=self.password,
-        )
-
-        print("\n=== Run attempt handoff ===")
-        print(f"Start new participant (local): {self.local_participant_url}")
-        print(f"Dashboard (local): {dashboard_url}")
+        print("\n=== Run attempt Cloud Desktop handoff ===")
+        print("Dashboard/develop is ready for Cloud Desktop review.")
+        print("Open or refresh the Cloud Desktop browser dashboard if needed.")
         print("Credentials:")
         print(f"  Username: {self.username}")
         print(f"  Password: {self.password}")
-        print("Public tunnel: not started by default. Ask the user whether they want one.")
-        print("=== End run attempt handoff ===\n", flush=True)
+        print("Public links are shown only after a requested tunnel is ready.")
+        print("=== End run attempt Cloud Desktop handoff ===\n", flush=True)
         self.local_announced = True
 
     def print_public_handoff(self) -> None:
@@ -583,7 +576,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--public-tunnel",
         action="store_true",
-        help="Start localtunnel and print public review links in addition to local links.",
+        help="Start localtunnel and print public review links once it is ready.",
     )
     parser.add_argument(
         "--no-public-tunnel",
