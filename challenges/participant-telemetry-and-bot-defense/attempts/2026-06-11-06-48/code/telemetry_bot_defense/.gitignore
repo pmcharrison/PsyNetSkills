@@ -1,0 +1,7 @@
+__pycache__/
+.pytest_cache/
+.dallingerconfig
+data/
+*.db
+*.sqlite
+*.log
