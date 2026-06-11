@@ -1,0 +1,47 @@
+[
+  {
+    "participant_id": "P001",
+    "local_profile_label": "mock_human_like",
+    "n_trials": 6,
+    "median_latency_ms": 4350,
+    "signals": "",
+    "review_decision": "no_review_flag",
+    "interpretation": "No rule-based review flag in this local demonstration."
+  },
+  {
+    "participant_id": "P002",
+    "local_profile_label": "mock_fast_uniform",
+    "n_trials": 6,
+    "median_latency_ms": 217,
+    "signals": "fast_median_latency:217ms;attention_check_failed;low_response_variance",
+    "review_decision": "manual_review",
+    "interpretation": "Review flag only; telemetry does not prove bot, AI, or LLM assistance."
+  },
+  {
+    "participant_id": "P003",
+    "local_profile_label": "mock_attention_fail",
+    "n_trials": 6,
+    "median_latency_ms": 3500,
+    "signals": "attention_check_failed",
+    "review_decision": "manual_review",
+    "interpretation": "Review flag only; telemetry does not prove bot, AI, or LLM assistance."
+  },
+  {
+    "participant_id": "P004",
+    "local_profile_label": "mock_inconsistent_pair",
+    "n_trials": 6,
+    "median_latency_ms": 3050,
+    "signals": "response_consistency_mismatch:focus_environment;response_consistency_mismatch:planning",
+    "review_decision": "manual_review",
+    "interpretation": "Review flag only; telemetry does not prove bot, AI, or LLM assistance."
+  },
+  {
+    "participant_id": "P005",
+    "local_profile_label": "mock_missing_telemetry",
+    "n_trials": 6,
+    "median_latency_ms": "",
+    "signals": "missing_timing_telemetry",
+    "review_decision": "manual_review",
+    "interpretation": "Review flag only; telemetry does not prove bot, AI, or LLM assistance."
+  }
+]
