@@ -25,10 +25,10 @@ forwarded local port.
 2. Do not create or modify attempt evidence. This workflow is for ad hoc live
    review, not frozen evaluation artifacts.
 3. Run a dry run first:
-   `python .cursor/skills/run-attempt/scripts/run_attempt.py <attempt> --dry-run`
+   `uv run python .cursor/skills/run-attempt/scripts/run_attempt.py <attempt> --dry-run`
 4. If the dry run resolves exactly one experiment directory, start the live
    server in a tmux session so the user can continue using the agent:
-   `tmux -f /exec-daemon/tmux.portal.conf new-session -d -s run-attempt -- python .cursor/skills/run-attempt/scripts/run_attempt.py <attempt>`
+   `tmux -f /exec-daemon/tmux.portal.conf new-session -d -s run-attempt -- uv run python .cursor/skills/run-attempt/scripts/run_attempt.py <attempt>`
 5. Watch the output for the generated PsyNet ad/participant URL and report it to
    the user. Also tell them which terminal/tmux session is running the server.
 6. If Cursor forwards the port, tell the user they can open the forwarded URL
@@ -39,7 +39,7 @@ forwarded local port.
 
 Run from the repository root:
 
-`python .cursor/skills/run-attempt/scripts/run_attempt.py <attempt>`
+`uv run python .cursor/skills/run-attempt/scripts/run_attempt.py <attempt>`
 
 Useful options:
 
