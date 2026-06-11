@@ -12,7 +12,7 @@ A long recording added little value for this challenge because the participant f
 The experiment itself ran locally, but `psynet export local` depended on dashboard configuration that was not available in this environment, and the dashboard monitor routes required authentication that was not documented in the challenge workflow.
 
 *Actions:*
-- **PsyNetSkills:** Add Cursor Cloud notes for collecting `monitor.html` and `data.zip` when dashboard auth is unavailable in local debug mode. Confidence: medium. Status: considering.
+- **PsyNet:** Ensure `psynet export local` works after `psynet debug local` without requiring manual dashboard credential workarounds. Confidence: medium. Status: completed. Notes: Fixed upstream in https://gitlab.com/PsyNetDev/PsyNet/-/merge_requests/1081; no PsyNetSkills guidance change needed.
 
 ## Questionnaire reconstructions need a clearer paper trail
 
