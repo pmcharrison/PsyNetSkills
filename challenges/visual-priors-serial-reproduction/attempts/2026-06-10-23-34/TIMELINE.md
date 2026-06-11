@@ -14,3 +14,8 @@
 - T+00:41:10 [agent-start] Resumed after video review found the circle trial dot was not visible in the participant recording.
 - T+00:42:00 [agent] Increased dot study duration for clearer participant-facing evidence.
 - T+00:49:30 [agent] Added a pre-dot fixation frame after a replacement recording still missed the target dot frames.
+- T+00:58:10 [agent] Passed `psynet test local` after the pre-dot fixation change.
+- T+01:03:40 [agent] Reran the five-minute 40-bot performance test against final code.
+- T+01:07:20 [agent] Recorded final participant evidence with visible square, triangle, and circle dot displays.
+- T+01:09:00 [agent] Re-exported final data, monitor HTML, and chain summary evidence.
+- T+01:09:06 [agent-stop] Final evidence collection complete.

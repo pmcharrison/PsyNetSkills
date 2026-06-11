@@ -6,6 +6,7 @@
     "anonymous/data/ChainVector.csv",
     "anonymous/data/ExperimentConfig.csv",
     "anonymous/data/ImitationChainNetwork.csv",
+    "anonymous/data/Notification.csv",
     "anonymous/data/Participant.csv",
     "anonymous/data/Request.csv",
     "anonymous/data/Response.csv",
@@ -18,6 +19,7 @@
     "regular/data/ChainVector.csv",
     "regular/data/ExperimentConfig.csv",
     "regular/data/ImitationChainNetwork.csv",
+    "regular/data/Notification.csv",
     "regular/data/Participant.csv",
     "regular/data/Request.csv",
     "regular/data/Response.csv",
@@ -40,24 +42,24 @@
   ],
   "click_coordinates": [
     [
-      49.971616425676935,
-      50.119366859671366
+      31.713846572169047,
+      32.040594749825324
     ],
     [
       49.971616425676935,
-      50.119366859671366
+      34.009569930105584
     ],
     [
-      49.971616425676935,
-      50.119366859671366
+      34.57781047075852,
+      34.90455864841479
     ]
   ],
   "spawned_nodes": [
     {
       "shape": "square",
       "shape_label": "square",
-      "x": 49.97,
-      "y": 50.12,
+      "x": 31.71,
+      "y": 32.04,
       "generation": 1,
       "seed_index": 1,
       "chain_length": 3,
@@ -66,8 +68,8 @@
       "source_answer": {
         "clicked_object": "response_area",
         "click_coordinates": [
-          49.971616425676935,
-          50.119366859671366
+          31.713846572169047,
+          32.040594749825324
         ]
       }
     },
@@ -75,7 +77,7 @@
       "shape": "triangle",
       "shape_label": "triangle",
       "x": 49.97,
-      "y": 50.12,
+      "y": 34.01,
       "generation": 1,
       "seed_index": 1,
       "chain_length": 3,
@@ -85,15 +87,15 @@
         "clicked_object": "response_area",
         "click_coordinates": [
           49.971616425676935,
-          50.119366859671366
+          34.009569930105584
         ]
       }
     },
     {
       "shape": "circle",
       "shape_label": "circle",
-      "x": 49.97,
-      "y": 50.12,
+      "x": 34.58,
+      "y": 34.9,
       "generation": 1,
       "seed_index": 1,
       "chain_length": 3,
@@ -102,8 +104,8 @@
       "source_answer": {
         "clicked_object": "response_area",
         "click_coordinates": [
-          49.971616425676935,
-          50.119366859671366
+          34.57781047075852,
+          34.90455864841479
         ]
       }
     }

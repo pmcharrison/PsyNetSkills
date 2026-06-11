@@ -7,7 +7,7 @@
     "hard_max_experiment_payment": 1100.0,
     "soft_max_experiment_payment": 1000.0,
     "max_participant_payment": 25.0,
-    "deployment_id": "visual-priors-serial-reproduction__mode=debug__launch=2026-06-10--23-51-34",
+    "deployment_id": "visual-priors-serial-reproduction__mode=debug__launch=2026-06-11--00-27-23",
     "label": "Visual priors serial reproduction",
     "deployment_config": {
         "aws_region": "us-east-1",
@@ -91,8 +91,8 @@
         "description": "In this experiment you briefly view a dot in an outlined shape, remember its location, and reproduce it by clicking inside the same shape. Responses are passed along serial reproduction chains. Please use a Chrome browser in incognito mode.",
         "organization_name": "PsyNetSkills",
         "recruiter": "generic",
-        "id": "4e8c1e11-4f84-dc15-bf23-9f33491eafd2",
-        "heroku_app_id_root": "4e8c1e11-4f84-dc15-bf23-9f33491eafd2"
+        "id": "e414e9ef-7f84-ff04-7088-a7975074cab3",
+        "heroku_app_id_root": "e414e9ef-7f84-ff04-7088-a7975074cab3"
     }
 }
 
@@ -101,16 +101,20 @@
 Preparing to export the data...
 Zipping up the package...
 Done. Local export available in data/local-data.zip
+/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/yaspin/core.py:172: UserWarning: color, on_color and attrs are not supported when output stream is not a TTY
+  self._color = self._set_color(color) if color else color
+
 ⠋ Completed.             ✔ Completed.
-Participant:   0%|          | 0/1 [00:00<?, ?it/s]Participant: 100%|██████████| 1/1 [00:00<00:00, 2721.81it/s]
-ImitationChainNetwork:   0%|          | 0/3 [00:00<?, ?it/s]ImitationChainNetwork: 100%|██████████| 3/3 [00:00<00:00, 12852.82it/s]
-SpatialMemoryNode:   0%|          | 0/6 [00:00<?, ?it/s]SpatialMemoryNode: 100%|██████████| 6/6 [00:00<00:00, 13774.40it/s]
-ChainVector:   0%|          | 0/3 [00:00<?, ?it/s]ChainVector: 100%|██████████| 3/3 [00:00<00:00, 24720.85it/s]
-SpatialMemoryTrial:   0%|          | 0/3 [00:00<?, ?it/s]SpatialMemoryTrial: 100%|██████████| 3/3 [00:00<00:00, 5963.47it/s]
-Response:   0%|          | 0/11 [00:00<?, ?it/s]Response: 100%|██████████| 11/11 [00:00<00:00, 13384.78it/s]
-ChainTrialMakerState:   0%|          | 0/1 [00:00<?, ?it/s]ChainTrialMakerState: 100%|██████████| 1/1 [00:00<00:00, 7913.78it/s]
-Request:   0%|          | 0/27 [00:00<?, ?it/s]Request: 100%|██████████| 27/27 [00:00<00:00, 182067.86it/s]
-ExperimentConfig:   0%|          | 0/1 [00:00<?, ?it/s]ExperimentConfig: 100%|██████████| 1/1 [00:00<00:00, 5005.14it/s]
+Participant:   0%|          | 0/1 [00:00<?, ?it/s]Participant: 100%|██████████| 1/1 [00:00<00:00, 2723.57it/s]
+ImitationChainNetwork:   0%|          | 0/3 [00:00<?, ?it/s]ImitationChainNetwork: 100%|██████████| 3/3 [00:00<00:00, 12470.68it/s]
+SpatialMemoryNode:   0%|          | 0/6 [00:00<?, ?it/s]SpatialMemoryNode: 100%|██████████| 6/6 [00:00<00:00, 11688.72it/s]
+ChainVector:   0%|          | 0/3 [00:00<?, ?it/s]ChainVector: 100%|██████████| 3/3 [00:00<00:00, 23172.95it/s]
+SpatialMemoryTrial:   0%|          | 0/3 [00:00<?, ?it/s]SpatialMemoryTrial: 100%|██████████| 3/3 [00:00<00:00, 8911.41it/s]
+Notification:   0%|          | 0/1 [00:00<?, ?it/s]Notification: 100%|██████████| 1/1 [00:00<00:00, 12228.29it/s]
+Response:   0%|          | 0/12 [00:00<?, ?it/s]Response: 100%|██████████| 12/12 [00:00<00:00, 11732.32it/s]
+ChainTrialMakerState:   0%|          | 0/1 [00:00<?, ?it/s]ChainTrialMakerState: 100%|██████████| 1/1 [00:00<00:00, 10230.01it/s]
+Request:   0%|          | 0/31 [00:00<?, ?it/s]Request: 100%|██████████| 31/31 [00:00<00:00, 167555.96it/s]
+ExperimentConfig:   0%|          | 0/1 [00:00<?, ?it/s]ExperimentConfig: 100%|██████████| 1/1 [00:00<00:00, 3718.35it/s]
 ⠋ Completed.             ✔ Completed.
 
 ❯❯ Export complete. You can find your results at: /workspace/challenges/visual-priors-serial-reproduction/attempts/2026-06-10-23-34/evidence/export
@@ -121,15 +125,16 @@ Preparing to export the data...
 Zipping up the package...
 Done. Local export available in data/local-data.zip
 ⠋ Completed.             ✔ Completed.
-Participant:   0%|          | 0/1 [00:00<?, ?it/s]Participant: 100%|██████████| 1/1 [00:00<00:00, 3554.49it/s]
-ImitationChainNetwork:   0%|          | 0/3 [00:00<?, ?it/s]ImitationChainNetwork: 100%|██████████| 3/3 [00:00<00:00, 16299.11it/s]
-SpatialMemoryNode:   0%|          | 0/6 [00:00<?, ?it/s]SpatialMemoryNode: 100%|██████████| 6/6 [00:00<00:00, 14082.72it/s]
-ChainVector:   0%|          | 0/3 [00:00<?, ?it/s]ChainVector: 100%|██████████| 3/3 [00:00<00:00, 27838.30it/s]
-SpatialMemoryTrial:   0%|          | 0/3 [00:00<?, ?it/s]SpatialMemoryTrial: 100%|██████████| 3/3 [00:00<00:00, 10494.51it/s]
-Response:   0%|          | 0/11 [00:00<?, ?it/s]Response: 100%|██████████| 11/11 [00:00<00:00, 13830.14it/s]
-ChainTrialMakerState:   0%|          | 0/1 [00:00<?, ?it/s]ChainTrialMakerState: 100%|██████████| 1/1 [00:00<00:00, 12300.01it/s]
-Request:   0%|          | 0/27 [00:00<?, ?it/s]Request: 100%|██████████| 27/27 [00:00<00:00, 193583.26it/s]
-ExperimentConfig:   0%|          | 0/1 [00:00<?, ?it/s]ExperimentConfig: 100%|██████████| 1/1 [00:00<00:00, 4777.11it/s]
+Participant:   0%|          | 0/1 [00:00<?, ?it/s]Participant: 100%|██████████| 1/1 [00:00<00:00, 3765.08it/s]
+ImitationChainNetwork:   0%|          | 0/3 [00:00<?, ?it/s]ImitationChainNetwork: 100%|██████████| 3/3 [00:00<00:00, 9453.73it/s]
+SpatialMemoryNode:   0%|          | 0/6 [00:00<?, ?it/s]SpatialMemoryNode: 100%|██████████| 6/6 [00:00<00:00, 12807.04it/s]
+ChainVector:   0%|          | 0/3 [00:00<?, ?it/s]ChainVector: 100%|██████████| 3/3 [00:00<00:00, 27594.11it/s]
+SpatialMemoryTrial:   0%|          | 0/3 [00:00<?, ?it/s]SpatialMemoryTrial: 100%|██████████| 3/3 [00:00<00:00, 10373.38it/s]
+Notification:   0%|          | 0/1 [00:00<?, ?it/s]Notification: 100%|██████████| 1/1 [00:00<00:00, 20867.18it/s]
+Response:   0%|          | 0/12 [00:00<?, ?it/s]Response: 100%|██████████| 12/12 [00:00<00:00, 12186.84it/s]
+ChainTrialMakerState:   0%|          | 0/1 [00:00<?, ?it/s]ChainTrialMakerState: 100%|██████████| 1/1 [00:00<00:00, 11586.48it/s]
+Request:   0%|          | 0/31 [00:00<?, ?it/s]Request: 100%|██████████| 31/31 [00:00<00:00, 214206.63it/s]
+ExperimentConfig:   0%|          | 0/1 [00:00<?, ?it/s]ExperimentConfig: 100%|██████████| 1/1 [00:00<00:00, 4240.95it/s]
 ⠋ Completed.             ✔ Completed.
 
 ❯❯ Export complete. You can find your results at: /workspace/challenges/visual-priors-serial-reproduction/attempts/2026-06-10-23-34/evidence/export

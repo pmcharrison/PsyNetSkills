@@ -5,8 +5,8 @@ Input #0, mov,mp4,m4a,3gp,3g2,mj2, from 'challenges/visual-priors-serial-reprodu
     compatible_brands: isomiso2avc1mp41
     encoder         : Lavf60.16.100
     comment         : Made with Cursor
-  Duration: 00:00:39.67, start: 0.000000, bitrate: 47 kb/s
-  Stream #0:0[0x1](und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(progressive), 1152x720, 45 kb/s, 15 fps, 15 tbr, 15360 tbn (default)
+  Duration: 00:00:42.33, start: 0.000000, bitrate: 48 kb/s
+  Stream #0:0[0x1](und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(progressive), 1152x720, 46 kb/s, 15 fps, 15 tbr, 15360 tbn (default)
     Metadata:
       handler_name    : VideoHandler
       vendor_id       : [0][0][0][0]
@@ -45,12 +45,12 @@ avg_frame_rate=15/1
 time_base=1/15360
 start_pts=0
 start_time=0.000000
-duration_ts=609280
-duration=39.666667
-bit_rate=45763
+duration_ts=650240
+duration=42.333333
+bit_rate=46843
 max_bit_rate=N/A
 bits_per_raw_sample=8
-nb_frames=595
+nb_frames=635
 nb_read_frames=N/A
 nb_read_packets=N/A
 extradata_size=46
