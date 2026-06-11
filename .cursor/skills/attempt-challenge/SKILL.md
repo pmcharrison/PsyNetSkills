@@ -10,10 +10,11 @@ Use this skill when the user asks you to attempt a challenge in the
 PsyNetSkills repository.
 
 The user should only need to initiate the attempt, for example:
-`Attempt the <challenge-slug> challenge.` Do not ask for or rely on supplementary
-implementation instructions at attempt time. If the public challenge
-instructions are insufficient, record that as an issue and recommend updating the
-challenge before starting a fresh attempt.
+`Attempt the <challenge-slug> challenge.` If the challenge frontmatter has
+`fidelity: exact` or `fidelity: flexible`, use that tag as the source of truth for
+how much implementation judgment is allowed. If the public challenge instructions
+are insufficient even after applying the fidelity policy, record that as an
+issue and recommend updating the challenge before starting a fresh attempt.
 
 ## Required reads
 
@@ -27,7 +28,19 @@ challenge before starting a fresh attempt.
 ## Workflow
 
 1. Read `INSTRUCTIONS.md` from the target challenge, including its YAML
-   frontmatter.
+   frontmatter. Interpret the optional `fidelity` field as follows:
+   - `exact`: faithfully replicate the challenge description. Do not add,
+     remove, simplify, or substitute design elements unless the instructions
+     explicitly allow it. If a required detail is ambiguous, ask the user to
+     confirm with a concise questionnaire or selection list before
+     implementation.
+   - `flexible`: implement the described scientific or participant-facing goal
+     while making reasonable PsyNet-native choices for underspecified details.
+     Record important assumptions in `TIMELINE.md` or `EVALUATION.md`.
+   - missing: before implementation, ask the user whether the challenge should
+     be treated as `exact` or `flexible`, and how to handle ambiguities. For
+     user-created untagged challenges, continue to ask for confirmation whenever
+     an unresolved ambiguity would materially change the participant experience.
 2. Do not read `CRITERIA.md` or any existing `attempts/` folders before
    implementation and evidence collection are complete. Do not inspect dashboard
    attempt pages for the same challenge during this phase either; any criteria

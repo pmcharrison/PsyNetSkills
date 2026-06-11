@@ -25,11 +25,25 @@ title: Primary color rating experiment
 type: experiment implementation
 difficulty: 2
 authors: [pmcharrison]
+fidelity: flexible
 ---
 ```
 
 `authors` must list one or more GitHub author keys from `authors.yaml`; see
 `docs/authors.md` for the registration workflow.
+
+`fidelity` tells attempt agents how literally to follow the public challenge
+description:
+
+- `exact` means the attempt should faithfully replicate the described experiment.
+  Agents should ask for confirmation before resolving ambiguities that would
+  materially change the participant experience.
+- `flexible` means the attempt should preserve the goal while making reasonable
+  PsyNet-native choices for underspecified details.
+
+Challenges created with the `create-challenge` skill should include `fidelity`.
+Older or manually written challenges may omit it; attempt agents should ask the
+user which fidelity mode to use before implementation.
 
 Challenges may also include `CRITERIA.md` for evaluator-facing success
 criteria and `references/` for supporting material. `CRITERIA.md` is optional:
