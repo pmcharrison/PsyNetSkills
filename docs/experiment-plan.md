@@ -1,7 +1,7 @@
 # Shared experiment plan
 
 This document proposes a planning scaffold for PsyNet experiments that a human
-researcher and an agent can share before implementation. It is meant to sit
+researcher and agents can share before implementation. It is meant to sit
 between a prose idea and a challenge or experiment build: detailed enough to
 remove ambiguity, but not so implementation-heavy that it replaces PsyNet skills
 or code review.
@@ -9,20 +9,25 @@ or code review.
 The structure is based on the current PsyNetSkills challenge set, the attempt
 schema documented in this repository, and recurring patterns in the local PsyNet
 checkout (`~/PsyNet/demos/experiments/`, `~/PsyNet/demos/features/`, and
-`~/PsyNet/docs/`). At the time of writing, the repository checkout contains
-challenge definitions and attempt templates/specifications, but no committed
-completed attempt directories under `challenges/*/attempts/`; attempt insights
-therefore come from `docs/attempts.md`, validation/dashboard tests, and skill
-templates rather than from completed attempt artifacts.
+`~/PsyNet/docs/`).
 
 ## How to use this plan
 
 Create one plan for each experiment before an agent starts coding. The human
-should fill or approve the scientific and design decisions; the agent can propose
+should fill or approve the scientific, design, and implementation decisions; the agent can propose
 defaults, identify PsyNet demos that match the design, and flag contradictions.
 Implementation entries are not a line-by-line coding recipe. They are the places
 where human oversight is valuable because a wrong technical choice can change the
 scientific task, participant experience, deployment safety, or data interpretation.
+
+Before proposing defaults, agents should work through the plan systematically
+and flag any logical gaps, contradictions, or underspecified fields — not assume
+they can be resolved silently during implementation. Agents should not advocate
+for a specific design choice before the human has expressed a preference. When
+the human skips a clarification question, deems a point unimportant, or
+genuinely does not know the answer, the agent should propose the most reasonable
+default, explain the reasoning behind it, and mark it clearly as a default so it
+can be overridden later.
 
 Use these labels:
 
@@ -58,6 +63,11 @@ not allowed to claim.
 - **Minimal analysis**: participant count, trial count, exclusions, condition
   summaries, planned figures/tables, and the report or export expected after a
   run.
+- **Purpose**: whether this is a proof-of-concept demo, a pilot, or a formal
+  experiment. The intended purpose sets the level of rigor expected across all
+  three plan sections: the depth of scientific justification, the fidelity of
+  the participant-facing design, and the completeness of implementation and
+  evidence collection.
 
 ### Optional fields
 
@@ -223,6 +233,7 @@ README when starting a new experiment.
 - Required: participant population:
 - Required: interpretation boundary:
 - Required: minimal analysis:
+- Required: purpose (demo / pilot / formal experiment):
 - Optional: sample-size rationale:
 - Optional: adaptive / group / AI logic:
 - Optional: ethical or domain constraints:
