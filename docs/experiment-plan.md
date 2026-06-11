@@ -21,13 +21,14 @@ where human oversight is valuable because a wrong technical choice can change th
 scientific task, participant experience, deployment safety, or data interpretation.
 
 Before proposing defaults, agents should work through the plan systematically
-and flag any logical gaps, contradictions, or underspecified fields — not assume
-they can be resolved silently during implementation. Agents should not advocate
-for a specific design choice before the human has expressed a preference. When
-the human skips a clarification question, deems a point unimportant, or
-genuinely does not know the answer, the agent should propose the most reasonable
-default, explain the reasoning behind it, and mark it clearly as a default so it
-can be overridden later.
+and identify any logical gaps, contradictions, or underspecified fields. For
+each gap, evaluate whether it requires human judgment: if the choice could
+silently change the scientific meaning, participant experience, data
+interpretation, or deployment safety, raise it explicitly with the human before
+proceeding. If the gap is low-stakes or has an obvious reasonable default,
+set that default, state it briefly, and mark it as overridable — do not burden
+the human with questions about minor details. Agents should not advocate for a
+specific design choice before the human has expressed a preference.
 
 Use these labels:
 
