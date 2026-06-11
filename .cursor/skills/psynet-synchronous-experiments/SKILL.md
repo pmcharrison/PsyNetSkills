@@ -72,15 +72,6 @@ If participants exchange live actions or messages within a trial, also read
   otherwise exit while async network growth is still pending.
 - Use `ChatRoom(room_id=f"group_{participant.sync_group.id}")` only for
   participant communication; keep phase advancement and scoring in barriers.
-- For synchronous chain or rolling-inventory designs, make node readiness depend
-  on the active group size, not only a fixed `trials_per_node`, so a generation
-  does not spawn before all current group members have submitted.
-- Keep rolling shared state analyzable in node definitions or trial answers:
-  condition, generation, parent/original network IDs, visible option IDs,
-  ancestry/children, proposal counts, and selection/adoption records.
-- For timed phases, prefer participant-facing wait pages that show which
-  anonymous group members are done or pending. This reduces confusion and makes
-  stalled-partner behavior easier to debug.
 
 ## Recruitment and platform design
 
@@ -114,9 +105,6 @@ If participants exchange live actions or messages within a trial, also read
 - Assert group formation, active group size, role assignment, shared node/trial
   IDs, barrier IDs, `on_release` side effects, and failed/overflow exits.
 - Test dropout and top-up behavior, not only a complete group that finishes.
-- For one-human manual sync testing, a development-only route or scheduled task
-  may launch companion bots to fill the group. Disable or guard this path before
-  real deployment.
 - For participant-facing waiting rooms or multi-browser behavior, collect
   separate browser-context evidence. Use `record-participant-video/SKILL.md` for
   challenge evidence or participant-flow recordings.
