@@ -77,6 +77,9 @@ output of `psynet performance-test` or an equivalent performance check.
 Store the Playwright participant-flow test with the experiment code, typically
 under `code/<slug>/tests/participant-flow.spec.js`, and make it assert the
 behavior shown in the screenshots or recording.
+To override filename-derived screenshot captions on the dashboard, add
+`evidence/screenshots/manifest.json` with a `captions` object mapping screenshot
+paths to concise review labels.
 
 For challenge attempts, treat `psynet test local` and `psynet performance-test
 local` as separate checks. Functional tests can stay fast; performance evidence

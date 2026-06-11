@@ -41,6 +41,9 @@ Prefer a hybrid workflow when feasible:
 - Use Playwright screenshots as the primary review artifact for static UI
   states: instructions, labels, button states, representative trials, feedback,
   validation errors, and completion pages.
+- Add `evidence/screenshots/manifest.json` when filenames are not enough for
+  reviewers. Use a `captions` object that maps screenshot paths to short
+  descriptions of the experiment state shown.
 - Keep the Playwright participant-flow test with the experiment code, for
   example `code/<experiment_slug>/tests/participant-flow.spec.js`. The committed
   test should include assertions for the behavior it demonstrates, not just

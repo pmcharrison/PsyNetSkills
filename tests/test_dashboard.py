@@ -474,6 +474,14 @@ def test_export_dashboard_publishes_attempt_screenshots(tmp_path: Path) -> None:
         attempt_dir / "evidence/screenshots/01-instructions.png",
         screenshot_data,
     )
+    write(
+        attempt_dir / "evidence/screenshots/manifest.json",
+        '{\n'
+        '  "captions": {\n'
+        '    "screenshots/01-instructions.png": "Instructions page"\n'
+        "  }\n"
+        "}\n",
+    )
 
     export_dashboard(tmp_path, tmp_path / "dashboard")
     data = json.loads(
@@ -490,6 +498,11 @@ def test_export_dashboard_publishes_attempt_screenshots(tmp_path: Path) -> None:
     screenshot_blob = tmp_path / "dashboard/static" / screenshot["url"]
     assert screenshot_blob.exists()
     assert screenshot_blob.read_bytes() == screenshot_data
+    manifest = evidence_by_path["screenshots/manifest.json"]
+    assert manifest["content"] is not None
+    assert manifest["url"].startswith("artifacts/blobs/sha256/")
+    manifest_blob = tmp_path / "dashboard/static" / manifest["url"]
+    assert manifest_blob.exists()
 
 
 def test_collect_challenges_uses_agent_timestamp_for_example_attempt(

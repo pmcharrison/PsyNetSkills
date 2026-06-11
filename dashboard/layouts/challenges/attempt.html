@@ -32,6 +32,17 @@
     {{ end }}
   {{ end }}
   {{ $hasScreenshots := gt (len $screenshotFiles) 0 }}
+  {{ $screenshotCaptionFiles := where $attempt.evidence_files "path" "screenshots/manifest.json" }}
+  {{ $screenshotCaptions := dict }}
+  {{ if gt (len $screenshotCaptionFiles) 0 }}
+    {{ $screenshotCaptionFile := index $screenshotCaptionFiles 0 }}
+    {{ with $screenshotCaptionFile.content }}
+      {{ $screenshotManifest := . | transform.Unmarshal }}
+      {{ with $screenshotManifest.captions }}
+        {{ $screenshotCaptions = . }}
+      {{ end }}
+    {{ end }}
+  {{ end }}
   {{ $performanceFiles := where $attempt.evidence_files "path" "performance.json" }}
   {{ $performanceFile := dict }}
   {{ if gt (len $performanceFiles) 0 }}
@@ -251,22 +262,33 @@
 
       {{ if $hasScreenshots }}
         <section class="screenshot-gallery" aria-labelledby="screenshot-gallery-heading">
-          <h3 id="screenshot-gallery-heading">Screenshot walkthrough</h3>
-          <p class="artifact-note">
-            Targeted participant-facing states captured with Playwright.
-          </p>
-          <div class="screenshot-carousel" role="list">
-            {{ range $screenshotFiles }}
+          <div class="screenshot-gallery-header">
+            <div>
+              <h3 id="screenshot-gallery-heading">Screenshot walkthrough</h3>
+              <p class="artifact-note">
+                Targeted participant-facing states captured with Playwright.
+              </p>
+            </div>
+            <div class="screenshot-controls" aria-label="Screenshot navigation">
+              <button class="screenshot-nav" type="button" data-screenshot-prev aria-label="Previous screenshot">‹</button>
+              <span class="screenshot-counter" data-screenshot-counter>1 / {{ len $screenshotFiles }}</span>
+              <button class="screenshot-nav" type="button" data-screenshot-next aria-label="Next screenshot">›</button>
+            </div>
+          </div>
+          <div class="screenshot-carousel" data-screenshot-gallery tabindex="0">
+            {{ range $index, $file := $screenshotFiles }}
               {{ $caption := replaceRE "\\.[^.]+$" "" (replaceRE "^.*/" "" .path) }}
               {{ $caption = replace $caption "-" " " }}
               {{ $caption = replace $caption "_" " " }}
-              <figure class="screenshot-card" role="listitem">
-                <a href="{{ .url | relURL }}">
-                  <img src="{{ .url | relURL }}" alt="{{ $caption | humanize }}">
+              {{ with index $screenshotCaptions .path }}
+                {{ $caption = . }}
+              {{ end }}
+              <figure class="screenshot-card" data-screenshot-card{{ if ne $index 0 }} hidden{{ end }}>
+                <a href="{{ .url | relURL }}" aria-label="Open full-size screenshot">
+                  <img src="{{ .url | relURL }}" alt="{{ $caption }}">
                 </a>
                 <figcaption>
-                  <code>{{ .path }}</code>
-                  · {{ .size_bytes }} bytes
+                  {{ $caption }}
                 </figcaption>
               </figure>
             {{ end }}

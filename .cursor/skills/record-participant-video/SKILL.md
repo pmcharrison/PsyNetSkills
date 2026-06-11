@@ -50,6 +50,9 @@ instructions, consent/ad pages, representative trials, feedback, validation
 errors, completion pages, and edge-case states. Save targeted screenshots under
 `evidence/screenshots/`, using ordered descriptive names such as
 `01-instructions.png` or `03-masked-trial.png`.
+When screenshots need review-facing captions, add
+`evidence/screenshots/manifest.json` with a `captions` object that maps
+screenshot paths to concise descriptions of what each image demonstrates.
 
 Use video for behavior that screenshots cannot prove well: audio playback,
 timing-sensitive displays, animation, masking, continuous interaction, live
