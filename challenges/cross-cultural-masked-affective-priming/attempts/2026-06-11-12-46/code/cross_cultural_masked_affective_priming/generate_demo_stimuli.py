@@ -105,18 +105,20 @@ def write_manifest() -> None:
         make_trial("practice", 1, "happy", "demo_a", "happy", "demo_a"),
         make_trial("practice", 2, "angry", "demo_b", "angry", "demo_b"),
     ]
-    main = []
-    i = 1
-    for prime_group, target_group in [
-        ("demo_a", "demo_a"),
-        ("demo_a", "demo_b"),
-        ("demo_b", "demo_a"),
-        ("demo_b", "demo_b"),
-    ]:
-        main.append(make_trial("main", i, "happy", prime_group, "happy", target_group))
-        i += 1
-        main.append(make_trial("main", i, "angry", prime_group, "happy", target_group))
-        i += 1
+    main_specs = [
+        ("happy", "demo_a", "happy", "demo_a"),
+        ("angry", "demo_a", "happy", "demo_a"),
+        ("angry", "demo_a", "angry", "demo_b"),
+        ("happy", "demo_a", "angry", "demo_b"),
+        ("happy", "demo_b", "happy", "demo_a"),
+        ("angry", "demo_b", "happy", "demo_a"),
+        ("angry", "demo_b", "angry", "demo_b"),
+        ("happy", "demo_b", "angry", "demo_b"),
+    ]
+    main = [
+        make_trial("main", i, prime_affect, prime_group, target_response, target_group)
+        for i, (prime_affect, prime_group, target_response, target_group) in enumerate(main_specs, start=1)
+    ]
 
     MANIFEST_PATH.parent.mkdir(parents=True, exist_ok=True)
     MANIFEST_PATH.write_text(

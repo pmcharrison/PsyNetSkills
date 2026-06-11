@@ -97,15 +97,15 @@
       "stimulus_note": "Generated placeholder; replace with validated face stimuli for real research."
     },
     {
-      "trial_id": "main_03_happy_demo_a_happy_demo_b",
+      "trial_id": "main_03_angry_demo_a_angry_demo_b",
       "block": "main",
-      "prime_id": "prime_happy_demo_a",
-      "prime_affect": "happy",
+      "prime_id": "prime_angry_demo_a",
+      "prime_affect": "angry",
       "prime_cultural_group": "demo_a",
-      "target_id": "target_ambiguous_happy_demo_b",
+      "target_id": "target_ambiguous_angry_demo_b",
       "target_ambiguity": "60-40 demonstration morph",
       "target_cultural_group": "demo_b",
-      "coded_target_response": "happy",
+      "coded_target_response": "angry",
       "mask_id": "mask_checker",
       "congruency": "congruent",
       "timings_ms": {
@@ -119,15 +119,15 @@
       "stimulus_note": "Generated placeholder; replace with validated face stimuli for real research."
     },
     {
-      "trial_id": "main_04_angry_demo_a_happy_demo_b",
+      "trial_id": "main_04_happy_demo_a_angry_demo_b",
       "block": "main",
-      "prime_id": "prime_angry_demo_a",
-      "prime_affect": "angry",
+      "prime_id": "prime_happy_demo_a",
+      "prime_affect": "happy",
       "prime_cultural_group": "demo_a",
-      "target_id": "target_ambiguous_happy_demo_b",
+      "target_id": "target_ambiguous_angry_demo_b",
       "target_ambiguity": "60-40 demonstration morph",
       "target_cultural_group": "demo_b",
-      "coded_target_response": "happy",
+      "coded_target_response": "angry",
       "mask_id": "mask_checker",
       "congruency": "incongruent",
       "timings_ms": {
@@ -185,15 +185,15 @@
       "stimulus_note": "Generated placeholder; replace with validated face stimuli for real research."
     },
     {
-      "trial_id": "main_07_happy_demo_b_happy_demo_b",
+      "trial_id": "main_07_angry_demo_b_angry_demo_b",
       "block": "main",
-      "prime_id": "prime_happy_demo_b",
-      "prime_affect": "happy",
+      "prime_id": "prime_angry_demo_b",
+      "prime_affect": "angry",
       "prime_cultural_group": "demo_b",
-      "target_id": "target_ambiguous_happy_demo_b",
+      "target_id": "target_ambiguous_angry_demo_b",
       "target_ambiguity": "60-40 demonstration morph",
       "target_cultural_group": "demo_b",
-      "coded_target_response": "happy",
+      "coded_target_response": "angry",
       "mask_id": "mask_checker",
       "congruency": "congruent",
       "timings_ms": {
@@ -207,15 +207,15 @@
       "stimulus_note": "Generated placeholder; replace with validated face stimuli for real research."
     },
     {
-      "trial_id": "main_08_angry_demo_b_happy_demo_b",
+      "trial_id": "main_08_happy_demo_b_angry_demo_b",
       "block": "main",
-      "prime_id": "prime_angry_demo_b",
-      "prime_affect": "angry",
+      "prime_id": "prime_happy_demo_b",
+      "prime_affect": "happy",
       "prime_cultural_group": "demo_b",
-      "target_id": "target_ambiguous_happy_demo_b",
+      "target_id": "target_ambiguous_angry_demo_b",
       "target_ambiguity": "60-40 demonstration morph",
       "target_cultural_group": "demo_b",
-      "coded_target_response": "happy",
+      "coded_target_response": "angry",
       "mask_id": "mask_checker",
       "congruency": "incongruent",
       "timings_ms": {

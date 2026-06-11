@@ -1,5 +1,10 @@
 __pycache__/
 .pytest_cache/
 .dallinger/
+.deploy/
+static/
+data/export/
 data/*.zip
+server.log
+source_code.zip
 *.pyc
