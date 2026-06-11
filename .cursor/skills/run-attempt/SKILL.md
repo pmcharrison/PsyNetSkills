@@ -13,8 +13,9 @@ asks to start an existing attempt for live interactive review.
 ## Goal
 
 Start the PsyNet experiment stored in an existing challenge attempt, open the
-live experiment dashboard or participant page in the Cursor browser/remote
-desktop, and leave the server running so the user can take control.
+live experiment dashboard/develop page in the Cursor browser or remote desktop,
+log in with the local dashboard credentials, and leave the server running so the
+user can take control.
 
 ## Workflow
 
@@ -29,10 +30,18 @@ desktop, and leave the server running so the user can take control.
 4. If the dry run resolves exactly one experiment directory, start the live
    server in a tmux session so the user can continue using the agent:
    `tmux -f /exec-daemon/tmux.portal.conf new-session -d -s run-attempt -- uv run python .cursor/skills/run-attempt/scripts/run_attempt.py <attempt>`
-5. Watch the output for the generated PsyNet dashboard, ad, or participant URL.
-6. Open the live URL in the Cursor browser or remote desktop so the user can take
-   control of the running experiment. Also tell them which tmux session is
-   running the server.
+5. Watch the output for the generated PsyNet dashboard/develop, ad, or
+   participant URL. Prefer the dashboard/develop URL for handoff because it lets
+   the reviewer start participant sessions from the live server.
+6. Open the dashboard/develop URL in the Cursor browser or remote desktop. If a
+   login form appears, log in automatically with the local dashboard credentials
+   printed by PsyNet or configured for the experiment. In the standard local test
+   environment these are usually `test_admin` / `test_password`; otherwise use
+   the `dashboard_user` and `dashboard_password` values from the local PsyNet
+   config. Do not ask the user to perform this login manually unless automatic
+   login fails.
+7. After login, leave the browser on the dashboard/develop page and tell the user
+   which tmux session is running the server so they can take control.
 
 ## Helper usage
 
@@ -55,4 +64,5 @@ Useful options:
 - If multiple experiment directories exist, ask the user which one to run.
 - Missing or stale PsyNet dependencies should be fixed in the Cloud Agent
   environment, not by editing the attempt code during this workflow.
-- Do not add real service credentials just to make a review run succeed.
+- Use only local, ephemeral dashboard credentials. Do not add real service
+  credentials just to make a review run succeed.
