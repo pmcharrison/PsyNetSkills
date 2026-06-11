@@ -41,6 +41,8 @@ from psynetsk_tools.validate import (
 from psynetsk_tools.timeline import (
     TimelineEntry,
     format_duration,
+    format_human_intervention_count,
+    human_intervention_count,
     implementation_time_seconds,
     parse_timeline_entries,
 )
@@ -211,6 +213,8 @@ class Attempt:
     timeline_entries: list[TimelineEntry]
     implementation_time_seconds: int | None
     implementation_time_display: str
+    human_intervention_count: int | None
+    human_intervention_display: str
     run_cost_amount: int | float | None
     run_cost_currency: str
     run_cost_attribution_status: str
@@ -680,6 +684,7 @@ def collect_attempts(
         )
         timeline_entries = parse_timeline_entries(timeline)
         implementation_seconds = implementation_time_seconds(timeline_entries)
+        intervention_count = human_intervention_count(timeline_entries)
         learnings_source = ""
         learnings = ""
         if learnings_file.exists():
@@ -731,6 +736,10 @@ def collect_attempts(
                 timeline_entries=timeline_entries,
                 implementation_time_seconds=implementation_seconds,
                 implementation_time_display=format_duration(implementation_seconds),
+                human_intervention_count=intervention_count,
+                human_intervention_display=format_human_intervention_count(
+                    intervention_count,
+                ),
                 run_cost_amount=run_cost_amount,
                 run_cost_currency=run_cost_currency,
                 run_cost_attribution_status=run_cost_attribution_status,
