@@ -9,12 +9,15 @@ import re
 import shutil
 import subprocess
 import sys
+import threading
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Sequence
+from urllib.parse import quote, unquote, urlsplit, urlunsplit
 
 
 URL_PATTERN = re.compile(r"https?://[^\s'\")<>]+")
+CREDENTIAL_PATTERN = re.compile(r"(Username|Password):\s*(?:`([^`]+)`|(\S+))")
 
 
 class RunAttemptError(RuntimeError):
@@ -35,6 +38,168 @@ class AttemptRun:
         """Return the `psynet debug local` command."""
 
         return [self.psynet_command, "debug", "local"]
+
+
+@dataclass
+class HandoffState:
+    """Collect and print the links needed for live review."""
+
+    username: str | None = None
+    password: str | None = None
+    local_participant_url: str | None = None
+    public_tunnel_url: str | None = None
+    announced: bool = False
+
+    def update_from_line(self, line: str) -> None:
+        """Extract dashboard credentials from PsyNet output."""
+
+        match = CREDENTIAL_PATTERN.search(line)
+        if not match:
+            return
+        value = match.group(2) or match.group(3)
+        if match.group(1) == "Username":
+            self.username = value
+        else:
+            self.password = value
+
+    def update_from_url(self, url: str) -> None:
+        """Extract participant URLs and userinfo credentials from a URL."""
+
+        parsed = urlsplit(url)
+        if parsed.username and parsed.password:
+            self.username = unquote(parsed.username)
+            self.password = unquote(parsed.password)
+        if is_local_url(url) and parsed.path == "/ad":
+            self.local_participant_url = strip_userinfo(url)
+
+    def set_public_tunnel_url(self, url: str) -> None:
+        """Record the public tunnel base URL."""
+
+        self.public_tunnel_url = url.rstrip("/")
+
+    def maybe_print(self) -> None:
+        """Print the complete handoff block once all required values are known."""
+
+        if self.announced or not self.is_complete:
+            return
+
+        assert self.local_participant_url is not None
+        assert self.public_tunnel_url is not None
+        assert self.username is not None
+        assert self.password is not None
+
+        public_participant_url = to_public_url(
+            self.local_participant_url,
+            self.public_tunnel_url,
+        )
+        public_dashboard_url = to_public_url(
+            with_path(self.local_participant_url, "/dashboard/develop"),
+            self.public_tunnel_url,
+            username=self.username,
+            password=self.password,
+        )
+
+        print("\n=== Run attempt handoff ===")
+        print(f"Start new participant (local): {self.local_participant_url}")
+        print(f"Add new participant (public tunnel): {public_participant_url}")
+        print(f"Dashboard (public tunnel): {public_dashboard_url}")
+        print("Credentials:")
+        print(f"  Username: {self.username}")
+        print(f"  Password: {self.password}")
+        print("Open the public dashboard link in Cursor Desktop and leave it ready.")
+        print("=== End run attempt handoff ===\n", flush=True)
+        self.announced = True
+
+    @property
+    def is_complete(self) -> bool:
+        """Return whether all required handoff values are available."""
+
+        return all(
+            [
+                self.username,
+                self.password,
+                self.local_participant_url,
+                self.public_tunnel_url,
+            ]
+        )
+
+
+class PublicTunnel:
+    """Manage a localtunnel subprocess for a running PsyNet server."""
+
+    def __init__(self, port: int, handoff: HandoffState) -> None:
+        self.port = port
+        self.handoff = handoff
+        self.process: subprocess.Popen[str] | None = None
+        self.thread: threading.Thread | None = None
+
+    def start(self) -> None:
+        """Start the tunnel if localtunnel tooling is available."""
+
+        command = self.command
+        if command is None:
+            print(
+                "Public tunnel skipped: install localtunnel or npx to create public links.",
+                file=sys.stderr,
+            )
+            return
+
+        print(f"Starting public tunnel: {' '.join(command)}")
+        self.process = subprocess.Popen(
+            command,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            bufsize=1,
+        )
+        self.thread = threading.Thread(target=self._stream_output, daemon=True)
+        self.thread.start()
+
+    def stop(self) -> None:
+        """Stop the tunnel subprocess."""
+
+        if self.process is None or self.process.poll() is not None:
+            return
+        self.process.terminate()
+        try:
+            self.process.wait(timeout=5)
+        except subprocess.TimeoutExpired:
+            self.process.kill()
+
+    @property
+    def command(self) -> list[str] | None:
+        """Return the localtunnel command to run."""
+
+        if command_available("localtunnel"):
+            return [
+                "localtunnel",
+                "--port",
+                str(self.port),
+                "--local-host",
+                "127.0.0.1",
+            ]
+        if command_available("npx"):
+            return [
+                "npx",
+                "-y",
+                "localtunnel",
+                "--port",
+                str(self.port),
+                "--local-host",
+                "127.0.0.1",
+            ]
+        return None
+
+    def _stream_output(self) -> None:
+        """Relay tunnel output and capture its public URL."""
+
+        if self.process is None or self.process.stdout is None:
+            return
+        for line in self.process.stdout:
+            print(line, end="")
+            for url in URL_PATTERN.findall(line):
+                self.handoff.set_public_tunnel_url(url.rstrip(".,;"))
+                self.handoff.maybe_print()
 
 
 def find_repo_root(start: Path) -> Path:
@@ -148,6 +313,46 @@ def command_available(command: str) -> bool:
     return shutil.which(command) is not None
 
 
+def strip_userinfo(url: str) -> str:
+    """Remove embedded credentials from a URL."""
+
+    parsed = urlsplit(url)
+    netloc = parsed.hostname or ""
+    if parsed.port:
+        netloc = f"{netloc}:{parsed.port}"
+    return urlunsplit((parsed.scheme, netloc, parsed.path, parsed.query, parsed.fragment))
+
+
+def with_path(url: str, path: str) -> str:
+    """Return a copy of a URL with a different path and no query."""
+
+    parsed = urlsplit(strip_userinfo(url))
+    return urlunsplit((parsed.scheme, parsed.netloc, path, "", ""))
+
+
+def is_local_url(url: str) -> bool:
+    """Return whether a URL points at the local PsyNet server."""
+
+    parsed = urlsplit(url)
+    return parsed.hostname in {"127.0.0.1", "localhost", "0.0.0.0"}
+
+
+def to_public_url(
+    local_url: str,
+    public_base_url: str,
+    username: str | None = None,
+    password: str | None = None,
+) -> str:
+    """Map a local PsyNet URL to the public tunnel host."""
+
+    local = urlsplit(strip_userinfo(local_url))
+    public = urlsplit(public_base_url)
+    netloc = public.netloc
+    if username is not None and password is not None:
+        netloc = f"{quote(username, safe='')}:{quote(password, safe='')}@{netloc}"
+    return urlunsplit((public.scheme, netloc, local.path, local.query, local.fragment))
+
+
 def run_quietly(command: Sequence[str], timeout: int = 15) -> subprocess.CompletedProcess[str]:
     """Run a short command without raising on non-zero exit."""
 
@@ -253,36 +458,53 @@ def print_run_summary(run: AttemptRun) -> None:
     print("Working directory:", run.experiment_dir)
 
 
-def run_server(run: AttemptRun) -> int:
+def run_server(
+    run: AttemptRun,
+    *,
+    public_tunnel: bool,
+    public_tunnel_port: int,
+) -> int:
     """Run `psynet debug local` and stream output."""
 
     env = os.environ.copy()
     env.setdefault("PYTHONUNBUFFERED", "1")
+    handoff = HandoffState()
+    tunnel = PublicTunnel(public_tunnel_port, handoff) if public_tunnel else None
 
     print_run_summary(run)
     print("Starting PsyNet. Open the generated dashboard/ad URL in the Cursor browser.")
+    if tunnel is not None:
+        tunnel.start()
 
-    process = subprocess.Popen(
-        run.command,
-        cwd=run.experiment_dir,
-        env=env,
-        text=True,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.STDOUT,
-        bufsize=1,
-    )
+    try:
+        process = subprocess.Popen(
+            run.command,
+            cwd=run.experiment_dir,
+            env=env,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            bufsize=1,
+        )
 
-    seen_urls: set[str] = set()
-    assert process.stdout is not None
-    for line in process.stdout:
-        print(line, end="")
-        for url in URL_PATTERN.findall(line):
-            cleaned = url.rstrip(".,;")
-            if cleaned not in seen_urls:
-                seen_urls.add(cleaned)
-                print(f"Detected URL: {cleaned}", flush=True)
+        seen_urls: set[str] = set()
+        assert process.stdout is not None
+        for line in process.stdout:
+            print(line, end="")
+            handoff.update_from_line(line)
+            handoff.maybe_print()
+            for url in URL_PATTERN.findall(line):
+                cleaned = url.rstrip(".,;")
+                handoff.update_from_url(cleaned)
+                handoff.maybe_print()
+                if cleaned not in seen_urls:
+                    seen_urls.add(cleaned)
+                    print(f"Detected URL: {cleaned}", flush=True)
 
-    return process.wait()
+        return process.wait()
+    finally:
+        if tunnel is not None:
+            tunnel.stop()
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -317,6 +539,17 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Skip best-effort PostgreSQL and Redis startup.",
     )
+    parser.add_argument(
+        "--no-public-tunnel",
+        action="store_true",
+        help="Skip the default localtunnel process for public review links.",
+    )
+    parser.add_argument(
+        "--public-tunnel-port",
+        type=int,
+        default=5000,
+        help="Local PsyNet port exposed by the default public tunnel.",
+    )
     return parser
 
 
@@ -332,7 +565,11 @@ def main(argv: Sequence[str] | None = None) -> int:
             return 0
         if not args.no_start_services:
             ensure_services()
-        return run_server(run)
+        return run_server(
+            run,
+            public_tunnel=not args.no_public_tunnel,
+            public_tunnel_port=args.public_tunnel_port,
+        )
     except RunAttemptError as error:
         print(f"run-attempt: {error}", file=sys.stderr)
         return 2
