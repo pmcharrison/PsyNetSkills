@@ -64,5 +64,8 @@ Useful options:
 - If multiple experiment directories exist, ask the user which one to run.
 - Missing or stale PsyNet dependencies should be fixed in the Cloud Agent
   environment, not by editing the attempt code during this workflow.
+- If PsyNet starts but generated commands cannot find runtime tools such as
+  `flask`, relaunch with the PsyNet virtualenv on `PATH` or pass
+  `--psynet-command /home/ubuntu/PsyNet/.venv/bin/psynet`.
 - Use only local, ephemeral dashboard credentials. Do not add real service
   credentials just to make a review run succeed.
