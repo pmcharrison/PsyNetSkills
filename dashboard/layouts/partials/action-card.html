@@ -10,6 +10,13 @@
   data-action-challenge="{{ .challenge_title }}"
   data-action-attempt="{{ .attempt_name }}"
 >
+  <input
+    class="action-card-checkbox"
+    type="checkbox"
+    value="{{ .id }}"
+    data-action-copy-checkbox
+    aria-label="Select action {{ .id }} for copying"
+  >
   <article class="action-card" id="{{ .anchor_id }}">
     <div class="action-card-meta">
       <span class="learning-chip learning-chip-repository">

@@ -17,66 +17,8 @@
         {{ end }}
         · Regenerate with <code>/compile-actions-review</code>
       </p>
-      <section class="action-controls" aria-labelledby="action-controls-heading">
-        <div>
-          <h2 id="action-controls-heading">Find the next action</h2>
-          <p>Filter the full list, then sort by the priority signal that matters.</p>
-        </div>
-        <form class="action-filter-form" data-action-filter-form>
-          <label>
-            <span>Repository</span>
-            <select data-action-filter="repository">
-              <option value="">All repositories</option>
-              <option value="psynetskills">PsyNetSkills</option>
-              <option value="psynet">PsyNet</option>
-            </select>
-          </label>
-          <label>
-            <span>Impact</span>
-            <select data-action-filter="impact">
-              <option value="">All impacts</option>
-              <option value="high">High</option>
-              <option value="medium">Medium</option>
-              <option value="low">Low</option>
-            </select>
-          </label>
-          <label>
-            <span>Confidence</span>
-            <select data-action-filter="confidence">
-              <option value="">All confidence</option>
-              <option value="high">High</option>
-              <option value="medium">Medium</option>
-              <option value="low">Low</option>
-            </select>
-          </label>
-          <label>
-            <span>Status</span>
-            <select data-action-filter="status">
-              <option value="">All statuses</option>
-              <option value="considering">Considering</option>
-              <option value="in_progress">In progress</option>
-              <option value="planned">Planned</option>
-            </select>
-          </label>
-          <label class="action-sort-field">
-            <span>Sort</span>
-            <select data-action-sort>
-              <option value="priority">Priority: impact, confidence, repository</option>
-              <option value="impact">Impact, high to low</option>
-              <option value="confidence">Confidence, high to low</option>
-              <option value="repository">Repository, PsyNetSkills first</option>
-              <option value="status">Status</option>
-              <option value="challenge">Challenge, A to Z</option>
-            </select>
-          </label>
-          <button type="button" class="action-clear-filters" data-action-clear-filters>
-            Clear filters
-          </button>
-        </form>
-        <p class="action-filter-status" data-action-filter-status role="status" aria-live="polite">
-          Showing {{ len $actions }} action{{ if ne (len $actions) 1 }}s{{ end }}.
-        </p>
-      </section>
+      {{ partial "action-copy-toolbar.html" . }}
+      {{ partial "action-copy-data.html" $actions }}
 
       <section class="action-review-section" aria-labelledby="open-actions-heading">
         <h2 id="open-actions-heading" class="visually-hidden">Open actions</h2>
@@ -85,9 +27,6 @@
             {{ partial "action-card.html" . }}
           {{ end }}
         </div>
-        <p class="action-empty-state" data-action-empty-state hidden>
-          No actions match those filters.
-        </p>
       </section>
     </div>
   </article>
