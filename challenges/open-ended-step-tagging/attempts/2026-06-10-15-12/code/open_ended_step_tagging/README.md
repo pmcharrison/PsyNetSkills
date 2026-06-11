@@ -29,9 +29,9 @@ The committed demo audio is synthetic and 15 seconds long. Replace it with real
 `recruiter_settings`. Because real deployment targets have not been chosen yet,
 the current Lucid config path points to
 `qualifications/lucid/mock-lucid-ENG-US.json`, which is only for local import and
-test checks. The committed `mock-local-*` Lucid key placeholders in
-`experiment.py` are non-secret local values for PsyNet's dev Lucid recruiter;
-replace them through the deployment environment before any real Cint run.
+test checks. To run local tests without Lucid credentials, set
+`PSYNET_CINT_LOCAL_MOCK=1`; real Cint deployments should leave that variable
+unset and provide real Lucid credentials through the deployment environment.
 
 To prepare real Cint qualifications:
 

@@ -1,5 +1,6 @@
 import csv
 import hashlib
+import os
 import random
 import re
 from collections import defaultdict
@@ -23,8 +24,6 @@ _ = get_translator(namespace="experiment")
 LANGUAGE = "ENG"
 COUNTRY = "US"
 LUCID_CONFIG_PATH = f"qualifications/lucid/mock-lucid-{LANGUAGE}-{COUNTRY}.json"
-LOCAL_MOCK_LUCID_API_KEY = "mock-local-lucid-api-key"
-LOCAL_MOCK_LUCID_SHA1_HASHING_KEY = "mock-local-lucid-sha1-hashing-key"
 
 recruiter_settings = get_lucid_settings(
     lucid_recruitment_config_path=LUCID_CONFIG_PATH,
@@ -35,6 +34,13 @@ recruiter_settings = get_lucid_settings(
     no_focus_timeout_in_s=10 * 60,
     bid_incidence=66,
 )
+
+if os.environ.get("PSYNET_CINT_LOCAL_MOCK") == "1":
+    recruiter_settings = {
+        **recruiter_settings,
+        "recruiter": "generic",
+        "currency": "$",
+    }
 
 STIMULUS_MANIFEST = Path("data/stimuli.csv")
 MIN_ITERATIONS_PER_STIMULUS = 5
@@ -305,8 +311,6 @@ class Exp(psynet.experiment.Experiment):
         **recruiter_settings,
         "wage_per_hour": 12.0,
         "publish_experiment": True,
-        "lucid_api_key": LOCAL_MOCK_LUCID_API_KEY,
-        "lucid_sha1_hashing_key": LOCAL_MOCK_LUCID_SHA1_HASHING_KEY,
     }
 
     timeline = Timeline(
