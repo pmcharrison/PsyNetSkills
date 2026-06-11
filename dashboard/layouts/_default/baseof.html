@@ -29,6 +29,10 @@
             href="{{ "challenges/" | relURL }}"
           >Challenges</a>
           <a
+            {{ if eq .Section "attempts" }}aria-current="page" class="current"{{ end }}
+            href="{{ "attempts/" | relURL }}"
+          >Attempts</a>
+          <a
             {{ if eq .Section "actions" }}aria-current="page" class="current"{{ end }}
             href="{{ "actions/" | relURL }}"
           >Actions</a>

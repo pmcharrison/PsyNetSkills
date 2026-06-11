@@ -202,6 +202,7 @@ class Attempt:
     path: str
     url: str
     date_time: str
+    sort_key: str
     model: str
     authors: list[Author]
     agent_json: str
@@ -394,6 +395,21 @@ def attempt_date_time(name: str, agent: dict[str, object]) -> str:
         if timestamp_match is not None:
             _, month, day, hour, minute = timestamp_match.groups()
             return f"{month}/{day} {hour}:{minute}"
+
+    return name
+
+
+def attempt_sort_key(name: str, agent: dict[str, object]) -> str:
+    """Return a sortable timestamp key for an attempt."""
+    match = re.search(r"(\d{4})-(\d{2})-(\d{2})(?:-(\d{2})-(\d{2}))?", name)
+    if match is not None:
+        year, month, day, hour, minute = match.groups()
+        return f"{year}-{month}-{day}T{hour or '00'}:{minute or '00'}"
+
+    for key in ("started_at", "ended_at"):
+        value = agent.get(key)
+        if isinstance(value, str):
+            return value
 
     return name
 
@@ -695,6 +711,7 @@ def collect_attempts(
                 ),
                 url=f"challenges/{challenge_dir.name}/{attempt_dir.name}/",
                 date_time=attempt_date_time(attempt_dir.name, agent),
+                sort_key=attempt_sort_key(attempt_dir.name, agent),
                 model=str(agent.get("model") or "Unknown model"),
                 authors=resolve_authors(
                     author_ids_from_value(agent.get("authors")),
@@ -861,6 +878,29 @@ def collect_open_learning_actions(
     return actions
 
 
+def latest_attempts_data(
+    challenges: list[Challenge],
+    limit: int = 20,
+) -> list[dict[str, object]]:
+    """Return dashboard-ready attempt summaries ordered most recent first."""
+
+    attempts = [
+        {
+            **asdict(attempt),
+            "challenge_slug": challenge.slug,
+            "challenge_title": challenge.title,
+            "challenge_url": challenge.url,
+        }
+        for challenge in challenges
+        for attempt in challenge.attempts
+    ]
+    return sorted(
+        attempts,
+        key=lambda attempt: str(attempt["sort_key"]),
+        reverse=True,
+    )[:limit]
+
+
 def action_review_data(
     root: Path,
     actions: list[LearningAction],
@@ -935,6 +975,7 @@ def dashboard_data(
             }
             for challenge in challenges
         ],
+        "attempts": latest_attempts_data(challenges),
         "actions": [asdict(action) for action in actions],
         "action_review": action_review_data(root, actions),
         "counts": {
@@ -1017,6 +1058,22 @@ def write_actions_content(dashboard_dir: Path) -> None:
             "This page compiles unresolved action points from previous attempts. "
             "You can select multiple action points at a time and copy them as "
             "instructions for a new agent to resolve.\n",
+        ),
+        encoding="utf-8",
+    )
+
+
+def write_attempts_content(dashboard_dir: Path) -> None:
+    """Write the generated Hugo content page for latest attempts."""
+
+    attempts_dir = dashboard_dir / "content" / "attempts"
+    shutil.rmtree(attempts_dir, ignore_errors=True)
+    attempts_dir.mkdir(parents=True, exist_ok=True)
+    (attempts_dir / "_index.md").write_text(
+        write_frontmatter(
+            "Attempts",
+            "This page lists the latest 20 challenge attempts, with the most "
+            "recent attempt first.\n",
         ),
         encoding="utf-8",
     )
@@ -1257,6 +1314,7 @@ def export_dashboard(root: Path, dashboard_dir: Path) -> None:
         [Skill(**skill) for skill in data["skills"]],  # type: ignore[arg-type]
     )
     write_actions_content(dashboard_dir)
+    write_attempts_content(dashboard_dir)
     write_challenge_content(
         dashboard_dir,
         [
