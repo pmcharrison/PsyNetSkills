@@ -27,11 +27,20 @@ async function completeIshiharaPlate(page, answer) {
   await clickIfVisible(page, [/next/i, /submit/i]);
 }
 
+async function advanceUntilVisible(page, locator, maxClicks = 5) {
+  for (let attempt = 0; attempt <= maxClicks; attempt += 1) {
+    if ((await locator.count()) > 0 && (await locator.first().isVisible())) {
+      return;
+    }
+    await clickIfVisible(page, [/next/i, /continue/i, /begin experiment/i, /start/i]);
+    await page.waitForTimeout(500);
+  }
+  await expect(locator.first()).toBeVisible();
+}
+
 test("participant can complete minimal visual discrimination flow", async ({ page }) => {
   await page.goto(participantUrl);
-  await clickIfVisible(page, [/begin experiment/i, /start/i]);
-
-  await expect(page.getByText(/colored circles/i)).toBeVisible();
+  await advanceUntilVisible(page, page.getByText(/colored circles/i));
   await clickIfVisible(page, [/next/i, /continue/i]);
 
   for (let trial = 1; trial <= 3; trial += 1) {
