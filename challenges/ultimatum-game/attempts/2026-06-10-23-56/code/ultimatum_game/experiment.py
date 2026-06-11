@@ -5,7 +5,6 @@ from dallinger import db
 from dallinger.experiment import experiment_route
 from dallinger.experiment_server.utils import success_response
 from flask import request
-from psynet.bot import advance_past_wait_pages
 from psynet.page import InfoPage, WaitPage
 from psynet.participant import Participant
 from psynet.sync import GroupBarrier, SimpleGrouper
@@ -145,13 +144,15 @@ class Exp(psynet.experiment.Experiment):
         for bot in bots:
             assert 'Repeated Ultimatum game' in bot.current_page_text
             bot.take_page()
-        advance_past_wait_pages(bots)
-        assert all(bot.current_page_label == 'ultimatum_game' for bot in bots)
-        for bot in bots:
-            bot.take_page()
-        for bot in bots:
-            assert 'Task complete' in bot.current_page_text
-            bot.run_to_completion()
+        for _ in range(100):
+            if all(not bot.is_working for bot in bots):
+                break
+            for bot in bots:
+                if bot.is_working:
+                    bot.take_page()
+        else:
+            labels = [bot.current_page_label for bot in bots]
+            raise AssertionError(f'Bots did not complete the synchronized ultimatum flow; labels={labels}.')
         assert all(not bot.is_working for bot in bots)
 
     def test_check_bots(self, bots):
