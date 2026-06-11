@@ -33,26 +33,37 @@ reject the candidate, or implement an approved change through `create-skill`.
    - candidates with `status: unreviewed` in `skill-candidates.yaml`;
    - draft skills with `review_status: unreviewed` in frontmatter.
 2. Present a concise review queue grouped by urgency and proposed disposition.
-3. For each candidate under review, verify:
+3. Skip or batch low-value items before deep review:
+   - mark `triage: small_edit` items as `rejected`, `deferred`, or route them to
+     a one-sentence owner-skill edit when the fix is obvious;
+   - only promote small edits when multiple sources reveal the same recurring
+     workflow gap;
+   - leave `trace_status: sorted` once the information has been considered.
+4. For each candidate under review, verify:
    - evidence sources exist and support the claimed problem or pattern;
    - the candidate is general enough to recur;
    - the trigger is clear;
    - the proposed procedure would change future agent behavior;
    - the expected benefit justifies another skill or skill edit.
-4. Run `skill-overlap-review/SKILL.md` and record the overlap disposition:
+5. Run `skill-overlap-review/SKILL.md` and record the overlap disposition:
    - `replacement`: reject the candidate or point to the existing skill;
    - `extension`: approve an update to the owner skill;
    - `pointer`: approve only if the candidate has distinct ownership;
    - `combination`: approve a choreography skill that points to owner skills;
    - `new`: approve a new skill only if the necessity filter passes.
-5. Update the candidate status:
+6. Update the candidate status:
    - `approved` when the reviewer wants the change but not immediate editing;
    - `implemented` after the corresponding skill change is committed;
    - `rejected` when it is too narrow, duplicative, or unsupported;
    - `deferred` when more evidence is needed.
-6. If implementing, invoke `create-skill/SKILL.md`. Do not bypass author
+7. Update trace fields:
+   - add reviewed action IDs, attempt paths, `LEARNINGS.md`, and
+     `EVALUATION.md` paths to `source_ids` or `traced_sources`;
+   - set `trace_status: sorted` when the source has been handled;
+   - keep review status separate from functional skill execution.
+8. If implementing, invoke `create-skill/SKILL.md`. Do not bypass author
    identification, overlap reporting, or validation.
-7. For draft skills with `review_status: unreviewed`, either remove the field or
+9. For draft skills with `review_status: unreviewed`, either remove the field or
    change it to `reviewed` after reviewer approval. This metadata must not
    affect whether the skill can be used.
 
@@ -61,6 +72,7 @@ reject the candidate, or implement an approved change through `create-skill`.
 For each reviewed item, record:
 
 - decision and status;
+- triage and trace status;
 - overlap disposition;
 - evidence checked;
 - files changed, if any;

@@ -37,22 +37,48 @@ for implementation after review.
    - `deep` only when the user explicitly asks for broad historical coverage.
 2. Export dashboard data with `uv run psynetsk-export-dashboard-data` when the
    current `dashboard/data/psynetsk.json` is missing or stale.
-3. Build a structured corpus from stable source paths and IDs. Prefer exported
-   JSON, YAML, and small Python extraction scripts over hand-copied snippets.
-4. Cluster evidence by recurring task, failure mode, missing procedure, or
+3. Build a structured corpus from stable source paths and IDs. Use
+   `scripts/collect_sources.py` for the first pass instead of hand-copying
+   snippets.
+4. Mark already-traced information before reading deeply. Treat an action ID,
+   attempt path, `LEARNINGS.md`, or `EVALUATION.md` path as traced when it is
+   already cited in a candidate's `evidence_sources`, `source_ids`, or
+   `traced_sources`.
+5. Separate likely one-line fixes from skill candidates. If the source can be
+   resolved with a small wording or checklist edit, record it as `small_edit`
+   or route it to the owner skill; do not spend skill-mining attention on it
+   unless it repeats across attempts.
+6. Cluster remaining evidence by recurring task, failure mode, missing procedure, or
    successful pattern. Track both frequency and severity.
-5. Apply the necessity filter before proposing a candidate:
+7. Apply the necessity filter before proposing a candidate:
    - it recurs across attempts or affects a high-risk workflow;
    - it would materially improve future agent speed, quality, or safety;
    - it has a clear trigger condition;
    - it can be expressed as a concise procedure;
    - it is not merely challenge-specific advice.
-6. Run `skill-overlap-review/SKILL.md` at candidate level. Classify likely
+8. Run `skill-overlap-review/SKILL.md` at candidate level. Classify likely
    disposition as `new`, `extension`, `combination`, `pointer`, or `reject`.
-7. Write or update `skill-candidates.yaml` with each proposed candidate marked
+9. Write or update `skill-candidates.yaml` with each proposed candidate marked
    `status: unreviewed`.
-8. Report candidates in priority order, placing urgent safety or repeated
+10. Report candidates in priority order, placing urgent safety or repeated
    blocker candidates before convenience improvements.
+
+## Helper script
+
+Run from the repository root after dashboard export:
+
+`uv run python .cursor/skills/mine-skill-candidates/scripts/collect_sources.py --scope open-actions-only`
+
+Useful options:
+
+- `--scope open-actions-plus-evaluations` also lists attempt evaluations for
+  attempts with open actions.
+- `--scope balanced` includes solved attempts as success-pattern sources.
+- `--json` emits machine-readable records for downstream clustering.
+
+The helper groups sources into `candidate-evidence`, `small-edit`, and
+`already-traced`. Start with `candidate-evidence`; review `small-edit` only when
+many similar items point to the same reusable gap.
 
 ## Candidate schema
 
@@ -66,15 +92,20 @@ Use this shape for each candidate in `skill-candidates.yaml`:
 - `trigger`: when future agents should use the skill.
 - `proposed_disposition`: `new`, `extension`, `combination`, `pointer`, or
   `reject`.
+- `triage`: `candidate`, `small_edit`, `already_traced`, or `deferred`.
 - `overlap_notes`: concise result from overlap review.
 - `evidence_sources`: action IDs, attempt paths, evaluation paths, or dashboard
   links.
+- `source_ids`: stable IDs already traced for this candidate.
+- `trace_status`: `unreviewed`, `traced`, or `sorted`.
 - `summary`: one paragraph of distilled rationale.
 - `review_notes`: optional reviewer comments.
 
 ## Rules
 
 - Necessity first, urgency first. Prefer no candidate over a weak candidate.
+- Avoid over-processing one-sentence fixes. They can become ordinary action
+  resolutions or owner-skill edits without becoming separate candidates.
 - Keep hidden criteria, private evaluation material, secrets, and participant
   data out of candidate prose. Cite paths instead of copying sensitive text.
 - Prefer updating an existing skill over creating a near duplicate.
