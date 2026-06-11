@@ -782,6 +782,11 @@ td {
   padding-right: 1.7rem;
 }
 
+.action-filter-form option {
+  background: var(--background);
+  color: var(--foreground);
+}
+
 .action-filter-form select:focus,
 .action-clear-filters:focus {
   border-color: var(--link);
@@ -826,14 +831,13 @@ td {
   box-shadow: 0 0.45rem 1.2rem rgb(15 23 42 / 0.08);
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   gap: 0.6rem;
+  margin: 1rem 0;
   padding: 0.7rem 0.85rem;
-  position: fixed;
-  bottom: 1rem;
-  left: 50%;
-  max-width: calc(100vw - 2rem);
-  transform: translateX(-50%);
-  width: max-content;
+  position: sticky;
+  top: 0.75rem;
+  width: fit-content;
   z-index: 20;
 }
 
@@ -1065,9 +1069,6 @@ td {
   }
 
   .action-copy-toolbar {
-    left: 1rem;
-    right: 1rem;
-    transform: none;
     width: auto;
   }
 
