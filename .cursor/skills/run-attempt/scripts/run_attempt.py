@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import os
+import platform
 import re
 import shutil
 import subprocess
@@ -18,6 +19,13 @@ from urllib.parse import quote, unquote, urlsplit, urlunsplit
 
 URL_PATTERN = re.compile(r"https?://[^\s'\")<>]+")
 CREDENTIAL_PATTERN = re.compile(r"(Username|Password):\s*(?:`([^`]+)`|(\S+))")
+CLOUDFLARED_DOWNLOADS = {
+    "aarch64": "https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-arm64",
+    "arm64": "https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-arm64",
+    "amd64": "https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64",
+    "x86_64": "https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64",
+}
+CLOUDFLARED_CACHE = Path("/tmp/cloudflared")
 
 
 class RunAttemptError(RuntimeError):
@@ -151,7 +159,7 @@ class HandoffState:
 
 
 class PublicTunnel:
-    """Manage a localtunnel subprocess for a running PsyNet server."""
+    """Manage a public tunnel subprocess for a running PsyNet server."""
 
     def __init__(self, port: int, handoff: HandoffState) -> None:
         self.port = port
@@ -160,12 +168,12 @@ class PublicTunnel:
         self.thread: threading.Thread | None = None
 
     def start(self) -> None:
-        """Start the tunnel if localtunnel tooling is available."""
+        """Start the tunnel if supported tooling is available."""
 
         command = self.command
         if command is None:
             print(
-                "Public tunnel skipped: install localtunnel or npx to create public links.",
+                "Public tunnel skipped: install cloudflared, curl, localtunnel, or npx.",
                 file=sys.stderr,
             )
             return
@@ -194,7 +202,16 @@ class PublicTunnel:
 
     @property
     def command(self) -> list[str] | None:
-        """Return the localtunnel command to run."""
+        """Return the public tunnel command to run."""
+
+        cloudflared = resolve_cloudflared_command()
+        if cloudflared is not None:
+            return [
+                cloudflared,
+                "tunnel",
+                "--url",
+                f"http://127.0.0.1:{self.port}",
+            ]
 
         if command_available("localtunnel"):
             return [
@@ -224,8 +241,10 @@ class PublicTunnel:
         for line in self.process.stdout:
             print(line, end="")
             for url in URL_PATTERN.findall(line):
-                self.handoff.set_public_tunnel_url(url.rstrip(".,;"))
-                self.handoff.maybe_print()
+                cleaned = url.rstrip(".,;")
+                if is_public_tunnel_url(cleaned):
+                    self.handoff.set_public_tunnel_url(cleaned)
+                    self.handoff.maybe_print()
 
 
 def find_repo_root(start: Path) -> Path:
@@ -339,6 +358,50 @@ def command_available(command: str) -> bool:
     return shutil.which(command) is not None
 
 
+def resolve_cloudflared_command() -> str | None:
+    """Return a cloudflared executable, downloading a temporary copy if needed."""
+
+    discovered = shutil.which("cloudflared")
+    if discovered:
+        return discovered
+
+    if CLOUDFLARED_CACHE.exists() and os.access(CLOUDFLARED_CACHE, os.X_OK):
+        return str(CLOUDFLARED_CACHE)
+
+    if not command_available("curl"):
+        return None
+
+    url = CLOUDFLARED_DOWNLOADS.get(platform.machine().lower())
+    if url is None:
+        return None
+
+    print(f"Downloading cloudflared quick-tunnel binary to {CLOUDFLARED_CACHE}...")
+    download = run_quietly(
+        [
+            "curl",
+            "-L",
+            "--fail",
+            "--retry",
+            "3",
+            "--retry-delay",
+            "2",
+            "-o",
+            str(CLOUDFLARED_CACHE),
+            url,
+        ],
+        timeout=120,
+    )
+    if download.returncode != 0:
+        print(
+            "cloudflared download failed; falling back to localtunnel if available.",
+            file=sys.stderr,
+        )
+        return None
+
+    CLOUDFLARED_CACHE.chmod(0o755)
+    return str(CLOUDFLARED_CACHE)
+
+
 def strip_userinfo(url: str) -> str:
     """Remove embedded credentials from a URL."""
 
@@ -369,6 +432,13 @@ def is_local_url(url: str) -> bool:
 
     parsed = urlsplit(url)
     return parsed.hostname in {"127.0.0.1", "localhost", "0.0.0.0"}
+
+
+def is_public_tunnel_url(url: str) -> bool:
+    """Return whether a URL is from a supported public tunnel provider."""
+
+    hostname = urlsplit(url).hostname or ""
+    return hostname.endswith(".trycloudflare.com") or hostname.endswith(".loca.lt")
 
 
 def to_public_url(
@@ -576,7 +646,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--public-tunnel",
         action="store_true",
-        help="Start localtunnel and print public review links once it is ready.",
+        help="Start Cloudflare Quick Tunnel and print public review links once ready.",
     )
     parser.add_argument(
         "--no-public-tunnel",
