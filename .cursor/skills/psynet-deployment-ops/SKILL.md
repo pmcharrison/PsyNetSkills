@@ -32,6 +32,9 @@ Check that the experiment folder has:
 - `.gitignore` excluding `.venv/`, `.deploy/`, `.pytest_cache/`, `exports/`,
   `deploy_logs/`, source archives, and generated logs
 - recruiter/qualification JSON files when a recruiter requires them
+- qualification files and recruiter settings that match any in-experiment
+  prescreeners; use `participant-filtering-and-prescreening/SKILL.md` when the
+  mapping is unclear
 - local assets or manifests present and deployable
 - no broken symlinks to local user paths
 - no stale app/server/study names copied from another template
