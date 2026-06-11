@@ -227,8 +227,14 @@ def option_card(option):
     )
 
 
+SCENARIOS_BY_ID = {scenario["id"]: scenario for scenario in SCENARIOS}
+
+# Node definitions store only the locale-independent scenario ID. The
+# translated texts are resolved at render time from SCENARIOS_BY_ID; storing
+# translated strings in the database would freeze whatever locale was active
+# when the nodes were created (and makes the saved data locale-dependent).
 nodes = [
-    StaticNode(definition={"scenario": scenario})
+    StaticNode(definition={"scenario_id": scenario["id"]})
     for scenario in SCENARIOS
 ]
 
@@ -237,7 +243,7 @@ class ChoiceTrial(StaticTrial):
     time_estimate = 12
 
     def show_trial(self, experiment, participant):
-        scenario = self.definition["scenario"]
+        scenario = SCENARIOS_BY_ID[self.definition["scenario_id"]]
         options = scenario["options"]
 
         prompt = tags.div(
@@ -317,7 +323,7 @@ class Exp(psynet.experiment.Experiment):
             assert trial.answer in CHOICE_KEYS, (
                 f"Expected one saved choice from {CHOICE_KEYS}, got {trial.answer!r}"
             )
-            seen_scenarios.add(trial.definition["scenario"]["id"])
+            seen_scenarios.add(trial.definition["scenario_id"])
         assert len(seen_scenarios) == len(SCENARIOS), (
             "Each scenario should be presented exactly once per participant"
         )
