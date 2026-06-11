@@ -1,7 +1,7 @@
 ---
 name: task-specific-prescreening
 description: Design, implement, and validate task-specific pre-screening for PsyNet experiments, including recruiter/platform alignment and pass/fail handling.
-authors: [pmcharrison]
+authors: [lucasgautheron]
 ---
 
 # Implement task-specific pre-screening
