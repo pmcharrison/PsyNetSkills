@@ -4,7 +4,10 @@ from psynet.bot import BotResponse
 from psynet.modular_page import Control
 from psynet.timeline import FailedValidation
 
-from signals import build_synthetic_telemetry
+try:
+    from .signals import build_synthetic_telemetry
+except ImportError:
+    from signals import build_synthetic_telemetry
 
 
 class TelemetryTextControl(Control):

@@ -9,10 +9,13 @@ from markupsafe import Markup
 import psynet.experiment
 from psynet.modular_page import ModularPage, PushButtonControl
 from psynet.page import InfoPage
-from psynet.timeline import Timeline
+from psynet.timeline import Response, Timeline
 from psynet.trial.static import StaticNode, StaticTrial, StaticTrialMaker
 
-from telemetry_control import TelemetryTextControl
+try:
+    from .telemetry_control import TelemetryTextControl
+except ImportError:
+    from telemetry_control import TelemetryTextControl
 
 
 HERE = Path(__file__).parent
@@ -167,3 +170,27 @@ class Exp(psynet.experiment.Experiment):
             time_estimate=5,
         ),
     )
+
+    def test_check_bot(self, participant):
+        responses = Response.query.filter_by(participant_id=participant.id).all()
+        telemetry_answers = [
+            response.answer
+            for response in responses
+            if isinstance(response.answer, dict) and "telemetry" in response.answer
+        ]
+        assert len(telemetry_answers) >= 8
+        for answer in telemetry_answers:
+            telemetry = answer["telemetry"]
+            assert answer["trial_id"]
+            assert answer["trial_type"] in {
+                "normal_task",
+                "attention_check",
+                "comprehension_check",
+                "open_text_probe",
+            }
+            assert telemetry["trial_id"] == answer["trial_id"]
+            assert telemetry["source"] == "synthetic_bot"
+            assert "response_latency_ms" in telemetry
+            assert "paste_count" in telemetry
+            assert "keydown_count" in telemetry
+            assert "edit_count" in telemetry

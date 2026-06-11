@@ -1,0 +1,115 @@
+{
+  "checks": {
+    "browser_rows_found": true,
+    "paste_event_found": true,
+    "keydown_counts_present": true,
+    "edit_counts_present": true,
+    "latencies_present": true
+  },
+  "latest_participant_rows": [
+    {
+      "response_id": 43,
+      "participant_id": 4,
+      "trial_id": "probe_confidence",
+      "trial_type": "open_text_probe",
+      "paste_count": 0,
+      "keydown_count": 40,
+      "edit_count": 39,
+      "focus_event_count": 0,
+      "visibility_event_count": 0,
+      "response_latency_ms": 27549,
+      "source": "browser"
+    },
+    {
+      "response_id": 42,
+      "participant_id": 4,
+      "trial_id": "probe_assistance",
+      "trial_type": "open_text_probe",
+      "paste_count": 0,
+      "keydown_count": 23,
+      "edit_count": 22,
+      "focus_event_count": 0,
+      "visibility_event_count": 0,
+      "response_latency_ms": 53105,
+      "source": "browser"
+    },
+    {
+      "response_id": 41,
+      "participant_id": 4,
+      "trial_id": "probe_strategy",
+      "trial_type": "open_text_probe",
+      "paste_count": 0,
+      "keydown_count": 74,
+      "edit_count": 73,
+      "focus_event_count": 0,
+      "visibility_event_count": 0,
+      "response_latency_ms": 25878,
+      "source": "browser"
+    },
+    {
+      "response_id": 40,
+      "participant_id": 4,
+      "trial_id": "comprehension_source",
+      "trial_type": "comprehension_check",
+      "paste_count": 0,
+      "keydown_count": 32,
+      "edit_count": 32,
+      "focus_event_count": 0,
+      "visibility_event_count": 0,
+      "response_latency_ms": 25671,
+      "source": "browser"
+    },
+    {
+      "response_id": 39,
+      "participant_id": 4,
+      "trial_id": "attention_color",
+      "trial_type": "attention_check",
+      "paste_count": 0,
+      "keydown_count": 4,
+      "edit_count": 4,
+      "focus_event_count": 0,
+      "visibility_event_count": 0,
+      "response_latency_ms": 24138,
+      "source": "browser"
+    },
+    {
+      "response_id": 38,
+      "participant_id": 4,
+      "trial_id": "task_library_hours",
+      "trial_type": "normal_task",
+      "paste_count": 0,
+      "keydown_count": 181,
+      "edit_count": 179,
+      "focus_event_count": 0,
+      "visibility_event_count": 0,
+      "response_latency_ms": 48357,
+      "source": "browser"
+    },
+    {
+      "response_id": 37,
+      "participant_id": 4,
+      "trial_id": "task_bike_racks",
+      "trial_type": "normal_task",
+      "paste_count": 0,
+      "keydown_count": 188,
+      "edit_count": 186,
+      "focus_event_count": 0,
+      "visibility_event_count": 0,
+      "response_latency_ms": 24645,
+      "source": "browser"
+    },
+    {
+      "response_id": 36,
+      "participant_id": 4,
+      "trial_id": "task_river_garden",
+      "trial_type": "normal_task",
+      "paste_count": 1,
+      "keydown_count": 2,
+      "edit_count": 1,
+      "focus_event_count": 0,
+      "visibility_event_count": 0,
+      "response_latency_ms": 22418,
+      "source": "browser"
+    }
+  ]
+}
