@@ -275,6 +275,16 @@ What happened during implementation or testing.
   medium. Impact: low. Status: considering.
 ```
 
+To avoid omitting required fields, generate individual action bullets with:
+
+```bash
+uv run psynetsk-learning-action \
+  --repository PsyNetSkills \
+  --proposal "A standalone action another agent can execute" \
+  --confidence high \
+  --impact medium
+```
+
 Use `Impact: low` for quick recoveries or nice-to-have improvements,
 `Impact: medium` for issues the agent fixed after meaningful friction, and
 `Impact: high` for fixes that would prevent a stuck attempt, major evidence gap,
