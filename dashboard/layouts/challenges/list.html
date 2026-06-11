@@ -1,4 +1,10 @@
 {{ define "main" }}
+  <div class="page-heading">
+    <h1>{{ .Title }}</h1>
+    <p class="page-actions">
+      <a class="edit-source-link" href="{{ "new-challenge/" | relURL }}">New challenge</a>
+    </p>
+  </div>
   {{ .Content }}
 
   <table>

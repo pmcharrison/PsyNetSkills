@@ -726,6 +726,11 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
         "Repeat useful challenge attempts.\n"
     )
     assert not (tmp_path / "dashboard/content/docs").exists()
+    challenge_builder = tmp_path / "dashboard/content/new-challenge/index.md"
+    assert challenge_builder.exists()
+    challenge_builder_text = challenge_builder.read_text(encoding="utf-8")
+    assert 'title: New challenge' in challenge_builder_text
+    assert 'layout: "challenge-builder"' in challenge_builder_text
     assert (tmp_path / "dashboard/content/skills/_index.md").exists()
     skills_index = (
         tmp_path / "dashboard/content/skills/_index.md"

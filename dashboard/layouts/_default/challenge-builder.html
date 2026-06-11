@@ -1,0 +1,83 @@
+{{ define "main" }}
+  <article class="prose challenge-builder">
+    <h1>{{ .Title }}</h1>
+    {{ .Content }}
+
+    <div class="builder-notice">
+      <strong>No backend required.</strong>
+      This page runs locally in your browser and generates the source files for a
+      pull request. It does not send your draft anywhere.
+    </div>
+
+    <form class="challenge-builder-form" id="challenge-builder-form">
+      <fieldset>
+        <legend>Challenge metadata</legend>
+
+        <label for="challenge-title">Title</label>
+        <input id="challenge-title" name="title" type="text" autocomplete="off" required placeholder="Primary color rating experiment">
+
+        <label for="challenge-slug">Slug</label>
+        <input id="challenge-slug" name="slug" type="text" autocomplete="off" required pattern="[a-z0-9]+(?:-[a-z0-9]+)*" aria-describedby="slug-help" placeholder="primary-color-rating">
+        <p class="form-help" id="slug-help">Lowercase letters, numbers, and single hyphens.</p>
+
+        <label for="challenge-type">Type</label>
+        <input id="challenge-type" name="type" type="text" required value="experiment implementation">
+
+        <label for="challenge-difficulty">Difficulty</label>
+        <input id="challenge-difficulty" name="difficulty" type="number" min="1" max="10" step="1" required value="3">
+
+        <label for="challenge-authors">Author GitHub username</label>
+        <input id="challenge-authors" name="authors" type="text" autocomplete="off" required placeholder="your-github-username">
+      </fieldset>
+
+      <fieldset>
+        <legend>Challenge text</legend>
+
+        <label for="challenge-instructions">Public instructions for the attempting agent</label>
+        <textarea id="challenge-instructions" name="instructions" required rows="9" placeholder="Describe the participant experience, stimuli, responses to collect, constraints, and evidence expected."></textarea>
+
+        <label for="challenge-criteria">Optional evaluator criteria</label>
+        <textarea id="challenge-criteria" name="criteria" rows="6" aria-describedby="criteria-help" placeholder="- The experiment runs as a PsyNet experiment.&#10;- Responses are associated with the correct trial data."></textarea>
+        <p class="form-help" id="criteria-help">Criteria are reviewer-facing, but the repository is public, so they are not secret.</p>
+      </fieldset>
+    </form>
+
+    <section class="builder-output" aria-live="polite">
+      <div class="section-heading">
+        <h2>Generated files</h2>
+        <div class="builder-actions">
+          <button class="edit-source-link" type="button" id="copy-cursor-prompt">Copy Cursor prompt</button>
+          <span class="builder-status" id="builder-status" role="status"></span>
+        </div>
+      </div>
+
+      <div class="generated-files">
+        <section>
+          <div class="section-heading">
+            <h3 id="instructions-path">challenges/example/INSTRUCTIONS.md</h3>
+            <button class="edit-source-link" type="button" data-copy-target="instructions-preview">Copy</button>
+          </div>
+          <pre><code id="instructions-preview"></code></pre>
+        </section>
+
+        <section id="criteria-output">
+          <div class="section-heading">
+            <h3 id="criteria-path">challenges/example/CRITERIA.md</h3>
+            <button class="edit-source-link" type="button" data-copy-target="criteria-preview">Copy</button>
+          </div>
+          <pre><code id="criteria-preview"></code></pre>
+        </section>
+
+        <section>
+          <div class="section-heading">
+            <h3 id="gitkeep-path">challenges/example/attempts/.gitkeep</h3>
+            <button class="edit-source-link" type="button" data-copy-target="gitkeep-preview">Copy</button>
+          </div>
+          <pre><code id="gitkeep-preview"></code></pre>
+        </section>
+      </div>
+    </section>
+
+  </article>
+  <script src="{{ "js/challenge-builder.js" | relURL }}" defer></script>
+{{ end }}
