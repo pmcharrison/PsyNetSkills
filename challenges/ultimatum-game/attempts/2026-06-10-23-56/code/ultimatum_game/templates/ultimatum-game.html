@@ -110,7 +110,8 @@ import * as THREE from "/static/three.module.min.js";
         payload.group_id = GROUP_ID;
         payload.participant_id = MY_ID;
         payload.unique_id = psynet.uniqueId;
-        if (socketReady && socket && socket.readyState === WebSocket.OPEN) {
+        if (payload.type === 'join' || payload.type === 'request_state') {
+            if (!socketReady || !socket || socket.readyState !== WebSocket.OPEN) return;
             socket.send(JSON.stringify(payload));
             return;
         }
