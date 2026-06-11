@@ -1,7 +1,5 @@
 {
-  "authors": [
-    "elif22"
-  ],
+  "authors": ["elif22"],
   "agent": "Cursor Cloud Agent",
   "client": "cursor",
   "model": "GPT-5.5",
@@ -19,41 +17,5 @@
     "update_command": "git pull --ff-only origin master",
     "dirty": false
   },
-  "run_cost": {
-    "currency": "USD",
-    "amount": 25.41,
-    "source": "cursor_usage_csv_batch_import",
-    "recorded_at": "2026-06-11T14:46:39.998322Z",
-    "attribution_status": "matched_cloud_agent_id",
-    "window_started_at": "2026-06-10T15:12:49Z",
-    "window_ended_at": "2026-06-10T15:25:58Z",
-    "matched_started_at": "2026-06-10T15:08:42.466000Z",
-    "matched_ended_at": "2026-06-10T15:08:42.466000Z",
-    "matched_cloud_agent_ids": [
-      "bc-5c335ef0-a9be-4194-912b-0fcde9814771"
-    ],
-    "usage": {
-      "rows": 1,
-      "input_with_cache_write": 167044,
-      "input_without_cache_write": 681675,
-      "cache_read": 27000506,
-      "output_tokens": 80650,
-      "total_tokens": 27929875,
-      "models": {
-        "gpt-5.5-high": {
-          "rows": 1,
-          "input_with_cache_write": 167044,
-          "input_without_cache_write": 681675,
-          "cache_read": 27000506,
-          "output_tokens": 80650,
-          "total_tokens": 27929875,
-          "cost": 25.41
-        }
-      }
-    },
-    "notes": [
-      "Matched Cursor CSV rows by cursor_conversation_id.",
-      "Applied attempt time window plus padding."
-    ]
-  }
+  "run_cost": null
 }

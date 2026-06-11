@@ -1,7 +1,5 @@
 {
-  "authors": [
-    "raja-marjieh"
-  ],
+  "authors": ["raja-marjieh"],
   "agent": "Cursor Cloud Agent",
   "client": "cursor",
   "model": "GPT-5.5",
@@ -19,41 +17,5 @@
     "update_command": "git pull --ff-only origin master",
     "dirty": false
   },
-  "run_cost": {
-    "currency": "USD",
-    "amount": 54.54,
-    "source": "cursor_usage_csv_batch_import",
-    "recorded_at": "2026-06-11T14:46:39.998322Z",
-    "attribution_status": "matched_cloud_agent_id",
-    "window_started_at": "2026-06-11T00:50:04Z",
-    "window_ended_at": "2026-06-11T04:40:58Z",
-    "matched_started_at": "2026-06-11T00:46:41.846000Z",
-    "matched_ended_at": "2026-06-11T00:46:41.846000Z",
-    "matched_cloud_agent_ids": [
-      "bc-da4fffc3-0db0-4d32-be84-77391b15daf6"
-    ],
-    "usage": {
-      "rows": 1,
-      "input_with_cache_write": 526936,
-      "input_without_cache_write": 1489485,
-      "cache_read": 58035237,
-      "output_tokens": 155638,
-      "total_tokens": 60207296,
-      "models": {
-        "gpt-5.5-high": {
-          "rows": 1,
-          "input_with_cache_write": 526936,
-          "input_without_cache_write": 1489485,
-          "cache_read": 58035237,
-          "output_tokens": 155638,
-          "total_tokens": 60207296,
-          "cost": 54.54
-        }
-      }
-    },
-    "notes": [
-      "Matched Cursor CSV rows by cursor_conversation_id.",
-      "Applied attempt time window plus padding."
-    ]
-  }
+  "run_cost": null
 }
