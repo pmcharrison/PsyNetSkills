@@ -46,13 +46,17 @@ created successfully.
    is ready, and show the credentials. Do not provide local participant or
    dashboard links. Ask whether they would like a public tunnel as well.
 8. If the user wants a public tunnel, keep the `run-attempt` tmux session
-   running and start a separate tunnel for port `5000`:
-   `tmux -f /exec-daemon/tmux.portal.conf new-session -d -s run-attempt-tunnel -- npx -y localtunnel --port 5000 --local-host 127.0.0.1`
-   Watch the tunnel output for the public base URL. Derive and show:
+   running and start a separate Cloudflare Quick Tunnel for port `5000`:
+   `tmux -f /exec-daemon/tmux.portal.conf new-session -d -s run-attempt-cloudflare-tunnel -- cloudflared tunnel --url http://127.0.0.1:5000`
+   Watch the tunnel output for the `trycloudflare.com` URL. Derive and show:
    - the public participant URL by replacing the local participant URL origin
      with the public tunnel origin;
    - the public dashboard/develop URL by replacing the local dashboard URL
      origin with the public tunnel origin and preserving embedded credentials.
+   If `cloudflared` is missing on a Linux amd64 Cursor Cloud VM, install a
+   temporary copy first:
+   `curl -L --fail --retry 3 --retry-delay 2 -o /tmp/cloudflared https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64 && chmod +x /tmp/cloudflared`
+   Then run the tmux command with `/tmp/cloudflared` in place of `cloudflared`.
 
 ## Helper usage
 
@@ -68,9 +72,11 @@ Useful options:
   than one `experiment.py`.
 - `--no-start-services` skips the best-effort PostgreSQL/Redis startup step.
 - `--psynet-command <path-or-command>` overrides the detected PsyNet executable.
-- `--public-tunnel` starts localtunnel with the server and prints public links
-  once the tunnel URL is available. Use this only when the user has already
-  requested a public tunnel.
+- `--public-tunnel` starts Cloudflare Quick Tunnel with the server and prints
+  public links once the `trycloudflare.com` URL is available. Use this only when
+  the user has already requested a public tunnel. The helper prefers
+  `cloudflared`, downloads a temporary `/tmp/cloudflared` when possible, and
+  falls back to localtunnel only if Cloudflare setup is unavailable.
 - `--public-tunnel-port <port>` changes the local port exposed when
   `--public-tunnel` is used; PsyNet normally uses `5000`.
 
@@ -86,9 +92,12 @@ Useful options:
   Relaunch the tmux command with the PsyNet virtualenv first on `PATH`, for
   example:
   `tmux -f /exec-daemon/tmux.portal.conf new-session -d -s run-attempt -c "$PWD" -- bash -lc 'export PATH="/home/ubuntu/PsyNet/.venv/bin:$PATH"; uv run python .cursor/skills/run-attempt/scripts/run_attempt.py <attempt> --psynet-command /home/ubuntu/PsyNet/.venv/bin/psynet'`
-- If a requested public tunnel produces no URL, verify `npx --version`, then
-  start the tunnel in a separate tmux session while leaving PsyNet running. If
-  `localtunnel` still hangs silently, report that public tunnel creation is
-  blocked and use Cloud Desktop control instead.
+- If a requested public tunnel produces no URL, verify `cloudflared --version`
+  or `/tmp/cloudflared --version`, then start the Cloudflare tunnel in a separate
+  tmux session while leaving PsyNet running. If Cloudflare setup fails because
+  downloads are blocked, fall back to:
+  `tmux -f /exec-daemon/tmux.portal.conf new-session -d -s run-attempt-tunnel -- npx -y localtunnel --port 5000 --local-host 127.0.0.1`
+  If no tunnel produces a URL, report that public tunnel creation is blocked and
+  use Cloud Desktop control instead.
 - Use only local, ephemeral dashboard credentials. Do not add real service
   credentials just to make a review run succeed.
