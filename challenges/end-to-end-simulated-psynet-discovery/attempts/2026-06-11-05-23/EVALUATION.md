@@ -32,4 +32,3 @@ Copied from the challenge criteria for human evaluation:
 ## Notes
 
 - Score and feedback should come from a human evaluator, captured conversationally when working with Cursor Cloud Agents.
-- Author metadata is pending until the requester provides the GitHub username to credit.
