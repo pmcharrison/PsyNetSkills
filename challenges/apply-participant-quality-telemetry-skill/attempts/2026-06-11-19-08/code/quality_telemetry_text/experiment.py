@@ -4,7 +4,7 @@ from statistics import mean
 import psynet.experiment
 from markupsafe import Markup
 from psynet.page import InfoPage
-from psynet.timeline import Page, Timeline
+from psynet.timeline import Page, Response, Timeline
 
 
 PROMPTS = [
@@ -50,7 +50,7 @@ PAGE_TEMPLATE = """
     We record timing and interaction summaries for manual data-quality review.
     We do not record raw keystrokes or clipboard contents.
   </p>
-  <button id="next-button" type="button" class="btn btn-primary mt-3">Next</button>
+  <button id="quality-next-button" type="button" class="btn btn-primary submit mt-3">Next</button>
 </div>
 {% endblock %}
 """
@@ -70,8 +70,8 @@ PAGE_CSS = """
 TELEMETRY_SCRIPT = """
 (function () {
   const textarea = document.getElementById("quality-response");
-  const button = document.getElementById("next-button");
-  const trial = psynet.page.js_vars.qualityTrial;
+  const button = document.getElementById("quality-next-button");
+  const trial = psynet.var.qualityTrial || window.qualityTrial;
   const startedAt = Date.now();
   let firstKeyAt = null;
   let lastKeyAt = null;
@@ -231,11 +231,8 @@ class TelemetryTextPage(Page):
         )
         return {"quality_telemetry": telemetry}
 
-    def bot_response(self, experiment, bot, **kwargs):
-        profile = getattr(bot, "participant", None)
+    def get_bot_response(self, experiment, bot):
         profile_name = "attentive_fixture"
-        if profile is not None and hasattr(profile, "var"):
-            profile_name = profile.var.get("participant_profile", "attentive_fixture")
         response_text = (
             self.prompt_spec.get("expected_answer", "blue")
             if self.prompt_spec["kind"] == "attention_check"
@@ -296,12 +293,12 @@ class Exp(psynet.experiment.Experiment):
         super().test_check_bot(bot)
         responses = [
             response
-            for response in bot.participant.responses
-            if response.label in {prompt["trial_id"] for prompt in PROMPTS}
+            for response in Response.query.filter_by(participant_id=bot.id).all()
+            if response.question in {prompt["trial_id"] for prompt in PROMPTS}
         ]
         assert len(responses) == len(PROMPTS)
         for response in responses:
             telemetry = response.metadata["quality_telemetry"]
-            assert telemetry["trial_id"] == response.label
+            assert telemetry["trial_id"] == response.question
             assert telemetry["response_latency_ms"] > 0
             assert telemetry["keydown_count"] > 0
