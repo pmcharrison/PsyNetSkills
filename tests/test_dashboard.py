@@ -553,6 +553,49 @@ def test_dashboard_data_reports_counts(tmp_path: Path) -> None:
     assert "docs" not in data
 
 
+def test_dashboard_data_reports_latest_attempts(tmp_path: Path) -> None:
+    write(tmp_path / "authors.yaml", authors_yaml())
+    write(
+        tmp_path / ".cursor/skills/example-skill/SKILL.md",
+        "---\n"
+        "name: example-skill\n"
+        "description: Use when testing dashboard generation.\n"
+        "---\n\n"
+        "# Example skill\n",
+    )
+    write(
+        tmp_path / "challenges/example/INSTRUCTIONS.md",
+        challenge_instructions(),
+    )
+    write(
+        tmp_path / "challenges/second/INSTRUCTIONS.md",
+        "---\n"
+        "title: Second challenge\n"
+        "type: experiment implementation\n"
+        "difficulty: 3\n"
+        "---\n\n"
+        "Implement another experiment.\n",
+    )
+    for day in range(1, 23):
+        challenge_slug = "second" if day == 22 else "example"
+        write(
+            tmp_path
+            / f"challenges/{challenge_slug}/attempts/2026-06-{day:02d}-10-10"
+            / "EVALUATION.md",
+            evaluation(day),
+        )
+
+    data = dashboard_data(tmp_path)
+    attempts = data["attempts"]
+
+    assert len(attempts) == 20
+    assert attempts[0]["name"] == "2026-06-22-10-10"
+    assert attempts[0]["challenge_title"] == "Second challenge"
+    assert attempts[0]["challenge_url"] == "challenges/second/"
+    assert attempts[-1]["name"] == "2026-06-03-10-10"
+    assert "2026-06-02-10-10" not in {attempt["name"] for attempt in attempts}
+
+
 def test_export_dashboard_uses_configured_artifact_url_prefix(
     tmp_path: Path,
     monkeypatch,
@@ -824,6 +867,11 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
         "(https://github.com/pmcharrison/PsyNetSkills/blob/main/docs/skills.md)."
     ) in skills_index
     assert "../docs/skills/" not in skills_index
+    attempts_index = tmp_path / "dashboard/content/attempts/_index.md"
+    assert attempts_index.exists()
+    assert "latest 20 challenge attempts" in attempts_index.read_text(
+        encoding="utf-8",
+    )
     assert (
         tmp_path / "dashboard/content/skills/example-skill/index.md"
     ).exists()
@@ -956,6 +1004,10 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
     assert '"url": "challenges/example/2026-06-01-10-10/"' in data
     assert parsed_data["challenges"][0]["open_actions"] == 1
     assert exported_attempt["open_actions"] == 1
+    assert parsed_data["attempts"][0]["challenge_title"] == "Example challenge"
+    assert parsed_data["attempts"][0]["url"] == (
+        "challenges/example/2026-06-01-10-10/"
+    )
     assert exported_attempt["evaluation"] == "Attempt body.\n"
     assert exported_attempt["timeline"] == (
         "- T+00:00:00 [agent-start] Started.\n"
