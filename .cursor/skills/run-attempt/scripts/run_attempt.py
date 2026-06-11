@@ -133,7 +133,7 @@ class HandoffState:
 
     @property
     def is_local_complete(self) -> bool:
-        """Return whether local review links and credentials are available."""
+        """Return whether Cloud Desktop handoff details are available."""
 
         return all(
             [
@@ -506,7 +506,7 @@ def run_server(
     tunnel = PublicTunnel(public_tunnel_port, handoff) if public_tunnel else None
 
     print_run_summary(run)
-    print("Starting PsyNet. Open the generated dashboard/ad URL in the Cursor browser.")
+    print("Starting PsyNet. Use the Cloud Desktop browser for dashboard control.")
     if tunnel is not None:
         tunnel.start()
 
