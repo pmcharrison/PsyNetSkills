@@ -17,18 +17,6 @@ CANONICAL_LEARNING_IMPACTS = {
     "low",
     "medium",
 }
-CANONICAL_LEARNING_CONFIDENCES = {
-    "high",
-    "low",
-    "medium",
-}
-CANONICAL_LEARNING_REPOSITORIES = {
-    "PsyNetSkills",
-    "PsyNet",
-}
-LEARNING_REPOSITORY_ALIASES = {
-    repository.lower(): repository for repository in CANONICAL_LEARNING_REPOSITORIES
-}
 COMPLETED_LEARNING_STATUSES = {
     "completed",
     "dismissed",
@@ -72,66 +60,6 @@ def is_learning_actions_heading(line: str) -> bool:
     """Return whether a line is the Actions heading for a learning card."""
 
     return line.strip() == "*Actions:*"
-
-
-def require_canonical_value(value: str, choices: set[str], field: str) -> str:
-    """Return a normalized canonical value or raise a helpful error."""
-
-    normalized = value.strip().lower()
-    if normalized not in choices:
-        expected = ", ".join(sorted(choices))
-        raise ValueError(f"{field} must be one of: {expected}")
-    return normalized
-
-
-def format_learning_action_bullet(
-    repository: str,
-    proposal: str,
-    *,
-    confidence: str,
-    impact: str,
-    status: str = "considering",
-    notes: str = "",
-) -> str:
-    """Return a canonical ``LEARNINGS.md`` action bullet."""
-
-    repository_label = LEARNING_REPOSITORY_ALIASES.get(repository.strip().lower())
-    if repository_label is None:
-        expected = ", ".join(sorted(CANONICAL_LEARNING_REPOSITORIES))
-        raise ValueError(f"repository must be one of: {expected}")
-
-    normalized_proposal = re.sub(r"\s+", " ", proposal).strip()
-    if not normalized_proposal:
-        raise ValueError("proposal must not be empty")
-    if normalized_proposal[-1] not in ".!?":
-        normalized_proposal += "."
-
-    normalized_confidence = require_canonical_value(
-        confidence,
-        CANONICAL_LEARNING_CONFIDENCES,
-        "confidence",
-    )
-    normalized_impact = require_canonical_value(
-        impact,
-        CANONICAL_LEARNING_IMPACTS,
-        "impact",
-    )
-    normalized_status = require_canonical_value(
-        status,
-        CANONICAL_LEARNING_STATUSES,
-        "status",
-    )
-
-    bullet = (
-        f"- **{repository_label}:** {normalized_proposal} "
-        f"Confidence: {normalized_confidence}. "
-        f"Impact: {normalized_impact}. "
-        f"Status: {normalized_status}"
-    )
-    normalized_notes = re.sub(r"\s+", " ", notes).strip().rstrip(".")
-    if normalized_notes:
-        bullet += f". Notes: {normalized_notes}"
-    return f"{bullet}."
 
 
 def learning_action_bullets(lines: list[str]) -> list[str]:

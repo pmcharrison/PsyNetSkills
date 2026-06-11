@@ -30,8 +30,8 @@ you organize that judgment into the repository's evaluation record.
    evaluation feedback changes or clarifies a reusable lesson. When adding or
    revising action bullets, make each action self-contained enough to be copied
    into a new agent prompt without relying on the surrounding learning prose.
-   Use `uv run psynetsk-learning-action` to generate bullets with the required
-   `Confidence`, `Impact`, and `Status` fields.
+   Follow the action shape in `attempt-challenge/assets/attempt-template/LEARNING_CARD.md`
+   so bullets include the required `Confidence`, `Impact`, and `Status` fields.
 8. Run `uv run psynetsk-validate` and any narrow checks needed for changed files.
 
 ## Rules

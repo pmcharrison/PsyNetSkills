@@ -16,7 +16,6 @@ dependencies = [
 psynetsk-validate = "psynetsk_tools.validate:main"
 psynetsk-export-dashboard-data = "psynetsk_tools.dashboard:main"
 psynetsk-import-cursor-costs = "psynetsk_tools.cursor_costs:main"
-psynetsk-learning-action = "psynetsk_tools.learning_action:main"
 
 [dependency-groups]
 dev = [
