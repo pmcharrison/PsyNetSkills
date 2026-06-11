@@ -27,6 +27,12 @@ trial, as long as the excerpt demonstrates the instructions, representative
 trials, responses, and completion behavior, and automated checks or exported
 data cover the full experimental structure.
 
+If an already-recorded flow is complete but slightly too long, prefer an
+accelerated copy over a hard truncation when the full sequence matters for
+review. Make the speed-up only as aggressive as needed to fit under 3 minutes,
+verify the result remains understandable, and do not use speed-up when real-time
+timing, audio quality, or participant pacing is itself the evidence being judged.
+
 Published `evidence/participant.mp4` files must be no larger than 1280x720.
 Prefer 15 fps for UI walkthrough evidence unless smooth motion is essential.
 Use H.264 with CRF 30-34, AAC audio when audio is needed, and `+faststart` so
