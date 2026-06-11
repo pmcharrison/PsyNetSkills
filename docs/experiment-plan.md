@@ -20,6 +20,19 @@ Implementation entries are not a line-by-line coding recipe. They are the places
 where human oversight is valuable because a wrong technical choice can change the
 scientific task, participant experience, deployment safety, or data interpretation.
 
+**Canonical reference.** Before filling the template, identify a published
+paper, preregistration, or established procedure that describes the intended
+paradigm. If its license permits redistribution, store a copy (PDF or HTML) in
+the `references/` directory of the relevant challenge or experiment folder;
+otherwise record only the citation and a URL. Transcribe the key procedure
+into the Science and Design sections of the plan — exact instruction wording,
+question text, response scales, timing values, and screening criteria from the
+original study. If the gap between the source procedure and what PsyNet can
+natively express is large (custom frontend, specialised hardware, a large
+stimulus corpus requiring prior preparation, or complex external integrations),
+stop before filling the Implementation section and consult the user: suggest
+compiling the experimental materials as a separate preparatory project first.
+
 Before proposing defaults, agents should work through the plan systematically
 and identify any logical gaps, contradictions, or underspecified fields. For
 each gap, evaluate whether it requires human judgment: if the choice could
@@ -45,6 +58,11 @@ not allowed to claim.
 
 ### Required fields
 
+- **Canonical reference**: the primary published paper, preregistration, or
+  established procedure this experiment is based on. Record the citation and
+  either the `references/` path (if stored locally) or a URL. Note which
+  sections of the plan were transcribed directly from this source. If no
+  canonical reference exists, state that explicitly.
 - **Research question**: the primary question in ordinary language.
 - **Scientific construct**: the psychological, behavioral, cultural, perceptual,
   social, or interaction process being measured.
@@ -96,26 +114,43 @@ not allowed to claim.
 
 The design section describes the participant-facing experience and assignment
 logic in result-oriented terms. It should be readable without knowing PsyNet
-class names.
+class names. The required level of detail scales with the purpose declared in
+Part 1: a formal experiment should specify every stage and parameter; a pilot
+may leave lower-stakes fields at sensible defaults, which the agent should
+document explicitly rather than leave blank.
 
 ### Required fields
 
-- **Participant journey**: ordered flow from consent or welcome through
-  instructions, practice, main trials, feedback, debrief, and completion.
+- **Participant journey**: the complete ordered sequence from arrival to exit.
+  A standard flow for a formal experiment includes: consent → demographics or
+  pre-experiment questionnaire → device or ability prescreens (audio
+  calibration, headphone check, colour-vision test) → task instructions →
+  comprehension check → practice trials → main trials → post-experiment
+  questionnaire or debrief → reward or bonus summary shown to participant →
+  completion and recruiter redirect. For a pilot, omit questionnaires,
+  prescreens, and comprehension checks unless the task requires them, and
+  apply defaults for debrief and reward display. Mark any omitted stage
+  explicitly as out of scope rather than leaving it blank.
 - **Trial experience**: what participants see or hear on each trial, what action
   they take, whether feedback appears, and how progress is communicated.
 - **Response modality**: buttons, keyboard, sliders, text, audio/video recording,
   drawing, chat, synchronous interaction, or another input mode.
-- **Timing**: display durations, response windows, deliberation windows,
-  playback rules, timeouts, and whether participants can replay stimuli.
+- **Timing and pacing**: display durations, response windows, deliberation
+  windows, playback rules, timeouts, whether participants can replay stimuli,
+  and whether a progress bar or trial counter is shown. For formal experiments,
+  specify every value; for pilots, document which values are defaults and
+  which were measured or drawn from the canonical reference.
 - **Assignment and counterbalancing**: randomization, block order, repeated
   stimuli, between-participant condition assignment, group assignment, and role
   assignment.
 - **Quality controls**: comprehension checks, attention checks, volume
   calibration, headphone screening, practice accuracy, device constraints, and
   failure paths.
-- **Feedback and scoring visible to participants**: what participants learn about
-  correctness, payoff, progress, or group outcomes.
+- **Feedback and scoring visible to participants**: what participants learn
+  about correctness, payoff, progress, or group outcomes — including whether
+  accumulated reward or bonus is shown trial-by-trial, at the end of the
+  session, or not at all, and how the final reward calculation is explained
+  before participants exit.
 - **Completion states**: success, rejection, consent rejection, timeout,
   technical failure, and participant abort behavior.
 
@@ -225,6 +260,7 @@ README when starting a new experiment.
 
 ## Science
 
+- Required: canonical reference (citation + URL or `references/` path):
 - Required: research question:
 - Required: construct:
 - Required: hypotheses or expected patterns:
@@ -243,13 +279,15 @@ README when starting a new experiment.
 
 ## Design
 
-- Required: participant journey:
+- Required: participant journey (consent → questionnaire → prescreens →
+  instructions → comprehension check → practice → main trials → debrief →
+  reward summary → completion; mark omitted stages as out of scope):
 - Required: trial experience:
 - Required: response modality:
-- Required: timing and replay rules:
+- Required: timing, progress bar, and replay rules:
 - Required: assignment and counterbalancing:
 - Required: quality controls:
-- Required: participant-visible feedback/scoring:
+- Required: participant-visible feedback, scoring, and reward display:
 - Required: completion states:
 - Optional: visual direction:
 - Optional: audio/media direction:
