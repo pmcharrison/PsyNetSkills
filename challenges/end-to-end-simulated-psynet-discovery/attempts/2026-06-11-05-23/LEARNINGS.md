@@ -13,3 +13,15 @@ Returning Pandas DataFrames from `get_basic_data(context="export")` is useful be
 
 *Actions:*
 - **PsyNetSkills:** Mention context-sensitive `get_basic_data` returns in future experiment challenge examples when both dashboard display and CSV export evidence matter. Confidence: medium. Status: considering.
+
+## Pipeline demos can overfit deterministic bot behavior
+
+The evaluation judged the end-to-end pipeline proof strong, but noted that the
+scientific demonstration stayed simple because the simulated behavior was
+hard-coded and deterministic. Future discovery-oriented attempts should preserve
+the same export/analysis evidence while using richer stimulus structure,
+less scripted simulated responses, and analysis artifacts that reveal more than
+the bot response rule.
+
+*Actions:*
+- **PsyNetSkills:** For future discovery-style experiment challenges, encourage attempts to include a richer design or simulation model when doing so does not distract from the required end-to-end evidence. Confidence: medium. Status: considering.
