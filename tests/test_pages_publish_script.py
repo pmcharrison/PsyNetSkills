@@ -69,3 +69,35 @@ def test_push_pages_branch_rebases_changes_onto_latest_remote(tmp_path: Path) ->
         final / "pr-preview/pr-2/index.html"
     ).read_text(encoding="utf-8") == "preview 2\n"
     assert len(git("rev-list", "--parents", "-n", "1", "HEAD", cwd=final).split()) == 1
+
+
+def test_prepare_production_pages_preserves_previews_and_artifacts(
+    tmp_path: Path,
+) -> None:
+    pages_dir = tmp_path / "pages"
+    write(pages_dir / "index.html", "old production\n")
+    write(pages_dir / "css/site.css", "old css\n")
+    write(pages_dir / "pr-preview/pr-182/index.html", "preview\n")
+    write(
+        pages_dir / "artifacts/blobs/sha256/ab/abcdef.mp4",
+        "shared artifact\n",
+    )
+
+    script = (
+        Path(__file__).resolve().parents[1]
+        / ".github/scripts/prepare-production-pages.py"
+    )
+    subprocess.run(
+        ["python", str(script), str(pages_dir)],
+        check=True,
+        cwd=Path(__file__).resolve().parents[1],
+    )
+
+    assert not (pages_dir / "index.html").exists()
+    assert not (pages_dir / "css").exists()
+    assert (pages_dir / "pr-preview/pr-182/index.html").read_text(
+        encoding="utf-8",
+    ) == "preview\n"
+    assert (pages_dir / "artifacts/blobs/sha256/ab/abcdef.mp4").read_text(
+        encoding="utf-8",
+    ) == "shared artifact\n"

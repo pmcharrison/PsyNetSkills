@@ -38,11 +38,10 @@ same challenge before implementation and evidence collection are complete.
 The production dashboard is published from the `gh-pages` branch root. Pull
 requests from branches in this repository are built into subdirectories of the
 same branch, under `pr-preview/pr-NUMBER/`.
-Attempt artifacts are published to a content-addressed store under
-`artifacts/blobs/sha256/` for production and under
-`pr-preview/pr-NUMBER/artifacts/blobs/sha256/` for pull request previews. Keeping
-preview artifacts inside the preview directory prevents later production deploys
-from removing PR-only evidence files.
+Attempt artifacts are published to a shared content-addressed store under
+`artifacts/blobs/sha256/`, so production and preview pages can reuse identical
+evidence files instead of copying them into every preview directory. Production
+deploys preserve this shared root artifact store along with open preview pages.
 Large ZIP files from attempt `challenge/` snapshots, generated attempt `code/`
 directories, and evidence ZIPs other than `evidence/data.zip` are shown as
 metadata-only file entries rather than copied to GitHub Pages.
