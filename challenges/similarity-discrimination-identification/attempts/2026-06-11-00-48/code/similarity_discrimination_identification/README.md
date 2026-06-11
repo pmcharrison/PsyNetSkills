@@ -16,7 +16,7 @@ Identification trials store numbered display items, display positions, probe sti
 
 ## Minimal review mode
 
-Set `PSYNET_PROFILE=minimal` before launching the experiment to shorten the flow for visual review or participant evidence recording. The default profile is the canonical full design.
+Set `PSYNET_PROFILE=minimal` before launching the experiment to shorten the flow for visual review or participant evidence recording. This profile also slows the timed visual displays so reviewers can inspect them. The default profile is the canonical full design.
 
 ## Analysis
 

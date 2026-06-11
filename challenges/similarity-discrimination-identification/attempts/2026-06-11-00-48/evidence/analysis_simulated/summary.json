@@ -1,0 +1,9 @@
+{
+  "n_trials": 48,
+  "blocks": [
+    "identification",
+    "same_different",
+    "similarity"
+  ],
+  "input": "simulated deterministic dataset"
+}

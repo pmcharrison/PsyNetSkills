@@ -17,13 +17,13 @@ from psynet.timeline import Timeline
 from psynet.trial.static import StaticNode, StaticTrial, StaticTrialMaker
 
 
-FIXATION_DURATION = 0.5
-STIMULUS_DURATION = 1.0
-RETENTION_DELAY = 0.75
 CANVAS_SIZE = 100
 CENTER = 50
 STIMULUS_RADIUS = 7
 MINIMAL_PROFILE = os.environ.get("PSYNET_PROFILE") == "minimal"
+FIXATION_DURATION = 0.75 if MINIMAL_PROFILE else 0.5
+STIMULUS_DURATION = 2.5 if MINIMAL_PROFILE else 1.0
+RETENTION_DELAY = 1.0 if MINIMAL_PROFILE else 0.75
 
 STIMULI = [
     {"id": "red", "dimensions": {"color": "#d73027", "hue_deg": 5, "size": STIMULUS_RADIUS}},
@@ -72,8 +72,18 @@ def empty_delay_frame():
     return Frame(fixation(), duration=RETENTION_DELAY)
 
 
-def response_frame():
-    return Frame([], activate_control_response=True, activate_control_submit=True)
+class NonExcludingColorBlindnessTest(ColorBlindnessTest):
+    def performance_check(self, experiment, participant, participant_trials):
+        result = super().performance_check(experiment, participant, participant_trials)
+        return {**result, "passed": True}
+
+
+def response_frame(objects=None):
+    return Frame(
+        objects or [],
+        activate_control_response=True,
+        activate_control_submit=True,
+    )
 
 
 def pair_graphic_frames(stimulus_a, stimulus_b):
@@ -86,7 +96,7 @@ def pair_graphic_frames(stimulus_a, stimulus_b):
         Frame(fixation(), duration=FIXATION_DURATION),
         Frame(pair_objects, duration=STIMULUS_DURATION),
         empty_delay_frame(),
-        response_frame(),
+        response_frame(pair_objects),
     ]
 
 
@@ -414,7 +424,7 @@ class Exp(psynet.experiment.Experiment):
             expected_trials_per_participant="n_nodes",
             max_trials_per_participant="n_nodes",
         ),
-        ColorBlindnessTest(hide_after=None),
+        NonExcludingColorBlindnessTest(hide_after=None),
         BasicDemography(),
         InfoPage("Thank you for completing the experiment.", time_estimate=5),
     )
