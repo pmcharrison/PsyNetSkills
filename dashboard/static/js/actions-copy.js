@@ -40,10 +40,11 @@
     return new URL(path, window.location.origin).toString();
   }
 
-  function formatAction(action, index) {
+  function formatAction(action) {
     const context = action.copy_context || {};
+    const actionPoint = context.action || action.proposal;
     const lines = [
-      `## ${index}. ${context.learning_title || action.source_section}`,
+      `## ${actionPoint}`,
       "",
       `Action ID: ${context.id || action.id}`,
       `Challenge: ${context.challenge || action.challenge_title}`,
@@ -56,9 +57,6 @@
       "",
       "Learning context:",
       context.learning_context || action.learning_context || "(No learning context recorded.)",
-      "",
-      "Action point:",
-      context.action || action.proposal,
     ];
 
     const notes = context.notes || action.notes;
@@ -75,7 +73,7 @@
       "",
       "Please address the following outstanding action points from historic challenge attempts. If they fall into clearly separate pieces of work, address those pieces one at a time, discussing strategy with the user and getting confirmation before continuing.",
       "",
-      selected.map((action, index) => formatAction(action, index + 1)).join("\n\n"),
+      selected.map((action) => formatAction(action)).join("\n\n"),
     ].join("\n").trim() + "\n";
   }
 
@@ -143,6 +141,63 @@
     }
   }
 
+  async function copySelectedActions() {
+    const selected = selectedActions();
+    if (selected.length === 0) {
+      return false;
+    }
+
+    try {
+      await copyText(formatBrief(selected));
+      if (statusElement) {
+        statusElement.textContent = `Copied ${selected.length} action${selected.length === 1 ? "" : "s"}.`;
+      }
+      return true;
+    } catch (_error) {
+      if (statusElement) {
+        statusElement.textContent = "Copy failed. Please try again.";
+      }
+      return false;
+    }
+  }
+
+  function isTextEditableTarget(target) {
+    if (!(target instanceof Element)) {
+      return false;
+    }
+    if (
+      target.closest(
+        "textarea, select, [contenteditable=''], [contenteditable='true']",
+      )
+    ) {
+      return true;
+    }
+
+    const input = target.closest("input");
+    if (!input) {
+      return false;
+    }
+
+    const nonTextTypes = new Set([
+      "button",
+      "checkbox",
+      "color",
+      "file",
+      "hidden",
+      "image",
+      "radio",
+      "range",
+      "reset",
+      "submit",
+    ]);
+    return !nonTextTypes.has((input.getAttribute("type") || "text").toLowerCase());
+  }
+
+  function hasTextSelection() {
+    const selection = window.getSelection && window.getSelection();
+    return Boolean(selection && !selection.isCollapsed && selection.toString());
+  }
+
   checkboxes.forEach((checkbox) => {
     checkbox.addEventListener("change", updateState);
   });
@@ -178,21 +233,7 @@
   });
 
   button.addEventListener("click", async () => {
-    const selected = selectedActions();
-    if (selected.length === 0) {
-      return;
-    }
-
-    try {
-      await copyText(formatBrief(selected));
-      if (statusElement) {
-        statusElement.textContent = `Copied ${selected.length} action${selected.length === 1 ? "" : "s"}.`;
-      }
-    } catch (_error) {
-      if (statusElement) {
-        statusElement.textContent = "Copy failed. Please try again.";
-      }
-    }
+    await copySelectedActions();
   });
 
   if (previewButton && previewPopover && previewText) {
@@ -229,6 +270,21 @@
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") {
       closePreview();
+      return;
+    }
+
+    if (
+      event.key.toLowerCase() === "c" &&
+      (event.metaKey || event.ctrlKey) &&
+      !event.altKey &&
+      !isTextEditableTarget(event.target) &&
+      !hasTextSelection()
+    ) {
+      if (selectedActions().length === 0) {
+        return;
+      }
+      event.preventDefault();
+      copySelectedActions();
     }
   });
 
