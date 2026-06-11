@@ -7,7 +7,7 @@ Starting from only `experiment.py`, `config.txt`, and `requirements.txt` made
 `constraints.txt` were missing.
 
 *Actions:*
-- **PsyNetSkills:** Update the `attempt-challenge` or `psynet-experiment-implementation` guidance to list `test.py` and generated `constraints.txt` alongside `.gitignore` as required files for self-contained PsyNet challenge attempts. Confidence: high. Status: considering.
+- **PsyNetSkills:** Update the `attempt-challenge` or `psynet-experiment-implementation` guidance to list `test.py` and generated `constraints.txt` alongside `.gitignore` as required files for self-contained PsyNet challenge attempts. Confidence: high. Impact: high. Status: considering.
 
 ## Verify browser-path JavaScript, not only bot-path telemetry
 
@@ -16,8 +16,8 @@ browser script used `psynet.page.js_vars`, while PsyNet exposes page variables
 through `psynet.var` and globals.
 
 *Actions:*
-- **PsyNetSkills:** Add a reminder to `psynet-participant-quality-telemetry` that custom telemetry JavaScript should be manually exercised in a browser because PsyNet bots can bypass client-side event collection. Confidence: high. Status: considering.
-- **PsyNet:** Consider documenting the recommended JavaScript access pattern for page `js_vars` near the `ModularPage` or `Page` API docs. Confidence: medium. Status: considering.
+- **PsyNetSkills:** Add a reminder to `psynet-participant-quality-telemetry` that custom telemetry JavaScript should be manually exercised in a browser because PsyNet bots can bypass client-side event collection. Confidence: high. Impact: high. Status: considering.
+- **PsyNet:** Consider documenting the recommended JavaScript access pattern for page `js_vars` near the `ModularPage` or `Page` API docs. Confidence: medium. Impact: medium. Status: considering.
 
 ## Review participant videos before accepting them
 
@@ -25,7 +25,7 @@ The first successful-looking participant recording ended at the attention check
 because the fixed-duration capture stopped before the completion page.
 
 *Actions:*
-- **PsyNetSkills:** Keep the `videoReview` verification step for participant evidence and prefer stopping `ffmpeg` immediately after completion rather than relying on a tight fixed-duration cap. Confidence: high. Status: considering.
+- **PsyNetSkills:** Keep the `videoReview` verification step for participant evidence and prefer stopping `ffmpeg` immediately after completion rather than relying on a tight fixed-duration cap. Confidence: high. Impact: high. Status: considering.
 
 ## Stress-test telemetry rules with ambiguous profiles
 
@@ -35,4 +35,4 @@ more ambiguous participant profiles would better test whether manual-review
 rules remain conservative under realistic uncertainty.
 
 *Actions:*
-- **PsyNetSkills:** Add a future participant-quality telemetry challenge or example that uses a richer real experimental paradigm with ambiguous participant profiles, so review rules are tested against overlapping quality signals rather than clearly separated attentive and suspicious fixtures. Confidence: medium. Status: considering.
+- **PsyNetSkills:** Add a future participant-quality telemetry challenge or example that uses a richer real experimental paradigm with ambiguous participant profiles, so review rules are tested against overlapping quality signals rather than clearly separated attentive and suspicious fixtures. Confidence: medium. Impact: medium. Status: considering.
