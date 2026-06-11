@@ -8,7 +8,7 @@ environment variables, with code-level defaults and optional registered config
 lookups.
 
 *Actions:*
-- **PsyNetSkills:** Clarify in experiment implementation guidance that arbitrary custom settings should not be written to `config.txt` unless the deployment registers them first. Confidence: medium. Status: completed. Notes: Added a `config.txt` registration warning to `psynet-experiment-implementation`.
+- **PsyNetSkills:** Clarify in experiment implementation guidance that arbitrary custom settings should not be written to `config.txt` unless the deployment registers them first. Confidence: medium. Status: completed. Notes: Documented the `extra_parameters()` registration pattern and noted that sensitive credentials should stay out of `config.txt`.
 
 ## Radio button bot answers need a subclass in current PsyNet
 

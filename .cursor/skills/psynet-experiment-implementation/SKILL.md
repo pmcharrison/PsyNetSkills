@@ -48,13 +48,14 @@ Useful starting points:
 9. Add short comments only where the PsyNet pattern is not obvious.
 10. Regularly use `psynet test local` to test the experiment logic,
    and implement custom assertions to test the experiment's behavior.
-11. Do not write arbitrary custom settings to `config.txt` unless they are
-    already registered by Dallinger/PsyNet or by the deployment's configuration
-    registration hook, such as `extra_parameters()`. Dallinger validates
-    `config.txt` before the experiment module can finish loading, so unregistered
-    keys can fail before your code-level defaults or optional lookups run. For
-    local/test-only provider settings, prefer environment variables or code-level
-    defaults unless you have first verified that the config key is registered.
+11. Register custom `config.txt` settings before using them. For experiment-owned
+    parameters, define `extra_parameters()` on the experiment class, call
+    `super().extra_parameters()`, then register each key with Dallinger's config
+    object before adding it to `config.txt`. Dallinger validates `config.txt`
+    before the experiment module can finish loading, so unregistered keys fail
+    early. Do not put real API keys, tokens, passwords, or other sensitive
+    credentials in `config.txt`; keep those in environment variables or another
+    secret store instead.
 12. When implementing custom `Page` classes, make sure `get_bot_response`
     returns the same structured, formatted answer that the browser path records.
     PsyNet bots submit the value returned by `get_bot_response` as the formatted
