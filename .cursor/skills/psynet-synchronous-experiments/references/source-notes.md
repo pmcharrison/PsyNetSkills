@@ -74,6 +74,12 @@ repositories and group-derived skill notes. The useful tacit lessons were:
   or config helpers rather than burying it in participant logic;
 - provide explicit unsuccessful-end and partial-compensation paths for
   participants who spend time but cannot complete the intended path;
+- use engaging waiting content instead of passive waiting screens when matching
+  can take time;
+- use attention-capturing cues such as sounds or visual warnings when
+  participants are matched or expected to act;
+- use timers, warning states, and automatic submission or timeout handling to
+  keep group phases responsive;
 - avoid copying older ad hoc coordination patterns when current PsyNet barriers,
   `sync_group_type`, and chatrooms can express the design.
 

@@ -72,6 +72,16 @@ If participants exchange live actions or messages within a trial, also read
   otherwise exit while async network growth is still pending.
 - Use `ChatRoom(room_id=f"group_{participant.sync_group.id}")` only for
   participant communication; keep phase advancement and scoring in barriers.
+- Use engaging waiting trials instead of passive wait screens when waits may be
+  long. Participants may be distracted or running multiple experiments at once;
+  useful filler tasks can improve retention and reduce idle no-shows.
+- Add participant-facing alerts for important transitions, such as an audible
+  cue when a group is matched or when the participant is expected to act. Make
+  sure alerts are compatible with browser autoplay rules and the study's audio
+  consent/device requirements.
+- Use visible timers, warning states, automatic staging/submission, and clear
+  timeout behavior for timed phases. These patterns keep groups responsive and
+  prevent one inactive participant from blocking everyone else indefinitely.
 
 ## Recruitment and platform design
 
@@ -105,6 +115,10 @@ If participants exchange live actions or messages within a trial, also read
 - Assert group formation, active group size, role assignment, shared node/trial
   IDs, barrier IDs, `on_release` side effects, and failed/overflow exits.
 - Test dropout and top-up behavior, not only a complete group that finishes.
+- Test waiting-phase retention aids: filler trials should save usable data or
+  stay harmless, alerts should fire at the intended transition, timers should be
+  visible, and automatic submissions should record a valid response or failure
+  reason.
 - For participant-facing waiting rooms or multi-browser behavior, collect
   separate browser-context evidence. Use `record-participant-video/SKILL.md` for
   challenge evidence or participant-flow recordings.
