@@ -59,10 +59,10 @@ not allowed to claim.
 ### Required fields
 
 - **Canonical reference**: the primary published paper, preregistration, or
-  established procedure this experiment is based on. Record the citation and
-  either the `references/` path (if stored locally) or a URL. Note which
-  sections of the plan were transcribed directly from this source. If no
-  canonical reference exists, state that explicitly.
+  established procedure this experiment is based on or replicates, if one
+  exists. Record the citation and either the `references/` path (if stored
+  locally) or a URL. Note which sections of the plan were transcribed directly
+  from this source. If no canonical reference exists, state that explicitly.
 - **Research question**: the primary question in ordinary language.
 - **Scientific construct**: the psychological, behavioral, cultural, perceptual,
   social, or interaction process being measured.
@@ -82,10 +82,11 @@ not allowed to claim.
 - **Minimal analysis**: participant count, trial count, exclusions, condition
   summaries, planned figures/tables, and the report or export expected after a
   run.
-- **Purpose**: whether this is a proof-of-concept demo, a pilot, or a formal
-  experiment. The intended purpose sets the level of rigor expected across all
-  three plan sections: the depth of scientific justification, the fidelity of
-  the participant-facing design, and the completeness of implementation and
+- **Purpose**: whether this is a proof-of-concept demo, a pilot, a formal
+  experiment, a direct replication, or an adaptation of an existing study. The
+  intended purpose sets the level of rigor expected across all three plan
+  sections: the depth of scientific justification, the fidelity of the
+  participant-facing design, and the completeness of implementation and
   evidence collection.
 
 ### Optional fields
@@ -135,11 +136,12 @@ document explicitly rather than leave blank.
   they take, whether feedback appears, and how progress is communicated.
 - **Response modality**: buttons, keyboard, sliders, text, audio/video recording,
   drawing, chat, synchronous interaction, or another input mode.
-- **Timing and pacing**: display durations, response windows, deliberation
-  windows, playback rules, timeouts, whether participants can replay stimuli,
-  and whether a progress bar or trial counter is shown. For formal experiments,
-  specify every value; for pilots, document which values are defaults and
-  which were measured or drawn from the canonical reference.
+- **Timing and pacing**: per-trial display durations, response windows,
+  deliberation windows, playback rules, timeouts, whether participants can
+  replay stimuli, and whether a progress bar or trial counter is shown. No
+  experiment-wide time limit is assumed unless stated. For formal experiments,
+  specify every value; for pilots, document which values are defaults and which
+  were measured or drawn from the canonical reference.
 - **Assignment and counterbalancing**: randomization, block order, repeated
   stimuli, between-participant condition assignment, group assignment, and role
   assignment.
