@@ -9,7 +9,8 @@ pointing to the local PsyNet asset cache.
 *Actions:*
 - **PsyNetSkills:** Consider adding a reusable minimal PsyNet experiment
   `.gitignore` snippet to the attempt guidance. Confidence: high. Status:
-  considering.
+  completed. Notes: Added minimal launch and packaging ignore entries to the
+  `attempt-challenge` skill.
 
 ## Export paths and source-code prompts
 
