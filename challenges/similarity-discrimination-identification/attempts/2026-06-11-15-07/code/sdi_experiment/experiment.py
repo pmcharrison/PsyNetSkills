@@ -1,14 +1,13 @@
 # pylint: disable=abstract-method,unused-argument
 
-import json
 import math
 import os
 import random
 from datetime import datetime
 from itertools import combinations_with_replacement
-from pathlib import Path
 
 import psynet.experiment
+from markupsafe import Markup
 from psynet.bot import Bot
 from psynet.demography.general import BasicDemography
 from psynet.graphics import Circle, Frame, GraphicPrompt, Text
@@ -18,16 +17,20 @@ from psynet.prescreen import ColorBlindnessTest
 from psynet.timeline import Timeline
 from psynet.trial.static import StaticNode, StaticTrial, StaticTrialMaker
 
-STIMULUS_PATH = Path(__file__).parent / "data" / "stimuli.json"
 FIXATION_SECONDS = 0.6
 STIMULUS_SECONDS = 1.0
-DELAY_SECONDS = 0.6
+DELAY_SECONDS = 0.7
 PROFILE = os.environ.get("PSYNET_PROFILE", "full")
+STIMULI = [{'stimulus_id': 'red', 'label': 'Red', 'dimensions': {'color': {'hex': '#d73027', 'hue_degrees': 5, 'lightness': 48}, 'size': {'radius_px': 24}, 'shape': 'filled_circle'}},
+    {'stimulus_id': 'orange', 'label': 'Orange', 'dimensions': {'color': {'hex': '#fc8d59', 'hue_degrees': 24, 'lightness': 67}, 'size': {'radius_px': 24}, 'shape': 'filled_circle'}},
+    {'stimulus_id': 'yellow', 'label': 'Yellow', 'dimensions': {'color': {'hex': '#fee08b', 'hue_degrees': 50, 'lightness': 77}, 'size': {'radius_px': 24}, 'shape': 'filled_circle'}},
+    {'stimulus_id': 'green', 'label': 'Green', 'dimensions': {'color': {'hex': '#91cf60', 'hue_degrees': 104, 'lightness': 59}, 'size': {'radius_px': 24}, 'shape': 'filled_circle'}},
+    {'stimulus_id': 'blue', 'label': 'Blue', 'dimensions': {'color': {'hex': '#4575b4', 'hue_degrees': 212, 'lightness': 49}, 'size': {'radius_px': 24}, 'shape': 'filled_circle'}},
+    {'stimulus_id': 'purple', 'label': 'Purple', 'dimensions': {'color': {'hex': '#7b3294', 'hue_degrees': 286, 'lightness': 39}, 'size': {'radius_px': 24}, 'shape': 'filled_circle'}}]
 
 
 def load_stimuli():
-    with open(STIMULUS_PATH, encoding="utf-8") as f:
-        return json.load(f)
+    return STIMULI
 
 
 def stimulus_by_id():
@@ -57,6 +60,103 @@ def circle(stimulus, x, y, id_suffix):
             "stroke-width": 1.5,
         },
     )
+
+
+def circle_html(stimulus, label=None):
+    size = stimulus["dimensions"]["size"]["radius_px"] * 2
+    color = stimulus["dimensions"]["color"]["hex"]
+    label_html = f"<span class='sdi-circle-label'>{label}</span>" if label else ""
+    return (
+        "<span class='sdi-circle' "
+        f"style='width:{size}px;height:{size}px;background:{color};'>"
+        f"{label_html}</span>"
+    )
+
+
+def timed_prompt_html(trial_id, instructions, stimulus_html, response_html):
+    root_id = "sdi_" + "".join(ch if ch.isalnum() else "_" for ch in trial_id)
+    delay_ms = int((FIXATION_SECONDS + STIMULUS_SECONDS + DELAY_SECONDS) * 1000)
+    stimulus_ms = int(FIXATION_SECONDS * 1000)
+    blank_ms = int((FIXATION_SECONDS + STIMULUS_SECONDS) * 1000)
+    return f"""
+<div id="{root_id}" class="sdi-task">
+  <p>{instructions}</p>
+  <div class="sdi-stage">
+    <div class="sdi-phase sdi-fixation">+</div>
+    <div class="sdi-phase sdi-stimulus">{stimulus_html}</div>
+    <div class="sdi-phase sdi-blank"></div>
+    <div class="sdi-phase sdi-response">{response_html}</div>
+  </div>
+</div>
+<style>
+  .sdi-stage {{ min-height: 260px; display: flex; align-items: center; justify-content: center; }}
+  .sdi-phase {{ display: none; text-align: center; width: 100%; }}
+  .sdi-fixation {{ font-size: 56px; font-weight: bold; line-height: 260px; }}
+  .sdi-circle {{ border-radius: 50%; border: 2px solid #333; display: inline-flex; align-items: center; justify-content: center; margin: 16px 32px; vertical-align: middle; }}
+  .sdi-circle-label {{ font-weight: bold; color: #111; font-size: 18px; }}
+  .sdi-response-note {{ font-size: 18px; margin-top: 20px; }}
+  .push-button.response {{ visibility: hidden; }}
+</style>
+<script>
+(function() {{
+  function setResponsesVisible(show) {{
+    document.querySelectorAll(".push-button.response, button.response").forEach(function(button) {{
+      button.disabled = !show;
+      button.style.visibility = show ? "visible" : "hidden";
+    }});
+  }}
+  function showPhase(root, name) {{
+    root.querySelectorAll(".sdi-phase").forEach(function(phase) {{ phase.style.display = "none"; }});
+    root.querySelector("." + name).style.display = "block";
+  }}
+  function startSdiTrial() {{
+    var root = document.getElementById("{root_id}");
+    if (!root) return;
+    setResponsesVisible(false);
+    showPhase(root, "sdi-fixation");
+    window.setTimeout(function() {{ showPhase(root, "sdi-stimulus"); }}, {stimulus_ms});
+    window.setTimeout(function() {{ showPhase(root, "sdi-blank"); }}, {blank_ms});
+    window.setTimeout(function() {{
+      showPhase(root, "sdi-response");
+      setResponsesVisible(true);
+      if (window.psynet && psynet.trial && psynet.trial.registerEvent) {{
+        psynet.trial.registerEvent("sdiResponseEnable");
+      }}
+    }}, {delay_ms});
+  }}
+  if (document.readyState === "loading") {{
+    document.addEventListener("DOMContentLoaded", startSdiTrial);
+  }} else {{
+    window.setTimeout(startSdiTrial, 0);
+  }}
+}})();
+</script>
+"""
+
+
+def pair_prompt_html(definition, instructions):
+    stimulus_html = (
+        circle_html(definition["stimulus_a"])
+        + circle_html(definition["stimulus_b"])
+    )
+    return timed_prompt_html(
+        definition["trial_id"],
+        instructions,
+        stimulus_html,
+        "<div class='sdi-response-note'>The circles have disappeared. Answer using the buttons below.</div>",
+    )
+
+
+def identification_prompt_html(definition, instructions):
+    display_html = "".join(
+        circle_html(item["stimulus"], label=item["number"])
+        for item in definition["display_items"]
+    )
+    response_html = (
+        circle_html(definition["probe_stimulus"])
+        + "<div class='sdi-response-note'>Probe: choose the display number that best matches.</div>"
+    )
+    return timed_prompt_html(definition["trial_id"], instructions, display_html, response_html)
 
 
 def numbered_circle(item):
@@ -173,7 +273,7 @@ class ReactionTimePushButtonControl(PushButtonControl):
         click_time = event_time(event_log, {"pushButtonClicked"})
         enable_time = event_time(
             event_log,
-            {"graphicPromptEnableResponse", "responseEnable", "promptEnd", "trialStart"},
+            {"sdiResponseEnable", "graphicPromptEnableResponse", "responseEnable", "promptEnd", "trialStart"},
         )
         reaction_time_sec = None
         if click_time is not None and enable_time is not None:
@@ -205,13 +305,11 @@ class SameDifferentTrial(MetadataTrial):
     time_estimate = FIXATION_SECONDS + STIMULUS_SECONDS + DELAY_SECONDS + 2.0
 
     def show_trial(self, experiment, participant):
-        stimuli = stimulus_by_id()
         return ModularVisualChoicePage(
             label="same_different_trial",
-            text="Decide whether the two circles were identical or different. The circles disappear before you can answer.",
-            frames=pair_frames(
-                stimuli[self.definition["stimulus_a"]["stimulus_id"]],
-                stimuli[self.definition["stimulus_b"]["stimulus_id"]],
+            prompt_html=pair_prompt_html(
+                self.definition,
+                "Decide whether the two circles were identical or different. The circles disappear before you can answer.",
             ),
             choices=["same", "different"],
             labels=["Same", "Different"],
@@ -227,23 +325,21 @@ class SimilarityTrial(MetadataTrial):
     time_estimate = FIXATION_SECONDS + STIMULUS_SECONDS + DELAY_SECONDS + 3.0
 
     def show_trial(self, experiment, participant):
-        stimuli = stimulus_by_id()
         return ModularVisualChoicePage(
             label="similarity_trial",
-            text="Rate how similar the two circles were. The circles disappear before the scale appears.",
-            frames=pair_frames(
-                stimuli[self.definition["stimulus_a"]["stimulus_id"]],
-                stimuli[self.definition["stimulus_b"]["stimulus_id"]],
+            prompt_html=pair_prompt_html(
+                self.definition,
+                "Rate how similar the two circles were. The circles disappear before the scale appears. Use 0 for completely dissimilar and 6 for completely similar.",
             ),
             choices=[str(i) for i in range(7)],
             labels=[
-                "0 Completely Dissimilar",
+                "0 Dissimilar",
                 "1",
                 "2",
                 "3",
                 "4",
                 "5",
-                "6 Completely Similar",
+                "6 Similar",
             ],
             arrange_vertically=False,
             bot_response=str(self.definition["simulated_rating"]),
@@ -260,8 +356,10 @@ class IdentificationTrial(MetadataTrial):
     def show_trial(self, experiment, participant):
         return ModularVisualChoicePage(
             label="identification_trial",
-            text="Remember the numbered display. After it disappears, choose the display number most similar to the probe.",
-            frames=identification_frames(self.definition),
+            prompt_html=identification_prompt_html(
+                self.definition,
+                "Remember the numbered display. After it disappears, choose the display number most similar to the probe.",
+            ),
             choices=[str(item["number"]) for item in self.definition["display_items"]],
             labels=[f"Item {item['number']}" for item in self.definition["display_items"]],
             arrange_vertically=False,
@@ -286,8 +384,7 @@ class ModularVisualChoicePage(ModularPage):
     def __init__(
         self,
         label,
-        text,
-        frames,
+        prompt_html,
         choices,
         labels,
         bot_response,
@@ -296,14 +393,7 @@ class ModularVisualChoicePage(ModularPage):
     ):
         super().__init__(
             label,
-            prompt=GraphicPrompt(
-                text=text,
-                dimensions=[100, 100],
-                viewport_width=0.55,
-                frames=frames,
-                prevent_control_response=True,
-                prevent_control_submit=True,
-            ),
+            prompt=Markup(prompt_html),
             control=ReactionTimePushButtonControl(
                 choices=choices,
                 labels=labels,
@@ -349,7 +439,9 @@ def same_different_nodes():
                 }
             )
         )
-    return minimal(nodes, 4)
+    if PROFILE == "minimal":
+        return [nodes[0], nodes[-1]]
+    return nodes
 
 
 def similarity_nodes():
@@ -373,7 +465,9 @@ def similarity_nodes():
                 }
             )
         )
-    return minimal(nodes, 4)
+    if PROFILE == "minimal":
+        return [nodes[0], nodes[-1]]
+    return nodes
 
 
 def identification_nodes():
@@ -422,7 +516,7 @@ def identification_nodes():
                         }
                     )
                 )
-    return minimal(nodes, 3)
+    return minimal(nodes, 2)
 
 
 class Exp(psynet.experiment.Experiment):
@@ -466,7 +560,10 @@ class Exp(psynet.experiment.Experiment):
             allow_repeated_nodes=False,
         ),
         InfoPage("Next you will complete a brief Ishihara-style color-vision check.", time_estimate=4),
-        ColorBlindnessTest(),
+        ColorBlindnessTest(
+            hide_after=2.0 if PROFILE == "minimal" else 3.0,
+            performance_threshold=0 if PROFILE == "minimal" else 4,
+        ),
         InfoPage("Finally, please answer a short demographics questionnaire.", time_estimate=4),
         BasicDemography(),
         InfoPage("Thank you for participating.", time_estimate=3),

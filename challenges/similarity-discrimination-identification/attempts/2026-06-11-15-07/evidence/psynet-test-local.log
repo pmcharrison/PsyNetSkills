@@ -1,0 +1,1322 @@
+============================= test session starts ==============================
+platform linux -- Python 3.13.13, pytest-9.0.3, pluggy-1.6.0
+rootdir: /workspace/challenges/similarity-discrimination-identification/attempts/2026-06-11-15-07/code/sdi_experiment
+configfile: pytest.ini
+plugins: anyio-4.13.0, dallinger-12.2.0, Faker-40.15.0, psynet-13.3.0a0, dependency-0.6.0, mock-3.14.1, test-groups-1.2.1, timeout-2.4.0
+collected 1 item
+
+test.py Launching experiment in directory '/workspace/challenges/similarity-discrimination-identification/attempts/2026-06-11-15-07/code/sdi_experiment'...
+
+❯❯ Experiment directory size: 0.047 MB.
+Creating networks:   0%|                                 | 0/21 [00:00<?, ?it/s]Creating networks: 100%|██████████████████████| 21/21 [00:00<00:00, 7466.34it/s]
+Staging assets:   0%|                                    | 0/21 [00:00<?, ?it/s]Staging assets: 100%|███████████████████████| 21/21 [00:00<00:00, 727937.06it/s]
+Creating networks:   0%|                                 | 0/21 [00:00<?, ?it/s]Creating networks: 100%|██████████████████████| 21/21 [00:00<00:00, 8694.15it/s]
+Staging assets:   0%|                                    | 0/21 [00:00<?, ?it/s]Staging assets: 100%|██████████████████████| 21/21 [00:00<00:00, 1061209.45it/s]
+Creating networks:   0%|                                 | 0/12 [00:00<?, ?it/s]Creating networks: 100%|██████████████████████| 12/12 [00:00<00:00, 8229.50it/s]
+Staging assets:   0%|                                    | 0/12 [00:00<?, ?it/s]Staging assets: 100%|███████████████████████| 12/12 [00:00<00:00, 671088.64it/s]
+Creating networks:   0%|                                  | 0/6 [00:00<?, ?it/s]Creating networks: 100%|████████████████████████| 6/6 [00:00<00:00, 5879.87it/s]
+Staging assets:   0%|                                     | 0/6 [00:00<?, ?it/s]Staging assets: 100%|██████████████████████████| 6/6 [00:00<00:00, 44938.97it/s]
+Generating/uploading assets...:   0%|                     | 0/6 [00:00<?, ?it/s]Generating/uploading assets...: 100%|███████████| 6/6 [00:00<00:00, 4074.78it/s]
+✓ config.txt is PRESENT
+✓ experiment.py is PRESENT
+✓ Size OK at 0MB (max is 256MB)
+✓ experiment.py defines 1 experiment
+✓ no file conflicts
+
+
+❯❯ Experiment UID: a7f73255-fed3-d586-a1d0-60c2323dd39c
+Deployment temp directory: /tmp/tmpzv77l3vu/a7f73255-fed3-d586-a1d0-60c2323dd39c
+
+❯❯ Starting up the Heroku Local server...
+4:16:34 PM web.1    |  [2026-06-11 16:16:34 +0000] [30947] [INFO] Starting gunicorn 25.3.0
+
+❯❯ Server is running on http://localhost:5000. Press Ctrl+C to exit.
+
+❯❯ Launching the experiment...
+
+❯❯ Initial recruitment list:
+http://localhost:5000/ad?recruiter=hotair&assignmentId=4UNNRI&hitId=M0ID02&workerId=FY2DBM&mode=debug
+Additional details:
+
+Single recruitment link: http://localhost:5000/ad?recruiter=hotair&generate_tokens=1&mode=debug
+
+Recruitment requests will open browser windows automatically.
+
+❯❯ Experiment dashboard: http://localhost:5000/dashboard/
+
+❯❯ Dashboard user: test_admin password: test_password
+
+❯❯ Monitoring the Heroku Local server for recruitment or completion...
+4:16:34 PM web.1    |  [2026-06-11 16:16:34 +0000] [30947] [INFO] Listening at: http://0.0.0.0:5000 (30947)
+4:16:34 PM web.1    |  [2026-06-11 16:16:34 +0000] [30947] [INFO] Using worker: gevent
+4:16:34 PM web.1    |  2026-06-11 16:16:34,036 Ready.
+4:16:34 PM web.1    |  [2026-06-11 16:16:34 +0000] [30965] [INFO] Booting worker with pid: 30965
+4:16:34 PM web.1    |  2026-06-11 16:16:34,093 A worker restarted (new pid: 30965). Please check the logs to find out why ⚠️
+4:16:34 PM web.1    |  [2026-06-11 16:16:34 +0000] [30947] [INFO] Control socket listening at /home/ubuntu/.gunicorn/gunicorn.ctl
+4:16:35 PM web.1    |  2026-06-11 16:16:35,302 Launched experiment "Similarity discrimination identification" (`53d98c01-c841-4e32-9787-c0431fdbcb07`) locally
+4:16:35 PM web.1    |  2026-06-11 16:16:35,302 [1mExperiment dashboard[0m: http://localhost:5000/dashboard
+4:16:35 PM web.1    |  Username: `test_admin`
+4:16:35 PM web.1    |  Password: `test_password`
+4:16:35 PM web.1    |  2026-06-11 16:16:35,302 Experiment launch complete!
+4:16:35 PM web.1    |  2026-06-11 16:16:35,303 New participant requested: http://localhost:5000/ad?recruiter=hotair&assignmentId=4UNNRI&hitId=M0ID02&workerId=FY2DBM&mode=debug
+
+❯❯ new recruitment request!
+
+❯❯ New participant requested:: http://localhost:5000/ad?recruiter=hotair&assignmentId=4UNNRI&hitId=M0ID02&workerId=FY2DBM&mode=debug
+4:16:35 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:35 +0000] "POST /launch HTTP/1.1" 200 357 "-" "python-requests/2.33.1"
+.4:16:35 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:35 +0000] "GET /timeline?unique_id=946e1de4-040a-4aba-852c-48178dff7929%3A3973054d-f9c5-410e-ae58-16b143cde004 HTTP/1.1" 200 73894 "-" "python-requests/2.33.1"
+4:16:35 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:35 +0000] "GET /dashboard/login HTTP/1.1" 200 5820 "-" "python-requests/2.33.1"
+4:16:35 PM web.1    |  /home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/flask_login/login_manager.py:488: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+4:16:35 PM web.1    |    expires = datetime.utcnow() + duration
+4:16:35 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:35 +0000] "POST /dashboard/login HTTP/1.1" 302 219 "-" "python-requests/2.33.1"
+4:16:35 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:35 +0000] "GET /dashboard/index HTTP/1.1" 200 13047 "-" "python-requests/2.33.1"
+4:16:35 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:35 +0000] "GET /dashboard/index HTTP/1.1" 200 12917 "-" "python-requests/2.33.1"
+4:16:35 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:35 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+4:16:35 PM web.1    |  2026-06-11 16:16:35,671 Received a response from participant 1 on page 57dbfe4f-dd4c-175f-f49a-14128be65634.
+4:16:35 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:35 +0000] "POST /response HTTP/1.1" 200 296 "-" "python-requests/2.33.1"
+4:16:35 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:35 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+4:16:35 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:35 +0000] "GET /timeline?unique_id=946e1de4-040a-4aba-852c-48178dff7929%3A3973054d-f9c5-410e-ae58-16b143cde004 HTTP/1.1" 200 73855 "-" "python-requests/2.33.1"
+4:16:35 PM web.1    |  2026-06-11 16:16:35,793 Received a response from participant 1 on page 130d1210-0ae6-4090-3bf3-2e503c644246.
+4:16:35 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:35 +0000] "POST /response HTTP/1.1" 200 296 "-" "python-requests/2.33.1"
+4:16:35 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:35 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+4:16:35 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:35 +0000] "GET /timeline?unique_id=946e1de4-040a-4aba-852c-48178dff7929%3A3973054d-f9c5-410e-ae58-16b143cde004 HTTP/1.1" 200 73802 "-" "python-requests/2.33.1"
+4:16:35 PM web.1    |  2026-06-11 16:16:35,911 Received a response from participant 1 on page 5b605139-bd63-c8b0-8016-f656722d2d75.
+4:16:35 PM web.1    |  2026-06-11 16:16:35,933 Preparing trial for participant 1.
+4:16:35 PM web.1    |  2026-06-11 16:16:35,933 Looking for networks for participant 1.
+4:16:35 PM web.1    |  2026-06-11 16:16:35,946 21 remain after applying custom network filters.
+4:16:35 PM web.1    |  2026-06-11 16:16:35,946 0 out of 21 networks are awaiting async processes (or have nodes awaiting async processes).
+4:16:35 PM web.1    |  2026-06-11 16:16:35,947 Task 'find_networks' took 0.013 s
+4:16:35 PM web.1    |  2026-06-11 16:16:35,947 Outcome: found 1 candidate network(s) for participant 1.
+4:16:35 PM web.1    |  2026-06-11 16:16:35,947 Selected node 15 from network 15 to give to participant 1.
+4:16:35 PM web.1    |  2026-06-11 16:16:35,955 Task 'prepare_trial' took 0.022 s
+4:16:35 PM web.1    |  2026-06-11 16:16:35,955 Task '_prepare_trial' took 0.022 s
+4:16:35 PM web.1    |  2026-06-11 16:16:35,959 Evaluating while_loop (Waiting for trial) condition: result = False
+4:16:35 PM web.1    |  2026-06-11 16:16:35,960 Evaluating while_loop (same_different__trial_loop) condition: result = True
+4:16:35 PM web.1    |  2026-06-11 16:16:35,961 Task 'advance_page' took 0.046 s
+4:16:35 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:35 +0000] "POST /response HTTP/1.1" 200 311 "-" "python-requests/2.33.1"
+4:16:35 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:35 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+4:16:36 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:36 +0000] "GET /timeline?unique_id=946e1de4-040a-4aba-852c-48178dff7929%3A3973054d-f9c5-410e-ae58-16b143cde004 HTTP/1.1" 200 76702 "-" "python-requests/2.33.1"
+4:16:36 PM web.1    |  2026-06-11 16:16:36,087 Received a response from participant 1 on page be7c079f-e369-e027-ee7b-648536539785.
+4:16:36 PM web.1    |  2026-06-11 16:16:36,093 Calling _finalize_trial.
+4:16:36 PM web.1    |  2026-06-11 16:16:36,099 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+4:16:36 PM web.1    |  2026-06-11 16:16:36,101 Allocating a performance reward of $0.00 to participant 1 for trial 1.
+4:16:36 PM web.1    |  2026-06-11 16:16:36,110 Warning: Trial 1 received an unexpected amount of time credit (expected = 4.3 seconds; actual = 4.300000000000001 seconds). Consider setting the trial's `time_estimate` parameter to 4.300000000000001.You can disable this warning message by setting `Trial.check_time_credit_received = False`.
+4:16:36 PM web.1    |  2026-06-11 16:16:36,110 Preparing trial for participant 1.
+4:16:36 PM web.1    |  2026-06-11 16:16:36,110 Looking for networks for participant 1.
+4:16:36 PM web.1    |  2026-06-11 16:16:36,118 20 remain after applying custom network filters.
+4:16:36 PM web.1    |  2026-06-11 16:16:36,119 0 out of 20 networks are awaiting async processes (or have nodes awaiting async processes).
+4:16:36 PM web.1    |  2026-06-11 16:16:36,119 Outcome: found 1 candidate network(s) for participant 1.
+4:16:36 PM web.1    |  2026-06-11 16:16:36,119 Selected node 12 from network 12 to give to participant 1.
+4:16:36 PM web.1    |  2026-06-11 16:16:36,124 Task 'prepare_trial' took 0.014 s
+4:16:36 PM web.1    |  2026-06-11 16:16:36,124 Task '_prepare_trial' took 0.014 s
+4:16:36 PM web.1    |  2026-06-11 16:16:36,128 Evaluating while_loop (Waiting for trial) condition: result = False
+4:16:36 PM web.1    |  2026-06-11 16:16:36,128 Evaluating while_loop (same_different__trial_loop) condition: result = True
+4:16:36 PM web.1    |  2026-06-11 16:16:36,129 Task 'advance_page' took 0.035 s
+4:16:36 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:36 +0000] "POST /response HTTP/1.1" 200 311 "-" "python-requests/2.33.1"
+4:16:36 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:36 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+4:16:36 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:36 +0000] "GET /timeline?unique_id=946e1de4-040a-4aba-852c-48178dff7929%3A3973054d-f9c5-410e-ae58-16b143cde004 HTTP/1.1" 200 76702 "-" "python-requests/2.33.1"
+4:16:36 PM web.1    |  2026-06-11 16:16:36,251 Received a response from participant 1 on page 12a25648-116c-c20f-a15f-614693fc7016.
+4:16:36 PM web.1    |  2026-06-11 16:16:36,257 Calling _finalize_trial.
+4:16:36 PM web.1    |  2026-06-11 16:16:36,261 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+4:16:36 PM web.1    |  2026-06-11 16:16:36,262 Allocating a performance reward of $0.00 to participant 1 for trial 2.
+4:16:36 PM web.1    |  2026-06-11 16:16:36,266 Warning: Trial 2 received an unexpected amount of time credit (expected = 4.3 seconds; actual = 4.300000000000001 seconds). Consider setting the trial's `time_estimate` parameter to 4.300000000000001.You can disable this warning message by setting `Trial.check_time_credit_received = False`.
+4:16:36 PM web.1    |  2026-06-11 16:16:36,266 Preparing trial for participant 1.
+4:16:36 PM web.1    |  2026-06-11 16:16:36,266 Looking for networks for participant 1.
+4:16:36 PM web.1    |  2026-06-11 16:16:36,273 19 remain after applying custom network filters.
+4:16:36 PM web.1    |  2026-06-11 16:16:36,273 0 out of 19 networks are awaiting async processes (or have nodes awaiting async processes).
+4:16:36 PM web.1    |  2026-06-11 16:16:36,274 Outcome: found 1 candidate network(s) for participant 1.
+4:16:36 PM web.1    |  2026-06-11 16:16:36,274 Selected node 9 from network 9 to give to participant 1.
+4:16:36 PM web.1    |  2026-06-11 16:16:36,278 Task 'prepare_trial' took 0.012 s
+4:16:36 PM web.1    |  2026-06-11 16:16:36,278 Task '_prepare_trial' took 0.012 s
+4:16:36 PM web.1    |  2026-06-11 16:16:36,283 Evaluating while_loop (Waiting for trial) condition: result = False
+4:16:36 PM web.1    |  2026-06-11 16:16:36,283 Evaluating while_loop (same_different__trial_loop) condition: result = True
+4:16:36 PM web.1    |  2026-06-11 16:16:36,284 Task 'advance_page' took 0.027 s
+4:16:36 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:36 +0000] "POST /response HTTP/1.1" 200 311 "-" "python-requests/2.33.1"
+4:16:36 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:36 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+4:16:36 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:36 +0000] "GET /timeline?unique_id=946e1de4-040a-4aba-852c-48178dff7929%3A3973054d-f9c5-410e-ae58-16b143cde004 HTTP/1.1" 200 76694 "-" "python-requests/2.33.1"
+4:16:36 PM web.1    |  2026-06-11 16:16:36,403 Received a response from participant 1 on page c8e07fa6-6e0a-4337-6ac3-35dc45aef1e9.
+4:16:36 PM web.1    |  2026-06-11 16:16:36,408 Calling _finalize_trial.
+4:16:36 PM web.1    |  2026-06-11 16:16:36,411 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+4:16:36 PM web.1    |  2026-06-11 16:16:36,412 Allocating a performance reward of $0.00 to participant 1 for trial 3.
+4:16:36 PM web.1    |  2026-06-11 16:16:36,415 Warning: Trial 3 received an unexpected amount of time credit (expected = 4.3 seconds; actual = 4.300000000000001 seconds). Consider setting the trial's `time_estimate` parameter to 4.300000000000001.You can disable this warning message by setting `Trial.check_time_credit_received = False`.
+4:16:36 PM web.1    |  2026-06-11 16:16:36,416 Preparing trial for participant 1.
+4:16:36 PM web.1    |  2026-06-11 16:16:36,416 Looking for networks for participant 1.
+4:16:36 PM web.1    |  2026-06-11 16:16:36,423 18 remain after applying custom network filters.
+4:16:36 PM web.1    |  2026-06-11 16:16:36,423 0 out of 18 networks are awaiting async processes (or have nodes awaiting async processes).
+4:16:36 PM web.1    |  2026-06-11 16:16:36,423 Outcome: found 1 candidate network(s) for participant 1.
+4:16:36 PM web.1    |  2026-06-11 16:16:36,423 Selected node 13 from network 13 to give to participant 1.
+4:16:36 PM web.1    |  2026-06-11 16:16:36,427 Task 'prepare_trial' took 0.012 s
+4:16:36 PM web.1    |  2026-06-11 16:16:36,427 Task '_prepare_trial' took 0.012 s
+4:16:36 PM web.1    |  2026-06-11 16:16:36,432 Evaluating while_loop (Waiting for trial) condition: result = False
+4:16:36 PM web.1    |  2026-06-11 16:16:36,432 Evaluating while_loop (same_different__trial_loop) condition: result = True
+4:16:36 PM web.1    |  2026-06-11 16:16:36,433 Task 'advance_page' took 0.025 s
+4:16:36 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:36 +0000] "POST /response HTTP/1.1" 200 311 "-" "python-requests/2.33.1"
+4:16:36 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:36 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+4:16:36 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:36 +0000] "GET /timeline?unique_id=946e1de4-040a-4aba-852c-48178dff7929%3A3973054d-f9c5-410e-ae58-16b143cde004 HTTP/1.1" 200 76700 "-" "python-requests/2.33.1"
+4:16:36 PM web.1    |  2026-06-11 16:16:36,556 Received a response from participant 1 on page 68428fb3-5e91-583a-e4be-bad7d67b8414.
+4:16:36 PM web.1    |  2026-06-11 16:16:36,562 Calling _finalize_trial.
+4:16:36 PM web.1    |  2026-06-11 16:16:36,566 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+4:16:36 PM web.1    |  2026-06-11 16:16:36,567 Allocating a performance reward of $0.00 to participant 1 for trial 4.
+4:16:36 PM web.1    |  2026-06-11 16:16:36,571 Warning: Trial 4 received an unexpected amount of time credit (expected = 4.3 seconds; actual = 4.300000000000001 seconds). Consider setting the trial's `time_estimate` parameter to 4.300000000000001.You can disable this warning message by setting `Trial.check_time_credit_received = False`.
+4:16:36 PM web.1    |  2026-06-11 16:16:36,571 Preparing trial for participant 1.
+4:16:36 PM web.1    |  2026-06-11 16:16:36,571 Looking for networks for participant 1.
+4:16:36 PM web.1    |  2026-06-11 16:16:36,578 17 remain after applying custom network filters.
+4:16:36 PM web.1    |  2026-06-11 16:16:36,578 0 out of 17 networks are awaiting async processes (or have nodes awaiting async processes).
+4:16:36 PM web.1    |  2026-06-11 16:16:36,578 Outcome: found 1 candidate network(s) for participant 1.
+4:16:36 PM web.1    |  2026-06-11 16:16:36,578 Selected node 21 from network 21 to give to participant 1.
+4:16:36 PM web.1    |  2026-06-11 16:16:36,583 Task 'prepare_trial' took 0.012 s
+4:16:36 PM web.1    |  2026-06-11 16:16:36,583 Task '_prepare_trial' took 0.012 s
+4:16:36 PM web.1    |  2026-06-11 16:16:36,587 Evaluating while_loop (Waiting for trial) condition: result = False
+4:16:36 PM web.1    |  2026-06-11 16:16:36,588 Evaluating while_loop (same_different__trial_loop) condition: result = True
+4:16:36 PM web.1    |  2026-06-11 16:16:36,588 Task 'advance_page' took 0.026 s
+4:16:36 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:36 +0000] "POST /response HTTP/1.1" 200 311 "-" "python-requests/2.33.1"
+4:16:36 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:36 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+4:16:36 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:36 +0000] "GET /timeline?unique_id=946e1de4-040a-4aba-852c-48178dff7929%3A3973054d-f9c5-410e-ae58-16b143cde004 HTTP/1.1" 200 76698 "-" "python-requests/2.33.1"
+4:16:36 PM web.1    |  2026-06-11 16:16:36,708 Received a response from participant 1 on page df6a5258-c698-206e-41c2-43534e4d2da3.
+4:16:36 PM web.1    |  2026-06-11 16:16:36,715 Calling _finalize_trial.
+4:16:36 PM web.1    |  2026-06-11 16:16:36,717 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+4:16:36 PM web.1    |  2026-06-11 16:16:36,718 Allocating a performance reward of $0.00 to participant 1 for trial 5.
+4:16:36 PM web.1    |  2026-06-11 16:16:36,722 Warning: Trial 5 received an unexpected amount of time credit (expected = 4.3 seconds; actual = 4.299999999999997 seconds). Consider setting the trial's `time_estimate` parameter to 4.299999999999997.You can disable this warning message by setting `Trial.check_time_credit_received = False`.
+4:16:36 PM web.1    |  2026-06-11 16:16:36,723 Preparing trial for participant 1.
+4:16:36 PM web.1    |  2026-06-11 16:16:36,723 Looking for networks for participant 1.
+4:16:36 PM web.1    |  2026-06-11 16:16:36,730 16 remain after applying custom network filters.
+4:16:36 PM web.1    |  2026-06-11 16:16:36,730 0 out of 16 networks are awaiting async processes (or have nodes awaiting async processes).
+4:16:36 PM web.1    |  2026-06-11 16:16:36,730 Outcome: found 1 candidate network(s) for participant 1.
+4:16:36 PM web.1    |  2026-06-11 16:16:36,730 Selected node 19 from network 19 to give to participant 1.
+4:16:36 PM web.1    |  2026-06-11 16:16:36,734 Task 'prepare_trial' took 0.011 s
+4:16:36 PM web.1    |  2026-06-11 16:16:36,734 Task '_prepare_trial' took 0.011 s
+4:16:36 PM web.1    |  2026-06-11 16:16:36,737 Evaluating while_loop (Waiting for trial) condition: result = False
+4:16:36 PM web.1    |  2026-06-11 16:16:36,738 Evaluating while_loop (same_different__trial_loop) condition: result = True
+4:16:36 PM web.1    |  2026-06-11 16:16:36,738 Task 'advance_page' took 0.024 s
+4:16:36 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:36 +0000] "POST /response HTTP/1.1" 200 311 "-" "python-requests/2.33.1"
+4:16:36 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:36 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+4:16:36 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:36 +0000] "GET /timeline?unique_id=946e1de4-040a-4aba-852c-48178dff7929%3A3973054d-f9c5-410e-ae58-16b143cde004 HTTP/1.1" 200 76699 "-" "python-requests/2.33.1"
+4:16:36 PM web.1    |  2026-06-11 16:16:36,863 Received a response from participant 1 on page 81b3fc62-46cd-8199-1b8f-4d15000d2f71.
+4:16:36 PM web.1    |  2026-06-11 16:16:36,869 Calling _finalize_trial.
+4:16:36 PM web.1    |  2026-06-11 16:16:36,873 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+4:16:36 PM web.1    |  2026-06-11 16:16:36,875 Allocating a performance reward of $0.00 to participant 1 for trial 6.
+4:16:36 PM web.1    |  2026-06-11 16:16:36,880 Warning: Trial 6 received an unexpected amount of time credit (expected = 4.3 seconds; actual = 4.299999999999997 seconds). Consider setting the trial's `time_estimate` parameter to 4.299999999999997.You can disable this warning message by setting `Trial.check_time_credit_received = False`.
+4:16:36 PM web.1    |  2026-06-11 16:16:36,880 Preparing trial for participant 1.
+4:16:36 PM web.1    |  2026-06-11 16:16:36,880 Looking for networks for participant 1.
+4:16:36 PM web.1    |  2026-06-11 16:16:36,888 15 remain after applying custom network filters.
+4:16:36 PM web.1    |  2026-06-11 16:16:36,888 0 out of 15 networks are awaiting async processes (or have nodes awaiting async processes).
+4:16:36 PM web.1    |  2026-06-11 16:16:36,888 Outcome: found 1 candidate network(s) for participant 1.
+4:16:36 PM web.1    |  2026-06-11 16:16:36,888 Selected node 14 from network 14 to give to participant 1.
+4:16:36 PM web.1    |  2026-06-11 16:16:36,893 Task 'prepare_trial' took 0.013 s
+4:16:36 PM web.1    |  2026-06-11 16:16:36,893 Task '_prepare_trial' took 0.013 s
+4:16:36 PM web.1    |  2026-06-11 16:16:36,898 Evaluating while_loop (Waiting for trial) condition: result = False
+4:16:36 PM web.1    |  2026-06-11 16:16:36,898 Evaluating while_loop (same_different__trial_loop) condition: result = True
+4:16:36 PM web.1    |  2026-06-11 16:16:36,899 Task 'advance_page' took 0.030 s
+4:16:36 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:36 +0000] "POST /response HTTP/1.1" 200 311 "-" "python-requests/2.33.1"
+4:16:36 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:36 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+4:16:37 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:37 +0000] "GET /timeline?unique_id=946e1de4-040a-4aba-852c-48178dff7929%3A3973054d-f9c5-410e-ae58-16b143cde004 HTTP/1.1" 200 76701 "-" "python-requests/2.33.1"
+4:16:37 PM web.1    |  2026-06-11 16:16:37,023 Received a response from participant 1 on page 516be10e-7714-d24b-7efb-45b64a86f1e4.
+4:16:37 PM web.1    |  2026-06-11 16:16:37,029 Calling _finalize_trial.
+4:16:37 PM web.1    |  2026-06-11 16:16:37,033 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+4:16:37 PM web.1    |  2026-06-11 16:16:37,034 Allocating a performance reward of $0.00 to participant 1 for trial 7.
+4:16:37 PM web.1    |  2026-06-11 16:16:37,038 Warning: Trial 7 received an unexpected amount of time credit (expected = 4.3 seconds; actual = 4.299999999999997 seconds). Consider setting the trial's `time_estimate` parameter to 4.299999999999997.You can disable this warning message by setting `Trial.check_time_credit_received = False`.
+4:16:37 PM web.1    |  2026-06-11 16:16:37,039 Preparing trial for participant 1.
+4:16:37 PM web.1    |  2026-06-11 16:16:37,039 Looking for networks for participant 1.
+4:16:37 PM web.1    |  2026-06-11 16:16:37,046 14 remain after applying custom network filters.
+4:16:37 PM web.1    |  2026-06-11 16:16:37,046 0 out of 14 networks are awaiting async processes (or have nodes awaiting async processes).
+4:16:37 PM web.1    |  2026-06-11 16:16:37,046 Outcome: found 1 candidate network(s) for participant 1.
+4:16:37 PM web.1    |  2026-06-11 16:16:37,046 Selected node 5 from network 5 to give to participant 1.
+4:16:37 PM web.1    |  2026-06-11 16:16:37,051 Task 'prepare_trial' took 0.012 s
+4:16:37 PM web.1    |  2026-06-11 16:16:37,051 Task '_prepare_trial' took 0.012 s
+4:16:37 PM web.1    |  2026-06-11 16:16:37,055 Evaluating while_loop (Waiting for trial) condition: result = False
+4:16:37 PM web.1    |  2026-06-11 16:16:37,055 Evaluating while_loop (same_different__trial_loop) condition: result = True
+4:16:37 PM web.1    |  2026-06-11 16:16:37,056 Task 'advance_page' took 0.028 s
+4:16:37 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:37 +0000] "POST /response HTTP/1.1" 200 311 "-" "python-requests/2.33.1"
+4:16:37 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:37 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+4:16:37 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:37 +0000] "GET /timeline?unique_id=946e1de4-040a-4aba-852c-48178dff7929%3A3973054d-f9c5-410e-ae58-16b143cde004 HTTP/1.1" 200 76687 "-" "python-requests/2.33.1"
+4:16:37 PM web.1    |  2026-06-11 16:16:37,179 Received a response from participant 1 on page e91bf331-9bb7-836f-16af-0dbb21965ee3.
+4:16:37 PM web.1    |  2026-06-11 16:16:37,185 Calling _finalize_trial.
+4:16:37 PM web.1    |  2026-06-11 16:16:37,189 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+4:16:37 PM web.1    |  2026-06-11 16:16:37,191 Allocating a performance reward of $0.00 to participant 1 for trial 8.
+4:16:37 PM web.1    |  2026-06-11 16:16:37,196 Warning: Trial 8 received an unexpected amount of time credit (expected = 4.3 seconds; actual = 4.299999999999997 seconds). Consider setting the trial's `time_estimate` parameter to 4.299999999999997.You can disable this warning message by setting `Trial.check_time_credit_received = False`.
+4:16:37 PM web.1    |  2026-06-11 16:16:37,197 Preparing trial for participant 1.
+4:16:37 PM web.1    |  2026-06-11 16:16:37,197 Looking for networks for participant 1.
+4:16:37 PM web.1    |  2026-06-11 16:16:37,204 13 remain after applying custom network filters.
+4:16:37 PM web.1    |  2026-06-11 16:16:37,205 0 out of 13 networks are awaiting async processes (or have nodes awaiting async processes).
+4:16:37 PM web.1    |  2026-06-11 16:16:37,205 Outcome: found 1 candidate network(s) for participant 1.
+4:16:37 PM web.1    |  2026-06-11 16:16:37,205 Selected node 2 from network 2 to give to participant 1.
+4:16:37 PM web.1    |  2026-06-11 16:16:37,210 Task 'prepare_trial' took 0.013 s
+4:16:37 PM web.1    |  2026-06-11 16:16:37,210 Task '_prepare_trial' took 0.013 s
+4:16:37 PM web.1    |  2026-06-11 16:16:37,214 Evaluating while_loop (Waiting for trial) condition: result = False
+4:16:37 PM web.1    |  2026-06-11 16:16:37,214 Evaluating while_loop (same_different__trial_loop) condition: result = True
+4:16:37 PM web.1    |  2026-06-11 16:16:37,215 Task 'advance_page' took 0.030 s
+4:16:37 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:37 +0000] "POST /response HTTP/1.1" 200 311 "-" "python-requests/2.33.1"
+4:16:37 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:37 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+4:16:37 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:37 +0000] "GET /timeline?unique_id=946e1de4-040a-4aba-852c-48178dff7929%3A3973054d-f9c5-410e-ae58-16b143cde004 HTTP/1.1" 200 76691 "-" "python-requests/2.33.1"
+4:16:37 PM web.1    |  2026-06-11 16:16:37,338 Received a response from participant 1 on page a6cf5e97-de54-545f-7f5f-4c1eff55cee9.
+4:16:37 PM web.1    |  2026-06-11 16:16:37,344 Calling _finalize_trial.
+4:16:37 PM web.1    |  2026-06-11 16:16:37,348 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+4:16:37 PM web.1    |  2026-06-11 16:16:37,349 Allocating a performance reward of $0.00 to participant 1 for trial 9.
+4:16:37 PM web.1    |  2026-06-11 16:16:37,353 Warning: Trial 9 received an unexpected amount of time credit (expected = 4.3 seconds; actual = 4.299999999999997 seconds). Consider setting the trial's `time_estimate` parameter to 4.299999999999997.You can disable this warning message by setting `Trial.check_time_credit_received = False`.
+4:16:37 PM web.1    |  2026-06-11 16:16:37,354 Preparing trial for participant 1.
+4:16:37 PM web.1    |  2026-06-11 16:16:37,354 Looking for networks for participant 1.
+4:16:37 PM web.1    |  2026-06-11 16:16:37,361 12 remain after applying custom network filters.
+4:16:37 PM web.1    |  2026-06-11 16:16:37,362 0 out of 12 networks are awaiting async processes (or have nodes awaiting async processes).
+4:16:37 PM web.1    |  2026-06-11 16:16:37,362 Outcome: found 1 candidate network(s) for participant 1.
+4:16:37 PM web.1    |  2026-06-11 16:16:37,362 Selected node 10 from network 10 to give to participant 1.
+4:16:37 PM web.1    |  2026-06-11 16:16:37,367 Task 'prepare_trial' took 0.013 s
+4:16:37 PM web.1    |  2026-06-11 16:16:37,367 Task '_prepare_trial' took 0.013 s
+4:16:37 PM web.1    |  2026-06-11 16:16:37,371 Evaluating while_loop (Waiting for trial) condition: result = False
+4:16:37 PM web.1    |  2026-06-11 16:16:37,372 Evaluating while_loop (same_different__trial_loop) condition: result = True
+4:16:37 PM web.1    |  2026-06-11 16:16:37,372 Task 'advance_page' took 0.028 s
+4:16:37 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:37 +0000] "POST /response HTTP/1.1" 200 311 "-" "python-requests/2.33.1"
+4:16:37 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:37 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+4:16:37 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:37 +0000] "GET /timeline?unique_id=946e1de4-040a-4aba-852c-48178dff7929%3A3973054d-f9c5-410e-ae58-16b143cde004 HTTP/1.1" 200 76695 "-" "python-requests/2.33.1"
+4:16:37 PM web.1    |  2026-06-11 16:16:37,498 Received a response from participant 1 on page 2a3afb61-08df-938f-a660-07c0d52a4c6a.
+4:16:37 PM web.1    |  2026-06-11 16:16:37,504 Calling _finalize_trial.
+4:16:37 PM web.1    |  2026-06-11 16:16:37,508 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+4:16:37 PM web.1    |  2026-06-11 16:16:37,510 Allocating a performance reward of $0.00 to participant 1 for trial 10.
+4:16:37 PM web.1    |  2026-06-11 16:16:37,514 Warning: Trial 10 received an unexpected amount of time credit (expected = 4.3 seconds; actual = 4.299999999999997 seconds). Consider setting the trial's `time_estimate` parameter to 4.299999999999997.You can disable this warning message by setting `Trial.check_time_credit_received = False`.
+4:16:37 PM web.1    |  2026-06-11 16:16:37,515 Preparing trial for participant 1.
+4:16:37 PM web.1    |  2026-06-11 16:16:37,515 Looking for networks for participant 1.
+4:16:37 PM web.1    |  2026-06-11 16:16:37,521 11 remain after applying custom network filters.
+4:16:37 PM web.1    |  2026-06-11 16:16:37,522 0 out of 11 networks are awaiting async processes (or have nodes awaiting async processes).
+4:16:37 PM web.1    |  2026-06-11 16:16:37,522 Outcome: found 1 candidate network(s) for participant 1.
+4:16:37 PM web.1    |  2026-06-11 16:16:37,522 Selected node 1 from network 1 to give to participant 1.
+4:16:37 PM web.1    |  2026-06-11 16:16:37,527 Task 'prepare_trial' took 0.012 s
+4:16:37 PM web.1    |  2026-06-11 16:16:37,527 Task '_prepare_trial' took 0.012 s
+4:16:37 PM web.1    |  2026-06-11 16:16:37,530 Evaluating while_loop (Waiting for trial) condition: result = False
+4:16:37 PM web.1    |  2026-06-11 16:16:37,531 Evaluating while_loop (same_different__trial_loop) condition: result = True
+4:16:37 PM web.1    |  2026-06-11 16:16:37,531 Task 'advance_page' took 0.028 s
+4:16:37 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:37 +0000] "POST /response HTTP/1.1" 200 311 "-" "python-requests/2.33.1"
+4:16:37 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:37 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+4:16:37 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:37 +0000] "GET /timeline?unique_id=946e1de4-040a-4aba-852c-48178dff7929%3A3973054d-f9c5-410e-ae58-16b143cde004 HTTP/1.1" 200 76685 "-" "python-requests/2.33.1"
+4:16:37 PM web.1    |  2026-06-11 16:16:37,656 Received a response from participant 1 on page 12411f29-9cac-3ad6-6727-f7792409ae3b.
+4:16:37 PM web.1    |  2026-06-11 16:16:37,661 Calling _finalize_trial.
+4:16:37 PM web.1    |  2026-06-11 16:16:37,665 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+4:16:37 PM web.1    |  2026-06-11 16:16:37,667 Allocating a performance reward of $0.00 to participant 1 for trial 11.
+4:16:37 PM web.1    |  2026-06-11 16:16:37,672 Warning: Trial 11 received an unexpected amount of time credit (expected = 4.3 seconds; actual = 4.299999999999997 seconds). Consider setting the trial's `time_estimate` parameter to 4.299999999999997.You can disable this warning message by setting `Trial.check_time_credit_received = False`.
+4:16:37 PM web.1    |  2026-06-11 16:16:37,673 Preparing trial for participant 1.
+4:16:37 PM web.1    |  2026-06-11 16:16:37,673 Looking for networks for participant 1.
+4:16:37 PM web.1    |  2026-06-11 16:16:37,680 10 remain after applying custom network filters.
+4:16:37 PM web.1    |  2026-06-11 16:16:37,680 0 out of 10 networks are awaiting async processes (or have nodes awaiting async processes).
+4:16:37 PM web.1    |  2026-06-11 16:16:37,680 Outcome: found 1 candidate network(s) for participant 1.
+4:16:37 PM web.1    |  2026-06-11 16:16:37,680 Selected node 8 from network 8 to give to participant 1.
+4:16:37 PM web.1    |  2026-06-11 16:16:37,685 Task 'prepare_trial' took 0.012 s
+4:16:37 PM web.1    |  2026-06-11 16:16:37,685 Task '_prepare_trial' took 0.012 s
+4:16:37 PM web.1    |  2026-06-11 16:16:37,690 Evaluating while_loop (Waiting for trial) condition: result = False
+4:16:37 PM web.1    |  2026-06-11 16:16:37,690 Evaluating while_loop (same_different__trial_loop) condition: result = True
+4:16:37 PM web.1    |  2026-06-11 16:16:37,691 Task 'advance_page' took 0.029 s
+4:16:37 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:37 +0000] "POST /response HTTP/1.1" 200 311 "-" "python-requests/2.33.1"
+4:16:37 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:37 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+4:16:37 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:37 +0000] "GET /timeline?unique_id=946e1de4-040a-4aba-852c-48178dff7929%3A3973054d-f9c5-410e-ae58-16b143cde004 HTTP/1.1" 200 76699 "-" "python-requests/2.33.1"
+4:16:37 PM web.1    |  2026-06-11 16:16:37,817 Received a response from participant 1 on page 899f42ff-8193-593f-70f9-ecbb8d8ae525.
+4:16:37 PM web.1    |  2026-06-11 16:16:37,822 Calling _finalize_trial.
+4:16:37 PM web.1    |  2026-06-11 16:16:37,825 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+4:16:37 PM web.1    |  2026-06-11 16:16:37,826 Allocating a performance reward of $0.00 to participant 1 for trial 12.
+4:16:37 PM web.1    |  2026-06-11 16:16:37,831 Warning: Trial 12 received an unexpected amount of time credit (expected = 4.3 seconds; actual = 4.299999999999997 seconds). Consider setting the trial's `time_estimate` parameter to 4.299999999999997.You can disable this warning message by setting `Trial.check_time_credit_received = False`.
+4:16:37 PM web.1    |  2026-06-11 16:16:37,831 Preparing trial for participant 1.
+4:16:37 PM web.1    |  2026-06-11 16:16:37,831 Looking for networks for participant 1.
+4:16:37 PM web.1    |  2026-06-11 16:16:37,837 9 remain after applying custom network filters.
+4:16:37 PM web.1    |  2026-06-11 16:16:37,838 0 out of 9 networks are awaiting async processes (or have nodes awaiting async processes).
+4:16:37 PM web.1    |  2026-06-11 16:16:37,838 Outcome: found 1 candidate network(s) for participant 1.
+4:16:37 PM web.1    |  2026-06-11 16:16:37,838 Selected node 11 from network 11 to give to participant 1.
+4:16:37 PM web.1    |  2026-06-11 16:16:37,842 Task 'prepare_trial' took 0.011 s
+4:16:37 PM web.1    |  2026-06-11 16:16:37,842 Task '_prepare_trial' took 0.011 s
+4:16:37 PM web.1    |  2026-06-11 16:16:37,845 Evaluating while_loop (Waiting for trial) condition: result = False
+4:16:37 PM web.1    |  2026-06-11 16:16:37,845 Evaluating while_loop (same_different__trial_loop) condition: result = True
+4:16:37 PM web.1    |  2026-06-11 16:16:37,846 Task 'advance_page' took 0.024 s
+4:16:37 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:37 +0000] "POST /response HTTP/1.1" 200 311 "-" "python-requests/2.33.1"
+4:16:37 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:37 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+4:16:37 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:37 +0000] "GET /timeline?unique_id=946e1de4-040a-4aba-852c-48178dff7929%3A3973054d-f9c5-410e-ae58-16b143cde004 HTTP/1.1" 200 76699 "-" "python-requests/2.33.1"
+4:16:37 PM web.1    |  2026-06-11 16:16:37,967 Received a response from participant 1 on page 6a91c2c9-5f22-70f4-ceaa-319a2bf2d67f.
+4:16:37 PM web.1    |  2026-06-11 16:16:37,972 Calling _finalize_trial.
+4:16:37 PM web.1    |  2026-06-11 16:16:37,976 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+4:16:37 PM web.1    |  2026-06-11 16:16:37,977 Allocating a performance reward of $0.00 to participant 1 for trial 13.
+4:16:37 PM web.1    |  2026-06-11 16:16:37,982 Warning: Trial 13 received an unexpected amount of time credit (expected = 4.3 seconds; actual = 4.299999999999997 seconds). Consider setting the trial's `time_estimate` parameter to 4.299999999999997.You can disable this warning message by setting `Trial.check_time_credit_received = False`.
+4:16:37 PM web.1    |  2026-06-11 16:16:37,983 Preparing trial for participant 1.
+4:16:37 PM web.1    |  2026-06-11 16:16:37,983 Looking for networks for participant 1.
+4:16:37 PM web.1    |  2026-06-11 16:16:37,990 8 remain after applying custom network filters.
+4:16:37 PM web.1    |  2026-06-11 16:16:37,990 0 out of 8 networks are awaiting async processes (or have nodes awaiting async processes).
+4:16:37 PM web.1    |  2026-06-11 16:16:37,990 Outcome: found 1 candidate network(s) for participant 1.
+4:16:37 PM web.1    |  2026-06-11 16:16:37,990 Selected node 20 from network 20 to give to participant 1.
+4:16:37 PM web.1    |  2026-06-11 16:16:37,994 Task 'prepare_trial' took 0.012 s
+4:16:37 PM web.1    |  2026-06-11 16:16:37,994 Task '_prepare_trial' took 0.012 s
+4:16:37 PM web.1    |  2026-06-11 16:16:37,998 Evaluating while_loop (Waiting for trial) condition: result = False
+4:16:37 PM web.1    |  2026-06-11 16:16:37,998 Evaluating while_loop (same_different__trial_loop) condition: result = True
+4:16:37 PM web.1    |  2026-06-11 16:16:37,999 Task 'advance_page' took 0.027 s
+4:16:38 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:37 +0000] "POST /response HTTP/1.1" 200 311 "-" "python-requests/2.33.1"
+4:16:38 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:38 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+4:16:38 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:38 +0000] "GET /timeline?unique_id=946e1de4-040a-4aba-852c-48178dff7929%3A3973054d-f9c5-410e-ae58-16b143cde004 HTTP/1.1" 200 76703 "-" "python-requests/2.33.1"
+4:16:38 PM web.1    |  2026-06-11 16:16:38,120 Received a response from participant 1 on page e4d0f710-cee6-c3bf-cd5e-855c5312b30e.
+4:16:38 PM web.1    |  2026-06-11 16:16:38,126 Calling _finalize_trial.
+4:16:38 PM web.1    |  2026-06-11 16:16:38,129 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+4:16:38 PM web.1    |  2026-06-11 16:16:38,130 Allocating a performance reward of $0.00 to participant 1 for trial 14.
+4:16:38 PM web.1    |  2026-06-11 16:16:38,135 Warning: Trial 14 received an unexpected amount of time credit (expected = 4.3 seconds; actual = 4.299999999999997 seconds). Consider setting the trial's `time_estimate` parameter to 4.299999999999997.You can disable this warning message by setting `Trial.check_time_credit_received = False`.
+4:16:38 PM web.1    |  2026-06-11 16:16:38,135 Preparing trial for participant 1.
+4:16:38 PM web.1    |  2026-06-11 16:16:38,135 Looking for networks for participant 1.
+4:16:38 PM web.1    |  2026-06-11 16:16:38,142 7 remain after applying custom network filters.
+4:16:38 PM web.1    |  2026-06-11 16:16:38,142 0 out of 7 networks are awaiting async processes (or have nodes awaiting async processes).
+4:16:38 PM web.1    |  2026-06-11 16:16:38,142 Outcome: found 1 candidate network(s) for participant 1.
+4:16:38 PM web.1    |  2026-06-11 16:16:38,142 Selected node 4 from network 4 to give to participant 1.
+4:16:38 PM web.1    |  2026-06-11 16:16:38,146 Task 'prepare_trial' took 0.011 s
+4:16:38 PM web.1    |  2026-06-11 16:16:38,146 Task '_prepare_trial' took 0.011 s
+4:16:38 PM web.1    |  2026-06-11 16:16:38,150 Evaluating while_loop (Waiting for trial) condition: result = False
+4:16:38 PM web.1    |  2026-06-11 16:16:38,150 Evaluating while_loop (same_different__trial_loop) condition: result = True
+4:16:38 PM web.1    |  2026-06-11 16:16:38,151 Task 'advance_page' took 0.026 s
+4:16:38 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:38 +0000] "POST /response HTTP/1.1" 200 311 "-" "python-requests/2.33.1"
+4:16:38 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:38 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+4:16:38 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:38 +0000] "GET /timeline?unique_id=946e1de4-040a-4aba-852c-48178dff7929%3A3973054d-f9c5-410e-ae58-16b143cde004 HTTP/1.1" 200 76689 "-" "python-requests/2.33.1"
+4:16:38 PM web.1    |  2026-06-11 16:16:38,272 Received a response from participant 1 on page eb0f0a21-b8eb-92ae-687c-9b7731901741.
+4:16:38 PM web.1    |  2026-06-11 16:16:38,277 Calling _finalize_trial.
+4:16:38 PM web.1    |  2026-06-11 16:16:38,281 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+4:16:38 PM web.1    |  2026-06-11 16:16:38,282 Allocating a performance reward of $0.00 to participant 1 for trial 15.
+4:16:38 PM web.1    |  2026-06-11 16:16:38,286 Warning: Trial 15 received an unexpected amount of time credit (expected = 4.3 seconds; actual = 4.299999999999997 seconds). Consider setting the trial's `time_estimate` parameter to 4.299999999999997.You can disable this warning message by setting `Trial.check_time_credit_received = False`.
+4:16:38 PM web.1    |  2026-06-11 16:16:38,287 Preparing trial for participant 1.
+4:16:38 PM web.1    |  2026-06-11 16:16:38,287 Looking for networks for participant 1.
+4:16:38 PM web.1    |  2026-06-11 16:16:38,293 6 remain after applying custom network filters.
+4:16:38 PM web.1    |  2026-06-11 16:16:38,293 0 out of 6 networks are awaiting async processes (or have nodes awaiting async processes).
+4:16:38 PM web.1    |  2026-06-11 16:16:38,293 Outcome: found 1 candidate network(s) for participant 1.
+4:16:38 PM web.1    |  2026-06-11 16:16:38,293 Selected node 3 from network 3 to give to participant 1.
+4:16:38 PM web.1    |  2026-06-11 16:16:38,297 Task 'prepare_trial' took 0.011 s
+4:16:38 PM web.1    |  2026-06-11 16:16:38,298 Task '_prepare_trial' took 0.011 s
+4:16:38 PM web.1    |  2026-06-11 16:16:38,302 Evaluating while_loop (Waiting for trial) condition: result = False
+4:16:38 PM web.1    |  2026-06-11 16:16:38,303 Evaluating while_loop (same_different__trial_loop) condition: result = True
+4:16:38 PM web.1    |  2026-06-11 16:16:38,303 Task 'advance_page' took 0.026 s
+4:16:38 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:38 +0000] "POST /response HTTP/1.1" 200 311 "-" "python-requests/2.33.1"
+4:16:38 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:38 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+4:16:38 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:38 +0000] "GET /timeline?unique_id=946e1de4-040a-4aba-852c-48178dff7929%3A3973054d-f9c5-410e-ae58-16b143cde004 HTTP/1.1" 200 76691 "-" "python-requests/2.33.1"
+4:16:38 PM web.1    |  2026-06-11 16:16:38,425 Received a response from participant 1 on page 3d4e7b8c-00da-27c9-696a-aab3756c7372.
+4:16:38 PM web.1    |  2026-06-11 16:16:38,431 Calling _finalize_trial.
+4:16:38 PM web.1    |  2026-06-11 16:16:38,434 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+4:16:38 PM web.1    |  2026-06-11 16:16:38,436 Allocating a performance reward of $0.00 to participant 1 for trial 16.
+4:16:38 PM web.1    |  2026-06-11 16:16:38,441 Warning: Trial 16 received an unexpected amount of time credit (expected = 4.3 seconds; actual = 4.299999999999997 seconds). Consider setting the trial's `time_estimate` parameter to 4.299999999999997.You can disable this warning message by setting `Trial.check_time_credit_received = False`.
+4:16:38 PM web.1    |  2026-06-11 16:16:38,441 Preparing trial for participant 1.
+4:16:38 PM web.1    |  2026-06-11 16:16:38,441 Looking for networks for participant 1.
+4:16:38 PM web.1    |  2026-06-11 16:16:38,447 5 remain after applying custom network filters.
+4:16:38 PM web.1    |  2026-06-11 16:16:38,447 0 out of 5 networks are awaiting async processes (or have nodes awaiting async processes).
+4:16:38 PM web.1    |  2026-06-11 16:16:38,448 Outcome: found 1 candidate network(s) for participant 1.
+4:16:38 PM web.1    |  2026-06-11 16:16:38,448 Selected node 16 from network 16 to give to participant 1.
+4:16:38 PM web.1    |  2026-06-11 16:16:38,452 Task 'prepare_trial' took 0.011 s
+4:16:38 PM web.1    |  2026-06-11 16:16:38,452 Task '_prepare_trial' took 0.012 s
+4:16:38 PM web.1    |  2026-06-11 16:16:38,457 Evaluating while_loop (Waiting for trial) condition: result = False
+4:16:38 PM web.1    |  2026-06-11 16:16:38,457 Evaluating while_loop (same_different__trial_loop) condition: result = True
+4:16:38 PM web.1    |  2026-06-11 16:16:38,458 Task 'advance_page' took 0.027 s
+4:16:38 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:38 +0000] "POST /response HTTP/1.1" 200 311 "-" "python-requests/2.33.1"
+4:16:38 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:38 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+4:16:38 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:38 +0000] "GET /timeline?unique_id=946e1de4-040a-4aba-852c-48178dff7929%3A3973054d-f9c5-410e-ae58-16b143cde004 HTTP/1.1" 200 76703 "-" "python-requests/2.33.1"
+4:16:38 PM web.1    |  2026-06-11 16:16:38,581 Received a response from participant 1 on page e04987ee-3f58-d50e-4e8e-bda5f62c8f26.
+4:16:38 PM web.1    |  2026-06-11 16:16:38,586 Calling _finalize_trial.
+4:16:38 PM web.1    |  2026-06-11 16:16:38,590 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+4:16:38 PM web.1    |  2026-06-11 16:16:38,591 Allocating a performance reward of $0.00 to participant 1 for trial 17.
+4:16:38 PM web.1    |  2026-06-11 16:16:38,594 Warning: Trial 17 received an unexpected amount of time credit (expected = 4.3 seconds; actual = 4.299999999999997 seconds). Consider setting the trial's `time_estimate` parameter to 4.299999999999997.You can disable this warning message by setting `Trial.check_time_credit_received = False`.
+4:16:38 PM web.1    |  2026-06-11 16:16:38,595 Preparing trial for participant 1.
+4:16:38 PM web.1    |  2026-06-11 16:16:38,595 Looking for networks for participant 1.
+4:16:38 PM web.1    |  2026-06-11 16:16:38,601 4 remain after applying custom network filters.
+4:16:38 PM web.1    |  2026-06-11 16:16:38,601 0 out of 4 networks are awaiting async processes (or have nodes awaiting async processes).
+4:16:38 PM web.1    |  2026-06-11 16:16:38,601 Outcome: found 1 candidate network(s) for participant 1.
+4:16:38 PM web.1    |  2026-06-11 16:16:38,602 Selected node 7 from network 7 to give to participant 1.
+4:16:38 PM web.1    |  2026-06-11 16:16:38,606 Task 'prepare_trial' took 0.011 s
+4:16:38 PM web.1    |  2026-06-11 16:16:38,606 Task '_prepare_trial' took 0.011 s
+4:16:38 PM web.1    |  2026-06-11 16:16:38,610 Evaluating while_loop (Waiting for trial) condition: result = False
+4:16:38 PM web.1    |  2026-06-11 16:16:38,611 Evaluating while_loop (same_different__trial_loop) condition: result = True
+4:16:38 PM web.1    |  2026-06-11 16:16:38,611 Task 'advance_page' took 0.025 s
+4:16:38 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:38 +0000] "POST /response HTTP/1.1" 200 311 "-" "python-requests/2.33.1"
+4:16:38 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:38 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+4:16:38 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:38 +0000] "GET /timeline?unique_id=946e1de4-040a-4aba-852c-48178dff7929%3A3973054d-f9c5-410e-ae58-16b143cde004 HTTP/1.1" 200 76699 "-" "python-requests/2.33.1"
+4:16:38 PM web.1    |  2026-06-11 16:16:38,733 Received a response from participant 1 on page 3614a847-0de0-b5c5-fafe-07c35230c5d6.
+4:16:38 PM web.1    |  2026-06-11 16:16:38,739 Calling _finalize_trial.
+4:16:38 PM web.1    |  2026-06-11 16:16:38,742 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+4:16:38 PM web.1    |  2026-06-11 16:16:38,744 Allocating a performance reward of $0.00 to participant 1 for trial 18.
+4:16:38 PM web.1    |  2026-06-11 16:16:38,748 Warning: Trial 18 received an unexpected amount of time credit (expected = 4.3 seconds; actual = 4.299999999999997 seconds). Consider setting the trial's `time_estimate` parameter to 4.299999999999997.You can disable this warning message by setting `Trial.check_time_credit_received = False`.
+4:16:38 PM web.1    |  2026-06-11 16:16:38,749 Preparing trial for participant 1.
+4:16:38 PM web.1    |  2026-06-11 16:16:38,749 Looking for networks for participant 1.
+4:16:38 PM web.1    |  2026-06-11 16:16:38,755 3 remain after applying custom network filters.
+4:16:38 PM web.1    |  2026-06-11 16:16:38,755 0 out of 3 networks are awaiting async processes (or have nodes awaiting async processes).
+4:16:38 PM web.1    |  2026-06-11 16:16:38,755 Outcome: found 1 candidate network(s) for participant 1.
+4:16:38 PM web.1    |  2026-06-11 16:16:38,755 Selected node 18 from network 18 to give to participant 1.
+4:16:38 PM web.1    |  2026-06-11 16:16:38,760 Task 'prepare_trial' took 0.011 s
+4:16:38 PM web.1    |  2026-06-11 16:16:38,760 Task '_prepare_trial' took 0.011 s
+4:16:38 PM web.1    |  2026-06-11 16:16:38,764 Evaluating while_loop (Waiting for trial) condition: result = False
+4:16:38 PM web.1    |  2026-06-11 16:16:38,764 Evaluating while_loop (same_different__trial_loop) condition: result = True
+4:16:38 PM web.1    |  2026-06-11 16:16:38,765 Task 'advance_page' took 0.027 s
+4:16:38 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:38 +0000] "POST /response HTTP/1.1" 200 311 "-" "python-requests/2.33.1"
+4:16:38 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:38 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+4:16:38 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:38 +0000] "GET /timeline?unique_id=946e1de4-040a-4aba-852c-48178dff7929%3A3973054d-f9c5-410e-ae58-16b143cde004 HTTP/1.1" 200 76705 "-" "python-requests/2.33.1"
+4:16:38 PM web.1    |  2026-06-11 16:16:38,887 Received a response from participant 1 on page ef087f04-9d59-7047-7240-da19929bbc58.
+4:16:38 PM web.1    |  2026-06-11 16:16:38,893 Calling _finalize_trial.
+4:16:38 PM web.1    |  2026-06-11 16:16:38,897 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+4:16:38 PM web.1    |  2026-06-11 16:16:38,898 Allocating a performance reward of $0.00 to participant 1 for trial 19.
+4:16:38 PM web.1    |  2026-06-11 16:16:38,903 Warning: Trial 19 received an unexpected amount of time credit (expected = 4.3 seconds; actual = 4.299999999999997 seconds). Consider setting the trial's `time_estimate` parameter to 4.299999999999997.You can disable this warning message by setting `Trial.check_time_credit_received = False`.
+4:16:38 PM web.1    |  2026-06-11 16:16:38,903 Preparing trial for participant 1.
+4:16:38 PM web.1    |  2026-06-11 16:16:38,903 Looking for networks for participant 1.
+4:16:38 PM web.1    |  2026-06-11 16:16:38,910 2 remain after applying custom network filters.
+4:16:38 PM web.1    |  2026-06-11 16:16:38,910 0 out of 2 networks are awaiting async processes (or have nodes awaiting async processes).
+4:16:38 PM web.1    |  2026-06-11 16:16:38,910 Outcome: found 1 candidate network(s) for participant 1.
+4:16:38 PM web.1    |  2026-06-11 16:16:38,910 Selected node 6 from network 6 to give to participant 1.
+4:16:38 PM web.1    |  2026-06-11 16:16:38,914 Task 'prepare_trial' took 0.011 s
+4:16:38 PM web.1    |  2026-06-11 16:16:38,914 Task '_prepare_trial' took 0.011 s
+4:16:38 PM web.1    |  2026-06-11 16:16:38,919 Evaluating while_loop (Waiting for trial) condition: result = False
+4:16:38 PM web.1    |  2026-06-11 16:16:38,919 Evaluating while_loop (same_different__trial_loop) condition: result = True
+4:16:38 PM web.1    |  2026-06-11 16:16:38,920 Task 'advance_page' took 0.027 s
+4:16:38 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:38 +0000] "POST /response HTTP/1.1" 200 311 "-" "python-requests/2.33.1"
+4:16:38 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:38 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+4:16:39 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:39 +0000] "GET /timeline?unique_id=946e1de4-040a-4aba-852c-48178dff7929%3A3973054d-f9c5-410e-ae58-16b143cde004 HTTP/1.1" 200 76691 "-" "python-requests/2.33.1"
+4:16:39 PM web.1    |  2026-06-11 16:16:39,040 Received a response from participant 1 on page 0faba040-3a42-1c46-7d50-aa63f0b0c3d3.
+4:16:39 PM web.1    |  2026-06-11 16:16:39,044 Calling _finalize_trial.
+4:16:39 PM web.1    |  2026-06-11 16:16:39,047 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+4:16:39 PM web.1    |  2026-06-11 16:16:39,048 Allocating a performance reward of $0.00 to participant 1 for trial 20.
+4:16:39 PM web.1    |  2026-06-11 16:16:39,053 Warning: Trial 20 received an unexpected amount of time credit (expected = 4.3 seconds; actual = 4.299999999999997 seconds). Consider setting the trial's `time_estimate` parameter to 4.299999999999997.You can disable this warning message by setting `Trial.check_time_credit_received = False`.
+4:16:39 PM web.1    |  2026-06-11 16:16:39,053 Preparing trial for participant 1.
+4:16:39 PM web.1    |  2026-06-11 16:16:39,053 Looking for networks for participant 1.
+4:16:39 PM web.1    |  2026-06-11 16:16:39,058 1 remain after applying custom network filters.
+4:16:39 PM web.1    |  2026-06-11 16:16:39,058 0 out of 1 networks are awaiting async processes (or have nodes awaiting async processes).
+4:16:39 PM web.1    |  2026-06-11 16:16:39,059 Outcome: found 1 candidate network(s) for participant 1.
+4:16:39 PM web.1    |  2026-06-11 16:16:39,059 Selected node 17 from network 17 to give to participant 1.
+4:16:39 PM web.1    |  2026-06-11 16:16:39,066 Evaluating while_loop (Waiting for trial) condition: result = False
+4:16:39 PM web.1    |  2026-06-11 16:16:39,066 Evaluating while_loop (same_different__trial_loop) condition: result = True
+4:16:39 PM web.1    |  2026-06-11 16:16:39,067 Task 'advance_page' took 0.023 s
+4:16:39 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:39 +0000] "POST /response HTTP/1.1" 200 311 "-" "python-requests/2.33.1"
+4:16:39 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:39 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+4:16:39 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:39 +0000] "GET /timeline?unique_id=946e1de4-040a-4aba-852c-48178dff7929%3A3973054d-f9c5-410e-ae58-16b143cde004 HTTP/1.1" 200 76701 "-" "python-requests/2.33.1"
+4:16:39 PM web.1    |  2026-06-11 16:16:39,189 Received a response from participant 1 on page c8c3db47-9f80-6648-5617-0eed9b6a9477.
+4:16:39 PM web.1    |  2026-06-11 16:16:39,194 Calling _finalize_trial.
+4:16:39 PM web.1    |  2026-06-11 16:16:39,198 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+4:16:39 PM web.1    |  2026-06-11 16:16:39,198 Allocating a performance reward of $0.00 to participant 1 for trial 21.
+4:16:39 PM web.1    |  2026-06-11 16:16:39,203 Warning: Trial 21 received an unexpected amount of time credit (expected = 4.3 seconds; actual = 4.299999999999997 seconds). Consider setting the trial's `time_estimate` parameter to 4.299999999999997.You can disable this warning message by setting `Trial.check_time_credit_received = False`.
+4:16:39 PM web.1    |  2026-06-11 16:16:39,203 Preparing trial for participant 1.
+4:16:39 PM web.1    |  2026-06-11 16:16:39,203 Looking for networks for participant 1.
+4:16:39 PM web.1    |  2026-06-11 16:16:39,203 N completed trials (21) >= N trials per participant (21), skipping forward
+4:16:39 PM web.1    |  2026-06-11 16:16:39,203 Outcome of find_networks: exit
+4:16:39 PM web.1    |  2026-06-11 16:16:39,206 Evaluating while_loop (Waiting for trial) condition: result = False
+4:16:39 PM web.1    |  2026-06-11 16:16:39,206 Evaluating while_loop (same_different__trial_loop) condition: result = False
+4:16:39 PM web.1    |  2026-06-11 16:16:39,206 Task 'advance_page' took 0.012 s
+4:16:39 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:39 +0000] "POST /response HTTP/1.1" 200 296 "-" "python-requests/2.33.1"
+4:16:39 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:39 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+4:16:39 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:39 +0000] "GET /timeline?unique_id=946e1de4-040a-4aba-852c-48178dff7929%3A3973054d-f9c5-410e-ae58-16b143cde004 HTTP/1.1" 200 73803 "-" "python-requests/2.33.1"
+4:16:39 PM web.1    |  2026-06-11 16:16:39,323 Received a response from participant 1 on page 6b62dd90-da9f-8b77-c5e0-43ad9adeef32.
+4:16:39 PM web.1    |  2026-06-11 16:16:39,336 Preparing trial for participant 1.
+4:16:39 PM web.1    |  2026-06-11 16:16:39,336 Looking for networks for participant 1.
+4:16:39 PM web.1    |  2026-06-11 16:16:39,342 21 remain after applying custom network filters.
+4:16:39 PM web.1    |  2026-06-11 16:16:39,342 0 out of 21 networks are awaiting async processes (or have nodes awaiting async processes).
+4:16:39 PM web.1    |  2026-06-11 16:16:39,343 Outcome: found 1 candidate network(s) for participant 1.
+4:16:39 PM web.1    |  2026-06-11 16:16:39,343 Selected node 35 from network 35 to give to participant 1.
+4:16:39 PM web.1    |  2026-06-11 16:16:39,348 Task 'prepare_trial' took 0.012 s
+4:16:39 PM web.1    |  2026-06-11 16:16:39,348 Task '_prepare_trial' took 0.012 s
+4:16:39 PM web.1    |  2026-06-11 16:16:39,352 Evaluating while_loop (Waiting for trial) condition: result = False
+4:16:39 PM web.1    |  2026-06-11 16:16:39,353 Evaluating while_loop (similarity__trial_loop) condition: result = True
+4:16:39 PM web.1    |  2026-06-11 16:16:39,354 Task 'advance_page' took 0.028 s
+4:16:39 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:39 +0000] "POST /response HTTP/1.1" 200 311 "-" "python-requests/2.33.1"
+4:16:39 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:39 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+4:16:39 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:39 +0000] "GET /timeline?unique_id=946e1de4-040a-4aba-852c-48178dff7929%3A3973054d-f9c5-410e-ae58-16b143cde004 HTTP/1.1" 200 78369 "-" "python-requests/2.33.1"
+4:16:39 PM web.1    |  2026-06-11 16:16:39,477 Received a response from participant 1 on page 48beaa7a-9dd6-d658-7096-be2bc564ab1c.
+4:16:39 PM web.1    |  2026-06-11 16:16:39,483 Calling _finalize_trial.
+4:16:39 PM web.1    |  2026-06-11 16:16:39,486 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+4:16:39 PM web.1    |  2026-06-11 16:16:39,488 Allocating a performance reward of $0.00 to participant 1 for trial 22.
+4:16:39 PM web.1    |  2026-06-11 16:16:39,493 Warning: Trial 22 received an unexpected amount of time credit (expected = 5.3 seconds; actual = 5.299999999999997 seconds). Consider setting the trial's `time_estimate` parameter to 5.299999999999997.You can disable this warning message by setting `Trial.check_time_credit_received = False`.
+4:16:39 PM web.1    |  2026-06-11 16:16:39,493 Preparing trial for participant 1.
+4:16:39 PM web.1    |  2026-06-11 16:16:39,493 Looking for networks for participant 1.
+4:16:39 PM web.1    |  2026-06-11 16:16:39,502 20 remain after applying custom network filters.
+4:16:39 PM web.1    |  2026-06-11 16:16:39,502 0 out of 20 networks are awaiting async processes (or have nodes awaiting async processes).
+4:16:39 PM web.1    |  2026-06-11 16:16:39,502 Outcome: found 1 candidate network(s) for participant 1.
+4:16:39 PM web.1    |  2026-06-11 16:16:39,502 Selected node 22 from network 22 to give to participant 1.
+4:16:39 PM web.1    |  2026-06-11 16:16:39,508 Task 'prepare_trial' took 0.014 s
+4:16:39 PM web.1    |  2026-06-11 16:16:39,508 Task '_prepare_trial' took 0.014 s
+4:16:39 PM web.1    |  2026-06-11 16:16:39,512 Evaluating while_loop (Waiting for trial) condition: result = False
+4:16:39 PM web.1    |  2026-06-11 16:16:39,512 Evaluating while_loop (similarity__trial_loop) condition: result = True
+4:16:39 PM web.1    |  2026-06-11 16:16:39,513 Task 'advance_page' took 0.030 s
+4:16:39 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:39 +0000] "POST /response HTTP/1.1" 200 311 "-" "python-requests/2.33.1"
+4:16:39 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:39 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+4:16:39 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:39 +0000] "GET /timeline?unique_id=946e1de4-040a-4aba-852c-48178dff7929%3A3973054d-f9c5-410e-ae58-16b143cde004 HTTP/1.1" 200 78361 "-" "python-requests/2.33.1"
+4:16:39 PM web.1    |  2026-06-11 16:16:39,635 Received a response from participant 1 on page e3fea09e-f4bd-5c96-40ee-d1a37ee3a06e.
+4:16:39 PM web.1    |  2026-06-11 16:16:39,641 Calling _finalize_trial.
+4:16:39 PM web.1    |  2026-06-11 16:16:39,645 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+4:16:39 PM web.1    |  2026-06-11 16:16:39,646 Allocating a performance reward of $0.00 to participant 1 for trial 23.
+4:16:39 PM web.1    |  2026-06-11 16:16:39,651 Warning: Trial 23 received an unexpected amount of time credit (expected = 5.3 seconds; actual = 5.299999999999997 seconds). Consider setting the trial's `time_estimate` parameter to 5.299999999999997.You can disable this warning message by setting `Trial.check_time_credit_received = False`.
+4:16:39 PM web.1    |  2026-06-11 16:16:39,652 Preparing trial for participant 1.
+4:16:39 PM web.1    |  2026-06-11 16:16:39,652 Looking for networks for participant 1.
+4:16:39 PM web.1    |  2026-06-11 16:16:39,659 19 remain after applying custom network filters.
+4:16:39 PM web.1    |  2026-06-11 16:16:39,659 0 out of 19 networks are awaiting async processes (or have nodes awaiting async processes).
+4:16:39 PM web.1    |  2026-06-11 16:16:39,659 Outcome: found 1 candidate network(s) for participant 1.
+4:16:39 PM web.1    |  2026-06-11 16:16:39,659 Selected node 39 from network 39 to give to participant 1.
+4:16:39 PM web.1    |  2026-06-11 16:16:39,664 Task 'prepare_trial' took 0.012 s
+4:16:39 PM web.1    |  2026-06-11 16:16:39,664 Task '_prepare_trial' took 0.013 s
+4:16:39 PM web.1    |  2026-06-11 16:16:39,669 Evaluating while_loop (Waiting for trial) condition: result = False
+4:16:39 PM web.1    |  2026-06-11 16:16:39,669 Evaluating while_loop (similarity__trial_loop) condition: result = True
+4:16:39 PM web.1    |  2026-06-11 16:16:39,670 Task 'advance_page' took 0.029 s
+4:16:39 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:39 +0000] "POST /response HTTP/1.1" 200 311 "-" "python-requests/2.33.1"
+4:16:39 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:39 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+4:16:39 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:39 +0000] "GET /timeline?unique_id=946e1de4-040a-4aba-852c-48178dff7929%3A3973054d-f9c5-410e-ae58-16b143cde004 HTTP/1.1" 200 78371 "-" "python-requests/2.33.1"
+4:16:39 PM web.1    |  2026-06-11 16:16:39,794 Received a response from participant 1 on page a15d45f4-2763-c33f-52df-82302837fea0.
+4:16:39 PM web.1    |  2026-06-11 16:16:39,799 Calling _finalize_trial.
+4:16:39 PM web.1    |  2026-06-11 16:16:39,802 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+4:16:39 PM web.1    |  2026-06-11 16:16:39,803 Allocating a performance reward of $0.00 to participant 1 for trial 24.
+4:16:39 PM web.1    |  2026-06-11 16:16:39,808 Warning: Trial 24 received an unexpected amount of time credit (expected = 5.3 seconds; actual = 5.299999999999997 seconds). Consider setting the trial's `time_estimate` parameter to 5.299999999999997.You can disable this warning message by setting `Trial.check_time_credit_received = False`.
+4:16:39 PM web.1    |  2026-06-11 16:16:39,808 Preparing trial for participant 1.
+4:16:39 PM web.1    |  2026-06-11 16:16:39,808 Looking for networks for participant 1.
+4:16:39 PM web.1    |  2026-06-11 16:16:39,816 18 remain after applying custom network filters.
+4:16:39 PM web.1    |  2026-06-11 16:16:39,816 0 out of 18 networks are awaiting async processes (or have nodes awaiting async processes).
+4:16:39 PM web.1    |  2026-06-11 16:16:39,816 Outcome: found 1 candidate network(s) for participant 1.
+4:16:39 PM web.1    |  2026-06-11 16:16:39,816 Selected node 24 from network 24 to give to participant 1.
+4:16:39 PM web.1    |  2026-06-11 16:16:39,821 Task 'prepare_trial' took 0.013 s
+4:16:39 PM web.1    |  2026-06-11 16:16:39,821 Task '_prepare_trial' took 0.013 s
+4:16:39 PM web.1    |  2026-06-11 16:16:39,824 Evaluating while_loop (Waiting for trial) condition: result = False
+4:16:39 PM web.1    |  2026-06-11 16:16:39,825 Evaluating while_loop (similarity__trial_loop) condition: result = True
+4:16:39 PM web.1    |  2026-06-11 16:16:39,825 Task 'advance_page' took 0.027 s
+4:16:39 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:39 +0000] "POST /response HTTP/1.1" 200 311 "-" "python-requests/2.33.1"
+4:16:39 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:39 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+4:16:39 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:39 +0000] "GET /timeline?unique_id=946e1de4-040a-4aba-852c-48178dff7929%3A3973054d-f9c5-410e-ae58-16b143cde004 HTTP/1.1" 200 78367 "-" "python-requests/2.33.1"
+4:16:39 PM web.1    |  2026-06-11 16:16:39,949 Received a response from participant 1 on page bb07c182-3607-9ddd-88bf-1a36b3001d45.
+4:16:39 PM web.1    |  2026-06-11 16:16:39,954 Calling _finalize_trial.
+4:16:39 PM web.1    |  2026-06-11 16:16:39,958 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+4:16:39 PM web.1    |  2026-06-11 16:16:39,959 Allocating a performance reward of $0.00 to participant 1 for trial 25.
+4:16:39 PM web.1    |  2026-06-11 16:16:39,964 Warning: Trial 25 received an unexpected amount of time credit (expected = 5.3 seconds; actual = 5.299999999999997 seconds). Consider setting the trial's `time_estimate` parameter to 5.299999999999997.You can disable this warning message by setting `Trial.check_time_credit_received = False`.
+4:16:39 PM web.1    |  2026-06-11 16:16:39,964 Preparing trial for participant 1.
+4:16:39 PM web.1    |  2026-06-11 16:16:39,964 Looking for networks for participant 1.
+4:16:39 PM web.1    |  2026-06-11 16:16:39,971 17 remain after applying custom network filters.
+4:16:39 PM web.1    |  2026-06-11 16:16:39,971 0 out of 17 networks are awaiting async processes (or have nodes awaiting async processes).
+4:16:39 PM web.1    |  2026-06-11 16:16:39,971 Outcome: found 1 candidate network(s) for participant 1.
+4:16:39 PM web.1    |  2026-06-11 16:16:39,971 Selected node 40 from network 40 to give to participant 1.
+4:16:39 PM web.1    |  2026-06-11 16:16:39,975 Task 'prepare_trial' took 0.011 s
+4:16:39 PM web.1    |  2026-06-11 16:16:39,975 Task '_prepare_trial' took 0.011 s
+4:16:39 PM web.1    |  2026-06-11 16:16:39,980 Evaluating while_loop (Waiting for trial) condition: result = False
+4:16:39 PM web.1    |  2026-06-11 16:16:39,980 Evaluating while_loop (similarity__trial_loop) condition: result = True
+4:16:39 PM web.1    |  2026-06-11 16:16:39,981 Task 'advance_page' took 0.027 s
+4:16:39 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:39 +0000] "POST /response HTTP/1.1" 200 311 "-" "python-requests/2.33.1"
+4:16:39 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:39 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+4:16:40 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:40 +0000] "GET /timeline?unique_id=946e1de4-040a-4aba-852c-48178dff7929%3A3973054d-f9c5-410e-ae58-16b143cde004 HTTP/1.1" 200 78365 "-" "python-requests/2.33.1"
+4:16:40 PM web.1    |  2026-06-11 16:16:40,105 Received a response from participant 1 on page 26aa9463-f1ee-91c3-a21e-01365dec8d2e.
+4:16:40 PM web.1    |  2026-06-11 16:16:40,111 Calling _finalize_trial.
+4:16:40 PM web.1    |  2026-06-11 16:16:40,115 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+4:16:40 PM web.1    |  2026-06-11 16:16:40,117 Allocating a performance reward of $0.00 to participant 1 for trial 26.
+4:16:40 PM web.1    |  2026-06-11 16:16:40,121 Warning: Trial 26 received an unexpected amount of time credit (expected = 5.3 seconds; actual = 5.300000000000011 seconds). Consider setting the trial's `time_estimate` parameter to 5.300000000000011.You can disable this warning message by setting `Trial.check_time_credit_received = False`.
+4:16:40 PM web.1    |  2026-06-11 16:16:40,121 Preparing trial for participant 1.
+4:16:40 PM web.1    |  2026-06-11 16:16:40,121 Looking for networks for participant 1.
+4:16:40 PM web.1    |  2026-06-11 16:16:40,129 16 remain after applying custom network filters.
+4:16:40 PM web.1    |  2026-06-11 16:16:40,129 0 out of 16 networks are awaiting async processes (or have nodes awaiting async processes).
+4:16:40 PM web.1    |  2026-06-11 16:16:40,129 Outcome: found 1 candidate network(s) for participant 1.
+4:16:40 PM web.1    |  2026-06-11 16:16:40,129 Selected node 32 from network 32 to give to participant 1.
+4:16:40 PM web.1    |  2026-06-11 16:16:40,134 Task 'prepare_trial' took 0.013 s
+4:16:40 PM web.1    |  2026-06-11 16:16:40,134 Task '_prepare_trial' took 0.013 s
+4:16:40 PM web.1    |  2026-06-11 16:16:40,138 Evaluating while_loop (Waiting for trial) condition: result = False
+4:16:40 PM web.1    |  2026-06-11 16:16:40,138 Evaluating while_loop (similarity__trial_loop) condition: result = True
+4:16:40 PM web.1    |  2026-06-11 16:16:40,139 Task 'advance_page' took 0.028 s
+4:16:40 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:40 +0000] "POST /response HTTP/1.1" 200 311 "-" "python-requests/2.33.1"
+4:16:40 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:40 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+4:16:40 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:40 +0000] "GET /timeline?unique_id=946e1de4-040a-4aba-852c-48178dff7929%3A3973054d-f9c5-410e-ae58-16b143cde004 HTTP/1.1" 200 78373 "-" "python-requests/2.33.1"
+4:16:40 PM web.1    |  2026-06-11 16:16:40,262 Received a response from participant 1 on page 9cb028a9-f700-cd48-e15f-e14d09003046.
+4:16:40 PM web.1    |  2026-06-11 16:16:40,269 Calling _finalize_trial.
+4:16:40 PM web.1    |  2026-06-11 16:16:40,272 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+4:16:40 PM web.1    |  2026-06-11 16:16:40,273 Allocating a performance reward of $0.00 to participant 1 for trial 27.
+4:16:40 PM web.1    |  2026-06-11 16:16:40,278 Warning: Trial 27 received an unexpected amount of time credit (expected = 5.3 seconds; actual = 5.300000000000011 seconds). Consider setting the trial's `time_estimate` parameter to 5.300000000000011.You can disable this warning message by setting `Trial.check_time_credit_received = False`.
+4:16:40 PM web.1    |  2026-06-11 16:16:40,278 Preparing trial for participant 1.
+4:16:40 PM web.1    |  2026-06-11 16:16:40,278 Looking for networks for participant 1.
+4:16:40 PM web.1    |  2026-06-11 16:16:40,286 15 remain after applying custom network filters.
+4:16:40 PM web.1    |  2026-06-11 16:16:40,286 0 out of 15 networks are awaiting async processes (or have nodes awaiting async processes).
+4:16:40 PM web.1    |  2026-06-11 16:16:40,286 Outcome: found 1 candidate network(s) for participant 1.
+4:16:40 PM web.1    |  2026-06-11 16:16:40,286 Selected node 36 from network 36 to give to participant 1.
+4:16:40 PM web.1    |  2026-06-11 16:16:40,291 Task 'prepare_trial' took 0.012 s
+4:16:40 PM web.1    |  2026-06-11 16:16:40,291 Task '_prepare_trial' took 0.013 s
+4:16:40 PM web.1    |  2026-06-11 16:16:40,296 Evaluating while_loop (Waiting for trial) condition: result = False
+4:16:40 PM web.1    |  2026-06-11 16:16:40,296 Evaluating while_loop (similarity__trial_loop) condition: result = True
+4:16:40 PM web.1    |  2026-06-11 16:16:40,297 Task 'advance_page' took 0.028 s
+4:16:40 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:40 +0000] "POST /response HTTP/1.1" 200 311 "-" "python-requests/2.33.1"
+4:16:40 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:40 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+4:16:40 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:40 +0000] "GET /timeline?unique_id=946e1de4-040a-4aba-852c-48178dff7929%3A3973054d-f9c5-410e-ae58-16b143cde004 HTTP/1.1" 200 78373 "-" "python-requests/2.33.1"
+4:16:40 PM web.1    |  2026-06-11 16:16:40,421 Received a response from participant 1 on page a7b52098-288f-0709-20f0-5a0ab1138192.
+4:16:40 PM web.1    |  2026-06-11 16:16:40,428 Calling _finalize_trial.
+4:16:40 PM web.1    |  2026-06-11 16:16:40,432 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+4:16:40 PM web.1    |  2026-06-11 16:16:40,434 Allocating a performance reward of $0.00 to participant 1 for trial 28.
+4:16:40 PM web.1    |  2026-06-11 16:16:40,439 Warning: Trial 28 received an unexpected amount of time credit (expected = 5.3 seconds; actual = 5.300000000000011 seconds). Consider setting the trial's `time_estimate` parameter to 5.300000000000011.You can disable this warning message by setting `Trial.check_time_credit_received = False`.
+4:16:40 PM web.1    |  2026-06-11 16:16:40,439 Preparing trial for participant 1.
+4:16:40 PM web.1    |  2026-06-11 16:16:40,439 Looking for networks for participant 1.
+4:16:40 PM web.1    |  2026-06-11 16:16:40,447 14 remain after applying custom network filters.
+4:16:40 PM web.1    |  2026-06-11 16:16:40,447 0 out of 14 networks are awaiting async processes (or have nodes awaiting async processes).
+4:16:40 PM web.1    |  2026-06-11 16:16:40,447 Outcome: found 1 candidate network(s) for participant 1.
+4:16:40 PM web.1    |  2026-06-11 16:16:40,447 Selected node 29 from network 29 to give to participant 1.
+4:16:40 PM web.1    |  2026-06-11 16:16:40,452 Task 'prepare_trial' took 0.013 s
+4:16:40 PM web.1    |  2026-06-11 16:16:40,452 Task '_prepare_trial' took 0.013 s
+4:16:40 PM web.1    |  2026-06-11 16:16:40,456 Evaluating while_loop (Waiting for trial) condition: result = False
+4:16:40 PM web.1    |  2026-06-11 16:16:40,457 Evaluating while_loop (similarity__trial_loop) condition: result = True
+4:16:40 PM web.1    |  2026-06-11 16:16:40,457 Task 'advance_page' took 0.030 s
+4:16:40 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:40 +0000] "POST /response HTTP/1.1" 200 311 "-" "python-requests/2.33.1"
+4:16:40 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:40 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+4:16:40 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:40 +0000] "GET /timeline?unique_id=946e1de4-040a-4aba-852c-48178dff7929%3A3973054d-f9c5-410e-ae58-16b143cde004 HTTP/1.1" 200 78373 "-" "python-requests/2.33.1"
+4:16:40 PM web.1    |  2026-06-11 16:16:40,582 Received a response from participant 1 on page e6234a1b-8354-9537-799d-e9ed0458eda8.
+4:16:40 PM web.1    |  2026-06-11 16:16:40,588 Calling _finalize_trial.
+4:16:40 PM web.1    |  2026-06-11 16:16:40,591 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+4:16:40 PM web.1    |  2026-06-11 16:16:40,593 Allocating a performance reward of $0.00 to participant 1 for trial 29.
+4:16:40 PM web.1    |  2026-06-11 16:16:40,597 Warning: Trial 29 received an unexpected amount of time credit (expected = 5.3 seconds; actual = 5.300000000000011 seconds). Consider setting the trial's `time_estimate` parameter to 5.300000000000011.You can disable this warning message by setting `Trial.check_time_credit_received = False`.
+4:16:40 PM web.1    |  2026-06-11 16:16:40,597 Preparing trial for participant 1.
+4:16:40 PM web.1    |  2026-06-11 16:16:40,598 Looking for networks for participant 1.
+4:16:40 PM web.1    |  2026-06-11 16:16:40,605 13 remain after applying custom network filters.
+4:16:40 PM web.1    |  2026-06-11 16:16:40,606 0 out of 13 networks are awaiting async processes (or have nodes awaiting async processes).
+4:16:40 PM web.1    |  2026-06-11 16:16:40,606 Outcome: found 1 candidate network(s) for participant 1.
+4:16:40 PM web.1    |  2026-06-11 16:16:40,606 Selected node 37 from network 37 to give to participant 1.
+4:16:40 PM web.1    |  2026-06-11 16:16:40,611 Task 'prepare_trial' took 0.013 s
+4:16:40 PM web.1    |  2026-06-11 16:16:40,611 Task '_prepare_trial' took 0.013 s
+4:16:40 PM web.1    |  2026-06-11 16:16:40,615 Evaluating while_loop (Waiting for trial) condition: result = False
+4:16:40 PM web.1    |  2026-06-11 16:16:40,615 Evaluating while_loop (similarity__trial_loop) condition: result = True
+4:16:40 PM web.1    |  2026-06-11 16:16:40,616 Task 'advance_page' took 0.029 s
+4:16:40 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:40 +0000] "POST /response HTTP/1.1" 200 311 "-" "python-requests/2.33.1"
+4:16:40 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:40 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+4:16:40 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:40 +0000] "GET /timeline?unique_id=946e1de4-040a-4aba-852c-48178dff7929%3A3973054d-f9c5-410e-ae58-16b143cde004 HTTP/1.1" 200 78369 "-" "python-requests/2.33.1"
+4:16:40 PM web.1    |  2026-06-11 16:16:40,739 Received a response from participant 1 on page 9b11e8d8-db01-face-65fe-3b4e6447c567.
+4:16:40 PM web.1    |  2026-06-11 16:16:40,745 Calling _finalize_trial.
+4:16:40 PM web.1    |  2026-06-11 16:16:40,750 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+4:16:40 PM web.1    |  2026-06-11 16:16:40,750 Allocating a performance reward of $0.00 to participant 1 for trial 30.
+4:16:40 PM web.1    |  2026-06-11 16:16:40,756 Warning: Trial 30 received an unexpected amount of time credit (expected = 5.3 seconds; actual = 5.300000000000011 seconds). Consider setting the trial's `time_estimate` parameter to 5.300000000000011.You can disable this warning message by setting `Trial.check_time_credit_received = False`.
+4:16:40 PM web.1    |  2026-06-11 16:16:40,756 Preparing trial for participant 1.
+4:16:40 PM web.1    |  2026-06-11 16:16:40,756 Looking for networks for participant 1.
+4:16:40 PM web.1    |  2026-06-11 16:16:40,763 12 remain after applying custom network filters.
+4:16:40 PM web.1    |  2026-06-11 16:16:40,763 0 out of 12 networks are awaiting async processes (or have nodes awaiting async processes).
+4:16:40 PM web.1    |  2026-06-11 16:16:40,763 Outcome: found 1 candidate network(s) for participant 1.
+4:16:40 PM web.1    |  2026-06-11 16:16:40,763 Selected node 30 from network 30 to give to participant 1.
+4:16:40 PM web.1    |  2026-06-11 16:16:40,768 Task 'prepare_trial' took 0.012 s
+4:16:40 PM web.1    |  2026-06-11 16:16:40,768 Task '_prepare_trial' took 0.013 s
+4:16:40 PM web.1    |  2026-06-11 16:16:40,773 Evaluating while_loop (Waiting for trial) condition: result = False
+4:16:40 PM web.1    |  2026-06-11 16:16:40,773 Evaluating while_loop (similarity__trial_loop) condition: result = True
+4:16:40 PM web.1    |  2026-06-11 16:16:40,774 Task 'advance_page' took 0.029 s
+4:16:40 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:40 +0000] "POST /response HTTP/1.1" 200 311 "-" "python-requests/2.33.1"
+4:16:40 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:40 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+4:16:40 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:40 +0000] "GET /timeline?unique_id=946e1de4-040a-4aba-852c-48178dff7929%3A3973054d-f9c5-410e-ae58-16b143cde004 HTTP/1.1" 200 78371 "-" "python-requests/2.33.1"
+4:16:40 PM web.1    |  2026-06-11 16:16:40,896 Received a response from participant 1 on page f0c4e801-916a-a49f-5afe-6ce453b58222.
+4:16:40 PM web.1    |  2026-06-11 16:16:40,901 Calling _finalize_trial.
+4:16:40 PM web.1    |  2026-06-11 16:16:40,905 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+4:16:40 PM web.1    |  2026-06-11 16:16:40,907 Allocating a performance reward of $0.00 to participant 1 for trial 31.
+4:16:40 PM web.1    |  2026-06-11 16:16:40,912 Warning: Trial 31 received an unexpected amount of time credit (expected = 5.3 seconds; actual = 5.300000000000011 seconds). Consider setting the trial's `time_estimate` parameter to 5.300000000000011.You can disable this warning message by setting `Trial.check_time_credit_received = False`.
+4:16:40 PM web.1    |  2026-06-11 16:16:40,912 Preparing trial for participant 1.
+4:16:40 PM web.1    |  2026-06-11 16:16:40,912 Looking for networks for participant 1.
+4:16:40 PM web.1    |  2026-06-11 16:16:40,919 11 remain after applying custom network filters.
+4:16:40 PM web.1    |  2026-06-11 16:16:40,919 0 out of 11 networks are awaiting async processes (or have nodes awaiting async processes).
+4:16:40 PM web.1    |  2026-06-11 16:16:40,919 Outcome: found 1 candidate network(s) for participant 1.
+4:16:40 PM web.1    |  2026-06-11 16:16:40,919 Selected node 41 from network 41 to give to participant 1.
+4:16:40 PM web.1    |  2026-06-11 16:16:40,923 Task 'prepare_trial' took 0.010 s
+4:16:40 PM web.1    |  2026-06-11 16:16:40,923 Task '_prepare_trial' took 0.010 s
+4:16:40 PM web.1    |  2026-06-11 16:16:40,927 Evaluating while_loop (Waiting for trial) condition: result = False
+4:16:40 PM web.1    |  2026-06-11 16:16:40,927 Evaluating while_loop (similarity__trial_loop) condition: result = True
+4:16:40 PM web.1    |  2026-06-11 16:16:40,928 Task 'advance_page' took 0.027 s
+4:16:40 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:40 +0000] "POST /response HTTP/1.1" 200 311 "-" "python-requests/2.33.1"
+4:16:40 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:40 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+4:16:41 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:41 +0000] "GET /timeline?unique_id=946e1de4-040a-4aba-852c-48178dff7929%3A3973054d-f9c5-410e-ae58-16b143cde004 HTTP/1.1" 200 78369 "-" "python-requests/2.33.1"
+4:16:41 PM web.1    |  2026-06-11 16:16:41,050 Received a response from participant 1 on page d8d8c375-83e1-f864-d267-7c40602d7dcb.
+4:16:41 PM web.1    |  2026-06-11 16:16:41,056 Calling _finalize_trial.
+4:16:41 PM web.1    |  2026-06-11 16:16:41,060 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+4:16:41 PM web.1    |  2026-06-11 16:16:41,061 Allocating a performance reward of $0.00 to participant 1 for trial 32.
+4:16:41 PM web.1    |  2026-06-11 16:16:41,065 Warning: Trial 32 received an unexpected amount of time credit (expected = 5.3 seconds; actual = 5.300000000000011 seconds). Consider setting the trial's `time_estimate` parameter to 5.300000000000011.You can disable this warning message by setting `Trial.check_time_credit_received = False`.
+4:16:41 PM web.1    |  2026-06-11 16:16:41,066 Preparing trial for participant 1.
+4:16:41 PM web.1    |  2026-06-11 16:16:41,066 Looking for networks for participant 1.
+4:16:41 PM web.1    |  2026-06-11 16:16:41,072 10 remain after applying custom network filters.
+4:16:41 PM web.1    |  2026-06-11 16:16:41,073 0 out of 10 networks are awaiting async processes (or have nodes awaiting async processes).
+4:16:41 PM web.1    |  2026-06-11 16:16:41,073 Outcome: found 1 candidate network(s) for participant 1.
+4:16:41 PM web.1    |  2026-06-11 16:16:41,073 Selected node 28 from network 28 to give to participant 1.
+4:16:41 PM web.1    |  2026-06-11 16:16:41,078 Task 'prepare_trial' took 0.012 s
+4:16:41 PM web.1    |  2026-06-11 16:16:41,078 Task '_prepare_trial' took 0.012 s
+4:16:41 PM web.1    |  2026-06-11 16:16:41,082 Evaluating while_loop (Waiting for trial) condition: result = False
+4:16:41 PM web.1    |  2026-06-11 16:16:41,082 Evaluating while_loop (similarity__trial_loop) condition: result = True
+4:16:41 PM web.1    |  2026-06-11 16:16:41,083 Task 'advance_page' took 0.027 s
+4:16:41 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:41 +0000] "POST /response HTTP/1.1" 200 311 "-" "python-requests/2.33.1"
+4:16:41 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:41 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+4:16:41 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:41 +0000] "GET /timeline?unique_id=946e1de4-040a-4aba-852c-48178dff7929%3A3973054d-f9c5-410e-ae58-16b143cde004 HTTP/1.1" 200 78373 "-" "python-requests/2.33.1"
+4:16:41 PM web.1    |  2026-06-11 16:16:41,203 Received a response from participant 1 on page 9cbffb6f-8cc0-1ce4-e537-eef84481d4cf.
+4:16:41 PM web.1    |  2026-06-11 16:16:41,208 Calling _finalize_trial.
+4:16:41 PM web.1    |  2026-06-11 16:16:41,212 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+4:16:41 PM web.1    |  2026-06-11 16:16:41,213 Allocating a performance reward of $0.00 to participant 1 for trial 33.
+4:16:41 PM web.1    |  2026-06-11 16:16:41,218 Warning: Trial 33 received an unexpected amount of time credit (expected = 5.3 seconds; actual = 5.300000000000011 seconds). Consider setting the trial's `time_estimate` parameter to 5.300000000000011.You can disable this warning message by setting `Trial.check_time_credit_received = False`.
+4:16:41 PM web.1    |  2026-06-11 16:16:41,218 Preparing trial for participant 1.
+4:16:41 PM web.1    |  2026-06-11 16:16:41,218 Looking for networks for participant 1.
+4:16:41 PM web.1    |  2026-06-11 16:16:41,225 9 remain after applying custom network filters.
+4:16:41 PM web.1    |  2026-06-11 16:16:41,225 0 out of 9 networks are awaiting async processes (or have nodes awaiting async processes).
+4:16:41 PM web.1    |  2026-06-11 16:16:41,225 Outcome: found 1 candidate network(s) for participant 1.
+4:16:41 PM web.1    |  2026-06-11 16:16:41,225 Selected node 25 from network 25 to give to participant 1.
+4:16:41 PM web.1    |  2026-06-11 16:16:41,230 Task 'prepare_trial' took 0.012 s
+4:16:41 PM web.1    |  2026-06-11 16:16:41,230 Task '_prepare_trial' took 0.012 s
+4:16:41 PM web.1    |  2026-06-11 16:16:41,234 Evaluating while_loop (Waiting for trial) condition: result = False
+4:16:41 PM web.1    |  2026-06-11 16:16:41,234 Evaluating while_loop (similarity__trial_loop) condition: result = True
+4:16:41 PM web.1    |  2026-06-11 16:16:41,235 Task 'advance_page' took 0.027 s
+4:16:41 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:41 +0000] "POST /response HTTP/1.1" 200 311 "-" "python-requests/2.33.1"
+4:16:41 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:41 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+4:16:41 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:41 +0000] "GET /timeline?unique_id=946e1de4-040a-4aba-852c-48178dff7929%3A3973054d-f9c5-410e-ae58-16b143cde004 HTTP/1.1" 200 78365 "-" "python-requests/2.33.1"
+4:16:41 PM web.1    |  2026-06-11 16:16:41,356 Received a response from participant 1 on page 6eb2ace4-3ad5-1199-2f4f-17dc5e682531.
+4:16:41 PM web.1    |  2026-06-11 16:16:41,362 Calling _finalize_trial.
+4:16:41 PM web.1    |  2026-06-11 16:16:41,366 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+4:16:41 PM web.1    |  2026-06-11 16:16:41,367 Allocating a performance reward of $0.00 to participant 1 for trial 34.
+4:16:41 PM web.1    |  2026-06-11 16:16:41,372 Warning: Trial 34 received an unexpected amount of time credit (expected = 5.3 seconds; actual = 5.300000000000011 seconds). Consider setting the trial's `time_estimate` parameter to 5.300000000000011.You can disable this warning message by setting `Trial.check_time_credit_received = False`.
+4:16:41 PM web.1    |  2026-06-11 16:16:41,372 Preparing trial for participant 1.
+4:16:41 PM web.1    |  2026-06-11 16:16:41,372 Looking for networks for participant 1.
+4:16:41 PM web.1    |  2026-06-11 16:16:41,378 8 remain after applying custom network filters.
+4:16:41 PM web.1    |  2026-06-11 16:16:41,378 0 out of 8 networks are awaiting async processes (or have nodes awaiting async processes).
+4:16:41 PM web.1    |  2026-06-11 16:16:41,378 Outcome: found 1 candidate network(s) for participant 1.
+4:16:41 PM web.1    |  2026-06-11 16:16:41,378 Selected node 38 from network 38 to give to participant 1.
+4:16:41 PM web.1    |  2026-06-11 16:16:41,382 Task 'prepare_trial' took 0.010 s
+4:16:41 PM web.1    |  2026-06-11 16:16:41,382 Task '_prepare_trial' took 0.010 s
+4:16:41 PM web.1    |  2026-06-11 16:16:41,386 Evaluating while_loop (Waiting for trial) condition: result = False
+4:16:41 PM web.1    |  2026-06-11 16:16:41,387 Evaluating while_loop (similarity__trial_loop) condition: result = True
+4:16:41 PM web.1    |  2026-06-11 16:16:41,387 Task 'advance_page' took 0.026 s
+4:16:41 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:41 +0000] "POST /response HTTP/1.1" 200 311 "-" "python-requests/2.33.1"
+4:16:41 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:41 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+4:16:41 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:41 +0000] "GET /timeline?unique_id=946e1de4-040a-4aba-852c-48178dff7929%3A3973054d-f9c5-410e-ae58-16b143cde004 HTTP/1.1" 200 78367 "-" "python-requests/2.33.1"
+4:16:41 PM web.1    |  2026-06-11 16:16:41,507 Received a response from participant 1 on page b43a7da2-7169-fe1f-84c4-1b086ea1e43a.
+4:16:41 PM web.1    |  2026-06-11 16:16:41,513 Calling _finalize_trial.
+4:16:41 PM web.1    |  2026-06-11 16:16:41,517 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+4:16:41 PM web.1    |  2026-06-11 16:16:41,518 Allocating a performance reward of $0.00 to participant 1 for trial 35.
+4:16:41 PM web.1    |  2026-06-11 16:16:41,522 Warning: Trial 35 received an unexpected amount of time credit (expected = 5.3 seconds; actual = 5.300000000000011 seconds). Consider setting the trial's `time_estimate` parameter to 5.300000000000011.You can disable this warning message by setting `Trial.check_time_credit_received = False`.
+4:16:41 PM web.1    |  2026-06-11 16:16:41,523 Preparing trial for participant 1.
+4:16:41 PM web.1    |  2026-06-11 16:16:41,523 Looking for networks for participant 1.
+4:16:41 PM web.1    |  2026-06-11 16:16:41,529 7 remain after applying custom network filters.
+4:16:41 PM web.1    |  2026-06-11 16:16:41,529 0 out of 7 networks are awaiting async processes (or have nodes awaiting async processes).
+4:16:41 PM web.1    |  2026-06-11 16:16:41,529 Outcome: found 1 candidate network(s) for participant 1.
+4:16:41 PM web.1    |  2026-06-11 16:16:41,529 Selected node 33 from network 33 to give to participant 1.
+4:16:41 PM web.1    |  2026-06-11 16:16:41,534 Task 'prepare_trial' took 0.011 s
+4:16:41 PM web.1    |  2026-06-11 16:16:41,534 Task '_prepare_trial' took 0.011 s
+4:16:41 PM web.1    |  2026-06-11 16:16:41,538 Evaluating while_loop (Waiting for trial) condition: result = False
+4:16:41 PM web.1    |  2026-06-11 16:16:41,538 Evaluating while_loop (similarity__trial_loop) condition: result = True
+4:16:41 PM web.1    |  2026-06-11 16:16:41,539 Task 'advance_page' took 0.026 s
+4:16:41 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:41 +0000] "POST /response HTTP/1.1" 200 311 "-" "python-requests/2.33.1"
+4:16:41 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:41 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+4:16:41 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:41 +0000] "GET /timeline?unique_id=946e1de4-040a-4aba-852c-48178dff7929%3A3973054d-f9c5-410e-ae58-16b143cde004 HTTP/1.1" 200 78373 "-" "python-requests/2.33.1"
+4:16:41 PM web.1    |  2026-06-11 16:16:41,663 Received a response from participant 1 on page 732128fd-38ef-71ac-2a4c-8fe4ebc8b75b.
+4:16:41 PM web.1    |  2026-06-11 16:16:41,670 Calling _finalize_trial.
+4:16:41 PM web.1    |  2026-06-11 16:16:41,674 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+4:16:41 PM web.1    |  2026-06-11 16:16:41,675 Allocating a performance reward of $0.00 to participant 1 for trial 36.
+4:16:41 PM web.1    |  2026-06-11 16:16:41,680 Warning: Trial 36 received an unexpected amount of time credit (expected = 5.3 seconds; actual = 5.300000000000011 seconds). Consider setting the trial's `time_estimate` parameter to 5.300000000000011.You can disable this warning message by setting `Trial.check_time_credit_received = False`.
+4:16:41 PM web.1    |  2026-06-11 16:16:41,680 Preparing trial for participant 1.
+4:16:41 PM web.1    |  2026-06-11 16:16:41,681 Looking for networks for participant 1.
+4:16:41 PM web.1    |  2026-06-11 16:16:41,687 6 remain after applying custom network filters.
+4:16:41 PM web.1    |  2026-06-11 16:16:41,687 0 out of 6 networks are awaiting async processes (or have nodes awaiting async processes).
+4:16:41 PM web.1    |  2026-06-11 16:16:41,687 Outcome: found 1 candidate network(s) for participant 1.
+4:16:41 PM web.1    |  2026-06-11 16:16:41,687 Selected node 23 from network 23 to give to participant 1.
+4:16:41 PM web.1    |  2026-06-11 16:16:41,691 Task 'prepare_trial' took 0.011 s
+4:16:41 PM web.1    |  2026-06-11 16:16:41,691 Task '_prepare_trial' took 0.011 s
+4:16:41 PM web.1    |  2026-06-11 16:16:41,696 Evaluating while_loop (Waiting for trial) condition: result = False
+4:16:41 PM web.1    |  2026-06-11 16:16:41,696 Evaluating while_loop (similarity__trial_loop) condition: result = True
+4:16:41 PM web.1    |  2026-06-11 16:16:41,697 Task 'advance_page' took 0.027 s
+4:16:41 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:41 +0000] "POST /response HTTP/1.1" 200 311 "-" "python-requests/2.33.1"
+4:16:41 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:41 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+4:16:41 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:41 +0000] "GET /timeline?unique_id=946e1de4-040a-4aba-852c-48178dff7929%3A3973054d-f9c5-410e-ae58-16b143cde004 HTTP/1.1" 200 78367 "-" "python-requests/2.33.1"
+4:16:41 PM web.1    |  2026-06-11 16:16:41,820 Received a response from participant 1 on page 2c85ee42-5052-08be-0aad-5e214f6e512b.
+4:16:41 PM web.1    |  2026-06-11 16:16:41,826 Calling _finalize_trial.
+4:16:41 PM web.1    |  2026-06-11 16:16:41,830 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+4:16:41 PM web.1    |  2026-06-11 16:16:41,831 Allocating a performance reward of $0.00 to participant 1 for trial 37.
+4:16:41 PM web.1    |  2026-06-11 16:16:41,835 Warning: Trial 37 received an unexpected amount of time credit (expected = 5.3 seconds; actual = 5.300000000000011 seconds). Consider setting the trial's `time_estimate` parameter to 5.300000000000011.You can disable this warning message by setting `Trial.check_time_credit_received = False`.
+4:16:41 PM web.1    |  2026-06-11 16:16:41,836 Preparing trial for participant 1.
+4:16:41 PM web.1    |  2026-06-11 16:16:41,836 Looking for networks for participant 1.
+4:16:41 PM web.1    |  2026-06-11 16:16:41,842 5 remain after applying custom network filters.
+4:16:41 PM web.1    |  2026-06-11 16:16:41,842 0 out of 5 networks are awaiting async processes (or have nodes awaiting async processes).
+4:16:41 PM web.1    |  2026-06-11 16:16:41,842 Outcome: found 1 candidate network(s) for participant 1.
+4:16:41 PM web.1    |  2026-06-11 16:16:41,842 Selected node 34 from network 34 to give to participant 1.
+4:16:41 PM web.1    |  2026-06-11 16:16:41,847 Task 'prepare_trial' took 0.011 s
+4:16:41 PM web.1    |  2026-06-11 16:16:41,847 Task '_prepare_trial' took 0.011 s
+4:16:41 PM web.1    |  2026-06-11 16:16:41,851 Evaluating while_loop (Waiting for trial) condition: result = False
+4:16:41 PM web.1    |  2026-06-11 16:16:41,851 Evaluating while_loop (similarity__trial_loop) condition: result = True
+4:16:41 PM web.1    |  2026-06-11 16:16:41,852 Task 'advance_page' took 0.027 s
+4:16:41 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:41 +0000] "POST /response HTTP/1.1" 200 311 "-" "python-requests/2.33.1"
+4:16:41 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:41 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+4:16:41 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:41 +0000] "GET /timeline?unique_id=946e1de4-040a-4aba-852c-48178dff7929%3A3973054d-f9c5-410e-ae58-16b143cde004 HTTP/1.1" 200 78371 "-" "python-requests/2.33.1"
+4:16:41 PM web.1    |  2026-06-11 16:16:41,973 Received a response from participant 1 on page c37b94c2-e8a6-b929-c56a-870e73d3d319.
+4:16:41 PM web.1    |  2026-06-11 16:16:41,978 Calling _finalize_trial.
+4:16:41 PM web.1    |  2026-06-11 16:16:41,982 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+4:16:41 PM web.1    |  2026-06-11 16:16:41,983 Allocating a performance reward of $0.00 to participant 1 for trial 38.
+4:16:41 PM web.1    |  2026-06-11 16:16:41,987 Warning: Trial 38 received an unexpected amount of time credit (expected = 5.3 seconds; actual = 5.300000000000011 seconds). Consider setting the trial's `time_estimate` parameter to 5.300000000000011.You can disable this warning message by setting `Trial.check_time_credit_received = False`.
+4:16:41 PM web.1    |  2026-06-11 16:16:41,988 Preparing trial for participant 1.
+4:16:41 PM web.1    |  2026-06-11 16:16:41,988 Looking for networks for participant 1.
+4:16:41 PM web.1    |  2026-06-11 16:16:41,993 4 remain after applying custom network filters.
+4:16:41 PM web.1    |  2026-06-11 16:16:41,994 0 out of 4 networks are awaiting async processes (or have nodes awaiting async processes).
+4:16:41 PM web.1    |  2026-06-11 16:16:41,994 Outcome: found 1 candidate network(s) for participant 1.
+4:16:41 PM web.1    |  2026-06-11 16:16:41,994 Selected node 27 from network 27 to give to participant 1.
+4:16:41 PM web.1    |  2026-06-11 16:16:41,998 Task 'prepare_trial' took 0.011 s
+4:16:41 PM web.1    |  2026-06-11 16:16:41,998 Task '_prepare_trial' took 0.011 s
+4:16:42 PM web.1    |  2026-06-11 16:16:42,002 Evaluating while_loop (Waiting for trial) condition: result = False
+4:16:42 PM web.1    |  2026-06-11 16:16:42,003 Evaluating while_loop (similarity__trial_loop) condition: result = True
+4:16:42 PM web.1    |  2026-06-11 16:16:42,003 Task 'advance_page' took 0.025 s
+4:16:42 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:42 +0000] "POST /response HTTP/1.1" 200 311 "-" "python-requests/2.33.1"
+4:16:42 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:42 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+4:16:42 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:42 +0000] "GET /timeline?unique_id=946e1de4-040a-4aba-852c-48178dff7929%3A3973054d-f9c5-410e-ae58-16b143cde004 HTTP/1.1" 200 78367 "-" "python-requests/2.33.1"
+4:16:42 PM web.1    |  2026-06-11 16:16:42,127 Received a response from participant 1 on page e0d6f282-e45e-5fc0-204c-f9ff85611db0.
+4:16:42 PM web.1    |  2026-06-11 16:16:42,134 Calling _finalize_trial.
+4:16:42 PM web.1    |  2026-06-11 16:16:42,138 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+4:16:42 PM web.1    |  2026-06-11 16:16:42,140 Allocating a performance reward of $0.00 to participant 1 for trial 39.
+4:16:42 PM web.1    |  2026-06-11 16:16:42,144 Warning: Trial 39 received an unexpected amount of time credit (expected = 5.3 seconds; actual = 5.300000000000011 seconds). Consider setting the trial's `time_estimate` parameter to 5.300000000000011.You can disable this warning message by setting `Trial.check_time_credit_received = False`.
+4:16:42 PM web.1    |  2026-06-11 16:16:42,145 Preparing trial for participant 1.
+4:16:42 PM web.1    |  2026-06-11 16:16:42,145 Looking for networks for participant 1.
+4:16:42 PM web.1    |  2026-06-11 16:16:42,150 3 remain after applying custom network filters.
+4:16:42 PM web.1    |  2026-06-11 16:16:42,151 0 out of 3 networks are awaiting async processes (or have nodes awaiting async processes).
+4:16:42 PM web.1    |  2026-06-11 16:16:42,151 Outcome: found 1 candidate network(s) for participant 1.
+4:16:42 PM web.1    |  2026-06-11 16:16:42,151 Selected node 42 from network 42 to give to participant 1.
+4:16:42 PM web.1    |  2026-06-11 16:16:42,155 Task 'prepare_trial' took 0.010 s
+4:16:42 PM web.1    |  2026-06-11 16:16:42,155 Task '_prepare_trial' took 0.010 s
+4:16:42 PM web.1    |  2026-06-11 16:16:42,160 Evaluating while_loop (Waiting for trial) condition: result = False
+4:16:42 PM web.1    |  2026-06-11 16:16:42,160 Evaluating while_loop (similarity__trial_loop) condition: result = True
+4:16:42 PM web.1    |  2026-06-11 16:16:42,161 Task 'advance_page' took 0.027 s
+4:16:42 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:42 +0000] "POST /response HTTP/1.1" 200 311 "-" "python-requests/2.33.1"
+4:16:42 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:42 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+4:16:42 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:42 +0000] "GET /timeline?unique_id=946e1de4-040a-4aba-852c-48178dff7929%3A3973054d-f9c5-410e-ae58-16b143cde004 HTTP/1.1" 200 78373 "-" "python-requests/2.33.1"
+4:16:42 PM web.1    |  2026-06-11 16:16:42,283 Received a response from participant 1 on page eb6ae7eb-2ecf-8b1e-3fd8-e53a5deda790.
+4:16:42 PM web.1    |  2026-06-11 16:16:42,290 Calling _finalize_trial.
+4:16:42 PM web.1    |  2026-06-11 16:16:42,294 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+4:16:42 PM web.1    |  2026-06-11 16:16:42,295 Allocating a performance reward of $0.00 to participant 1 for trial 40.
+4:16:42 PM web.1    |  2026-06-11 16:16:42,300 Warning: Trial 40 received an unexpected amount of time credit (expected = 5.3 seconds; actual = 5.300000000000011 seconds). Consider setting the trial's `time_estimate` parameter to 5.300000000000011.You can disable this warning message by setting `Trial.check_time_credit_received = False`.
+4:16:42 PM web.1    |  2026-06-11 16:16:42,300 Preparing trial for participant 1.
+4:16:42 PM web.1    |  2026-06-11 16:16:42,300 Looking for networks for participant 1.
+4:16:42 PM web.1    |  2026-06-11 16:16:42,305 2 remain after applying custom network filters.
+4:16:42 PM web.1    |  2026-06-11 16:16:42,306 0 out of 2 networks are awaiting async processes (or have nodes awaiting async processes).
+4:16:42 PM web.1    |  2026-06-11 16:16:42,306 Outcome: found 1 candidate network(s) for participant 1.
+4:16:42 PM web.1    |  2026-06-11 16:16:42,306 Selected node 31 from network 31 to give to participant 1.
+4:16:42 PM web.1    |  2026-06-11 16:16:42,310 Task 'prepare_trial' took 0.010 s
+4:16:42 PM web.1    |  2026-06-11 16:16:42,310 Task '_prepare_trial' took 0.010 s
+4:16:42 PM web.1    |  2026-06-11 16:16:42,314 Evaluating while_loop (Waiting for trial) condition: result = False
+4:16:42 PM web.1    |  2026-06-11 16:16:42,315 Evaluating while_loop (similarity__trial_loop) condition: result = True
+4:16:42 PM web.1    |  2026-06-11 16:16:42,315 Task 'advance_page' took 0.026 s
+4:16:42 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:42 +0000] "POST /response HTTP/1.1" 200 311 "-" "python-requests/2.33.1"
+4:16:42 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:42 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+4:16:42 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:42 +0000] "GET /timeline?unique_id=946e1de4-040a-4aba-852c-48178dff7929%3A3973054d-f9c5-410e-ae58-16b143cde004 HTTP/1.1" 200 78369 "-" "python-requests/2.33.1"
+4:16:42 PM web.1    |  2026-06-11 16:16:42,437 Received a response from participant 1 on page 3e313e45-54ee-8ddc-00b7-13b47efb6e44.
+4:16:42 PM web.1    |  2026-06-11 16:16:42,442 Calling _finalize_trial.
+4:16:42 PM web.1    |  2026-06-11 16:16:42,446 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+4:16:42 PM web.1    |  2026-06-11 16:16:42,447 Allocating a performance reward of $0.00 to participant 1 for trial 41.
+4:16:42 PM web.1    |  2026-06-11 16:16:42,452 Warning: Trial 41 received an unexpected amount of time credit (expected = 5.3 seconds; actual = 5.300000000000011 seconds). Consider setting the trial's `time_estimate` parameter to 5.300000000000011.You can disable this warning message by setting `Trial.check_time_credit_received = False`.
+4:16:42 PM web.1    |  2026-06-11 16:16:42,452 Preparing trial for participant 1.
+4:16:42 PM web.1    |  2026-06-11 16:16:42,452 Looking for networks for participant 1.
+4:16:42 PM web.1    |  2026-06-11 16:16:42,458 1 remain after applying custom network filters.
+4:16:42 PM web.1    |  2026-06-11 16:16:42,458 0 out of 1 networks are awaiting async processes (or have nodes awaiting async processes).
+4:16:42 PM web.1    |  2026-06-11 16:16:42,458 Outcome: found 1 candidate network(s) for participant 1.
+4:16:42 PM web.1    |  2026-06-11 16:16:42,458 Selected node 26 from network 26 to give to participant 1.
+4:16:42 PM web.1    |  2026-06-11 16:16:42,463 Task 'prepare_trial' took 0.011 s
+4:16:42 PM web.1    |  2026-06-11 16:16:42,463 Task '_prepare_trial' took 0.011 s
+4:16:42 PM web.1    |  2026-06-11 16:16:42,466 Evaluating while_loop (Waiting for trial) condition: result = False
+4:16:42 PM web.1    |  2026-06-11 16:16:42,466 Evaluating while_loop (similarity__trial_loop) condition: result = True
+4:16:42 PM web.1    |  2026-06-11 16:16:42,467 Task 'advance_page' took 0.025 s
+4:16:42 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:42 +0000] "POST /response HTTP/1.1" 200 311 "-" "python-requests/2.33.1"
+4:16:42 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:42 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+4:16:42 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:42 +0000] "GET /timeline?unique_id=946e1de4-040a-4aba-852c-48178dff7929%3A3973054d-f9c5-410e-ae58-16b143cde004 HTTP/1.1" 200 78363 "-" "python-requests/2.33.1"
+4:16:42 PM web.1    |  2026-06-11 16:16:42,590 Received a response from participant 1 on page 19578de2-b525-255b-8b5e-ca125e11af64.
+4:16:42 PM web.1    |  2026-06-11 16:16:42,595 Calling _finalize_trial.
+4:16:42 PM web.1    |  2026-06-11 16:16:42,598 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+4:16:42 PM web.1    |  2026-06-11 16:16:42,600 Allocating a performance reward of $0.00 to participant 1 for trial 42.
+4:16:42 PM web.1    |  2026-06-11 16:16:42,604 Warning: Trial 42 received an unexpected amount of time credit (expected = 5.3 seconds; actual = 5.300000000000011 seconds). Consider setting the trial's `time_estimate` parameter to 5.300000000000011.You can disable this warning message by setting `Trial.check_time_credit_received = False`.
+4:16:42 PM web.1    |  2026-06-11 16:16:42,604 Preparing trial for participant 1.
+4:16:42 PM web.1    |  2026-06-11 16:16:42,604 Looking for networks for participant 1.
+4:16:42 PM web.1    |  2026-06-11 16:16:42,605 N completed trials (21) >= N trials per participant (21), skipping forward
+4:16:42 PM web.1    |  2026-06-11 16:16:42,605 Outcome of find_networks: exit
+4:16:42 PM web.1    |  2026-06-11 16:16:42,607 Evaluating while_loop (Waiting for trial) condition: result = False
+4:16:42 PM web.1    |  2026-06-11 16:16:42,607 Evaluating while_loop (similarity__trial_loop) condition: result = False
+4:16:42 PM web.1    |  2026-06-11 16:16:42,608 Task 'advance_page' took 0.013 s
+4:16:42 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:42 +0000] "POST /response HTTP/1.1" 200 296 "-" "python-requests/2.33.1"
+4:16:42 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:42 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+4:16:42 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:42 +0000] "GET /timeline?unique_id=946e1de4-040a-4aba-852c-48178dff7929%3A3973054d-f9c5-410e-ae58-16b143cde004 HTTP/1.1" 200 73837 "-" "python-requests/2.33.1"
+4:16:42 PM web.1    |  2026-06-11 16:16:42,726 Received a response from participant 1 on page 04af8c53-87e3-8ed7-fb4b-a9c6e364f04c.
+4:16:42 PM web.1    |  2026-06-11 16:16:42,739 Preparing trial for participant 1.
+4:16:42 PM web.1    |  2026-06-11 16:16:42,739 Looking for networks for participant 1.
+4:16:42 PM web.1    |  2026-06-11 16:16:42,746 12 remain after applying custom network filters.
+4:16:42 PM web.1    |  2026-06-11 16:16:42,746 0 out of 12 networks are awaiting async processes (or have nodes awaiting async processes).
+4:16:42 PM web.1    |  2026-06-11 16:16:42,746 Outcome: found 1 candidate network(s) for participant 1.
+4:16:42 PM web.1    |  2026-06-11 16:16:42,746 Selected node 45 from network 45 to give to participant 1.
+4:16:42 PM web.1    |  2026-06-11 16:16:42,752 Task 'prepare_trial' took 0.013 s
+4:16:42 PM web.1    |  2026-06-11 16:16:42,752 Task '_prepare_trial' took 0.013 s
+4:16:42 PM web.1    |  2026-06-11 16:16:42,757 Evaluating while_loop (Waiting for trial) condition: result = False
+4:16:42 PM web.1    |  2026-06-11 16:16:42,757 Evaluating while_loop (identification__trial_loop) condition: result = True
+4:16:42 PM web.1    |  2026-06-11 16:16:42,758 Task 'advance_page' took 0.028 s
+4:16:42 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:42 +0000] "POST /response HTTP/1.1" 200 311 "-" "python-requests/2.33.1"
+4:16:42 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:42 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+4:16:42 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:42 +0000] "GET /timeline?unique_id=946e1de4-040a-4aba-852c-48178dff7929%3A3973054d-f9c5-410e-ae58-16b143cde004 HTTP/1.1" 200 77286 "-" "python-requests/2.33.1"
+4:16:42 PM web.1    |  2026-06-11 16:16:42,881 Received a response from participant 1 on page 9cd14fbb-5a29-899d-591c-5283ac74f2fa.
+4:16:42 PM web.1    |  2026-06-11 16:16:42,886 Calling _finalize_trial.
+4:16:42 PM web.1    |  2026-06-11 16:16:42,890 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+4:16:42 PM web.1    |  2026-06-11 16:16:42,891 Allocating a performance reward of $0.00 to participant 1 for trial 43.
+4:16:42 PM web.1    |  2026-06-11 16:16:42,896 Warning: Trial 43 received an unexpected amount of time credit (expected = 5.3 seconds; actual = 5.300000000000011 seconds). Consider setting the trial's `time_estimate` parameter to 5.300000000000011.You can disable this warning message by setting `Trial.check_time_credit_received = False`.
+4:16:42 PM web.1    |  2026-06-11 16:16:42,897 Preparing trial for participant 1.
+4:16:42 PM web.1    |  2026-06-11 16:16:42,897 Looking for networks for participant 1.
+4:16:42 PM web.1    |  2026-06-11 16:16:42,904 11 remain after applying custom network filters.
+4:16:42 PM web.1    |  2026-06-11 16:16:42,904 0 out of 11 networks are awaiting async processes (or have nodes awaiting async processes).
+4:16:42 PM web.1    |  2026-06-11 16:16:42,904 Outcome: found 1 candidate network(s) for participant 1.
+4:16:42 PM web.1    |  2026-06-11 16:16:42,904 Selected node 44 from network 44 to give to participant 1.
+4:16:42 PM web.1    |  2026-06-11 16:16:42,909 Task 'prepare_trial' took 0.013 s
+4:16:42 PM web.1    |  2026-06-11 16:16:42,910 Task '_prepare_trial' took 0.013 s
+4:16:42 PM web.1    |  2026-06-11 16:16:42,914 Evaluating while_loop (Waiting for trial) condition: result = False
+4:16:42 PM web.1    |  2026-06-11 16:16:42,914 Evaluating while_loop (identification__trial_loop) condition: result = True
+4:16:42 PM web.1    |  2026-06-11 16:16:42,915 Task 'advance_page' took 0.029 s
+4:16:42 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:42 +0000] "POST /response HTTP/1.1" 200 311 "-" "python-requests/2.33.1"
+4:16:42 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:42 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+4:16:43 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:43 +0000] "GET /timeline?unique_id=946e1de4-040a-4aba-852c-48178dff7929%3A3973054d-f9c5-410e-ae58-16b143cde004 HTTP/1.1" 200 77284 "-" "python-requests/2.33.1"
+4:16:43 PM web.1    |  2026-06-11 16:16:43,046 Received a response from participant 1 on page 9f83677e-2c51-b583-f9c6-ea72b9636728.
+4:16:43 PM web.1    |  2026-06-11 16:16:43,053 Calling _finalize_trial.
+4:16:43 PM web.1    |  2026-06-11 16:16:43,057 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+4:16:43 PM web.1    |  2026-06-11 16:16:43,059 Allocating a performance reward of $0.00 to participant 1 for trial 44.
+4:16:43 PM web.1    |  2026-06-11 16:16:43,065 Warning: Trial 44 received an unexpected amount of time credit (expected = 5.3 seconds; actual = 5.300000000000011 seconds). Consider setting the trial's `time_estimate` parameter to 5.300000000000011.You can disable this warning message by setting `Trial.check_time_credit_received = False`.
+4:16:43 PM web.1    |  2026-06-11 16:16:43,065 Preparing trial for participant 1.
+4:16:43 PM web.1    |  2026-06-11 16:16:43,065 Looking for networks for participant 1.
+4:16:43 PM web.1    |  2026-06-11 16:16:43,073 10 remain after applying custom network filters.
+4:16:43 PM web.1    |  2026-06-11 16:16:43,073 0 out of 10 networks are awaiting async processes (or have nodes awaiting async processes).
+4:16:43 PM web.1    |  2026-06-11 16:16:43,073 Outcome: found 1 candidate network(s) for participant 1.
+4:16:43 PM web.1    |  2026-06-11 16:16:43,073 Selected node 46 from network 46 to give to participant 1.
+4:16:43 PM web.1    |  2026-06-11 16:16:43,079 Task 'prepare_trial' took 0.014 s
+4:16:43 PM web.1    |  2026-06-11 16:16:43,079 Task '_prepare_trial' took 0.014 s
+4:16:43 PM web.1    |  2026-06-11 16:16:43,083 Evaluating while_loop (Waiting for trial) condition: result = False
+4:16:43 PM web.1    |  2026-06-11 16:16:43,083 Evaluating while_loop (identification__trial_loop) condition: result = True
+4:16:43 PM web.1    |  2026-06-11 16:16:43,084 Task 'advance_page' took 0.031 s
+4:16:43 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:43 +0000] "POST /response HTTP/1.1" 200 311 "-" "python-requests/2.33.1"
+4:16:43 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:43 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+4:16:43 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:43 +0000] "GET /timeline?unique_id=946e1de4-040a-4aba-852c-48178dff7929%3A3973054d-f9c5-410e-ae58-16b143cde004 HTTP/1.1" 200 77284 "-" "python-requests/2.33.1"
+4:16:43 PM web.1    |  2026-06-11 16:16:43,215 Received a response from participant 1 on page db69a119-f448-6bb6-f931-d3355f0d2c60.
+4:16:43 PM web.1    |  2026-06-11 16:16:43,221 Calling _finalize_trial.
+4:16:43 PM web.1    |  2026-06-11 16:16:43,226 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+4:16:43 PM web.1    |  2026-06-11 16:16:43,228 Allocating a performance reward of $0.00 to participant 1 for trial 45.
+4:16:43 PM web.1    |  2026-06-11 16:16:43,233 Warning: Trial 45 received an unexpected amount of time credit (expected = 5.3 seconds; actual = 5.300000000000011 seconds). Consider setting the trial's `time_estimate` parameter to 5.300000000000011.You can disable this warning message by setting `Trial.check_time_credit_received = False`.
+4:16:43 PM web.1    |  2026-06-11 16:16:43,233 Preparing trial for participant 1.
+4:16:43 PM web.1    |  2026-06-11 16:16:43,233 Looking for networks for participant 1.
+4:16:43 PM web.1    |  2026-06-11 16:16:43,242 9 remain after applying custom network filters.
+4:16:43 PM web.1    |  2026-06-11 16:16:43,242 0 out of 9 networks are awaiting async processes (or have nodes awaiting async processes).
+4:16:43 PM web.1    |  2026-06-11 16:16:43,242 Outcome: found 1 candidate network(s) for participant 1.
+4:16:43 PM web.1    |  2026-06-11 16:16:43,242 Selected node 51 from network 51 to give to participant 1.
+4:16:43 PM web.1    |  2026-06-11 16:16:43,247 Task 'prepare_trial' took 0.014 s
+4:16:43 PM web.1    |  2026-06-11 16:16:43,247 Task '_prepare_trial' took 0.014 s
+4:16:43 PM web.1    |  2026-06-11 16:16:43,252 Evaluating while_loop (Waiting for trial) condition: result = False
+4:16:43 PM web.1    |  2026-06-11 16:16:43,252 Evaluating while_loop (identification__trial_loop) condition: result = True
+4:16:43 PM web.1    |  2026-06-11 16:16:43,253 Task 'advance_page' took 0.032 s
+4:16:43 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:43 +0000] "POST /response HTTP/1.1" 200 311 "-" "python-requests/2.33.1"
+4:16:43 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:43 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+4:16:43 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:43 +0000] "GET /timeline?unique_id=946e1de4-040a-4aba-852c-48178dff7929%3A3973054d-f9c5-410e-ae58-16b143cde004 HTTP/1.1" 200 78194 "-" "python-requests/2.33.1"
+4:16:43 PM web.1    |  2026-06-11 16:16:43,378 Received a response from participant 1 on page 189cba42-6c1c-743c-81ca-a652ce2296ba.
+4:16:43 PM web.1    |  2026-06-11 16:16:43,384 Calling _finalize_trial.
+4:16:43 PM web.1    |  2026-06-11 16:16:43,388 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+4:16:43 PM web.1    |  2026-06-11 16:16:43,390 Allocating a performance reward of $0.00 to participant 1 for trial 46.
+4:16:43 PM web.1    |  2026-06-11 16:16:43,394 Warning: Trial 46 received an unexpected amount of time credit (expected = 5.3 seconds; actual = 5.300000000000011 seconds). Consider setting the trial's `time_estimate` parameter to 5.300000000000011.You can disable this warning message by setting `Trial.check_time_credit_received = False`.
+4:16:43 PM web.1    |  2026-06-11 16:16:43,395 Preparing trial for participant 1.
+4:16:43 PM web.1    |  2026-06-11 16:16:43,395 Looking for networks for participant 1.
+4:16:43 PM web.1    |  2026-06-11 16:16:43,403 8 remain after applying custom network filters.
+4:16:43 PM web.1    |  2026-06-11 16:16:43,403 0 out of 8 networks are awaiting async processes (or have nodes awaiting async processes).
+4:16:43 PM web.1    |  2026-06-11 16:16:43,403 Outcome: found 1 candidate network(s) for participant 1.
+4:16:43 PM web.1    |  2026-06-11 16:16:43,403 Selected node 43 from network 43 to give to participant 1.
+4:16:43 PM web.1    |  2026-06-11 16:16:43,408 Task 'prepare_trial' took 0.013 s
+4:16:43 PM web.1    |  2026-06-11 16:16:43,408 Task '_prepare_trial' took 0.013 s
+4:16:43 PM web.1    |  2026-06-11 16:16:43,412 Evaluating while_loop (Waiting for trial) condition: result = False
+4:16:43 PM web.1    |  2026-06-11 16:16:43,412 Evaluating while_loop (identification__trial_loop) condition: result = True
+4:16:43 PM web.1    |  2026-06-11 16:16:43,413 Task 'advance_page' took 0.029 s
+4:16:43 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:43 +0000] "POST /response HTTP/1.1" 200 311 "-" "python-requests/2.33.1"
+4:16:43 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:43 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+4:16:43 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:43 +0000] "GET /timeline?unique_id=946e1de4-040a-4aba-852c-48178dff7929%3A3973054d-f9c5-410e-ae58-16b143cde004 HTTP/1.1" 200 77286 "-" "python-requests/2.33.1"
+4:16:43 PM web.1    |  2026-06-11 16:16:43,539 Received a response from participant 1 on page 22ef88de-6015-0da8-5443-c7f72f68dcc1.
+4:16:43 PM web.1    |  2026-06-11 16:16:43,546 Calling _finalize_trial.
+4:16:43 PM web.1    |  2026-06-11 16:16:43,550 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+4:16:43 PM web.1    |  2026-06-11 16:16:43,552 Allocating a performance reward of $0.00 to participant 1 for trial 47.
+4:16:43 PM web.1    |  2026-06-11 16:16:43,557 Warning: Trial 47 received an unexpected amount of time credit (expected = 5.3 seconds; actual = 5.300000000000011 seconds). Consider setting the trial's `time_estimate` parameter to 5.300000000000011.You can disable this warning message by setting `Trial.check_time_credit_received = False`.
+4:16:43 PM web.1    |  2026-06-11 16:16:43,557 Preparing trial for participant 1.
+4:16:43 PM web.1    |  2026-06-11 16:16:43,557 Looking for networks for participant 1.
+4:16:43 PM web.1    |  2026-06-11 16:16:43,565 7 remain after applying custom network filters.
+4:16:43 PM web.1    |  2026-06-11 16:16:43,565 0 out of 7 networks are awaiting async processes (or have nodes awaiting async processes).
+4:16:43 PM web.1    |  2026-06-11 16:16:43,565 Outcome: found 1 candidate network(s) for participant 1.
+4:16:43 PM web.1    |  2026-06-11 16:16:43,565 Selected node 52 from network 52 to give to participant 1.
+4:16:43 PM web.1    |  2026-06-11 16:16:43,569 Task 'prepare_trial' took 0.012 s
+4:16:43 PM web.1    |  2026-06-11 16:16:43,569 Task '_prepare_trial' took 0.012 s
+4:16:43 PM web.1    |  2026-06-11 16:16:43,573 Evaluating while_loop (Waiting for trial) condition: result = False
+4:16:43 PM web.1    |  2026-06-11 16:16:43,573 Evaluating while_loop (identification__trial_loop) condition: result = True
+4:16:43 PM web.1    |  2026-06-11 16:16:43,574 Task 'advance_page' took 0.028 s
+4:16:43 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:43 +0000] "POST /response HTTP/1.1" 200 311 "-" "python-requests/2.33.1"
+4:16:43 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:43 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+4:16:43 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:43 +0000] "GET /timeline?unique_id=946e1de4-040a-4aba-852c-48178dff7929%3A3973054d-f9c5-410e-ae58-16b143cde004 HTTP/1.1" 200 78192 "-" "python-requests/2.33.1"
+4:16:43 PM web.1    |  2026-06-11 16:16:43,699 Received a response from participant 1 on page 9f21a98f-4e05-2574-4848-e1e9e328e0f8.
+4:16:43 PM web.1    |  2026-06-11 16:16:43,705 Calling _finalize_trial.
+4:16:43 PM web.1    |  2026-06-11 16:16:43,708 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+4:16:43 PM web.1    |  2026-06-11 16:16:43,709 Allocating a performance reward of $0.00 to participant 1 for trial 48.
+4:16:43 PM web.1    |  2026-06-11 16:16:43,714 Warning: Trial 48 received an unexpected amount of time credit (expected = 5.3 seconds; actual = 5.300000000000011 seconds). Consider setting the trial's `time_estimate` parameter to 5.300000000000011.You can disable this warning message by setting `Trial.check_time_credit_received = False`.
+4:16:43 PM web.1    |  2026-06-11 16:16:43,714 Preparing trial for participant 1.
+4:16:43 PM web.1    |  2026-06-11 16:16:43,714 Looking for networks for participant 1.
+4:16:43 PM web.1    |  2026-06-11 16:16:43,721 6 remain after applying custom network filters.
+4:16:43 PM web.1    |  2026-06-11 16:16:43,721 0 out of 6 networks are awaiting async processes (or have nodes awaiting async processes).
+4:16:43 PM web.1    |  2026-06-11 16:16:43,721 Outcome: found 1 candidate network(s) for participant 1.
+4:16:43 PM web.1    |  2026-06-11 16:16:43,721 Selected node 48 from network 48 to give to participant 1.
+4:16:43 PM web.1    |  2026-06-11 16:16:43,725 Task 'prepare_trial' took 0.011 s
+4:16:43 PM web.1    |  2026-06-11 16:16:43,725 Task '_prepare_trial' took 0.011 s
+4:16:43 PM web.1    |  2026-06-11 16:16:43,730 Evaluating while_loop (Waiting for trial) condition: result = False
+4:16:43 PM web.1    |  2026-06-11 16:16:43,730 Evaluating while_loop (identification__trial_loop) condition: result = True
+4:16:43 PM web.1    |  2026-06-11 16:16:43,731 Task 'advance_page' took 0.026 s
+4:16:43 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:43 +0000] "POST /response HTTP/1.1" 200 311 "-" "python-requests/2.33.1"
+4:16:43 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:43 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+4:16:43 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:43 +0000] "GET /timeline?unique_id=946e1de4-040a-4aba-852c-48178dff7929%3A3973054d-f9c5-410e-ae58-16b143cde004 HTTP/1.1" 200 77738 "-" "python-requests/2.33.1"
+4:16:43 PM web.1    |  2026-06-11 16:16:43,855 Received a response from participant 1 on page cb01b9c7-289d-8452-07ba-57276d9f1e48.
+4:16:43 PM web.1    |  2026-06-11 16:16:43,861 Calling _finalize_trial.
+4:16:43 PM web.1    |  2026-06-11 16:16:43,865 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+4:16:43 PM web.1    |  2026-06-11 16:16:43,866 Allocating a performance reward of $0.00 to participant 1 for trial 49.
+4:16:43 PM web.1    |  2026-06-11 16:16:43,870 Warning: Trial 49 received an unexpected amount of time credit (expected = 5.3 seconds; actual = 5.300000000000011 seconds). Consider setting the trial's `time_estimate` parameter to 5.300000000000011.You can disable this warning message by setting `Trial.check_time_credit_received = False`.
+4:16:43 PM web.1    |  2026-06-11 16:16:43,871 Preparing trial for participant 1.
+4:16:43 PM web.1    |  2026-06-11 16:16:43,871 Looking for networks for participant 1.
+4:16:43 PM web.1    |  2026-06-11 16:16:43,877 5 remain after applying custom network filters.
+4:16:43 PM web.1    |  2026-06-11 16:16:43,877 0 out of 5 networks are awaiting async processes (or have nodes awaiting async processes).
+4:16:43 PM web.1    |  2026-06-11 16:16:43,877 Outcome: found 1 candidate network(s) for participant 1.
+4:16:43 PM web.1    |  2026-06-11 16:16:43,877 Selected node 53 from network 53 to give to participant 1.
+4:16:43 PM web.1    |  2026-06-11 16:16:43,882 Task 'prepare_trial' took 0.011 s
+4:16:43 PM web.1    |  2026-06-11 16:16:43,882 Task '_prepare_trial' took 0.011 s
+4:16:43 PM web.1    |  2026-06-11 16:16:43,886 Evaluating while_loop (Waiting for trial) condition: result = False
+4:16:43 PM web.1    |  2026-06-11 16:16:43,886 Evaluating while_loop (identification__trial_loop) condition: result = True
+4:16:43 PM web.1    |  2026-06-11 16:16:43,887 Task 'advance_page' took 0.026 s
+4:16:43 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:43 +0000] "POST /response HTTP/1.1" 200 311 "-" "python-requests/2.33.1"
+4:16:43 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:43 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+4:16:44 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:44 +0000] "GET /timeline?unique_id=946e1de4-040a-4aba-852c-48178dff7929%3A3973054d-f9c5-410e-ae58-16b143cde004 HTTP/1.1" 200 78194 "-" "python-requests/2.33.1"
+4:16:44 PM web.1    |  2026-06-11 16:16:44,011 Received a response from participant 1 on page 14799ab4-5dca-5e33-906c-9dbc12946d80.
+4:16:44 PM web.1    |  2026-06-11 16:16:44,018 Calling _finalize_trial.
+4:16:44 PM web.1    |  2026-06-11 16:16:44,022 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+4:16:44 PM web.1    |  2026-06-11 16:16:44,022 Allocating a performance reward of $0.00 to participant 1 for trial 50.
+4:16:44 PM web.1    |  2026-06-11 16:16:44,027 Warning: Trial 50 received an unexpected amount of time credit (expected = 5.3 seconds; actual = 5.300000000000011 seconds). Consider setting the trial's `time_estimate` parameter to 5.300000000000011.You can disable this warning message by setting `Trial.check_time_credit_received = False`.
+4:16:44 PM web.1    |  2026-06-11 16:16:44,027 Preparing trial for participant 1.
+4:16:44 PM web.1    |  2026-06-11 16:16:44,027 Looking for networks for participant 1.
+4:16:44 PM web.1    |  2026-06-11 16:16:44,033 4 remain after applying custom network filters.
+4:16:44 PM web.1    |  2026-06-11 16:16:44,034 0 out of 4 networks are awaiting async processes (or have nodes awaiting async processes).
+4:16:44 PM web.1    |  2026-06-11 16:16:44,034 Outcome: found 1 candidate network(s) for participant 1.
+4:16:44 PM web.1    |  2026-06-11 16:16:44,034 Selected node 50 from network 50 to give to participant 1.
+4:16:44 PM web.1    |  2026-06-11 16:16:44,039 Task 'prepare_trial' took 0.011 s
+4:16:44 PM web.1    |  2026-06-11 16:16:44,039 Task '_prepare_trial' took 0.011 s
+4:16:44 PM web.1    |  2026-06-11 16:16:44,043 Evaluating while_loop (Waiting for trial) condition: result = False
+4:16:44 PM web.1    |  2026-06-11 16:16:44,043 Evaluating while_loop (identification__trial_loop) condition: result = True
+4:16:44 PM web.1    |  2026-06-11 16:16:44,044 Task 'advance_page' took 0.027 s
+4:16:44 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:44 +0000] "POST /response HTTP/1.1" 200 311 "-" "python-requests/2.33.1"
+4:16:44 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:44 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+4:16:44 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:44 +0000] "GET /timeline?unique_id=946e1de4-040a-4aba-852c-48178dff7929%3A3973054d-f9c5-410e-ae58-16b143cde004 HTTP/1.1" 200 77738 "-" "python-requests/2.33.1"
+4:16:44 PM web.1    |  2026-06-11 16:16:44,166 Received a response from participant 1 on page 9dcef681-a3b3-7e95-5b19-a7de84928510.
+4:16:44 PM web.1    |  2026-06-11 16:16:44,171 Calling _finalize_trial.
+4:16:44 PM web.1    |  2026-06-11 16:16:44,174 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+4:16:44 PM web.1    |  2026-06-11 16:16:44,176 Allocating a performance reward of $0.00 to participant 1 for trial 51.
+4:16:44 PM web.1    |  2026-06-11 16:16:44,180 Warning: Trial 51 received an unexpected amount of time credit (expected = 5.3 seconds; actual = 5.300000000000011 seconds). Consider setting the trial's `time_estimate` parameter to 5.300000000000011.You can disable this warning message by setting `Trial.check_time_credit_received = False`.
+4:16:44 PM web.1    |  2026-06-11 16:16:44,180 Preparing trial for participant 1.
+4:16:44 PM web.1    |  2026-06-11 16:16:44,180 Looking for networks for participant 1.
+4:16:44 PM web.1    |  2026-06-11 16:16:44,187 3 remain after applying custom network filters.
+4:16:44 PM web.1    |  2026-06-11 16:16:44,187 0 out of 3 networks are awaiting async processes (or have nodes awaiting async processes).
+4:16:44 PM web.1    |  2026-06-11 16:16:44,187 Outcome: found 1 candidate network(s) for participant 1.
+4:16:44 PM web.1    |  2026-06-11 16:16:44,187 Selected node 54 from network 54 to give to participant 1.
+4:16:44 PM web.1    |  2026-06-11 16:16:44,192 Task 'prepare_trial' took 0.012 s
+4:16:44 PM web.1    |  2026-06-11 16:16:44,192 Task '_prepare_trial' took 0.012 s
+4:16:44 PM web.1    |  2026-06-11 16:16:44,197 Evaluating while_loop (Waiting for trial) condition: result = False
+4:16:44 PM web.1    |  2026-06-11 16:16:44,197 Evaluating while_loop (identification__trial_loop) condition: result = True
+4:16:44 PM web.1    |  2026-06-11 16:16:44,198 Task 'advance_page' took 0.027 s
+4:16:44 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:44 +0000] "POST /response HTTP/1.1" 200 311 "-" "python-requests/2.33.1"
+4:16:44 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:44 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+4:16:44 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:44 +0000] "GET /timeline?unique_id=946e1de4-040a-4aba-852c-48178dff7929%3A3973054d-f9c5-410e-ae58-16b143cde004 HTTP/1.1" 200 78192 "-" "python-requests/2.33.1"
+4:16:44 PM web.1    |  2026-06-11 16:16:44,321 Received a response from participant 1 on page 9db65503-3351-ce01-ce58-74ce0d67913e.
+4:16:44 PM web.1    |  2026-06-11 16:16:44,327 Calling _finalize_trial.
+4:16:44 PM web.1    |  2026-06-11 16:16:44,330 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+4:16:44 PM web.1    |  2026-06-11 16:16:44,332 Allocating a performance reward of $0.00 to participant 1 for trial 52.
+4:16:44 PM web.1    |  2026-06-11 16:16:44,337 Warning: Trial 52 received an unexpected amount of time credit (expected = 5.3 seconds; actual = 5.300000000000011 seconds). Consider setting the trial's `time_estimate` parameter to 5.300000000000011.You can disable this warning message by setting `Trial.check_time_credit_received = False`.
+4:16:44 PM web.1    |  2026-06-11 16:16:44,337 Preparing trial for participant 1.
+4:16:44 PM web.1    |  2026-06-11 16:16:44,337 Looking for networks for participant 1.
+4:16:44 PM web.1    |  2026-06-11 16:16:44,345 2 remain after applying custom network filters.
+4:16:44 PM web.1    |  2026-06-11 16:16:44,345 0 out of 2 networks are awaiting async processes (or have nodes awaiting async processes).
+4:16:44 PM web.1    |  2026-06-11 16:16:44,345 Outcome: found 1 candidate network(s) for participant 1.
+4:16:44 PM web.1    |  2026-06-11 16:16:44,345 Selected node 47 from network 47 to give to participant 1.
+4:16:44 PM web.1    |  2026-06-11 16:16:44,350 Task 'prepare_trial' took 0.012 s
+4:16:44 PM web.1    |  2026-06-11 16:16:44,350 Task '_prepare_trial' took 0.012 s
+4:16:44 PM web.1    |  2026-06-11 16:16:44,354 Evaluating while_loop (Waiting for trial) condition: result = False
+4:16:44 PM web.1    |  2026-06-11 16:16:44,355 Evaluating while_loop (identification__trial_loop) condition: result = True
+4:16:44 PM web.1    |  2026-06-11 16:16:44,355 Task 'advance_page' took 0.029 s
+4:16:44 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:44 +0000] "POST /response HTTP/1.1" 200 311 "-" "python-requests/2.33.1"
+4:16:44 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:44 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+4:16:44 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:44 +0000] "GET /timeline?unique_id=946e1de4-040a-4aba-852c-48178dff7929%3A3973054d-f9c5-410e-ae58-16b143cde004 HTTP/1.1" 200 77740 "-" "python-requests/2.33.1"
+4:16:44 PM web.1    |  2026-06-11 16:16:44,479 Received a response from participant 1 on page 61248943-71f8-68f6-9f86-4e9ce24eaf6e.
+4:16:44 PM web.1    |  2026-06-11 16:16:44,485 Calling _finalize_trial.
+4:16:44 PM web.1    |  2026-06-11 16:16:44,489 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+4:16:44 PM web.1    |  2026-06-11 16:16:44,490 Allocating a performance reward of $0.00 to participant 1 for trial 53.
+4:16:44 PM web.1    |  2026-06-11 16:16:44,495 Warning: Trial 53 received an unexpected amount of time credit (expected = 5.3 seconds; actual = 5.300000000000011 seconds). Consider setting the trial's `time_estimate` parameter to 5.300000000000011.You can disable this warning message by setting `Trial.check_time_credit_received = False`.
+4:16:44 PM web.1    |  2026-06-11 16:16:44,495 Preparing trial for participant 1.
+4:16:44 PM web.1    |  2026-06-11 16:16:44,495 Looking for networks for participant 1.
+4:16:44 PM web.1    |  2026-06-11 16:16:44,501 1 remain after applying custom network filters.
+4:16:44 PM web.1    |  2026-06-11 16:16:44,501 0 out of 1 networks are awaiting async processes (or have nodes awaiting async processes).
+4:16:44 PM web.1    |  2026-06-11 16:16:44,501 Outcome: found 1 candidate network(s) for participant 1.
+4:16:44 PM web.1    |  2026-06-11 16:16:44,501 Selected node 49 from network 49 to give to participant 1.
+4:16:44 PM web.1    |  2026-06-11 16:16:44,506 Task 'prepare_trial' took 0.010 s
+4:16:44 PM web.1    |  2026-06-11 16:16:44,506 Task '_prepare_trial' took 0.010 s
+4:16:44 PM web.1    |  2026-06-11 16:16:44,510 Evaluating while_loop (Waiting for trial) condition: result = False
+4:16:44 PM web.1    |  2026-06-11 16:16:44,510 Evaluating while_loop (identification__trial_loop) condition: result = True
+4:16:44 PM web.1    |  2026-06-11 16:16:44,511 Task 'advance_page' took 0.026 s
+4:16:44 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:44 +0000] "POST /response HTTP/1.1" 200 311 "-" "python-requests/2.33.1"
+4:16:44 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:44 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+4:16:44 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:44 +0000] "GET /timeline?unique_id=946e1de4-040a-4aba-852c-48178dff7929%3A3973054d-f9c5-410e-ae58-16b143cde004 HTTP/1.1" 200 77740 "-" "python-requests/2.33.1"
+4:16:44 PM web.1    |  2026-06-11 16:16:44,632 Received a response from participant 1 on page 5a1b4a69-948b-842d-4217-d54b6e2cc6b9.
+4:16:44 PM web.1    |  2026-06-11 16:16:44,638 Calling _finalize_trial.
+4:16:44 PM web.1    |  2026-06-11 16:16:44,642 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+4:16:44 PM web.1    |  2026-06-11 16:16:44,643 Allocating a performance reward of $0.00 to participant 1 for trial 54.
+4:16:44 PM web.1    |  2026-06-11 16:16:44,648 Warning: Trial 54 received an unexpected amount of time credit (expected = 5.3 seconds; actual = 5.300000000000011 seconds). Consider setting the trial's `time_estimate` parameter to 5.300000000000011.You can disable this warning message by setting `Trial.check_time_credit_received = False`.
+4:16:44 PM web.1    |  2026-06-11 16:16:44,648 Preparing trial for participant 1.
+4:16:44 PM web.1    |  2026-06-11 16:16:44,648 Looking for networks for participant 1.
+4:16:44 PM web.1    |  2026-06-11 16:16:44,648 N completed trials (12) >= N trials per participant (12), skipping forward
+4:16:44 PM web.1    |  2026-06-11 16:16:44,648 Outcome of find_networks: exit
+4:16:44 PM web.1    |  2026-06-11 16:16:44,651 Evaluating while_loop (Waiting for trial) condition: result = False
+4:16:44 PM web.1    |  2026-06-11 16:16:44,651 Evaluating while_loop (identification__trial_loop) condition: result = False
+4:16:44 PM web.1    |  2026-06-11 16:16:44,651 Task 'advance_page' took 0.014 s
+4:16:44 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:44 +0000] "POST /response HTTP/1.1" 200 296 "-" "python-requests/2.33.1"
+4:16:44 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:44 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+4:16:44 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:44 +0000] "GET /timeline?unique_id=946e1de4-040a-4aba-852c-48178dff7929%3A3973054d-f9c5-410e-ae58-16b143cde004 HTTP/1.1" 200 73807 "-" "python-requests/2.33.1"
+4:16:44 PM web.1    |  2026-06-11 16:16:44,770 Received a response from participant 1 on page e9fc926d-6c75-6605-6745-d69ad187ff34.
+4:16:44 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:44 +0000] "POST /response HTTP/1.1" 200 296 "-" "python-requests/2.33.1"
+4:16:44 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:44 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+4:16:44 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:44 +0000] "GET /timeline?unique_id=946e1de4-040a-4aba-852c-48178dff7929%3A3973054d-f9c5-410e-ae58-16b143cde004 HTTP/1.1" 200 73994 "-" "python-requests/2.33.1"
+4:16:44 PM web.1    |  2026-06-11 16:16:44,901 Received a response from participant 1 on page 012c66f2-5fab-0102-f756-18920cdf2d2d.
+4:16:44 PM web.1    |  2026-06-11 16:16:44,908 Preparing trial for participant 1.
+4:16:44 PM web.1    |  2026-06-11 16:16:44,908 Looking for networks for participant 1.
+4:16:44 PM web.1    |  2026-06-11 16:16:44,911 6 remain after applying custom network filters.
+4:16:44 PM web.1    |  2026-06-11 16:16:44,911 0 out of 6 networks are awaiting async processes (or have nodes awaiting async processes).
+4:16:44 PM web.1    |  2026-06-11 16:16:44,911 Outcome: found 1 candidate network(s) for participant 1.
+4:16:44 PM web.1    |  2026-06-11 16:16:44,911 Selected node 56 from network 56 to give to participant 1.
+4:16:44 PM web.1    |  2026-06-11 16:16:44,917 Task '_prepare_trial' took 0.012 s
+4:16:44 PM web.1    |  2026-06-11 16:16:44,923 Evaluating while_loop (Waiting for trial) condition: result = False
+4:16:44 PM web.1    |  2026-06-11 16:16:44,924 Evaluating while_loop (color_blindness_test__trial_loop) condition: result = True
+4:16:44 PM web.1    |  2026-06-11 16:16:44,925 Task 'advance_page' took 0.020 s
+4:16:44 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:44 +0000] "POST /response HTTP/1.1" 200 299 "-" "python-requests/2.33.1"
+4:16:44 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:44 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+4:16:45 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:45 +0000] "GET /timeline?unique_id=946e1de4-040a-4aba-852c-48178dff7929%3A3973054d-f9c5-410e-ae58-16b143cde004 HTTP/1.1" 200 75781 "-" "python-requests/2.33.1"
+4:16:45 PM web.1    |  2026-06-11 16:16:45,050 Received a response from participant 1 on page 8beabad2-75de-1232-1aa3-15a4d32a4eda.
+4:16:45 PM web.1    |  2026-06-11 16:16:45,058 Calling _finalize_trial.
+4:16:45 PM web.1    |  2026-06-11 16:16:45,062 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+4:16:45 PM web.1    |  2026-06-11 16:16:45,062 Allocating a performance reward of $0.00 to participant 1 for trial 55.
+4:16:45 PM web.1    |  2026-06-11 16:16:45,068 Preparing trial for participant 1.
+4:16:45 PM web.1    |  2026-06-11 16:16:45,068 Looking for networks for participant 1.
+4:16:45 PM web.1    |  2026-06-11 16:16:45,074 5 remain after applying custom network filters.
+4:16:45 PM web.1    |  2026-06-11 16:16:45,074 0 out of 5 networks are awaiting async processes (or have nodes awaiting async processes).
+4:16:45 PM web.1    |  2026-06-11 16:16:45,075 Outcome: found 1 candidate network(s) for participant 1.
+4:16:45 PM web.1    |  2026-06-11 16:16:45,075 Selected node 60 from network 60 to give to participant 1.
+4:16:45 PM web.1    |  2026-06-11 16:16:45,081 Task 'prepare_trial' took 0.013 s
+4:16:45 PM web.1    |  2026-06-11 16:16:45,081 Task '_prepare_trial' took 0.013 s
+4:16:45 PM web.1    |  2026-06-11 16:16:45,087 Evaluating while_loop (Waiting for trial) condition: result = False
+4:16:45 PM web.1    |  2026-06-11 16:16:45,087 Evaluating while_loop (color_blindness_test__trial_loop) condition: result = True
+4:16:45 PM web.1    |  2026-06-11 16:16:45,088 Task 'advance_page' took 0.031 s
+4:16:45 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:45 +0000] "POST /response HTTP/1.1" 200 299 "-" "python-requests/2.33.1"
+4:16:45 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:45 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+4:16:45 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:45 +0000] "GET /timeline?unique_id=946e1de4-040a-4aba-852c-48178dff7929%3A3973054d-f9c5-410e-ae58-16b143cde004 HTTP/1.1" 200 75781 "-" "python-requests/2.33.1"
+4:16:45 PM web.1    |  2026-06-11 16:16:45,213 Received a response from participant 1 on page 8c153110-27f3-5d14-0f2a-cbd4245c0717.
+4:16:45 PM web.1    |  2026-06-11 16:16:45,220 Calling _finalize_trial.
+4:16:45 PM web.1    |  2026-06-11 16:16:45,223 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+4:16:45 PM web.1    |  2026-06-11 16:16:45,223 Allocating a performance reward of $0.00 to participant 1 for trial 56.
+4:16:45 PM web.1    |  2026-06-11 16:16:45,228 Preparing trial for participant 1.
+4:16:45 PM web.1    |  2026-06-11 16:16:45,228 Looking for networks for participant 1.
+4:16:45 PM web.1    |  2026-06-11 16:16:45,235 4 remain after applying custom network filters.
+4:16:45 PM web.1    |  2026-06-11 16:16:45,235 0 out of 4 networks are awaiting async processes (or have nodes awaiting async processes).
+4:16:45 PM web.1    |  2026-06-11 16:16:45,235 Outcome: found 1 candidate network(s) for participant 1.
+4:16:45 PM web.1    |  2026-06-11 16:16:45,235 Selected node 57 from network 57 to give to participant 1.
+4:16:45 PM web.1    |  2026-06-11 16:16:45,241 Task 'prepare_trial' took 0.013 s
+4:16:45 PM web.1    |  2026-06-11 16:16:45,241 Task '_prepare_trial' took 0.013 s
+4:16:45 PM web.1    |  2026-06-11 16:16:45,247 Evaluating while_loop (Waiting for trial) condition: result = False
+4:16:45 PM web.1    |  2026-06-11 16:16:45,247 Evaluating while_loop (color_blindness_test__trial_loop) condition: result = True
+4:16:45 PM web.1    |  2026-06-11 16:16:45,248 Task 'advance_page' took 0.028 s
+4:16:45 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:45 +0000] "POST /response HTTP/1.1" 200 299 "-" "python-requests/2.33.1"
+4:16:45 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:45 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+4:16:45 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:45 +0000] "GET /timeline?unique_id=946e1de4-040a-4aba-852c-48178dff7929%3A3973054d-f9c5-410e-ae58-16b143cde004 HTTP/1.1" 200 75781 "-" "python-requests/2.33.1"
+4:16:45 PM web.1    |  2026-06-11 16:16:45,372 Received a response from participant 1 on page 788f9fbd-57bf-cadd-d715-1e0c8bcdede3.
+4:16:45 PM web.1    |  2026-06-11 16:16:45,378 Calling _finalize_trial.
+4:16:45 PM web.1    |  2026-06-11 16:16:45,381 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+4:16:45 PM web.1    |  2026-06-11 16:16:45,382 Allocating a performance reward of $0.00 to participant 1 for trial 57.
+4:16:45 PM web.1    |  2026-06-11 16:16:45,387 Preparing trial for participant 1.
+4:16:45 PM web.1    |  2026-06-11 16:16:45,388 Looking for networks for participant 1.
+4:16:45 PM web.1    |  2026-06-11 16:16:45,394 3 remain after applying custom network filters.
+4:16:45 PM web.1    |  2026-06-11 16:16:45,394 0 out of 3 networks are awaiting async processes (or have nodes awaiting async processes).
+4:16:45 PM web.1    |  2026-06-11 16:16:45,394 Outcome: found 1 candidate network(s) for participant 1.
+4:16:45 PM web.1    |  2026-06-11 16:16:45,394 Selected node 59 from network 59 to give to participant 1.
+4:16:45 PM web.1    |  2026-06-11 16:16:45,400 Task 'prepare_trial' took 0.013 s
+4:16:45 PM web.1    |  2026-06-11 16:16:45,400 Task '_prepare_trial' took 0.013 s
+4:16:45 PM web.1    |  2026-06-11 16:16:45,406 Evaluating while_loop (Waiting for trial) condition: result = False
+4:16:45 PM web.1    |  2026-06-11 16:16:45,406 Evaluating while_loop (color_blindness_test__trial_loop) condition: result = True
+4:16:45 PM web.1    |  2026-06-11 16:16:45,407 Task 'advance_page' took 0.029 s
+4:16:45 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:45 +0000] "POST /response HTTP/1.1" 200 299 "-" "python-requests/2.33.1"
+4:16:45 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:45 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+4:16:45 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:45 +0000] "GET /timeline?unique_id=946e1de4-040a-4aba-852c-48178dff7929%3A3973054d-f9c5-410e-ae58-16b143cde004 HTTP/1.1" 200 75781 "-" "python-requests/2.33.1"
+4:16:45 PM web.1    |  2026-06-11 16:16:45,534 Received a response from participant 1 on page fa3e12e5-c1eb-ea90-fc41-9ffbbf42a746.
+4:16:45 PM web.1    |  2026-06-11 16:16:45,541 Calling _finalize_trial.
+4:16:45 PM web.1    |  2026-06-11 16:16:45,545 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+4:16:45 PM web.1    |  2026-06-11 16:16:45,545 Allocating a performance reward of $0.00 to participant 1 for trial 58.
+4:16:45 PM web.1    |  2026-06-11 16:16:45,551 Preparing trial for participant 1.
+4:16:45 PM web.1    |  2026-06-11 16:16:45,551 Looking for networks for participant 1.
+4:16:45 PM web.1    |  2026-06-11 16:16:45,558 2 remain after applying custom network filters.
+4:16:45 PM web.1    |  2026-06-11 16:16:45,558 0 out of 2 networks are awaiting async processes (or have nodes awaiting async processes).
+4:16:45 PM web.1    |  2026-06-11 16:16:45,559 Outcome: found 1 candidate network(s) for participant 1.
+4:16:45 PM web.1    |  2026-06-11 16:16:45,559 Selected node 55 from network 55 to give to participant 1.
+4:16:45 PM web.1    |  2026-06-11 16:16:45,565 Task 'prepare_trial' took 0.013 s
+4:16:45 PM web.1    |  2026-06-11 16:16:45,565 Task '_prepare_trial' took 0.013 s
+4:16:45 PM web.1    |  2026-06-11 16:16:45,569 Evaluating while_loop (Waiting for trial) condition: result = False
+4:16:45 PM web.1    |  2026-06-11 16:16:45,570 Evaluating while_loop (color_blindness_test__trial_loop) condition: result = True
+4:16:45 PM web.1    |  2026-06-11 16:16:45,570 Task 'advance_page' took 0.029 s
+4:16:45 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:45 +0000] "POST /response HTTP/1.1" 200 299 "-" "python-requests/2.33.1"
+4:16:45 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:45 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+4:16:45 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:45 +0000] "GET /timeline?unique_id=946e1de4-040a-4aba-852c-48178dff7929%3A3973054d-f9c5-410e-ae58-16b143cde004 HTTP/1.1" 200 75781 "-" "python-requests/2.33.1"
+4:16:45 PM web.1    |  2026-06-11 16:16:45,694 Received a response from participant 1 on page 1fdd1171-91fe-8556-b245-befbfb64dbed.
+4:16:45 PM web.1    |  2026-06-11 16:16:45,701 Calling _finalize_trial.
+4:16:45 PM web.1    |  2026-06-11 16:16:45,705 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+4:16:45 PM web.1    |  2026-06-11 16:16:45,705 Allocating a performance reward of $0.00 to participant 1 for trial 59.
+4:16:45 PM web.1    |  2026-06-11 16:16:45,710 Preparing trial for participant 1.
+4:16:45 PM web.1    |  2026-06-11 16:16:45,710 Looking for networks for participant 1.
+4:16:45 PM web.1    |  2026-06-11 16:16:45,716 1 remain after applying custom network filters.
+4:16:45 PM web.1    |  2026-06-11 16:16:45,716 0 out of 1 networks are awaiting async processes (or have nodes awaiting async processes).
+4:16:45 PM web.1    |  2026-06-11 16:16:45,716 Outcome: found 1 candidate network(s) for participant 1.
+4:16:45 PM web.1    |  2026-06-11 16:16:45,716 Selected node 58 from network 58 to give to participant 1.
+4:16:45 PM web.1    |  2026-06-11 16:16:45,721 Task 'prepare_trial' took 0.011 s
+4:16:45 PM web.1    |  2026-06-11 16:16:45,721 Task '_prepare_trial' took 0.011 s
+4:16:45 PM web.1    |  2026-06-11 16:16:45,727 Evaluating while_loop (Waiting for trial) condition: result = False
+4:16:45 PM web.1    |  2026-06-11 16:16:45,727 Evaluating while_loop (color_blindness_test__trial_loop) condition: result = True
+4:16:45 PM web.1    |  2026-06-11 16:16:45,728 Task 'advance_page' took 0.027 s
+4:16:45 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:45 +0000] "POST /response HTTP/1.1" 200 299 "-" "python-requests/2.33.1"
+4:16:45 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:45 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+4:16:45 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:45 +0000] "GET /timeline?unique_id=946e1de4-040a-4aba-852c-48178dff7929%3A3973054d-f9c5-410e-ae58-16b143cde004 HTTP/1.1" 200 75781 "-" "python-requests/2.33.1"
+4:16:45 PM web.1    |  2026-06-11 16:16:45,851 Received a response from participant 1 on page 0a7d5ffd-a50b-e007-01fa-137ae8f03d17.
+4:16:45 PM web.1    |  2026-06-11 16:16:45,857 Calling _finalize_trial.
+4:16:45 PM web.1    |  2026-06-11 16:16:45,861 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+4:16:45 PM web.1    |  2026-06-11 16:16:45,861 Allocating a performance reward of $0.00 to participant 1 for trial 60.
+4:16:45 PM web.1    |  2026-06-11 16:16:45,866 Preparing trial for participant 1.
+4:16:45 PM web.1    |  2026-06-11 16:16:45,866 Looking for networks for participant 1.
+4:16:45 PM web.1    |  2026-06-11 16:16:45,871 0 remain after applying custom network filters.
+4:16:45 PM web.1    |  2026-06-11 16:16:45,871 0 out of 0 networks are awaiting async processes (or have nodes awaiting async processes).
+4:16:45 PM web.1    |  2026-06-11 16:16:45,871 Outcome of find_networks: exit
+4:16:45 PM web.1    |  2026-06-11 16:16:45,873 Evaluating while_loop (Waiting for trial) condition: result = False
+4:16:45 PM web.1    |  2026-06-11 16:16:45,873 Evaluating while_loop (color_blindness_test__trial_loop) condition: result = False
+4:16:45 PM web.1    |  2026-06-11 16:16:45,877 Evaluating while_loop (wait_while) condition: result = False
+4:16:45 PM web.1    |  2026-06-11 16:16:45,882 Task 'advance_page' took 0.024 s
+4:16:45 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:45 +0000] "POST /response HTTP/1.1" 200 296 "-" "python-requests/2.33.1"
+4:16:45 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:45 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+4:16:45 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:45 +0000] "GET /timeline?unique_id=946e1de4-040a-4aba-852c-48178dff7929%3A3973054d-f9c5-410e-ae58-16b143cde004 HTTP/1.1" 200 73800 "-" "python-requests/2.33.1"
+4:16:46 PM web.1    |  2026-06-11 16:16:46,000 Received a response from participant 1 on page 447bbc09-71b6-51bd-20cc-a00aa70a6848.
+4:16:46 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:46 +0000] "POST /response HTTP/1.1" 200 294 "-" "python-requests/2.33.1"
+4:16:46 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:46 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+4:16:46 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:46 +0000] "GET /timeline?unique_id=946e1de4-040a-4aba-852c-48178dff7929%3A3973054d-f9c5-410e-ae58-16b143cde004 HTTP/1.1" 200 76845 "-" "python-requests/2.33.1"
+4:16:46 PM web.1    |  2026-06-11 16:16:46,121 Received a response from participant 1 on page 652308bc-7a68-fed1-8776-41b8871ddfd8.
+4:16:46 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:46 +0000] "POST /response HTTP/1.1" 200 291 "-" "python-requests/2.33.1"
+4:16:46 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:46 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+4:16:46 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:46 +0000] "GET /timeline?unique_id=946e1de4-040a-4aba-852c-48178dff7929%3A3973054d-f9c5-410e-ae58-16b143cde004 HTTP/1.1" 200 74537 "-" "python-requests/2.33.1"
+4:16:46 PM web.1    |  2026-06-11 16:16:46,246 Received a response from participant 1 on page 4d7f81ca-101c-ac9b-25f6-b21495b3b1ee.
+4:16:46 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:46 +0000] "POST /response HTTP/1.1" 200 302 "-" "python-requests/2.33.1"
+4:16:46 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:46 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+4:16:46 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:46 +0000] "GET /timeline?unique_id=946e1de4-040a-4aba-852c-48178dff7929%3A3973054d-f9c5-410e-ae58-16b143cde004 HTTP/1.1" 200 93052 "-" "python-requests/2.33.1"
+4:16:46 PM web.1    |  2026-06-11 16:16:46,373 Received a response from participant 1 on page 2ed8873a-97fb-91d2-9e00-8d5a1fce10fe.
+4:16:46 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:46 +0000] "POST /response HTTP/1.1" 200 306 "-" "python-requests/2.33.1"
+4:16:46 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:46 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+4:16:46 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:46 +0000] "GET /timeline?unique_id=946e1de4-040a-4aba-852c-48178dff7929%3A3973054d-f9c5-410e-ae58-16b143cde004 HTTP/1.1" 200 93080 "-" "python-requests/2.33.1"
+4:16:46 PM web.1    |  2026-06-11 16:16:46,498 Received a response from participant 1 on page 079dfc3c-fe5a-ed62-7d09-a239c29e6f4b.
+4:16:46 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:46 +0000] "POST /response HTTP/1.1" 200 303 "-" "python-requests/2.33.1"
+4:16:46 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:46 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+4:16:46 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:46 +0000] "GET /timeline?unique_id=946e1de4-040a-4aba-852c-48178dff7929%3A3973054d-f9c5-410e-ae58-16b143cde004 HTTP/1.1" 200 76154 "-" "python-requests/2.33.1"
+4:16:46 PM web.1    |  2026-06-11 16:16:46,625 Received a response from participant 1 on page baac7aac-6ca2-f4a2-ea62-d7b82bf61758.
+4:16:46 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:46 +0000] "POST /response HTTP/1.1" 200 296 "-" "python-requests/2.33.1"
+4:16:46 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:46 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+4:16:46 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:46 +0000] "GET /timeline?unique_id=946e1de4-040a-4aba-852c-48178dff7929%3A3973054d-f9c5-410e-ae58-16b143cde004 HTTP/1.1" 200 73770 "-" "python-requests/2.33.1"
+4:16:46 PM web.1    |  2026-06-11 16:16:46,748 Received a response from participant 1 on page 0e985d15-8fa6-d518-0c85-002c5830c266.
+4:16:46 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:46 +0000] "POST /response HTTP/1.1" 200 299 "-" "python-requests/2.33.1"
+4:16:46 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:46 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+4:16:46 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:46 +0000] "GET /timeline?unique_id=946e1de4-040a-4aba-852c-48178dff7929%3A3973054d-f9c5-410e-ae58-16b143cde004 HTTP/1.1" 200 74230 "-" "python-requests/2.33.1"
+4:16:46 PM web.1    |  2026-06-11 16:16:46,871 Received a response from participant 1 on page 95558e74-71c5-33ae-b354-3207a48d21cd.
+4:16:46 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:46 +0000] "POST /response HTTP/1.1" 200 305 "-" "python-requests/2.33.1"
+4:16:46 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:46 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+4:16:46 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:46 +0000] "GET /timeline?unique_id=946e1de4-040a-4aba-852c-48178dff7929%3A3973054d-f9c5-410e-ae58-16b143cde004 HTTP/1.1" 200 72673 "-" "python-requests/2.33.1"
+4:16:47 PM web.1    |  127.0.0.1 - - [11/Jun/2026:16:16:46 +0000] "GET /request_statistics HTTP/1.1" 200 68 "-" "python-requests/2.33.1"
+^C
+❯❯ Completed debugging of experiment with id a7f73255-fed3-d586-a1d0-60c2323dd39c
+
+❯❯ Cleaning up local Heroku process...
+
+❯❯ Local Heroku process terminated.
+
+❯❯ Found 1 remaining PsyNet worker process(es), terminating them now.
+
+
+=============================== warnings summary ===============================
+../../../../../../../home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/_pytest/config/__init__.py:1309
+  /home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/_pytest/config/__init__.py:1309: PytestAssertRewriteWarning: Module already imported so cannot be rewritten; dallinger
+    self._mark_plugins_for_rewrite(hook, disable_autoload)
+
+../../../../../../../home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/_pytest/config/__init__.py:1309
+  /home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/_pytest/config/__init__.py:1309: PytestAssertRewriteWarning: Module already imported so cannot be rewritten; faker
+    self._mark_plugins_for_rewrite(hook, disable_autoload)
+
+../../../../../../../home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/_pytest/config/__init__.py:1309
+  /home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/_pytest/config/__init__.py:1309: PytestAssertRewriteWarning: Module already imported so cannot be rewritten; psynet
+    self._mark_plugins_for_rewrite(hook, disable_autoload)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+======================== 1 passed, 3 warnings in 20.67s ========================

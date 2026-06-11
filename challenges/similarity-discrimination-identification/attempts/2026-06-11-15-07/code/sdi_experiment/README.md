@@ -10,7 +10,7 @@ This attempt implements a PsyNet experiment with three visual blocks using simpl
 
 Every trial begins with a fixation frame. The stimulus display then appears for a fixed duration, disappears for a fixed delay of at least 500 ms, and only then are responses enabled. Identification trials show the probe after the delay while the prior display remains absent.
 
-Set `PSYNET_PROFILE=minimal` for short visual evidence runs. The default profile uses the full documented trial set.
+Set `PSYNET_PROFILE=minimal` for short visual evidence runs. The default profile uses the full documented trial set. Minimal mode shortens the three task blocks and relaxes the color-vision pass threshold so manual recordings can continue to demographics even when randomized Ishihara plate order is not known to the operator.
 
 ## Analysis
 
