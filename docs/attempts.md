@@ -269,6 +269,12 @@ dismissed, or superseded. When an action is reviewed or its status changes,
 append an optional `Notes: ...` clause to the original action bullet to preserve
 the decision rationale.
 
+Write each action bullet so it remains understandable when copied without the
+surrounding learning card. Name the target skill, documentation page, challenge
+guidance, or framework behavior directly; avoid phrases such as "this pattern",
+"this gotcha", "the behavior", or "it" unless the same sentence identifies what
+they refer to.
+
 In Cursor Cloud Agent workflows, users usually review attempts through
 conversation with an agent rather than by editing files directly. Agents should
 invite the user to comment on the proposed actions in `LEARNINGS.md`, then

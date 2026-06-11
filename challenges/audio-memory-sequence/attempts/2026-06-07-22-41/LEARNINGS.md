@@ -20,7 +20,7 @@ at that server.
 
 *Actions:*
 - **PsyNetSkills:** Add a Linux fallback to the recording skill that installs/starts PulseAudio, creates `psynet_rec`, launches Chrome with `PULSE_SERVER`, and records `psynet_rec.monitor`. Confidence: high. Status: completed. Notes: Added to the record-participant-video skill, including audio verification commands.
-- **PsyNet:** No framework change needed; this is a cloud recording environment setup issue. Confidence: medium. Status: dismissed.
+- **PsyNet:** No framework change needed for PulseAudio null-sink browser-audio capture in Cursor Cloud recording environments. Confidence: medium. Status: dismissed.
 
 ## Combine minimal visual review with scripted full-flow evidence
 
@@ -53,7 +53,7 @@ cognitive demands of the task.
 
 *Actions:*
 - **PsyNetSkills:** Add review guidance to flag replay controls in memory tasks unless the challenge explicitly asks for replay. Confidence: high. Status: completed. Notes: Defaults now live in implementation guidance; create-challenge warns to mention replay only when intentionally departing from defaults.
-- **PsyNet:** No framework change needed; this is an experiment-design convention. Confidence: high. Status: dismissed.
+- **PsyNet:** No framework change needed for avoiding replay controls in memory-task experiment designs. Confidence: high. Status: dismissed.
 
 ## Prefer generated audio files for control and replication
 

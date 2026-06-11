@@ -18,4 +18,4 @@ plan.
 
 *Actions:*
 
-- **PsyNetSkills:** If future operations-plan attempts repeat this issue, update the deployment-ops guidance to prefer explicit review checklists or clearly labeled optional verification commands over broad filesystem-discovery commands. Confidence: medium. Status: considering.
+- **PsyNetSkills:** If future operations-plan attempts include overly execution-oriented filesystem-discovery commands, update the deployment-ops guidance to prefer explicit review checklists or clearly labeled optional verification commands. Confidence: medium. Status: considering.

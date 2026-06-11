@@ -7,8 +7,7 @@ reuse per-trial metadata such as recording IDs. This attempt avoids repeat
 trials in the demo so every recording-enabled trial has a unique backend hash.
 
 *Actions:*
-- **PsyNetSkills:** Consider documenting this caveat in challenges that require
-  trial-specific identifiers. Confidence: medium. Status: considering.
+- **PsyNetSkills:** Consider documenting that static repeat trials can reuse parent trial metadata, so challenges requiring trial-specific identifiers should ensure each recording-enabled trial has a unique identifier. Confidence: medium. Status: considering.
 
 ## Dashboard monitor data expects JSON-serializable records
 
