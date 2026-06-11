@@ -29,8 +29,17 @@ At the end of the experiment, participants complete an Ishihara color-vision tes
 
 ## Implementation details
 
+Use psychophysics skills.
+
 Measure reaction time and store this information in every trial.
 
 Allow participants in the forced choice to respond by pressing a button on the keyboard.
 
 Include an analysis script or notebook that summarizes similarity ratings as a heatmap, and reaction times as average over pairs of stimuli from exported or simulated data.
+
+## Other instructions
+
+Use record-participant-video skills in addition to the following additional remark:
+
+Make systematic use of tests: testing experiment logic with psynet test local, testing front-end logic with Playwright, and testing visual logic with video testing. When video testing, make sure to be efficient, e.g. by running the experiment in a ‘minimal’ mode with a small number of trials; long videos are time-consuming to create and to analyze.
+
