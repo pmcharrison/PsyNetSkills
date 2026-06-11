@@ -109,3 +109,52 @@ def test_run_attempt_reports_multiple_experiments(
     assert exit_code == 2
     assert "Multiple experiment directories were found" in output.err
     assert "--experiment-dir" in output.err
+
+
+def test_run_attempt_builds_public_urls() -> None:
+    module = load_run_attempt_module()
+
+    public_url = module.to_public_url(
+        "http://127.0.0.1:5000/ad?assignmentId=A1&workerId=W1",
+        "https://example.loca.lt",
+    )
+    dashboard_url = module.to_public_url(
+        "http://127.0.0.1:5000/dashboard/develop",
+        "https://example.loca.lt",
+        username="admin",
+        password="p@ ss",
+    )
+
+    assert public_url == "https://example.loca.lt/ad?assignmentId=A1&workerId=W1"
+    assert dashboard_url == "https://admin:p%40%20ss@example.loca.lt/dashboard/develop"
+
+
+def test_run_attempt_handoff_prints_three_links(capsys) -> None:
+    module = load_run_attempt_module()
+    handoff = module.HandoffState()
+
+    handoff.set_public_tunnel_url("https://example.loca.lt")
+    handoff.update_from_line("Username: `admin`\n")
+    handoff.update_from_line("Password: `secret`\n")
+    handoff.update_from_url(
+        "http://127.0.0.1:5000/ad?recruiter=hotair&assignmentId=A1"
+    )
+    handoff.maybe_print()
+    handoff.maybe_print()
+
+    output = capsys.readouterr().out
+    assert output.count("=== Run attempt handoff ===") == 1
+    assert (
+        "Start new participant (local): "
+        "http://127.0.0.1:5000/ad?recruiter=hotair&assignmentId=A1"
+    ) in output
+    assert (
+        "Add new participant (public tunnel): "
+        "https://example.loca.lt/ad?recruiter=hotair&assignmentId=A1"
+    ) in output
+    assert (
+        "Dashboard (public tunnel): "
+        "https://admin:secret@example.loca.lt/dashboard/develop"
+    ) in output
+    assert "Username: admin" in output
+    assert "Password: secret" in output

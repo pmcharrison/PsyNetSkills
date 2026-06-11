@@ -1,6 +1,6 @@
 ---
 name: run-attempt
-description: Start a runnable PsyNet challenge attempt with psynet debug local and open it in the Cursor browser or remote desktop for live review.
+description: Start a runnable PsyNet challenge attempt with psynet debug local, public review links, and an opened dashboard for live review.
 authors: [pmcharrison]
 disable-model-invocation: true
 ---
@@ -12,10 +12,10 @@ asks to start an existing attempt for live interactive review.
 
 ## Goal
 
-Start the PsyNet experiment stored in an existing challenge attempt, open the
-live experiment dashboard/develop page in the Cursor browser or remote desktop,
-log in with the local dashboard credentials, and leave the server running so the
-user can take control.
+Start the PsyNet experiment stored in an existing challenge attempt, create
+clickable public review links, open the live experiment dashboard/develop page in
+the Cursor Desktop browser or remote desktop, show the dashboard credentials, and
+leave the server running so the user can take control.
 
 ## Workflow
 
@@ -30,18 +30,20 @@ user can take control.
 4. If the dry run resolves exactly one experiment directory, start the live
    server in a tmux session so the user can continue using the agent:
    `tmux -f /exec-daemon/tmux.portal.conf new-session -d -s run-attempt -- uv run python .cursor/skills/run-attempt/scripts/run_attempt.py <attempt>`
-5. Watch the output for the generated PsyNet dashboard/develop, ad, or
-   participant URL. Prefer the dashboard/develop URL for handoff because it lets
-   the reviewer start participant sessions from the live server.
-6. Open the dashboard/develop URL in the Cursor browser or remote desktop. If a
-   login form appears, log in automatically with the local dashboard credentials
-   printed by PsyNet or configured for the experiment. In the standard local test
-   environment these are usually `test_admin` / `test_password`; otherwise use
-   the `dashboard_user` and `dashboard_password` values from the local PsyNet
-   config. Do not ask the user to perform this login manually unless automatic
-   login fails.
-7. After login, leave the browser on the dashboard/develop page and tell the user
-   which tmux session is running the server so they can take control.
+5. By default, the helper starts a public localtunnel process for port `5000`.
+   Watch the output for the `Run attempt handoff` block. It must include:
+   - the local link to start a new participant;
+   - the public tunnel link to add/start a new participant;
+   - the public tunnel link to the dashboard/develop page;
+   - the dashboard username and password.
+6. Open the public dashboard/develop URL from the handoff block in the Cursor
+   Desktop browser or remote desktop. If a login form appears instead of using
+   the embedded URL credentials, log in automatically with the printed username
+   and password. Do not ask the user to perform this login manually unless
+   automatic login fails.
+7. After login, leave the browser on the dashboard/develop page. Tell the user
+   which tmux session is running the server and provide all three handoff links
+   plus the credentials.
 
 ## Helper usage
 
@@ -57,6 +59,10 @@ Useful options:
   than one `experiment.py`.
 - `--no-start-services` skips the best-effort PostgreSQL/Redis startup step.
 - `--psynet-command <path-or-command>` overrides the detected PsyNet executable.
+- `--no-public-tunnel` skips the default localtunnel process and only prints
+  local PsyNet URLs.
+- `--public-tunnel-port <port>` changes the local port exposed by the default
+  public tunnel; PsyNet normally uses `5000`.
 
 ## Common failures
 
@@ -67,5 +73,8 @@ Useful options:
 - If PsyNet starts but generated commands cannot find runtime tools such as
   `flask`, relaunch with the PsyNet virtualenv on `PATH` or pass
   `--psynet-command /home/ubuntu/PsyNet/.venv/bin/psynet`.
+- If no public tunnel URL appears, verify `npx` or `localtunnel` is available
+  and relaunch the helper. Plain `127.0.0.1` links only work inside the Cloud VM
+  or through Cursor's forwarded-port UI.
 - Use only local, ephemeral dashboard credentials. Do not add real service
   credentials just to make a review run succeed.
