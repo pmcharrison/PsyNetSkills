@@ -263,35 +263,35 @@
       {{ if $hasScreenshots }}
         <section class="screenshot-gallery" aria-labelledby="screenshot-gallery-heading">
           <div class="screenshot-gallery-header">
-            <div>
-              <h3 id="screenshot-gallery-heading">Screenshot walkthrough</h3>
-              <p class="artifact-note">
-                Targeted participant-facing states captured with Playwright.
-              </p>
-            </div>
-            <div class="screenshot-controls" aria-label="Screenshot navigation">
-              <button class="screenshot-nav" type="button" data-screenshot-prev aria-label="Previous screenshot">‹</button>
-              <span class="screenshot-counter" data-screenshot-counter>1 / {{ len $screenshotFiles }}</span>
-              <button class="screenshot-nav" type="button" data-screenshot-next aria-label="Next screenshot">›</button>
-            </div>
+            <h3 id="screenshot-gallery-heading">Screenshot walkthrough</h3>
+            <p class="artifact-note">
+              Targeted participant-facing states captured with Playwright.
+            </p>
           </div>
-          <div class="screenshot-carousel" data-screenshot-gallery tabindex="0">
-            {{ range $index, $file := $screenshotFiles }}
-              {{ $caption := replaceRE "\\.[^.]+$" "" (replaceRE "^.*/" "" .path) }}
-              {{ $caption = replace $caption "-" " " }}
-              {{ $caption = replace $caption "_" " " }}
-              {{ with index $screenshotCaptions .path }}
-                {{ $caption = . }}
+          <div class="screenshot-frame">
+            <div class="screenshot-carousel" data-screenshot-gallery tabindex="0">
+              {{ range $index, $file := $screenshotFiles }}
+                {{ $caption := replaceRE "\\.[^.]+$" "" (replaceRE "^.*/" "" .path) }}
+                {{ $caption = replace $caption "-" " " }}
+                {{ $caption = replace $caption "_" " " }}
+                {{ with index $screenshotCaptions .path }}
+                  {{ $caption = . }}
+                {{ end }}
+                <figure class="screenshot-card" data-screenshot-card data-screenshot-caption-text="{{ $caption }}"{{ if ne $index 0 }} hidden{{ end }}>
+                  <a href="{{ .url | relURL }}" aria-label="Open full-size screenshot">
+                    <img src="{{ .url | relURL }}" alt="{{ $caption }}">
+                  </a>
+                </figure>
               {{ end }}
-              <figure class="screenshot-card" data-screenshot-card{{ if ne $index 0 }} hidden{{ end }}>
-                <a href="{{ .url | relURL }}" aria-label="Open full-size screenshot">
-                  <img src="{{ .url | relURL }}" alt="{{ $caption }}">
-                </a>
-                <figcaption>
-                  {{ $caption }}
-                </figcaption>
-              </figure>
-            {{ end }}
+            </div>
+            <div class="screenshot-caption-panel">
+              <div class="screenshot-controls" aria-label="Screenshot navigation">
+                <button class="screenshot-nav" type="button" data-screenshot-prev aria-label="Previous screenshot">‹</button>
+                <span class="screenshot-counter" data-screenshot-counter>1 / {{ len $screenshotFiles }}</span>
+                <button class="screenshot-nav" type="button" data-screenshot-next aria-label="Next screenshot">›</button>
+              </div>
+              <p class="screenshot-caption" data-screenshot-caption></p>
+            </div>
           </div>
         </section>
       {{ end }}

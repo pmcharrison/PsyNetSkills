@@ -1049,21 +1049,14 @@ td {
 }
 
 .screenshot-gallery-header {
-  align-items: start;
-  display: flex;
-  gap: 1rem;
-  justify-content: space-between;
-}
-
-.screenshot-gallery h3 {
-  margin: 0 0 0.25rem;
+  margin-bottom: 0.85rem;
 }
 
 .screenshot-controls {
   align-items: center;
   display: inline-flex;
-  flex: 0 0 auto;
   gap: 0.45rem;
+  justify-content: center;
 }
 
 .screenshot-nav {
@@ -1113,14 +1106,16 @@ td {
 
 .screenshot-carousel {
   display: grid;
-  margin-top: 0.85rem;
+}
+
+.screenshot-frame {
+  border: 1px solid var(--border);
+  border-radius: 0.55rem;
+  overflow: hidden;
 }
 
 .screenshot-card {
-  border: 1px solid var(--border);
-  border-radius: 0.55rem;
   margin: 0;
-  overflow: hidden;
 }
 
 .screenshot-card[hidden] {
@@ -1142,11 +1137,18 @@ td {
   width: 100%;
 }
 
-.screenshot-card figcaption {
+.screenshot-caption-panel {
   border-top: 1px solid var(--border);
+  background: var(--background);
   color: var(--foreground);
   font-size: 0.95rem;
-  padding: 0.65rem 0.8rem;
+  padding: 0.65rem 0.9rem 0.75rem;
+  text-align: center;
+}
+
+.screenshot-caption {
+  margin: 0.45rem auto 0;
+  max-width: 42rem;
 }
 
 .evidence-actions,

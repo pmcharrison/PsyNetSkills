@@ -5,10 +5,12 @@
     const counter = panel.querySelector("[data-screenshot-counter]");
     const previous = panel.querySelector("[data-screenshot-prev]");
     const next = panel.querySelector("[data-screenshot-next]");
+    const caption = panel.querySelector("[data-screenshot-caption]");
 
     cards.forEach((card, cardIndex) => {
       card.hidden = cardIndex !== index;
     });
+    caption.textContent = cards[index].dataset.screenshotCaptionText || "";
     counter.textContent = `${index + 1} / ${cards.length}`;
     previous.disabled = cards.length <= 1;
     next.disabled = cards.length <= 1;
