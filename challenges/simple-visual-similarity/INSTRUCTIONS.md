@@ -25,8 +25,6 @@ All stimulus pairs should be presented. For each trial, the exact stimulus pair,
 
 Each participant completes 10 random trials.
 
-At the end of the experiment, participants complete an Ishihara color-vision test. Results are recorded, but participants are not failed based on performance. This is followed by a demographics questionnaire collecting age, gender, and mother tongue.
-
 ## Implementation details
 
 Use psychophysics skills.
