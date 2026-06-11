@@ -1,6 +1,6 @@
 ---
 name: run-attempt
-description: Start a runnable PsyNet challenge attempt with psynet debug local for interactive review through Cursor/browser port forwarding.
+description: Start a runnable PsyNet challenge attempt with psynet debug local and open it in the Cursor browser or remote desktop for live review.
 authors: [pmcharrison]
 disable-model-invocation: true
 ---
@@ -12,9 +12,9 @@ asks to start an existing attempt for live interactive review.
 
 ## Goal
 
-Start the PsyNet experiment stored in an existing challenge attempt and report
-the participant/ad URL that reviewers can open from the Cursor browser or a
-forwarded local port.
+Start the PsyNet experiment stored in an existing challenge attempt, open the
+live experiment dashboard or participant page in the Cursor browser/remote
+desktop, and leave the server running so the user can take control.
 
 ## Workflow
 
@@ -29,11 +29,10 @@ forwarded local port.
 4. If the dry run resolves exactly one experiment directory, start the live
    server in a tmux session so the user can continue using the agent:
    `tmux -f /exec-daemon/tmux.portal.conf new-session -d -s run-attempt -- uv run python .cursor/skills/run-attempt/scripts/run_attempt.py <attempt>`
-5. Watch the output for the generated PsyNet ad/participant URL and report it to
-   the user. Also tell them which terminal/tmux session is running the server.
-6. If Cursor forwards the port, tell the user they can open the forwarded URL
-   from their browser. If no forwarded browser URL is available, use the Cursor
-   browser or remote desktop inside the agent context.
+5. Watch the output for the generated PsyNet dashboard, ad, or participant URL.
+6. Open the live URL in the Cursor browser or remote desktop so the user can take
+   control of the running experiment. Also tell them which tmux session is
+   running the server.
 
 ## Helper usage
 

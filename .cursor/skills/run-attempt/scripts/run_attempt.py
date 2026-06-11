@@ -260,8 +260,7 @@ def run_server(run: AttemptRun) -> int:
     env.setdefault("PYTHONUNBUFFERED", "1")
 
     print_run_summary(run)
-    print("Starting PsyNet. Open the generated ad/participant URL when it appears.")
-    print("If Cursor forwards the port, use the forwarded browser URL.")
+    print("Starting PsyNet. Open the generated dashboard/ad URL in the Cursor browser.")
 
     process = subprocess.Popen(
         run.command,
