@@ -1,0 +1,24 @@
+{
+  "authors": ["pmcharrison"],
+  "agent": "Cursor Cloud Agent",
+  "client": "cursor",
+  "model": "Fable 5",
+  "started_at": "2026-06-11T00:32:00Z",
+  "ended_at": "2026-06-11T01:46:00Z",
+  "cursor_conversation_id": "bc-fd56fdb7-9aaf-429a-ae38-f9f05e216562",
+  "skills_commit": "1dbbf02b4d0afc1764aad2d67f39e075126b8e43",
+  "psynet": {
+    "checkout_path": "~/PsyNet",
+    "branch": "master",
+    "commit": "bc4c2f699bc1fc04689ead50d450796e22c3cf8c",
+    "version": "13.3.0a0",
+    "updated_from": "origin/master",
+    "updated_at": "2026-06-11T00:29:00Z",
+    "update_command": "git pull --ff-only origin master",
+    "dirty": false
+  },
+  "run_cost": null,
+  "notes": [
+    "Author metadata uses an existing repository author key as a placeholder so validation can run in autonomous mode; the initiating user should confirm or correct the author via the identify-author workflow."
+  ]
+}
