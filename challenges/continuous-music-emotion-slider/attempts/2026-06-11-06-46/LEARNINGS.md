@@ -20,3 +20,10 @@ The first participant recordings showed both dimensions on screen but only one s
 
 *Actions:*
 - **PsyNetSkills:** Consider asking challenge agents to review videos specifically for active interaction with every required response dimension, not only for control presence. Confidence: high. Status: considering.
+
+## Simulated trajectories should encode expected patterns
+
+The evaluator noted that the attempt validates the workflow well, but future versions would be more informative with richer stimulus metadata and more realistic trajectory-generating profiles. That would let the analysis test expected stimulus/condition patterns instead of mostly checking that the pipeline runs.
+
+*Actions:*
+- **PsyNetSkills:** Consider encouraging emotion-trajectory challenge attempts to include condition-specific simulated response profiles and richer stimulus metadata when real participant data are unavailable. Confidence: high. Status: considering.
