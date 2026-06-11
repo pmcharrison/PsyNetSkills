@@ -6,7 +6,7 @@
   "client": "cursor",
   "model": "GPT-5.5",
   "started_at": "2026-06-10T23:34:56Z",
-  "ended_at": null,
+  "ended_at": "2026-06-11T00:02:44Z",
   "cursor_conversation_id": "bc-b376d727-1cd9-4989-bc86-6b6e6ebca5e1",
   "skills_commit": "78e990cabff35ecb2fb5684559b2f8089b2f27cf",
   "psynet": {
