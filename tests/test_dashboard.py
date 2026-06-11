@@ -689,6 +689,25 @@ def test_export_dashboard_uses_configured_artifact_url_prefix(
     )
     assert evidence_files[0]["url"].endswith(".mp4")
 
+    monkeypatch.setenv(
+        "PSYNETSK_ARTIFACT_URL_PREFIX",
+        "https://example.github.io/PsyNetSkills/pr-preview/pr-182/artifacts/blobs/sha256",
+    )
+
+    export_dashboard(tmp_path, tmp_path / "dashboard-preview")
+    data = json.loads(
+        (tmp_path / "dashboard-preview/data/psynetsk.json").read_text(
+            encoding="utf-8"
+        ),
+    )
+    evidence_files = data["challenges"][0]["attempts"][0]["evidence_files"]
+
+    assert evidence_files[0]["url"].startswith(
+        "https://example.github.io/PsyNetSkills/pr-preview/pr-182/"
+        "artifacts/blobs/sha256/",
+    )
+    assert evidence_files[0]["url"].endswith(".mp4")
+
 
 def test_export_dashboard_normalizes_old_preview_artifact_prefix(
     tmp_path: Path,
