@@ -1,5 +1,5 @@
 {
-  "authors": [],
+  "authors": ["zeroada"],
   "agent": "Cursor Cloud Agent",
   "client": "cursor",
   "model": "GPT-5.5",
@@ -18,7 +18,5 @@
     "dirty": false
   },
   "run_cost": null,
-  "notes": [
-    "Author attribution is pending because the attempt-author skill requires a human GitHub username and none was provided in the initial request."
-  ]
+  "notes": []
 }

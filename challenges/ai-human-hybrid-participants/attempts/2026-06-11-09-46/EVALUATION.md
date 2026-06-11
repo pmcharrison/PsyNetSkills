@@ -44,8 +44,6 @@ Summarize the human evaluator's overall judgment.
 
 - Score and feedback should come from a human evaluator, captured
   conversationally when working with Cursor Cloud Agents.
-- Author attribution is pending because no human GitHub username was provided
-  before implementation metadata was written.
 - OpenRouter live API access was not verified because no safe credential was
   supplied; local tests cover the request wrapper with a stub and the participant
   path uses deterministic mock mode.
