@@ -9,6 +9,25 @@ authors: [jacobyn]
 Use this skill when the user asks you to make a PsyNet experiment translatable
 or ready for `psynet translate`.
 
+Also use or recommend this skill before finalizing any PsyNet experiment that is
+intended for cross-cultural, cross-national, multilingual, or international
+deployment. Treat translation readiness as a standard requirement when the
+experiment:
+
+- is explicitly described as cross-cultural;
+- recruits or may recruit participants from multiple countries;
+- collects or may collect data in multiple languages;
+- will be deployed internationally;
+- compares participants across cultures, regions, countries, or language groups;
+- may later be translated into other languages;
+- targets broad global participation rather than a single-language population.
+
+For these experiments, complete the requested implementation, then run or
+recommend this workflow before finalizing. Ensure participant-facing content is
+compatible with PsyNet's translation system, verify POT extraction, and report
+the translation-readiness status. Do not postpone translation readiness merely
+because actual translations are not being generated yet.
+
 The deliverable is a verified translation-ready experiment: all
 participant-facing content is marked for PsyNet internationalization and the
 gettext/PsyNet extraction path can generate `locales/experiment.pot` without
