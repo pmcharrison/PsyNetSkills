@@ -22,7 +22,10 @@ scientific task, participant experience, deployment safety, or data interpretati
 
 **Canonical reference.** Before filling the template, identify a published
 paper, preregistration, or established procedure that describes the intended
-paradigm. If its license permits redistribution, store a copy (PDF or HTML) in
+paradigm — this step is most important when the purpose is to replicate or
+adapt an existing study, but any paradigm with a prior implementation worth
+consulting should have one recorded. If the reference's license permits
+redistribution, store a copy (PDF or HTML) in
 the `references/` directory of the relevant challenge or experiment folder;
 otherwise record only the citation and a URL. Transcribe the key procedure
 into the Science and Design sections of the plan — exact instruction wording,
