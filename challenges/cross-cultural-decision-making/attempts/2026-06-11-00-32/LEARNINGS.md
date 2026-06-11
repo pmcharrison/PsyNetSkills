@@ -14,13 +14,11 @@ This also makes the exported data locale-independent.
 
 *Actions:*
 
-- **PsyNetSkills:** Update the `prepare-for-translation` skill to warn that trial-maker node definitions must store stable locale-independent keys, with translation applied in `show_trial`, not at node-definition time. Confidence: high. Status:
+- **PsyNetSkills:** Update the `prepare-for-translation` skill to warn that trial-maker node definitions must store stable locale-independent keys, with translation applied in `show_trial`, not at node-definition time. Confidence: high. Impact: high. Status:
   considering.
 - **PsyNet:** Document in the internationalization tutorial that translated
   strings must not be baked into node/trial definitions, or make node-creation
-  translation behavior consistent with page rendering. Confidence: medium.
-  Status: considering.
-
+  translation behavior consistent with page rendering. Confidence: medium. Impact: high. Status: considering.
 ## Manual PO files satisfy `psynet translate` without credentials
 
 `psynet translate` only invokes a machine translator for entries that are
@@ -35,8 +33,7 @@ created.
 
 - **PsyNetSkills:** Mention in `prepare-for-translation` that fully translated,
   non-fuzzy PO files make `psynet translate` itself a credential-free
-  validation step. Confidence: medium. Status: considering.
-
+  validation step. Confidence: medium. Impact: high. Status: considering.
 ## `get_translator()` fails in plain-script smoke tests
 
 `python experiment.py` (recommended in the validation reference) crashes with
@@ -49,8 +46,7 @@ behaves identically in deployment.
 
 - **PsyNet:** Make `get_translator` fall back gracefully (e.g. to the
   `experiment` namespace or the null translator) when `__package__` is `None`.
-  Confidence: medium. Status: considering.
-
+  Confidence: medium. Impact: high. Status: considering.
 ## PsyNet's end-page "Finish" button is not translated
 
 With `locale = hi`/`fr`, the `SuccessfulEndPage` body text is translated, but
@@ -63,8 +59,7 @@ also English, but that page is not shown to real participants.
 
 - **PsyNet:** Give the end-page Finish button a translated label
   (e.g. `PushButtonControl(["Finish"], labels=[_("Finish")])`) and add "Finish"
-  to PsyNet's own locales. Confidence: high. Status: considering.
-
+  to PsyNet's own locales. Confidence: high. Impact: high. Status: considering.
 ## Locale-independent end detection for scripted participant runs
 
 A Playwright runner that detects the end of the experiment by matching English
@@ -77,8 +72,7 @@ push buttons for choice pages will deadlock there.
 
 - **PsyNetSkills:** Note URL-based completion detection in the
   `record-participant-video` or attempt-evidence references for multilingual
-  recordings. Confidence: medium. Status: considering.
-
+  recordings. Confidence: medium. Impact: high. Status: considering.
 ## Config keys must live in exactly one place
 
 Defining `supported_locales` in both the experiment class `config` dict and
@@ -92,4 +86,4 @@ per-language evidence runs a one-line edit.
 - **PsyNetSkills:** Recommend in `prepare-for-translation` that `locale` and
   `supported_locales` live together in `config.txt` (not the experiment class
   config) so evidence runs can switch language with a one-line edit.
-  Confidence: low. Status: considering.
+  Confidence: low. Impact: low. Status: considering.

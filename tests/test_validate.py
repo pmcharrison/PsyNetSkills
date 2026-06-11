@@ -85,7 +85,7 @@ def write_valid_attempt(
         "## Useful finding\n\n"
         "*Actions:*\n\n"
         "- **PsyNetSkills:** Document it. Confidence: high. "
-        f"Status: {action_status}.\n",
+        f"Impact: medium. Status: {action_status}.\n",
     )
     write(
         attempt_dir / "TIMELINE.md",
@@ -147,9 +147,9 @@ def test_validate_learnings_accepts_expected_format(tmp_path: Path) -> None:
         "This explains what happened.\n\n"
         "*Actions:*\n\n"
         "- **PsyNetSkills:** Document the workflow. Confidence: high. "
-        "Status: considering. Notes: Waiting for maintainer review.\n"
+        "Impact: high. Status: considering. Notes: Waiting for maintainer review.\n"
         "- **PsyNet:** Improve the error message. Confidence: medium. "
-        "Status: in_progress.\n",
+        "Impact: low. Status: in_progress.\n",
     )
 
     assert validate_learnings_file(learnings_file) == []
@@ -193,7 +193,7 @@ def test_validate_learnings_rejects_legacy_status(tmp_path: Path) -> None:
         "# Learnings\n\n"
         "## Useful finding\n\n"
         "*Actions:*\n\n"
-        "- **PsyNetSkills:** Document it. Confidence: high. Status: implemented.\n",
+        "- **PsyNetSkills:** Document it. Confidence: high. Impact: medium. Status: implemented.\n",
     )
 
     problems = validate_learnings_file(learnings_file)
@@ -328,7 +328,7 @@ def test_validate_repository_requires_timeline_for_real_attempt(
         "# Learnings\n\n"
         "## Useful finding\n\n"
         "*Actions:*\n\n"
-        "- **PsyNetSkills:** Document it. Confidence: high. Status: considering.\n",
+        "- **PsyNetSkills:** Document it. Confidence: high. Impact: medium. Status: considering.\n",
     )
 
     problems = validate_repository(tmp_path)
@@ -566,7 +566,7 @@ def test_validate_repository_requires_criteria_snapshot_and_checklist(
         "# Learnings\n\n"
         "## Useful finding\n\n"
         "*Actions:*\n\n"
-        "- **PsyNetSkills:** Document it. Confidence: high. Status: considering.\n",
+        "- **PsyNetSkills:** Document it. Confidence: high. Impact: medium. Status: considering.\n",
     )
     write(
         attempt_dir / "TIMELINE.md",
@@ -601,7 +601,7 @@ def test_validate_repository_accepts_uppercase_criteria_checklist(
         "# Learnings\n\n"
         "## Useful finding\n\n"
         "*Actions:*\n\n"
-        "- **PsyNetSkills:** Document it. Confidence: high. Status: considering.\n",
+        "- **PsyNetSkills:** Document it. Confidence: high. Impact: medium. Status: considering.\n",
     )
     write(
         attempt_dir / "TIMELINE.md",

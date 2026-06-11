@@ -28,6 +28,7 @@ class LearningAction:
     id: str
     repository: str
     confidence: str
+    impact: str
     proposal: str
     status: str
     notes: str
@@ -73,6 +74,7 @@ def action_copy_context(action: LearningAction) -> dict[str, str]:
         "dashboard_path": action.source_url,
         "repository": action.repository,
         "confidence": action.confidence,
+        "impact": action.impact,
         "status": action.status,
         "learning_title": action.source_section,
         "learning_context": action.learning_context,
@@ -112,6 +114,7 @@ def format_action_copy_markdown(
                 f"Dashboard link: {dashboard_url}",
                 f"Repository target: {action.repository}",
                 f"Confidence: {action.confidence}",
+                f"Impact: {action.impact}",
                 f"Status: {action.status}",
                 "",
                 "Learning context:",
@@ -155,7 +158,7 @@ def open_learning_actions_from_markdown(
             if parsed is None:
                 continue
             action_index += 1
-            repository, confidence, proposal, status, notes = parsed
+            repository, confidence, impact, proposal, status, notes = parsed
             if status in COMPLETED_LEARNING_STATUSES:
                 continue
             action_id = f"{challenge_slug}/{attempt_name}/action-{action_index:03d}"
@@ -168,6 +171,7 @@ def open_learning_actions_from_markdown(
                 id=action_id,
                 repository=repository,
                 confidence=confidence,
+                impact=impact,
                 proposal=proposal,
                 status=status,
                 notes=notes,
@@ -227,7 +231,7 @@ def mark_open_learning_actions_in_markdown(
         parsed = parse_learning_action_bullet(bullet)
         if parsed is not None:
             action_index += 1
-            _, _, _, status = parsed
+            _, _, _, _, status = parsed
             if status not in COMPLETED_LEARNING_STATUSES:
                 action_id = f"{challenge_slug}/{attempt_name}/action-{action_index:03d}"
                 marker = action_anchor_marker(action_anchor_id(action_id))

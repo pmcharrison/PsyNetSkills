@@ -11,8 +11,7 @@ imports.
 *Actions:*
 - **PsyNetSkills:** Consider adding a short note to attempt or experiment
   implementation guidance about explicit import paths for nested attempt helper
-  scripts. Confidence: medium. Status: considering.
-
+  scripts. Confidence: medium. Impact: low. Status: considering.
 ## Preserve PsyNet generated-asset ignores in nested attempts
 
 `psynet test local` creates `source_code.zip` and may create `static/assets`.
@@ -23,8 +22,7 @@ before the experiment starts.
 *Actions:*
 - **PsyNetSkills:** Consider expanding the attempt-challenge reminder about
   copying standard support files to name `source_code.zip` and `static/assets`
-  ignore rules explicitly. Confidence: high. Status: considering.
-
+  ignore rules explicitly. Confidence: high. Impact: low. Status: considering.
 ## Use richer ambiguity in telemetry challenge simulations
 
 The evaluation noted that future telemetry attempts would be stronger if the
@@ -36,4 +34,4 @@ only obvious fast, uniform, or failed-check profiles.
 - **PsyNetSkills:** Consider updating this challenge's public examples or future
   attempt guidance to encourage nuanced simulated profiles that test review
   rules under ambiguous but still local and ethical conditions. Confidence:
-  medium. Status: considering.
+  medium. Impact: medium. Status: considering.

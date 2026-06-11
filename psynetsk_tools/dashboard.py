@@ -699,7 +699,7 @@ def collect_attempts(
             learnings = demote_markdown_headings(learnings)
         open_actions = sum(
             1
-            for _, _, _, status in parse_learning_actions(learnings_source)
+            for _, _, _, _, status in parse_learning_actions(learnings_source)
             if status not in COMPLETED_LEARNING_STATUSES
         )
         artifact_prefix = attempt_artifact_url_prefix(

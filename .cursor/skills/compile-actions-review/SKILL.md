@@ -20,8 +20,8 @@ LLM-generated action review.
 
 2. Read `dashboard/data/psynetsk.json` and inspect the top-level `actions` array.
    Each entry is one currently unresolved action point with a stable `id`,
-   challenge/attempt metadata, learning context, notes, and a deep link to the
-   original learning-action bullet.
+   challenge/attempt metadata, confidence, impact, learning context, notes, and a
+   deep link to the original learning-action bullet.
 3. Read the existing `actions-review.yaml` if present. Preserve useful section
    themes when they still fit the current action set.
 4. Group related open actions into a small number of coherent sections. Prefer

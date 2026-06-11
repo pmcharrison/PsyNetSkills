@@ -27,6 +27,8 @@ renders the workflow overview, generated content, layouts, and final HTML into
 LLM-generated review of currently open learning actions, grouped into thematic
 sections that reference stable action IDs. Dashboard builds never call an LLM;
 they only parse repository files and render the committed review.
+Action cards show confidence, status, and impact; impact is a red/yellow/green
+signal for how valuable the fix is likely to be.
 
 Attempt pages are reviewer-facing artifacts. They may show evaluation criteria
 so reviewers can compare the implementation against the rubric, but agents must

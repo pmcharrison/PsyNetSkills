@@ -77,8 +77,8 @@ Use one section per learning:
 - `## <short title>`
 - Optional prose describing what happened.
 - `*Actions:*`
-  - `**PsyNetSkills:** <repo/skill/docs change>. Confidence: <level>. Status: <status>. Notes: <optional review rationale>.`
-  - `**PsyNet:** <framework/docs/CLI change>. Confidence: <level>. Status: <status>.`
+  - `**PsyNetSkills:** <repo/skill/docs change>. Confidence: <level>. Impact: <level>. Status: <status>. Notes: <optional review rationale>.`
+  - `**PsyNet:** <framework/docs/CLI change>. Confidence: <level>. Impact: <level>. Status: <status>.`
 
 Only include action bullets for concrete proposed or completed actions. Write
 each action bullet so it stands on its own when copied out of `LEARNINGS.md`:
@@ -89,7 +89,11 @@ referent. If there is no suggested action for PsyNet, PsyNetSkills, or another
 owner, omit that owner's bullet entirely rather than adding a dismissed no-op
 such as "No framework change suggested."
 
-Use confidence levels `high`, `medium`, or `low`. Generally propose a near-term
+Use confidence and impact levels `high`, `medium`, or `low`. Impact means the
+value of implementing the fix: use `low` for quick recoveries and nice-to-have
+clarifications, `medium` for issues the agent can fix after meaningful friction,
+and `high` for fixes that prevent stuck attempts, major evidence gaps, or serious
+participant-facing/research-validity failures. Generally propose a near-term
 PsyNetSkills change first, then a longer-term PsyNet change if the learning
 points to a framework issue. Use lowercase status values: `considering`,
 `planned`, `in_progress`, `completed`, `dismissed`, or `superseded`. New actions
