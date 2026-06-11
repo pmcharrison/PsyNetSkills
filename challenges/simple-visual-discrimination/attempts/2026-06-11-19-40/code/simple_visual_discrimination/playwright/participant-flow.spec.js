@@ -78,5 +78,9 @@ test("participant can complete minimal visual discrimination flow", async ({ pag
   await languageSelect.selectOption(englishValue);
   await clickIfVisible(page, [/next/i, /submit/i]);
 
-  await expect(page.getByText(/You're finished!/i)).toBeVisible({ timeout: 15_000 });
+  await expect(page.getByText(/That's the end of the experiment/i)).toBeVisible({
+    timeout: 15_000,
+  });
+  await clickIfVisible(page, [/finish/i]);
+  await expect(page.getByText(/finished/i)).toBeVisible({ timeout: 15_000 });
 });
