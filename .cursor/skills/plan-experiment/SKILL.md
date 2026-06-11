@@ -1,7 +1,7 @@
 ---
 name: plan-experiment
 description: Collaboratively fill the shared experiment plan scaffold (Science, Design, Implementation oversight) with a human researcher before any implementation begins. Use when a user brings a new experiment idea, asks to plan or design an experiment, or needs to document an existing design before coding starts.
-authors: [pmcharrison]
+authors: [zeroada]
 ---
 
 # Plan an experiment
