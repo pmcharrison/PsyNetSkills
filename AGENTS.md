@@ -146,11 +146,23 @@ source .venv/bin/activate
 uv pip install -e '.[dev,slack]'
 ```
 
-**Verify** (hello_world demo):
+PsyNet must stay installed **editable** from `~/PsyNet`. Installing a demo or
+experiment `constraints.txt` replaces it with a non-editable install pinned to
+a git commit (the constraints contain `psynet @ git+...`), after which local
+source edits in `~/PsyNet` are silently ignored. If you install any
+`constraints.txt`, re-run `uv pip install -e '.[dev,slack]'` afterwards as the
+final Python-install step. Verify with:
+
+```bash
+python -c "import psynet; print(psynet.__file__)"
+# must print a path under ~/PsyNet/psynet/, not site-packages
+```
+
+**Verify** (hello_world demo; the editable install already provides all
+dependencies, so do not install the demo's `constraints.txt`):
 
 ```bash
 cd ~/PsyNet/demos/experiments/hello_world
-uv pip install -r constraints.txt
 psynet test local
 ```
 
