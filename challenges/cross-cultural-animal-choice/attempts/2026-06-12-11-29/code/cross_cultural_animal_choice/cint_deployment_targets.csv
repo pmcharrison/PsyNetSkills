@@ -1,6 +1,3 @@
 locale,language,country,language_tag,country_tag,wage_per_hour,qualification_file
-tr,Turkish,Turkey,TUR,TR,,qualifications/lucid/lucid-TUR-TR.json
-ar,Arabic,Morocco,ARA,MA,,qualifications/lucid/lucid-ARA-MA.json
-en,English,United States,ENG,US,,qualifications/lucid/lucid-ENG-US.json
 fr,French,France,FRE,FR,,qualifications/lucid/lucid-FRE-FR.json
-fr,French,Canada,FRE,CA,,qualifications/lucid/lucid-FRE-CA.json
+en,English,India,ENG,IN,,qualifications/lucid/lucid-ENG-IN.json
