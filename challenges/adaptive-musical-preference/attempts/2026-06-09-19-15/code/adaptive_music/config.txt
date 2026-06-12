@@ -1,0 +1,14 @@
+[Config]
+title = Adaptive musical preference experiment
+description = Listen to pairs of short synthesized musical clips and choose the one you prefer.
+contact_email_on_error = admin@example.com
+organization_name = PsyNetSkills
+
+recruiter = generic
+currency = $
+wage_per_hour = 12.0
+
+[Prolific]
+auto_recruit = false
+prolific_estimated_completion_minutes = 4
+base_payment = 0.80
