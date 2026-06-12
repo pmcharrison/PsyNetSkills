@@ -22,3 +22,4 @@
 - T+00:39:00 [agent] Generated `constraints.txt` with `dallinger constraints generate`.
 - T+00:42:00 [agent] Playwright exploration found PsyNet's default static-trial block selection presented green first, so the experiment needed an explicit red, green, blue block order.
 - T+00:43:00 [agent] Added `ColorRatingTrialMaker.choose_block_order` and a bot assertion for the requested color order.
+- T+00:47:00 [agent] Added Playwright participant-flow evidence script and fixed its video save ordering after the first scripted run completed the flow but failed while saving video.

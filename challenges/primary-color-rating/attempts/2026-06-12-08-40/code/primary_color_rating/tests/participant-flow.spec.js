@@ -75,9 +75,10 @@ test("participant rates red, green, and blue in order", async () => {
   });
 
   const video = page.video();
+  await page.close();
+  await video.saveAs(path.join(evidenceDir, "participant.webm"));
   await context.close();
   await browser.close();
-  await video.saveAs(path.join(evidenceDir, "participant.webm"));
 
   const manifest = {
     captions: {
