@@ -16,10 +16,10 @@
     #tabletop-canvas { width: 100%; height: 660px; display: block; }
     #scene-hud { position: absolute; inset: 0; pointer-events: none; font-weight: 700; color: #52525b; text-shadow: 0 1px 2px rgba(255, 255, 255, 0.9); }
     #partner-label, #me-label, #partner-coins-label, #me-coins-label, #table-caption { position: absolute; transform: translate(-50%, -50%); white-space: nowrap; }
-    #partner-label { left: 69%; top: 14%; font-size: 1.15rem; }
-    #partner-coins-label { left: 56%; top: 11%; font-size: 0.9rem; }
-    #me-label { left: 70%; top: 90%; font-size: 1.2rem; }
-    #me-coins-label { left: 55%; top: 83%; font-size: 0.95rem; }
+    #partner-label { left: 64%; top: 16%; font-size: 1.15rem; }
+    #partner-coins-label { left: 48%; top: 22%; font-size: 0.9rem; }
+    #me-label { left: 65%; top: 87%; font-size: 1.2rem; }
+    #me-coins-label { left: 48%; top: 74%; font-size: 0.95rem; }
     #table-caption { left: 53%; top: 42%; padding: 0.35rem 0.55rem; border-radius: 999px; background: rgba(255, 255, 255, 0.86); color: #334155; font-size: 0.85rem; }
     .pill { display: inline-block; padding: 0.15rem 0.5rem; border-radius: 999px; background: #dbeafe; color: #1e40af; font-size: 0.85rem; font-weight: 700; }
     .action-button { padding: 0.6rem 0.9rem; border: 0; border-radius: 8px; color: white; font-weight: 700; background: #0b5cff; cursor: pointer; }
@@ -255,13 +255,11 @@ import * as THREE from "/static/three.module.min.js";
         var floor = new THREE.Mesh(new THREE.PlaneGeometry(14, 12), new THREE.MeshStandardMaterial({color: 0xdbeafe, roughness: 0.85}));
         floor.rotation.x = -Math.PI / 2; floor.position.y = -0.8; scene.add(floor);
         scene.add(createTable());
-        var partner = createAvatar(0x2563eb, 0.72); partner.position.set(1.75, 0.2, -2.85); partner.rotation.y = Math.PI; scene.add(partner);
-        var me = createAvatar(0x0f766e, 1.02); me.position.set(1.9, 0.15, 2.95); scene.add(me);
-        var partnerBowl = createBowl(0.42); partnerBowl.position.set(-1.55, 0.18, -2.85); scene.add(partnerBowl);
-        var meBowl = createBowl(0.58); meBowl.position.set(-1.55, 0.23, 2.75); scene.add(meBowl);
+        var partner = createAvatar(0x2563eb, 0.72); partner.position.set(1.05, 0.2, -2.55); partner.rotation.y = Math.PI; scene.add(partner);
+        var me = createAvatar(0x0f766e, 1.02); me.position.set(1.15, 0.15, 2.65); scene.add(me);
         var centerCoins = createCoinSet(10, 0.23); centerCoins.position.set(0.05, 0.34, 0.0); scene.add(centerCoins);
-        var meCoins = createCoinSet(10, 0.21); meCoins.position.set(-1.55, 0.56, 2.75); scene.add(meCoins);
-        var partnerCoins = createCoinSet(10, 0.19); partnerCoins.position.set(-1.55, 0.50, -2.85); scene.add(partnerCoins);
+        var meCoins = createCoinSet(10, 0.21); meCoins.position.set(-0.85, 0.58, 1.62); scene.add(meCoins);
+        var partnerCoins = createCoinSet(10, 0.19); partnerCoins.position.set(-0.85, 0.54, -1.62); scene.add(partnerCoins);
         var offerTrail = createCoinSet(10, 0.2); offerTrail.position.set(0.0, 0.70, 0.0); scene.add(offerTrail);
         sceneHandles = {renderer: renderer, scene: scene, camera: camera, centerCoins: centerCoins, meCoins: meCoins, partnerCoins: partnerCoins, offerTrail: offerTrail};
         resizeScene(); window.addEventListener('resize', resizeScene);
@@ -323,13 +321,6 @@ import * as THREE from "/static/three.module.min.js";
         hand.position.set(x * 1.12, 0.14, 0);
         arm.add(sleeve, forearm, hand);
         return arm;
-    }
-
-    function createBowl(scale) {
-        var group = new THREE.Group(); var glass = new THREE.MeshStandardMaterial({color: 0xe8eef7, roughness: 0.25, transparent: true, opacity: 0.72});
-        var rim = new THREE.Mesh(new THREE.TorusGeometry(0.55, 0.055, 16, 48), glass); rim.rotation.x = Math.PI / 2;
-        var body = new THREE.Mesh(new THREE.SphereGeometry(0.58, 32, 16, 0, Math.PI * 2, Math.PI / 2, Math.PI / 2), glass); body.scale.y = 0.55; body.rotation.x = Math.PI;
-        group.add(rim); group.add(body); group.scale.setScalar(scale); return group;
     }
 
     function createCoinSet(count, radius) {
