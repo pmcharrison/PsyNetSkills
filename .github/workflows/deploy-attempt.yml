@@ -1,0 +1,315 @@
+name: Deploy PsyNet attempt
+
+on:
+  workflow_dispatch:
+    inputs:
+      attempt_ref:
+        description: "Git ref or commit SHA containing the attempt code"
+        required: true
+        type: string
+      attempt_path:
+        description: "Path to the PsyNet experiment folder"
+        required: true
+        type: string
+      app_name:
+        description: "Dallinger/PsyNet app name"
+        required: true
+        type: string
+      server_name:
+        description: "EC2 instance/server name"
+        required: true
+        type: string
+      dns_host:
+        description: "Route53 DNS host, e.g. attempt.cap-experiments.com"
+        required: true
+        type: string
+      region:
+        description: "AWS region"
+        required: true
+        default: "us-east-1"
+        type: string
+      instance_type:
+        description: "EC2 instance type"
+        required: true
+        default: "m7i.xlarge"
+        type: string
+      storage_gb:
+        description: "EBS storage in GB"
+        required: true
+        default: "32"
+        type: string
+      security_group_name:
+        description: "EC2 security group name"
+        required: true
+        default: "dallinger"
+        type: string
+      dry_run:
+        description: "Only validate inputs and produce the deployment plan"
+        required: true
+        default: true
+        type: boolean
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-attempt-${{ inputs.server_name }}
+  cancel-in-progress: false
+
+jobs:
+  prepare:
+    name: Prepare deployment plan
+    runs-on: ubuntu-latest
+    outputs:
+      resolved_sha: ${{ steps.plan.outputs.resolved_sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.attempt_ref }}
+          lfs: true
+
+      - name: Validate inputs and write plan
+        id: plan
+        env:
+          ATTEMPT_PATH: ${{ inputs.attempt_path }}
+          APP_NAME: ${{ inputs.app_name }}
+          SERVER_NAME: ${{ inputs.server_name }}
+          DNS_HOST: ${{ inputs.dns_host }}
+          REGION: ${{ inputs.region }}
+          INSTANCE_TYPE: ${{ inputs.instance_type }}
+          STORAGE_GB: ${{ inputs.storage_gb }}
+          SECURITY_GROUP_NAME: ${{ inputs.security_group_name }}
+          DRY_RUN: ${{ inputs.dry_run }}
+        run: |
+          set -euo pipefail
+
+          python3 - <<'PY'
+          import os
+          import re
+          import sys
+          from pathlib import Path
+
+          labels = {
+              "APP_NAME": r"[a-z0-9][a-z0-9-]{1,61}[a-z0-9]",
+              "SERVER_NAME": r"[a-z0-9][a-z0-9-]{1,61}[a-z0-9]",
+              "DNS_HOST": r"(?=.{1,253}$)([a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,63}",
+              "REGION": r"[a-z]{2}-[a-z]+-\d",
+              "INSTANCE_TYPE": r"[a-z0-9]+\.[a-z0-9]+",
+              "STORAGE_GB": r"[1-9][0-9]{0,3}",
+              "SECURITY_GROUP_NAME": r"[A-Za-z0-9._ -]{1,255}",
+          }
+          for key, pattern in labels.items():
+              value = os.environ[key]
+              if not re.fullmatch(pattern, value):
+                  print(f"Invalid {key}: {value}", file=sys.stderr)
+                  sys.exit(2)
+
+          attempt_path = Path(os.environ["ATTEMPT_PATH"])
+          if attempt_path.is_absolute() or ".." in attempt_path.parts:
+              print("ATTEMPT_PATH must be a relative path without '..'.", file=sys.stderr)
+              sys.exit(2)
+          if not attempt_path.is_dir():
+              print(f"Attempt path does not exist: {attempt_path}", file=sys.stderr)
+              sys.exit(2)
+          if not (attempt_path / "experiment.py").is_file():
+              print(f"Missing experiment.py in {attempt_path}", file=sys.stderr)
+              sys.exit(2)
+          if not (attempt_path / "config.txt").is_file():
+              print(f"Missing config.txt in {attempt_path}", file=sys.stderr)
+              sys.exit(2)
+          PY
+
+          resolved_sha="$(git rev-parse HEAD)"
+          echo "resolved_sha=${resolved_sha}" >> "${GITHUB_OUTPUT}"
+
+          cat > deployment-plan.md <<EOF
+          # PsyNet attempt deployment plan
+
+          | Field | Value |
+          | --- | --- |
+          | Attempt ref | ${{ inputs.attempt_ref }} |
+          | Resolved SHA | ${resolved_sha} |
+          | Attempt path | ${ATTEMPT_PATH} |
+          | App name | ${APP_NAME} |
+          | Server name | ${SERVER_NAME} |
+          | DNS host | ${DNS_HOST} |
+          | Region | ${REGION} |
+          | Instance type | ${INSTANCE_TYPE} |
+          | Storage | ${STORAGE_GB} GB |
+          | Security group | ${SECURITY_GROUP_NAME} |
+          | Dry run | ${DRY_RUN} |
+
+          Provision command:
+
+          \`dallinger ec2 provision --name "${SERVER_NAME}" --region "${REGION}" --dns-host "${DNS_HOST}" --type "${INSTANCE_TYPE}" --storage "${STORAGE_GB}" --security_group_name "${SECURITY_GROUP_NAME}"\`
+
+          Deploy command:
+
+          \`psynet deploy ssh --app "${APP_NAME}" --dns-host "${DNS_HOST}" --server "${DNS_HOST}"\`
+
+          Teardown commands for a separately approved teardown run:
+
+          \`psynet destroy ssh --app "${APP_NAME}" --server "${DNS_HOST}"\`
+
+          \`dallinger ec2 teardown --name "${SERVER_NAME}" --region "${REGION}" --dns-host "${DNS_HOST}"\`
+          EOF
+
+          cat deployment-plan.md >> "${GITHUB_STEP_SUMMARY}"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: deployment-plan
+          path: deployment-plan.md
+
+  deploy:
+    name: Provision EC2 and deploy attempt
+    if: ${{ inputs.dry_run == false }}
+    needs: prepare
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    environment:
+      name: attempt-deploy
+      url: https://${{ inputs.dns_host }}
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      ATTEMPT_PATH: ${{ inputs.attempt_path }}
+      APP_NAME: ${{ inputs.app_name }}
+      SERVER_NAME: ${{ inputs.server_name }}
+      DNS_HOST: ${{ inputs.dns_host }}
+      REGION: ${{ inputs.region }}
+      INSTANCE_TYPE: ${{ inputs.instance_type }}
+      STORAGE_GB: ${{ inputs.storage_gb }}
+      SECURITY_GROUP_NAME: ${{ inputs.security_group_name }}
+      SSH_KEY_NAME: ${{ vars.ATTEMPT_DEPLOY_SSH_KEY_NAME || 'psynetskills-attempt-deploy' }}
+      AWS_ROLE_ARN: ${{ vars.ATTEMPT_DEPLOY_AWS_ROLE_ARN }}
+      DASHBOARD_USER: ${{ secrets.ATTEMPT_DEPLOY_DASHBOARD_USER }}
+      DASHBOARD_PASSWORD: ${{ secrets.ATTEMPT_DEPLOY_DASHBOARD_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.attempt_ref }}
+          lfs: true
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version-file: .python-version
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          cache-dependency-glob: "**/constraints.txt"
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ env.AWS_ROLE_ARN }}
+          aws-region: ${{ env.REGION }}
+          role-session-name: psynetskills-attempt-deploy
+
+      - name: Install experiment dependencies
+        working-directory: ${{ inputs.attempt_path }}
+        run: |
+          set -euo pipefail
+
+          uv venv --python 3.13 .venv
+          source .venv/bin/activate
+
+          if [ -f requirements.txt ] && [ -f constraints.txt ]; then
+            uv pip install -r requirements.txt -c constraints.txt
+          elif [ -f requirements.txt ]; then
+            uv pip install -r requirements.txt
+          elif [ -f constraints.txt ]; then
+            uv pip install -r constraints.txt
+          elif [ -f pyproject.toml ]; then
+            uv pip install -e .
+          else
+            echo "No requirements.txt, constraints.txt, or pyproject.toml found in ${ATTEMPT_PATH}." >&2
+            exit 1
+          fi
+
+          command -v dallinger >/dev/null
+          command -v psynet >/dev/null
+
+      - name: Configure Dallinger SSH and dashboard settings
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.ATTEMPT_DEPLOY_SSH_PRIVATE_KEY }}
+        run: |
+          set -euo pipefail
+
+          if [ -z "${AWS_ROLE_ARN}" ]; then
+            echo "Missing GitHub Environment variable ATTEMPT_DEPLOY_AWS_ROLE_ARN." >&2
+            exit 1
+          fi
+          if [ -z "${SSH_PRIVATE_KEY}" ]; then
+            echo "Missing GitHub Environment secret ATTEMPT_DEPLOY_SSH_PRIVATE_KEY." >&2
+            exit 1
+          fi
+          if [ -z "${DASHBOARD_USER}" ] || [ -z "${DASHBOARD_PASSWORD}" ]; then
+            echo "Missing dashboard GitHub Environment secrets." >&2
+            exit 1
+          fi
+
+          mkdir -p "${HOME}/.ssh"
+          chmod 700 "${HOME}/.ssh"
+          printf '%s\n' "${SSH_PRIVATE_KEY}" > "${HOME}/.ssh/${SSH_KEY_NAME}.pem"
+          chmod 600 "${HOME}/.ssh/${SSH_KEY_NAME}.pem"
+          touch "${HOME}/.ssh/known_hosts"
+
+          cat > "${HOME}/.dallingerconfig" <<EOF
+          [Parameters]
+          aws_region = ${REGION}
+          ec2_default_pem = ${SSH_KEY_NAME}
+          ec2_default_security_group = ${SECURITY_GROUP_NAME}
+          server_pem = ~/.ssh/${SSH_KEY_NAME}.pem
+          dashboard_user = ${DASHBOARD_USER}
+          dashboard_password = ${DASHBOARD_PASSWORD}
+          EOF
+
+      - name: Provision EC2 server
+        working-directory: ${{ inputs.attempt_path }}
+        run: |
+          set -euo pipefail
+          source .venv/bin/activate
+
+          dallinger ec2 provision \
+            --name "${SERVER_NAME}" \
+            --region "${REGION}" \
+            --dns-host "${DNS_HOST}" \
+            --type "${INSTANCE_TYPE}" \
+            --storage "${STORAGE_GB}" \
+            --security_group_name "${SECURITY_GROUP_NAME}"
+
+      - name: Deploy PsyNet experiment over SSH
+        working-directory: ${{ inputs.attempt_path }}
+        run: |
+          set -euo pipefail
+          source .venv/bin/activate
+
+          psynet deploy ssh \
+            --app "${APP_NAME}" \
+            --dns-host "${DNS_HOST}" \
+            --server "${DNS_HOST}"
+
+      - name: Write deployment summary
+        if: ${{ always() }}
+        run: |
+          {
+            echo "## PsyNet attempt deployment"
+            echo
+            echo "- Attempt SHA: ${{ needs.prepare.outputs.resolved_sha }}"
+            echo "- App: ${APP_NAME}"
+            echo "- Server: ${SERVER_NAME}"
+            echo "- URL: https://${DNS_HOST}"
+            echo
+            echo "Export command:"
+            echo
+            echo "\`psynet export ssh --app \"${APP_NAME}\" --server \"${DNS_HOST}\" --path \"${ATTEMPT_PATH}/exports\"\`"
+            echo
+            echo "Teardown commands:"
+            echo
+            echo "\`psynet destroy ssh --app \"${APP_NAME}\" --server \"${DNS_HOST}\"\`"
+            echo
+            echo "\`dallinger ec2 teardown --name \"${SERVER_NAME}\" --region \"${REGION}\" --dns-host \"${DNS_HOST}\"\`"
+          } >> "${GITHUB_STEP_SUMMARY}"
