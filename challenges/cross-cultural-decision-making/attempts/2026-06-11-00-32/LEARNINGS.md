@@ -1,5 +1,22 @@
 # Learnings
 
+## Keep repeated per-trial instructions visually lean
+
+Evaluator feedback: the experiment works correctly but looks somewhat bulky.
+The choice pages repeat the full instructions in an expandable panel that was
+rendered expanded by default, pushing the actual stimulus (the two option
+cards) down the page on every trial. When a challenge asks for instructions to
+be repeated on the task page, prefer a collapsed-by-default details panel or a
+single compact line with an expandable remainder, so the stimulus stays the
+visual focus.
+
+*Actions:*
+
+- **PsyNetSkills:** Add a design note to `psynet-experiment-implementation`
+  (participant-facing UI guidance): repeated instructions on trial pages
+  should default to collapsed/compact so the stimulus dominates the page.
+  Confidence: medium. Status: considering.
+
 ## Do not store translated text in trial/node definitions
 
 The first implementation put the translated scenario texts (via `_()` at module
