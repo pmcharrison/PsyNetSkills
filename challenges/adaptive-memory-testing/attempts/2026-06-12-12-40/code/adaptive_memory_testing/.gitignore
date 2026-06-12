@@ -8,3 +8,4 @@ source_code.zip
 __pycache__
 *.DS_Store
 simulation_output/
+node_modules/

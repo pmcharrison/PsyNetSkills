@@ -2,43 +2,67 @@
   {
     "ability": "low",
     "policy": "adaptive",
-    "mean_selected_length": 9.675,
-    "mean_late_selected_length": 4.55,
-    "accuracy": 0.1
+    "n_participants": 10,
+    "mean_selected_length": 9.77,
+    "mean_late_selected_length": 4.74,
+    "accuracy": 0.11,
+    "mean_vi_abs_error": 0.137,
+    "mean_hmc_abs_error": 0.213,
+    "mean_hmc_acceptance_rate": 0.998
   },
   {
     "ability": "low",
     "policy": "random",
-    "mean_selected_length": 12.125,
-    "mean_late_selected_length": 13.85,
-    "accuracy": 0.125
+    "n_participants": 10,
+    "mean_selected_length": 11.8,
+    "mean_late_selected_length": 11.74,
+    "accuracy": 0.15,
+    "mean_vi_abs_error": 0.332,
+    "mean_hmc_abs_error": 0.391,
+    "mean_hmc_acceptance_rate": 0.991
   },
   {
     "ability": "medium",
     "policy": "adaptive",
-    "mean_selected_length": 11.725,
-    "mean_late_selected_length": 8.2,
-    "accuracy": 0.225
+    "n_participants": 10,
+    "mean_selected_length": 12.86,
+    "mean_late_selected_length": 9.8,
+    "accuracy": 0.23,
+    "mean_vi_abs_error": 0.31,
+    "mean_hmc_abs_error": 0.297,
+    "mean_hmc_acceptance_rate": 0.996
   },
   {
     "ability": "medium",
     "policy": "random",
-    "mean_selected_length": 10.55,
-    "mean_late_selected_length": 10.9,
-    "accuracy": 0.325
+    "n_participants": 10,
+    "mean_selected_length": 10.88,
+    "mean_late_selected_length": 10.86,
+    "accuracy": 0.32,
+    "mean_vi_abs_error": 0.372,
+    "mean_hmc_abs_error": 0.467,
+    "mean_hmc_acceptance_rate": 0.999
   },
   {
     "ability": "high",
     "policy": "adaptive",
-    "mean_selected_length": 16.525,
-    "mean_late_selected_length": 15.9,
-    "accuracy": 0.3
+    "n_participants": 10,
+    "mean_selected_length": 16.35,
+    "mean_late_selected_length": 15.56,
+    "accuracy": 0.36,
+    "mean_vi_abs_error": 0.399,
+    "mean_hmc_abs_error": 0.488,
+    "mean_hmc_acceptance_rate": 0.996
   },
   {
     "ability": "high",
     "policy": "random",
-    "mean_selected_length": 10.85,
-    "mean_late_selected_length": 9.85,
-    "accuracy": 0.65
+    "n_participants": 10,
+    "mean_selected_length": 11.16,
+    "mean_late_selected_length": 10.3,
+    "accuracy": 0.6,
+    "mean_vi_abs_error": 0.27,
+    "mean_hmc_abs_error": 0.264,
+    "mean_hmc_acceptance_rate": 0.996
   }
 ]

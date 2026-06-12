@@ -6,14 +6,18 @@ import argparse
 import csv
 import hashlib
 import json
+import math
 import random
 from pathlib import Path
+
+import numpy as np
 
 from adaptive_policy import (
     AdaptivePolicy,
     MAX_LENGTH,
     MIN_LENGTH,
     Observation,
+    _log_joint,
     initial_posterior_state,
     recall_probability,
     simulate_response,
@@ -25,6 +29,69 @@ N_TRIALS = 10
 def stable_seed(*parts) -> int:
     digest = hashlib.sha256(":".join(map(str, parts)).encode("utf-8")).hexdigest()
     return int(digest[:12], 16)
+
+
+def hmc_theta_estimate(
+    observations: list[Observation],
+    start: list[float],
+    seed: int,
+    samples: int = 160,
+    burnin: int = 60,
+    step_size: float = 0.025,
+    leapfrog_steps: int = 10,
+) -> dict:
+    rng = np.random.default_rng(seed)
+    position = np.array(start, dtype=float)
+    draws = []
+    accepted = 0
+
+    def log_density(z):
+        return float(_log_joint(np.array([z], dtype=float), observations)[0])
+
+    def gradient(z):
+        grad = np.zeros_like(z)
+        epsilon = 1e-4
+        for i in range(len(z)):
+            plus = z.copy()
+            minus = z.copy()
+            plus[i] += epsilon
+            minus[i] -= epsilon
+            grad[i] = (log_density(plus) - log_density(minus)) / (2.0 * epsilon)
+        return grad
+
+    for iteration in range(samples + burnin):
+        momentum = rng.normal(size=3)
+        proposal = position.copy()
+        proposal_momentum = momentum + 0.5 * step_size * gradient(proposal)
+
+        for _ in range(leapfrog_steps):
+            proposal = proposal + step_size * proposal_momentum
+            grad = gradient(proposal)
+            proposal_momentum = proposal_momentum + step_size * grad
+
+        proposal_momentum = proposal_momentum - 0.5 * step_size * grad
+        proposal_momentum = -proposal_momentum
+
+        current_energy = -log_density(position) + 0.5 * float(momentum @ momentum)
+        proposed_energy = -log_density(proposal) + 0.5 * float(
+            proposal_momentum @ proposal_momentum
+        )
+
+        if math.isfinite(proposed_energy) and rng.random() < math.exp(
+            min(0.0, current_energy - proposed_energy)
+        ):
+            position = proposal
+            accepted += 1
+
+        if iteration >= burnin:
+            draws.append(position.copy())
+
+    theta_draws = np.array(draws)[:, 2]
+    return {
+        "hmc_theta_mean": round(float(np.mean(theta_draws)), 6),
+        "hmc_theta_sd": round(float(np.std(theta_draws)), 6),
+        "hmc_acceptance_rate": round(float(accepted / (samples + burnin)), 3),
+    }
 
 
 def run_participant(theta: float, adaptive: bool, seed: int) -> list[dict]:
@@ -65,15 +132,23 @@ def run_participant(theta: float, adaptive: bool, seed: int) -> list[dict]:
         observations.append(Observation(length=length, correct=correct))
 
     posterior = policy.fit(observations, posterior)
+    hmc = hmc_theta_estimate(
+        observations=observations,
+        start=posterior["mean"],
+        seed=stable_seed("hmc", seed),
+    )
     rows[-1]["posterior_theta_mean_after"] = posterior["mean"][2]
     rows[-1]["posterior_theta_sd_after"] = posterior["sd"][2]
+    rows[-1].update(hmc)
+    rows[-1]["theta_abs_error_vi"] = abs(rows[-1]["posterior_theta_mean_after"] - theta)
+    rows[-1]["theta_abs_error_hmc"] = abs(rows[-1]["hmc_theta_mean"] - theta)
     return rows
 
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--output-dir", default="simulation_output")
-    parser.add_argument("--participants-per-ability", type=int, default=4)
+    parser.add_argument("--participants-per-ability", type=int, default=10)
     args = parser.parse_args()
 
     output_dir = Path(args.output_dir)
@@ -110,10 +185,12 @@ def main():
                 if row["ability"] == ability_label and row["policy"] == policy_name
             ]
             late_rows = [row for row in rows if row["trial_index"] >= 5]
+            final_rows = [row for row in rows if row["trial_index"] == N_TRIALS - 1]
             summary.append(
                 {
                     "ability": ability_label,
                     "policy": policy_name,
+                    "n_participants": len(final_rows),
                     "mean_selected_length": round(
                         sum(row["selected_length"] for row in rows) / len(rows), 3
                     ),
@@ -122,6 +199,21 @@ def main():
                         3,
                     ),
                     "accuracy": round(sum(row["correct"] for row in rows) / len(rows), 3),
+                    "mean_vi_abs_error": round(
+                        sum(row["theta_abs_error_vi"] for row in final_rows)
+                        / len(final_rows),
+                        3,
+                    ),
+                    "mean_hmc_abs_error": round(
+                        sum(row["theta_abs_error_hmc"] for row in final_rows)
+                        / len(final_rows),
+                        3,
+                    ),
+                    "mean_hmc_acceptance_rate": round(
+                        sum(row["hmc_acceptance_rate"] for row in final_rows)
+                        / len(final_rows),
+                        3,
+                    ),
                 }
             )
 
