@@ -1,7 +1,7 @@
 ---
 name: psynet-synchronous-experiments
 description: Design and implement PsyNet synchronous experiments using cohort, grouping, barrier, waiting-room, and recruiter coordination patterns without assuming websocket interaction.
-authors: [pmcharrison]
+authors: [lucasgautheron]
 ---
 
 # Implement synchronous PsyNet experiments
