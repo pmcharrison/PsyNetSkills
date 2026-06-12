@@ -45,27 +45,55 @@ missing required values before editing target-specific qualification settings:
 - generated qualification files;
 - deployment CSV path, usually `cint_deployment_targets.csv`.
 
-Ask explicitly:
+Before asking for choices, explain the decisions in practical terms. Use this
+decision guide, adapting only the examples to the user's experiment:
 
-1. Which language-country pairs do you want to prepare for Cint?
-2. Which Lucid qualifications do you want enabled in the study?
-3. Which target should be used as the current placeholder in `experiment.py`?
+```text
+Before I prepare the Cint files, here is what you need to decide.
 
-When asking about qualifications, briefly explain the available custom filters:
+1. Deployment targets
+   Each Cint deployment is for one language-country pair, for example
+   Turkish-Turkey or English-United Kingdom. The language determines the PsyNet
+   locale and participant-facing translation. The country determines the Cint
+   market and often the wage.
+
+2. Wage per hour
+   Wage should be reviewed separately for every country. I can leave this blank
+   in cint_deployment_targets.csv if you do not have approved wages yet.
+
+3. Qualification filters
+   Filters make the sample more specific but can reduce the participant pool.
+   Use only filters you really need for the study.
+
+4. Placeholder target
+   experiment.py can only point at one active LANGUAGE/COUNTRY at a time. Choose
+   one target as the current placeholder; before each deployment, update it to
+   the target being deployed.
+```
+
+Then explain qualification options in decision-oriented language:
 
 - `TIMEOUT`: warning participants that leaving the page or switching context can
   terminate participation; this is set automatically by PsyNet's Lucid helper.
-- `MONOLINGUALISM`: asks whether participants were raised with only their native
-  language.
-- `HAS_AUDIO`: asks whether participants can play audio.
+- `MONOLINGUALISM`: use when the study needs people raised with only their native
+  language; it can strongly restrict the pool.
+- `HAS_AUDIO`: use for audio/music experiments where participants must be able to
+  play sound.
 - `ALLOW_VOICE_RECORDING`: asks whether participants can record their voice.
-- `BORN_IN_COUNTRY`: asks whether participants were born in the target country.
+- `BORN_IN_COUNTRY`: use when birthplace matters for cultural exposure.
 - `LIVE_IN_COUNTRY`: asks whether participants currently live in the target
   country.
 - `HAS_NATIONALITY`: asks whether participants hold the target country's
   nationality.
-- `IS_NATIVE`: asks whether participants are native speakers of the target
-  language.
+- `IS_NATIVE`: use when native-language competence is important.
+
+After this explanation, ask explicitly:
+
+1. Which language-country pairs do you want to prepare for Cint?
+2. Which qualifications do you want enabled? If unsure, suggest a minimal choice
+   based on the experiment. For example, for an audio/music native-language
+   study, suggest `HAS_AUDIO` and `IS_NATIVE`, then ask for confirmation.
+3. Which target should be used as the current placeholder in `experiment.py`?
 
 If targets are unknown, continue with generic parameter preparation and
 qualification tooling, but leave real `country_language_tags` commented out and
