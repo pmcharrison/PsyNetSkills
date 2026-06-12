@@ -9,6 +9,8 @@ const participantUrl =
 const evidenceDir = path.resolve(__dirname, "../../../evidence");
 const screenshotsDir = path.join(evidenceDir, "screenshots");
 
+test.use({ channel: "chrome" });
+
 async function saveScreenshot(page, name) {
   fs.mkdirSync(screenshotsDir, { recursive: true });
   await page.screenshot({ path: path.join(screenshotsDir, name), fullPage: true });
