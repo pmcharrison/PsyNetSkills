@@ -11,8 +11,9 @@ interactions between multiple participants within the same trial.
 
 ## Required reads
 
-- Read `psynet-experiment-implementation/SKILL.md` for the general PsyNet
-  implementation workflow, setup reminders, and validation expectations.
+- Read `psynet-experiment-implementation/SKILL.md` (Implement psychophysics
+  experiment) for the general PsyNet implementation workflow, setup reminders,
+  and validation expectations.
 - Inspect the closest PsyNet demos and framework APIs for groups, trials,
   nodes, events, websocket handling, and participant routing before designing
   custom frontend behavior.

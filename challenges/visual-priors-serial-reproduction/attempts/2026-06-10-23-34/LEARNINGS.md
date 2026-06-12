@@ -18,7 +18,7 @@ Using an absolute path under the attempt evidence directory made the export
 repeatable.
 
 *Actions:*
-- **PsyNetSkills:** Recommend absolute paths for `psynet export local --path` in challenge evidence instructions. Confidence: high. Status: considering.
+- **PsyNetSkills:** Recommend absolute paths for `psynet export local --path` in challenge evidence instructions. Confidence: high. Status: completed. Notes: Added absolute-path guidance to the experiment evidence checklist and validation reference.
 
 ## Avoid unrequested task elements
 
@@ -28,7 +28,7 @@ unless they are specified by the instructions or clearly required by the
 framework.
 
 *Actions:*
-- **PsyNetSkills:** Add attempt guidance reminding agents not to infer extra participant-facing task elements from generic experiment conventions. Confidence: high. Status: considering.
+- **PsyNetSkills:** Add attempt guidance reminding agents not to infer extra participant-facing task elements from generic experiment conventions. Confidence: high. Status: completed. Notes: Added explicit psychophysics guidance not to add unrequested participant-facing task elements.
 
 ## Interpret schematic figure sizes cautiously
 
@@ -38,4 +38,4 @@ implementations should distinguish schematic clarity from intended stimulus
 scale.
 
 *Actions:*
-- **PsyNetSkills:** Add visual-experiment guidance to treat schematic element sizes as approximate unless the challenge text or source gives measurements. Confidence: high. Status: considering.
+- **PsyNetSkills:** Add visual-experiment guidance to treat schematic element sizes as approximate unless the challenge text or source gives measurements. Confidence: high. Status: completed. Notes: Added schematic-size guidance to the Implement psychophysics experiment skill.

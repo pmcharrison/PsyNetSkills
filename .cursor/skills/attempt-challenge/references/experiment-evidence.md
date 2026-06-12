@@ -15,10 +15,14 @@ Provide these artifacts or document the blocker in `EVALUATION.md`:
   and re-encode them before adding them to the attempt.
 - `evidence/performance.json` contains `psynet performance-test` JSON output, or
   `evidence/performance-test.log` plus an `EVALUATION.md` blocker explains why
-  the performance test could not run. Use
+  the performance test could not run. Use the Implement psychophysics experiment
+  skill's
   `psynet-experiment-implementation/references/validation.md` for the command.
 - `evidence/monitor.html` contains a PsyNet dashboard monitor snapshot.
 - `evidence/data.zip` contains exported experiment data.
+  Use an absolute export path under `evidence/` when running PsyNet export
+  commands; some local export subprocesses resolve relative paths from temporary
+  deployment directories.
 - `EVALUATION.md` has the copied criteria checklist when the challenge includes
   copied criteria.
 - If the challenge's central requirement is a real external service or

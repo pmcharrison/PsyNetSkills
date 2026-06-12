@@ -19,7 +19,8 @@ challenge before starting a fresh attempt.
 
 - Read `references/attempt-artifacts.md` before setting up attempt templates or
   collecting evidence.
-- For experiment implementation challenges, also read
+- For experiment implementation challenges, also read the Implement psychophysics
+  experiment skill's
   `references/experiment-evidence.md` and
   `psynet-experiment-implementation/references/validation.md` before finalizing
   functional or performance evidence.
@@ -125,7 +126,8 @@ participant-facing behavior and the technical health of the attempt. Match the
 evidence to the challenge type and public instructions. For experiment
 implementation challenges, use the required artifact checklist in
 `references/experiment-evidence.md`. For PsyNet functional and performance
-checks, follow `psynet-experiment-implementation/references/validation.md`.
+checks, follow the Implement psychophysics experiment skill's
+`psynet-experiment-implementation/references/validation.md`.
 
 When a challenge's central requirement depends on an external service or
 integration, such as S3, payment APIs, webhooks, or third-party recruitment
