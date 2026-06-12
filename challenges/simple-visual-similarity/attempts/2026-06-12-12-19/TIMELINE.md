@@ -14,3 +14,5 @@
 - T+04:55:00 [agent] Video review found controls could advance during fixation; gated response events and hid controls during fixation.
 - T+05:15:00 [agent] Video review found rapid Playwright responses could race stale trial pages; added page-change waits and deterministic prompt timing.
 - T+05:18:00 [agent-stop] Implementation and first-pass evidence collection complete after final video review confirmed fixation, controls, responses, and recruiter exit.
+- T+05:55:00 [agent] Replaced graphic frame sequence with deterministic prompt and paced Playwright by page UUID after video review found stale-page races.
+- T+06:15:00 [agent-stop] Final video review confirmed fixation before every trial, hidden controls during fixation, visible circles/buttons before responses, and recruiter exit.
