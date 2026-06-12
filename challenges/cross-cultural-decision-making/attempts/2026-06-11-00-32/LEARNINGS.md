@@ -86,7 +86,11 @@ also English, but that page is not shown to real participants.
 
 - **PsyNet:** Give the end-page Finish button a translated label
   (e.g. `PushButtonControl(["Finish"], labels=[_("Finish")])`) and add "Finish"
-  to PsyNet's own locales. Confidence: high. Impact: high. Status: considering.
+  to PsyNet's own locales. Confidence: high. Impact: high. Status: in_progress.
+  Notes: implemented on 2026-06-12 and submitted upstream as
+  https://gitlab.com/PsyNetDev/PsyNet/-/merge_requests/1085 with pmcharrison
+  assigned as reviewer; fuzzy "Finish" entries added for all 75 PsyNet locales
+  pending a credentialed psynet translate review.
 
 ## Locale-independent end detection for scripted participant runs
 
