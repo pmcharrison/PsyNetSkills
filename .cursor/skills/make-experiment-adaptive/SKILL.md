@@ -73,6 +73,16 @@ which choices are assumptions.
   scoring.
 - If bot_response logic is not already supplied, override the default with answers
 drawn from the generative model itself
+- Lower-level computational logic (such as Bayesian computations) should be located in
+a separate file (`adaptive.py`) imported from `experiment.py` and any other script
+that needs these procedures.
+- Implementations should include a concise standalone simulation script (`simulate_procedure.py`) that:
+   - Simulates the adaptive setup against a static baseline outside psynet,
+   on a reasonable number of participants. 
+   - If an approximate inference scheme is used, check the accuracy of posterior estimates
+   in these simulations, using less approximate inference strategies such as HMC.
+   - Produces diagnostic plots, in particular posterior predictive checks,
+   to confirm that Bayesian computations are reliable.
 
 ## Posterior update strategy
 
