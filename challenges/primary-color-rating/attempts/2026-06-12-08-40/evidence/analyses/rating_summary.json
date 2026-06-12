@@ -1,0 +1,45 @@
+{
+  "source": "simulated_data.zip",
+  "n_trials": 72,
+  "n_participants": 24,
+  "expected_trials_per_participant": 3,
+  "summary": [
+    {
+      "color": "red",
+      "n": 24,
+      "mean": 5.0,
+      "median": 5.0,
+      "min": 5,
+      "max": 5,
+      "stdev": 0.0
+    },
+    {
+      "color": "green",
+      "n": 24,
+      "mean": 6.0,
+      "median": 6.0,
+      "min": 6,
+      "max": 6,
+      "stdev": 0.0
+    },
+    {
+      "color": "blue",
+      "n": 24,
+      "mean": 4.0,
+      "median": 4.0,
+      "min": 4,
+      "max": 4,
+      "stdev": 0.0
+    }
+  ],
+  "friedman_test": {
+    "n_participants": 24,
+    "df": 2,
+    "statistic": 48.0,
+    "p_value_chi_square_df2": 3.775134544279098e-11,
+    "rank_sum_red": 48.0,
+    "rank_sum_green": 72.0,
+    "rank_sum_blue": 24.0
+  },
+  "interpretation": "All simulated participants completed one red, one green, and one blue rating. Ratings reflect deterministic bot responses, so inferential statistics validate the analysis pipeline rather than human behavior."
+}

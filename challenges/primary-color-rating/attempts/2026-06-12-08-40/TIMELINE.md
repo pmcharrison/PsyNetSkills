@@ -42,3 +42,7 @@
 - T+02:43:00 [agent] Increased `Exp.test_n_bots` to 24 so `psynet simulate` produces a representative simple-study dataset.
 - T+02:44:00 [agent] First `psynet simulate` run failed because the bot order assertion used database-return order instead of trial position.
 - T+02:45:00 [agent] Updated the bot order assertion to sort completed trials by `trial.position`.
+- T+02:46:00 [agent] Re-ran `psynet simulate` successfully and saved `evidence/simulated_data.zip`.
+- T+02:48:00 [agent] Added and ran `evidence/analyses/summarize_ratings.py`, producing summary CSV, JSON, and SVG outputs.
+- T+02:50:00 [agent] Added `evidence/analyses/primary_color_rating_analysis.ipynb` and `REPORT.md`.
+- T+02:50:30 [agent-stop] Simulation, analysis, and reporting follow-up complete.

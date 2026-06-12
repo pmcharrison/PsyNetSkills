@@ -7,6 +7,7 @@ env/
 server.log
 static/assets
 source_code.zip
+data/
 
 # Editor and Python cache files
 .idea
