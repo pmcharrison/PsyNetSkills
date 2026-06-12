@@ -45,6 +45,11 @@ missing required values before editing target-specific qualification settings:
 - generated qualification files;
 - deployment CSV path, usually `cint_deployment_targets.csv`.
 
+Use English-United Kingdom (`locale = en`, `LANGUAGE = "ENG"`,
+`COUNTRY = "GB"`) as the current structural placeholder in `experiment.py`.
+Do not ask which placeholder target to use. Real deployment targets still go in
+`cint_deployment_targets.csv` and generated qualification files.
+
 Before asking for choices, show this exact explanation verbatim. Do not shorten
 it, skip parts, or adapt the examples. The goal is that every user gets the same
 baseline Cint deployment explanation before making choices:
@@ -63,11 +68,12 @@ Before I prepare the Cint files, here is what you need to decide and why.
    In experiment.py, one deployment target is active at a time through:
    LANGUAGE = "<Lucid language tag>"
    COUNTRY = "<Lucid country tag>"
-   LUCID_CONFIG_PATH = "qualifications/lucid/lucid-<LANGUAGE>-<COUNTRY>.json"
+   LUCID_CONFIG_PATH = f"qualifications/lucid/lucid-{LANGUAGE}-{COUNTRY}.json"
 
    Before deploying each target, LANGUAGE, COUNTRY, locale, wage_per_hour, and
-   LUCID_CONFIG_PATH must match that target. These values are not one-time
-   setup values: they must be checked and changed for every separate deployment.
+   the qualification JSON selected by LUCID_CONFIG_PATH must match that target.
+   These values are not one-time setup values: they must be checked and changed
+   for every separate deployment.
 
 2. Qualifications
    A qualification is a Cint/Lucid screening rule. Some rules are technical
@@ -129,12 +135,22 @@ Before I prepare the Cint files, here is what you need to decide and why.
 
 Now please answer:
 1. Which language-country pairs do you want to prepare for Cint?
-2. Which qualifications do you want enabled? If you are unsure, tell me what the
-   experiment measures and I will suggest a minimal set.
-3. Which target should be used as the current placeholder in experiment.py?
+2. Which qualifications do you want enabled? Select zero or more:
+   [ ] MONOLINGUALISM
+   [ ] HAS_AUDIO
+   [ ] ALLOW_VOICE_RECORDING
+   [ ] BORN_IN_COUNTRY
+   [ ] LIVE_IN_COUNTRY
+   [ ] HAS_NATIONALITY
+   [ ] IS_NATIVE
+
+   TIMEOUT is added automatically by PsyNet's Lucid helper and does not need to
+   be selected. If you are unsure, tell me what the experiment measures and I
+   will suggest a minimal set.
 
 After I edit the repo, I will summarize which files I changed, which target is
-currently active in experiment.py, which deployment rows need wage review, and
+currently active in experiment.py (always ENG-GB unless you later change it for
+a deployment), which deployment rows need wage review, and
 the exact local command you should run to generate real qualification JSON files
 once your Lucid API keys are available.
 ```
@@ -184,14 +200,15 @@ Make the smallest safe edit.
 1. Add the import if missing:
    `from psynet.recruiters import get_lucid_settings`.
 2. Add or update module-level target constants:
-   `LANGUAGE`, `COUNTRY`, and `LUCID_CONFIG_PATH`. Use the user's chosen
-   placeholder target if available. The default `LUCID_CONFIG_PATH` should point
-   to the real deployable path
-   `qualifications/lucid/lucid-<LANGUAGE>-<COUNTRY>.json`, not a mock file.
-   If the real API-generated file is not available yet, copy the provided Lucid
-   JSON shape example to that same path as a temporary placeholder and clearly
-   report that the experimenter must regenerate it locally with valid Lucid API
-   access before deployment.
+   `LANGUAGE = "ENG"`, `COUNTRY = "GB"`, and
+   `LUCID_CONFIG_PATH = f"qualifications/lucid/lucid-{LANGUAGE}-{COUNTRY}.json"`.
+   Use ENG-GB as the structural placeholder in `experiment.py`; do not ask the
+   user to choose another placeholder. The f-string path should resolve to the
+   real deployable path for whichever `LANGUAGE` and `COUNTRY` values are active,
+   not a mock file. If the real API-generated file is not available yet, copy the
+   provided Lucid JSON shape example to the ENG-GB path as a temporary
+   placeholder and clearly report that the experimenter must regenerate it
+   locally with valid Lucid API access before deployment.
 3. Add or update `recruiter_settings = get_lucid_settings(...)` with explicit
    timeouts, `debug_recruiter`, and `bid_incidence`.
    A typical starting block is:
@@ -222,16 +239,17 @@ Make the smallest safe edit.
    custom variables, and database settings. If multiple target locales are
    planned, include them in `supported_locales`.
 
-If no real target is known, use clearly marked placeholder `LANGUAGE` and
-`COUNTRY` values only when the experiment must import locally, and report that
-the experiment is Cint-parameter ready but not target-ready. Keep the real-path
-default visible so the experimenter knows what must be generated for deployment.
+If no real target is known, keep the ENG-GB placeholder constants so the
+experiment can import locally, and report that the experiment is Cint-parameter
+ready but not target-ready. Keep the computed real-path default visible so the
+experimenter knows what must be generated for deployment.
 
 Teach the experimenter that these `get_lucid_settings` parameters are
 study-specific review points:
 
-- `lucid_recruitment_config_path`: must point to the active target's generated
-  `qualifications/lucid/lucid-<LANGUAGE>-<COUNTRY>.json`.
+- `lucid_recruitment_config_path`: uses `LUCID_CONFIG_PATH`, which is computed
+  from the active `LANGUAGE` and `COUNTRY` values and must resolve to that
+  target's generated `qualifications/lucid/lucid-<LANGUAGE>-<COUNTRY>.json`.
 - `termination_time_in_s`: maximum time a participant may spend in the
   experiment.
 - `debug_recruiter`: use `True` only for local testing; use `False` for real
@@ -289,7 +307,8 @@ For every known target, verify:
 
 - `LANGUAGE` and `COUNTRY` match the Lucid tags from `psynet lucid locale`;
 - `"locale"` matches a PsyNet supported locale;
-- `LUCID_CONFIG_PATH` points at the target's generated qualification JSON;
+- `LUCID_CONFIG_PATH` is computed from `LANGUAGE` and `COUNTRY` and resolves to
+  the target's generated qualification JSON;
 - the qualification JSON exists under `qualifications/lucid/`;
 - `wage_per_hour` comes from the approved wage source;
 - `locales/<locale>/LC_MESSAGES/experiment.po` exists;
@@ -305,7 +324,8 @@ know why these values matter:
 - `locale`: controls PsyNet's participant-facing language. It must match an
   existing translation file such as `locales/tr/LC_MESSAGES/experiment.po`.
 - `LANGUAGE` and `COUNTRY`: Lucid/Cint tags for the recruitment market. They
-  must match the active deployment target and the generated JSON filename.
+  must match the active deployment target; `LUCID_CONFIG_PATH` is computed from
+  these values to select the generated JSON filename.
 - `wage_per_hour`: the hourly payment rate. Review it separately for every
   country; do not reuse one country's wage for all deployment targets.
 - `qualification_file`: the JSON file Cint/Lucid uses for demographic and custom
@@ -369,16 +389,17 @@ Cint Readiness Report
 
 Experiment parameters
 - COMPLETE: Added get_lucid_settings import.
-- COMPLETE: Added LANGUAGE, COUNTRY, and LUCID_CONFIG_PATH.
+- COMPLETE: Added LANGUAGE, COUNTRY, and computed LUCID_CONFIG_PATH.
 - COMPLETE: Added class-level Exp.config with recruiter, locale,
   recruiter_settings, wage_per_hour, and publish_experiment.
 - REVIEW: LANGUAGE/COUNTRY/locale/wage_per_hour must be updated for each real
   deployment target.
-- REVIEW: LUCID_CONFIG_PATH points to lucid-<LANGUAGE>-<COUNTRY>.json; if this
-  file was copied from the example JSON, regenerate it before deployment.
+- REVIEW: LUCID_CONFIG_PATH is computed as
+  f"qualifications/lucid/lucid-{LANGUAGE}-{COUNTRY}.json"; if this file was
+  copied from the example JSON, regenerate it before deployment.
 - REVIEW: Before each deployment, re-check LANGUAGE, COUNTRY, locale,
-  LUCID_CONFIG_PATH, qualification_file, and wage_per_hour against that target's
-  row in cint_deployment_targets.csv.
+  the generated qualification file selected by LUCID_CONFIG_PATH, and
+  wage_per_hour against that target's row in cint_deployment_targets.csv.
 
 Deployment targets
 | Language | Country | PsyNet locale | Lucid language tag | Lucid country tag | wage_per_hour |
@@ -410,13 +431,14 @@ Parameter review notes
 - REVIEW: termination_time_in_s, initial_response_within_s,
   inactivity_timeout_in_s, no_focus_timeout_in_s, and bid_incidence are
   study-specific.
-- REVIEW: locale, LANGUAGE, COUNTRY, LUCID_CONFIG_PATH, wage_per_hour, and the
-  generated qualification file must match each deployment target.
+- REVIEW: locale, LANGUAGE, COUNTRY, wage_per_hour, and the generated
+  qualification file selected by LUCID_CONFIG_PATH must match each deployment
+  target.
 
 What the experimenter needs to know
 - locale controls the participant language and must match an existing .po file.
-- LANGUAGE and COUNTRY are Lucid market tags; they also determine the
-  lucid-<LANGUAGE>-<COUNTRY>.json filename.
+- LANGUAGE and COUNTRY are Lucid market tags; the computed LUCID_CONFIG_PATH
+  uses them to select the lucid-<LANGUAGE>-<COUNTRY>.json filename.
 - wage_per_hour is country-specific and should be filled separately for every
   row in cint_deployment_targets.csv.
 - create_qualifications.py is ready, but real qualification JSON generation
