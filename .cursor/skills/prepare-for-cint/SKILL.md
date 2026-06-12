@@ -39,7 +39,8 @@ missing required values before editing target-specific qualification settings:
 - requested Lucid qualifications;
 - per-target `wage_per_hour` review value, which may remain blank until the
   experimenter fills it from an approved wage source;
-- generated qualification files.
+- generated qualification files;
+- deployment CSV path, usually `cint_deployment_targets.csv`.
 
 Ask explicitly:
 
@@ -66,6 +67,19 @@ languages, countries, locales, wages, or real qualification files.
    approved wage source, commonly `minimum_wage_countries.csv`. Never guess wage
    values. The report should teach the experimenter that `wage_per_hour` must be
    reviewed and set separately for each deployment target.
+6. Create or update `cint_deployment_targets.csv` in the experiment root. Include
+   one row per requested target and leave `wage_per_hour` blank unless an
+   approved wage value was provided. If no targets are known yet, create the file
+   with the header only and report that target rows remain blocked.
+
+Required CSV columns:
+
+```text
+locale,language,country,language_tag,country_tag,wage_per_hour,qualification_file
+```
+
+Use `.cursor/skills/prepare-for-cint/assets/cint_deployment_targets_template.csv`
+as the starting point when creating this file.
 
 ### Phase 3 - Add Cint parameters to `experiment.py`
 
@@ -171,6 +185,8 @@ Use this structure:
 - `Deployment targets`: language-country pairs, PsyNet locale, Lucid tags, and
   source used to verify them. Include an empty `wage_per_hour` column when wages
   have not been supplied.
+- `Deployment CSV`: path, rows added, and any blank wage values requiring human
+  review.
 - `Qualification tooling`: script path, enabled target tuples, enabled filters,
   and whether real generation was attempted.
 - `Lucid API access`: available, missing, unusable, or not checked. Never include
@@ -201,6 +217,12 @@ Deployment targets
 | Language | Country | PsyNet locale | Lucid language tag | Lucid country tag | wage_per_hour |
 | Turkish  | Turkey  | tr            | TUR                | TR                |               |
 | French   | France  | fr            | FRE                | FR                |               |
+
+Deployment CSV
+- COMPLETE: Created cint_deployment_targets.csv with locale, language, country,
+  language_tag, country_tag, wage_per_hour, and qualification_file columns.
+- REVIEW: wage_per_hour is blank for each target and must be filled before
+  deployment.
 
 Qualification tooling
 - COMPLETE: Created create_qualifications.py.
