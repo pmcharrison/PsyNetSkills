@@ -59,8 +59,12 @@ which choices are assumptions.
   posterior version or snapshot, data cutoff, and optimizer version.
 - Make the adaptive path deterministic under a fixed seed where possible, or
   explicitly record random seeds for stochastic policies.
-- Keep selection code fast enough for the participant response path. Add timing
-  logs around data loading, posterior fitting/sampling, and objective scoring.
+- Keep selection code fast enough for the participant response path. Adaptive
+  computation should normally take less than 1 second per selection; treat
+  roughly 2 seconds halfway through an actual deployment as a warning threshold
+  that requires simplification, caching, or a different posterior strategy.
+- Add timing logs around data loading, posterior fitting/sampling, and objective
+  scoring.
 
 ## Posterior update strategy
 
@@ -108,8 +112,9 @@ Choose one of these strategies explicitly:
 - Check that repeated runs with a fixed seed reproduce the same decisions when
   the policy is intended to be deterministic.
 - Stress the concurrent case with multiple bots when participants may overlap.
-- Review timing logs and fail the design if posterior fitting or DB scans are too
-  slow for the participant response path.
+- Review timing logs and fail the design if posterior fitting, objective
+  scoring, or DB scans exceed the real-time budget for the participant response
+  path.
 
 ## Common failures
 
