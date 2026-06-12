@@ -178,10 +178,8 @@ PsyNet commands need sandboxing disabled in Cursor (`required_permissions: ["all
 ### Dashboard preview links
 
 When a Cursor Cloud Agent opens or updates a pull request from a branch in this
-repository, use the `dashboard-preview-links` skill before sharing dashboard
-preview links. The skill owns the polling procedure, freshness checks, timeout
-fallback wording, and distinction between preview publication and the separate
-`Validate` workflow.
+repository, use the `dashboard-preview-links` skill for sharing dashboard
+preview links.
 
 Include these links when first creating/updating the PR, after changes that
 affect dashboard rendering or challenge attempt pages, and in the final response.
