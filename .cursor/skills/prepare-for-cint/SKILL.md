@@ -73,13 +73,12 @@ you and tell you which psynet translate command to run later.
      TUR or ENG;
    - COUNTRY tells Cint/Lucid which country market to recruit from, such as TR
      or GB;
-   - LUCID_CONFIG_PATH points to the qualification JSON file for that exact
-     language-country target, such as qualifications/lucid/lucid-TUR-TR.json.
 
-   Before each deployment, locale, LANGUAGE, COUNTRY, wage_per_hour, and the
-   qualification JSON selected by LUCID_CONFIG_PATH must all match the same row
-   in cint_deployment_targets.csv. These values are not one-time setup values:
-   they must be checked and changed for every separate deployment.
+   Before each deployment, locale, LANGUAGE, COUNTRY, and wage_per_hour must be
+   set to the correct values for that deployment target. These values are not
+   one-time setup values: they must be checked and changed for every separate
+   deployment. I will save the target values in cint_deployment_targets.csv so
+   you can review and reuse them easily.
 
 2. Qualifications
    A qualification is a Cint/Lucid screening rule. Some rules are technical
@@ -95,11 +94,12 @@ you and tell you which psynet translate command to run later.
    those API keys are already configured in the environment.
 
 3. Wage per hour
-   wage_per_hour is the hourly payment value used by PsyNet/Dallinger. It should
+   wage_per_hour is the minimum hourly payment value used by PsyNet/Dallinger.
+   It is usually determined from online wage or minimum-wage sources and should
    be reviewed separately for each country. I will create
    cint_deployment_targets.csv with a wage_per_hour column so you can fill or
-   review wages manually before each deployment. Do not assume one wage works
-   for every country.
+   review wages before each deployment. Do not assume one wage works for every
+   country.
 
 4. Cint timing and incidence settings
    I will add recruiter_settings = get_lucid_settings(...). These defaults may
@@ -142,13 +142,13 @@ you and tell you which psynet translate command to run later.
 Now please answer:
 1. Which language-country pairs do you want to prepare for Cint?
 2. Which qualifications do you want enabled? Select zero or more:
-   [ ] MONOLINGUALISM
-   [ ] HAS_AUDIO
-   [ ] ALLOW_VOICE_RECORDING
-   [ ] BORN_IN_COUNTRY
-   [ ] LIVE_IN_COUNTRY
-   [ ] HAS_NATIONALITY
-   [ ] IS_NATIVE
+   - MONOLINGUALISM
+   - HAS_AUDIO
+   - ALLOW_VOICE_RECORDING
+   - BORN_IN_COUNTRY
+   - LIVE_IN_COUNTRY
+   - HAS_NATIONALITY
+   - IS_NATIVE
 
    TIMEOUT is added automatically by PsyNet's Lucid helper and does not need to
    be selected. If you are unsure, tell me what the experiment measures and I
