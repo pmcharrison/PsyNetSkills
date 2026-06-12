@@ -15,16 +15,28 @@ from psynet.page import InfoPage
 from psynet.timeline import FailedValidation, Timeline, join
 from psynet.trial.chain import ChainNode, ChainTrial, ChainTrialMaker
 
-from adaptive_policy import (
-    MAX_LENGTH,
-    MIN_LENGTH,
-    AdaptivePolicy,
-    Observation,
-    initial_posterior_state,
-    next_trial_definition,
-    observations_from_trials,
-    recall_probability,
-)
+try:
+    from .adaptive_policy import (
+        MAX_LENGTH,
+        MIN_LENGTH,
+        AdaptivePolicy,
+        Observation,
+        initial_posterior_state,
+        next_trial_definition,
+        observations_from_trials,
+        recall_probability,
+    )
+except ImportError:
+    from adaptive_policy import (
+        MAX_LENGTH,
+        MIN_LENGTH,
+        AdaptivePolicy,
+        Observation,
+        initial_posterior_state,
+        next_trial_definition,
+        observations_from_trials,
+        recall_probability,
+    )
 
 N_TRIALS = 10
 
