@@ -26,4 +26,4 @@ the result here after implementation and evidence collection are complete.
 ## Notes
 
 - Score and feedback should come from a human evaluator, captured conversationally when working with Cursor Cloud Agents.
-- Implementation has not started yet because the experiment implementation skill requires human review of `PLAN.md` first.
+- The plan-review pause was cleared when the user approved `PLAN.md` in chat on 2026-06-12.

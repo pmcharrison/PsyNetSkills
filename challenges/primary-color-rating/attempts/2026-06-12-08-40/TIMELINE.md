@@ -15,3 +15,6 @@
 - T+00:15:30 [agent] Added early in-progress `agent.json` metadata with `ended_at` set to null while authorship remains pending.
 - T+00:28:00 [agent] Validated paused-at-plan support with repository checks, dashboard export/build, and manual dashboard preview.
 - T+00:28:30 [agent-stop] Paused again pending human plan approval and author metadata.
+- T+00:29:00 [agent-start] Resumed after human plan approval.
+- T+00:31:30 [agent] Merged interim paused-at-plan process changes to `main` and returned to the attempt branch.
+- T+00:36:00 [agent] Implemented the first PsyNet experiment version in `code/primary_color_rating/`.
