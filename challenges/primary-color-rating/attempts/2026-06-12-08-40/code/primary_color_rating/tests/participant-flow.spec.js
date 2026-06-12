@@ -12,6 +12,7 @@ const chromeExecutable =
   process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH || "/usr/local/bin/google-chrome";
 
 async function clickMainNext(page) {
+  await page.waitForTimeout(400);
   await page.getByRole("button", { name: "Next" }).first().click();
 }
 
@@ -19,7 +20,9 @@ async function rateColor(page, color, rating, screenshotName) {
   await expect(page.getByText("How pleasant is this color?")).toBeVisible();
   await expect(page.getByText(color, { exact: true })).toBeVisible();
   await page.screenshot({ path: path.join(screenshotDir, screenshotName), fullPage: true });
+  await page.waitForTimeout(700);
   await page.getByText(String(rating), { exact: true }).click();
+  await page.waitForTimeout(300);
   await clickMainNext(page);
 }
 
@@ -48,6 +51,7 @@ test("participant rates red, green, and blue in order", async () => {
     path: path.join(screenshotDir, "01-ad-page.png"),
     fullPage: true,
   });
+  await page.waitForTimeout(600);
   await page.getByRole("button", { name: "Begin Experiment" }).click();
 
   await expect(page.getByRole("button", { name: "Next" }).first()).toBeVisible();
@@ -73,6 +77,7 @@ test("participant rates red, green, and blue in order", async () => {
     path: path.join(screenshotDir, "07-thank-you-page.png"),
     fullPage: true,
   });
+  await page.waitForTimeout(700);
 
   const video = page.video();
   await page.close();
