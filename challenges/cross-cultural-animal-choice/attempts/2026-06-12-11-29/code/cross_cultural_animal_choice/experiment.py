@@ -12,7 +12,7 @@ from psynet.timeline import Timeline
 from psynet.trial.static import StaticNode, StaticTrial, StaticTrialMaker
 from psynet.utils import get_locale, get_translator
 
-_ = get_translator()
+_ = get_translator(namespace="experiment")
 
 ANIMAL_KEYS = ["cat", "dog", "bird"]
 KEYS = ["KeyA", "KeyS", "KeyD"]
