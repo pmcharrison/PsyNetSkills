@@ -97,11 +97,11 @@ challenge before starting a fresh attempt.
    - For experiment implementation challenges, first follow
      `psynet-experiment-implementation/SKILL.md`, including its requirement to
      stop for human review of `PLAN.md` before coding. After opening or updating
-     the PR, give the user the dashboard attempt URL with the `#plan` anchor when
-     the preview build succeeds. If the dashboard preview cannot build, point the
-     user to the PR diff or code viewer for the full `PLAN.md` and include only a
-     brief chat summary to avoid making the reviewer wonder where the full plan
-     went.
+     the PR, follow the `dashboard-preview-links` skill and give the user the
+     dashboard attempt URL with the `#plan` anchor, noting that it may 404 or show
+     stale content until publishing finishes. Also point the user to the PR diff
+     or code viewer for the full `PLAN.md` and include only a brief chat summary
+     to avoid making the reviewer wonder where the full plan went.
    - Do not make challenge code depend on files outside its attempt directory
      unless absolutely necessary.
    - For runnable PsyNet experiments, prefer a non-conflicting nested directory
