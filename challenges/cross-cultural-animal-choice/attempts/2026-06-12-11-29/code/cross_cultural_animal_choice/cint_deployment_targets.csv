@@ -1,3 +1,4 @@
 locale,language,country,language_tag,country_tag,wage_per_hour,qualification_file
-fr,French,France,FRE,FR,,qualifications/lucid/lucid-FRE-FR.json
-en,English,India,ENG,IN,,qualifications/lucid/lucid-ENG-IN.json
+en,English,Nigeria,ENG,NG,,qualifications/lucid/lucid-ENG-NG.json
+ar,Arabic,Morocco,ARA,MA,,qualifications/lucid/lucid-ARA-MA.json
+tr,Turkish,Turkey,TUR,TR,,qualifications/lucid/lucid-TUR-TR.json

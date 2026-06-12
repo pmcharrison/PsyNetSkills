@@ -5,9 +5,9 @@ from psynet.utils import get_config
 
 
 country_language_tags = (
-    # ("TUR", "TR"),
+    ("TUR", "TR"),
     # ("GER", "DE"),
-    ("FRE", "FR"),
+    # ("FRE", "FR"),
     # ("JPN", "JP"),
     # ("ENG", "GB"),
     # ("ENG", "US"),
@@ -51,8 +51,8 @@ country_language_tags = (
     # ("THA", "TH"),
     # ("MAY", "MY"),
     # ("ENG", "AU"),
-    ("ENG", "IN"),
-    # ("ENG", "NG"),
+    # ("ENG", "IN"),
+    ("ENG", "NG"),
     # ("SPA", "AR"),
     # ("SPA", "MX"),
     # ("SPA", "CO"),
@@ -119,7 +119,7 @@ country_language_tags = (
     # ("SPA", "GT"),
     # ("SPA", "EC"),
 
-    # ("ARA", "MA"),
+    ("ARA", "MA"),
     # ("SPA", "PE"),
     # ("ARA", "SA"),
     # ("UKR", "UA"),
@@ -166,11 +166,11 @@ for language_tag, country_tag in tqdm(country_language_tags):
         language_tag=language_tag,
         country_tag=country_tag,
         question_answer_dict={
-            "IS_NATIVE V1": ["Yes"],
+            # "IS_NATIVE V1": ["Yes"],
             # "MONOLINGUALISM v1": ["I was raised with my native language only"],
-            # "BORN_IN_COUNTRY v1": ["Yes"],
+            "BORN_IN_COUNTRY v1": ["Yes"],
             # "LIVE_IN_COUNTRY v1": ["Yes"],
-            "HAS_NATIONALITY v1": ["Yes"],
+            # "HAS_NATIONALITY v1": ["Yes"],
             # "HAS_AUDIO v1": ["Yes"],
         },
         config_path=config_path,
