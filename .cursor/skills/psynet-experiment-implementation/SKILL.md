@@ -9,9 +9,16 @@ authors: [pmcharrison]
 Use this skill when implementing a PsyNet experiment from a natural-language
 specification.
 
+## Required reads
+
+- Read `explore-psynet-repository/SKILL.md` before choosing demos, examples, or
+  framework APIs to copy.
+- Read `references/validation.md` before finalizing functional, interactive, or
+  performance checks.
+
 ## Steps
 
-### Planning
+### Planning
 
 The planning phase is responsible for turning the original natural-language specification into a detailed implementation plan.
 The plan should be saved in PLAN.md, and have the following sections:

@@ -1,7 +1,7 @@
 ---
 name: psynet-realtime-synchronous-experiments
 description: Design and implement PsyNet websocket experiments with live synchronous interactions between multiple participants in the same trial.
-authors: [pmcharrison]
+authors: [lucasgautheron]
 ---
 
 # Implement real-time synchronous PsyNet experiments

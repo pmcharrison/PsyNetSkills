@@ -1,14 +1,8 @@
 [Config]
 title = Open-ended STEP tagging demo
-description = Listen to short local demo clips and add emotion or affect tags. This local configuration uses generic recruitment defaults and no production service credentials.
+description = Listen to short local demo clips and add emotion or affect tags. Cint/Lucid recruitment parameters live in experiment.py with a mock-only local qualification file until real deployment targets are chosen.
 contact_email_on_error = test@example.com
 organization_name = PsyNetSkills
-
-recruiter = generic
-currency = $
-wage_per_hour = 12.0
-locale = en
-supported_locales = ["en"]
 
 [Prolific]
 auto_recruit = false

@@ -66,6 +66,12 @@ user explicitly asks for them.
    migrate it to `locale` rather than adding stale duplicate settings. If no
    target locales have been requested, keep the experiment source-locale-ready
    and state that target locales can be added during the localization phase.
+   Each config key must live in exactly one place: defining a key such as
+   `supported_locales` in both the experiment class `config` dict and
+   `config.txt` aborts launch with a "registered both in config.txt and
+   experiment.py" error. Prefer keeping `locale` and `supported_locales`
+   together in `config.txt`, so per-language evidence runs can switch language
+   with a one-line edit.
 
 ### Phase 2 - Participant-facing string audit
 
@@ -94,7 +100,14 @@ user explicitly asks for them.
 5. Keep translation units short and natural. Prefer separating page structure
    from text with `dominate.tags`; avoid embedding HTML tags inside strings
    that translators will edit.
-6. Do not translate non-participant identifiers such as page labels, trial IDs,
+6. Keep trial-maker node and stimulus definitions language-neutral. Store
+   stable keys (for example a `scenario_id`) in node definitions and resolve
+   the translated texts at render time in `show_trial` from module-level
+   structures marked with `_()`. Translated strings stored in node definitions
+   are serialized to the database in a context where the translator can be
+   inactive, freezing untranslated (or wrong-locale) text for the whole
+   deployment and making the exported data locale-dependent.
+7. Do not translate non-participant identifiers such as page labels, trial IDs,
    asset filenames, data keys, model names, analysis-only strings, logger
    messages, comments, database field names, or recruiter config values unless
    they are displayed to participants.
@@ -138,6 +151,14 @@ found. Check for:
    translator credentials or a mock translator are available, you may run
    `psynet translate <locale>` through `.po` generation and verify the generated
    files. Otherwise, do not require translated `.po` files for readiness.
+   If translations are required but no credentials are allowed (for example in
+   challenge attempts), write complete `.po` files manually with non-fuzzy
+   entries: `psynet translate <locales>` only invokes a machine translator for
+   missing or fuzzy entries, so with fully translated non-fuzzy files the
+   command runs its extraction and consistency checks end to end without
+   credentials and serves as a credential-free validation step. Note that
+   launch checks require a `.po` file for every supported non-English locale,
+   so `psynet test local` fails until those files exist.
 4. Inspect `locales/experiment.pot` and command output. Verify that every
    expected participant-facing string from the audit appears in the POT and that
    no f-string-resolved English, accidental HTML-heavy unit, logger message, page

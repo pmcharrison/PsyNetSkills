@@ -1,7 +1,7 @@
 ---
 name: run-attempt
 description: Start a runnable PsyNet challenge attempt with psynet debug local, an opened Cloud Desktop dashboard, credentials, and optional public tunnel links for live review.
-authors: [pmcharrison]
+authors: [lucasgautheron]
 disable-model-invocation: true
 ---
 

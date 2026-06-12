@@ -35,6 +35,9 @@ from psynetsk_tools.timeline import TIMELINE_ENTRY_RE
 
 SKILLS_ROOT = Path(".cursor") / "skills"
 SKILL_NAME_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
+SKILL_REFERENCE_RE = re.compile(
+    r"(?<![\w./-])((?:(?P<skill>[a-z0-9-]+)/)?references/[A-Za-z0-9_.-]+\.md)"
+)
 PSYNET_AGENT_REQUIRED_FIELDS = {
     "checkout_path": str,
     "branch": str,
@@ -403,6 +406,62 @@ def require_string_field(
     return []
 
 
+def referenced_skill_reference_paths(
+    text: str,
+    *,
+    current_skill_dir: Path,
+    skills_dir: Path,
+) -> set[Path]:
+    """Return skill reference paths mentioned in Markdown text."""
+
+    paths: set[Path] = set()
+    for match in SKILL_REFERENCE_RE.finditer(text):
+        reference = Path(match.group(1))
+        skill_name = match.group("skill")
+        if skill_name:
+            paths.add(skills_dir / reference)
+        else:
+            paths.add(current_skill_dir / reference)
+    return paths
+
+
+def validate_skill_references(skill_dir: Path, skills_dir: Path) -> list[str]:
+    """Validate that skill reference files are cited and citation paths exist."""
+
+    references_dir = skill_dir / "references"
+    problems: list[str] = []
+    skill_file = skill_dir / "SKILL.md"
+    reference_files = sorted(references_dir.glob("*.md")) if references_dir.exists() else []
+    known_references = set(reference_files)
+    reachable = {skill_file}
+    queue = [skill_file]
+
+    while queue:
+        current_file = queue.pop(0)
+        text = current_file.read_text(encoding="utf-8")
+        cited_paths = referenced_skill_reference_paths(
+            text,
+            current_skill_dir=skill_dir,
+            skills_dir=skills_dir,
+        )
+        for cited_path in sorted(cited_paths):
+            if not cited_path.exists():
+                problems.append(f"{current_file}: cited reference does not exist: {cited_path}")
+            elif cited_path.parent == references_dir and cited_path in known_references:
+                if cited_path not in reachable:
+                    reachable.add(cited_path)
+                    queue.append(cited_path)
+
+    for reference_file in reference_files:
+        if reference_file not in reachable:
+            problems.append(
+                f"{reference_file}: reference file is not cited from {skill_file} "
+                "or another cited reference"
+            )
+
+    return problems
+
+
 def validate_skills(
     root: Path,
     registry: dict[str, Author] | None = None,
@@ -440,6 +499,7 @@ def validate_skills(
         problems.extend(
             validate_author_references(skill_file, frontmatter.get("authors"), registry)
         )
+        problems.extend(validate_skill_references(skill_dir, skills_dir))
 
     return problems
 
