@@ -9,7 +9,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: dashboard-gh-pages-publication
+  group: dashboard-production
   cancel-in-progress: false
 
 jobs:
@@ -62,20 +62,7 @@ jobs:
           git -C "${pages_dir}" config user.name "github-actions[bot]"
           git -C "${pages_dir}" config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          python - "${pages_dir}" <<'PY'
-          import shutil
-          import sys
-          from pathlib import Path
-
-          root = Path(sys.argv[1])
-          for child in root.iterdir():
-              if child.name in {".git", "pr-preview"}:
-                  continue
-              if child.is_dir():
-                  shutil.rmtree(child)
-              else:
-                  child.unlink()
-          PY
+          python .github/scripts/prepare-production-pages.py "${pages_dir}"
 
           cp -a public/. "${pages_dir}/"
           touch "${pages_dir}/.nojekyll"

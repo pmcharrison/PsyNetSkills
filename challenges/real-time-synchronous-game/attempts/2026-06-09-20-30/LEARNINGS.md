@@ -6,4 +6,4 @@ Dallinger channel broadcasts are useful for public synchronization, but target-f
 
 *Actions:*
 
-- **PsyNetSkills:** Add a realtime challenge note warning that websocket broadcasts must not carry private payloads, even when clients filter by recipient id. Confidence: high. Status: considering.
+- **PsyNetSkills:** Add a realtime challenge note warning that websocket broadcasts must not carry private payloads, even when clients filter by recipient id. Confidence: high. Impact: high. Status: considering.

@@ -1,0 +1,59 @@
+{
+  "authors": [
+    "pmcharrison"
+  ],
+  "agent": "Cursor Cloud Agent",
+  "client": "cursor",
+  "model": "GPT-5.5",
+  "started_at": "2026-06-11T05:17:00Z",
+  "ended_at": "2026-06-11T05:23:09Z",
+  "cursor_conversation_id": "bc-e4e7fcf7-9021-41e9-8cd8-1f94f688a6a1",
+  "skills_commit": "d24cf27d19d44b0a7a7be3a54db40014224bd7e6",
+  "psynet": {
+    "checkout_path": "~/PsyNet",
+    "branch": "master",
+    "commit": "bc4c2f699bc1fc04689ead50d450796e22c3cf8c",
+    "version": "13.3.0a0",
+    "updated_from": "origin/master",
+    "updated_at": "2026-06-11T05:19:07Z",
+    "update_command": "git pull --ff-only origin master",
+    "dirty": false
+  },
+  "run_cost": {
+    "currency": "USD",
+    "amount": 3.58,
+    "source": "cursor_usage_csv_batch_import",
+    "recorded_at": "2026-06-11T14:46:39.998322Z",
+    "attribution_status": "matched_cloud_agent_id",
+    "window_started_at": "2026-06-11T05:17:00Z",
+    "window_ended_at": "2026-06-11T05:23:09Z",
+    "matched_started_at": "2026-06-11T05:16:49.159000Z",
+    "matched_ended_at": "2026-06-11T05:16:49.159000Z",
+    "matched_cloud_agent_ids": [
+      "bc-e4e7fcf7-9021-41e9-8cd8-1f94f688a6a1"
+    ],
+    "usage": {
+      "rows": 1,
+      "input_with_cache_write": 0,
+      "input_without_cache_write": 95826,
+      "cache_read": 3184128,
+      "output_tokens": 23202,
+      "total_tokens": 3303156,
+      "models": {
+        "gpt-5.5-high": {
+          "rows": 1,
+          "input_with_cache_write": 0,
+          "input_without_cache_write": 95826,
+          "cache_read": 3184128,
+          "output_tokens": 23202,
+          "total_tokens": 3303156,
+          "cost": 3.58
+        }
+      }
+    },
+    "notes": [
+      "Matched Cursor CSV rows by cursor_conversation_id.",
+      "Applied attempt time window plus padding."
+    ]
+  }
+}

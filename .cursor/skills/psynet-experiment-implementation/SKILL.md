@@ -33,21 +33,46 @@ Useful starting points:
    mechanisms can express the behavior. Custom JavaScript should be a last
    resort, used only when the required functionality cannot be achieved through
    PsyNet pages, controls, timelines, events, modules, or native helpers.
-5. Put generated experiment files in the requested output directory.
-6. If the experiment has a `requirements.txt`, pin PsyNet to the local checkout
+5. If the experiment needs participant eligibility, capability, device,
+   comprehension, or recruiter qualification checks, read
+   `participant-filtering-and-prescreening/SKILL.md` before coding those gates.
+6. If the experiment is cross-cultural, cross-national, multilingual,
+   international, or compares cultures/regions/language groups, read
+   `prepare-for-translation/SKILL.md` now and mark participant-facing strings as
+   you implement them. Do not wait until after evidence collection to make the
+   experiment translation-ready.
+7. Put generated experiment files in the requested output directory.
+8. If the experiment has a `requirements.txt`, pin PsyNet to the local checkout
    commit used for the implementation, for example:
    `psynet@git+https://gitlab.com/PsyNetDev/PsyNet@<commit>#egg=psynet`.
-7. Generate `constraints.txt` from that pinned `requirements.txt` using the
+9. Generate `constraints.txt` from that pinned `requirements.txt` using the
    PsyNet/Dallinger environment, typically `dallinger constraints generate`.
    Do not copy a constraints file that still points to `master`.
-8. Add short comments only where the PsyNet pattern is not obvious.
-9. Regularly use `psynet test local` to test the experiment logic,
+10. Add short comments only where the PsyNet pattern is not obvious.
+11. Regularly use `psynet test local` to test the experiment logic,
    and implement custom assertions to test the experiment's behavior.
-10. When implementing custom `Page` classes, make sure `get_bot_response`
+12. Register custom `config.txt` settings before using them. For experiment-owned
+    parameters, define `extra_parameters()` on the experiment class, call
+    `super().extra_parameters()`, then register each key with Dallinger's config
+    object before adding it to `config.txt`. Dallinger validates `config.txt`
+    before the experiment module can finish loading, so unregistered keys fail
+    early. Do not put real API keys, tokens, passwords, or other sensitive
+    credentials in `config.txt`; keep those in environment variables or another
+    secret store instead.
+13. When implementing custom `Page` classes, make sure `get_bot_response`
     returns the same structured, formatted answer that the browser path records.
     PsyNet bots submit the value returned by `get_bot_response` as the formatted
     answer, so the bot path can bypass `format_answer` unless you explicitly
     call it or otherwise match its output.
+
+## Round structure check
+
+When the specification describes repeated rounds, games, turns, exchanges,
+blocks, or other sequenced participant actions, read
+`simple-round-structure/SKILL.md` before choosing the timeline structure. Use it
+to decide whether the design can be implemented as a simple repeated-trial
+structure, or whether PsyNet should explicitly represent the sequence with
+`Trial`, `TrialMaker`, `Node`, or chain classes.
 
 ## Design guidance
 
@@ -67,10 +92,10 @@ Useful starting points:
   the demo set, check that each audio asset duration matches the task, and add
   assertions or exported-data checks that prove audio trials ran and responses
   were saved against the correct stimulus IDs.
-- When an audio task depends on listening quality, include the relevant
-  prescreening or quality-control pages from PsyNet demos, such as volume
-  calibration, headphone screening, and comprehension checks, unless the prompt
-  explicitly excludes them.
+- When an audio, visual, language, comprehension, or device requirement affects
+  eligibility or data quality, use
+  `participant-filtering-and-prescreening/SKILL.md` to choose and validate the
+  gate rather than adding a generic check by habit.
 - For participant-facing instructions, payoff tables, lists, headings, and other
   ordinary page structure, prefer `dominate.tags` over raw HTML. Use
   `markupsafe.Markup` only for trusted, static HTML snippets passed directly as

@@ -28,6 +28,14 @@
             {{ if eq .Section "challenges" }}aria-current="page" class="current"{{ end }}
             href="{{ "challenges/" | relURL }}"
           >Challenges</a>
+          <a
+            {{ if eq .Section "attempts" }}aria-current="page" class="current"{{ end }}
+            href="{{ "attempts/" | relURL }}"
+          >Attempts</a>
+          <a
+            {{ if eq .Section "actions" }}aria-current="page" class="current"{{ end }}
+            href="{{ "actions/" | relURL }}"
+          >Actions</a>
         </span>
         {{ partial "branch-context.html" . }}
         <span class="nav-actions">
@@ -45,11 +53,13 @@
     <main>
       {{ block "main" . }}{{ end }}
     </main>
-    {{ if or .IsHome (and .IsPage (in (slice "skills" "challenges") .Section)) (and (eq .Section "challenges") .Params.challenge) }}
+    {{ if or .IsHome (and .IsPage (in (slice "skills" "actions" "challenges") .Section)) (and (eq .Section "challenges") .Params.challenge) }}
       {{ partial "giscus.html" . }}
     {{ end }}
     <footer>
     </footer>
     <script src="{{ "js/workflow-status.js" | relURL }}" defer></script>
+    <script src="{{ "js/actions-copy.js" | relURL }}" defer></script>
+    <script src="{{ "js/screenshot-gallery.js" | relURL }}" defer></script>
   </body>
 </html>

@@ -68,19 +68,37 @@ a pull request.
    only. Do not print workflow run links in the user-facing response unless the
    user asks for them.
 
-6. If no matching preview run appears within 75 seconds, do not say the preview build was
+6. If the matching Pages deployment is cancelled, check whether a newer
+   `pages-build-deployment` run on `gh-pages` completed successfully after the
+   cancelled run was created:
+
+   ```bash
+   gh run list \
+     --workflow "pages-build-deployment" \
+     --branch "gh-pages" \
+     --limit 10 \
+     --json headSha,status,conclusion,url,createdAt,updatedAt
+   ```
+
+   If a newer successful Pages deployment exists, treat the cancelled run as
+   superseded. Tell the user the preview files were built and a newer Pages
+   deployment has published the latest `gh-pages` state, then print the preview
+   URL only.
+
+7. If no matching preview run appears within 75 seconds, do not say the preview build was
    triggered. Tell the user no preview run has appeared yet for the latest
    commit, and print the workflow-runs link.
 
-7. If a matching preview run appears but does not complete successfully within 75
+8. If a matching preview run appears but does not complete successfully within 75
    seconds, do not imply the preview is current. Tell the user the preview build
    is still pending or not successful for the latest commit, and print the
    workflow-runs link instead of relying on the preview URL.
 
-8. If the matching preview run succeeds but the matching Pages deployment is
-   missing, pending, or unsuccessful, tell the user the preview files were built
-   but may not be published yet. Print the Pages workflow-runs link instead of
-   relying on the preview URL.
+9. If the matching preview run succeeds but the matching Pages deployment is
+   missing, pending, unsuccessful, or cancelled without a newer successful Pages
+   deployment, tell the user the preview files were built but may not be
+   published yet. Print the Pages workflow-runs link instead of relying on the
+   preview URL.
 
 ## Rules
 
@@ -98,4 +116,7 @@ a pull request.
   branch-filtered workflow-runs link.
 - If the matching preview run succeeds but Pages deployment is still queued or in
   progress, print the Pages workflow-runs link.
+- If the matching Pages deployment was cancelled but a newer Pages deployment
+  succeeded, treat the cancelled run as superseded and print only the dashboard
+  preview URL.
 - If both matching runs succeed, print only the dashboard preview URL.

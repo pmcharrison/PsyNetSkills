@@ -52,9 +52,27 @@ The recording and upload behavior should:
 - Save sufficient metadata to associate each video with the participant, trial,
   experiment session, recording start and stop events, upload status, and final
   S3 object location or error state.
-- Make sure that the implemented experiment really use S3 for upload.
+- Make sure that the implemented experiment really uses S3 for upload.
+
+For development and automated testing, it is acceptable to use an S3-compatible
+simulator or mock, such as Moto, LocalStack, MinIO, or a botocore stub, provided
+the test exercises the same bucket preparation, upload-configuration,
+presigned-upload, object-key, and metadata code paths that would be used with
+real S3. Such evidence should be labeled as simulated S3 evidence, not as a
+successful real-S3 deployment.
 
 The submitted evidence should demonstrate that recordings are captured for
-multiple static trials, uploaded directly to S3 or an equivalent local/test S3
-endpoint, and linked back to the corresponding PsyNet trial data through the
-hashed recording identifier and saved metadata.
+multiple static trials, uploaded through the S3 upload path, and linked back to
+the corresponding PsyNet trial data through the hashed recording identifier and
+saved metadata. If real S3 credentials are not available in the attempt
+environment, the submission should include:
+
+- An automated test or scripted run that creates or prepares a simulated
+  S3-compatible bucket using PsyNet's S3-management logic or a faithful mock of
+  that logic.
+- Verification that uploaded objects exist at the expected hashed filenames and
+  contain non-trivial video payloads, not placeholder files.
+- Clear local instructions for rerunning the same bucket creation/preparation
+  and upload workflow against real S3 when the user supplies their own AWS/PsyNet
+  S3 credentials locally. Do not commit credentials or require production
+  secrets for review.

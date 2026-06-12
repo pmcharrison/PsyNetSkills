@@ -23,6 +23,11 @@ challenge before starting a fresh attempt.
   `references/experiment-evidence.md` and
   `psynet-experiment-implementation/references/validation.md` before finalizing
   functional or performance evidence.
+- If the challenge is explicitly cross-cultural, cross-national, multilingual,
+  international, or compares cultures/regions/language groups, read and apply
+  `prepare-for-translation/SKILL.md` while implementing the experiment. Mark
+  participant-facing strings and verify translation readiness before collecting
+  final evidence; do not treat this as an optional post-attempt cleanup.
 
 ## Workflow
 
@@ -88,16 +93,24 @@ challenge before starting a fresh attempt.
    - When copying a minimal PsyNet demo into `code/`, include the standard
      experiment support files needed by PsyNet local launch checks, especially
      `.gitignore`, rather than copying only Python/config/test files.
-   - Make systematic use of tests: testing experiment logic with `psynet test local`,
-     testing front-end logic with Playwright, and testing visual logic with
-     video testing. When video testing, make sure to be efficient,
-     e.g. by running the experiment in a 'minimal' mode with a small number of trials;
-     long videos are time-consuming to create and to analyze.
+   - For cross-cultural, cross-national, multilingual, or international
+     experiments, follow `prepare-for-translation/SKILL.md` during this
+     implementation step so translation-marked strings are part of the first
+     runnable version.
+   - Make systematic use of tests: testing experiment logic with
+     `psynet test local`, testing front-end logic with Playwright assertions,
+     and testing visual states with targeted Playwright screenshots. Use video
+     for behavior that screenshots cannot prove well, such as audio, timing,
+     animation, or continuous interaction.
    - Update `LEARNINGS.md` with any generalizable lessons you encounter.
      This should include mistakes you made when running tests,
-     things that took a long time to find in documentation, etc.
+     things that took a long time to find in documentation, etc. Write each
+     action bullet as a standalone instruction that remains understandable when
+     copied into the Actions dashboard for another agent. Copy the action shape
+     from `assets/attempt-template/LEARNING_CARD.md` so bullets include the
+     required `Confidence`, `Impact`, and `Status` fields.
 10. Collect evidence in `evidence/`. Use the `record-participant-video` skill
-   when creating `evidence/participant.mp4`, and follow
+   when creating participant-flow screenshots or `evidence/participant.mp4`, and follow
    `references/attempt-artifacts.md` for challenge-type-specific evidence
    guidance.
 11. When implementation and first-pass evidence collection are complete, close
@@ -132,9 +145,14 @@ integration, such as S3, payment APIs, webhooks, or third-party recruitment
 services, collect explicit evidence that the real integration worked end to end.
 Local mocks, emulators, simulated payloads, placeholder files, and stub endpoints
 can support development, but they must not be presented as satisfying the
-external-service requirement. If safe credentials or access are unavailable,
-record the blocker in `TIMELINE.md` and `EVALUATION.md` before substituting a
-local stub, and explain exactly what remains unverified.
+external-service requirement unless the public challenge explicitly defines a
+simulated service test as acceptable evidence. In that case, the simulated test
+must exercise the same integration contract and code path as the real service,
+be labeled clearly as simulated evidence, and include instructions for rerunning
+the same workflow locally against the real service with user-provided
+credentials. If safe credentials or access are unavailable and the challenge does
+not permit simulation, record the blocker in `TIMELINE.md` and `EVALUATION.md`
+before substituting a local stub, and explain exactly what remains unverified.
 
 Do not imply a skipped check passed: record what was run, what happened, and why
 any required evidence is missing or blocked in `EVALUATION.md`.
@@ -151,7 +169,9 @@ safer workflow rather than committing or publishing them.
 ## Templates
 
 Use the files in `assets/attempt-template/` as the starting point for attempt
-metadata, timeline, learnings, and evaluation notes.
+metadata, timeline, learnings, and evaluation notes. Use
+`assets/attempt-template/LEARNING_CARD.md` when replacing the initialized
+`LEARNINGS.md` placeholder with concrete learning cards.
 
 ## Notes
 

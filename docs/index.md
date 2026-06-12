@@ -12,3 +12,5 @@ specifications for contributors and agents.
 - `architecture.md` describes the repository layout and dashboard data flow.
 - `dashboard.md` describes static-site export, builds, and previews.
 - `psynet-reference.md` describes the expected local PsyNet checkout.
+- `deploy-attempt.md` describes the human-approved EC2 deployment workflow for
+  PsyNet attempts.

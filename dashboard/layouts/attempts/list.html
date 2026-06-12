@@ -1,0 +1,43 @@
+{{ define "main" }}
+  {{ .Content }}
+
+  {{ with hugo.Data.psynetsk.attempts }}
+    <table>
+      <thead>
+        <tr>
+          <th>Date/time</th>
+          <th>Challenge</th>
+          <th>Model</th>
+          <th>Score</th>
+          <th>Implementation time</th>
+          <th>Interventions</th>
+          <th>Cost</th>
+          <th>Open actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{ range . }}
+          {{ $openActions := int .open_actions }}
+          {{ $openActionsClass := "open-actions-danger" }}
+          {{ if eq $openActions 0 }}
+            {{ $openActionsClass = "open-actions-success" }}
+          {{ else if le $openActions 3 }}
+            {{ $openActionsClass = "open-actions-warning" }}
+          {{ end }}
+          <tr class="attempt-row">
+            <td><a href="{{ .url | relURL }}">{{ .date_time }}</a></td>
+            <td><a href="{{ .challenge_url | relURL }}">{{ .challenge_title }}</a></td>
+            <td>{{ .model }}</td>
+            <td>{{ with .score }}{{ . }}{{ else }}Not scored{{ end }}</td>
+            <td>{{ .implementation_time_display }}</td>
+            <td>{{ .human_intervention_display }}</td>
+            <td>{{ .run_cost_display }}</td>
+            <td><span class="open-actions-count {{ $openActionsClass }}">{{ $openActions }}</span></td>
+          </tr>
+        {{ end }}
+      </tbody>
+    </table>
+  {{ else }}
+    <p>No attempts yet.</p>
+  {{ end }}
+{{ end }}
