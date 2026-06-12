@@ -45,9 +45,9 @@ missing required values before editing target-specific qualification settings:
 - generated qualification files;
 - deployment CSV path, usually `cint_deployment_targets.csv`.
 
-Before asking for choices, explain the decisions in practical terms. Use this
-decision guide, adapting only the examples to the user's experiment. The goal is
-that a user with no Cint deployment experience can make informed choices:
+Before asking for choices, show this exact explanation verbatim. Do not shorten
+it, skip parts, or adapt the examples. The goal is that every user gets the same
+baseline Cint deployment explanation before making choices:
 
 ```text
 Before I prepare the Cint files, here is what you need to decide and why.
@@ -96,31 +96,44 @@ Before I prepare the Cint files, here is what you need to decide and why.
    - no_focus_timeout_in_s: timeout after leaving the window or opening a tab.
    - bid_incidence: expected percentage of respondents who qualify after
      targeting and filters. Stricter qualifications usually lower incidence.
+
+5. Qualification options
+   TIMEOUT warns participants that leaving the page or switching context can
+   terminate participation. PsyNet's Lucid helper adds this automatically.
+
+   MONOLINGUALISM asks whether participants were raised with only their native
+   language. Use it only when monolingual background is important, because it can
+   strongly restrict the pool.
+
+   HAS_AUDIO asks whether participants can play audio. Use it for audio or music
+   experiments.
+
+   ALLOW_VOICE_RECORDING asks whether participants can record their voice. Use it
+   only when the study records speech or singing.
+
+   BORN_IN_COUNTRY asks whether participants were born in the target country. Use
+   it when birthplace matters for cultural exposure.
+
+   LIVE_IN_COUNTRY asks whether participants currently live in the target
+   country. Use it when current residence matters.
+
+   HAS_NATIONALITY asks whether participants hold the target country's
+   nationality. Use it when citizenship or nationality matters.
+
+   IS_NATIVE asks whether participants are native speakers of the target
+   language. Use it when native-language competence is important.
+
+Now please answer:
+1. Which language-country pairs do you want to prepare for Cint?
+2. Which qualifications do you want enabled? If you are unsure, tell me what the
+   experiment measures and I will suggest a minimal set.
+3. Which target should be used as the current placeholder in experiment.py?
 ```
 
-Then explain qualification options in decision-oriented language:
-
-- `TIMEOUT`: warning participants that leaving the page or switching context can
-  terminate participation; this is set automatically by PsyNet's Lucid helper.
-- `MONOLINGUALISM`: use when the study needs people raised with only their native
-  language; it can strongly restrict the pool.
-- `HAS_AUDIO`: use for audio/music experiments where participants must be able to
-  play sound.
-- `ALLOW_VOICE_RECORDING`: asks whether participants can record their voice.
-- `BORN_IN_COUNTRY`: use when birthplace matters for cultural exposure.
-- `LIVE_IN_COUNTRY`: asks whether participants currently live in the target
-  country.
-- `HAS_NATIONALITY`: asks whether participants hold the target country's
-  nationality.
-- `IS_NATIVE`: use when native-language competence is important.
-
-After this explanation, ask explicitly:
-
-1. Which language-country pairs do you want to prepare for Cint?
-2. Which qualifications do you want enabled? If unsure, suggest a minimal choice
-   based on the experiment. For example, for an audio/music native-language
-   study, suggest `HAS_AUDIO` and `IS_NATIVE`, then ask for confirmation.
-3. Which target should be used as the current placeholder in `experiment.py`?
+If the user is unsure about qualifications after reading the fixed explanation,
+ask what the experiment measures and suggest a minimal set. For example, for an
+audio/music native-language study, suggest `HAS_AUDIO` and `IS_NATIVE`, then ask
+for confirmation.
 
 If targets are unknown, continue with generic parameter preparation and
 qualification tooling, but leave real `country_language_tags` commented out and
