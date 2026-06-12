@@ -46,29 +46,56 @@ missing required values before editing target-specific qualification settings:
 - deployment CSV path, usually `cint_deployment_targets.csv`.
 
 Before asking for choices, explain the decisions in practical terms. Use this
-decision guide, adapting only the examples to the user's experiment:
+decision guide, adapting only the examples to the user's experiment. The goal is
+that a user with no Cint deployment experience can make informed choices:
 
 ```text
-Before I prepare the Cint files, here is what you need to decide.
+Before I prepare the Cint files, here is what you need to decide and why.
 
-1. Deployment targets
-   Each Cint deployment is for one language-country pair, for example
-   Turkish-Turkey or English-United Kingdom. The language determines the PsyNet
-   locale and participant-facing translation. The country determines the Cint
-   market and often the wage.
+1. Target language-country pairs
+   Each Cint deployment targets one language-country pair, for example
+   Turkish-Turkey or English-United Kingdom. I will turn each pair into:
+   - PsyNet locale, such as tr or en;
+   - Lucid language tag, such as TUR or ENG;
+   - Lucid country tag, such as TR or GB;
+   - a qualification filename such as qualifications/lucid/lucid-TUR-TR.json.
 
-2. Wage per hour
-   Wage should be reviewed separately for every country. I can leave this blank
-   in cint_deployment_targets.csv if you do not have approved wages yet.
+   In experiment.py, one deployment target is active at a time through:
+   LANGUAGE = "<Lucid language tag>"
+   COUNTRY = "<Lucid country tag>"
+   LUCID_CONFIG_PATH = "qualifications/lucid/lucid-<LANGUAGE>-<COUNTRY>.json"
 
-3. Qualification filters
-   Filters make the sample more specific but can reduce the participant pool.
-   Use only filters you really need for the study.
+   Before deploying each target, LANGUAGE, COUNTRY, locale, wage_per_hour, and
+   LUCID_CONFIG_PATH must match that target.
 
-4. Placeholder target
-   experiment.py can only point at one active LANGUAGE/COUNTRY at a time. Choose
-   one target as the current placeholder; before each deployment, update it to
-   the target being deployed.
+2. Qualifications
+   A qualification is a Cint/Lucid screening rule. Some rules are technical
+   defaults, like blocking mobile/tablet devices or warning about timeouts.
+   Custom qualifications ask participants extra eligibility questions. More
+   filters can improve sample fit, but they can reduce the number of eligible
+   participants and change the expected incidence rate.
+
+   I will prepare create_qualifications.py for the targets and filters you
+   choose. You will run that file later in your local repo terminal to generate
+   the real JSON files, because real generation needs valid Lucid API keys.
+
+3. Wage per hour
+   wage_per_hour is the hourly payment value used by PsyNet/Dallinger. It should
+   be reviewed separately for each country. I will create
+   cint_deployment_targets.csv with a wage_per_hour column so you can fill or
+   review wages manually before each deployment.
+
+4. Cint timing and incidence settings
+   I will add recruiter_settings = get_lucid_settings(...). These defaults may
+   need adjustment for your study:
+   - termination_time_in_s: maximum total time a participant can spend.
+   - debug_recruiter: keep False for real deployment; only True for local tests.
+   - initial_response_within_s: time allowed before the first response.
+   - inactivity_timeout_in_s: timeout after no clicking, typing, scrolling, or
+     mouse movement.
+   - no_focus_timeout_in_s: timeout after leaving the window or opening a tab.
+   - bid_incidence: expected percentage of respondents who qualify after
+     targeting and filters. Stricter qualifications usually lower incidence.
 ```
 
 Then explain qualification options in decision-oriented language:
@@ -145,6 +172,22 @@ Make the smallest safe edit.
    access before deployment.
 3. Add or update `recruiter_settings = get_lucid_settings(...)` with explicit
    timeouts, `debug_recruiter`, and `bid_incidence`.
+   A typical starting block is:
+
+   ```python
+   recruiter_settings = get_lucid_settings(
+       lucid_recruitment_config_path=LUCID_CONFIG_PATH,
+       termination_time_in_s=120 * 60,  # Maximal time a participant can spend.
+       debug_recruiter=False,  # Only True during local testing.
+       initial_response_within_s=180,  # Terminate if first response is too slow.
+       inactivity_timeout_in_s=15 * 60,  # No clicking/typing/scrolling/mouse movement.
+       no_focus_timeout_in_s=10 * 60,  # Mouse outside window or another tab.
+       bid_incidence=30,  # Percent expected to qualify after targeting.
+   )
+   ```
+
+   Preserve existing local values when present, but tell the user these are
+   study-specific and may need adjustment.
 4. Merge Cint keys into the class-level `Exp.config` dictionary. Keep `config`
    inside `class Exp(...)`; do not move it to module scope.
 5. Required keys are:
