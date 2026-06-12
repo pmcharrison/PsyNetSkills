@@ -478,6 +478,8 @@ td {
   border: 1px solid var(--border);
   border-radius: 0.5rem;
   margin: 1rem 0;
+  max-width: 100%;
+  min-width: 0;
   padding: 1rem;
 }
 
@@ -489,6 +491,94 @@ td {
 .plan-panel {
   background: #f0f6ff;
   border-color: #80b7ff;
+}
+
+.analysis-notebook-panel {
+  background: #f6f8fa;
+}
+
+.notebook-preview {
+  display: grid;
+  gap: 0.85rem;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.notebook-cell {
+  background: var(--background);
+  border: 1px solid var(--border);
+  border-radius: 0.45rem;
+  max-width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  padding: 0.85rem;
+}
+
+.notebook-code,
+.notebook-code .highlight,
+.notebook-code .highlight pre,
+.notebook-code .chroma,
+.notebook-outputs,
+.notebook-outputs pre {
+  max-width: 100%;
+  min-width: 0;
+}
+
+.notebook-cell > :first-child,
+.notebook-cell .attempt-markdown > :first-child {
+  margin-top: 0;
+}
+
+.notebook-cell > :last-child,
+.notebook-cell .attempt-markdown > :last-child {
+  margin-bottom: 0;
+}
+
+.notebook-code .highlight,
+.notebook-outputs pre {
+  margin: 0;
+  overflow-x: auto;
+}
+
+.notebook-code .highlight pre code {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.notebook-outputs {
+  border-top: 1px solid var(--border);
+  margin-top: 0.75rem;
+  overflow-x: auto;
+  padding-top: 0.75rem;
+}
+
+.notebook-html {
+  overflow-x: auto;
+}
+
+.notebook-html table {
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  margin: 0;
+  width: auto;
+}
+
+.notebook-html th,
+.notebook-html td {
+  border: 1px solid var(--border);
+  padding: 0.35rem 0.55rem;
+  text-align: right;
+}
+
+.notebook-html th:first-child,
+.notebook-html td:first-child {
+  text-align: left;
+}
+
+.notebook-svg svg {
+  display: block;
+  height: auto;
+  max-width: 100%;
 }
 
 .attempt-panel > h2:first-child,

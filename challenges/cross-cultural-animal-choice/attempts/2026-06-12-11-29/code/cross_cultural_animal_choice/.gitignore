@@ -1,0 +1,17 @@
+# This file is adapted from PsyNet's standard experiment .gitignore.
+
+env/
+.venv/
+.deploy/
+server.log
+static/assets
+source_code.zip
+.idea
+__pycache__
+*.DS_Store
+node_modules/
+data/
+test-results/
+develop/
+deploy/
+deploy_logs/

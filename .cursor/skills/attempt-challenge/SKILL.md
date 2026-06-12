@@ -22,8 +22,9 @@ challenge before starting a fresh attempt.
 - For experiment implementation challenges, also read and follow
   `psynet-experiment-implementation/SKILL.md` before implementing the experiment.
   This underlying skill requires a `PLAN.md` and a human planning review; stop
-  there until the plan is approved. Also read `references/experiment-evidence.md`
-  before collecting experiment evidence.
+  there until the plan is approved. It also requires simulation, a canonical
+  analysis notebook, and `REPORT.md` before the attempt is complete. Also read
+  `references/experiment-evidence.md` before collecting experiment evidence.
 - If the challenge is explicitly cross-cultural, cross-national, multilingual,
   international, or compares cultures/regions/language groups, read and apply
   `prepare-for-translation/SKILL.md` before implementing participant-facing
@@ -98,8 +99,9 @@ challenge before starting a fresh attempt.
      stop for human review of `PLAN.md` before coding. After opening or updating
      the PR, follow the `dashboard-preview-links` skill and give the user the
      dashboard attempt URL with the `#plan` anchor, noting that it may 404 or show
-     stale content until publishing finishes. Include the plan text in chat so
-     the user can review it without leaving the conversation.
+     stale content until publishing finishes. Also point the user to the PR diff
+     or code viewer for the full `PLAN.md` and include only a brief chat summary
+     to avoid making the reviewer wonder where the full plan went.
    - Do not make challenge code depend on files outside its attempt directory
      unless absolutely necessary.
    - For runnable PsyNet experiments, prefer a non-conflicting nested directory
@@ -125,6 +127,13 @@ challenge before starting a fresh attempt.
    when creating participant-flow screenshots or `evidence/participant.mp4`, and follow
    `references/attempt-artifacts.md` for challenge-type-specific evidence
    guidance.
+    - For experiment implementation challenges, do not stop after functional
+      evidence. Complete the `psynet-experiment-implementation` post-coding
+      steps as review artifacts: run `psynet simulate`, save a simulated export,
+      write the canonical `evidence/analyses/analysis.ipynb` notebook with
+      visible CSV-reading code, inline tables, plots, and interpretation, and add
+      `REPORT.md`. If any of these cannot be completed, record the blocker in
+      `EVALUATION.md`.
 11. When implementation and first-pass evidence collection are complete, close
    `TIMELINE.md` with `[agent-stop]` and set `ended_at` in `agent.json` to the
    matching UTC ISO timestamp. Leave `run_cost` as `null`; maintainers can
