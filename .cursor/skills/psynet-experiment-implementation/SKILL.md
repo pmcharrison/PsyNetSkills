@@ -9,6 +9,13 @@ authors: [pmcharrison]
 Use this skill when implementing a PsyNet experiment from a natural-language
 specification.
 
+## Required reads
+
+- Read `references/experiment-patterns.md` before choosing the initial PsyNet
+  demo or implementation pattern.
+- Read `references/validation.md` before finalizing functional, interactive, or
+  performance checks.
+
 ## Steps
 
 ### Planning
@@ -50,8 +57,6 @@ Only continue when they are happy.
 ### Developing the experiment
 
 Use the develop-experiment-code skill to implement the experiment.
-Use `references/validation.md` for functional, interactive, and performance
-checks.
 
 ### Run simulations
 

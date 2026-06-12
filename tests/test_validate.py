@@ -118,6 +118,64 @@ def test_validate_repository_rejects_skill_name_mismatch(
     assert any("name must match folder" in problem for problem in problems)
 
 
+def test_validate_repository_rejects_uncited_skill_reference(
+    tmp_path: Path,
+) -> None:
+    minimal_repo(tmp_path)
+    write(
+        tmp_path / ".cursor/skills/example-skill/references/details.md",
+        "# Details\n",
+    )
+
+    problems = validate_repository(tmp_path)
+
+    assert any("reference file is not cited" in problem for problem in problems)
+
+
+def test_validate_repository_accepts_cited_skill_reference_chain(
+    tmp_path: Path,
+) -> None:
+    minimal_repo(tmp_path)
+    write(
+        tmp_path / ".cursor/skills/example-skill/SKILL.md",
+        "---\n"
+        "name: example-skill\n"
+        "description: Use when testing repository validation.\n"
+        "authors: [pmcharrison]\n"
+        "---\n\n"
+        "Read `references/primary.md`.\n",
+    )
+    write(
+        tmp_path / ".cursor/skills/example-skill/references/primary.md",
+        "# Primary\n\nRead `references/secondary.md`.\n",
+    )
+    write(
+        tmp_path / ".cursor/skills/example-skill/references/secondary.md",
+        "# Secondary\n",
+    )
+
+    assert validate_repository(tmp_path) == []
+
+
+def test_validate_repository_rejects_missing_skill_reference_path(
+    tmp_path: Path,
+) -> None:
+    minimal_repo(tmp_path)
+    write(
+        tmp_path / ".cursor/skills/example-skill/SKILL.md",
+        "---\n"
+        "name: example-skill\n"
+        "description: Use when testing repository validation.\n"
+        "authors: [pmcharrison]\n"
+        "---\n\n"
+        "Read `references/missing.md`.\n",
+    )
+
+    problems = validate_repository(tmp_path)
+
+    assert any("cited reference does not exist" in problem for problem in problems)
+
+
 def test_parse_evaluation_score_handles_frontmatter(tmp_path: Path) -> None:
     evaluation_file = tmp_path / "EVALUATION.md"
     evaluation_file.write_text(
