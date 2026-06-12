@@ -61,6 +61,15 @@ class ColorRatingTrial(StaticTrial):
                 bot_response=color["bot_rating"],
             ),
             time_estimate=self.time_estimate,
+            css="""
+            #main-body {
+              padding-bottom: 5rem;
+            }
+
+            #next-button {
+              margin-bottom: 3rem;
+            }
+            """,
         )
 
 
