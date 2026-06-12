@@ -177,7 +177,7 @@ class Exp(psynet.experiment.Experiment):
 
     config = {
         "locale": "en",
-        "supported_locales": ["ar", "en", "fr", "tr"],
+        "supported_locales": ["en"],
         "wage_per_hour": 12.0,
         "publish_experiment": True,
         **recruiter_settings,
