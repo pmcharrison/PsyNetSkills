@@ -108,8 +108,17 @@ def test_prepare_preview_pages_merges_shared_artifacts_without_preview_copies(
 ) -> None:
     pages_dir = tmp_path / "pages"
     public_dir = tmp_path / "public"
+    shared_large_reference = "x" * (600 * 1024)
     write(pages_dir / "pr-preview/pr-182/stale.html", "old preview\n")
     write(pages_dir / "pr-preview/pr-181/index.html", "other preview\n")
+    write(
+        pages_dir / "challenges/example/references/shared.zip",
+        shared_large_reference,
+    )
+    write(
+        pages_dir / "challenges/example/references/changed.zip",
+        "old" * (200 * 1024),
+    )
     write(
         pages_dir / "artifacts/blobs/sha256/ab/abcdef.mp4",
         "existing shared artifact\n",
@@ -121,6 +130,22 @@ def test_prepare_preview_pages_merges_shared_artifacts_without_preview_copies(
         "new shared artifact\n",
     )
     write(public_dir / "artifacts/monitor-static/player.js", "player\n")
+    write(
+        public_dir / "challenges/example/references/shared.zip",
+        shared_large_reference,
+    )
+    write(
+        public_dir / "challenges/example/references/changed.zip",
+        "new" * (200 * 1024),
+    )
+    write(
+        public_dir / "challenges/example/references/small.txt",
+        "small duplicate\n",
+    )
+    write(
+        pages_dir / "challenges/example/references/small.txt",
+        "small duplicate\n",
+    )
 
     script = (
         Path(__file__).resolve().parents[1]
@@ -140,6 +165,15 @@ def test_prepare_preview_pages_merges_shared_artifacts_without_preview_copies(
         encoding="utf-8",
     ) == "body {}\n"
     assert not (pages_dir / "pr-preview/pr-182/artifacts").exists()
+    assert not (
+        pages_dir / "pr-preview/pr-182/challenges/example/references/shared.zip"
+    ).exists()
+    assert (
+        pages_dir / "pr-preview/pr-182/challenges/example/references/changed.zip"
+    ).read_text(encoding="utf-8") == "new" * (200 * 1024)
+    assert (
+        pages_dir / "pr-preview/pr-182/challenges/example/references/small.txt"
+    ).read_text(encoding="utf-8") == "small duplicate\n"
     assert (pages_dir / "pr-preview/pr-181/index.html").read_text(
         encoding="utf-8",
     ) == "other preview\n"
