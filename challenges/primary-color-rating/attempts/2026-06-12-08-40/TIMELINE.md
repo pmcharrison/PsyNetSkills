@@ -28,4 +28,6 @@
 - T+01:01:00 [agent] Opened copied criteria after evidence collection and added the criteria checklist to `EVALUATION.md`.
 - T+01:04:00 [agent] Video review found the Next button overlapped the reward footer on color trial pages.
 - T+01:05:00 [agent] Added trial-page bottom spacing to keep the Next button visible above the footer.
-- T+01:05:30 [agent-stop] Implementation and first-pass evidence collection complete; attempt metadata remains open pending human author key.
+- T+01:08:00 [agent] Second video review showed spacing alone did not keep the Next button above the fixed footer before rating selection.
+- T+01:09:00 [agent] Updated trial CSS to pin the Next button above the reward footer.
+- T+01:09:30 [agent-stop] Implementation and first-pass evidence collection complete; attempt metadata remains open pending human author key.

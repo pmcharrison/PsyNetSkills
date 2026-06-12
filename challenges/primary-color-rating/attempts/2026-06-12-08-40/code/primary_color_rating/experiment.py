@@ -63,11 +63,14 @@ class ColorRatingTrial(StaticTrial):
             time_estimate=self.time_estimate,
             css="""
             #main-body {
-              padding-bottom: 5rem;
+              padding-bottom: 7rem;
             }
 
             #next-button {
-              margin-bottom: 3rem;
+              position: fixed;
+              bottom: 4.5rem;
+              left: max(1rem, calc((100vw - 1140px) / 2 + 12px));
+              z-index: 1100;
             }
             """,
         )
