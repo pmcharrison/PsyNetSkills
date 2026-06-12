@@ -4,7 +4,7 @@ description: Implement psychophysics experiments with PsyNet, focusing on precis
 authors: [raja-marjieh]
 ---
 
-# Implement psychophysics experiment
+# Implement PsyNet psychophysics experiment
 
 ## General guidelines
 
