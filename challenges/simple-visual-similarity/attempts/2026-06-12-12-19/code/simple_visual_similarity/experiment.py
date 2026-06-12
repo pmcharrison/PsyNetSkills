@@ -17,7 +17,7 @@ from psynet.graphics import Circle, Frame, GraphicPrompt, Text
 from psynet.modular_page import KeyboardPushButtonControl, ModularPage
 from psynet.page import InfoPage
 from psynet.participant import Participant
-from psynet.timeline import Timeline
+from psynet.timeline import Event, Timeline
 from psynet.trial.static import StaticNode, StaticTrial, StaticTrialMaker
 
 STIMULI_PATH = Path(__file__).with_name("stimuli.json")
@@ -146,6 +146,10 @@ class SimilarityTrial(StaticTrial):
                 style="min-width: 145px; margin: 6px;",
                 bot_response=self.get_bot_response,
             ),
+            events={
+                "responseEnable": Event(is_triggered_by="graphicPromptEnableResponse"),
+                "submitEnable": Event(is_triggered_by="graphicPromptEnableSubmit"),
+            },
             time_estimate=self.time_estimate,
         )
 
