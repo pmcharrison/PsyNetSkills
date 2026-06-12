@@ -17,6 +17,23 @@ For challenges with a participant-facing flow, use the `record-participant-video
 skill when creating `evidence/participant.mp4` or
 `evidence/screenshots/` visual review artifacts.
 
+When a challenge's central requirement depends on an external service or
+integration, such as S3, payment APIs, webhooks, or third-party recruitment
+services, collect explicit evidence that the real integration worked end to end.
+Local mocks, emulators, simulated payloads, placeholder files, and stub endpoints
+can support development, but they must not be presented as satisfying the
+external-service requirement unless the public challenge explicitly defines a
+simulated service test as acceptable evidence. In that case, the simulated test
+must exercise the same integration contract and code path as the real service,
+be labeled clearly as simulated evidence, and include instructions for rerunning
+the same workflow locally against the real service with user-provided
+credentials. If safe credentials or access are unavailable and the challenge does
+not permit simulation, record the blocker in `TIMELINE.md` and `EVALUATION.md`
+before substituting a local stub, and explain exactly what remains unverified.
+
+Do not imply a skipped check passed: record what was run, what happened, and why
+any required evidence is missing or blocked in `EVALUATION.md`.
+
 ## Timeline notes
 
 `TIMELINE.md` should help reviewers understand how the attempt progressed. Start
