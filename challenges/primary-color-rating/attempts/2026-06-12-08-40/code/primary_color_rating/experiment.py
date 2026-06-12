@@ -115,7 +115,10 @@ class Exp(psynet.experiment.Experiment):
         ratings_by_color = {
             trial.definition["name"]: trial.answer for trial in completed_trials
         }
-        color_order = [trial.definition["name"] for trial in completed_trials]
+        color_order = [
+            trial.definition["name"]
+            for trial in sorted(completed_trials, key=lambda trial: trial.position)
+        ]
 
         assert set(ratings_by_color) == {"red", "green", "blue"}
         assert color_order == ["red", "green", "blue"]

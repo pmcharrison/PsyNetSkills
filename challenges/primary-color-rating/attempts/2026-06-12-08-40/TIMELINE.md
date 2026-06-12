@@ -40,3 +40,5 @@
 - T+02:41:00 [manual] User pointed out that the experiment implementation skill also required simulation, analysis, and report steps.
 - T+02:41:30 [agent-start] Resumed to complete simulation, analysis, and reporting.
 - T+02:43:00 [agent] Increased `Exp.test_n_bots` to 24 so `psynet simulate` produces a representative simple-study dataset.
+- T+02:44:00 [agent] First `psynet simulate` run failed because the bot order assertion used database-return order instead of trial position.
+- T+02:45:00 [agent] Updated the bot order assertion to sort completed trials by `trial.position`.
