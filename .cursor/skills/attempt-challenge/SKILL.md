@@ -19,10 +19,12 @@ challenge before starting a fresh attempt.
 
 - Read `references/attempt-artifacts.md` before setting up attempt templates or
   collecting evidence.
-- For experiment implementation challenges, also read
-  `references/experiment-evidence.md` and
-  `psynet-experiment-implementation/references/validation.md` before finalizing
-  functional or performance evidence.
+- For experiment implementation challenges, also read and follow
+  `psynet-experiment-implementation/SKILL.md` before implementing the experiment.
+  This underlying skill requires a `PLAN.md` and a human planning review; stop
+  there until the plan is approved. Also read `references/experiment-evidence.md`
+  and `psynet-experiment-implementation/references/validation.md` before
+  finalizing functional or performance evidence.
 - If the challenge is explicitly cross-cultural, cross-national, multilingual,
   international, or compares cultures/regions/language groups, read and apply
   `prepare-for-translation/SKILL.md` while implementing the experiment. Mark
@@ -87,6 +89,9 @@ challenge before starting a fresh attempt.
    implementation. Follow `references/attempt-artifacts.md` for timeline and
    learning-note conventions.
 9. Implement the challenge in `code/`.
+   - For experiment implementation challenges, first follow
+     `psynet-experiment-implementation/SKILL.md`, including its requirement to
+     stop for human review of `PLAN.md` before coding.
    - Do not make challenge code depend on files outside its attempt directory
      unless absolutely necessary.
    - For runnable PsyNet experiments, prefer a non-conflicting nested directory
