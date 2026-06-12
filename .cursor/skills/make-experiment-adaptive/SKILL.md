@@ -57,6 +57,12 @@ which choices are assumptions.
 - Keep raw answer data available for audit; do not replace it with only `y`.
 - Log each adaptive decision: candidate IDs, chosen ID, objective components,
   posterior version or snapshot, data cutoff, and optimizer version.
+- When already computed at no extra approximation cost, store the posterior
+  predictive summary for `y` as it was used when delivering the trial. For
+  binary or other low-dimensional discrete `y`, store the probability mass
+  function as a list; for continuous `y`, store only the predictive mean and
+  standard deviation. Do not add extra integrals, sampling, or approximation work
+  just to produce this record.
 - Make the adaptive path deterministic under a fixed seed where possible, or
   explicitly record random seeds for stochastic policies.
 - Keep selection code fast enough for the participant response path. Adaptive
@@ -108,7 +114,8 @@ Choose one of these strategies explicitly:
 - Run bot tests or simulations that exercise the adaptive selection path, not
   just the static participant flow.
 - Export or query trial data and verify that `y`, `z`, selected adaptive units,
-  posterior references, and objective components are present.
+  posterior references, objective components, and any free posterior predictive
+  summaries are present.
 - Check that repeated runs with a fixed seed reproduce the same decisions when
   the policy is intended to be deterministic.
 - Stress the concurrent case with multiple bots when participants may overlap.
