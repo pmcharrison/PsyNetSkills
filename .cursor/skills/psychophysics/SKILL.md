@@ -1,11 +1,13 @@
 ---
-name: Implement a Psychophysics Experiment
+name: psychophysics
 description: Design and validate PsyNet psychophysics experiments.
 authors: [raja-marjieh]
 ---
 
+# Psychophysics
 
-## General Guidelines
+## General guidelines
+
 Follow general guidelines in psynet-experiment-implementation skills.
 
 -- First priority for correct display of all visual elements, with the right time, and no additional lingering display items such as fixation crosses or unrelated graphical elements that are not specified.

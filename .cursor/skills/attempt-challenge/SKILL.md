@@ -37,6 +37,8 @@ challenge before starting a fresh attempt.
    implementation and evidence collection are complete. Do not inspect dashboard
    attempt pages for the same challenge during this phase either; any criteria
    shown there are for later review.
+   Use only the visible challenge instructions while implementing; hidden
+   criteria are for evaluators.
 3. Use the `identify-author` skill before writing metadata.
 4. Refresh the local PsyNet checkout before implementing experiment code:
    `cd ~/PsyNet && git checkout master && git pull --ff-only origin master`.
@@ -85,6 +87,8 @@ challenge before starting a fresh attempt.
    implementation. Follow `references/attempt-artifacts.md` for timeline and
    learning-note conventions.
 9. Implement the challenge in `code/`.
+   - Do not make challenge code depend on files outside its attempt directory
+     unless absolutely necessary.
    - For runnable PsyNet experiments, prefer a non-conflicting nested directory
      such as `code/<experiment_slug>/` rather than running directly from a
      directory named `code`; Dallinger imports the experiment directory as a
@@ -124,9 +128,9 @@ challenge before starting a fresh attempt.
    `cursor-cost-estimation` skill when importing, auditing, or backfilling costs.
 12. Reflect on the timeline of events. Did anything take disproportionately long?
     Make a note in `LEARNINGS.md` in case this can be optimized later.
-14. Leave `EVALUATION.md` as a template for human evaluators unless the user
+13. Leave `EVALUATION.md` as a template for human evaluators unless the user
    provides evaluation feedback.
-15. In the final response, invite the user to evaluate the attempt
+14. In the final response, invite the user to evaluate the attempt
    conversationally, including a 1-10 score and concise feedback. Use the
    `evaluate-attempt` skill for that conversation and any resulting updates to
    `EVALUATION.md` or `LEARNINGS.md`.
