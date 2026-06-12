@@ -28,43 +28,14 @@ Provide these artifacts or document the blocker in `EVALUATION.md`:
 - `EVALUATION.md` has the copied criteria checklist when the challenge includes
   copied criteria.
 - If the challenge's central requirement is a real external service or
-  integration, evidence includes a successful end-to-end run against that service.
-  Local mocks, emulators, simulated files, or stub endpoints are acceptable only
-  as development aids or explicit fallback evidence unless the challenge
-  explicitly permits simulated-service evidence. When simulation is permitted,
-  evidence must show that the same integration contract and code path were
-  exercised, label the evidence as simulated, and provide local instructions for
-  rerunning the same workflow against the real service with user-provided
-  credentials. If real credentials or access cannot be used safely and simulation
-  is not permitted, record the blocker in `TIMELINE.md` and `EVALUATION.md` and
-  state what remains unverified.
+  integration, follow the external-service evidence policy in
+  `attempt-artifacts.md`.
 
 The `evidence/analyses/` directory is optional because not every experiment
 implementation challenge needs analysis beyond the standard artifacts.
 
 ## Participant-flow evidence
 
-Prefer a hybrid workflow when feasible:
-
-- Use Playwright screenshots as the primary review artifact for static UI
-  states: instructions, labels, button states, representative trials, feedback,
-  validation errors, and completion pages.
-- Add `evidence/screenshots/manifest.json` when filenames are not enough for
-  reviewers. Use a `captions` object that maps screenshot paths to short
-  descriptions of the experiment state shown.
-- Keep the Playwright participant-flow test with the experiment code, for
-  example `code/<experiment_slug>/tests/participant-flow.spec.js`. The committed
-  test should include assertions for the behavior it demonstrates, not just
-  screenshot commands.
-- Use a scripted browser runner for the canonical full-flow recording when video
-  is useful. Prefer JavaScript Playwright, and use human-readable pacing such as
-  deliberate waits, `slowMo`, or experiment `time_factor` settings so reviewers
-  can see individual actions and hear audio without watching a slow
-  agent-driven session.
-- Use focused short clips for timing, animation, audio, masking, continuous
-  interaction, or new trial types. Do not analyze a long video when screenshots
-  and Playwright assertions answer the review question.
-- If the experiment supports `PSYNET_PROFILE=minimal`, use that profile for
-  visual review screenshots or concise recordings.
-- Keep the default experiment path canonical; minimal profile is for review only
-  and should be visibly documented in evidence.
+Use `record-participant-video/SKILL.md` for the canonical screenshot and video
+workflow. In challenge attempts, save those artifacts under `evidence/` and keep
+any review-only profile visibly documented in the evidence notes.

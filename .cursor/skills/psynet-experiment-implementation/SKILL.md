@@ -50,6 +50,8 @@ Only continue when they are happy.
 ### Developing the experiment
 
 Use the develop-experiment-code skill to implement the experiment.
+Use `references/validation.md` for functional, interactive, and performance
+checks.
 
 ### Run simulations
 
