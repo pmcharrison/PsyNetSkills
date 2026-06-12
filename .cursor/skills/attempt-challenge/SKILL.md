@@ -19,11 +19,12 @@ challenge before starting a fresh attempt.
 
 - Read `references/attempt-artifacts.md` before setting up attempt templates or
   collecting evidence.
-- For experiment implementation challenges, also read
-  `psynet-experiment-implementation/SKILL.md` before planning or editing code,
-  then read `references/experiment-evidence.md` and
-  `psynet-experiment-implementation/references/validation.md` before finalizing
-  functional or performance evidence.
+- For experiment implementation challenges, also read and follow
+  `psynet-experiment-implementation/SKILL.md` before implementing the experiment.
+  This underlying skill requires a `PLAN.md` and a human planning review; stop
+  there until the plan is approved. Also read `references/experiment-evidence.md`
+  and `psynet-experiment-implementation/references/validation.md` before
+  finalizing functional or performance evidence.
 - If the challenge is explicitly cross-cultural, cross-national, multilingual,
   international, or compares cultures/regions/language groups, read and apply
   `prepare-for-translation/SKILL.md` while implementing the experiment. Mark
@@ -87,20 +88,10 @@ challenge before starting a fresh attempt.
 8. Start `TIMELINE.md` and initialize `LEARNINGS.md` from the template before
    implementation. Follow `references/attempt-artifacts.md` for timeline and
    learning-note conventions.
-9. For experiment implementation challenges, initialize `PLAN.md` from the
-   attempt template, fill it using only the public challenge instructions and
-   required public references, then stop for human review as required by
-   `psynet-experiment-implementation/SKILL.md`.
-   - Do not edit `code/`, experiment templates, assets, tests, or generated
-     experiment files before the human approves the plan or explicitly asks you
-     to proceed.
-   - This review gate overrides the autonomous end-to-end challenge workflow.
-     The instruction not to ask for supplementary implementation instructions
-     does not waive plan review.
-   - If you use a todo list for an experiment implementation challenge, the first
-     todo must be `write-plan-await-review`, and it must remain in progress until
-     the review gate is satisfied.
-10. Implement the challenge in `code/`.
+9. Implement the challenge in `code/`.
+   - For experiment implementation challenges, first follow
+     `psynet-experiment-implementation/SKILL.md`, including its requirement to
+     stop for human review of `PLAN.md` before coding.
    - Do not make challenge code depend on files outside its attempt directory
      unless absolutely necessary.
    - For runnable PsyNet experiments, prefer a non-conflicting nested directory
@@ -127,11 +118,11 @@ challenge before starting a fresh attempt.
      copied into the Actions dashboard for another agent. Copy the action shape
      from `assets/attempt-template/LEARNING_CARD.md` so bullets include the
      required `Confidence`, `Impact`, and `Status` fields.
-11. Collect evidence in `evidence/`. Use the `record-participant-video` skill
+10. Collect evidence in `evidence/`. Use the `record-participant-video` skill
    when creating participant-flow screenshots or `evidence/participant.mp4`, and follow
    `references/attempt-artifacts.md` for challenge-type-specific evidence
    guidance.
-12. When implementation and first-pass evidence collection are complete, close
+11. When implementation and first-pass evidence collection are complete, close
    `TIMELINE.md` with `[agent-stop]` and set `ended_at` in `agent.json` to the
    matching UTC ISO timestamp. Leave `run_cost` as `null`; maintainers can
    periodically run `psynetsk-import-cursor-costs <cursor-usage.csv>` to backfill
@@ -140,11 +131,11 @@ challenge before starting a fresh attempt.
    matches as resolved. Local attempts without a Cloud Agent ID should keep
    `run_cost` as `null` unless a human records a manual cost. Use the
    `cursor-cost-estimation` skill when importing, auditing, or backfilling costs.
-13. Reflect on the timeline of events. Did anything take disproportionately long?
+12. Reflect on the timeline of events. Did anything take disproportionately long?
     Make a note in `LEARNINGS.md` in case this can be optimized later.
-14. Leave `EVALUATION.md` as a template for human evaluators unless the user
+13. Leave `EVALUATION.md` as a template for human evaluators unless the user
    provides evaluation feedback.
-15. In the final response, invite the user to evaluate the attempt
+14. In the final response, invite the user to evaluate the attempt
    conversationally, including a 1-10 score and concise feedback. Use the
    `evaluate-attempt` skill for that conversation and any resulting updates to
    `EVALUATION.md` or `LEARNINGS.md`.
