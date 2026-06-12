@@ -61,14 +61,15 @@ Use the develop-experiment-code skill to implement the experiment.
 ### Run simulations
 
 Use `psynet simulate` to simulate participants and produce an example dataset.
-This dataset should contain a decent number of participants representative of a real study.
+This dataset should contain a decent number of participants representative of a real study;
+adjust `Exp.test_n_bots` to ensure this. Save the simulated export at `evidence/simulated_data.zip`.
 
 ### Develop analysis scripts
 
-Write scripts to analyze the generated data.
-Use Jupyter notebooks for this.
-These notebooks should include inferential statistics and plots,
-designed to address relevant research questions.
+Write scripts to analyze the generated data. Use a Jupyter notebook for this,
+with the canonical filename `evidence/analyses/analysis.ipynb` when working in a
+challenge attempt. The notebook should be self-contained for review,
+including all code, tables, and plots.
 If the implementation is inspired by a published paper, replicate the analyses reported in the paper as closely as possible.
 
 ### Review
@@ -80,3 +81,9 @@ Return to previous steps if necessary to address these.
 
 Compile a final report of the experiment (REPORT.md), summarizing the process taken
 and any findings that arose.
+
+### Completion gate
+
+Do not treat an experiment implementation as complete until the simulation
+export, canonical analysis notebook, and `REPORT.md` are present, or until a
+blocker for each missing artifact is recorded in `EVALUATION.md`.

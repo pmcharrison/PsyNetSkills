@@ -914,6 +914,47 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
         / "challenges/example/attempts/2026-06-01-10-10/evidence/README.md",
         "# Evidence notes\n",
     )
+    write(
+        tmp_path
+        / "challenges/example/attempts/2026-06-01-10-10/evidence/analyses/analysis.ipynb",
+        json.dumps(
+            {
+                "cells": [
+                    {
+                        "cell_type": "markdown",
+                        "source": ["# Analysis\n\nThis notebook is rendered."],
+                        "metadata": {},
+                    },
+                    {
+                        "cell_type": "code",
+                        "source": ["print('ok')"],
+                        "outputs": [{"output_type": "stream", "text": ["ok\n"]}],
+                        "metadata": {},
+                    },
+                    {
+                        "cell_type": "code",
+                        "source": ["plot_svg"],
+                        "outputs": [
+                            {
+                                "output_type": "display_data",
+                                "data": {
+                                    "image/svg+xml": [
+                                        "<svg xmlns=\"http://www.w3.org/2000/svg\"><circle cx=\"5\" cy=\"5\" r=\"5\" /></svg>"
+                                    ],
+                                },
+                                "metadata": {},
+                            },
+                        ],
+                        "metadata": {},
+                    },
+                ],
+                "metadata": {},
+                "nbformat": 4,
+                "nbformat_minor": 5,
+            },
+        )
+        + "\n",
+    )
     write_bytes(
         tmp_path
         / "challenges/example/attempts/2026-06-01-10-10/evidence/data.zip",
@@ -1080,6 +1121,13 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
     ]
     assert evidence_by_path["data.zip"]["published"] is True
     assert evidence_by_path["data.zip"]["url"].startswith(
+        "artifacts/blobs/sha256/",
+    )
+    assert evidence_by_path["analyses/analysis.ipynb"]["kind"] == "ipynb"
+    assert "This notebook is rendered." in evidence_by_path["analyses/analysis.ipynb"][
+        "content"
+    ]
+    assert evidence_by_path["analyses/analysis.ipynb"]["url"].startswith(
         "artifacts/blobs/sha256/",
     )
     assert evidence_by_path["archive.zip"]["published"] is False

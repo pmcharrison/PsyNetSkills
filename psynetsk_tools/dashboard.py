@@ -53,6 +53,7 @@ TEXT_FILE_EXTENSIONS = {
     ".css",
     ".csv",
     ".html",
+    ".ipynb",
     ".json",
     ".md",
     ".py",
@@ -82,7 +83,17 @@ CREDENTIAL_REDACTIONS = (
     (re.compile(r"(?i)(PROLIFIC_API_TOKEN\s*=\s*)[^\s\"']+"), r"\1[REDACTED]"),
     (re.compile(r"(?i)(PROLIFIC_API_KEY\s*=\s*)[^\s\"']+"), r"\1[REDACTED]"),
 )
-TEXT_ARTIFACT_EXTENSIONS = {".html", ".log", ".md", ".txt", ".json", ".csv", ".yaml", ".yml"}
+TEXT_ARTIFACT_EXTENSIONS = {
+    ".html",
+    ".ipynb",
+    ".log",
+    ".md",
+    ".txt",
+    ".json",
+    ".csv",
+    ".yaml",
+    ".yml",
+}
 WORKFLOW_CONTEXT_REPOSITORY = "pmcharrison/PsyNetSkills"
 WORKFLOW_CONTEXT_FILES_BY_NAME = {
     "Deploy dashboard PR preview": "dashboard-preview.yml",

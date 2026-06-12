@@ -68,6 +68,7 @@ screenshots/
 performance.json
 monitor.html
 data.zip
+simulated_data.zip
 analyses/
 ```
 
@@ -107,8 +108,19 @@ it helps reviewers understand what ran. If the full load test cannot run locally
 say so in `EVALUATION.md` rather than presenting a one-bot smoke test as
 complete performance evidence.
 `monitor.html` snapshots the PsyNet dashboard monitor view. `data.zip` contains
-exported experiment data. `analyses/` contains challenge-specific scientific
-checks, typically figures or concise reports.
+exported experiment data. `simulated_data.zip` contains the `psynet simulate`
+export used for analysis. `analyses/` contains the canonical
+`analysis.ipynb` notebook, which should read exported CSV data directly, show
+the data-wrangling code, display summary tables and plots inline, and provide a
+short interpretation. The dashboard renders `evidence/analyses/analysis.ipynb`
+prominently near the top of the attempt page and falls back to the first
+notebook in `evidence/analyses/` for older attempts.
+
+Experiment implementation attempts should also include `REPORT.md` at the
+attempt root. The report should summarize the implementation, simulation,
+analysis, validation, and any findings. If simulation, analysis, or the report
+cannot be completed, explain the blocker in `EVALUATION.md` rather than treating
+the attempt as complete.
 
 The dashboard publishes `evidence/data.zip`, but it does not publish other ZIP
 files from attempt `evidence/`, generated `code/`, or attempt `challenge/`
