@@ -1,0 +1,11 @@
+{
+  "n_trials": 3,
+  "n_choices": 3,
+  "proposals_accepted": 3,
+  "mean_chosen_tempo": 126,
+  "mean_chosen_brightness": 0.59,
+  "final_choice": {
+    "tempo": 126,
+    "brightness": 0.71
+  }
+}
