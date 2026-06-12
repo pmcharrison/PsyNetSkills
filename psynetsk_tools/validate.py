@@ -59,6 +59,7 @@ EMPTY_LEARNINGS_PLACEHOLDER = (
 MAX_EVIDENCE_VIDEO_DURATION_SECONDS = 180
 MAX_EVIDENCE_VIDEO_WIDTH = 1280
 MAX_EVIDENCE_VIDEO_HEIGHT = 720
+CHALLENGE_FIDELITY_VALUES = {"exact", "flexible"}
 
 
 def read_markdown_frontmatter(markdown_file: Path) -> tuple[dict[str, Any], list[str]]:
@@ -379,6 +380,22 @@ def require_string_field(
     return []
 
 
+def validate_challenge_fidelity(
+    source: Path,
+    frontmatter: dict[str, Any],
+) -> list[str]:
+    """Validate the optional challenge fidelity frontmatter tag."""
+
+    if "fidelity" not in frontmatter:
+        return []
+
+    value = frontmatter.get("fidelity")
+    if not isinstance(value, str) or value not in CHALLENGE_FIDELITY_VALUES:
+        allowed = ", ".join(sorted(CHALLENGE_FIDELITY_VALUES))
+        return [f"{source}: fidelity must be one of {allowed}"]
+    return []
+
+
 def validate_skills(
     root: Path,
     registry: dict[str, Author] | None = None,
@@ -499,6 +516,7 @@ def validate_challenges(
             problems.extend(frontmatter_problems)
             problems.extend(require_string_field(instructions_file, frontmatter, "title"))
             problems.extend(require_string_field(instructions_file, frontmatter, "type"))
+            problems.extend(validate_challenge_fidelity(instructions_file, frontmatter))
             problems.extend(
                 validate_author_references(
                     instructions_file,

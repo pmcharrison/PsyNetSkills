@@ -100,6 +100,44 @@ def test_validate_repository_accepts_minimal_structure(tmp_path: Path) -> None:
     assert validate_repository(tmp_path) == []
 
 
+def test_validate_repository_accepts_challenge_fidelity_tag(tmp_path: Path) -> None:
+    minimal_repo(tmp_path)
+    write(
+        tmp_path / "challenges/example/INSTRUCTIONS.md",
+        "---\n"
+        "title: Example challenge\n"
+        "type: experiment implementation\n"
+        "difficulty: 3\n"
+        "authors: [pmcharrison]\n"
+        "fidelity: exact\n"
+        "---\n\n"
+        "Implement the experiment.\n",
+    )
+
+    assert validate_repository(tmp_path) == []
+
+
+def test_validate_repository_rejects_invalid_challenge_fidelity_tag(
+    tmp_path: Path,
+) -> None:
+    minimal_repo(tmp_path)
+    write(
+        tmp_path / "challenges/example/INSTRUCTIONS.md",
+        "---\n"
+        "title: Example challenge\n"
+        "type: experiment implementation\n"
+        "difficulty: 3\n"
+        "authors: [pmcharrison]\n"
+        "fidelity: loose\n"
+        "---\n\n"
+        "Implement the experiment.\n",
+    )
+
+    problems = validate_repository(tmp_path)
+
+    assert any("fidelity must be one of exact, flexible" in problem for problem in problems)
+
+
 def test_validate_repository_rejects_skill_name_mismatch(
     tmp_path: Path,
 ) -> None:
