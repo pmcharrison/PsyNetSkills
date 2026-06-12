@@ -61,11 +61,11 @@
 
 ## Validation run
 
-- PENDING: `python experiment.py`.
-- PENDING: `psynet translate`.
-- PENDING: `psynet test local`.
-- PENDING: `python create_qualifications.py`.
-- PENDING: `uv run psynetsk-validate`.
+- COMPLETE: `python experiment.py` passed and confirmed the experiment imports with the ENG-GB placeholder JSON.
+- COMPLETE: `psynet translate` passed for POT extraction and translated into 0 languages because only English is active structurally.
+- BLOCKED: `psynet test local` launches the experiment but fails when the real Lucid recruiter tries to open recruitment without `lucid_api_key`.
+- BLOCKED: `python create_qualifications.py` stops safely because `lucid_api_key` and `lucid_sha1_hashing_key` are missing.
+- COMPLETE: `uv run psynetsk-validate` passed.
 
 ## What the experimenter needs to know
 
