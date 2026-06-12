@@ -1,0 +1,21 @@
+{
+  "authors": ["pmcharrison"],
+  "agent": "Cursor Cloud Agent",
+  "client": "Cursor Cloud",
+  "model": "GPT-5.5",
+  "started_at": "2026-06-09T17:17:24Z",
+  "skills_commit": "f951272a78cc2e1ad702295c73efc62506d6ef77",
+  "psynet": {
+    "checkout_path": "~/PsyNet",
+    "branch": "master",
+    "commit": "2290ae6a4f25f9e76f9d08f560bccc4f1cbbc4f5",
+    "version": "13.3.0a0",
+    "updated_from": "origin/master",
+    "updated_at": "2026-06-09T17:17:24Z",
+    "update_command": "git pull --ff-only origin master",
+    "dirty": false
+  },
+  "notes": [
+    "Author metadata uses the only registered author key present in authors.yaml during the autonomous run."
+  ]
+}
