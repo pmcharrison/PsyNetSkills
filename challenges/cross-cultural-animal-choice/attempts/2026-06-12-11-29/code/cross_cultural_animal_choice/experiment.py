@@ -8,11 +8,26 @@ import psynet.experiment
 from psynet.modular_page import KeyboardPushButtonControl, ModularPage
 from psynet.page import InfoPage
 from psynet.participant import Participant
+from psynet.recruiters import get_lucid_settings
 from psynet.timeline import Timeline
 from psynet.trial.static import StaticNode, StaticTrial, StaticTrialMaker
 from psynet.utils import get_locale, get_translator
 
 _ = get_translator(namespace="experiment")
+
+LANGUAGE = "ENG"
+COUNTRY = "GB"
+LUCID_CONFIG_PATH = f"qualifications/lucid/lucid-{LANGUAGE}-{COUNTRY}.json"
+
+recruiter_settings = get_lucid_settings(
+    lucid_recruitment_config_path=LUCID_CONFIG_PATH,
+    termination_time_in_s=120 * 60,  # Maximal time a participant can spend.
+    debug_recruiter=False,  # Only True during local testing.
+    initial_response_within_s=180,  # Terminate if first response is too slow.
+    inactivity_timeout_in_s=15 * 60,  # No clicking/typing/scrolling/mouse movement.
+    no_focus_timeout_in_s=10 * 60,  # Mouse outside window or another tab.
+    bid_incidence=30,  # Percent expected to qualify after targeting.
+)
 
 ANIMAL_KEYS = ["cat", "dog", "bird"]
 KEYS = ["KeyA", "KeyS", "KeyD"]
@@ -159,6 +174,14 @@ def make_trial_maker(prompt_key, question_number):
 class Exp(psynet.experiment.Experiment):
     label = "Cross-cultural animal choice"
     test_n_bots = 3
+
+    config = {
+        "locale": "en",
+        "supported_locales": ["ar", "en", "fr", "tr"],
+        "wage_per_hour": 12.0,
+        "publish_experiment": True,
+        **recruiter_settings,
+    }
 
     timeline = Timeline(
         InfoPage(
