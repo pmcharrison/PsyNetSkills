@@ -1,7 +1,7 @@
 ---
 name: simple-round-structure
 description: Decide whether a round-based PsyNet experiment should use a simple repeated-trial structure or explicit chain/node/trial-maker architecture.
-authors: [pmcharrison]
+authors: [eandrade-lotero]
 ---
 
 # Choose a round structure
