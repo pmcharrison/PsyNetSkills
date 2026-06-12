@@ -5,3 +5,6 @@
 - T+00:02:00 [agent] Refreshed the local PsyNet checkout to `origin/master`.
 - T+00:04:30 [agent] Explored PsyNet trial, page, bot, and trial-maker APIs for planning.
 - T+00:06:30 [agent-stop] Paused before implementation for required human review of `PLAN.md`.
+- T+00:08:00 [manual] Reviewer clarified that variational inference should update `mu`, `alpha`, and `r_i`.
+- T+00:08:05 [agent-start] Resumed planning update.
+- T+00:08:40 [agent-stop] Updated `PLAN.md` to use joint VI with warm-started optimization.

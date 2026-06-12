@@ -22,9 +22,9 @@ Participants will complete a short instruction page followed by 10 trials. Each 
 
 Digit strings will be sampled uniformly from digits `0` through `9`, with the selected length stored alongside the generated target. Responses will be scored as correct only when the typed response exactly matches the target string. No partial-credit scoring will be used.
 
-In adaptive mode, candidate lengths will be the integer range `2..20` inclusive, matching the non-adaptive random mode bounds. Before each trial, the policy will fit or update a variational posterior from the participant's completed trials. It will then estimate the expected information gain for each candidate length by:
+In adaptive mode, candidate lengths will be the integer range `2..20` inclusive, matching the non-adaptive random mode bounds. Before each trial, the policy will fit or update a joint variational posterior over `mu`, `alpha`, and the participant's `r_i` from the participant's completed trials. It will then estimate the expected information gain for each candidate length by:
 
-- sampling plausible ability values from the current variational posterior;
+- sampling plausible population and participant ability parameters from the current variational posterior;
 - computing the response probability for each candidate length;
 - considering the two possible outcomes, correct and incorrect;
 - estimating how much the outcome is expected to reduce posterior uncertainty.
@@ -62,11 +62,11 @@ The model code will live in a small local module, for example `adaptive_policy.p
 - `expected_information_gain(state, candidate_length) -> float`
 - `choose_length(observations, initial_state, adaptive=True, rng=None) -> SelectionResult`
 
-Variational inference will approximate the participant-level posterior for `r_i`, with the population priors from the prompt fixed in the likelihood calculation. The initial implementation will use a log-normal variational approximation for `r_i` and optimize an evidence lower bound by Monte Carlo samples, using the previous trial's optimized parameters as the next trial's initialization. The cached state will include at least:
+Variational inference will approximate the joint posterior for `mu`, `alpha`, and `r_i` rather than treating the population parameters as fixed. The initial implementation will use independent log-normal variational factors for `mu`, `alpha`, and `r_i`, apply the challenge's Gamma priors in the ELBO, and optimize by Monte Carlo samples. After each completed trial, the previous trial's optimized variational values will be reused as the starting point for the next optimization so trial-by-trial fits can warm start. The cached state will include at least:
 
 - variational family name;
-- optimized location and scale parameters for `log(r_i)`;
-- posterior mean and standard deviation for `r_i`;
+- optimized location and scale parameters for `log(mu)`, `log(alpha)`, and `log(r_i)`;
+- posterior means and standard deviations for `mu`, `alpha`, and `r_i`;
 - optimization status, objective value, and iteration count;
 - candidate acquisition values for the selected trial.
 
@@ -118,6 +118,5 @@ After plan approval and implementation, the attempt will collect:
 
 ### Risks and review questions
 
-- The variational approximation must be light enough to run inside trial preparation without slowing participant flow. The posterior cache and warm start are intended to keep this manageable.
+- The variational approximation over all three parameters must be light enough to run inside trial preparation without slowing participant flow. The posterior cache and warm start are intended to keep this manageable.
 - The exact expected information gain calculation may be expensive if every candidate refits two hypothetical posteriors. If necessary, the implementation will use a bounded Monte Carlo approximation and document the approximation in code and report.
-- Reviewer feedback is especially useful on whether the variational posterior should model only participant `r_i` online, or whether online updates should also approximate uncertainty in `mu` and `alpha` for a single-participant attempt.
