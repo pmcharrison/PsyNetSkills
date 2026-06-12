@@ -3,7 +3,7 @@
 This repository includes a `deploy-attempt` workflow for publishing a PsyNet
 attempt to an EC2 instance with Dallinger/PsyNet SSH deployment.
 
-The current setup is no-reviewer mode:
+The current setup is:
 
 1. An agent or developer can trigger a dry run or queue a deployment request.
 2. GitHub runs the non-privileged `prepare` job and writes a deployment plan.
@@ -12,10 +12,9 @@ The current setup is no-reviewer mode:
    reconstructs the SSH private key from Environment secrets, provisions EC2,
    and deploys the experiment.
 
-Agents should not have AWS credentials or GitHub Environment admin rights. In
-no-reviewer mode, any identity that can dispatch the workflow can start a real
-EC2 deployment, so dispatch permission should be limited to trusted automation
-or humans. Add required reviewers later if a separate approval gate is needed.
+Agents should not have AWS credentials or GitHub Environment admin rights. Any
+identity that can dispatch the workflow can start a real EC2 deployment, so
+dispatch permission should be limited to trusted automation or humans.
 
 ## One-time setup
 
@@ -31,11 +30,10 @@ or humans. Add required reviewers later if a separate approval gate is needed.
    ```
 
 2. In GitHub, create an Environment named `attempt-deploy`.
-3. Do not add required reviewers for no-approval deploys.
-4. Add the Environment variables printed by the setup script:
+3. Add the Environment variables printed by the setup script:
    `ATTEMPT_DEPLOY_AWS_ROLE_ARN`, `ATTEMPT_DEPLOY_AWS_REGION`, and
    `ATTEMPT_DEPLOY_SSH_KEY_NAME`.
-5. Add the Environment secrets:
+4. Add the Environment secrets:
    `ATTEMPT_DEPLOY_SSH_PRIVATE_KEY`, `ATTEMPT_DEPLOY_DASHBOARD_USER`, and
    `ATTEMPT_DEPLOY_DASHBOARD_PASSWORD`.
 
@@ -80,9 +78,8 @@ The `Deploy PsyNet attempt` workflow accepts:
 - `dry_run`: keep `true` to only generate a plan; set `false` to run a real
   deployment.
 
-The user-facing handoff link is the workflow run page. In no-reviewer mode,
-there is no `Review deployments` step; the deploy job starts automatically once
-the prepare job succeeds.
+The user-facing handoff link is the workflow run page. The deploy job starts
+automatically once the prepare job succeeds.
 
 ## Why provision then deploy works
 
@@ -105,8 +102,8 @@ stored host entry therefore remain available for the SSH deploy step.
 
 - Use fresh app/server/DNS names unless a human has confirmed that replacing the
   existing DNS record is safe.
-- Keep teardown as a separate protected workflow or manual human operation.
+- Keep teardown as a separate controlled workflow or manual human operation.
 - Record export and teardown commands from the workflow summary before running
   paid recruitment.
 - Do not store AWS access keys in GitHub or Cursor Cloud; the deploy job uses
-  short-lived AWS STS credentials obtained through OIDC after approval.
+  short-lived AWS STS credentials obtained through OIDC during the deploy run.
