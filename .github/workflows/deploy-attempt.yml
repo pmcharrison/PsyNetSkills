@@ -186,7 +186,7 @@ jobs:
       AWS_ROLE_ARN: ${{ vars.ATTEMPT_DEPLOY_AWS_ROLE_ARN }}
       DASHBOARD_USER: ${{ secrets.ATTEMPT_DEPLOY_DASHBOARD_USER }}
       DASHBOARD_PASSWORD: ${{ secrets.ATTEMPT_DEPLOY_DASHBOARD_PASSWORD }}
-      VENV_PATH: ${{ runner.temp }}/attempt-deploy-venv
+      VENV_PATH: /tmp/attempt-deploy-venv
     steps:
       - uses: actions/checkout@v4
         with:
