@@ -80,6 +80,12 @@ For Playwright evidence scripts:
   Playwright's default transient output folders.
 - Keep the canonical experiment path unchanged. Use a documented minimal visual
   review profile only to make screenshots or short recordings reviewable.
+- Detect experiment completion with the locale-independent `/recruiter-exit`
+  URL rather than matching English page text; text matching breaks for
+  non-English locales (for example when recording the same flow in several
+  languages). Also note that PsyNet's end page presents its "Finish" button as
+  a single `button.push-button`, so a runner that requires two or more push
+  buttons before clicking will deadlock there.
 
 ## Workflow
 

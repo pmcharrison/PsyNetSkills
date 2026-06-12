@@ -10,12 +10,8 @@ sections:
       rendering. The common theme is that translation should be an experiment
       invariant rather than a late surface-level pass.
     actions:
-      - cross-cultural-decision-making/2026-06-11-00-32/action-001
-      - cross-cultural-decision-making/2026-06-11-00-32/action-002
       - cross-cultural-decision-making/2026-06-11-00-32/action-003
-      - cross-cultural-decision-making/2026-06-11-00-32/action-005
       - cross-cultural-decision-making/2026-06-11-00-32/action-006
-      - cross-cultural-decision-making/2026-06-11-00-32/action-007
       - open-ended-step-tagging/2026-06-09-20-34/action-003
       - translate-static-experiment/2026-06-10-00-45/action-003
       - translate-static-experiment/2026-06-10-00-45/action-004
@@ -144,7 +140,7 @@ sections:
       and validation hooks. They indicate that many attempt failures are
       setup-contract failures rather than core experiment-design failures.
     actions:
-      - cross-cultural-decision-making/2026-06-11-00-32/action-004
+      - cross-cultural-decision-making/2026-06-11-00-32/action-005
       - rolling-inventory-melody-market/2026-06-10-17-06/action-001
       - similarity-discrimination-identification/2026-06-10-00-38/action-001
       - ultimatum-game/2026-06-10-17-15/action-001
@@ -158,6 +154,7 @@ sections:
       code.
     actions:
       - common-pool-resources/2026-06-09-19-02/action-001
+      - cross-cultural-decision-making/2026-06-11-00-32/action-001
       - open-ended-step-tagging/2026-06-09-20-34/action-001
       - open-ended-step-tagging/2026-06-09-20-34/action-005
       - rolling-inventory-melody-market/2026-06-10-20-01/action-002

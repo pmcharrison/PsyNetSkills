@@ -1,5 +1,22 @@
 # Learnings
 
+## Keep repeated per-trial instructions visually lean
+
+Evaluator feedback: the experiment works correctly but looks somewhat bulky.
+The choice pages repeat the full instructions in an expandable panel that was
+rendered expanded by default, pushing the actual stimulus (the two option
+cards) down the page on every trial. When a challenge asks for instructions to
+be repeated on the task page, prefer a collapsed-by-default details panel or a
+single compact line with an expandable remainder, so the stimulus stays the
+visual focus.
+
+*Actions:*
+
+- **PsyNetSkills:** Add a design note to `psynet-experiment-implementation`
+  (participant-facing UI guidance): repeated instructions on trial pages
+  should default to collapsed/compact so the stimulus dominates the page.
+  Confidence: medium. Impact: medium. Status: considering.
+
 ## Do not store translated text in trial/node definitions
 
 The first implementation put the translated scenario texts (via `_()` at module
@@ -14,11 +31,17 @@ This also makes the exported data locale-independent.
 
 *Actions:*
 
-- **PsyNetSkills:** Update the `prepare-for-translation` skill to warn that trial-maker node definitions must store stable locale-independent keys, with translation applied in `show_trial`, not at node-definition time. Confidence: high. Impact: high. Status:
-  considering.
+- **PsyNetSkills:** Update the `prepare-for-translation` skill to warn that
+  trial-maker node definitions must store stable locale-independent keys, with
+  translation applied in `show_trial`, not at node-definition time.
+  Confidence: high. Impact: high. Status: completed. Notes: applied on
+  2026-06-12 as a new Phase 2 workflow step in `prepare-for-translation`, at
+  the user's request.
 - **PsyNet:** Document in the internationalization tutorial that translated
   strings must not be baked into node/trial definitions, or make node-creation
-  translation behavior consistent with page rendering. Confidence: medium. Impact: high. Status: considering.
+  translation behavior consistent with page rendering. Confidence: medium.
+  Impact: high. Status: considering.
+
 ## Manual PO files satisfy `psynet translate` without credentials
 
 `psynet translate` only invokes a machine translator for entries that are
@@ -33,7 +56,10 @@ created.
 
 - **PsyNetSkills:** Mention in `prepare-for-translation` that fully translated,
   non-fuzzy PO files make `psynet translate` itself a credential-free
-  validation step. Confidence: medium. Impact: high. Status: considering.
+  validation step. Confidence: medium. Impact: high. Status: completed. Notes:
+  applied on 2026-06-12 to the Phase 4 extraction-verification step of
+  `prepare-for-translation`, at the user's request.
+
 ## `get_translator()` fails in plain-script smoke tests
 
 `python experiment.py` (recommended in the validation reference) crashes with
@@ -47,6 +73,7 @@ behaves identically in deployment.
 - **PsyNet:** Make `get_translator` fall back gracefully (e.g. to the
   `experiment` namespace or the null translator) when `__package__` is `None`.
   Confidence: medium. Impact: high. Status: considering.
+
 ## PsyNet's end-page "Finish" button is not translated
 
 With `locale = hi`/`fr`, the `SuccessfulEndPage` body text is translated, but
@@ -59,7 +86,12 @@ also English, but that page is not shown to real participants.
 
 - **PsyNet:** Give the end-page Finish button a translated label
   (e.g. `PushButtonControl(["Finish"], labels=[_("Finish")])`) and add "Finish"
-  to PsyNet's own locales. Confidence: high. Impact: high. Status: considering.
+  to PsyNet's own locales. Confidence: high. Impact: high. Status: in_progress.
+  Notes: implemented on 2026-06-12 and submitted upstream as
+  https://gitlab.com/PsyNetDev/PsyNet/-/merge_requests/1085 with pmcharrison
+  assigned as reviewer; fuzzy "Finish" entries added for all 75 PsyNet locales
+  pending a credentialed psynet translate review.
+
 ## Locale-independent end detection for scripted participant runs
 
 A Playwright runner that detects the end of the experiment by matching English
@@ -72,7 +104,10 @@ push buttons for choice pages will deadlock there.
 
 - **PsyNetSkills:** Note URL-based completion detection in the
   `record-participant-video` or attempt-evidence references for multilingual
-  recordings. Confidence: medium. Impact: high. Status: considering.
+  recordings. Confidence: medium. Impact: high. Status: completed. Notes:
+  applied on 2026-06-12 to the Playwright evidence-script guidance in
+  `record-participant-video`, at the user's request.
+
 ## Config keys must live in exactly one place
 
 Defining `supported_locales` in both the experiment class `config` dict and
@@ -86,4 +121,6 @@ per-language evidence runs a one-line edit.
 - **PsyNetSkills:** Recommend in `prepare-for-translation` that `locale` and
   `supported_locales` live together in `config.txt` (not the experiment class
   config) so evidence runs can switch language with a one-line edit.
-  Confidence: low. Impact: low. Status: considering.
+  Confidence: low. Impact: low. Status: completed. Notes: applied on
+  2026-06-12 to the Phase 1 locale-configuration step of
+  `prepare-for-translation`, at the user's request.
