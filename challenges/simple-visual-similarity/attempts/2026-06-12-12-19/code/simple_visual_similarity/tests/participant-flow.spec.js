@@ -32,6 +32,19 @@ async function pressAndWait(page, key) {
   }
 }
 
+async function currentPageUuid(page) {
+  return page.evaluate(() => window.psynet?.page?.attributes?.page_uuid || null);
+}
+
+async function waitForPageChange(page, previousUuid) {
+  await page.waitForFunction(
+    (uuid) => window.psynet?.page?.attributes?.page_uuid !== uuid,
+    previousUuid,
+    { timeout: 10000 },
+  );
+  await page.waitForTimeout(visualMode ? 600 : 150);
+}
+
 test.describe.configure({ mode: 'serial' });
 
 test('participant can complete visual similarity flow', async ({ page }) => {
@@ -62,20 +75,27 @@ test('participant can complete visual similarity flow', async ({ page }) => {
 
   for (let trial = 1; trial <= 10; trial += 1) {
     await expect(page.getByText(/How similar are these two circles/i)).toBeVisible({ timeout: 10000 });
+    await expect(page.locator('#svs-fixation')).toBeVisible({ timeout: 5000 });
+    await expect(page.getByRole('button', { name: /^3$/ })).toBeHidden();
     for (const rating of ratings) {
-      await expect(page.getByRole('button', { name: rating })).toBeVisible();
+      await expect(page.getByRole('button', { name: rating })).toBeAttached();
     }
     await expect(page.locator('#svs-stimuli')).toBeVisible({ timeout: 5000 });
     await expect.poll(async () => page.locator('#svs-stimuli circle').count(), { timeout: 5000 }).toBe(2);
+    for (const rating of ratings) {
+      await expect(page.getByRole('button', { name: rating })).toBeVisible();
+    }
     await expect(page.getByRole('button', { name: /^3$/ })).toBeEnabled();
     if (trial === 1) {
       await saveScreenshot(page, '04-first-trial.png');
     }
+    const previousUuid = await currentPageUuid(page);
     if (trial === 2) {
       await pressAndWait(page, 'Digit3');
     } else {
       await clickAndWait(page, page.getByRole('button', { name: trial % 3 === 0 ? /5 Completely similar/i : /^3$/ }));
     }
+    await waitForPageChange(page, previousUuid);
     if (visualMode) {
       await page.waitForTimeout(350);
     }
