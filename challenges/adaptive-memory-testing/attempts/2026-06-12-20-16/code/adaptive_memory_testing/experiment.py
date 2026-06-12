@@ -146,6 +146,11 @@ class AdaptiveMemoryTrialMaker(StaticTrialMaker):
         return trial, trial_status
 
 
+class MemoryNode(StaticNode):
+    def create_initial_seed(self, experiment, participant):
+        return 0
+
+
 class Exp(psynet.experiment.Experiment):
     label = "Adaptive memory testing"
     test_n_bots = 6
@@ -169,7 +174,7 @@ class Exp(psynet.experiment.Experiment):
         AdaptiveMemoryTrialMaker(
             id_="adaptive_memory",
             trial_class=MemoryTrial,
-            nodes=[StaticNode()],
+            nodes=[MemoryNode()],
             expected_trials_per_participant=N_TRIALS,
             max_trials_per_participant=N_TRIALS,
             allow_repeated_nodes=True,
