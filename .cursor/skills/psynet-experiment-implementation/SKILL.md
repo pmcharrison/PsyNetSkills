@@ -18,7 +18,7 @@ specification.
 
 ## Steps
 
-### Planning
+### Planning
 
 The planning phase is responsible for turning the original natural-language specification into a detailed implementation plan.
 The plan should be saved in PLAN.md, and have the following sections:
