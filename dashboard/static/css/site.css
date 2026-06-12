@@ -478,6 +478,8 @@ td {
   border: 1px solid var(--border);
   border-radius: 0.5rem;
   margin: 1rem 0;
+  max-width: 100%;
+  min-width: 0;
   padding: 1rem;
 }
 
@@ -498,13 +500,28 @@ td {
 .notebook-preview {
   display: grid;
   gap: 0.85rem;
+  max-width: 100%;
+  min-width: 0;
 }
 
 .notebook-cell {
   background: var(--background);
   border: 1px solid var(--border);
   border-radius: 0.45rem;
+  max-width: 100%;
+  min-width: 0;
+  overflow: hidden;
   padding: 0.85rem;
+}
+
+.notebook-code,
+.notebook-code .highlight,
+.notebook-code .highlight pre,
+.notebook-code .chroma,
+.notebook-outputs,
+.notebook-outputs pre {
+  max-width: 100%;
+  min-width: 0;
 }
 
 .notebook-cell > :first-child,
@@ -520,11 +537,18 @@ td {
 .notebook-code .highlight,
 .notebook-outputs pre {
   margin: 0;
+  overflow-x: auto;
+}
+
+.notebook-code .highlight pre code {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
 }
 
 .notebook-outputs {
   border-top: 1px solid var(--border);
   margin-top: 0.75rem;
+  overflow-x: auto;
   padding-top: 0.75rem;
 }
 
