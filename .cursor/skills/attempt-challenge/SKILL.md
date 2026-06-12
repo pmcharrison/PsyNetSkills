@@ -50,10 +50,13 @@ challenge before starting a fresh attempt.
 6. Snapshot the challenge into `attempts/<timestamp>/challenge/`, excluding
    previous attempts. Keep optional `CRITERIA.md` in the snapshot if it exists,
    but do not open it during implementation.
-7. Write `agent.json` with the author key, model/client details you know, the
-   current commit hash of the PsyNetSkills repository, Cursor conversation ID if
-   available, and a `psynet` object recording the refreshed PsyNet checkout. Use
-   this standard shape:
+7. Write `agent.json` as soon as the attempt folder and PsyNet checkout metadata
+   exist. Include the author key when it is known; if authorship is still pending
+   during a required pause, use `"authors": []`, keep `"ended_at": null`, and add
+   a note that the human author must be filled before the attempt is marked
+   complete. Record model/client details you know, the current commit hash of the
+   PsyNetSkills repository, Cursor conversation ID if available, and a `psynet`
+   object recording the refreshed PsyNet checkout. Use this standard shape:
 
    ```json
    {
@@ -83,13 +86,20 @@ challenge before starting a fresh attempt.
    Cursor Cloud, set `cursor_conversation_id` from the
    `CURSOR_CONVERSATION_ID` environment variable when it is available. This lets
    later CSV cost imports match the attempt to Cursor's `Cloud Agent ID` exactly.
+   Repository validation treats an attempt whose `agent.json` explicitly has
+   `"ended_at": null` as in progress, so plan-review pauses can pass CI without
+   pretending that implementation evidence or criteria review is complete.
 8. Start `TIMELINE.md` and initialize `LEARNINGS.md` from the template before
    implementation. Follow `references/attempt-artifacts.md` for timeline and
    learning-note conventions.
 9. Implement the challenge in `code/`.
    - For experiment implementation challenges, first follow
      `psynet-experiment-implementation/SKILL.md`, including its requirement to
-     stop for human review of `PLAN.md` before coding.
+     stop for human review of `PLAN.md` before coding. After opening or updating
+     the PR, give the user the dashboard attempt URL with the `#plan` anchor when
+     the preview build succeeds. If the dashboard preview cannot build, include
+     the plan text in chat so the user can review it without leaving the
+     conversation.
    - Do not make challenge code depend on files outside its attempt directory
      unless absolutely necessary.
    - For runnable PsyNet experiments, prefer a non-conflicting nested directory
@@ -109,7 +119,8 @@ challenge before starting a fresh attempt.
    - Update `LEARNINGS.md` with any generalizable lessons you encounter.
      This should include mistakes you made when running tests,
      things that took a long time to find in documentation, etc. Follow
-     `references/attempt-artifacts.md` for learning-card format.
+     `references/attempt-artifacts.md` for standalone action bullets and
+     learning-card format.
 10. Collect evidence in `evidence/`. Use the `record-participant-video` skill
    when creating participant-flow screenshots or `evidence/participant.mp4`, and follow
    `references/attempt-artifacts.md` for challenge-type-specific evidence
@@ -155,10 +166,12 @@ safer workflow rather than committing or publishing them.
 
 ## Templates
 
-Use the files in `assets/attempt-template/` as the starting point for attempt
-metadata, timeline, learnings, and evaluation notes. Use
-`assets/attempt-template/LEARNING_CARD.md` when replacing the initialized
-`LEARNINGS.md` placeholder with concrete learning cards.
+Use the files in `.cursor/skills/attempt-challenge/assets/attempt-template/` as
+the starting point for attempt metadata, timeline, learnings, and evaluation
+notes. Use
+`.cursor/skills/attempt-challenge/assets/attempt-template/LEARNING_CARD.md` when
+replacing the initialized `LEARNINGS.md` placeholder with concrete learning
+cards.
 
 ## Notes
 

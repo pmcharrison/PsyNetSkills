@@ -210,6 +210,7 @@ class Attempt:
     authors: list[Author]
     agent_json: str
     evaluation: str
+    plan: str
     timeline: str
     timeline_entries: list[TimelineEntry]
     implementation_time_seconds: int | None
@@ -656,6 +657,7 @@ def collect_attempts(
         evaluation_file = attempt_dir / "EVALUATION.md"
         learnings_file = attempt_dir / "LEARNINGS.md"
         timeline_file = attempt_dir / "TIMELINE.md"
+        plan_file = attempt_dir / "PLAN.md"
         score = (
             parse_evaluation_score(evaluation_file)
             if evaluation_file.exists()
@@ -731,6 +733,11 @@ def collect_attempts(
                         )
                     )
                     if evaluation_file.exists()
+                    else ""
+                ),
+                plan=(
+                    strip_first_heading(plan_file.read_text(encoding="utf-8"))
+                    if plan_file.exists()
                     else ""
                 ),
                 timeline=timeline,

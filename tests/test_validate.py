@@ -295,6 +295,29 @@ def test_validate_repository_accepts_actions_review_for_open_action(
     assert validate_repository(tmp_path) == []
 
 
+def test_validate_repository_accepts_plan_paused_attempt(tmp_path: Path) -> None:
+    minimal_repo(tmp_path)
+    write(tmp_path / "challenges/example/CRITERIA.md", "# Criteria\n\n- Criterion.\n")
+    attempt_dir = tmp_path / "challenges/example/attempts/2026-06-01-10-10"
+    metadata = json.loads(agent_json())
+    metadata["authors"] = []
+    metadata["ended_at"] = None
+    write(attempt_dir / "agent.json", json.dumps(metadata) + "\n")
+    write(attempt_dir / "challenge/INSTRUCTIONS.md", "# Snapshot\n")
+    write(attempt_dir / "challenge/CRITERIA.md", "# Criteria\n\n- Criterion.\n")
+    write(attempt_dir / "PLAN.md", "# Plan\n\nImplementation plan.\n")
+    write(attempt_dir / "EVALUATION.md", "---\nscore:\n---\n\n# Evaluation\n")
+    write(attempt_dir / "LEARNINGS.md", EMPTY_LEARNINGS_PLACEHOLDER + "\n")
+    write(
+        attempt_dir / "TIMELINE.md",
+        "# Timeline\n\n"
+        "- T+00:00:00 [agent-start] Started.\n"
+        "- T+00:05:00 [agent-stop] Paused for plan review.\n",
+    )
+
+    assert validate_repository(tmp_path) == []
+
+
 def test_validate_repository_rejects_stale_actions_review_reference(
     tmp_path: Path,
 ) -> None:

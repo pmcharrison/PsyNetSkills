@@ -486,6 +486,11 @@ td {
   border-color: #d4a72c;
 }
 
+.plan-panel {
+  background: #f0f6ff;
+  border-color: #80b7ff;
+}
+
 .attempt-panel > h2:first-child,
 .attempt-panel > summary {
   margin-top: 0;
