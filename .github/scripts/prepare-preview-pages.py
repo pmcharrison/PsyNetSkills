@@ -3,11 +3,13 @@
 
 from __future__ import annotations
 
+import filecmp
 import shutil
 import sys
 from pathlib import Path, PurePosixPath
 
 SHARED_ARTIFACTS_DIR = "artifacts"
+LARGE_DUPLICATE_FILE_BYTES = 512 * 1024
 
 
 def safe_relative_path(path: str) -> PurePosixPath:
@@ -33,6 +35,42 @@ def copy_tree_contents(source: Path, target: Path) -> None:
             shutil.copy2(child, destination)
 
 
+def is_large_duplicate(source: Path, production_path: Path) -> bool:
+    """Return whether a large preview file already exists at the production path."""
+
+    return (
+        source.stat().st_size >= LARGE_DUPLICATE_FILE_BYTES
+        and production_path.is_file()
+        and filecmp.cmp(source, production_path, shallow=False)
+    )
+
+
+def copy_preview_tree(
+    source: Path,
+    target: Path,
+    pages_root: Path,
+    public_root: Path,
+) -> None:
+    """Copy preview files while omitting large production-identical files."""
+
+    if source.is_dir():
+        for child in source.iterdir():
+            copy_preview_tree(
+                child,
+                target / child.name,
+                pages_root,
+                public_root,
+            )
+        return
+
+    production_path = pages_root / source.relative_to(public_root)
+    if is_large_duplicate(source, production_path):
+        return
+
+    target.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(source, target)
+
+
 def prepare_preview_pages(pages_root: Path, public_root: Path, preview_path: str) -> None:
     """Replace one preview page while additively merging shared artifacts."""
 
@@ -46,10 +84,7 @@ def prepare_preview_pages(pages_root: Path, public_root: Path, preview_path: str
         if child.name == SHARED_ARTIFACTS_DIR:
             continue
         destination = preview_root / child.name
-        if child.is_dir():
-            shutil.copytree(child, destination)
-        else:
-            shutil.copy2(child, destination)
+        copy_preview_tree(child, destination, pages_root, public_root)
 
     copy_tree_contents(
         public_root / SHARED_ARTIFACTS_DIR,
