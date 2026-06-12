@@ -37,3 +37,6 @@
 - T+01:44:30 [agent-start] Resumed to close attempt metadata.
 - T+01:45:00 [agent] Filled `agent.json.authors` and `ended_at`.
 - T+01:45:30 [agent-stop] Attempt metadata complete.
+- T+02:41:00 [manual] User pointed out that the experiment implementation skill also required simulation, analysis, and report steps.
+- T+02:41:30 [agent-start] Resumed to complete simulation, analysis, and reporting.
+- T+02:43:00 [agent] Increased `Exp.test_n_bots` to 24 so `psynet simulate` produces a representative simple-study dataset.

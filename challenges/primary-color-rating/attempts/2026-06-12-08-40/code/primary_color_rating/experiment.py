@@ -97,7 +97,7 @@ class Exp(psynet.experiment.Experiment):
     """Experiment class for local PsyNet execution."""
 
     label = "Primary color rating"
-    test_n_bots = 1
+    test_n_bots = 24
 
     timeline = Timeline(
         InfoPage(
