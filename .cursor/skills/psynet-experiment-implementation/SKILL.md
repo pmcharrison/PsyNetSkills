@@ -65,6 +65,15 @@ Useful starting points:
     answer, so the bot path can bypass `format_answer` unless you explicitly
     call it or otherwise match its output.
 
+## Round structure check
+
+When the specification describes repeated rounds, games, turns, exchanges,
+blocks, or other sequenced participant actions, read
+`simple-round-structure/SKILL.md` before choosing the timeline structure. Use it
+to decide whether the design can be implemented as a simple repeated-trial
+structure, or whether PsyNet should explicitly represent the sequence with
+`Trial`, `TrialMaker`, `Node`, or chain classes.
+
 ## Design guidance
 
 - For nontrivial participant tasks, include a brief training or practice phase
