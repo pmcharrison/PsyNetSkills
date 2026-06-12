@@ -1,0 +1,14 @@
+[Config]
+title = Adaptive memory testing experiment
+description = Participants complete 10 digit-string recall trials with adaptive sequence lengths.
+contact_email_on_error = researcher@example.com
+organization_name = PsyNetSkills
+
+recruiter = generic
+currency = $
+wage_per_hour = 12.0
+
+[Prolific]
+auto_recruit = false
+prolific_estimated_completion_minutes = 3
+base_payment = 0.60

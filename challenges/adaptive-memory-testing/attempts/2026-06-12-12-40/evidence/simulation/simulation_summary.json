@@ -1,0 +1,44 @@
+[
+  {
+    "ability": "low",
+    "policy": "adaptive",
+    "mean_selected_length": 9.675,
+    "mean_late_selected_length": 4.55,
+    "accuracy": 0.1
+  },
+  {
+    "ability": "low",
+    "policy": "random",
+    "mean_selected_length": 12.125,
+    "mean_late_selected_length": 13.85,
+    "accuracy": 0.125
+  },
+  {
+    "ability": "medium",
+    "policy": "adaptive",
+    "mean_selected_length": 11.725,
+    "mean_late_selected_length": 8.2,
+    "accuracy": 0.225
+  },
+  {
+    "ability": "medium",
+    "policy": "random",
+    "mean_selected_length": 10.55,
+    "mean_late_selected_length": 10.9,
+    "accuracy": 0.325
+  },
+  {
+    "ability": "high",
+    "policy": "adaptive",
+    "mean_selected_length": 16.525,
+    "mean_late_selected_length": 15.9,
+    "accuracy": 0.3
+  },
+  {
+    "ability": "high",
+    "policy": "random",
+    "mean_selected_length": 10.85,
+    "mean_late_selected_length": 9.85,
+    "accuracy": 0.65
+  }
+]
