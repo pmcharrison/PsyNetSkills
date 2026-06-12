@@ -43,6 +43,10 @@
 - T+02:44:00 [agent] First `psynet simulate` run failed because the bot order assertion used database-return order instead of trial position.
 - T+02:45:00 [agent] Updated the bot order assertion to sort completed trials by `trial.position`.
 - T+02:46:00 [agent] Re-ran `psynet simulate` successfully and saved `evidence/simulated_data.zip`.
-- T+02:48:00 [agent] Added and ran `evidence/analyses/summarize_ratings.py`, producing summary CSV, JSON, and SVG outputs.
+- T+02:48:00 [agent] Added an initial standalone analysis script and generated summary artifacts.
 - T+02:50:00 [agent] Added `evidence/analyses/primary_color_rating_analysis.ipynb` and `REPORT.md`.
 - T+02:50:30 [agent-stop] Simulation, analysis, and reporting follow-up complete.
+- T+05:02:00 [manual] User requested removal of redundant standalone analysis artifacts now that the notebook contains the full analysis.
+- T+05:02:30 [agent-start] Resumed to simplify analysis evidence.
+- T+05:03:30 [agent] Removed standalone analysis script/log/CSV/JSON/SVG artifacts and kept `evidence/analyses/analysis.ipynb` as the single analysis artifact.
+- T+05:04:00 [agent-stop] Analysis evidence cleanup complete.

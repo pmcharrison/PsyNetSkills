@@ -14,11 +14,7 @@ I ran `psynet simulate` after setting `Exp.test_n_bots = 24`, producing a simula
 
 ## Analysis
 
-The canonical dashboard-rendered analysis notebook is `evidence/analyses/analysis.ipynb`, with the runnable script in `evidence/analyses/summarize_ratings.py`. The analysis reads the simulated trial export, verifies that each simulated participant has exactly one rating for red, green, and blue, and writes:
-
-- `rating_summary.csv`
-- `rating_summary.json`
-- `rating_means.svg`
+The canonical dashboard-rendered analysis notebook is `evidence/analyses/analysis.ipynb`. The notebook reads the simulated trial export directly, verifies that each simulated participant has exactly one rating for red, green, and blue, displays the trial-level data and summary table, renders the mean-rating plot inline, and reports the Friedman test calculation.
 
 The simulated ratings match the configured bot responses:
 
