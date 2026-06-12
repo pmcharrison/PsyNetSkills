@@ -34,10 +34,17 @@ skill commit, attempt start/end time, Cursor conversation ID when available,
 PsyNet checkout metadata, and optional derived cost metadata. `code/` contains
 the generated implementation. `evidence/` contains the materials used to
 evaluate whether the implementation worked.
+Agents should create `agent.json` near the beginning of the attempt. If the
+attempt pauses before implementation is complete, keep `ended_at` as `null`; the
+validator treats that explicit state as in progress and does not require
+completion-only artifacts such as implemented code, evidence, or a copied
+criteria checklist yet. Fill authors and `ended_at` before marking the attempt
+complete.
 `TIMELINE.md` records major attempt events with timestamps relative to the start
-of the attempt, including manual user interventions or corrective guidance. The
+of the attempt, including manual events and explicit intervention tags. The
 dashboard derives implementation time from completed `[agent-start]` to
-`[agent-stop]` intervals and excludes manual gaps between those intervals.
+`[agent-stop]` intervals, excludes manual gaps between those intervals, and
+counts human interventions from `[manual] [intervention]` entries.
 `EVALUATION.md` records human evaluation feedback and the score.
 `LEARNINGS.md` is initialized when the attempt is created, then records
 implementation findings and confidence-labelled improvement ideas as the attempt
@@ -57,18 +64,29 @@ unless the challenge needs something more specific:
 ```text
 evidence/
 participant.mp4
+screenshots/
 performance.json
 monitor.html
 data.zip
 analyses/
 ```
 
-`participant.mp4` records the participant experience. Keep it as a concise
-review artifact: it must be no longer than 3 minutes and no larger than
-1280x720. Prefer 15 fps, H.264 with CRF 30-34, AAC audio when needed, and
-`+faststart` metadata for streaming. Trim or re-encode recordings before
-committing if they exceed these limits. `performance.json` stores the output of
-`psynet performance-test` or an equivalent performance check.
+`participant.mp4` records the participant experience when video is the right
+evidence format. Drive the flow with Playwright at a readable pace and use
+`ffmpeg` for screen/audio capture. Keep it as a concise review artifact: it must
+be no longer than 3 minutes and no larger than 1280x720. Prefer 15 fps, H.264
+with CRF 30-34, AAC audio when needed, and `+faststart` metadata for streaming.
+Trim or re-encode recordings before committing if they exceed these limits.
+`screenshots/` contains targeted Playwright screenshots of important
+participant-facing states, such as instructions, representative trials,
+feedback, validation errors, and completion pages. `performance.json` stores the
+output of `psynet performance-test` or an equivalent performance check.
+Store the Playwright participant-flow test with the experiment code, typically
+under `code/<slug>/tests/participant-flow.spec.js`, and make it assert the
+behavior shown in the screenshots or recording.
+To override filename-derived screenshot captions on the dashboard, add
+`evidence/screenshots/manifest.json` with a `captions` object mapping screenshot
+paths to concise review labels.
 
 For challenge attempts, treat `psynet test local` and `psynet performance-test
 local` as separate checks. Functional tests can stay fast; performance evidence
@@ -97,6 +115,12 @@ files from attempt `evidence/`, generated `code/`, or attempt `challenge/`
 snapshot directories. Those ZIPs remain listed with size metadata so reviewers
 know they exist, but the static dashboard omits the bytes to avoid duplicating
 large implementation bundles and top-level challenge reference assets.
+
+When the experiment implementation workflow pauses for human review of
+`PLAN.md`, the dashboard renders that plan near the top of the attempt page at
+the `#plan` anchor. Agents should share the preview URL with that anchor after a
+successful preview build. If the preview build is unavailable, paste the plan
+text into the chat so the reviewer can still approve or revise it.
 
 Command logs may also be included in `evidence/` when they help reviewers
 understand what ran and what failed. Keep logs concise when practical, and do
@@ -151,9 +175,11 @@ PsyNet checkout cannot be updated to the latest `origin/master`, record the
 blocker in `TIMELINE.md` and `EVALUATION.md`.
 
 This metadata is required for all real attempts so reviewers can identify the
-framework checkout associated with the work. If metadata is backfilled for an
-older attempt, say so in `agent.json` notes rather than presenting it as exact
-historical provenance.
+framework checkout associated with the work. During an in-progress pause,
+`authors` may be empty only when the human author is still being identified and
+`ended_at` is `null`; complete attempts must list one or more author keys from
+`authors.yaml`. If metadata is backfilled for an older attempt, say so in
+`agent.json` notes rather than presenting it as exact historical provenance.
 
 ## Cursor cost metadata
 
@@ -176,7 +202,7 @@ relative timestamps that include seconds:
 - T+00:00:30 [agent] Read public challenge instructions.
 - T+00:12:10 [agent] Implemented initial experiment scaffold.
 - T+00:25:45 [agent-stop] Work paused while an interactive command waited for input.
-- T+00:26:05 [manual] User interrupted the command and clarified the next step.
+- T+00:26:05 [manual] [intervention] User interrupted the command and clarified the next step.
 - T+00:27:20 [agent-start] Resumed autonomous implementation work.
 - T+00:45:00 [agent-stop] Experiment implementation and first-pass evidence collection complete.
 ```
@@ -188,6 +214,13 @@ milestones, `[manual]` for user interventions or corrective guidance, and
 experiment implementation and first-pass evidence collection are complete. Do
 not include later repository-process discussions unless they directly change the
 experiment implementation.
+
+Add `[intervention]` after `[manual]` only when the human changes the
+implementation path, corrects the agent, or supplies guidance that affects what
+the agent builds or tests. Do not add `[intervention]` for passive approvals,
+status requests, final evaluations, or repository process discussion that does
+not change the implementation. The dashboard's human intervention count is the
+number of structured `[manual] [intervention]` entries.
 
 Close every active implementation segment with `[agent-stop]`. If a timeline has
 no completed start/stop segment, or if the final segment is left open, the
@@ -250,11 +283,16 @@ What happened during implementation or testing.
 *Actions:*
 
 - **PsyNetSkills:** A repo, skill, docs, validation, dashboard, or evidence workflow
-  change. Confidence: high. Status: considering. Notes: Optional decision
-  rationale after review.
+  change. Confidence: high. Impact: medium. Status: considering. Notes: Optional
+  decision rationale after review.
 - **PsyNet:** A PsyNet framework, documentation, or command-line change. Confidence:
-  medium. Status: considering.
+  medium. Impact: low. Status: considering.
 ```
+
+Use `Impact: low` for quick recoveries or nice-to-have improvements,
+`Impact: medium` for issues the agent fixed after meaningful friction, and
+`Impact: high` for fixes that would prevent a stuck attempt, major evidence gap,
+or serious participant-facing/research-validity failure.
 
 Keep learning notes concise and grounded in what happened. Useful topics include
 PsyNet or Dallinger API gotchas, ambiguous instructions, evidence collection

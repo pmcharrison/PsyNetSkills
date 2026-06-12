@@ -20,6 +20,7 @@ dashboard/.hugo_build.lock
 dashboard/data/psynetsk.json
 dashboard/content/_index.md
 dashboard/content/actions/
+dashboard/content/attempts/
 dashboard/content/challenges/
 dashboard/content/docs/
 dashboard/content/skills/

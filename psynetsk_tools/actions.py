@@ -19,6 +19,9 @@ from psynetsk_tools.learnings import (
 
 ACTION_REVIEW_FILE = "actions-review.yaml"
 ACTION_REVIEW_SCOPE = "open_actions"
+ACTION_CONFIDENCE_ORDER = {"high": 0, "medium": 1, "low": 2}
+ACTION_IMPACT_ORDER = {"high": 0, "medium": 1, "low": 2}
+ACTION_REPOSITORY_ORDER = {"psynetskills": 0, "psynet": 1}
 
 
 @dataclass(frozen=True)
@@ -28,6 +31,7 @@ class LearningAction:
     id: str
     repository: str
     confidence: str
+    impact: str
     proposal: str
     status: str
     notes: str
@@ -73,12 +77,34 @@ def action_copy_context(action: LearningAction) -> dict[str, str]:
         "dashboard_path": action.source_url,
         "repository": action.repository,
         "confidence": action.confidence,
+        "impact": action.impact,
         "status": action.status,
         "learning_title": action.source_section,
         "learning_context": action.learning_context,
         "action": action.proposal,
         "notes": action.notes,
     }
+
+
+def action_priority_sort_key(action: LearningAction) -> tuple[object, ...]:
+    """Return the default dashboard priority order for an action."""
+
+    return (
+        ACTION_IMPACT_ORDER.get(action.impact, len(ACTION_IMPACT_ORDER)),
+        ACTION_CONFIDENCE_ORDER.get(action.confidence, len(ACTION_CONFIDENCE_ORDER)),
+        ACTION_REPOSITORY_ORDER.get(action.repository, len(ACTION_REPOSITORY_ORDER)),
+        action.challenge_title.casefold(),
+        action.attempt_name.casefold(),
+        action.id,
+    )
+
+
+def sorted_learning_actions_for_dashboard(
+    actions: list[LearningAction],
+) -> list[LearningAction]:
+    """Return actions ordered by default dashboard priority."""
+
+    return sorted(actions, key=action_priority_sort_key)
 
 
 def format_action_copy_markdown(
@@ -112,6 +138,7 @@ def format_action_copy_markdown(
                 f"Dashboard link: {dashboard_url}",
                 f"Repository target: {action.repository}",
                 f"Confidence: {action.confidence}",
+                f"Impact: {action.impact}",
                 f"Status: {action.status}",
                 "",
                 "Learning context:",
@@ -155,7 +182,7 @@ def open_learning_actions_from_markdown(
             if parsed is None:
                 continue
             action_index += 1
-            repository, confidence, proposal, status, notes = parsed
+            repository, confidence, impact, proposal, status, notes = parsed
             if status in COMPLETED_LEARNING_STATUSES:
                 continue
             action_id = f"{challenge_slug}/{attempt_name}/action-{action_index:03d}"
@@ -168,6 +195,7 @@ def open_learning_actions_from_markdown(
                 id=action_id,
                 repository=repository,
                 confidence=confidence,
+                impact=impact,
                 proposal=proposal,
                 status=status,
                 notes=notes,
@@ -227,7 +255,7 @@ def mark_open_learning_actions_in_markdown(
         parsed = parse_learning_action_bullet(bullet)
         if parsed is not None:
             action_index += 1
-            _, _, _, status = parsed
+            _, _, _, _, status = parsed
             if status not in COMPLETED_LEARNING_STATUSES:
                 action_id = f"{challenge_slug}/{attempt_name}/action-{action_index:03d}"
                 marker = action_anchor_marker(action_anchor_id(action_id))

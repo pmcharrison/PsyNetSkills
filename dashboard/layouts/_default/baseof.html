@@ -29,6 +29,10 @@
             href="{{ "challenges/" | relURL }}"
           >Challenges</a>
           <a
+            {{ if eq .Section "attempts" }}aria-current="page" class="current"{{ end }}
+            href="{{ "attempts/" | relURL }}"
+          >Attempts</a>
+          <a
             {{ if eq .Section "actions" }}aria-current="page" class="current"{{ end }}
             href="{{ "actions/" | relURL }}"
           >Actions</a>
@@ -56,5 +60,6 @@
     </footer>
     <script src="{{ "js/workflow-status.js" | relURL }}" defer></script>
     <script src="{{ "js/actions-copy.js" | relURL }}" defer></script>
+    <script src="{{ "js/screenshot-gallery.js" | relURL }}" defer></script>
   </body>
 </html>

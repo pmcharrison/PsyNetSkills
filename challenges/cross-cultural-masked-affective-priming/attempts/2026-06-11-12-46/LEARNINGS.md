@@ -8,8 +8,7 @@ until that file was listed in the experiment `.gitignore`.
 *Actions:*
 - **PsyNetSkills:** Update the attempt challenge guidance to mention
   `source_code.zip` alongside the standard experiment support files when
-  creating PsyNet challenge attempts. Confidence: high. Status: considering.
-
+  creating PsyNet challenge attempts. Confidence: high. Impact: low. Status: considering.
 ## Export outside the experiment directory can hit local permissions
 
 `psynet export local --legacy --path ../../evidence/...` produced database export
@@ -20,8 +19,7 @@ Exporting into an in-experiment path and then packaging the CSVs into
 *Actions:*
 - **PsyNetSkills:** Add a note to experiment evidence guidance recommending an
   in-experiment export path followed by copying or zipping evidence into the
-  attempt folder. Confidence: medium. Status: considering.
-
+  attempt folder. Confidence: medium. Impact: low. Status: considering.
 ## Review condition summaries before treating evidence as final
 
 The first analysis summary showed that the main block only contained
@@ -32,8 +30,7 @@ angry targets.
 *Actions:*
 - **PsyNetSkills:** Encourage challenge attempts to inspect analysis summaries
   for condition coverage, not only whether scripts run successfully. Confidence:
-  high. Status: considering.
-
+  high. Impact: high. Status: considering.
 ## Cross-cultural experiments should trigger translation readiness during implementation
 
 The experiment was described as cross-cultural, but participant-facing strings
@@ -46,4 +43,4 @@ attempt and implementation skills did not make that trigger hard to miss.
   `psynet-experiment-implementation` so cross-cultural, cross-national,
   multilingual, and international experiments invoke translation readiness while
   the experiment is being implemented, before final evidence collection.
-  Confidence: high. Status: completed.
+  Confidence: high. Impact: high. Status: completed.

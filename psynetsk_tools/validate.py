@@ -35,6 +35,9 @@ from psynetsk_tools.timeline import TIMELINE_ENTRY_RE
 
 SKILLS_ROOT = Path(".cursor") / "skills"
 SKILL_NAME_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
+SKILL_REFERENCE_RE = re.compile(
+    r"(?<![\w./-])((?:(?P<skill>[a-z0-9-]+)/)?references/[A-Za-z0-9_.-]+\.md)"
+)
 PSYNET_AGENT_REQUIRED_FIELDS = {
     "checkout_path": str,
     "branch": str,
@@ -197,9 +200,14 @@ def validate_agent_metadata(
         return [f"{agent_file}: metadata must be a JSON object"]
 
     problems: list[str] = []
-    problems.extend(
-        validate_author_references(agent_file, agent.get("authors"), registry)
-    )
+    if not is_in_progress_agent(agent):
+        problems.extend(
+            validate_author_references(agent_file, agent.get("authors"), registry)
+        )
+    elif agent.get("authors") not in (None, []):
+        problems.extend(
+            validate_author_references(agent_file, agent.get("authors"), registry)
+        )
     psynet = agent.get("psynet")
     if psynet is None:
         problems.append(f"{agent_file}: missing psynet metadata")
@@ -221,6 +229,25 @@ def validate_agent_metadata(
         problems.extend(validate_run_cost_metadata(agent_file, run_cost))
 
     return problems
+
+
+def is_in_progress_agent(agent: dict[str, object]) -> bool:
+    """Return whether attempt metadata explicitly marks unfinished work."""
+
+    return "ended_at" in agent and agent.get("ended_at") is None
+
+
+def attempt_is_in_progress(attempt_dir: Path) -> bool:
+    """Return whether an attempt is explicitly marked as unfinished."""
+
+    agent_file = attempt_dir / "agent.json"
+    if not agent_file.exists():
+        return False
+    try:
+        agent = json.loads(agent_file.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return False
+    return isinstance(agent, dict) and is_in_progress_agent(agent)
 
 
 def validate_run_cost_metadata(agent_file: Path, run_cost: Any) -> list[str]:
@@ -379,6 +406,62 @@ def require_string_field(
     return []
 
 
+def referenced_skill_reference_paths(
+    text: str,
+    *,
+    current_skill_dir: Path,
+    skills_dir: Path,
+) -> set[Path]:
+    """Return skill reference paths mentioned in Markdown text."""
+
+    paths: set[Path] = set()
+    for match in SKILL_REFERENCE_RE.finditer(text):
+        reference = Path(match.group(1))
+        skill_name = match.group("skill")
+        if skill_name:
+            paths.add(skills_dir / reference)
+        else:
+            paths.add(current_skill_dir / reference)
+    return paths
+
+
+def validate_skill_references(skill_dir: Path, skills_dir: Path) -> list[str]:
+    """Validate that skill reference files are cited and citation paths exist."""
+
+    references_dir = skill_dir / "references"
+    problems: list[str] = []
+    skill_file = skill_dir / "SKILL.md"
+    reference_files = sorted(references_dir.glob("*.md")) if references_dir.exists() else []
+    known_references = set(reference_files)
+    reachable = {skill_file}
+    queue = [skill_file]
+
+    while queue:
+        current_file = queue.pop(0)
+        text = current_file.read_text(encoding="utf-8")
+        cited_paths = referenced_skill_reference_paths(
+            text,
+            current_skill_dir=skill_dir,
+            skills_dir=skills_dir,
+        )
+        for cited_path in sorted(cited_paths):
+            if not cited_path.exists():
+                problems.append(f"{current_file}: cited reference does not exist: {cited_path}")
+            elif cited_path.parent == references_dir and cited_path in known_references:
+                if cited_path not in reachable:
+                    reachable.add(cited_path)
+                    queue.append(cited_path)
+
+    for reference_file in reference_files:
+        if reference_file not in reachable:
+            problems.append(
+                f"{reference_file}: reference file is not cited from {skill_file} "
+                "or another cited reference"
+            )
+
+    return problems
+
+
 def validate_skills(
     root: Path,
     registry: dict[str, Author] | None = None,
@@ -416,6 +499,7 @@ def validate_skills(
         problems.extend(
             validate_author_references(skill_file, frontmatter.get("authors"), registry)
         )
+        problems.extend(validate_skill_references(skill_dir, skills_dir))
 
     return problems
 
@@ -427,7 +511,10 @@ def validate_attempt(
 ) -> list[str]:
     """Validate one challenge attempt folder."""
     problems: list[str] = []
-    required = ["challenge", "agent.json", "code", "evidence", "EVALUATION.md"]
+    in_progress = attempt_is_in_progress(attempt_dir)
+    required = ["challenge", "agent.json", "EVALUATION.md"]
+    if not in_progress:
+        required.extend(["code", "evidence"])
     for name in required:
         if not (attempt_dir / name).exists():
             problems.append(f"{attempt_dir}: missing {name}")
@@ -442,7 +529,8 @@ def validate_attempt(
         if score is not None and not 1 <= score <= 10:
             problems.append(f"{evaluation_file}: score must be between 1 and 10")
         if (
-            not attempt_dir.name.startswith("example-")
+            not in_progress
+            and not attempt_dir.name.startswith("example-")
             and (challenge_dir / "CRITERIA.md").exists()
             and not has_evaluation_checklist(evaluation_file)
         ):

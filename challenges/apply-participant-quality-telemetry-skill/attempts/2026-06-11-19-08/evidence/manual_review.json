@@ -1,0 +1,72 @@
+{
+  "rules": {
+    "failed_attention_check": "Attention/comprehension check answer did not match the expected answer.",
+    "very_fast_response": "Normal text response latency was below 3 seconds.",
+    "short_response": "Normal text response was shorter than 20 characters.",
+    "paste_activity": "Pasted text appeared in an open-text response.",
+    "focus_or_visibility_loss": "The browser lost focus or visibility during a response page.",
+    "sparse_keydown_telemetry": "Keydown count was low relative to final response length.",
+    "short_first_key_latency": "First keypress happened within 250 ms of page load.",
+    "ai_disclosure": "Participant disclosed AI assistance in local fixture metadata."
+  },
+  "participants": [
+    {
+      "participant_id": "P001",
+      "worker_id": "local_attentive",
+      "participant_profile": "attentive_human_like",
+      "flag_for_manual_review": false,
+      "review_worthy_signals": [],
+      "evidence": [],
+      "interpretation": "Review-worthy signals only; this output does not prove AI use, bot use, fraud, or dishonest behavior and must not be used for automatic rejection."
+    },
+    {
+      "participant_id": "P002",
+      "worker_id": "local_rushed",
+      "participant_profile": "rushed_failed_check",
+      "flag_for_manual_review": true,
+      "review_worthy_signals": [
+        "failed_attention_check",
+        "focus_or_visibility_loss",
+        "short_first_key_latency",
+        "short_response",
+        "sparse_keydown_telemetry",
+        "very_fast_response"
+      ],
+      "evidence": [
+        "summary_local_food: very_fast_response (latency=1500ms, paste=0, keydown=4, focus_loss=2)",
+        "summary_local_food: short_response (latency=1500ms, paste=0, keydown=4, focus_loss=2)",
+        "summary_local_food: focus_or_visibility_loss (latency=1500ms, paste=0, keydown=4, focus_loss=2)",
+        "summary_local_food: sparse_keydown_telemetry (latency=1500ms, paste=0, keydown=4, focus_loss=2)",
+        "summary_local_food: short_first_key_latency (latency=1500ms, paste=0, keydown=4, focus_loss=2)",
+        "explain_library: very_fast_response (latency=1700ms, paste=0, keydown=5, focus_loss=0)",
+        "explain_library: short_response (latency=1700ms, paste=0, keydown=5, focus_loss=0)",
+        "explain_library: short_first_key_latency (latency=1700ms, paste=0, keydown=5, focus_loss=0)",
+        "attention_blue_sky: failed_attention_check (latency=1200ms, paste=0, keydown=2, focus_loss=0)",
+        "attention_blue_sky: short_first_key_latency (latency=1200ms, paste=0, keydown=2, focus_loss=0)"
+      ],
+      "interpretation": "Review-worthy signals only; this output does not prove AI use, bot use, fraud, or dishonest behavior and must not be used for automatic rejection."
+    },
+    {
+      "participant_id": "P003",
+      "worker_id": "local_pasted",
+      "participant_profile": "pasted_ai_disclosed",
+      "flag_for_manual_review": true,
+      "review_worthy_signals": [
+        "ai_disclosure",
+        "focus_or_visibility_loss",
+        "paste_activity",
+        "sparse_keydown_telemetry"
+      ],
+      "evidence": [
+        "fixture profile marks disclosed_ai_assistance=true",
+        "summary_local_food: paste_activity (latency=4200ms, paste=1, keydown=9, focus_loss=4)",
+        "summary_local_food: focus_or_visibility_loss (latency=4200ms, paste=1, keydown=9, focus_loss=4)",
+        "summary_local_food: sparse_keydown_telemetry (latency=4200ms, paste=1, keydown=9, focus_loss=4)",
+        "explain_library: paste_activity (latency=3900ms, paste=1, keydown=8, focus_loss=2)",
+        "explain_library: focus_or_visibility_loss (latency=3900ms, paste=1, keydown=8, focus_loss=2)",
+        "explain_library: sparse_keydown_telemetry (latency=3900ms, paste=1, keydown=8, focus_loss=2)"
+      ],
+      "interpretation": "Review-worthy signals only; this output does not prove AI use, bot use, fraud, or dishonest behavior and must not be used for automatic rejection."
+    }
+  ]
+}

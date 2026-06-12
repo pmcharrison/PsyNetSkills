@@ -27,6 +27,8 @@ renders the workflow overview, generated content, layouts, and final HTML into
 LLM-generated review of currently open learning actions, grouped into thematic
 sections that reference stable action IDs. Dashboard builds never call an LLM;
 they only parse repository files and render the committed review.
+Action cards show confidence, status, and impact; impact is a red/yellow/green
+signal for how valuable the fix is likely to be.
 
 Attempt pages are reviewer-facing artifacts. They may show evaluation criteria
 so reviewers can compare the implementation against the rubric, but agents must
@@ -40,10 +42,16 @@ requests from branches in this repository are built into subdirectories of the
 same branch, under `pr-preview/pr-NUMBER/`.
 Attempt artifacts are published to a shared content-addressed store under
 `artifacts/blobs/sha256/`, so production and preview pages can reuse identical
-evidence files instead of copying them into every preview directory.
+evidence files instead of copying them into every preview directory. Production
+deploys preserve this shared root artifact store along with open preview pages.
 Large ZIP files from attempt `challenge/` snapshots, generated attempt `code/`
 directories, and evidence ZIPs other than `evidence/data.zip` are shown as
 metadata-only file entries rather than copied to GitHub Pages.
+Attempt screenshots under `evidence/screenshots/` are published with the other
+non-ZIP evidence artifacts and rendered as a static carousel on the attempt
+page. Use ordered, descriptive filenames and optionally add
+`evidence/screenshots/manifest.json` captions so reviewers can scan the flow
+without opening every artifact manually.
 Deploys publish `gh-pages` as a one-commit snapshot branch. This keeps the live
 site and open previews addressable without letting generated dashboard history
 grow indefinitely.

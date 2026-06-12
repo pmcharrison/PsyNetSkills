@@ -20,6 +20,7 @@ from psynetsk_tools.actions import (
     mark_open_learning_actions_in_markdown,
     open_learning_actions_from_markdown,
     read_actions_review,
+    sorted_learning_actions_for_dashboard,
 )
 from psynetsk_tools.authors import (
     Author,
@@ -41,6 +42,8 @@ from psynetsk_tools.validate import (
 from psynetsk_tools.timeline import (
     TimelineEntry,
     format_duration,
+    format_human_intervention_count,
+    human_intervention_count,
     implementation_time_seconds,
     parse_timeline_entries,
 )
@@ -202,14 +205,18 @@ class Attempt:
     path: str
     url: str
     date_time: str
+    sort_key: str
     model: str
     authors: list[Author]
     agent_json: str
     evaluation: str
+    plan: str
     timeline: str
     timeline_entries: list[TimelineEntry]
     implementation_time_seconds: int | None
     implementation_time_display: str
+    human_intervention_count: int | None
+    human_intervention_display: str
     run_cost_amount: int | float | None
     run_cost_currency: str
     run_cost_attribution_status: str
@@ -394,6 +401,21 @@ def attempt_date_time(name: str, agent: dict[str, object]) -> str:
         if timestamp_match is not None:
             _, month, day, hour, minute = timestamp_match.groups()
             return f"{month}/{day} {hour}:{minute}"
+
+    return name
+
+
+def attempt_sort_key(name: str, agent: dict[str, object]) -> str:
+    """Return a sortable timestamp key for an attempt."""
+    match = re.search(r"(\d{4})-(\d{2})-(\d{2})(?:-(\d{2})-(\d{2}))?", name)
+    if match is not None:
+        year, month, day, hour, minute = match.groups()
+        return f"{year}-{month}-{day}T{hour or '00'}:{minute or '00'}"
+
+    for key in ("started_at", "ended_at"):
+        value = agent.get(key)
+        if isinstance(value, str):
+            return value
 
     return name
 
@@ -635,6 +657,7 @@ def collect_attempts(
         evaluation_file = attempt_dir / "EVALUATION.md"
         learnings_file = attempt_dir / "LEARNINGS.md"
         timeline_file = attempt_dir / "TIMELINE.md"
+        plan_file = attempt_dir / "PLAN.md"
         score = (
             parse_evaluation_score(evaluation_file)
             if evaluation_file.exists()
@@ -664,6 +687,7 @@ def collect_attempts(
         )
         timeline_entries = parse_timeline_entries(timeline)
         implementation_seconds = implementation_time_seconds(timeline_entries)
+        intervention_count = human_intervention_count(timeline_entries)
         learnings_source = ""
         learnings = ""
         if learnings_file.exists():
@@ -678,7 +702,7 @@ def collect_attempts(
             learnings = demote_markdown_headings(learnings)
         open_actions = sum(
             1
-            for _, _, _, status in parse_learning_actions(learnings_source)
+            for _, _, _, _, status in parse_learning_actions(learnings_source)
             if status not in COMPLETED_LEARNING_STATUSES
         )
         artifact_prefix = attempt_artifact_url_prefix(
@@ -695,6 +719,7 @@ def collect_attempts(
                 ),
                 url=f"challenges/{challenge_dir.name}/{attempt_dir.name}/",
                 date_time=attempt_date_time(attempt_dir.name, agent),
+                sort_key=attempt_sort_key(attempt_dir.name, agent),
                 model=str(agent.get("model") or "Unknown model"),
                 authors=resolve_authors(
                     author_ids_from_value(agent.get("authors")),
@@ -710,10 +735,19 @@ def collect_attempts(
                     if evaluation_file.exists()
                     else ""
                 ),
+                plan=(
+                    strip_first_heading(plan_file.read_text(encoding="utf-8"))
+                    if plan_file.exists()
+                    else ""
+                ),
                 timeline=timeline,
                 timeline_entries=timeline_entries,
                 implementation_time_seconds=implementation_seconds,
                 implementation_time_display=format_duration(implementation_seconds),
+                human_intervention_count=intervention_count,
+                human_intervention_display=format_human_intervention_count(
+                    intervention_count,
+                ),
                 run_cost_amount=run_cost_amount,
                 run_cost_currency=run_cost_currency,
                 run_cost_attribution_status=run_cost_attribution_status,
@@ -861,6 +895,29 @@ def collect_open_learning_actions(
     return actions
 
 
+def latest_attempts_data(
+    challenges: list[Challenge],
+    limit: int = 20,
+) -> list[dict[str, object]]:
+    """Return dashboard-ready attempt summaries ordered most recent first."""
+
+    attempts = [
+        {
+            **asdict(attempt),
+            "challenge_slug": challenge.slug,
+            "challenge_title": challenge.title,
+            "challenge_url": challenge.url,
+        }
+        for challenge in challenges
+        for attempt in challenge.attempts
+    ]
+    return sorted(
+        attempts,
+        key=lambda attempt: str(attempt["sort_key"]),
+        reverse=True,
+    )[:limit]
+
+
 def action_review_data(
     root: Path,
     actions: list[LearningAction],
@@ -923,7 +980,9 @@ def dashboard_data(
     author_registry, _ = read_author_registry(root)
     skills = collect_skills(root, author_registry)
     challenges = collect_challenges(root, author_registry, artifact_publications)
-    actions = collect_open_learning_actions(root, challenges)
+    actions = sorted_learning_actions_for_dashboard(
+        collect_open_learning_actions(root, challenges),
+    )
     return {
         "authors": [asdict(author) for author in author_registry.values()],
         "skills": [asdict(skill) for skill in skills],
@@ -935,6 +994,7 @@ def dashboard_data(
             }
             for challenge in challenges
         ],
+        "attempts": latest_attempts_data(challenges),
         "actions": [asdict(action) for action in actions],
         "action_review": action_review_data(root, actions),
         "counts": {
@@ -1017,6 +1077,22 @@ def write_actions_content(dashboard_dir: Path) -> None:
             "This page compiles unresolved action points from previous attempts. "
             "You can select multiple action points at a time and copy them as "
             "instructions for a new agent to resolve.\n",
+        ),
+        encoding="utf-8",
+    )
+
+
+def write_attempts_content(dashboard_dir: Path) -> None:
+    """Write the generated Hugo content page for latest attempts."""
+
+    attempts_dir = dashboard_dir / "content" / "attempts"
+    shutil.rmtree(attempts_dir, ignore_errors=True)
+    attempts_dir.mkdir(parents=True, exist_ok=True)
+    (attempts_dir / "_index.md").write_text(
+        write_frontmatter(
+            "Attempts",
+            "This page lists the latest 20 challenge attempts, with the most "
+            "recent attempt first.\n",
         ),
         encoding="utf-8",
     )
@@ -1257,6 +1333,7 @@ def export_dashboard(root: Path, dashboard_dir: Path) -> None:
         [Skill(**skill) for skill in data["skills"]],  # type: ignore[arg-type]
     )
     write_actions_content(dashboard_dir)
+    write_attempts_content(dashboard_dir)
     write_challenge_content(
         dashboard_dir,
         [

@@ -1,5 +1,15 @@
 {{ $statusClass := replace .status "_" "-" }}
-<div class="action-card-row" data-action-card-row>
+<div
+  class="action-card-row"
+  data-action-card-row
+  data-action-id="{{ .id }}"
+  data-action-repository="{{ .repository }}"
+  data-action-confidence="{{ .confidence }}"
+  data-action-impact="{{ .impact }}"
+  data-action-status="{{ .status }}"
+  data-action-challenge="{{ .challenge_title }}"
+  data-action-attempt="{{ .attempt_name }}"
+>
   <input
     class="action-card-checkbox"
     type="checkbox"
@@ -14,6 +24,9 @@
       </span>
       <span class="learning-chip learning-chip-confidence learning-chip-confidence-{{ .confidence }}">
         <span class="learning-chip-label">Confidence</span> {{ .confidence }}
+      </span>
+      <span class="learning-chip learning-chip-impact learning-chip-impact-{{ .impact }}">
+        <span class="learning-chip-label">Impact</span> {{ .impact }}
       </span>
       <span class="learning-chip learning-chip-status learning-chip-status-{{ $statusClass }}">
         <span class="learning-chip-label">Status</span> {{ replace .status "_" " " }}

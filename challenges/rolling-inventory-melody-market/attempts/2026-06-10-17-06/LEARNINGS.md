@@ -9,4 +9,4 @@ dependency pre-checks needed `constraints.txt`, and legacy debug launch needed
 
 *Actions:*
 
-- **PsyNetSkills:** Extend the attempt-challenge support-file reminder to name `test.py`, `constraints.txt`, and `.python-version` alongside `.gitignore` for runnable PsyNet experiments. Confidence: high. Status: considering.
+- **PsyNetSkills:** Extend the attempt-challenge support-file reminder to name `test.py`, `constraints.txt`, and `.python-version` alongside `.gitignore` for runnable PsyNet experiments. Confidence: high. Impact: low. Status: considering.

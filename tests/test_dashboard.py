@@ -15,6 +15,7 @@ from psynetsk_tools.dashboard import (
 from psynetsk_tools.actions import (
     format_action_copy_markdown,
     open_learning_actions_from_markdown,
+    sorted_learning_actions_for_dashboard,
 )
 
 
@@ -191,7 +192,11 @@ def test_collect_challenges_reports_attempt_metadata(tmp_path: Path) -> None:
         attempt_dir / "TIMELINE.md",
         "# Timeline\n\n"
         "- T+00:00:00 [agent-start] Started.\n"
-        "- T+00:12:05 [agent-stop] Finished.\n",
+        "- T+00:05:00 [agent-stop] Paused for feedback.\n"
+        "- T+00:06:00 [manual] [intervention] User redirected the implementation.\n"
+        "- T+00:06:30 [manual] User acknowledged the updated plan.\n"
+        "- T+00:07:00 [agent-start] Resumed.\n"
+        "- T+00:14:05 [agent-stop] Finished.\n",
     )
     write(
         attempt_dir / "LEARNINGS.md",
@@ -199,7 +204,7 @@ def test_collect_challenges_reports_attempt_metadata(tmp_path: Path) -> None:
         "## Useful finding\n\n"
         "Useful finding.\n\n"
         "*Actions:*\n\n"
-        "- **PsyNetSkills:** Document it. Confidence: high. Status: considering.\n",
+        "- **PsyNetSkills:** Document it. Confidence: high. Impact: medium. Status: considering.\n",
     )
     write(
         attempt_dir / "challenge/INSTRUCTIONS.md",
@@ -212,6 +217,12 @@ def test_collect_challenges_reports_attempt_metadata(tmp_path: Path) -> None:
     )
     write(attempt_dir / "code/README.md", "# Code notes\n")
     write(attempt_dir / "evidence/README.md", "# Evidence notes\n")
+    write(
+        attempt_dir / "PLAN.md",
+        "# Plan\n\n"
+        "## Methods\n\n"
+        "Run a simple participant flow.\n",
+    )
 
     attempt = collect_challenges(tmp_path)[0].attempts[0]
 
@@ -221,16 +232,30 @@ def test_collect_challenges_reports_attempt_metadata(tmp_path: Path) -> None:
     assert attempt.authors[0].name == "Peter Harrison"
     assert attempt.url == "challenges/example/2026-06-01-10-10/"
     assert attempt.evaluation == "Attempt body.\n"
+    assert attempt.plan == "## Methods\n\nRun a simple participant flow.\n"
     assert attempt.timeline == (
         "- T+00:00:00 [agent-start] Started.\n"
-        "- T+00:12:05 [agent-stop] Finished.\n"
+        "- T+00:05:00 [agent-stop] Paused for feedback.\n"
+        "- T+00:06:00 [manual] [intervention] User redirected the implementation.\n"
+        "- T+00:06:30 [manual] User acknowledged the updated plan.\n"
+        "- T+00:07:00 [agent-start] Resumed.\n"
+        "- T+00:14:05 [agent-stop] Finished.\n"
     )
-    assert len(attempt.timeline_entries) == 2
+    assert len(attempt.timeline_entries) == 6
     assert attempt.timeline_entries[0].timestamp == "T+00:00:00"
     assert attempt.timeline_entries[0].actor == "agent-start"
     assert attempt.timeline_entries[0].description == "Started."
+    assert attempt.timeline_entries[2].actor == "manual"
+    assert attempt.timeline_entries[2].description == "User redirected the implementation."
+    assert attempt.timeline_entries[2].tags == ["intervention"]
+    assert attempt.timeline_entries[3].actor == "manual"
+    assert attempt.timeline_entries[3].tags == []
+    assert attempt.timeline_entries[4].actor == "agent-start"
+    assert attempt.timeline_entries[4].tags == []
     assert attempt.implementation_time_seconds == 725
     assert attempt.implementation_time_display == "12m 5s"
+    assert attempt.human_intervention_count == 1
+    assert attempt.human_intervention_display == "1"
     assert attempt.run_cost_amount == 22.56
     assert attempt.run_cost_currency == "USD"
     assert attempt.run_cost_attribution_status == "matched_cloud_agent_id"
@@ -302,17 +327,18 @@ def test_parse_learning_actions_accepts_optional_notes() -> None:
     markdown = (
         "*Actions:*\n\n"
         "- **PsyNetSkills:** Add reviewed-action notes. Confidence: high. "
-        "Status: completed. Notes: Implemented in the dashboard parser.\n"
+        "Impact: medium. Status: completed. Notes: Implemented in the dashboard parser.\n"
         "- **PsyNet:** Keep related framework behavior unchanged. Confidence: "
-        "medium. Status: dismissed. Notes: The repository convention is enough "
-        "for now.\n"
+        "medium. Impact: low. Status: dismissed. Notes: The repository "
+        "convention is enough for now.\n"
     )
 
     assert parse_learning_actions(markdown) == [
-        ("psynetskills", "high", "Add reviewed-action notes.", "completed"),
+        ("psynetskills", "high", "medium", "Add reviewed-action notes.", "completed"),
         (
             "psynet",
             "medium",
+            "low",
             "Keep related framework behavior unchanged.",
             "dismissed",
         ),
@@ -339,20 +365,20 @@ def test_dashboard_data_reports_open_learning_actions(tmp_path: Path) -> None:
         "This explains why the action matters.\n\n"
         "*Actions:*\n\n"
         "- **PsyNetSkills:** Document the behavior in the attempt guide. "
-        "Confidence: high. Status: completed.\n"
+        "Confidence: high. Impact: medium. Status: completed.\n"
         "- **PsyNet:** Clarify the underlying framework behavior across\n"
         "  the relevant API docs. Confidence: medium.\n"
-        "  Status: considering. Notes: Waiting for a framework maintainer to review.\n"
+        "  Impact: high. Status: considering. Notes: Waiting for a framework maintainer to review.\n"
         "- **PsyNetSkills:** Work on the active repository update. "
-        "Confidence: high. Status: in_progress.\n"
+        "Confidence: high. Impact: medium. Status: in_progress.\n"
         "- **PsyNetSkills:** Plan the repository update. "
-        "Confidence: low. Status: planned.\n"
+        "Confidence: low. Impact: low. Status: planned.\n"
         "- **PsyNet:** Mark the framework follow-up completed. "
-        "Confidence: high. Status: completed.\n"
+        "Confidence: high. Impact: medium. Status: completed.\n"
         "- **PsyNetSkills:** Dismiss the duplicate proposal. "
-        "Confidence: medium. Status: dismissed. Notes: Covered by the repository update.\n"
+        "Confidence: medium. Impact: medium. Status: dismissed. Notes: Covered by the repository update.\n"
         "- **PsyNet:** Supersede the old framework proposal. "
-        "Confidence: medium. Status: superseded.\n",
+        "Confidence: medium. Impact: medium. Status: superseded.\n",
     )
 
     data = dashboard_data(tmp_path)
@@ -375,7 +401,9 @@ def test_dashboard_data_reports_open_learning_actions(tmp_path: Path) -> None:
     assert data["actions"][0]["notes"] == (
         "Waiting for a framework maintainer to review."
     )
+    assert data["actions"][0]["impact"] == "high"
     assert data["actions"][0]["copy_context"]["learning_title"] == "Useful finding"
+    assert data["actions"][0]["copy_context"]["impact"] == "high"
     assert data["actions"][0]["copy_context"]["notes"] == (
         "Waiting for a framework maintainer to review."
     )
@@ -395,11 +423,11 @@ def test_format_action_copy_markdown_includes_context_and_notes() -> None:
         "The first learning context.\n\n"
         "*Actions:*\n\n"
         "- **PsyNetSkills:** Do the first thing. Confidence: high. "
-        "Status: considering. Notes: Preserve this note.\n\n"
+        "Impact: high. Status: considering. Notes: Preserve this note.\n\n"
         "## Second learning\n\n"
         "The second learning context.\n\n"
         "*Actions:*\n\n"
-        "- **PsyNet:** Do the second thing. Confidence: medium. Status: planned.\n",
+        "- **PsyNet:** Do the second thing. Confidence: medium. Impact: medium. Status: planned.\n",
         challenge_slug="example",
         challenge_title="Example challenge",
         attempt_name="2026-06-01-10-10",
@@ -422,10 +450,42 @@ def test_format_action_copy_markdown_includes_context_and_notes() -> None:
         "2026-06-01-10-10/#example-2026-06-01-10-10-action-001"
     ) in brief
     assert "Learning context:\nThe first learning context." in brief
+    assert "Impact: high" in brief
     assert "Action point:" not in brief
     assert "Notes:\nPreserve this note." in brief
     assert "## Do the second thing." in brief
     assert "Repository target: psynet" in brief
+
+
+def test_sorted_learning_actions_for_dashboard_prioritizes_signals() -> None:
+    actions = open_learning_actions_from_markdown(
+        "# Learnings\n\n"
+        "## Sorting\n\n"
+        "Sorting context.\n\n"
+        "*Actions:*\n\n"
+        "- **PsyNet:** Lower confidence framework item. Confidence: medium. "
+        "Impact: high. Status: considering.\n"
+        "- **PsyNetSkills:** Higher confidence skills item. Confidence: high. "
+        "Impact: high. Status: considering.\n"
+        "- **PsyNet:** Lower impact framework item. Confidence: high. "
+        "Impact: medium. Status: considering.\n"
+        "- **PsyNetSkills:** Same priority skills item. Confidence: high. "
+        "Impact: high. Status: planned.\n",
+        challenge_slug="example",
+        challenge_title="Example challenge",
+        attempt_name="2026-06-01-10-10",
+        attempt_url="challenges/example/2026-06-01-10-10/",
+        source_path="challenges/example/attempts/2026-06-01-10-10/LEARNINGS.md",
+    )
+
+    sorted_actions = sorted_learning_actions_for_dashboard(actions)
+
+    assert [action.proposal for action in sorted_actions] == [
+        "Higher confidence skills item.",
+        "Same priority skills item.",
+        "Lower confidence framework item.",
+        "Lower impact framework item.",
+    ]
 
 
 def test_collect_challenges_reports_binary_and_nested_attempt_files(
@@ -453,6 +513,56 @@ def test_collect_challenges_reports_binary_and_nested_attempt_files(
         "artifacts/challenges/example/attempts/2026-06-01-10-10/"
         "evidence/participant.mp4"
     )
+
+
+def test_export_dashboard_publishes_attempt_screenshots(tmp_path: Path) -> None:
+    write(tmp_path / "authors.yaml", authors_yaml())
+    write(tmp_path / "README.md", "# PsyNetSkills\n")
+    write(
+        tmp_path / ".cursor/skills/example-skill/SKILL.md",
+        "---\n"
+        "name: example-skill\n"
+        "description: Use when testing dashboard generation.\n"
+        "---\n\n"
+        "# Example skill\n",
+    )
+    write(tmp_path / "challenges/example/INSTRUCTIONS.md", challenge_instructions())
+    attempt_dir = tmp_path / "challenges/example/attempts/2026-06-01-10-10"
+    write(attempt_dir / "agent.json", "{}\n")
+    screenshot_data = b"\x89PNG\r\n\x1a\nexample"
+    write_bytes(
+        attempt_dir / "evidence/screenshots/01-instructions.png",
+        screenshot_data,
+    )
+    write(
+        attempt_dir / "evidence/screenshots/manifest.json",
+        '{\n'
+        '  "captions": {\n'
+        '    "screenshots/01-instructions.png": "Instructions page"\n'
+        "  }\n"
+        "}\n",
+    )
+
+    export_dashboard(tmp_path, tmp_path / "dashboard")
+    data = json.loads(
+        (tmp_path / "dashboard/data/psynetsk.json").read_text(encoding="utf-8"),
+    )
+    evidence_by_path = {
+        file["path"]: file
+        for file in data["challenges"][0]["attempts"][0]["evidence_files"]
+    }
+    screenshot = evidence_by_path["screenshots/01-instructions.png"]
+
+    assert screenshot["kind"] == "png"
+    assert screenshot["url"].startswith("artifacts/blobs/sha256/")
+    screenshot_blob = tmp_path / "dashboard/static" / screenshot["url"]
+    assert screenshot_blob.exists()
+    assert screenshot_blob.read_bytes() == screenshot_data
+    manifest = evidence_by_path["screenshots/manifest.json"]
+    assert manifest["content"] is not None
+    assert manifest["url"].startswith("artifacts/blobs/sha256/")
+    manifest_blob = tmp_path / "dashboard/static" / manifest["url"]
+    assert manifest_blob.exists()
 
 
 def test_collect_challenges_uses_agent_timestamp_for_example_attempt(
@@ -553,6 +663,49 @@ def test_dashboard_data_reports_counts(tmp_path: Path) -> None:
     assert "docs" not in data
 
 
+def test_dashboard_data_reports_latest_attempts(tmp_path: Path) -> None:
+    write(tmp_path / "authors.yaml", authors_yaml())
+    write(
+        tmp_path / ".cursor/skills/example-skill/SKILL.md",
+        "---\n"
+        "name: example-skill\n"
+        "description: Use when testing dashboard generation.\n"
+        "---\n\n"
+        "# Example skill\n",
+    )
+    write(
+        tmp_path / "challenges/example/INSTRUCTIONS.md",
+        challenge_instructions(),
+    )
+    write(
+        tmp_path / "challenges/second/INSTRUCTIONS.md",
+        "---\n"
+        "title: Second challenge\n"
+        "type: experiment implementation\n"
+        "difficulty: 3\n"
+        "---\n\n"
+        "Implement another experiment.\n",
+    )
+    for day in range(1, 23):
+        challenge_slug = "second" if day == 22 else "example"
+        write(
+            tmp_path
+            / f"challenges/{challenge_slug}/attempts/2026-06-{day:02d}-10-10"
+            / "EVALUATION.md",
+            evaluation(day),
+        )
+
+    data = dashboard_data(tmp_path)
+    attempts = data["attempts"]
+
+    assert len(attempts) == 20
+    assert attempts[0]["name"] == "2026-06-22-10-10"
+    assert attempts[0]["challenge_title"] == "Second challenge"
+    assert attempts[0]["challenge_url"] == "challenges/second/"
+    assert attempts[-1]["name"] == "2026-06-03-10-10"
+    assert "2026-06-02-10-10" not in {attempt["name"] for attempt in attempts}
+
+
 def test_export_dashboard_uses_configured_artifact_url_prefix(
     tmp_path: Path,
     monkeypatch,
@@ -593,6 +746,25 @@ def test_export_dashboard_uses_configured_artifact_url_prefix(
 
     assert evidence_files[0]["url"].startswith(
         "https://example.github.io/PsyNetSkills/artifacts/blobs/sha256/",
+    )
+    assert evidence_files[0]["url"].endswith(".mp4")
+
+    monkeypatch.setenv(
+        "PSYNETSK_ARTIFACT_URL_PREFIX",
+        "https://example.github.io/PsyNetSkills/pr-preview/pr-182/artifacts/blobs/sha256",
+    )
+
+    export_dashboard(tmp_path, tmp_path / "dashboard-preview")
+    data = json.loads(
+        (tmp_path / "dashboard-preview/data/psynetsk.json").read_text(
+            encoding="utf-8"
+        ),
+    )
+    evidence_files = data["challenges"][0]["attempts"][0]["evidence_files"]
+
+    assert evidence_files[0]["url"].startswith(
+        "https://example.github.io/PsyNetSkills/pr-preview/pr-182/"
+        "artifacts/blobs/sha256/",
     )
     assert evidence_files[0]["url"].endswith(".mp4")
 
@@ -702,6 +874,12 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
         + "\n",
     )
     write(
+        tmp_path / "challenges/example/attempts/2026-06-01-10-10/PLAN.md",
+        "# Plan\n\n"
+        "## Methods\n\n"
+        "Use a static trial maker.\n",
+    )
+    write(
         tmp_path
         / "challenges/example/attempts/2026-06-01-10-10/EVALUATION.md",
         evaluation(),
@@ -719,7 +897,7 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
         "## Useful finding\n\n"
         "Useful finding.\n\n"
         "*Actions:*\n\n"
-        "- **PsyNetSkills:** Document it. Confidence: high. Status: considering.\n",
+        "- **PsyNetSkills:** Document it. Confidence: high. Impact: medium. Status: considering.\n",
     )
     write(
         tmp_path
@@ -824,6 +1002,11 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
         "(https://github.com/pmcharrison/PsyNetSkills/blob/main/docs/skills.md)."
     ) in skills_index
     assert "../docs/skills/" not in skills_index
+    attempts_index = tmp_path / "dashboard/content/attempts/_index.md"
+    assert attempts_index.exists()
+    assert "latest 20 challenge attempts" in attempts_index.read_text(
+        encoding="utf-8",
+    )
     assert (
         tmp_path / "dashboard/content/skills/example-skill/index.md"
     ).exists()
@@ -956,6 +1139,11 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
     assert '"url": "challenges/example/2026-06-01-10-10/"' in data
     assert parsed_data["challenges"][0]["open_actions"] == 1
     assert exported_attempt["open_actions"] == 1
+    assert exported_attempt["plan"] == "## Methods\n\nUse a static trial maker.\n"
+    assert parsed_data["attempts"][0]["challenge_title"] == "Example challenge"
+    assert parsed_data["attempts"][0]["url"] == (
+        "challenges/example/2026-06-01-10-10/"
+    )
     assert exported_attempt["evaluation"] == "Attempt body.\n"
     assert exported_attempt["timeline"] == (
         "- T+00:00:00 [agent-start] Started.\n"
@@ -966,15 +1154,19 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
             "timestamp": "T+00:00:00",
             "actor": "agent-start",
             "description": "Started.",
+            "tags": [],
         },
         {
             "timestamp": "T+00:12:05",
             "actor": "agent-stop",
             "description": "Finished.",
+            "tags": [],
         },
     ]
     assert exported_attempt["implementation_time_seconds"] == 725
     assert exported_attempt["implementation_time_display"] == "12m 5s"
+    assert exported_attempt["human_intervention_count"] == 0
+    assert exported_attempt["human_intervention_display"] == "0"
     assert exported_attempt["run_cost_amount"] == 22.56
     assert exported_attempt["run_cost_currency"] == "USD"
     assert exported_attempt["run_cost_attribution_status"] == "matched_cloud_agent_id"

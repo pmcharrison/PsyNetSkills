@@ -1,5 +1,5 @@
 {
-  "authors": ["pmcharrison"],
+  "authors": ["jacobyn"],
   "agent": "Cursor Cloud Agent",
   "client": "cursor",
   "model": "Fable 5",
@@ -19,6 +19,6 @@
   },
   "run_cost": null,
   "notes": [
-    "Author metadata uses an existing repository author key as a placeholder so validation can run in autonomous mode; the initiating user should confirm or correct the author via the identify-author workflow."
+    "Author confirmed by the initiating user as jacobyn after the attempt was completed; an existing author key had been used as a placeholder during the autonomous run."
   ]
 }

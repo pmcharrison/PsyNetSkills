@@ -1,48 +1,46 @@
 ---
 name: psychophysics
-description: Design and validate PsyNet psychophysics experiments with controlled stimuli, timing, prescreeners, and analyzable trial metadata.
-authors: [raja-marjieh]
+description: Implement psychophysics experiments with PsyNet, focusing on precise visual displays, timing, response collection, and conservative interpretation of reference figures.
+authors: [raja-marjieh, jacobyn]
 ---
 
-# Implement psychophysics experiments
+# Implement PsyNet psychophysics experiment
 
-Use this skill when creating or revising PsyNet experiments that measure perceptual judgments, discrimination, detection, identification, similarity, memory, thresholds, or response times.
+## General guidelines
 
-## Required reads
+Follow the general workflow in `psynet-experiment-implementation/SKILL.md`.
 
-- Read `psynet-experiment-implementation/SKILL.md` for the general PsyNet implementation workflow, demo-first development, and validation expectations.
-- For challenge attempts, read `attempt-challenge/SKILL.md` and its evidence references before collecting review artifacts.
-- Inspect the closest PsyNet demos and framework APIs for the relevant modality before adding custom frontend code.
+- Prioritize correct display of all visual elements, correct timing, and no
+  additional lingering display items such as fixation crosses or unrelated
+  graphical elements that are not specified.
 
-## Design principles
+- Do not display any additional elements that are not mentioned in the task
+  description.
 
-1. Represent trials as data. Use `StaticNode`/`StaticTrialMaker` or another PsyNet trial-maker abstraction so stimulus identity, parameters, block, timing, and correctness metadata live in node definitions rather than ad hoc browser state.
-2. Use PsyNet-native stimulus presentation. Prefer `GraphicPrompt`, native graphics frames, controls, events, and trial makers over custom JavaScript for fixation, stimulus display, delays, and response activation.
-3. Begin timed visual trials with a fixation cross. Keep the fixation centered, remove it when the stimulus display appears unless the task explicitly requires concurrent fixation, keep subsequent stimuli centered around the intended display location, and document any intentional eccentricity or spatial layout.
-4. Fix and record timing. Define presentation and delay durations as constants, keep them consistent within a task unless adaptivity is part of the design, and record the values in trial metadata. Delays used for memory or retention should normally be at least 500 ms unless the specification says otherwise.
-5. Store enough metadata to reconstruct every trial. Include stimulus IDs, perceptual dimensions, display positions, block labels, trial condition, correct answer or scoring target, participant response, accuracy, and reaction time.
-6. Document sampling and balancing. State how stimulus pairs, set sizes, positions, target-present trials, lures, repeats, or adaptive staircases are chosen. Use deterministic manifests when the stimulus space is nontrivial.
-7. Include modality-appropriate prescreeners. Use PsyNet's Ishihara-style `ColorBlindnessTest` for color-critical tasks; use PsyNet volume, headphone, hearing, or audio checks when sound perception matters; add comprehension or practice checks for unfamiliar tasks. Decide explicitly whether each prescreener should exclude participants, stratify them, or serve only as a post hoc covariate.
-8. Keep response paths comparable. Ensure bot responses, formatted answers, and scoring use the same response representation as the participant-facing path.
-9. Center response controls that belong to a centered task display, especially Likert/rating scales and numbered identification buttons. Check the rendered page rather than assuming the control will be centered by default.
-10. Analyze at the trial level. Provide analysis code that can consume exported data or a documented simulated dataset and summarize psychophysical outcomes such as accuracy, confusion probabilities, thresholds, similarity matrices, and reaction-time distributions.
+- Make sure that PsyNet node and trial constructs are used correctly.
 
-## Validation
+- Measure reaction time with JavaScript only when needed, and keep it minimal.
+  Reaction time should be strongly tied to native events in PsyNet's event
+  management system, and reaction-time JavaScript should be isolated. Responses
+  should be recorded in the answer of each trial. Prefer existing PsyNet Control
+  mechanisms where possible, for example `GraphicPrompt` frame sequencing with
+  `prevent_control_response`/`activate_control_response`,
+  `KeyboardPushButtonControl`, and event-log reaction-time extraction before
+  adding custom JavaScript.
 
-- Run `python experiment.py` or an equivalent construction check to verify stimulus manifests and node counts.
-- Run `psynet test local` for PsyNet experiments, using a short documented profile only for visual review when the full design is long.
-- Inspect participant-facing pages in a browser or recording for fixation placement, stimulus centering, labels, endpoint text, button states, and escaped HTML.
-- Keep visual evidence profiles representative but short. They should include enough trials per block to demonstrate the task structure, often around three trials per block, not just one token trial. Prefer direct short recordings over long raw recordings that need expensive multi-segment editing.
-- Record evidence with one centered browser window. Close or hide unused windows, and verify the final artifact renders correctly in the attempt dashboard page.
-- Treat low bot completion rates as a performance issue even when request error counts are zero. If most bots time out, either adjust the performance-test duration/profile or record the limitation explicitly.
-- For challenge attempts, collect participant video, exported data, monitor, and performance evidence according to the attempt evidence references.
+- Implement keyboard-button responses with `KeyboardPushButtonControl` rather
+  than dedicated JavaScript.
 
-## Common failures
+- Center response buttons and questions around the stimuli.
 
-- Do not draw timed psychophysics stimuli with one-off HTML or custom JavaScript when PsyNet graphics frames can express the timing and layout.
-- Do not leave fixation crosses drifting relative to the stimulus display; small coordinate mistakes can change the task.
-- Do not leave the fixation cross visible over the stimulus unless the experimental design explicitly requires it.
-- Do not leave rating scales or forced-choice controls off-center or below the visible viewport in evidence recordings.
-- Do not use color as a primary dimension without a color-vision check unless the prompt explicitly excludes screening; do not let that check exclude participants when the study only needs to record color-vision status.
-- Do not record only labels such as `"trial 3"`; reviewers must be able to reconstruct the actual stimuli and conditions.
-- Do not let minimal review profiles replace the canonical experiment design. Keep them documented as evidence-generation aids.
+- Do not show technical details that are not participant-facing, such as labeling
+  display items "stimuli".
+
+- When implementing an experiment based on a PDF paper, keep in mind that display
+  items such as dots and stimuli may be exaggerated in size in schematic figures.
+  If the paper provides explicit size specifications for the elements, use those
+  values. If not, be cautious when estimating sizes from schematic figures,
+  especially when the figure contains multiple components and the actual display
+  is only one part of the image. However, if a screenshot or a clear
+  single-display schematic is provided, the relative sizes are likely to be more
+  indicative of the intended appearance.
