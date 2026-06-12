@@ -962,7 +962,7 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
         b"example video bytes",
     )
     write(
-        tmp_path / "challenges/example/references/experiment/interface-sketch.svg",
+        tmp_path / "challenges/example/references/interface-sketch.svg",
         "<svg><title>Example sketch</title></svg>",
     )
     write(
@@ -1094,7 +1094,7 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
     exported_monitor = monitor_blob.read_text(encoding="utf-8")
     exported_reference = (
         tmp_path
-        / "dashboard/static/challenges/example/references/experiment/"
+        / "dashboard/static/challenges/example/references/"
         "interface-sketch.svg"
     )
     assert exported_reference.read_text(encoding="utf-8") == (

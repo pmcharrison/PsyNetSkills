@@ -5,10 +5,10 @@ difficulty: 5
 authors: [ww577]
 ---
 
-Audit the mock PsyNet experiment dossier in `references/experiment/mock-experiment/` for
+Audit the mock PsyNet experiment dossier in `references/mock-experiment/` for
 deployment readiness and produce a concise readiness report.
 
-Treat the files in `references/experiment/mock-experiment/` as a copied experiment folder.
+Treat the files in `references/mock-experiment/` as a copied experiment folder.
 Inspect the dossier and report whether it appears ready for local debug,
 Hotair/internal preview, and eventual recruiter deployment.
 

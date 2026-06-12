@@ -74,7 +74,7 @@ scene should show a 3D tabletop environment with two player avatars; the lower
 avatar should appear closer to the camera and should represent the current
 participant's perspective. Bowls and coins should appear on top of the table.
 
-![Ultimatum game interface sketch](references/experiment/interface-sketch.svg)
+![Ultimatum game interface sketch](references/interface-sketch.svg)
 
 The left-hand panel should adapt to the participant's current state: proposer
 action, responder waiting, responder action, proposer waiting, timeout feedback,

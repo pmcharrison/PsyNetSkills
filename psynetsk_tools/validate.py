@@ -503,38 +503,6 @@ def validate_attempt(
     return problems
 
 
-ALLOWED_REFERENCE_SUBDIRS = {"experiment", "literature"}
-ALLOWED_REFERENCE_ROOT_FILES = {"README.md", ".gitkeep"}
-
-
-def validate_challenge_references(challenge_dir: Path) -> list[str]:
-    """Validate the layout of a challenge's top-level references folder.
-
-    Reference material must be split into ``references/experiment/`` for
-    development-related files and ``references/literature/`` for verified
-    research papers. Attempt snapshots are frozen records and are not checked.
-    """
-    references_dir = challenge_dir / "references"
-    if not references_dir.exists():
-        return []
-
-    problems: list[str] = []
-    for entry in sorted(references_dir.iterdir()):
-        if entry.is_dir():
-            if entry.name not in ALLOWED_REFERENCE_SUBDIRS:
-                problems.append(
-                    f"{entry}: unexpected references subdirectory; use "
-                    "references/experiment/ or references/literature/"
-                )
-        elif entry.name not in ALLOWED_REFERENCE_ROOT_FILES:
-            problems.append(
-                f"{entry}: place reference files under references/experiment/ "
-                "(development materials) or references/literature/ (verified "
-                "papers); only README.md and .gitkeep may sit at the top level"
-            )
-    return problems
-
-
 def validate_challenges(
     root: Path,
     registry: dict[str, Author] | None = None,
@@ -573,8 +541,6 @@ def validate_challenges(
                 problems.append(
                     f"{instructions_file}: difficulty must be between 1 and 10"
                 )
-
-        problems.extend(validate_challenge_references(challenge_dir))
 
         attempts_dir = challenge_dir / "attempts"
         if not attempts_dir.exists():

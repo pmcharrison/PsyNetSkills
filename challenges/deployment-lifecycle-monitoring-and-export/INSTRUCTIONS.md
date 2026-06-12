@@ -14,7 +14,7 @@ deployment practice. The plan should help a future operator move from local
 validation through final teardown without losing data, interrupting recruitment
 incorrectly, or running destructive commands too early.
 
-Use only the mock information in `references/experiment/mock-deployment-dossier.md`. Do not
+Use only the mock information in `references/mock-deployment-dossier.md`. Do not
 use or request real Prolific, Cint, AWS, dashboard, Dozzle, SSH, database, API,
 credential, URL, or participant information. Treat all names, links, statuses,
 and examples in the dossier as fictional.
