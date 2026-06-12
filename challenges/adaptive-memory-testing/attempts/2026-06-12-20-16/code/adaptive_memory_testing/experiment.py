@@ -200,7 +200,9 @@ class Exp(psynet.experiment.Experiment):
 
     def initialize_bot(self, bot):
         abilities = [0.45, 0.7, 1.0, 1.4, 2.0, 3.0]
-        bot.var.memory_ability = abilities[(bot.id or 1) % len(abilities)]
+        bot_index = getattr(self, "_adaptive_memory_bot_index", 0)
+        self._adaptive_memory_bot_index = bot_index + 1
+        bot.var.memory_ability = abilities[bot_index % len(abilities)]
 
     def test_check_bot(self, bot: Bot, **kwargs):
         assert not bot.failed
