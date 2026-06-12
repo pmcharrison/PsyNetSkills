@@ -65,21 +65,21 @@ you and tell you which psynet translate command to run later.
 
 1. Target language-country pairs
    Each Cint deployment targets one language-country pair, for example
-   Turkish-Turkey or English-United Kingdom. I will turn each pair into:
-   - PsyNet locale, such as tr or en;
-   - Lucid language tag, such as TUR or ENG;
-   - Lucid country tag, such as TR or GB;
-   - a qualification filename such as qualifications/lucid/lucid-TUR-TR.json.
+   Turkish-Turkey or English-United Kingdom. I will add the settings that connect
+   the experiment to that target:
+   - locale controls the participant-facing experiment language, such as tr or
+     en;
+   - LANGUAGE tells Cint/Lucid which language market to recruit from, such as
+     TUR or ENG;
+   - COUNTRY tells Cint/Lucid which country market to recruit from, such as TR
+     or GB;
+   - LUCID_CONFIG_PATH points to the qualification JSON file for that exact
+     language-country target, such as qualifications/lucid/lucid-TUR-TR.json.
 
-   In experiment.py, one deployment target is active at a time through:
-   LANGUAGE = "<Lucid language tag>"
-   COUNTRY = "<Lucid country tag>"
-   LUCID_CONFIG_PATH = f"qualifications/lucid/lucid-{LANGUAGE}-{COUNTRY}.json"
-
-   Before deploying each target, LANGUAGE, COUNTRY, locale, wage_per_hour, and
-   the qualification JSON selected by LUCID_CONFIG_PATH must match that target.
-   These values are not one-time setup values: they must be checked and changed
-   for every separate deployment.
+   Before each deployment, locale, LANGUAGE, COUNTRY, wage_per_hour, and the
+   qualification JSON selected by LUCID_CONFIG_PATH must all match the same row
+   in cint_deployment_targets.csv. These values are not one-time setup values:
+   they must be checked and changed for every separate deployment.
 
 2. Qualifications
    A qualification is a Cint/Lucid screening rule. Some rules are technical
