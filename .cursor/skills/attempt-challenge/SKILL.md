@@ -22,9 +22,9 @@ challenge before starting a fresh attempt.
 - For experiment implementation challenges, also read and follow
   `psynet-experiment-implementation/SKILL.md` before implementing the experiment.
   Run it in challenge mode: infer the purpose and high-stakes decisions from the
-  challenge instructions, record them in the `PLAN.md` decision log, draft all
-  plan sections in one pass, and stop at the single human plan review until the
-  plan is approved. Also read `references/experiment-evidence.md`
+  challenge instructions, record them in the `PLAN_DETAILS.md` decision log,
+  draft all plan sections in one pass, and stop at the single human plan review
+  until the plan is approved. Also read `references/experiment-evidence.md`
   and `psynet-experiment-implementation/references/validation.md` before
   finalizing functional or performance evidence.
 - If the challenge is explicitly cross-cultural, cross-national, multilingual,
@@ -99,9 +99,10 @@ challenge before starting a fresh attempt.
 9. Implement the challenge in `code/`.
    - For experiment implementation challenges, first follow
      `psynet-experiment-implementation/SKILL.md` in challenge mode, including
-     its requirement to stop for human review of the completed `PLAN.md`
-     (all sections drafted, with inferred decisions and considered options in
-     the decision log) before coding. After opening or updating
+     its requirement to stop for human review of the completed `PLAN.md` and
+     `PLAN_DETAILS.md` (all sections drafted, with inferred decisions and
+     considered options in the details decision log) before coding. After
+     opening or updating
      the PR, give the user the dashboard attempt URL with the `#plan` anchor when
      the preview build succeeds. If the dashboard preview cannot build, include
      the plan text in chat so the user can review it without leaving the

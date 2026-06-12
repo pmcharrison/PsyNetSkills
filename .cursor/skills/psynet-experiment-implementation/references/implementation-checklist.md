@@ -1,9 +1,10 @@
 # Implementation section checklist (agent-facing)
 
-Work through this checklist while drafting the Implementation section of
-PLAN.md. This section identifies the technical choices that need human review
-before coding; it is not a line-by-line coding recipe. Do not write experiment
-code during planning.
+Work through this checklist while drafting the Implementation section of the
+plan. Summarize the approach readably in PLAN.md and write the exact binding
+specification in PLAN_DETAILS.md. This section identifies the technical
+choices that need human review before coding; it is not a line-by-line coding
+recipe. Do not write experiment code during planning.
 
 ## Coverage
 

@@ -1,16 +1,17 @@
 # Method section checklist (agent-facing)
 
-Work through this checklist while drafting the Method section of PLAN.md.
-Write the section itself as prose like a paper's Methods section (Design,
-Participants, Materials, Procedure, Analysis); do not copy these labels into
-PLAN.md.
+Work through this checklist while drafting the Method section of the plan.
+Write the PLAN.md section as prose like a paper's Methods section (Design,
+Participants, Materials, Procedure, Analysis), without checklist labels, and
+record the structural choices in the PLAN_DETAILS.md method decisions table.
 
 ## Design-decision matrix
 
 These decisions must never be skipped or silently defaulted. Where a real
 alternative exists, present options with trade-offs and a recommendation;
 where the answer is forced by the science or the challenge instructions,
-record it in the key-decisions table with a one-line justification.
+record it in the PLAN_DETAILS.md method decisions table with a one-line
+justification.
 
 - **Within vs. between participants**: which manipulations vary within a
   session and which across participants; counterbalancing and block order.
@@ -66,15 +67,16 @@ Also specify, in prose:
 
 ## Rigor scaling
 
-The purpose recorded in PLAN.md sets the expected depth: a formal experiment
+The purpose recorded in the plan sets the expected depth: a formal experiment
 or replication specifies every stage and parameter; a pilot or demo may leave
 low-stakes fields at documented defaults. Never scale down the design-decision
 matrix itself.
 
 ## Self-check before requesting the gate review
 
-- Every matrix decision appears in the key-decisions table with a choice and
-  status.
+- Every matrix decision appears in the PLAN_DETAILS.md method decisions table
+  with a choice and status, and the structural choices read naturally in the
+  PLAN.md prose.
 - The journey has no unaccounted stages.
 - The analysis plan is concrete enough to write the analysis scripts from.
 - Replication deviations from the source study are listed as negotiation

@@ -1,8 +1,9 @@
 # Science section checklist (agent-facing)
 
-Work through this checklist while drafting the Science section of PLAN.md. It
-is a coverage rubric for you, the agent: write the section itself as readable
-academic prose and do not copy these labels into PLAN.md.
+Work through this checklist while drafting the Science section of the plan.
+It is a coverage rubric for you, the agent: write the PLAN.md section as
+readable academic prose (no checklist labels), and record the corresponding
+choices in the PLAN_DETAILS.md science decisions table.
 
 ## Coverage
 
@@ -67,8 +68,8 @@ Useful questions when the idea is underspecified:
 
 - Every must-cover item above is addressed in prose or explicitly out of
   scope with a reason.
-- The *In brief* paragraph is present and understandable without PsyNet or
+- The PLAN.md prose opens plainly and is understandable without PsyNet or
   domain jargon.
-- The key-decisions table matches the prose.
-- All decisions taken without the user are in the decision log, marked
-  overridable.
+- The PLAN_DETAILS.md science decisions table matches the prose.
+- Decisions taken without the user where a real alternative existed are in
+  the decision log, marked overridable.

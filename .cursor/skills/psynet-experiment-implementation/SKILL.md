@@ -1,6 +1,6 @@
 ---
 name: psynet-experiment-implementation
-description: A structured, gated process for implementing PsyNet experiments. Confirms the purpose and user intention first, then plans Science, Method, and Implementation as separately reviewed PLAN.md sections before any coding, simulations, analysis, and reporting.
+description: A structured, gated process for implementing PsyNet experiments. Confirms the purpose and user intention first, then plans Science, Method, and Implementation as separately reviewed sections of a human-readable PLAN.md backed by an authoritative PLAN_DETAILS.md, before any coding, simulations, analysis, and reporting.
 authors: [pmcharrison]
 ---
 
@@ -18,16 +18,29 @@ specification or research idea.
   under the `attempt-challenge` skill, which forbids asking for supplementary
   instructions at attempt time. Infer the purpose and high-stakes decisions
   from `INSTRUCTIONS.md`, record each inference and the options you considered
-  in the PLAN.md decision log, draft all sections in one pass, and surface
+  in the `PLAN_DETAILS.md` decision log, draft all sections in one pass, and surface
   everything at the single plan-review pause required by `attempt-challenge`.
 
 ## Planning
 
-Planning turns the original idea or specification into a single `PLAN.md`,
-created from `assets/PLAN_TEMPLATE.md` and filled **one section at a time**.
-The template starts with a section status table; keep it current at every step
-so any reader (or a resumed agent session) can see exactly where the workflow
-stands.
+Planning turns the original idea or specification into two companion files,
+filled **one section at a time** (Science, then Method, then Implementation).
+Save both at the attempt root in challenge mode (the dashboard renders
+`PLAN.md` at the attempt page's `#plan` anchor; `PLAN_DETAILS.md` is not
+rendered) or in the experiment project folder in interactive mode; if no
+folder exists yet, ask the user where to save them.
+
+- `PLAN.md`, from `assets/PLAN_TEMPLATE.md`: the human-readable plan that the
+  dashboard renders. Flowing prose covering science, method, and
+  implementation that a reviewer can absorb in one pass, ending with a
+  pointer to the details file. No status tables, decision tables, or decision
+  log here.
+- `PLAN_DETAILS.md`, from `assets/PLAN_DETAILS_TEMPLATE.md`: the
+  **authoritative specification**. Section status table, per-stage decision
+  tables, decision log, and the exact technical plan. Implementation must
+  match this file exactly; readable prose in `PLAN.md` never licenses
+  deviation from it. Keep the status table current at every step so any
+  reader (or a resumed agent session) can see where the workflow stands.
 
 Core planning rules:
 
@@ -41,15 +54,17 @@ Core planning rules:
   stage into one message; never present a menu for something you can safely
   default. Low-stakes gaps get a reasonable default, stated briefly and marked
   overridable.
-- Write the Science and Method sections in academic prose, each opening with a
-  short *In brief* paragraph and ending with a *Key decisions* table. Keep
-  checklist labels (Required/Optional) out of `PLAN.md`; the coverage
-  checklists in this skill's `references/` are for you, not the reader.
-- Record every nontrivial choice in the decision log appendix: what was
-  chosen, over what alternatives, why, and who approved it (or that it was a
-  default).
-- After every agreed revision, update the saved `PLAN.md` so it stays in sync
-  with the conversation.
+- Write `PLAN.md` in plain academic prose, scaled to the purpose: a simple
+  demo needs a few paragraphs, a formal experiment proportionally more. Keep
+  checklist labels (Required/Optional) and workflow scaffolding out of it;
+  the coverage checklists in this skill's `references/` are for you, not the
+  reader.
+- Record decisions in the `PLAN_DETAILS.md` decision log **only where a real
+  alternative existed or a nontrivial inference was made**: what was chosen,
+  over what alternatives, why, and who approved it (or that it was a
+  default). Do not log choices forced by the instructions.
+- Keep the two files in sync after every agreed revision. If they conflict,
+  fix the conflict at review; `PLAN_DETAILS.md` wins in the meantime.
 
 ### Stage 0: Purpose intake
 
@@ -58,7 +73,7 @@ it configures the rest of the workflow:
 
 | Purpose | Science section | Method section | Literature step |
 |---|---|---|---|
-| Simple implementation / technical demo | Skipped; recorded as out of scope in PLAN.md | Light: defaults allowed, key-decisions table still required | None |
+| Simple implementation / technical demo | Skipped; recorded as out of scope in the plan | Light: defaults allowed, decision tables still required in PLAN_DETAILS.md | None |
 | Replication / adaptation of an existing study | Transcribed from the source study, not invented | Fidelity-driven: deviations from the source are the negotiation points | Required: locate and verify the source |
 | New science question | Full: propose 2-3 candidate framings for user choice | Full decision matrix with alternatives | Recommended: grounding and expected effect sizes |
 
@@ -133,7 +148,8 @@ These notebooks should include inferential statistics and plots, designed to
 address relevant research questions. Follow the analysis plan approved in the
 Method section; if the implementation is inspired by a published paper,
 replicate the analyses reported in the paper as closely as possible. Log any
-deviation from the approved analysis plan in the PLAN.md decision log.
+deviation from the approved analysis plan in the `PLAN_DETAILS.md` decision
+log.
 
 ### Review
 
@@ -159,5 +175,9 @@ taken and any findings that arose.
   prior versions are visible, selectable, inherited, and exported.
 - Do not leave AI failure behavior vague; participants need a planned path for
   model timeouts, invalid output, or render failures.
-- Do not copy the agent-facing checklist labels into PLAN.md; the document the
-  user reviews should be plain prose plus the key-decisions tables.
+- Do not copy the agent-facing checklist labels into the plan files; the
+  document the user reviews should be plain prose.
+- Do not let workflow scaffolding (status tables, decision tables, decision
+  logs) leak into PLAN.md; it belongs in PLAN_DETAILS.md. Conversely, do not
+  let readable prose in PLAN.md drift from the binding specification in
+  PLAN_DETAILS.md.
