@@ -291,8 +291,8 @@ cat <<EOF
 
 AWS setup complete.
 
-Configure the GitHub Environment '${environment_name}' with required reviewers
-and prevent self-review. Then add these Environment variables:
+Create the GitHub Environment '${environment_name}' without required reviewers
+for no-approval deploys. Then add these Environment variables:
 
   ATTEMPT_DEPLOY_AWS_ROLE_ARN=${role_arn}
   ATTEMPT_DEPLOY_AWS_REGION=${regions%%,*}
@@ -307,4 +307,7 @@ Add these Environment secrets:
 The role trust policy only accepts OIDC tokens with subject:
 
   ${oidc_subject}
+
+In this no-reviewer mode, anyone who can dispatch the workflow can start a real
+EC2 deployment. Add required reviewers later if you want a separate human gate.
 EOF

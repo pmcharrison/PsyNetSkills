@@ -1,14 +1,14 @@
 ---
 name: deploy-attempt
-description: Queue a protected GitHub Actions deployment for a PsyNetSkills attempt, deriving workflow inputs and handing the human reviewer the approval run link.
+description: Queue a GitHub Actions deployment for a PsyNetSkills attempt, deriving workflow inputs and handing the user the run link.
 authors: [lucasgautheron]
 ---
 
 # Deploy an attempt
 
 Use this skill only when explicitly invoked as `/deploy-attempt` or when the
-user asks to deploy an existing PsyNetSkills attempt to the protected EC2
-deployment workflow.
+user asks to deploy an existing PsyNetSkills attempt to the EC2 deployment
+workflow.
 
 ## Required reads
 
@@ -25,10 +25,10 @@ deployment workflow.
 - Do not request, inspect, print, copy, or store AWS credentials, `.env`,
   `.dallingerconfig`, dashboard passwords, SSH private keys, or recruiter
   tokens.
-- The agent may queue the GitHub Actions workflow. The protected
-  `attempt-deploy` Environment must remain the human approval gate.
-- Never approve the deployment Environment, bypass protection rules, add the
-  agent to required reviewers, or alter GitHub Environment settings.
+- The agent may queue the GitHub Actions workflow when it has dispatch
+  permission. In no-reviewer mode, dispatch permission is deployment authority.
+- Never alter GitHub Environment settings or grant yourself additional GitHub,
+  AWS, or secret access.
 
 ## Workflow
 
@@ -49,15 +49,15 @@ deployment workflow.
 4. If the user invoked `/deploy-attempt` and did not ask for plan-only mode,
    queue the protected workflow:
    `python3 .cursor/skills/deploy-attempt/scripts/deploy_attempt.py <attempt> --request-deploy`
-5. If the helper returns a workflow run URL, give the user that URL and tell them
-   to open it, click `Review deployments`, select `attempt-deploy`, and approve
-   or reject.
+5. If the helper returns a workflow run URL, give the user that URL and explain
+   that no-reviewer mode starts the deploy job automatically after the prepare
+   job succeeds.
 6. If workflow dispatch is unavailable to the agent, give the user:
    - the workflow URL printed by the helper;
    - the exact inputs printed by the helper;
    - the instruction to run it from `main` with `dry_run=false`.
-7. Record in your final response that the agent queued only the protected
-   workflow request and did not receive AWS credentials or approve deployment.
+7. Record in your final response that the agent queued only the workflow request
+   and did not receive AWS credentials or alter Environment settings.
 
 ## Helper usage
 
@@ -84,9 +84,8 @@ Useful options:
   GitHub identity lacks Actions/workflows write permission for
   `workflow_dispatch`. Do not try another credential. Provide the printed
   GitHub workflow URL and inputs for a human to run, or ask a repository admin
-  to install a dispatch-only GitHub App/token that can start workflow runs but
-  is not a required reviewer for `attempt-deploy`.
+  to install a dispatch-capable GitHub App/token.
 - If names exceed GitHub, DNS, Dallinger, or EC2 limits, shorten only the
   free-form slug prefix; keep the commit suffix for traceability.
-- If the workflow run is queued successfully but waits for approval, stop there:
-  the wait is the intended safeguard.
+- If the workflow run is queued successfully, stop there and give the user the
+  run URL.
