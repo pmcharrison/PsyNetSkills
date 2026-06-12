@@ -74,6 +74,8 @@ import * as THREE from "/static/three.module.min.js";
     var finalSubmitted = false;
     var lastFeedbackAckKey = null;
     var sceneHandles = null;
+    var previewOffer = null;
+    var previewRoundIndex = null;
 
     initScene();
     openSocket();
@@ -176,12 +178,20 @@ import * as THREE from "/static/three.module.min.js";
         if (state.status === 'proposal') {
             if (state.role === 'proposer') {
                 document.getElementById('status-line').textContent = 'You are the proposer. Choose an offer.';
+                if (previewRoundIndex !== state.round_index) {
+                    previewRoundIndex = state.round_index;
+                    previewOffer = state.offer === null || state.offer === undefined ? 5 : Number(state.offer);
+                }
                 var label = document.createElement('label');
                 label.htmlFor = 'offer-slider';
-                label.innerHTML = "Offer to responder: <strong id='slider-value'>5</strong> coins";
+                label.innerHTML = "Offer to responder: <strong id='slider-value'>" + previewOffer + "</strong> coins";
                 var slider = document.createElement('input');
-                slider.type = 'range'; slider.min = '0'; slider.max = '10'; slider.value = '5'; slider.id = 'offer-slider';
-                slider.oninput = function () { document.getElementById('slider-value').textContent = slider.value; updateOfferPreview(Number(slider.value)); };
+                slider.type = 'range'; slider.min = '0'; slider.max = '10'; slider.value = String(previewOffer); slider.id = 'offer-slider';
+                slider.oninput = function () {
+                    previewOffer = Number(slider.value);
+                    document.getElementById('slider-value').textContent = slider.value;
+                    updateOfferPreview(previewOffer);
+                };
                 var button = document.createElement('button');
                 button.className = 'action-button';
                 button.textContent = 'Make the offer';
@@ -245,8 +255,8 @@ import * as THREE from "/static/three.module.min.js";
         var floor = new THREE.Mesh(new THREE.PlaneGeometry(14, 12), new THREE.MeshStandardMaterial({color: 0xdbeafe, roughness: 0.85}));
         floor.rotation.x = -Math.PI / 2; floor.position.y = -0.8; scene.add(floor);
         scene.add(createTable());
-        var partner = createAvatar(0x111827, 0.72); partner.position.set(1.75, 0.2, -2.85); partner.rotation.y = Math.PI; scene.add(partner);
-        var me = createAvatar(0x111827, 1.02); me.position.set(1.9, 0.15, 2.95); scene.add(me);
+        var partner = createAvatar(0x2563eb, 0.72); partner.position.set(1.75, 0.2, -2.85); partner.rotation.y = Math.PI; scene.add(partner);
+        var me = createAvatar(0x0f766e, 1.02); me.position.set(1.9, 0.15, 2.95); scene.add(me);
         var partnerBowl = createBowl(0.42); partnerBowl.position.set(-1.55, 0.18, -2.85); scene.add(partnerBowl);
         var meBowl = createBowl(0.58); meBowl.position.set(-1.55, 0.23, 2.75); scene.add(meBowl);
         var centerCoins = createCoinSet(10, 0.23); centerCoins.position.set(0.05, 0.34, 0.0); scene.add(centerCoins);
@@ -255,7 +265,17 @@ import * as THREE from "/static/three.module.min.js";
         var offerTrail = createCoinSet(10, 0.2); offerTrail.position.set(0.0, 0.70, 0.0); scene.add(offerTrail);
         sceneHandles = {renderer: renderer, scene: scene, camera: camera, centerCoins: centerCoins, meCoins: meCoins, partnerCoins: partnerCoins, offerTrail: offerTrail};
         resizeScene(); window.addEventListener('resize', resizeScene);
-        (function animate() { requestAnimationFrame(animate); if (sceneHandles) { sceneHandles.offerTrail.rotation.y += 0.006; renderer.render(scene, camera); } })();
+        (function animate() {
+            requestAnimationFrame(animate);
+            if (sceneHandles) {
+                var t = performance.now() * 0.001;
+                animateCoins(sceneHandles.centerCoins, t, 0.55);
+                animateCoins(sceneHandles.meCoins, t, 0.9);
+                animateCoins(sceneHandles.partnerCoins, t, 0.8);
+                animateCoins(sceneHandles.offerTrail, t, 1.1);
+                renderer.render(scene, camera);
+            }
+        })();
     }
 
     function createTable() {
@@ -267,11 +287,42 @@ import * as THREE from "/static/three.module.min.js";
         return group;
     }
 
-    function createAvatar(color, scale) {
-        var group = new THREE.Group(); var mat = new THREE.MeshStandardMaterial({color: color, roughness: 0.5});
-        var body = new THREE.Mesh(new THREE.CapsuleGeometry(0.32, 0.72, 8, 18), mat); body.position.y = 0.52;
-        var head = new THREE.Mesh(new THREE.SphereGeometry(0.28, 24, 24), mat); head.position.y = 1.17;
-        group.add(body); group.add(head); group.scale.setScalar(scale); return group;
+    function createAvatar(shirtColor, scale) {
+        var group = new THREE.Group();
+        var skin = new THREE.MeshStandardMaterial({color: 0xf2c7a5, roughness: 0.48});
+        var shirt = new THREE.MeshStandardMaterial({color: shirtColor, roughness: 0.62});
+        var dark = new THREE.MeshStandardMaterial({color: 0x1f2937, roughness: 0.68});
+        var torso = new THREE.Mesh(new THREE.CylinderGeometry(0.42, 0.56, 0.95, 28), shirt);
+        torso.position.y = 0.55;
+        var chest = new THREE.Mesh(new THREE.SphereGeometry(0.5, 28, 16), shirt);
+        chest.scale.set(1.05, 0.45, 0.55); chest.position.y = 0.92;
+        var shoulders = new THREE.Mesh(new THREE.CapsuleGeometry(0.17, 0.92, 8, 18), shirt);
+        shoulders.rotation.z = Math.PI / 2; shoulders.position.y = 1.03;
+        var neck = new THREE.Mesh(new THREE.CylinderGeometry(0.13, 0.15, 0.22, 18), skin);
+        neck.position.y = 1.28;
+        var head = new THREE.Mesh(new THREE.SphereGeometry(0.29, 32, 24), skin);
+        head.scale.set(0.9, 1.08, 0.86); head.position.y = 1.57;
+        var hair = new THREE.Mesh(new THREE.SphereGeometry(0.3, 24, 12, 0, Math.PI * 2, 0, Math.PI / 2.2), dark);
+        hair.position.y = 1.74;
+        var leftArm = createArm(shirt, skin, -0.62);
+        var rightArm = createArm(shirt, skin, 0.62);
+        var hips = new THREE.Mesh(new THREE.CylinderGeometry(0.45, 0.5, 0.22, 24), dark);
+        hips.position.y = 0.02;
+        group.add(torso, chest, shoulders, neck, head, hair, leftArm, rightArm, hips);
+        group.scale.setScalar(scale);
+        return group;
+    }
+
+    function createArm(shirt, skin, x) {
+        var arm = new THREE.Group();
+        var sleeve = new THREE.Mesh(new THREE.CapsuleGeometry(0.11, 0.52, 8, 16), shirt);
+        sleeve.position.set(x, 0.78, 0); sleeve.rotation.z = x < 0 ? -0.24 : 0.24;
+        var forearm = new THREE.Mesh(new THREE.CapsuleGeometry(0.085, 0.36, 8, 16), skin);
+        forearm.position.set(x * 1.08, 0.38, 0); forearm.rotation.z = x < 0 ? -0.1 : 0.1;
+        var hand = new THREE.Mesh(new THREE.SphereGeometry(0.095, 16, 12), skin);
+        hand.position.set(x * 1.12, 0.14, 0);
+        arm.add(sleeve, forearm, hand);
+        return arm;
     }
 
     function createBowl(scale) {
@@ -284,11 +335,47 @@ import * as THREE from "/static/three.module.min.js";
     function createCoinSet(count, radius) {
         var group = new THREE.Group();
         for (var i = 0; i < count; i++) {
-            var coin = new THREE.Mesh(new THREE.CylinderGeometry(radius, radius, 0.075, 48), new THREE.MeshStandardMaterial({color: 0xfacc15, metalness: 0.55, roughness: 0.22}));
+            var coin = createCoin(radius);
             coin.position.set((i % 5) * radius * 1.45 - radius * 2.9, Math.floor(i / 5) * 0.09, (i % 2) * radius * 1.45 - radius * 0.72);
+            coin.userData.spinOffset = i * 0.37;
             group.add(coin);
         }
         return group;
+    }
+
+    function createCoin(radius) {
+        var group = new THREE.Group();
+        var gold = new THREE.MeshStandardMaterial({color: 0xf6c343, metalness: 0.78, roughness: 0.18});
+        var edgeGold = new THREE.MeshStandardMaterial({color: 0xb7791f, metalness: 0.84, roughness: 0.2});
+        var coin = new THREE.Mesh(new THREE.CylinderGeometry(radius, radius, 0.085, 64), gold);
+        var topRim = new THREE.Mesh(new THREE.TorusGeometry(radius * 0.78, radius * 0.045, 10, 64), edgeGold);
+        topRim.rotation.x = Math.PI / 2; topRim.position.y = 0.048;
+        var bottomRim = topRim.clone(); bottomRim.position.y = -0.048;
+        var center = new THREE.Mesh(new THREE.CylinderGeometry(radius * 0.34, radius * 0.34, 0.095, 32), edgeGold);
+        center.position.y = 0.055;
+        var stripe = new THREE.Mesh(new THREE.BoxGeometry(radius * 0.13, 0.108, radius * 0.62), edgeGold);
+        stripe.position.y = 0.065;
+        group.add(coin, topRim, bottomRim, center, stripe);
+        addCoinRidges(group, radius, edgeGold);
+        return group;
+    }
+
+    function addCoinRidges(group, radius, material) {
+        for (var i = 0; i < 28; i++) {
+            var angle = (i / 28) * Math.PI * 2;
+            var ridge = new THREE.Mesh(new THREE.BoxGeometry(radius * 0.045, 0.105, radius * 0.105), material);
+            ridge.position.set(Math.cos(angle) * radius, 0, Math.sin(angle) * radius);
+            ridge.rotation.y = -angle;
+            group.add(ridge);
+        }
+    }
+
+    function animateCoins(group, time, speed) {
+        group.children.forEach(function (coin, i) {
+            if (!coin.visible) return;
+            coin.rotation.y = time * speed + coin.userData.spinOffset;
+            coin.rotation.z = Math.sin(time * 1.8 + i) * 0.045;
+        });
     }
 
     function resizeScene() {
@@ -297,17 +384,28 @@ import * as THREE from "/static/three.module.min.js";
         sceneHandles.renderer.setSize(rect.width, rect.height, false); sceneHandles.camera.aspect = rect.width / rect.height; sceneHandles.camera.updateProjectionMatrix();
     }
 
-    function updateOfferPreview(offer) { if (!state) return; var oldOffer = state.offer; state.offer = offer; updateScene(); state.offer = oldOffer; }
+    function updateOfferPreview(offer) {
+        if (!state) return;
+        previewOffer = clampOffer(offer);
+        updateScene();
+    }
 
     function updateScene() {
         if (!sceneHandles || !state) return;
-        var meCoins = 0, partnerCoins = 0, centerCoins = 10, offerTrail = state.offer == null ? 0 : Number(state.offer || 0), caption = '10-coin endowment';
+        var meCoins = 0, partnerCoins = 0, centerCoins = 10, offerTrail = 0, caption = '10-coin endowment';
         if (state.last_round && state.status === 'feedback') {
             meCoins = payoffFor(MY_ID); partnerCoins = payoffForPartner(); centerCoins = 0; offerTrail = state.last_round.skipped ? 0 : Number(state.last_round.offer || 0); caption = state.last_round.skipped ? 'Timeout: round skipped' : 'Decision: ' + state.last_round.decision;
         } else if (state.status === 'response') {
-            centerCoins = 10 - Number(state.offer || 0); caption = 'Offer: ' + state.offer + ' coins';
+            var responseSplit = splitOfferCoins(state.offer);
+            meCoins = responseSplit.me; partnerCoins = responseSplit.partner; centerCoins = 0;
+            caption = splitCaption(state.offer);
         } else if (state.status === 'proposal') {
-            if (state.role === 'proposer') { offerTrail = Number(state.offer || 5); centerCoins = 10; caption = 'Choose coins to give'; }
+            if (state.role === 'proposer') {
+                var proposalOffer = currentProposalOffer();
+                var proposalSplit = splitOfferCoins(proposalOffer);
+                meCoins = proposalSplit.me; partnerCoins = proposalSplit.partner; centerCoins = 0;
+                caption = splitCaption(proposalOffer);
+            }
             else { offerTrail = 0; centerCoins = 10; caption = 'Waiting for proposer'; }
         } else if (state.status === 'complete') {
             meCoins = Number(state.total_score || 0); partnerCoins = otherTotal(); centerCoins = 0; offerTrail = 0; caption = 'Task complete';
@@ -316,7 +414,33 @@ import * as THREE from "/static/three.module.min.js";
         document.getElementById('me-coins-label').textContent = meCoins + ' coins'; document.getElementById('partner-coins-label').textContent = partnerCoins + ' coins'; document.getElementById('table-caption').textContent = caption;
     }
 
-    function setVisibleCount(group, count) { group.children.forEach(function (coin, i) { coin.visible = i < count; }); }
+    function currentProposalOffer() {
+        var slider = document.getElementById('offer-slider');
+        if (slider) return clampOffer(slider.value);
+        if (previewOffer !== null) return clampOffer(previewOffer);
+        if (state.offer !== null && state.offer !== undefined) return clampOffer(state.offer);
+        return 5;
+    }
+
+    function splitOfferCoins(offer) {
+        var responderCoins = clampOffer(offer);
+        var proposerCoins = 10 - responderCoins;
+        if (state.role === 'proposer') return {me: proposerCoins, partner: responderCoins};
+        if (state.role === 'responder') return {me: responderCoins, partner: proposerCoins};
+        return {me: 0, partner: 0};
+    }
+
+    function splitCaption(offer) {
+        var responderCoins = clampOffer(offer);
+        return 'Proposer keeps ' + (10 - responderCoins) + '; responder gets ' + responderCoins;
+    }
+
+    function clampOffer(offer) {
+        var value = Math.round(Number(offer || 0));
+        return Math.max(0, Math.min(10, value));
+    }
+
+    function setVisibleCount(group, count) { group.children.forEach(function (coin, i) { coin.visible = i < Math.max(0, Math.round(count)); }); }
     function payoffFor(participantId) { if (!state.last_round || !state.last_round.payoffs) return 0; return Number(state.last_round.payoffs[String(participantId)] || 0); }
     function payoffForPartner() { if (!state.last_round || !state.last_round.payoffs) return 0; var total = 0; Object.keys(state.last_round.payoffs).forEach(function (pid) { if (Number(pid) !== MY_ID) total += Number(state.last_round.payoffs[pid] || 0); }); return total; }
     function otherTotal() { var total = 0; if (!state.totals) return 0; Object.keys(state.totals).forEach(function (pid) { if (Number(pid) !== MY_ID) total += Number(state.totals[pid] || 0); }); return total; }
