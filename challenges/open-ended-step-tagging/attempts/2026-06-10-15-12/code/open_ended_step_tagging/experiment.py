@@ -23,19 +23,26 @@ _ = get_translator(namespace="experiment")
 
 LANGUAGE = "ENG"
 COUNTRY = "US"
-LUCID_CONFIG_PATH = f"qualifications/lucid/mock-lucid-{LANGUAGE}-{COUNTRY}.json"
+USE_CINT_LOCAL_MOCK = os.environ.get("PSYNET_CINT_LOCAL_MOCK") == "1"
+REAL_LUCID_CONFIG_PATH = f"qualifications/lucid/lucid-{LANGUAGE}-{COUNTRY}.json"
+LOCAL_MOCK_LUCID_CONFIG_PATH = (
+    f"qualifications/lucid/mock-lucid-{LANGUAGE}-{COUNTRY}.json"
+)
+LUCID_CONFIG_PATH = (
+    LOCAL_MOCK_LUCID_CONFIG_PATH if USE_CINT_LOCAL_MOCK else REAL_LUCID_CONFIG_PATH
+)
 
 recruiter_settings = get_lucid_settings(
     lucid_recruitment_config_path=LUCID_CONFIG_PATH,
     termination_time_in_s=120 * 60,
-    debug_recruiter=True,
+    debug_recruiter=USE_CINT_LOCAL_MOCK,
     initial_response_within_s=180,
     inactivity_timeout_in_s=15 * 60,
     no_focus_timeout_in_s=10 * 60,
     bid_incidence=66,
 )
 
-if os.environ.get("PSYNET_CINT_LOCAL_MOCK") == "1":
+if USE_CINT_LOCAL_MOCK:
     recruiter_settings = {
         **recruiter_settings,
         "recruiter": "generic",
