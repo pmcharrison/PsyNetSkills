@@ -88,7 +88,10 @@ Useful starting points:
 - Treat schematic figures as illustrations, not measurements. When exact
   stimulus sizes are not specified, choose conservative sizes, preserve the
   intended perceptual relationship between objects, and document any important
-  assumptions.
+  assumptions. Note that sizes are unreliable when the figure contains multiple
+  components and the actual display is only one part of the image. However, if a
+  screenshot or a clear single-display schematic is provided, the relative sizes
+  are likely to be more indicative of the intended appearance.
 - PsyNet includes a sophisticated Native Graphics system for displaying
   graphics programmatically. Under the hood, it uses the JavaScript library
   Raphaël for graphics rendering. PsyNet exposes some Raphaël functionality to
