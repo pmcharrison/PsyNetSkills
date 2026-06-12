@@ -38,15 +38,17 @@ l_0 = 8
 mu ~ Gamma(2, 2)
 alpha ~ Gamma(2, 1)
 r_i ~ Gamma(alpha, alpha / mu), i = 1, ..., N
-p_ij = exp(-r_i * l_j / l_0)
+p_ij = exp(-l_j / (l_0 * r_i))
 y_ij ~ Bernoulli(p_ij)
 ```
 
 Here `y_ij` is whether participant `i` recalled number string `j` correctly,
 `l_j` is the length of the presented string, `r_i` is the
-participant-specific memory decay rate, `mu` is the population mean decay rate,
+participant-specific memory ability, `mu` is the population mean ability,
 `alpha` controls between-participant variation, and `l_0 = 8` is a fixed
-scaling factor. Lower values of `r_i` correspond to better memory performance.
+scaling factor. Values of `r_i` close to zero correspond to very low memory
+ability (`p_ij` close to 0), while very large values of `r_i` correspond to
+high memory ability (`p_ij` close to 1).
 
 The adaptive procedure should consider plausible candidate lengths before each
 trial and select the candidate with maximal expected information gain under the
