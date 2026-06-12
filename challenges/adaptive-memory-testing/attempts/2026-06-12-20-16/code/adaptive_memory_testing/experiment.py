@@ -10,16 +10,28 @@ from psynet.page import InfoPage, SuccessfulEndPage
 from psynet.timeline import Timeline
 from psynet.trial.static import StaticNode, StaticTrial, StaticTrialMaker
 
-from adaptive_policy import (
-    L0,
-    MAX_SEQUENCE_LENGTH,
-    MIN_SEQUENCE_LENGTH,
-    N_TRIALS,
-    MemoryObservation,
-    choose_length,
-    simulate_response,
-    state_summary,
-)
+try:
+    from adaptive_policy import (
+        L0,
+        MAX_SEQUENCE_LENGTH,
+        MIN_SEQUENCE_LENGTH,
+        N_TRIALS,
+        MemoryObservation,
+        choose_length,
+        simulate_response,
+        state_summary,
+    )
+except ModuleNotFoundError:
+    from .adaptive_policy import (
+        L0,
+        MAX_SEQUENCE_LENGTH,
+        MIN_SEQUENCE_LENGTH,
+        N_TRIALS,
+        MemoryObservation,
+        choose_length,
+        simulate_response,
+        state_summary,
+    )
 
 ADAPTIVE_MODE_ENV = "ADAPTIVE_MEMORY_MODE"
 POSTERIOR_CACHE_KEY = "adaptive_memory_posterior"
