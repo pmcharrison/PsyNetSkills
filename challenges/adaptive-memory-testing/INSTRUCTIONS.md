@@ -32,7 +32,7 @@ Use the following hierarchical response model:
 
 ```text
 y ~ Bernoulli(p)
-p = exp(-theta_i * l / l_0)
+p = exp(-exp(theta_i) * l / l_0)
 theta_i ~ Normal(mu, sigma)
 sigma ~ Exponential(1)
 mu ~ Normal(0, 1)
