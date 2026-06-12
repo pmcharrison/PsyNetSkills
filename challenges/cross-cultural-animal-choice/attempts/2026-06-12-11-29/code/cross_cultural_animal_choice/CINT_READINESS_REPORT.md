@@ -89,6 +89,14 @@
 - After configuring Lucid API keys locally, run: `python create_qualifications.py`.
 - This command creates the real qualification JSON files; this readiness pass only prepares the script and placeholder structure because Lucid API access is unavailable.
 
+## Final deployment warning
+
+- Run `psynet lucid locale` in an environment with Lucid API access and compare the returned language/country tags against `cint_deployment_targets.csv`; `FRE-FR` and `ENG-IN` are provisional until that check or real JSON generation succeeds.
+- After confirming the target tags, inspect `create_qualifications.py`, then run `python create_qualifications.py` to produce real `qualifications/lucid/lucid-FRE-FR.json` and `qualifications/lucid/lucid-ENG-IN.json`.
+- Confirm all target languages have reviewed locale files. French currently needs `psynet translate fr` followed by review of `locales/fr/LC_MESSAGES/experiment.po`.
+- Decide the minimum acceptable `wage_per_hour` for France and India, then fill the blank wage cells in `cint_deployment_targets.csv`.
+- Before each deployment, update `locale`, `LANGUAGE`, `COUNTRY`, and `wage_per_hour` to match the selected row in `cint_deployment_targets.csv`, either manually or with help from an AI assistant.
+
 ## Readiness status
 
 - `parameter-ready only`
