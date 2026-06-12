@@ -10,4 +10,4 @@ repository policy forbids committing or publishing custom service credentials.
 - **PsyNetSkills:** Consider adding a documented workflow for challenges whose
   central requirement is an external service: e.g., approved ephemeral test
   buckets, credential injection rules, and required redaction/evidence handling.
-  Confidence: high. Status: considering.
+  Confidence: high. Impact: high. Status: considering.

@@ -1,5 +1,5 @@
 ---
-name: Implement a Psychophysics Experiment
+name: psychophysics
 description: Design and validate PsyNet psychophysics experiments.
 authors: [raja-marjieh]
 ---
