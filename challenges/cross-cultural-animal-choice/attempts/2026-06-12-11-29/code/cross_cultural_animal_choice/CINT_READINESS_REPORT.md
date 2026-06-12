@@ -26,6 +26,7 @@
 
 - COMPLETE: PsyNet locale codes `tr`, `ar`, `en`, and `fr` are supported by the local PsyNet checkout.
 - BLOCKED: `psynet lucid locale` could not verify Lucid language-country pair availability because local Lucid API credentials are missing.
+- REVIEW: The Lucid tags in this report are provisional local-preparation tags. Run `psynet lucid locale` in an environment with Lucid API access, or generate real qualification JSON successfully, before treating these pairs as deployable.
 
 ## Deployment CSV
 
@@ -44,6 +45,7 @@
 - MISSING: `psynet lucid locale` failed because `lucid_api_key` is not configured.
 - MISSING: `create_qualifications.py` first requires `lucid_api_key` in the local/deployment environment; real qualification generation may also require the configured Lucid SHA1 hashing key.
 - No secret values were inspected, printed, copied, or committed.
+- SOLUTION: Configure Lucid credentials in the local or deployment environment, not in the repository, then run `psynet lucid locale` to verify `TUR-TR`, `ARA-MA`, `ENG-US`, `FRE-FR`, and `FRE-CA`.
 
 ## Qualification files
 
@@ -71,6 +73,7 @@
 
 - `locale` controls the participant-facing language and must match an existing `.po` file for non-English targets.
 - `LANGUAGE` and `COUNTRY` are Lucid market tags; the computed `LUCID_CONFIG_PATH` uses them to select `lucid-<LANGUAGE>-<COUNTRY>.json`.
+- `psynet lucid locale` is the preferred source of truth for Lucid language-country pairs. If API credentials are unavailable, locally derived tags can be prepared provisionally, but they must be verified before deployment.
 - `wage_per_hour` is country-specific and should be filled separately for every row in `cint_deployment_targets.csv`.
 - `create_qualifications.py` is ready, but real qualification JSON generation requires valid Lucid API credentials in the local/deployment environment.
 - `TIMEOUT` is added automatically. `IS_NATIVE V1` is currently enabled. Optional filters such as `MONOLINGUALISM` and `HAS_AUDIO` should be enabled intentionally because each one can reduce the qualifying participant pool.

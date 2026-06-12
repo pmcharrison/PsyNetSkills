@@ -173,8 +173,15 @@ languages, countries, locales, wages, or real qualification files.
    target locale is missing, stop target-specific readiness and report it.
 3. Verify `locales/<locale>/LC_MESSAGES/experiment.po` exists for every known
    target locale. Do not run translation generation in this skill.
-4. Determine Lucid language-country tags with `psynet lucid locale`; do not
-   guess or approximate tags.
+4. Determine Lucid language-country tags. First advise the experimenter to run
+   `psynet lucid locale` in an environment with valid Lucid API access and use
+   that API-backed lookup as the source of truth. If Lucid API access is missing,
+   derive provisional tags from local PsyNet Lucid tag references, existing
+   qualification templates, and the requested language/country names; clearly
+   mark these tags as unverified, report that they are not guaranteed to be
+   valid market pairs, and keep target-specific readiness blocked until the
+   experimenter verifies them with `psynet lucid locale` or generates real
+   qualification JSON successfully.
 5. Leave per-target wage values blank in the report unless the user provides an
    approved wage source, commonly `minimum_wage_countries.csv`. Never guess wage
    values. The report should teach the experimenter that `wage_per_hour` must be
@@ -325,7 +332,10 @@ know why these values matter:
   existing translation file such as `locales/tr/LC_MESSAGES/experiment.po`.
 - `LANGUAGE` and `COUNTRY`: Lucid/Cint tags for the recruitment market. They
   must match the active deployment target; `LUCID_CONFIG_PATH` is computed from
-  these values to select the generated JSON filename.
+  these values to select the generated JSON filename. Verify language-country
+  tags with `psynet lucid locale` in an environment with Lucid API access when
+  possible. If credentials are unavailable, any locally derived tags are
+  provisional and must be reported as unverified.
 - `wage_per_hour`: the hourly payment rate. Review it separately for every
   country; do not reuse one country's wage for all deployment targets.
 - `qualification_file`: the JSON file Cint/Lucid uses for demographic and custom
@@ -357,9 +367,10 @@ Use this structure:
 - `Parameter review notes`: explain which Cint parameters likely need
   experimenter review, especially timeouts, `bid_incidence`, locale, language
   tag, country tag, and per-target wage.
-- `Deployment targets`: language-country pairs, PsyNet locale, Lucid tags, and
-  source used to verify them. Include an empty `wage_per_hour` column when wages
-  have not been supplied.
+- `Deployment targets`: language-country pairs, PsyNet locale, Lucid tags,
+  whether they were verified with `psynet lucid locale`, and any provisional
+  source used when API access was unavailable. Include an empty `wage_per_hour`
+  column when wages have not been supplied.
 - `Deployment CSV`: path, rows added, and any blank wage values requiring human
   review.
 - `Qualification tooling`: script path, enabled target tuples, enabled filters,
@@ -438,7 +449,10 @@ Parameter review notes
 What the experimenter needs to know
 - locale controls the participant language and must match an existing .po file.
 - LANGUAGE and COUNTRY are Lucid market tags; the computed LUCID_CONFIG_PATH
-  uses them to select the lucid-<LANGUAGE>-<COUNTRY>.json filename.
+  uses them to select the lucid-<LANGUAGE>-<COUNTRY>.json filename. Run
+  psynet lucid locale with Lucid API access to verify market pairs; locally
+  derived tags are only provisional until that check or real JSON generation
+  succeeds.
 - wage_per_hour is country-specific and should be filled separately for every
   row in cint_deployment_targets.csv.
 - create_qualifications.py is ready, but real qualification JSON generation
