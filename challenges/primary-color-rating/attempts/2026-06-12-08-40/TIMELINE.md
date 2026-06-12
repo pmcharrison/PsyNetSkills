@@ -20,3 +20,5 @@
 - T+00:36:00 [agent] Implemented the first PsyNet experiment version in `code/primary_color_rating/`.
 - T+00:38:00 [agent] First `psynet test local` run failed because the experiment directory was missing the standard generated `constraints.txt`.
 - T+00:39:00 [agent] Generated `constraints.txt` with `dallinger constraints generate`.
+- T+00:42:00 [agent] Playwright exploration found PsyNet's default static-trial block selection presented green first, so the experiment needed an explicit red, green, blue block order.
+- T+00:43:00 [agent] Added `ColorRatingTrialMaker.choose_block_order` and a bot assertion for the requested color order.

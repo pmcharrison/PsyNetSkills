@@ -20,7 +20,7 @@ COLORS = [
 def color_nodes():
     """Return the static color nodes shown to each participant."""
 
-    return [StaticNode(definition=color) for color in COLORS]
+    return [StaticNode(definition=color, block=color["name"]) for color in COLORS]
 
 
 class ColorRatingTrial(StaticTrial):
@@ -64,7 +64,14 @@ class ColorRatingTrial(StaticTrial):
         )
 
 
-trial_maker = StaticTrialMaker(
+class ColorRatingTrialMaker(StaticTrialMaker):
+    """Present primary color blocks in the requested order."""
+
+    def choose_block_order(self, experiment, participant, blocks):
+        return ["red", "green", "blue"]
+
+
+trial_maker = ColorRatingTrialMaker(
     id_="primary_color_ratings",
     trial_class=ColorRatingTrial,
     nodes=color_nodes,
@@ -96,7 +103,9 @@ class Exp(psynet.experiment.Experiment):
         ratings_by_color = {
             trial.definition["name"]: trial.answer for trial in completed_trials
         }
+        color_order = [trial.definition["name"] for trial in completed_trials]
 
         assert set(ratings_by_color) == {"red", "green", "blue"}
+        assert color_order == ["red", "green", "blue"]
         assert all(isinstance(rating, int) for rating in ratings_by_color.values())
         assert all(1 <= rating <= 7 for rating in ratings_by_color.values())
