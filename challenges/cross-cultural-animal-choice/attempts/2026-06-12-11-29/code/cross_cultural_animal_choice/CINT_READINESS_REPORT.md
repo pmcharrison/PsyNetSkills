@@ -12,7 +12,7 @@
 
 - REVIEW: `termination_time_in_s`, `initial_response_within_s`, `inactivity_timeout_in_s`, `no_focus_timeout_in_s`, and `bid_incidence` are starting values and may need study-specific review.
 - REVIEW: `wage_per_hour` is currently a structural placeholder (`12.0`) in `Exp.config`; deployment wages are blank in `cint_deployment_targets.csv` and must be reviewed separately for each country.
-- REVIEW: No optional qualification filters were enabled because `MONOLINGUALISM` and `HAS_AUDIO` were provided with unchecked boxes. `TIMEOUT` is added automatically by PsyNet's Lucid helper.
+- REVIEW: `IS_NATIVE V1` is enabled in `create_qualifications.py` following the supplied qualification-generation file. `MONOLINGUALISM` and `HAS_AUDIO` remain commented out. `TIMEOUT` is added automatically by PsyNet's Lucid helper.
 
 ## Deployment targets
 
@@ -36,13 +36,13 @@
 
 - COMPLETE: Created `create_qualifications.py`.
 - COMPLETE: Enabled target tuples: `("TUR", "TR")`, `("ARA", "MA")`, `("ENG", "US")`, `("FRE", "FR")`, and `("FRE", "CA")`.
-- COMPLETE: No optional filters enabled; examples remain commented for future edits.
+- COMPLETE: `IS_NATIVE V1` is enabled; `MONOLINGUALISM`, `BORN_IN_COUNTRY`, `LIVE_IN_COUNTRY`, `HAS_NATIONALITY`, and `HAS_AUDIO` remain commented out for future edits.
 - BLOCKED: Real qualification generation requires valid Lucid API access in the local/deployment environment.
 
 ## Lucid API access
 
 - MISSING: `psynet lucid locale` failed because `lucid_api_key` is not configured.
-- MISSING: `create_qualifications.py` requires `lucid_api_key` and `lucid_sha1_hashing_key` in the local/deployment environment.
+- MISSING: `create_qualifications.py` first requires `lucid_api_key` in the local/deployment environment; real qualification generation may also require the configured Lucid SHA1 hashing key.
 - No secret values were inspected, printed, copied, or committed.
 
 ## Qualification files
@@ -64,7 +64,7 @@
 - COMPLETE: `python experiment.py` passed and confirmed the experiment imports with the ENG-GB placeholder JSON.
 - COMPLETE: `psynet translate` passed for POT extraction and translated into 0 languages because only English is active structurally.
 - BLOCKED: `psynet test local` launches the experiment but fails when the real Lucid recruiter tries to open recruitment without `lucid_api_key`.
-- BLOCKED: `python create_qualifications.py` stops safely because `lucid_api_key` and `lucid_sha1_hashing_key` are missing.
+- BLOCKED: `python create_qualifications.py` stops because `lucid_api_key` is missing.
 - COMPLETE: `uv run psynetsk-validate` passed.
 
 ## What the experimenter needs to know
@@ -73,7 +73,7 @@
 - `LANGUAGE` and `COUNTRY` are Lucid market tags; the computed `LUCID_CONFIG_PATH` uses them to select `lucid-<LANGUAGE>-<COUNTRY>.json`.
 - `wage_per_hour` is country-specific and should be filled separately for every row in `cint_deployment_targets.csv`.
 - `create_qualifications.py` is ready, but real qualification JSON generation requires valid Lucid API credentials in the local/deployment environment.
-- `TIMEOUT` is added automatically. Optional filters such as `MONOLINGUALISM` and `HAS_AUDIO` should be enabled intentionally because each one can reduce the qualifying participant pool.
+- `TIMEOUT` is added automatically. `IS_NATIVE V1` is currently enabled. Optional filters such as `MONOLINGUALISM` and `HAS_AUDIO` should be enabled intentionally because each one can reduce the qualifying participant pool.
 - `termination_time_in_s`, `inactivity_timeout_in_s`, `no_focus_timeout_in_s`, and `bid_incidence` are study-specific review parameters, not universal defaults.
 
 ## Remaining decisions/blockers
