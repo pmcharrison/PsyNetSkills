@@ -62,6 +62,13 @@ The helper triggers the workflow when its GitHub token has permission, then
 prints the workflow run URL for human approval. If dispatch is unavailable, it
 prints the exact workflow inputs for a human to paste into GitHub.
 
+If dispatch fails with `Resource not accessible by integration`, the GitHub
+identity running the helper lacks Actions/workflows write permission for
+`workflow_dispatch`. This is separate from AWS credentials and the protected
+Environment gate. The fix is either to let a human run the workflow in GitHub,
+or to configure a dispatch-only GitHub App/token that can start workflow runs
+but is not allowed to approve the `attempt-deploy` Environment.
+
 The `Deploy PsyNet attempt` workflow accepts:
 
 - `attempt_ref`: commit SHA or branch containing the attempt code.

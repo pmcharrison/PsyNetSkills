@@ -80,8 +80,12 @@ Useful options:
 
 - If the helper cannot identify exactly one experiment directory, ask for
   `--experiment-dir`.
-- If `gh api` reports insufficient permissions, do not try another credential.
-  Provide the printed GitHub workflow URL and inputs for a human to run.
+- If `gh api` reports `Resource not accessible by integration`, the agent's
+  GitHub identity lacks Actions/workflows write permission for
+  `workflow_dispatch`. Do not try another credential. Provide the printed
+  GitHub workflow URL and inputs for a human to run, or ask a repository admin
+  to install a dispatch-only GitHub App/token that can start workflow runs but
+  is not a required reviewer for `attempt-deploy`.
 - If names exceed GitHub, DNS, Dallinger, or EC2 limits, shorten only the
   free-form slug prefix; keep the commit suffix for traceability.
 - If the workflow run is queued successfully but waits for approval, stop there:
