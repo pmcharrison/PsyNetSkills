@@ -412,14 +412,20 @@ Use this structure:
   generate real JSON files.
 - `Final deployment warning`: emphasize the exact steps the experimenter must
   complete after this agent pass: run `psynet lucid locale` with API access and
-  compare tags against `cint_deployment_targets.csv`; inspect
-  `create_qualifications.py` and run it after confirming tags; confirm all target
-  `.po` files exist and have been reviewed; fill `wage_per_hour` for every row;
-  then, before each deployment, update `locale`, `LANGUAGE`, `COUNTRY`, and
-  `wage_per_hour` from `cint_deployment_targets.csv`, either manually or with an
-  AI assistant.
+  compare tags against `cint_deployment_targets.csv` because locally derived
+  tags can be wrong; inspect `create_qualifications.py` before running it because
+  it controls Cint screening filters and target JSON files; confirm all target
+  `.po` files exist and have been reviewed because `locale` controls the
+  participant language; fill `wage_per_hour` for every row because wages are
+  country-specific; then, before each deployment, update `locale`, `LANGUAGE`,
+  `COUNTRY`, and `wage_per_hour` from `cint_deployment_targets.csv`, either
+  manually or with an AI assistant.
 - `Readiness status`: one of `target-ready`, `parameter-ready only`, or
   `blocked`.
+
+In the final chat response, repeat the `Final deployment warning` steps in
+plain language even if they are already in `CINT_READINESS_REPORT.md`, so the
+experimenter sees the next actions without opening the report.
 
 ### Example report shape
 
@@ -500,18 +506,23 @@ Next local command for the experimenter
   prepares the script and placeholder structure unless API access is available.
 
 Final deployment warning
-- Before relying on these files for deployment, run psynet lucid locale in an
-  environment with Lucid API access and compare the language/country tags against
-  cint_deployment_targets.csv.
-- After confirming the target tags, inspect create_qualifications.py, then run
-  python create_qualifications.py to produce real qualification JSON files.
+- Run psynet lucid locale in an environment with Lucid API access, then compare
+  the returned language/country tags against cint_deployment_targets.csv. This
+  is needed because locally derived Lucid tags are provisional and a wrong tag
+  can target the wrong market or fail qualification generation.
+- Inspect create_qualifications.py, then run python create_qualifications.py
+  after confirming the tags. This creates the real qualification JSON files that
+  Cint/Lucid uses for targeting and screening.
 - Confirm all target languages have reviewed locale files. If files are missing,
-  run the reported psynet translate command and review the generated .po files.
+  run the reported psynet translate command and review the generated .po files;
+  otherwise participants may see the wrong language or untranslated text.
 - Fill wage_per_hour separately for every target country in
-  cint_deployment_targets.csv.
+  cint_deployment_targets.csv. This should come from an approved wage or
+  minimum-wage source and should not be reused blindly across countries.
 - For each deployment, update locale, LANGUAGE, COUNTRY, and wage_per_hour to
   match the selected row, either manually from the table or with help from an AI
-  assistant.
+  assistant. These values decide the experiment language, Cint target market, and
+  payment rate for that deployment.
 
 Readiness status
 - parameter-ready only

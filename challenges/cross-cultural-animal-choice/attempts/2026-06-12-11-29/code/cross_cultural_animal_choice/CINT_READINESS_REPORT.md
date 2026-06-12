@@ -93,11 +93,11 @@
 
 ## Final deployment warning
 
-- Run `psynet lucid locale` in an environment with Lucid API access and compare the returned language/country tags against `cint_deployment_targets.csv`; `ENG-NG`, `ARA-MA`, and `TUR-TR` are provisional until that check or real JSON generation succeeds.
-- After confirming the target tags, inspect `create_qualifications.py`, then run `python create_qualifications.py` to produce real `qualifications/lucid/lucid-ENG-NG.json`, `qualifications/lucid/lucid-ARA-MA.json`, and `qualifications/lucid/lucid-TUR-TR.json`.
-- Confirm all target languages have reviewed locale files. Arabic and Turkish currently need `psynet translate ar tr` followed by review of `locales/ar/LC_MESSAGES/experiment.po` and `locales/tr/LC_MESSAGES/experiment.po`.
-- Decide the minimum acceptable `wage_per_hour` for Nigeria, Morocco, and Turkey, then fill the blank wage cells in `cint_deployment_targets.csv`.
-- Before each deployment, update `locale`, `LANGUAGE`, `COUNTRY`, and `wage_per_hour` to match the selected row in `cint_deployment_targets.csv`, either manually or with help from an AI assistant.
+- Run `psynet lucid locale` in an environment with Lucid API access, then compare the returned language/country tags against `cint_deployment_targets.csv`. This is needed because `ENG-NG`, `ARA-MA`, and `TUR-TR` are provisional until API verification or real JSON generation succeeds.
+- After confirming the target tags, inspect `create_qualifications.py`, then run `python create_qualifications.py`. This creates the real `qualifications/lucid/lucid-ENG-NG.json`, `qualifications/lucid/lucid-ARA-MA.json`, and `qualifications/lucid/lucid-TUR-TR.json` files that Cint/Lucid uses for targeting and screening.
+- Confirm all target languages have reviewed locale files. Arabic and Turkish currently need `psynet translate ar tr` followed by review of `locales/ar/LC_MESSAGES/experiment.po` and `locales/tr/LC_MESSAGES/experiment.po`; otherwise participants may see untranslated or wrong-language text.
+- Decide the minimum acceptable `wage_per_hour` for Nigeria, Morocco, and Turkey, then fill the blank wage cells in `cint_deployment_targets.csv`. These values should come from an approved wage or minimum-wage source and should not be reused blindly across countries.
+- Before each deployment, update `locale`, `LANGUAGE`, `COUNTRY`, and `wage_per_hour` to match the selected row in `cint_deployment_targets.csv`, either manually or with help from an AI assistant. These values decide the participant language, Cint target market, and payment rate for that deployment.
 
 ## Readiness status
 
