@@ -25,9 +25,6 @@ specification or research idea.
 
 Planning turns the original idea or specification into a single `PLAN.md`,
 created from `assets/PLAN_TEMPLATE.md` and filled **one section at a time**.
-Save it at the attempt root in challenge mode (the dashboard renders it at the
-attempt page's `#plan` anchor) or in the experiment project folder in
-interactive mode; if no folder exists yet, ask the user where to save it.
 The template starts with a section status table; keep it current at every step
 so any reader (or a resumed agent session) can see exactly where the workflow
 stands.
