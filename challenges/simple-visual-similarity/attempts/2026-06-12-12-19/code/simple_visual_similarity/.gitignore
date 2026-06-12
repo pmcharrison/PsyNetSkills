@@ -9,6 +9,7 @@ env/
 
 # Automatically generated server log file
 server.log
+dump.rdb
 
 # Automatically generated resources for running experiments with assets
 static/assets
@@ -21,6 +22,14 @@ source_code.zip
 
 # Python cache files
 __pycache__
+
+# Local JavaScript dependencies and test outputs
+node_modules/
+test-results/
+playwright-report/
+
+# Local PsyNet simulation/export outputs
+data/
 
 # MacOS Finder config files
 *.DS_Store

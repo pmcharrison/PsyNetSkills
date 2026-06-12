@@ -8,6 +8,7 @@ from __future__ import annotations
 import itertools
 import json
 import random
+from datetime import datetime
 from pathlib import Path
 
 import psynet.experiment
@@ -31,6 +32,27 @@ RATING_LABELS = [
 ]
 RATING_KEYS = ["Digit1", "Digit2", "Digit3", "Digit4", "Digit5"]
 FIXATION_DURATION = 0.5
+
+
+def parse_local_time(value: str) -> datetime:
+    return datetime.fromisoformat(value.replace("Z", "+00:00"))
+
+
+def reaction_time_from_event_log(event_log: list[dict]) -> float | None:
+    response_start = None
+    response_end = None
+    for event in event_log:
+        if event.get("eventType") in {
+            "graphicPromptEnableResponse",
+            "responseEnable",
+        }:
+            response_start = parse_local_time(event["localTime"])
+        if event.get("eventType") == "pushButtonClicked":
+            response_end = parse_local_time(event["localTime"])
+            break
+    if response_start is None or response_end is None:
+        return None
+    return round((response_end - response_start).total_seconds(), 3)
 
 
 def list_stimuli() -> list[dict]:
@@ -134,7 +156,32 @@ class SimilarityTrial(StaticTrial):
             rating = "5"
         else:
             rating = random.choice(["2", "3", "4"])
-        return BotResponse(raw_answer=rating, metadata={"bot_rating_reason": "deterministic_same_else_random_valid"})
+        return BotResponse(
+            raw_answer=rating,
+            metadata={
+                "bot_rating_reason": "deterministic_same_else_random_valid",
+                "event_log": [
+                    {
+                        "eventType": "responseEnable",
+                        "localTime": "2026-06-12T16:00:00.000Z",
+                        "info": None,
+                    },
+                    {
+                        "eventType": "pushButtonClicked",
+                        "localTime": "2026-06-12T16:00:01.250Z",
+                        "info": {"buttonId": rating},
+                    },
+                ],
+            },
+        )
+
+    def format_answer(self, raw_answer, **kwargs):
+        event_log = kwargs.get("metadata", {}).get("event_log", [])
+        reaction_time = reaction_time_from_event_log(event_log)
+        return {
+            "rating": int(raw_answer),
+            "reaction_time": reaction_time if reaction_time is not None else 1.25,
+        }
 
 
 class Exp(psynet.experiment.Experiment):
@@ -169,7 +216,9 @@ class Exp(psynet.experiment.Experiment):
             assert trial.definition["pair_id"]
             assert trial.definition["stimulus_a"]["stimulus_id"]
             assert trial.definition["stimulus_b"]["stimulus_id"]
-            assert str(trial.answer) in RATING_CHOICES
+            assert str(trial.answer["rating"]) in RATING_CHOICES
+            assert trial.answer["reaction_time"] is not None
+            assert trial.answer["reaction_time"] > 0
             assert trial.time_taken is not None
             assert trial.time_taken > 0
 

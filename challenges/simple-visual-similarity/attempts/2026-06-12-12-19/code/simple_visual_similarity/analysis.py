@@ -65,21 +65,33 @@ def load_rows(input_path: Path) -> list[dict]:
 
 def row_to_trial(row: dict) -> dict | None:
     definition = parse_literal(row.get("definition") or row.get("trial_definition"))
-    if not isinstance(definition, dict) or "stimulus_a" not in definition:
+    stimulus_a = parse_literal(row.get("stimulus_a"))
+    stimulus_b = parse_literal(row.get("stimulus_b"))
+    if not isinstance(stimulus_a, dict) or not isinstance(stimulus_b, dict):
+        if not isinstance(definition, dict) or "stimulus_a" not in definition:
+            return None
+        stimulus_a = definition["stimulus_a"]
+        stimulus_b = definition["stimulus_b"]
+    if "stimulus_id" not in stimulus_a or "stimulus_id" not in stimulus_b:
         return None
     answer = parse_literal(row.get("answer") or row.get("trial_answer"))
+    if isinstance(answer, dict):
+        answer_reaction_time = answer.get("reaction_time")
+        answer = answer.get("rating")
+    else:
+        answer_reaction_time = None
     try:
         rating = float(answer)
     except (TypeError, ValueError):
         return None
-    rt = row.get("time_taken") or row.get("reaction_time") or row.get("rt")
+    rt = answer_reaction_time or row.get("reaction_time") or row.get("rt") or row.get("time_taken")
     try:
         reaction_time = float(rt) if rt not in (None, "") else None
     except (TypeError, ValueError):
         reaction_time = None
     return {
-        "stimulus_a": definition["stimulus_a"]["stimulus_id"],
-        "stimulus_b": definition["stimulus_b"]["stimulus_id"],
+        "stimulus_a": stimulus_a["stimulus_id"],
+        "stimulus_b": stimulus_b["stimulus_id"],
         "rating": rating,
         "reaction_time": reaction_time,
     }
