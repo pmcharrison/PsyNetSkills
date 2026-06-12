@@ -10,7 +10,7 @@ wage_per_hour = 12.0
 
 # The language of the experiment. Supported values: en, hi, fr.
 # Change this value (and relaunch) to run the experiment in another language.
-locale = hi
+locale = en
 supported_locales = ["en", "hi", "fr"]
 
 [Prolific]
