@@ -34,6 +34,8 @@ test checks. To run local tests without Lucid credentials, set
 unset and provide real Lucid credentials through the deployment environment.
 `cint_deployment_targets.csv` records the target locale/tag review table; it is
 header-only until real deployment targets and per-target wages are chosen.
+`qualifications/lucid/example-lucid-ENG-GB.json` is a review-only example of the
+generated Lucid JSON shape and is not deployable for this experiment.
 
 To prepare real Cint qualifications:
 

@@ -53,6 +53,7 @@ question_answer_dict = {
     # "LIVE_IN_COUNTRY v1": ["Yes"],
     # "HAS_NATIONALITY v1": ["Yes"],
     # "HAS_AUDIO v1": ["Yes"],
+    # "ALLOW_VOICE_RECORDING v1": ["Yes"],
 }
 
 
