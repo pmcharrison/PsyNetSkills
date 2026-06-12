@@ -6,7 +6,7 @@ PsyNet's `GraphicPrompt` frames, `prevent_control_response`, and `KeyboardPushBu
 
 *Actions:*
 
-- **PsyNetSkills:** Update the psychophysics skill to recommend `GraphicPrompt` frame sequencing with `prevent_control_response`, `activate_control_response`, `KeyboardPushButtonControl`, and event-log reaction-time extraction for simple visual discrimination tasks. Confidence: high. Impact: medium. Status: considering.
+- **PsyNetSkills:** Update the psychophysics skill to recommend `GraphicPrompt` frame sequencing with `prevent_control_response`, `activate_control_response`, `KeyboardPushButtonControl`, and event-log reaction-time extraction for simple visual discrimination tasks. Confidence: high. Impact: medium. Status: completed. Notes: Added concise guidance to `.cursor/skills/psychophysics/SKILL.md` after evaluation feedback.
 
 ## Existing-server performance tests need local dashboard credentials
 

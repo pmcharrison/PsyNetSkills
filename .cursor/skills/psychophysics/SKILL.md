@@ -14,6 +14,8 @@ Requests to allow keyboard buttons pressing should be implemented using Keyboard
 
 First priority for correct display of all visual elements, with the right time, and no additional lingering display items such as fixation crosses or unrelated graphical elements that are not specified.
 
+For simple timed visual discrimination tasks, prefer `GraphicPrompt` frame sequencing with `prevent_control_response`/`activate_control_response`, `KeyboardPushButtonControl`, and event-log reaction-time extraction before adding custom JavaScript.
+
 Response buttons and questions should be centered around the stimuli.
 
 Do not show technical details that are not participant-facing (e.g., labeling the stimuli “stimuli” etc).
