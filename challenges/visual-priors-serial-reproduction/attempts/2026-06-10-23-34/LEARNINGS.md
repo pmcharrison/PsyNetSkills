@@ -19,3 +19,23 @@ repeatable.
 
 *Actions:*
 - **PsyNetSkills:** Recommend absolute paths for `psynet export local --path` in challenge evidence instructions. Confidence: high. Status: considering.
+
+## Avoid unrequested task elements
+
+The evaluation noted that the fixation cross was not explicitly mentioned in the
+challenge description. Future attempts should avoid adding procedure elements
+unless they are specified by the instructions or clearly required by the
+framework.
+
+*Actions:*
+- **PsyNetSkills:** Add attempt guidance reminding agents not to infer extra participant-facing task elements from generic experiment conventions. Confidence: high. Status: considering.
+
+## Interpret schematic figure sizes cautiously
+
+The evaluation noted that the dot appeared too large, likely because schematic
+figures exaggerate small objects for visibility. Future visual experiment
+implementations should distinguish schematic clarity from intended stimulus
+scale.
+
+*Actions:*
+- **PsyNetSkills:** Add visual-experiment guidance to treat schematic element sizes as approximate unless the challenge text or source gives measurements. Confidence: high. Status: considering.
