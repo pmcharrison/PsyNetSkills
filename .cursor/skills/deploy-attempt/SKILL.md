@@ -26,7 +26,7 @@ workflow.
   `.dallingerconfig`, dashboard passwords, SSH private keys, or recruiter
   tokens.
 - The agent may queue the GitHub Actions workflow when it has dispatch
-  permission. In no-reviewer mode, dispatch permission is deployment authority.
+  permission. Dispatch permission is deployment authority.
 - Never alter GitHub Environment settings or grant yourself additional GitHub,
   AWS, or secret access.
 
@@ -50,8 +50,7 @@ workflow.
    queue the protected workflow:
    `python3 .cursor/skills/deploy-attempt/scripts/deploy_attempt.py <attempt> --request-deploy`
 5. If the helper returns a workflow run URL, give the user that URL and explain
-   that no-reviewer mode starts the deploy job automatically after the prepare
-   job succeeds.
+   that the deploy job starts automatically after the prepare job succeeds.
 6. If workflow dispatch is unavailable to the agent, give the user:
    - the workflow URL printed by the helper;
    - the exact inputs printed by the helper;
