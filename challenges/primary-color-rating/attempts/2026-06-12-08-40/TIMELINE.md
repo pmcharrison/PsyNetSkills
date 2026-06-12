@@ -32,4 +32,8 @@
 - T+01:09:00 [agent] Updated trial CSS to pin the Next button above the reward footer.
 - T+01:12:00 [agent] Regenerated participant screenshots and video; video review confirmed red, green, blue order, visible scale controls, and Next button clearance.
 - T+01:14:00 [agent] Re-ran final `python experiment.py` and `psynet test local` successfully after the CSS fix.
-- T+01:14:30 [agent-stop] Implementation and first-pass evidence collection complete; attempt metadata remains open pending human author key.
+- T+01:14:30 [agent-stop] Implementation and first-pass evidence collection complete; attempt metadata remained open pending human author key.
+- T+01:44:00 [manual] User provided author key `pmcharrison`.
+- T+01:44:30 [agent-start] Resumed to close attempt metadata.
+- T+01:45:00 [agent] Filled `agent.json.authors` and `ended_at`.
+- T+01:45:30 [agent-stop] Attempt metadata complete.

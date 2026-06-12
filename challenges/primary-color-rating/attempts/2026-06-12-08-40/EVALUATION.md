@@ -28,4 +28,4 @@ Summarize the human evaluator's overall judgment.
 
 - Score and feedback should come from a human evaluator, captured conversationally when working with Cursor Cloud Agents.
 - The plan-review pause was cleared when the user approved `PLAN.md` in chat on 2026-06-12.
-- `agent.json.authors` is still pending human author identification, so `ended_at` remains `null`.
+- The user identified `pmcharrison` as the human author, so `agent.json` metadata is complete.
