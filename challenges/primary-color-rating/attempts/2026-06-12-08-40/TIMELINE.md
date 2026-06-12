@@ -18,3 +18,5 @@
 - T+00:29:00 [agent-start] Resumed after human plan approval.
 - T+00:31:30 [agent] Merged interim paused-at-plan process changes to `main` and returned to the attempt branch.
 - T+00:36:00 [agent] Implemented the first PsyNet experiment version in `code/primary_color_rating/`.
+- T+00:38:00 [agent] First `psynet test local` run failed because the experiment directory was missing the standard generated `constraints.txt`.
+- T+00:39:00 [agent] Generated `constraints.txt` with `dallinger constraints generate`.
