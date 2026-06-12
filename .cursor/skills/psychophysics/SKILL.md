@@ -1,7 +1,7 @@
 ---
 name: psychophysics
 description: Implement psychophysics experiments with PsyNet, focusing on precise visual displays, timing, response collection, and conservative interpretation of reference figures.
-authors: [raja-marjieh]
+authors: [raja-marjieh, jacobyn]
 ---
 
 # Implement PsyNet psychophysics experiment
