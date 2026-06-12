@@ -87,7 +87,10 @@ that needs these procedures. Avoid duplicating the core model specification.
    to confirm that Bayesian computations are reliable.
 - If performance is insufficient, consider using more approximate sampling methods,
 or lowering the number of samples, but always make sure the accuracy does not degrade too much.
-
+- If simulations within psynet are sufficiently slower than simulations outside of psynet, make sure that
+performance is not degraded by using inefficient data retrieval techniques when updating the posteriors.
+For instance, avoid relying on the varstore. Optimize the SQL queries retrieving the data.
+  
 ## Posterior update strategy
 
 Choose one of these strategies explicitly:
