@@ -15,14 +15,24 @@ from psynet.page import InfoPage
 from psynet.timeline import FailedValidation, Timeline
 from psynet.trial.main import GenericTrialNode, Trial, TrialMaker
 
-from adaptive_memory import (
-    CANDIDATE_LENGTHS,
-    choose_next_length,
-    different_digit_string,
-    fit_posterior,
-    initial_posterior_state,
-    recall_probability,
-)
+try:
+    from adaptive_memory import (
+        CANDIDATE_LENGTHS,
+        choose_next_length,
+        different_digit_string,
+        fit_posterior,
+        initial_posterior_state,
+        recall_probability,
+    )
+except ModuleNotFoundError:
+    from .adaptive_memory import (
+        CANDIDATE_LENGTHS,
+        choose_next_length,
+        different_digit_string,
+        fit_posterior,
+        initial_posterior_state,
+        recall_probability,
+    )
 
 N_TRIALS = 10
 ADAPTIVE_ENABLED = os.environ.get("ADAPTIVE_MEMORY_ADAPTIVE", "1") != "0"
@@ -92,6 +102,7 @@ class MemoryTrial(Trial):
 
 class MemoryTrialMaker(TrialMaker):
     def __init__(self):
+        self.choose_participant_group = None
         super().__init__(
             id_="adaptive_memory_trials",
             trial_class=MemoryTrial,
