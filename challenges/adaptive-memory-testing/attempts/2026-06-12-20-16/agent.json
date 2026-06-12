@@ -20,6 +20,7 @@
   "run_cost": null,
   "notes": [
     "Human author metadata is pending; fill authors before marking the attempt complete.",
-    "Implementation is paused pending human review of PLAN.md."
+    "Implementation and first-pass evidence collection are complete.",
+    "ended_at remains null only because the human GitHub author key has not been provided."
   ]
 }
