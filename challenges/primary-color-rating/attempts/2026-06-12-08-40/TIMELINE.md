@@ -50,3 +50,7 @@
 - T+05:02:30 [agent-start] Resumed to simplify analysis evidence.
 - T+05:03:30 [agent] Removed standalone analysis script/log/CSV/JSON/SVG artifacts and kept `evidence/analyses/analysis.ipynb` as the single analysis artifact.
 - T+05:04:00 [agent-stop] Analysis evidence cleanup complete.
+- T+07:56:00 [manual] User asked how to clarify the simulation, analysis, and report requirements after an earlier intervention was needed.
+- T+07:56:30 [agent-start] Resumed to update the relevant skills and documentation.
+- T+07:58:00 [agent] Clarified experiment implementation completion gates in skills, evidence guidance, and attempts documentation.
+- T+08:01:00 [agent-stop] Skill and documentation clarification complete.

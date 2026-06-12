@@ -22,9 +22,11 @@ challenge before starting a fresh attempt.
 - For experiment implementation challenges, also read and follow
   `psynet-experiment-implementation/SKILL.md` before implementing the experiment.
   This underlying skill requires a `PLAN.md` and a human planning review; stop
-  there until the plan is approved. Also read `references/experiment-evidence.md`
-  and `psynet-experiment-implementation/references/validation.md` before
-  finalizing functional or performance evidence.
+  there until the plan is approved. It also requires simulation, a canonical
+  analysis notebook, and `REPORT.md` before the attempt is complete. Also read
+  `references/experiment-evidence.md` and
+  `psynet-experiment-implementation/references/validation.md` before finalizing
+  functional or performance evidence.
 - If the challenge is explicitly cross-cultural, cross-national, multilingual,
   international, or compares cultures/regions/language groups, read and apply
   `prepare-for-translation/SKILL.md` while implementing the experiment. Mark
@@ -133,6 +135,13 @@ challenge before starting a fresh attempt.
    when creating participant-flow screenshots or `evidence/participant.mp4`, and follow
    `references/attempt-artifacts.md` for challenge-type-specific evidence
    guidance.
+    - For experiment implementation challenges, do not stop after functional
+      evidence. Complete the `psynet-experiment-implementation` post-coding
+      steps as review artifacts: run `psynet simulate`, save a simulated export,
+      write the canonical `evidence/analyses/analysis.ipynb` notebook with
+      visible CSV-reading code, inline tables, plots, and interpretation, and add
+      `REPORT.md`. If any of these cannot be completed, record the blocker in
+      `EVALUATION.md`.
 11. When implementation and first-pass evidence collection are complete, close
    `TIMELINE.md` with `[agent-stop]` and set `ended_at` in `agent.json` to the
    matching UTC ISO timestamp. Leave `run_cost` as `null`; maintainers can

@@ -15,3 +15,11 @@ The experiment implementation workflow can require a pause after `PLAN.md` but b
 *Actions:*
 
 - **PsyNetSkills:** Treat `agent.json` with `ended_at: null` as an explicit in-progress attempt state in validation, render `PLAN.md` near the top of attempt dashboard pages, and instruct agents to share the `#plan` preview link or paste the plan when previews are unavailable. Confidence: high. Impact: medium. Status: completed.
+
+## Experiment implementation completion gates must be explicit
+
+The agent initially stopped after functional evidence and missed the `psynet-experiment-implementation` requirements to run simulation, write a Jupyter analysis notebook, and compile `REPORT.md`. The steps existed in the skill, but the attempt workflow and evidence checklist did not make them feel like hard completion gates.
+
+*Actions:*
+
+- **PsyNetSkills:** Make simulation export, canonical inline analysis notebook, and `REPORT.md` explicit completion requirements for experiment implementation attempts in the `psynet-experiment-implementation` and `attempt-challenge` skills, with blockers recorded in `EVALUATION.md` when any artifact is missing. Confidence: high. Impact: high. Status: completed.
