@@ -40,8 +40,10 @@ To prepare real Cint qualifications:
 3. Verify `locales/<locale>/LC_MESSAGES/experiment.po` exists for each target.
 4. Update `create_qualifications.py` by uncommenting only requested
    `country_language_tags` and qualification filters.
-5. Run `python create_qualifications.py`.
-6. Update `LANGUAGE`, `COUNTRY`, `LUCID_CONFIG_PATH`, `locale`, and
+5. Configure Lucid API access in the local/deployment environment; real
+   qualification JSON generation cannot run without it.
+6. Run `python create_qualifications.py`.
+7. Update `LANGUAGE`, `COUNTRY`, `LUCID_CONFIG_PATH`, `locale`, and
    `wage_per_hour` in `experiment.py` for the active deployment target.
 
 The mock Lucid file is not deployable.

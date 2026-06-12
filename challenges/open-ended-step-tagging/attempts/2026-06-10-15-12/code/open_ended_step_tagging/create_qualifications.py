@@ -91,12 +91,31 @@ def write_mock_only_config(language_tag, country_tag, config_path):
     )
 
 
+def require_lucid_api_access(config):
+    missing = []
+    for key in ("lucid_api_key", "lucid_sha1_hashing_key"):
+        try:
+            config.get(key)
+        except KeyError:
+            missing.append(key)
+
+    if missing:
+        raise SystemExit(
+            "Real Cint/Lucid qualification generation requires configured "
+            f"{', '.join(missing)}. Do not add real credentials to the repo. "
+            "Configure them in the local/deployment environment, or leave real "
+            "target tuples commented out and use mock-only files for local "
+            "import checks."
+        )
+
+
 def generate_real_configs(output_dir):
     from psynet.lucid import get_lucid_service
     from psynet.lucid.qualifications import create_lucid_recruitment_config
     from psynet.utils import get_config
 
     config = get_config()
+    require_lucid_api_access(config)
     service = get_lucid_service(config=config)
     service_qualifications = service.get_qualifications_dict()
 

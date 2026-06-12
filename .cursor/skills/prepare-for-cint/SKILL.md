@@ -102,18 +102,26 @@ standardize.
 3. Enable only qualifications explicitly requested by the experimenter in
    `question_answer_dict`. Never auto-enable filters such as native language,
    nationality, audio, or monolingualism.
-4. Preserve existing entries in `qualifications_dict`. If PsyNet raises
+4. Before claiming real qualification generation, verify that the local PsyNet
+   environment can access Lucid through configured `lucid_api_key` and
+   `lucid_sha1_hashing_key` values. Do not inspect, print, copy, or commit the
+   values. If keys are missing or unusable, stop real generation, leave the
+   script ready to run, and mark qualification generation as blocked by missing
+   Lucid API access.
+5. Preserve existing entries in `qualifications_dict`. If PsyNet raises
    `Unknown question TIMEOUT`, add the alias:
    `"TIMEOUT": service.get_qualifications_dict()["TIMEOUT v1"]`.
-5. Write generated files to
+6. Write real generated files to
    `qualifications/lucid/lucid-<LANGUAGE>-<COUNTRY>.json`.
-6. Run the script after targets and qualifications are known.
+7. Run the script only after targets, qualifications, and Lucid API access are
+   available.
 
 If no real target has been chosen, provide the script with all real target
 tuples commented out. Create a mock qualification file only if it is required
 for local import or tests, can be generated without real recruitment secrets or
 paid recruitment, and is named and reported as mock-only. A mock file must never
-be counted as Cint deployment-ready.
+be counted as Cint deployment-ready. Mock files prove local import/test
+readiness, not real Cint recruitment readiness.
 
 ### Phase 5 - Validate readiness
 
@@ -130,15 +138,29 @@ For every known target, verify:
 
 ## Cint Readiness Report
 
-End with a concise report:
+End with a concise report that explicitly lists every required step and whether
+it is complete, blocked, skipped, or not applicable. Do not collapse blockers
+into a single final status; reviewers should see exactly what remains.
 
-- Cint parameters changed in `experiment.py`;
-- target table with locale, Lucid tags, qualification file, and wage status;
-- qualifications enabled;
-- qualification generation status;
-- translation file status;
-- mock-only files, if any;
-- readiness status: `target-ready`, `parameter-ready only`, or `blocked`.
+Use this structure:
+
+- `Experiment parameters`: imports, `LANGUAGE`, `COUNTRY`,
+  `LUCID_CONFIG_PATH`, `get_lucid_settings`, class-level `Exp.config`, recruiter,
+  locale, wage, and `publish_experiment`.
+- `Deployment targets`: language-country pairs, PsyNet locale, Lucid tags, and
+  source used to verify them.
+- `Qualification tooling`: script path, enabled target tuples, enabled filters,
+  and whether real generation was attempted.
+- `Lucid API access`: available, missing, unusable, or not checked. Never include
+  secret values.
+- `Qualification files`: real files generated and mock-only files created, with
+  mock files clearly marked not deployable.
+- `Translation files`: per-target `.po` status.
+- `Validation run`: commands run and whether they passed.
+- `Remaining decisions/blockers`: targets, filters, locale files, wages, Lucid
+  credentials, or anything else needed before deployment.
+- `Readiness status`: one of `target-ready`, `parameter-ready only`, or
+  `blocked`.
 
 ## Rules
 
