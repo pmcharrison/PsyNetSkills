@@ -90,7 +90,7 @@ class SimilarityTrial(StaticTrial):
             "similarity_rating",
             prompt=GraphicPrompt(
                 text="How similar are these two circles?",
-                dimensions=[640, 360],
+                dimensions=[640, 260],
                 viewport_width=0.82,
                 frames=[
                     Frame(
@@ -99,7 +99,7 @@ class SimilarityTrial(StaticTrial):
                                 "fixation",
                                 "+",
                                 x=320,
-                                y=180,
+                                y=130,
                                 attributes={"font-size": 42, "font-weight": "bold"},
                             )
                         ],
@@ -110,7 +110,7 @@ class SimilarityTrial(StaticTrial):
                             Circle(
                                 "left_circle",
                                 x=230,
-                                y=180,
+                                y=130,
                                 radius=stimulus_a["radius"],
                                 attributes={
                                     "fill": stimulus_a["color"],
@@ -121,7 +121,7 @@ class SimilarityTrial(StaticTrial):
                             Circle(
                                 "right_circle",
                                 x=410,
-                                y=180,
+                                y=130,
                                 radius=stimulus_b["radius"],
                                 attributes={
                                     "fill": stimulus_b["color"],
