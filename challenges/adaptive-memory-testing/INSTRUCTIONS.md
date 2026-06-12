@@ -30,19 +30,25 @@ The experiment should:
 - Include a simulation, analysis script, or notebook that demonstrates the
   adaptive policy learning from synthetic participants with different abilities.
 
-Use the following hierarchical response model:
+Use the following hierarchical response model, using the shape-rate
+parameterization for Gamma distributions:
 
 ```text
-y ~ Bernoulli(p)
-p = exp(-exp(theta_i) * l / l_0)
-theta_i ~ Normal(mu, sigma)
-sigma ~ Exponential(1)
-mu ~ Normal(0, 1)
+l_0 = 8
+mu ~ Gamma(2, 2)
+alpha ~ Gamma(2, 1)
+r_i ~ Gamma(alpha, alpha / mu), i = 1, ..., N
+p_ij = exp(-l_j / (l_0 * r_i))
+y_ij ~ Bernoulli(p_ij)
 ```
 
-Here `y` is whether the participant recalled the number string correctly, `l` is
-the length of the presented string, `theta_i` is the participant-specific memory
-ability parameter, and `l_0 = 8` is a fixed scaling factor.
+Here `y_ij` is whether participant `i` recalled number string `j` correctly,
+`l_j` is the length of the presented string, `r_i` is the
+participant-specific memory ability, `mu` is the population mean ability,
+`alpha` controls between-participant variation, and `l_0 = 8` is a fixed
+scaling factor. Values of `r_i` close to zero correspond to very low memory
+ability (`p_ij` close to 0), while very large values of `r_i` correspond to
+high memory ability (`p_ij` close to 1).
 
 The adaptive procedure should consider plausible candidate lengths before each
 trial and select the candidate with maximal expected information gain under the

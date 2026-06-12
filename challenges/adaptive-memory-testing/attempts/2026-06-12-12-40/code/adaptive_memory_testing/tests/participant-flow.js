@@ -8,6 +8,7 @@ const screenshotDir = path.join(evidenceDir, "screenshots");
 const chromePath = fs.existsSync("/usr/local/bin/google-chrome")
   ? "/usr/local/bin/google-chrome"
   : "/usr/bin/google-chrome-stable";
+const visualReview = process.env.VISUAL_REVIEW === "1";
 const adUrl =
   process.env.PSYNET_PARTICIPANT_URL ||
   "http://127.0.0.1:5000/ad?generate_tokens=true&recruiter=hotair";
@@ -18,6 +19,9 @@ async function clickPrimary(page, labelPattern = /^(Begin Experiment|Next|Finish
   const button = page.getByRole("button", { name: labelPattern }).first();
   await expect(button).toBeVisible({ timeout: 15000 });
   await button.click();
+  if (visualReview) {
+    await page.waitForTimeout(500);
+  }
 }
 
 async function screenshot(page, filename) {
@@ -35,7 +39,8 @@ async function main() {
   const browser = await chromium.launch({
     executablePath: chromePath,
     headless,
-    slowMo: headless ? 0 : 180,
+    slowMo: visualReview ? 350 : headless ? 0 : 180,
+    args: ["--window-size=1280,720"],
   });
   const context = await browser.newContext({
     viewport: { width: 1280, height: 720 },
@@ -65,6 +70,9 @@ async function main() {
     if (trial === 1 || trial === 10) {
       await screenshot(page, `${String(3 + trial).padStart(2, "0")}_trial_${trial}_target.png`);
     }
+    if (visualReview) {
+      await page.waitForTimeout(1200);
+    }
     await clickPrimary(page, /Next/);
 
     await expect(page.getByRole("heading", { name: `Trial ${trial} of 10` })).toBeVisible();
@@ -73,11 +81,20 @@ async function main() {
     if (trial === 1) {
       const input = page.locator("input[type='text'], textarea").first();
       await input.fill("123");
+      if (visualReview) {
+        await page.waitForTimeout(700);
+      }
       await clickPrimary(page, /Next/);
       await expect(page.locator("#alert-modal")).toContainText(
         `exactly ${target.length} digits`
       );
+      if (visualReview) {
+        await page.waitForTimeout(1400);
+      }
       await screenshot(page, "05_recall_validation.png");
+      if (visualReview) {
+        await page.waitForTimeout(800);
+      }
       await page.getByRole("button", { name: "OK" }).click();
     }
 
@@ -86,6 +103,9 @@ async function main() {
     await input.fill(target);
     if (trial === 1) {
       await screenshot(page, "06_recall_response.png");
+    }
+    if (visualReview) {
+      await page.waitForTimeout(800);
     }
     await clickPrimary(page, /Next/);
   }
@@ -106,6 +126,9 @@ async function main() {
   await screenshot(page, "07_completion.png");
   if (!page.url().includes("/recruiter-exit")) {
     await expect(page.getByText(/finished|performance score|Thank you/i)).toBeVisible();
+  }
+  if (visualReview) {
+    await page.waitForTimeout(2000);
   }
 
   await context.close();

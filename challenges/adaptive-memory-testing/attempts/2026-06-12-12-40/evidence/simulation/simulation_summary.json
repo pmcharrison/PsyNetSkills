@@ -3,12 +3,12 @@
     "ability": "low",
     "policy": "adaptive",
     "n_participants": 10,
-    "mean_selected_length": 9.77,
-    "mean_late_selected_length": 4.74,
-    "accuracy": 0.11,
-    "mean_vi_abs_error": 0.137,
-    "mean_hmc_abs_error": 0.213,
-    "mean_hmc_acceptance_rate": 0.998
+    "mean_selected_length": 7.23,
+    "mean_late_selected_length": 5.08,
+    "accuracy": 0.14,
+    "mean_vi_abs_error_r_i": 0.18,
+    "mean_hmc_abs_error_r_i": 0.136,
+    "mean_hmc_acceptance_rate": 1.0
   },
   {
     "ability": "low",
@@ -16,21 +16,21 @@
     "n_participants": 10,
     "mean_selected_length": 11.8,
     "mean_late_selected_length": 11.74,
-    "accuracy": 0.15,
-    "mean_vi_abs_error": 0.332,
-    "mean_hmc_abs_error": 0.391,
-    "mean_hmc_acceptance_rate": 0.991
+    "accuracy": 0.13,
+    "mean_vi_abs_error_r_i": 0.257,
+    "mean_hmc_abs_error_r_i": 0.152,
+    "mean_hmc_acceptance_rate": 0.999
   },
   {
     "ability": "medium",
     "policy": "adaptive",
     "n_participants": 10,
-    "mean_selected_length": 12.86,
-    "mean_late_selected_length": 9.8,
-    "accuracy": 0.23,
-    "mean_vi_abs_error": 0.31,
-    "mean_hmc_abs_error": 0.297,
-    "mean_hmc_acceptance_rate": 0.996
+    "mean_selected_length": 11.36,
+    "mean_late_selected_length": 11.24,
+    "accuracy": 0.29,
+    "mean_vi_abs_error_r_i": 0.412,
+    "mean_hmc_abs_error_r_i": 0.43,
+    "mean_hmc_acceptance_rate": 0.998
   },
   {
     "ability": "medium",
@@ -39,20 +39,20 @@
     "mean_selected_length": 10.88,
     "mean_late_selected_length": 10.86,
     "accuracy": 0.32,
-    "mean_vi_abs_error": 0.372,
-    "mean_hmc_abs_error": 0.467,
+    "mean_vi_abs_error_r_i": 0.409,
+    "mean_hmc_abs_error_r_i": 0.325,
     "mean_hmc_acceptance_rate": 0.999
   },
   {
     "ability": "high",
     "policy": "adaptive",
     "n_participants": 10,
-    "mean_selected_length": 16.35,
-    "mean_late_selected_length": 15.56,
-    "accuracy": 0.36,
-    "mean_vi_abs_error": 0.399,
-    "mean_hmc_abs_error": 0.488,
-    "mean_hmc_acceptance_rate": 0.996
+    "mean_selected_length": 16.09,
+    "mean_late_selected_length": 18.38,
+    "accuracy": 0.47,
+    "mean_vi_abs_error_r_i": 0.491,
+    "mean_hmc_abs_error_r_i": 0.653,
+    "mean_hmc_acceptance_rate": 0.999
   },
   {
     "ability": "high",
@@ -60,9 +60,9 @@
     "n_participants": 10,
     "mean_selected_length": 11.16,
     "mean_late_selected_length": 10.3,
-    "accuracy": 0.6,
-    "mean_vi_abs_error": 0.27,
-    "mean_hmc_abs_error": 0.264,
-    "mean_hmc_acceptance_rate": 0.996
+    "accuracy": 0.67,
+    "mean_vi_abs_error_r_i": 0.953,
+    "mean_hmc_abs_error_r_i": 1.089,
+    "mean_hmc_acceptance_rate": 0.999
   }
 ]

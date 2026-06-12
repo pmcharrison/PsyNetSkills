@@ -24,8 +24,8 @@ Copied from `challenge/CRITERIA.md` for human evaluation:
 - [ ] Tests include an adaptive simulation with 30 participants.
 - [ ] Tests include a non-adaptive simulation with 30 participants.
 - [ ] The test fits the adaptive model using HMC.
-- [ ] The test reports a comparison of ability estimate accuracy under the
-      adaptive and non-adaptive simulations.
+- [ ] The test reports a comparison of participant memory-ability estimate
+      accuracy under the adaptive and non-adaptive simulations.
 
 ## Notes
 

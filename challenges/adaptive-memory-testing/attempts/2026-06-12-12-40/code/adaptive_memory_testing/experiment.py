@@ -94,12 +94,12 @@ class DigitTextControl(TextControl):
         trial = bot.current_trial
         target = trial.definition["target_string"]
         length = trial.definition["selected_length"]
-        theta = getattr(bot, "adaptive_memory_theta", None)
-        if theta is None:
-            theta = [-0.8, 0.0, 0.8][bot.id % 3]
-            bot.adaptive_memory_theta = theta
+        ability = getattr(bot, "adaptive_memory_r_i", None)
+        if ability is None:
+            ability = [0.45, 1.0, 2.5][bot.id % 3]
+            bot.adaptive_memory_r_i = ability
         rng = random.Random(f"bot:{bot.id}:{trial.definition['trial_index']}")
-        if rng.random() < float(recall_probability(theta, length)):
+        if rng.random() < float(recall_probability(ability, length)):
             return target
         return "".join(str(rng.randrange(10)) for _ in range(length))
 

@@ -17,3 +17,10 @@
 - T+01:41:00 [agent] Read hidden criteria after evidence collection and extended simulation evidence with 30 adaptive, 30 non-adaptive participants and HMC comparison.
 - T+01:44:00 [agent] Passed non-adaptive random-mode `psynet test local`.
 - T+01:44:30 [agent-stop] Implementation and first-pass evidence collection complete.
+- T+01:49:00 [manual] [intervention] User reported that the challenge had been updated with a new generative model and asked to update the attempt.
+- T+01:50:00 [agent-start] Resumed implementation to incorporate the updated Gamma memory-ability model.
+- T+01:58:00 [agent] Replaced the adaptive posterior, acquisition, bot simulation, and HMC evidence with the `mu`, `alpha`, and `r_i` Gamma model.
+- T+02:05:00 [agent] Regenerated the 30 adaptive/30 non-adaptive simulation with HMC memory-ability accuracy comparison.
+- T+02:16:00 [agent] Passed adaptive and non-adaptive PsyNet local tests with the updated model.
+- T+02:21:00 [agent] Regenerated performance, participant-flow, monitor, and export evidence.
+- T+02:22:00 [agent-stop] Updated-model implementation and first-pass evidence collection complete.

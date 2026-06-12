@@ -12,7 +12,7 @@ import numpy as np
 L0 = 8.0
 MIN_LENGTH = 2
 MAX_LENGTH = 20
-VARIABLE_ORDER = ["mu", "log_sigma", "theta_i"]
+VARIABLE_ORDER = ["log_mu", "log_alpha", "log_r_i"]
 
 
 @dataclass
@@ -21,12 +21,13 @@ class Observation:
     correct: int
 
 
-def recall_probability(theta: np.ndarray | float, length: int) -> np.ndarray | float:
-    return np.exp(-np.exp(theta) * float(length) / L0)
+def recall_probability(r_i: np.ndarray | float, length: int) -> np.ndarray | float:
+    r_i = np.maximum(r_i, 1e-8)
+    return np.exp(-float(length) / (L0 * r_i))
 
 
-def simulate_response(theta: float, length: int, rng: random.Random) -> int:
-    return int(rng.random() < float(recall_probability(theta, length)))
+def simulate_response(r_i: float, length: int, rng: random.Random) -> int:
+    return int(rng.random() < float(recall_probability(r_i, length)))
 
 
 def make_digit_string(length: int, seed: str) -> str:
@@ -34,12 +35,25 @@ def make_digit_string(length: int, seed: str) -> str:
     return "".join(str(rng.randrange(10)) for _ in range(length))
 
 
+def _transformed_mean(mean: np.ndarray, sd: np.ndarray) -> dict:
+    values = np.exp(mean + 0.5 * sd**2)
+    return {
+        "mu": round(float(values[0]), 6),
+        "alpha": round(float(values[1]), 6),
+        "r_i": round(float(values[2]), 6),
+    }
+
+
 def initial_posterior_state() -> dict:
+    mean = np.array([0.0, math.log(2.0), 0.0])
+    sd = np.array([0.55, 0.55, 0.75])
     return {
         "method": "mean_field_advi_numpy",
+        "model": "gamma_memory_ability",
         "variable_order": VARIABLE_ORDER,
-        "mean": [0.0, -0.1, 0.0],
-        "sd": [1.0, 0.65, 1.25],
+        "mean": [round(float(x), 6) for x in mean],
+        "sd": [round(float(x), 6) for x in sd],
+        "transformed_mean": _transformed_mean(mean, sd),
         "n_observations": 0,
         "elbo": None,
         "iterations": 0,
@@ -56,18 +70,21 @@ def _log_bernoulli(y: np.ndarray, p: np.ndarray) -> np.ndarray:
 
 
 def _log_joint(z: np.ndarray, observations: list[Observation]) -> np.ndarray:
-    mu = z[:, 0]
-    log_sigma = z[:, 1]
-    sigma = np.exp(log_sigma)
-    theta = z[:, 2]
+    log_mu = z[:, 0]
+    log_alpha = z[:, 1]
+    log_r = z[:, 2]
+    mu = np.exp(log_mu)
+    alpha = np.exp(log_alpha)
+    r_i = np.exp(log_r)
 
-    logp = -0.5 * (mu**2 + math.log(2.0 * math.pi))
-    logp += np.log(sigma) - sigma
-    logp += -log_sigma - 0.5 * ((theta - mu) / sigma) ** 2
-    logp += -0.5 * math.log(2.0 * math.pi)
+    logp = 2.0 * math.log(2.0) + 2.0 * log_mu - 2.0 * mu
+    logp += 2.0 * log_alpha - alpha
+    lgamma_alpha = np.array([math.lgamma(float(a)) for a in alpha])
+    logp += alpha * (log_alpha - log_mu) - lgamma_alpha
+    logp += alpha * log_r - (alpha / mu) * r_i
 
     for obs in observations:
-        p = recall_probability(theta, obs.length)
+        p = recall_probability(r_i, obs.length)
         logp += _log_bernoulli(np.array(obs.correct), p)
 
     return logp
@@ -130,19 +147,21 @@ class AdaptivePolicy:
         mean, sd = self._unpack(best_params)
         return {
             "method": "mean_field_advi_numpy",
+            "model": "gamma_memory_ability",
             "variable_order": VARIABLE_ORDER,
             "mean": [round(float(x), 6) for x in mean],
             "sd": [round(float(max(x, 1e-4)), 6) for x in sd],
+            "transformed_mean": _transformed_mean(mean, sd),
             "n_observations": len(observations),
             "elbo": round(float(best_elbo), 6),
             "iterations": self.vi_iterations,
         }
 
     def choose_length(self, posterior_state: dict) -> tuple[int, float, list[dict]]:
-        theta_samples = self._theta_samples(posterior_state)
+        ability_samples = self._ability_samples(posterior_state)
         diagnostics = []
         for length in self.candidate_lengths:
-            probs = np.clip(recall_probability(theta_samples, length), 1e-8, 1 - 1e-8)
+            probs = np.clip(recall_probability(ability_samples, length), 1e-8, 1 - 1e-8)
             predictive = float(np.mean(probs))
             acquisition = self._binary_entropy(predictive) - float(
                 np.mean([self._binary_entropy(float(p)) for p in probs])
@@ -158,10 +177,10 @@ class AdaptivePolicy:
         best = diagnostics[0]
         return best["length"], best["acquisition_value"], diagnostics
 
-    def _theta_samples(self, posterior_state: dict) -> np.ndarray:
+    def _ability_samples(self, posterior_state: dict) -> np.ndarray:
         mean = np.array(posterior_state["mean"], dtype=float)
         sd = np.array(posterior_state["sd"], dtype=float)
-        return mean[2] + sd[2] * self._eps[:, 2]
+        return np.exp(mean[2] + sd[2] * self._eps[:, 2])
 
     def _elbo(self, params: np.ndarray, observations: list[Observation]) -> float:
         mean, sd = self._unpack(params)

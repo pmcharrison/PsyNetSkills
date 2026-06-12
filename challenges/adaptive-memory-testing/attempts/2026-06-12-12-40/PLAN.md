@@ -17,15 +17,15 @@ metadata format unchanged.
 
 The response model will follow the challenge specification:
 
-- `y ~ Bernoulli(p)`
-- `p = exp(-exp(theta_i) * l / l_0)`
-- `theta_i ~ Normal(mu, sigma)`
-- `sigma ~ Exponential(1)`
-- `mu ~ Normal(0, 1)`
+- `mu ~ Gamma(2, 2)`
+- `alpha ~ Gamma(2, 1)`
+- `r_i ~ Gamma(alpha, alpha / mu)`
+- `p_ij = exp(-l_j / (l_0 * r_i))`
+- `y_ij ~ Bernoulli(p_ij)`
 
-The fixed scale will be `l_0 = 8`. The experiment will estimate the
-participant-specific memory parameter `theta_i` online from the participant's
-own previous trials while retaining the hierarchical hyperpriors in the model.
+The fixed scale will be `l_0 = 8`. The experiment will estimate the positive
+participant-specific memory ability `r_i` online from the participant's own
+previous trials while retaining the hierarchical hyperpriors in the model.
 
 ## Implementation
 
@@ -53,14 +53,15 @@ both high- and low-accuracy participants.
 
 ## Variational inference and cache representation
 
-The adaptive policy will use PyMC ADVI to approximate the posterior over
-`mu`, `sigma`, and `theta_i` given the participant's observed `(length,
-correct)` history. The posterior cache will be represented as JSON-serializable
-metadata containing:
+The adaptive policy will use lightweight NumPy mean-field variational inference
+to approximate the posterior over unconstrained `log_mu`, `log_alpha`, and
+`log_r_i` given the participant's observed `(length, correct)` history. The
+posterior cache will be represented as JSON-serializable metadata containing:
 
 - the previous posterior mean vector;
 - the previous posterior standard deviation vector;
 - the variable order used to interpret those vectors;
+- transformed posterior means for `mu`, `alpha`, and `r_i`;
 - the number of observations used for the fit;
 - fitting diagnostics such as ELBO loss and draw count.
 
@@ -78,7 +79,7 @@ posterior. It will then evaluate the two possible outcomes for that candidate
 and approximate expected information gain as the expected reduction in posterior
 entropy after observing that outcome:
 
-`EIG(l) = H(q_current(theta_i)) - E_y[H(q_next(theta_i) | l, y)]`
+`EIG(l) = H(q_current(r_i)) - E_y[H(q_next(r_i) | l, y)]`
 
 The implementation will use a deterministic random seed per participant/trial
 when estimating acquisition values so that adaptive choices are reproducible.

@@ -31,7 +31,7 @@ def stable_seed(*parts) -> int:
     return int(digest[:12], 16)
 
 
-def hmc_theta_estimate(
+def hmc_ability_estimate(
     observations: list[Observation],
     start: list[float],
     seed: int,
@@ -86,15 +86,15 @@ def hmc_theta_estimate(
         if iteration >= burnin:
             draws.append(position.copy())
 
-    theta_draws = np.array(draws)[:, 2]
+    ability_draws = np.exp(np.array(draws)[:, 2])
     return {
-        "hmc_theta_mean": round(float(np.mean(theta_draws)), 6),
-        "hmc_theta_sd": round(float(np.std(theta_draws)), 6),
+        "hmc_r_i_mean": round(float(np.mean(ability_draws)), 6),
+        "hmc_r_i_sd": round(float(np.std(ability_draws)), 6),
         "hmc_acceptance_rate": round(float(accepted / (samples + burnin)), 3),
     }
 
 
-def run_participant(theta: float, adaptive: bool, seed: int) -> list[dict]:
+def run_participant(true_r_i: float, adaptive: bool, seed: int) -> list[dict]:
     rng = random.Random(seed)
     policy = AdaptivePolicy()
     observations: list[Observation] = []
@@ -112,19 +112,20 @@ def run_participant(theta: float, adaptive: bool, seed: int) -> list[dict]:
             diagnostics = []
             policy_name = "random"
 
-        correct = simulate_response(theta, length, rng)
+        correct = simulate_response(true_r_i, length, rng)
         rows.append(
             {
                 "policy": policy_name,
-                "theta": theta,
+                "true_r_i": true_r_i,
                 "trial_index": trial_index,
                 "selected_length": length,
-                "predictive_correct_at_true_theta": float(
-                    recall_probability(theta, length)
+                "predictive_correct_at_true_r_i": float(
+                    recall_probability(true_r_i, length)
                 ),
                 "correct": correct,
-                "posterior_theta_mean_before": posterior["mean"][2],
-                "posterior_theta_sd_before": posterior["sd"][2],
+                "posterior_r_i_mean_before": posterior["transformed_mean"]["r_i"],
+                "posterior_log_r_i_mean_before": posterior["mean"][2],
+                "posterior_log_r_i_sd_before": posterior["sd"][2],
                 "acquisition_value": acquisition,
                 "top_candidate": diagnostics[0] if diagnostics else None,
             }
@@ -132,16 +133,19 @@ def run_participant(theta: float, adaptive: bool, seed: int) -> list[dict]:
         observations.append(Observation(length=length, correct=correct))
 
     posterior = policy.fit(observations, posterior)
-    hmc = hmc_theta_estimate(
+    hmc = hmc_ability_estimate(
         observations=observations,
         start=posterior["mean"],
         seed=stable_seed("hmc", seed),
     )
-    rows[-1]["posterior_theta_mean_after"] = posterior["mean"][2]
-    rows[-1]["posterior_theta_sd_after"] = posterior["sd"][2]
+    rows[-1]["posterior_r_i_mean_after"] = posterior["transformed_mean"]["r_i"]
+    rows[-1]["posterior_log_r_i_mean_after"] = posterior["mean"][2]
+    rows[-1]["posterior_log_r_i_sd_after"] = posterior["sd"][2]
     rows[-1].update(hmc)
-    rows[-1]["theta_abs_error_vi"] = abs(rows[-1]["posterior_theta_mean_after"] - theta)
-    rows[-1]["theta_abs_error_hmc"] = abs(rows[-1]["hmc_theta_mean"] - theta)
+    rows[-1]["r_i_abs_error_vi"] = abs(
+        rows[-1]["posterior_r_i_mean_after"] - true_r_i
+    )
+    rows[-1]["r_i_abs_error_hmc"] = abs(rows[-1]["hmc_r_i_mean"] - true_r_i)
     return rows
 
 
@@ -155,12 +159,12 @@ def main():
     output_dir.mkdir(parents=True, exist_ok=True)
 
     all_rows = []
-    abilities = {"low": 0.9, "medium": 0.0, "high": -0.9}
-    for ability_label, theta in abilities.items():
+    abilities = {"low": 0.35, "medium": 1.0, "high": 3.0}
+    for ability_label, true_r_i in abilities.items():
         for policy_name, adaptive in [("adaptive", True), ("random", False)]:
             for participant_index in range(args.participants_per_ability):
                 rows = run_participant(
-                    theta=theta,
+                    true_r_i=true_r_i,
                     adaptive=adaptive,
                     seed=stable_seed(ability_label, policy_name, participant_index),
                 )
@@ -199,13 +203,13 @@ def main():
                         3,
                     ),
                     "accuracy": round(sum(row["correct"] for row in rows) / len(rows), 3),
-                    "mean_vi_abs_error": round(
-                        sum(row["theta_abs_error_vi"] for row in final_rows)
+                    "mean_vi_abs_error_r_i": round(
+                        sum(row["r_i_abs_error_vi"] for row in final_rows)
                         / len(final_rows),
                         3,
                     ),
-                    "mean_hmc_abs_error": round(
-                        sum(row["theta_abs_error_hmc"] for row in final_rows)
+                    "mean_hmc_abs_error_r_i": round(
+                        sum(row["r_i_abs_error_hmc"] for row in final_rows)
                         / len(final_rows),
                         3,
                     ),
