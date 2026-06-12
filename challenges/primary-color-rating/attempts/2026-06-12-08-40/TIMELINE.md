@@ -30,4 +30,6 @@
 - T+01:05:00 [agent] Added trial-page bottom spacing to keep the Next button visible above the footer.
 - T+01:08:00 [agent] Second video review showed spacing alone did not keep the Next button above the fixed footer before rating selection.
 - T+01:09:00 [agent] Updated trial CSS to pin the Next button above the reward footer.
-- T+01:09:30 [agent-stop] Implementation and first-pass evidence collection complete; attempt metadata remains open pending human author key.
+- T+01:12:00 [agent] Regenerated participant screenshots and video; video review confirmed red, green, blue order, visible scale controls, and Next button clearance.
+- T+01:14:00 [agent] Re-ran final `python experiment.py` and `psynet test local` successfully after the CSS fix.
+- T+01:14:30 [agent-stop] Implementation and first-pass evidence collection complete; attempt metadata remains open pending human author key.
