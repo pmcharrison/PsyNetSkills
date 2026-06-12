@@ -71,6 +71,8 @@ which choices are assumptions.
   that requires simplification, caching, or a different posterior strategy.
 - Add timing logs around data loading, posterior fitting/sampling, and objective
   scoring.
+- If bot_response logic is not already supplied, override the default with answers
+drawn from the generative model itself
 
 ## Posterior update strategy
 
