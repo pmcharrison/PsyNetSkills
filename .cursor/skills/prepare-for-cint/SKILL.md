@@ -203,6 +203,33 @@ For every known target, verify:
 - `python create_qualifications.py` succeeds when real targets are configured;
 - the experiment's normal construction or local test command still runs.
 
+### Phase 6 - Explain Cint deployment review points
+
+Every run must include a short, plain-language explanation for experimenters who
+are new to Cint/Lucid deployment. Keep it concise, but do not assume they already
+know why these values matter:
+
+- `locale`: controls PsyNet's participant-facing language. It must match an
+  existing translation file such as `locales/tr/LC_MESSAGES/experiment.po`.
+- `LANGUAGE` and `COUNTRY`: Lucid/Cint tags for the recruitment market. They
+  must match the active deployment target and the generated JSON filename.
+- `wage_per_hour`: the hourly payment rate. Review it separately for every
+  country; do not reuse one country's wage for all deployment targets.
+- `qualification_file`: the JSON file Cint/Lucid uses for demographic and custom
+  qualification targeting. A copied placeholder can support structural review,
+  but real deployment needs JSON regenerated with `python create_qualifications.py`
+  after valid Lucid API access is configured.
+- `create_qualifications.py`: the local script the experimenter runs to create
+  real `qualifications/lucid/lucid-<LANGUAGE>-<COUNTRY>.json` files.
+- `debug_recruiter`: use `False` for real Cint/Lucid deployment.
+- `bid_incidence`: expected percentage of respondents who qualify after the
+  chosen targeting and filters. Review it for each study; stricter filters
+  usually lower the qualifying pool.
+- Timeouts (`termination_time_in_s`, `initial_response_within_s`,
+  `inactivity_timeout_in_s`, `no_focus_timeout_in_s`): study-specific limits for
+  total participation time, slow starts, inactivity, and leaving the experiment
+  window.
+
 ## Cint Readiness Report
 
 End with a concise report that explicitly lists every required step and whether
@@ -230,6 +257,9 @@ Use this structure:
   files created, with placeholders clearly marked as needing regeneration.
 - `Translation files`: per-target `.po` status.
 - `Validation run`: commands run and whether they passed.
+- `What the experimenter needs to know`: concise explanations of locale, Lucid
+  tags, wage, qualification files, selected filters, API access, and timing/
+  incidence parameters.
 - `Remaining decisions/blockers`: targets, filters, locale files, wages, Lucid
   credentials, or anything else needed before deployment.
 - `Readiness status`: one of `target-ready`, `parameter-ready only`, or
@@ -283,6 +313,20 @@ Parameter review notes
 - REVIEW: locale, LANGUAGE, COUNTRY, LUCID_CONFIG_PATH, wage_per_hour, and the
   generated qualification file must match each deployment target.
 
+What the experimenter needs to know
+- locale controls the participant language and must match an existing .po file.
+- LANGUAGE and COUNTRY are Lucid market tags; they also determine the
+  lucid-<LANGUAGE>-<COUNTRY>.json filename.
+- wage_per_hour is country-specific and should be filled separately for every
+  row in cint_deployment_targets.csv.
+- create_qualifications.py is ready, but real qualification JSON generation
+  requires valid Lucid API credentials in the local/deployment environment.
+- TIMEOUT is added automatically. Optional filters such as IS_NATIVE,
+  BORN_IN_COUNTRY, HAS_AUDIO, and MONOLINGUALISM should be chosen intentionally
+  because each one can reduce the qualifying participant pool.
+- termination_time_in_s, inactivity_timeout_in_s, no_focus_timeout_in_s, and
+  bid_incidence are study-specific review parameters, not universal defaults.
+
 Next local command for the experimenter
 - python create_qualifications.py
 
@@ -297,7 +341,8 @@ Readiness status
   other production credentials.
 - Do not use custom or real service credentials for local readiness work unless
   the user explicitly provides a safe deployment workflow.
-- Do not create fake real-looking Lucid files. Mock files must be visibly named
-  and documented as not deployable.
+- Do not claim a copied placeholder Lucid JSON is a real generated
+  qualification file. It must be documented as needing regeneration before
+  deployment.
 - Do not treat missing locales, wages, or qualification decisions as optional;
   report them as blockers for target-specific Cint deployment readiness.
