@@ -31,7 +31,7 @@ RATING_LABELS = [
     "5 Completely similar",
 ]
 RATING_KEYS = ["Digit1", "Digit2", "Digit3", "Digit4", "Digit5"]
-FIXATION_DURATION = 0.5
+FIXATION_DURATION = 0.8
 
 
 def parse_local_time(value: str) -> datetime:
@@ -147,9 +147,14 @@ class SimilarityTrial(StaticTrial):
                 bot_response=self.get_bot_response,
             ),
             events={
-                "responseEnable": Event(is_triggered_by="graphicPromptEnableResponse"),
+                "responseEnable": Event(
+                    is_triggered_by="graphicPromptEnableResponse",
+                    js="$('.push-button').css('visibility', 'visible');",
+                ),
                 "submitEnable": Event(is_triggered_by="graphicPromptEnableSubmit"),
             },
+            css=".push-button { visibility: hidden; }",
+            session_id=f"similarity_rating_{self.id or self.definition['pair_id']}",
             time_estimate=self.time_estimate,
         )
 
