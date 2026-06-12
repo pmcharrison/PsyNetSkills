@@ -1,75 +1,164 @@
 ---
 name: psynet-experiment-implementation
-description: A structured process for implementing PsyNet experiments, including planning, simulations, analysis, and reporting.
+description: A structured, gated process for implementing PsyNet experiments. Confirms the purpose and user intention first, then plans Science, Method, and Implementation as separately reviewed PLAN.md sections before any coding, simulations, analysis, and reporting.
 authors: [pmcharrison]
 ---
 
 # Implement PsyNet experiments
 
 Use this skill when implementing a PsyNet experiment from a natural-language
-specification.
+specification or research idea.
 
-## Steps
+## Modes
 
-### Planning
+- **Interactive mode** (default): a user brings an idea in conversation. Run
+  the staged planning gates below, pausing for explicit user confirmation at
+  each gate.
+- **Challenge mode**: the experiment is a PsyNetSkills challenge attempt run
+  under the `attempt-challenge` skill, which forbids asking for supplementary
+  instructions at attempt time. Infer the purpose and high-stakes decisions
+  from `INSTRUCTIONS.md`, record each inference and the options you considered
+  in the PLAN.md decision log, draft all sections in one pass, and surface
+  everything at the single plan-review pause required by `attempt-challenge`.
 
-The planning phase is responsible for turning the original natural-language specification into a detailed implementation plan.
-The plan should be saved in PLAN.md, and have the following sections:
+## Planning
 
-#### Science (optional)
+Planning turns the original idea or specification into a single `PLAN.md`,
+created from `assets/PLAN_TEMPLATE.md` and filled **one section at a time**.
+The template starts with a section status table; keep it current at every step
+so any reader (or a resumed agent session) can see exactly where the workflow
+stands.
 
-Decide whether to include this based on the prompt.
-The section is most relevant if the prompt is asking specifically about
-research questions, hypotheses, and the like.
+Core planning rules:
 
-#### Methods
+- Do not start drafting a section until the previous section is approved
+  (interactive mode).
+- Do not write any experiment code until all sections are approved.
+- **Propose, don't decide.** Whenever a decision could change the scientific
+  meaning, participant experience, data interpretation, or PsyNet
+  architecture, present 2-3 concrete options with trade-offs and a
+  recommendation, then wait for the user's choice. Batch the options for a
+  stage into one message; never present a menu for something you can safely
+  default. Low-stakes gaps get a reasonable default, stated briefly and marked
+  overridable.
+- Write the Science and Method sections in academic prose, each opening with a
+  short *In brief* paragraph and ending with a *Key decisions* table. Keep
+  checklist labels (Required/Optional) out of `PLAN.md`; the coverage
+  checklists in this skill's `references/` are for you, not the reader.
+- Record every nontrivial choice in the decision log appendix: what was
+  chosen, over what alternatives, why, and who approved it (or that it was a
+  default).
+- After every agreed revision, update the saved `PLAN.md` so it stays in sync
+  with the conversation.
 
-This section should look something like methods sections in a scientific paper.
-It should describe the experiment, including:
+### Stage 0: Purpose intake
 
-- Design: includes conditions, variables, randomizations.
-- Materials: includes stimuli, questionnaires, etc.
-- Procedures: includes participant workflow, trial structure, stimulus presentation, response collection.
+Before drafting anything, confirm the purpose of the implementation, because
+it configures the rest of the workflow:
 
-Format in academic prose.
+| Purpose | Science section | Method section | Literature step |
+|---|---|---|---|
+| Simple implementation / technical demo | Skipped; recorded as out of scope in PLAN.md | Light: defaults allowed, key-decisions table still required | None |
+| Replication / adaptation of an existing study | Transcribed from the source study, not invented | Fidelity-driven: deviations from the source are the negotiation points | Required: locate and verify the source |
+| New science question | Full: propose 2-3 candidate framings for user choice | Full decision matrix with alternatives | Recommended: grounding and expected effect sizes |
 
-#### Implementation
+In interactive mode, ask the user which purpose applies (with these options
+described) together with any blocking ambiguities in the idea itself. In
+challenge mode, infer the purpose from the challenge instructions and record
+the inference in the decision log. Write the purpose at the top of `PLAN.md`.
 
-This section focuses on the software implementation of the experiment, including:
+### Stage 1: Science
 
-- What PsyNet constructs to use (trials, trial makers, modules, etc.)
-- The general shape of the timeline
-- The strategy for generating the stimuli
-- Any external dependencies
+Skip for simple implementations (record "out of scope" with the reason so the
+plan is self-describing). Otherwise:
 
-### Human review
+- Read `references/science-checklist.md` and work through it while drafting.
+- For a new science question, propose 2-3 candidate framings (research
+  question, construct, hypotheses, question archetype) with what each can and
+  cannot claim; let the user pick or merge before writing the section.
+- For a replication or adaptation, follow
+  `references/literature-grounding.md` to locate and verify the source study
+  and store materials under the experiment or challenge folder's
+  `references/literature/`. Transcribe the question, hypotheses, measures,
+  and key procedure values from the source; the gate question becomes "did we
+  faithfully capture the source study?".
+- Gate: present the drafted section; iterate until approved.
 
-Once the plan is complete, ask the human user to review it and provide feedback.
-Only continue when they are happy.
+### Stage 2: Method
+
+This section should read like the Methods section of a paper (Design,
+Participants, Materials, Procedure, Analysis), in prose.
+
+- Read `references/method-checklist.md` and work through its design-decision
+  matrix. The matrix items (within vs. between participants, static trials
+  vs. chain/network, synchronous structure, AI involvement, prescreening,
+  sample size, analysis plan) must never be skipped or silently defaulted.
+- Delegate specialised decisions to their owner skills:
+  `simple-round-structure` for trial/chain classification,
+  `psynet-synchronous-experiments` and
+  `psynet-realtime-synchronous-experiments` for synchronous designs,
+  `participant-filtering-and-prescreening` for prescreens,
+  `turn-pure-experiment-to-ai-hybrid` and `verify-ai-model-usability` for AI
+  or hybrid participation.
+- Treat the analysis plan as locked once the section is approved: later
+  deviations must be recorded in the decision log, never made silently.
+- Gate: present the drafted section; iterate until approved.
+
+### Stage 3: Implementation plan
+
+This section is technical; bullets, file paths, and PsyNet class names are
+appropriate.
+
+- Read `references/implementation-checklist.md` and
+  `references/experiment-patterns.md`.
+- Identify the closest PsyNet demo, the experiment architecture, the timeline
+  shape, the stimulus pipeline, the data schema, the testing plan, and the
+  deployment boundary. Do not write experiment code at this stage.
+- Gate: present the drafted section; iterate until approved.
 
 ### Developing the experiment
 
-Use the develop-experiment-code skill to implement the experiment.
+Use the `develop-experiment-code` skill to implement the experiment,
+including its PsyNet build contract checklist.
 
 ### Run simulations
 
 Use `psynet simulate` to simulate participants and produce an example dataset.
-This dataset should contain a decent number of participants representative of a real study.
+This dataset should contain a decent number of participants representative of
+a real study.
 
 ### Develop analysis scripts
 
-Write scripts to analyze the generated data.
-Use Jupyter notebooks for this.
-These notebooks should include inferential statistics and plots,
-designed to address relevant research questions.
-If the implementation is inspired by a published paper, replicate the analyses reported in the paper as closely as possible.
+Write scripts to analyze the generated data. Use Jupyter notebooks for this.
+These notebooks should include inferential statistics and plots, designed to
+address relevant research questions. Follow the analysis plan approved in the
+Method section; if the implementation is inspired by a published paper,
+replicate the analyses reported in the paper as closely as possible. Log any
+deviation from the approved analysis plan in the PLAN.md decision log.
 
 ### Review
 
-Review the outcomes of the previous steps and identify any serious issues that need to be addressed.
-Return to previous steps if necessary to address these.
+Review the outcomes of the previous steps and identify any serious issues that
+need to be addressed. Use `references/validation.md` for functional and
+performance checks. Return to previous steps if necessary.
 
 ### Final report
 
-Compile a final report of the experiment (REPORT.md), summarizing the process taken
-and any findings that arose.
+Compile a final report of the experiment (REPORT.md), summarizing the process
+taken and any findings that arose.
+
+## Common failures
+
+- Do not decide unilaterally whether the science section is needed; that is
+  what the purpose intake is for.
+- Do not assume "chain" means one trial per participant; confirm whether the
+  unit of contribution is a participant, trial, chain node, or repeated
+  session.
+- Do not let hidden AI memory become part of the experimental treatment unless
+  it is explicitly planned, logged, and scientifically justified.
+- Do not skip lineage decisions in iterative tasks: the plan must state which
+  prior versions are visible, selectable, inherited, and exported.
+- Do not leave AI failure behavior vague; participants need a planned path for
+  model timeouts, invalid output, or render failures.
+- Do not copy the agent-facing checklist labels into PLAN.md; the document the
+  user reviews should be plain prose plus the key-decisions tables.

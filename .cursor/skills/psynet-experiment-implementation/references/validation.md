@@ -2,6 +2,11 @@
 
 Choose validation that matches the risk of the implementation.
 
+Before running functional checks, re-verify the PsyNet build contract listed
+in `develop-experiment-code/SKILL.md`; contract violations (missing
+`time_estimate`, missing `bot_response`, duplicate `id_`s, reused page
+instances) surface as confusing failures in the commands below.
+
 For a small experiment, useful checks include:
 
 ```bash

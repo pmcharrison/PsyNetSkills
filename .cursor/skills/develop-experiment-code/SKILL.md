@@ -35,6 +35,21 @@ Use the explore-psynet-repository skill to get a sense of the PsyNet codebase.
   use the `psynet-realtime-synchronous-experiments` skill alongside this general
   implementation workflow.
 
+## PsyNet build contract
+
+Check these invariants while coding and again before validation; violations
+cause silent failures or confusing bot-test errors:
+
+- Every `Page` / `Trial` declares a `time_estimate`.
+- Every `Module` / `TrialMaker` `id_` is globally unique.
+- Every `Control` provides a `bot_response`, so bot tests cannot hit
+  `NotImplementedError`.
+- A consent element comes first in the timeline.
+- No `Page` / `Control` instance is reused across timeline elements; construct
+  a fresh instance per element.
+- Static trial makers pass `nodes=`; chain/network trial makers pass
+  `start_nodes=`.
+
 ## Misc guidance
 
 - Add practice or training trials before main trials when the task has rules the
