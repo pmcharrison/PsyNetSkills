@@ -1,6 +1,5 @@
 import csv
 import hashlib
-import os
 import random
 import re
 from collections import defaultdict
@@ -22,33 +21,18 @@ from psynet.utils import get_translator
 _ = get_translator(namespace="experiment")
 
 LANGUAGE = "ENG"
-COUNTRY = "US"
-USE_CINT_LOCAL_MOCK = os.environ.get("PSYNET_CINT_LOCAL_MOCK") == "1"
-REAL_LUCID_CONFIG_PATH = f"qualifications/lucid/lucid-{LANGUAGE}-{COUNTRY}.json"
-LOCAL_MOCK_LUCID_CONFIG_PATH = (
-    f"qualifications/lucid/mock-lucid-{LANGUAGE}-{COUNTRY}.json"
-)
-LUCID_CONFIG_PATH = (
-    LOCAL_MOCK_LUCID_CONFIG_PATH if USE_CINT_LOCAL_MOCK else REAL_LUCID_CONFIG_PATH
-)
+COUNTRY = "GB"
+LUCID_CONFIG_PATH = f"qualifications/lucid/lucid-{LANGUAGE}-{COUNTRY}.json"
 
 recruiter_settings = get_lucid_settings(
     lucid_recruitment_config_path=LUCID_CONFIG_PATH,
     termination_time_in_s=120 * 60,
-    debug_recruiter=USE_CINT_LOCAL_MOCK,
+    debug_recruiter=False,
     initial_response_within_s=180,
     inactivity_timeout_in_s=15 * 60,
     no_focus_timeout_in_s=10 * 60,
     bid_incidence=66,
 )
-
-if USE_CINT_LOCAL_MOCK:
-    recruiter_settings = {
-        **recruiter_settings,
-        "recruiter": "generic",
-        "debug_recruiter": "HotAirRecruiter",
-        "currency": "$",
-    }
 
 STIMULUS_MANIFEST = Path("data/stimuli.csv")
 MIN_ITERATIONS_PER_STIMULUS = 5

@@ -3,11 +3,10 @@
 Real deployment files are written as:
     qualifications/lucid/lucid-<LANGUAGE>-<COUNTRY>.json
 
-The current ENG-US output is mock-only so the experiment can import locally
-before real deployment targets and qualification filters are chosen.
+This script is ready to generate the requested qualification files once valid
+Lucid API access is configured in the local/deployment environment.
 """
 
-import json
 from pathlib import Path
 
 from tqdm import tqdm
@@ -16,6 +15,7 @@ from tqdm import tqdm
 # Enable only deployment targets that the experimenter explicitly requested.
 # Verify each pair with ``psynet lucid locale`` before uncommenting it.
 country_language_tags = (
+    ("ENG", "GB"),
     # ("TUR", "TR"),
     # ("GER", "DE"),
     # ("FRE", "FR"),
@@ -34,17 +34,6 @@ country_language_tags = (
 )
 
 
-# Mock-only targets keep local imports/tests working while real targets are
-# undecided. Mock files are not deployable.
-use_mock_only_targets = True
-mock_only_country_language_tags = (
-    ("ENG", "US"),
-)
-mock_only_country_language_ids = {
-    ("ENG", "US"): 9,
-}
-
-
 # Enable only qualifications explicitly requested by the experimenter.
 question_answer_dict = {
     # "IS_NATIVE V1": ["Yes"],
@@ -55,41 +44,6 @@ question_answer_dict = {
     # "HAS_AUDIO v1": ["Yes"],
     # "ALLOW_VOICE_RECORDING v1": ["Yes"],
 }
-
-
-def write_mock_only_config(language_tag, country_tag, config_path):
-    country_language_id = mock_only_country_language_ids.get((language_tag, country_tag))
-    if country_language_id is None:
-        raise SystemExit(
-            f"No mock CountryLanguageID for {language_tag}-{country_tag}. "
-            "Do not guess; add an explicitly verified mock ID or choose a "
-            "different mock-only target."
-        )
-
-    config_path.write_text(
-        json.dumps(
-            {
-                "mock_only": True,
-                "survey": {
-                    "CountryLanguageID": country_language_id,
-                    "FulcrumExchangeAllocation": 0,
-                    "FulcrumExchangeHedgeAccess": True,
-                    "IndustryID": 30,
-                    "StudyTypeID": 1,
-                    "UniqueIPAddress": True,
-                    "UniquePID": True,
-                    "BidIncidence": 66,
-                    "CollectsPII": False,
-                },
-                "qualifications": [],
-                "country": country_tag,
-                "language": language_tag,
-            },
-            indent=4,
-        )
-        + "\n",
-        encoding="utf-8",
-    )
 
 
 def require_lucid_api_access(config):
@@ -105,8 +59,8 @@ def require_lucid_api_access(config):
             "Real Cint/Lucid qualification generation requires configured "
             f"{', '.join(missing)}. Do not add real credentials to the repo. "
             "Configure them in the local/deployment environment, or leave real "
-            "target tuples commented out and use mock-only files for local "
-            "import checks."
+            "target tuples commented out until the experimenter can generate "
+            "qualification files locally."
         )
 
 
@@ -146,23 +100,13 @@ def generate_real_configs(output_dir):
             qualifications_dict=qualifications_dict,
         )
 
-
-def generate_mock_only_configs(output_dir):
-    for language_tag, country_tag in tqdm(mock_only_country_language_tags):
-        config_path = output_dir / f"mock-lucid-{language_tag}-{country_tag}.json"
-        write_mock_only_config(language_tag, country_tag, config_path)
-
-
 output_dir = Path("qualifications/lucid")
 output_dir.mkdir(parents=True, exist_ok=True)
 
 if country_language_tags:
     generate_real_configs(output_dir)
-elif use_mock_only_targets and mock_only_country_language_tags:
-    generate_mock_only_configs(output_dir)
 else:
     raise SystemExit(
         "No Cint/Lucid targets enabled. Uncomment real country_language_tags "
-        "after the experimenter chooses deployment targets, or enable a "
-        "mock-only target for local import checks."
+        "after the experimenter chooses deployment targets."
     )

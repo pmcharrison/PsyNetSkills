@@ -111,9 +111,10 @@ Make the smallest safe edit.
    placeholder target if available. The default `LUCID_CONFIG_PATH` should point
    to the real deployable path
    `qualifications/lucid/lucid-<LANGUAGE>-<COUNTRY>.json`, not a mock file.
-   If local import/tests need a mock file before real qualifications exist, add
-   a separate explicit local flag such as `PSYNET_CINT_LOCAL_MOCK=1` that
-   switches the path to `mock-lucid-<LANGUAGE>-<COUNTRY>.json`.
+   If the real API-generated file is not available yet, copy the provided Lucid
+   JSON shape example to that same path as a temporary placeholder and clearly
+   report that the experimenter must regenerate it locally with valid Lucid API
+   access before deployment.
 3. Add or update `recruiter_settings = get_lucid_settings(...)` with explicit
    timeouts, `debug_recruiter`, and `bid_incidence`.
 4. Merge Cint keys into the class-level `Exp.config` dictionary. Keep `config`
@@ -132,13 +133,6 @@ If no real target is known, use clearly marked placeholder `LANGUAGE` and
 `COUNTRY` values only when the experiment must import locally, and report that
 the experiment is Cint-parameter ready but not target-ready. Keep the real-path
 default visible so the experimenter knows what must be generated for deployment.
-
-For local tests without Lucid credentials, prefer an explicit environment-gated
-mock path over committed credential placeholders. For example,
-`PSYNET_CINT_LOCAL_MOCK=1` may switch only the local test recruiter to
-`generic`, while the default code path remains Lucid/Cint-ready for deployment.
-Report the required environment flag and make clear that real deployments should
-leave the mock flag unset.
 
 Teach the experimenter that these `get_lucid_settings` parameters are
 study-specific review points:
@@ -185,25 +179,16 @@ standardize.
    `qualifications/lucid/lucid-<LANGUAGE>-<COUNTRY>.json`.
 7. Tell the user to run the script in their local repo terminal after targets,
    qualifications, and Lucid API access are available. The agent may run the
-   script only for mock-only local files unless safe Lucid API access is already
-   configured.
+   script only when safe Lucid API access is already configured.
 
 If no real target has been chosen, provide the script with all real target
-tuples commented out. Create a mock qualification file only if it is required
-for local import or tests, can be generated without real recruitment secrets or
-paid recruitment, and is named and reported as mock-only. A mock file must never
-be counted as Cint deployment-ready. Mock files prove local import/test
-readiness, not real Cint recruitment readiness.
-
-Always create or preserve one mock-only JSON when local import/tests need a
-Lucid config before real qualification files exist. The mock file should let the
-experiment run structurally through an explicit local flag, but it should not be
-the default deployment path. The report must remind the user to generate real
-qualifications themselves with valid Lucid API keys.
-Copy the example JSON to the experiment as
-`qualifications/lucid/example-lucid-ENG-GB.json` for review, unless an equivalent
-example already exists. Never point `LUCID_CONFIG_PATH` at this example for
-deployment and never count it as a generated target qualification.
+tuples commented out and report that target-specific qualification generation is
+blocked. When the experiment needs a JSON file to import structurally before
+API-backed qualification generation is possible, copy the ENG-GB example JSON
+shape to the current `LUCID_CONFIG_PATH` filename. Do not add alternate mock
+parameters or `mock-lucid-*` paths in `experiment.py`; instead, remind the user
+that this placeholder file must be regenerated in their local repo terminal with
+valid Lucid API keys before deployment.
 
 ### Phase 5 - Validate readiness
 
@@ -241,8 +226,8 @@ Use this structure:
   and whether real generation was attempted.
 - `Lucid API access`: available, missing, unusable, or not checked. Never include
   secret values.
-- `Qualification files`: real files generated and mock-only files created, with
-  mock files clearly marked not deployable.
+- `Qualification files`: real files generated and temporary placeholder JSON
+  files created, with placeholders clearly marked as needing regeneration.
 - `Translation files`: per-target `.po` status.
 - `Validation run`: commands run and whether they passed.
 - `Remaining decisions/blockers`: targets, filters, locale files, wages, Lucid
@@ -262,8 +247,8 @@ Experiment parameters
   recruiter_settings, wage_per_hour, and publish_experiment.
 - REVIEW: LANGUAGE/COUNTRY/locale/wage_per_hour must be updated for each real
   deployment target.
-- REVIEW: Default LUCID_CONFIG_PATH points to the real lucid-<LANGUAGE>-<COUNTRY>.json;
-  PSYNET_CINT_LOCAL_MOCK=1 switches to mock-lucid-* only for local tests.
+- REVIEW: LUCID_CONFIG_PATH points to lucid-<LANGUAGE>-<COUNTRY>.json; if this
+  file was copied from the example JSON, regenerate it before deployment.
 
 Deployment targets
 | Language | Country | PsyNet locale | Lucid language tag | Lucid country tag | wage_per_hour |
@@ -283,9 +268,10 @@ Qualification tooling
 - BLOCKED: Real qualification JSON generation requires local Lucid API access.
 
 Qualification files
-- COMPLETE: Created mock-only qualifications/lucid/mock-lucid-ENG-US.json for
-  local import/tests through PSYNET_CINT_LOCAL_MOCK=1.
-- COMPLETE: Added example-lucid-ENG-GB.json as a review-only JSON shape example.
+- COMPLETE: Added qualifications/lucid/lucid-ENG-GB.json from the example JSON
+  shape so the experiment can import structurally.
+- REVIEW: This JSON must be regenerated with create_qualifications.py and valid
+  Lucid API access before real deployment.
 - BLOCKED: Real lucid-TUR-TR.json and lucid-FRE-FR.json must be generated by the
   experimenter in their local repo terminal after Lucid credentials are
   configured.

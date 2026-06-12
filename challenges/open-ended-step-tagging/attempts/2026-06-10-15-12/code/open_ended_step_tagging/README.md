@@ -26,18 +26,15 @@ The committed demo audio is synthetic and 15 seconds long. Replace it with real
 
 `experiment.py` includes Cint/Lucid recruiter settings and a class-level
 `Exp.config` with `locale`, `wage_per_hour`, `publish_experiment`, and
-`recruiter_settings`. Because real deployment targets have not been chosen yet,
-the default Lucid config path points to
-`qualifications/lucid/lucid-ENG-US.json`, the real file that must be generated
-before deployment. To run local tests before that real file exists, set
-`PSYNET_CINT_LOCAL_MOCK=1`; this switches to
-`qualifications/lucid/mock-lucid-ENG-US.json`. Real Cint deployments should leave
-that variable unset and provide real Lucid credentials through the deployment
-environment.
+`recruiter_settings`. The current placeholder target is English — United
+Kingdom, so the Lucid config path points to
+`qualifications/lucid/lucid-ENG-GB.json`. That JSON follows the expected Lucid
+shape but should be regenerated with `create_qualifications.py` in the local
+repo terminal before any real Cint deployment. Real generation requires valid
+Lucid API credentials in the local/deployment environment.
 `cint_deployment_targets.csv` records the target locale/tag review table; it is
-header-only until real deployment targets and per-target wages are chosen.
-`qualifications/lucid/example-lucid-ENG-GB.json` is a review-only example of the
-generated Lucid JSON shape and is not deployable for this experiment.
+pre-filled with the ENG-GB target and leaves `wage_per_hour` blank for human
+review.
 
 To prepare real Cint qualifications:
 
