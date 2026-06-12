@@ -11,8 +11,8 @@ specification.
 
 ## Required reads
 
-- Read `references/experiment-patterns.md` before choosing the initial PsyNet
-  demo or implementation pattern.
+- Read `explore-psynet-repository/SKILL.md` before choosing demos, examples, or
+  framework APIs to copy.
 - Read `references/validation.md` before finalizing functional, interactive, or
   performance checks.
 
