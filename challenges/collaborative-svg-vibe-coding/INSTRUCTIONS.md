@@ -8,7 +8,8 @@ authors: [haoyu-hu]
 Implement a PsyNet experiment that replicates the main collaborative vibe-coding
 paradigm from Hu et al. (2026), "Why Human Guidance Matters in Collaborative
 Vibe Coding." The paper should be represented in
-`references/hu_et_al_2026_vibe_coding.md`; verify this file before proceeding.
+`references/literature/hu_et_al_2026_vibe_coding.md`; verify this file before
+proceeding.
 
 The experiment should study how humans and AI agents iteratively guide an AI
 code generator to recreate a reference image as SVG code. A local implementation

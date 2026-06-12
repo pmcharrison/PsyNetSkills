@@ -6,7 +6,7 @@ authors: [ww577]
 ---
 
 Reconstruct a PsyNet deployment record from the messy deployment dossier in
-`references/messy-deployment-dossier.md`.
+`references/experiment/messy-deployment-dossier.md`.
 
 The dossier contains partial deployment notes, shell snippets, export folder
 names, config fragments, app names, server names, DNS hosts, and deployment

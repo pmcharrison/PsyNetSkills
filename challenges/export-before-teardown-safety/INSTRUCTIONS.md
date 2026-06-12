@@ -5,7 +5,7 @@ difficulty: 7
 authors: [ww577]
 ---
 
-Given the deployment inventory in `references/active-deployments-snapshot.md`,
+Given the deployment inventory in `references/experiment/active-deployments-snapshot.md`,
 produce a safe export-before-teardown plan.
 
 The plan should help a human avoid destroying a PsyNet app or terminating an EC2

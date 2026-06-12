@@ -8,7 +8,7 @@ authors: [pmcharrison]
 Implement a PsyNet experiment that reimplements the web-based chord-emotion
 rating study reported by Lahdelma and Eerola (2016), "Single chords convey
 distinct emotional qualities to both naive and expert listeners." The source
-paper is provided in `references/`.
+paper is provided in `references/literature/`.
 
 The experiment should follow the standards of a real replication study. Treat
 the paper as the primary specification: extract the study design, stimuli,

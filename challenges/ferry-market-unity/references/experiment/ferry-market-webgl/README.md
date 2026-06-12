@@ -10,5 +10,5 @@ Expected contents usually include:
 - `TemplateData/`
 
 If the build is too large to commit as individual files, add a `.zip` archive
-under `challenges/ferry-market-unity/references/` instead; `.zip` files are
+under `challenges/ferry-market-unity/references/experiment/` instead; `.zip` files are
 tracked with Git LFS in this repository.

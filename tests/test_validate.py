@@ -100,6 +100,73 @@ def test_validate_repository_accepts_minimal_structure(tmp_path: Path) -> None:
     assert validate_repository(tmp_path) == []
 
 
+def test_validate_repository_accepts_split_references_layout(
+    tmp_path: Path,
+) -> None:
+    minimal_repo(tmp_path)
+    write(tmp_path / "challenges/example/references/README.md", "# Refs\n")
+    write(tmp_path / "challenges/example/references/.gitkeep", "")
+    write(
+        tmp_path / "challenges/example/references/experiment/notes.md",
+        "# Notes\n",
+    )
+    write(
+        tmp_path / "challenges/example/references/literature/paper.md",
+        "# Paper\n",
+    )
+
+    assert validate_repository(tmp_path) == []
+
+
+def test_validate_repository_rejects_unsplit_reference_file(
+    tmp_path: Path,
+) -> None:
+    minimal_repo(tmp_path)
+    write(
+        tmp_path / "challenges/example/references/notes.md",
+        "# Notes\n",
+    )
+
+    problems = validate_repository(tmp_path)
+
+    assert any(
+        "references/experiment/" in problem and "notes.md" in problem
+        for problem in problems
+    )
+
+
+def test_validate_repository_rejects_unknown_reference_subdir(
+    tmp_path: Path,
+) -> None:
+    minimal_repo(tmp_path)
+    write(
+        tmp_path / "challenges/example/references/misc/notes.md",
+        "# Notes\n",
+    )
+
+    problems = validate_repository(tmp_path)
+
+    assert any(
+        "unexpected references subdirectory" in problem for problem in problems
+    )
+
+
+def test_validate_repository_ignores_attempt_snapshot_references(
+    tmp_path: Path,
+) -> None:
+    minimal_repo(tmp_path)
+    write_valid_attempt(tmp_path)
+    write(
+        tmp_path
+        / "challenges/example/attempts/2026-06-01-10-10/challenge/references/old.md",
+        "# Old layout\n",
+    )
+
+    problems = validate_repository(tmp_path)
+
+    assert not any("old.md" in problem for problem in problems)
+
+
 def test_validate_repository_rejects_skill_name_mismatch(
     tmp_path: Path,
 ) -> None:
