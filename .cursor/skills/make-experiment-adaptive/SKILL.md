@@ -37,8 +37,8 @@ missing, list the decisions they must make and wait for their answer.
 - Posterior strategy: how posterior beliefs are fit or sampled.
 - Optimization policy: objective and decision rule, such as EIG, expected free
   energy, Thompson sampling, greedy utility, or an early-stopping rule.
-- Persistence requirement: whether posterior state must persist across
-  participants, app restarts, deployments, exports, or future studies.
+- Persistence requirement: whether posterior state should persist or be
+  recomputed without durable posterior storage.
 - Dependency preference or constraints, if any.
 
 If the user asks for suggestions, make the smallest coherent proposal and label
@@ -74,8 +74,9 @@ Choose one of these strategies explicitly:
 2. `warm_start_from_previous_posterior`
    - Initialize fitting from the last persisted posterior, but include all data
      needed to avoid missing observations.
-   - Persist posterior snapshots in the database, including model version,
-     optimizer version, data cutoff, fit status, diagnostics, and timestamp.
+   - Persist posterior snapshots in the database using an appropriate custom
+     table, including model version, optimizer version, data cutoff, fit status,
+     diagnostics, and timestamp.
    - Treat stale snapshots as hints, not proof that data has been incorporated.
 
 3. `online_learning`
