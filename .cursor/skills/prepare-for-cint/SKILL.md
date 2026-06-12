@@ -66,7 +66,8 @@ Before I prepare the Cint files, here is what you need to decide and why.
    LUCID_CONFIG_PATH = "qualifications/lucid/lucid-<LANGUAGE>-<COUNTRY>.json"
 
    Before deploying each target, LANGUAGE, COUNTRY, locale, wage_per_hour, and
-   LUCID_CONFIG_PATH must match that target.
+   LUCID_CONFIG_PATH must match that target. These values are not one-time
+   setup values: they must be checked and changed for every separate deployment.
 
 2. Qualifications
    A qualification is a Cint/Lucid screening rule. Some rules are technical
@@ -77,13 +78,16 @@ Before I prepare the Cint files, here is what you need to decide and why.
 
    I will prepare create_qualifications.py for the targets and filters you
    choose. You will run that file later in your local repo terminal to generate
-   the real JSON files, because real generation needs valid Lucid API keys.
+   the real JSON files, because real generation needs valid Lucid API keys. I
+   cannot honestly generate real Cint/Lucid qualification JSON files unless
+   those API keys are already configured in the environment.
 
 3. Wage per hour
    wage_per_hour is the hourly payment value used by PsyNet/Dallinger. It should
    be reviewed separately for each country. I will create
    cint_deployment_targets.csv with a wage_per_hour column so you can fill or
-   review wages manually before each deployment.
+   review wages manually before each deployment. Do not assume one wage works
+   for every country.
 
 4. Cint timing and incidence settings
    I will add recruiter_settings = get_lucid_settings(...). These defaults may
@@ -128,6 +132,11 @@ Now please answer:
 2. Which qualifications do you want enabled? If you are unsure, tell me what the
    experiment measures and I will suggest a minimal set.
 3. Which target should be used as the current placeholder in experiment.py?
+
+After I edit the repo, I will summarize which files I changed, which target is
+currently active in experiment.py, which deployment rows need wage review, and
+the exact local command you should run to generate real qualification JSON files
+once your Lucid API keys are available.
 ```
 
 If the user is unsure about qualifications after reading the fixed explanation,
@@ -346,6 +355,10 @@ Use this structure:
   incidence parameters.
 - `Remaining decisions/blockers`: targets, filters, locale files, wages, Lucid
   credentials, or anything else needed before deployment.
+- `Local generation reminder`: state that `create_qualifications.py` has been
+  prepared according to the requested targets/filters, but the experimenter must
+  run it in their own local repo terminal with valid Lucid API credentials to
+  generate real JSON files.
 - `Readiness status`: one of `target-ready`, `parameter-ready only`, or
   `blocked`.
 
@@ -363,6 +376,9 @@ Experiment parameters
   deployment target.
 - REVIEW: LUCID_CONFIG_PATH points to lucid-<LANGUAGE>-<COUNTRY>.json; if this
   file was copied from the example JSON, regenerate it before deployment.
+- REVIEW: Before each deployment, re-check LANGUAGE, COUNTRY, locale,
+  LUCID_CONFIG_PATH, qualification_file, and wage_per_hour against that target's
+  row in cint_deployment_targets.csv.
 
 Deployment targets
 | Language | Country | PsyNet locale | Lucid language tag | Lucid country tag | wage_per_hour |
@@ -412,7 +428,9 @@ What the experimenter needs to know
   bid_incidence are study-specific review parameters, not universal defaults.
 
 Next local command for the experimenter
-- python create_qualifications.py
+- After configuring Lucid API keys locally, run: python create_qualifications.py
+- This command is what creates the real qualification JSON files; the agent only
+  prepares the script and placeholder structure unless API access is available.
 
 Readiness status
 - parameter-ready only
