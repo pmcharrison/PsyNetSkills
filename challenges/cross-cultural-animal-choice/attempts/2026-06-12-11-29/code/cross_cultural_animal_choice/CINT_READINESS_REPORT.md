@@ -57,9 +57,11 @@
 
 - COMPLETE: Source template `locales/experiment.pot` exists.
 - COMPLETE: English source locale can run structurally.
-- BLOCKED: `locales/tr/LC_MESSAGES/experiment.po` is missing.
-- BLOCKED: `locales/ar/LC_MESSAGES/experiment.po` is missing.
-- BLOCKED: `locales/fr/LC_MESSAGES/experiment.po` is missing.
+- WARNING: `locales/tr/LC_MESSAGES/experiment.po` is missing, so Turkish deployment still needs translation review.
+- WARNING: `locales/ar/LC_MESSAGES/experiment.po` is missing, so Arabic deployment still needs translation review.
+- WARNING: `locales/fr/LC_MESSAGES/experiment.po` is missing, so French deployment still needs translation review.
+- SOLUTION: Run `psynet translate tr ar fr` in the experiment directory with appropriate translation credentials or workflow, then review the generated `.po` files before deploying those targets.
+- PROCEEDING: The Cint scaffolding intentionally keeps only English active structurally and does not activate missing locale files in `experiment.py`.
 
 ## Validation run
 
@@ -72,6 +74,7 @@
 ## What the experimenter needs to know
 
 - `locale` controls the participant-facing language and must match an existing `.po` file for non-English targets.
+- Missing non-English `.po` files are warnings for Cint scaffolding, not a reason to stop parameter preparation. Run `psynet translate tr ar fr` and review the generated files before deployment.
 - `LANGUAGE` and `COUNTRY` are Lucid market tags; the computed `LUCID_CONFIG_PATH` uses them to select `lucid-<LANGUAGE>-<COUNTRY>.json`.
 - `psynet lucid locale` is the preferred source of truth for Lucid language-country pairs. If API credentials are unavailable, locally derived tags can be prepared provisionally, but they must be verified before deployment.
 - `wage_per_hour` is country-specific and should be filled separately for every row in `cint_deployment_targets.csv`.
@@ -84,7 +87,7 @@
 - Fill or review `wage_per_hour` for every target row.
 - Configure Lucid API access locally, then verify target pair availability with `psynet lucid locale`.
 - Generate real qualification JSON files with `python create_qualifications.py`.
-- Add or review `.po` translation files for Turkish, Arabic, and French targets before deployment.
+- Run `psynet translate tr ar fr` and review `.po` translation files for Turkish, Arabic, and French targets before deployment.
 
 ## Local generation reminder
 

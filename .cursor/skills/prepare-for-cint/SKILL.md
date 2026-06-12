@@ -172,7 +172,11 @@ languages, countries, locales, wages, or real qualification files.
 2. Determine locale codes from PsyNet's supported locales; do not guess. If a
    target locale is missing, stop target-specific readiness and report it.
 3. Verify `locales/<locale>/LC_MESSAGES/experiment.po` exists for every known
-   target locale. Do not run translation generation in this skill.
+   target locale. Do not run translation generation in this skill. If one or
+   more target `.po` files are missing, do not stop Cint parameter preparation:
+   warn the experimenter, list the missing locale files, give the exact
+   `psynet translate <locale> ...` command they should run later, and proceed
+   without activating those missing locales in `experiment.py`.
 4. Determine Lucid language-country tags. First advise the experimenter to run
    `psynet lucid locale` in an environment with valid Lucid API access and use
    that API-backed lookup as the source of truth. If Lucid API access is missing,
@@ -244,7 +248,10 @@ Make the smallest safe edit.
    - `"publish_experiment": True`.
 6. Preserve existing config keys such as `supported_locales`, storage settings,
    custom variables, and database settings. If multiple target locales are
-   planned, include them in `supported_locales`.
+   planned and their `.po` files already exist, include them in
+   `supported_locales`. If `.po` files are missing, keep only the structural
+   placeholder locale active, proceed with Cint scaffolding, and report the
+   missing translation command instead of generating translations here.
 
 If no real target is known, keep the ENG-GB placeholder constants so the
 experiment can import locally, and report that the experiment is Cint-parameter
@@ -318,7 +325,9 @@ For every known target, verify:
   the target's generated qualification JSON;
 - the qualification JSON exists under `qualifications/lucid/`;
 - `wage_per_hour` comes from the approved wage source;
-- `locales/<locale>/LC_MESSAGES/experiment.po` exists;
+- `locales/<locale>/LC_MESSAGES/experiment.po` exists, or the report warns that
+  translations are missing and gives the required `psynet translate ...`
+  command;
 - `python create_qualifications.py` succeeds when real targets are configured;
 - the experiment's normal construction or local test command still runs.
 
@@ -330,6 +339,10 @@ know why these values matter:
 
 - `locale`: controls PsyNet's participant-facing language. It must match an
   existing translation file such as `locales/tr/LC_MESSAGES/experiment.po`.
+  Missing translation files should not block Cint parameter scaffolding, but the
+  report must warn that deployment for those languages requires running
+  `psynet translate <locale> ...` and reviewing the generated `.po` files before
+  launch.
 - `LANGUAGE` and `COUNTRY`: Lucid/Cint tags for the recruitment market. They
   must match the active deployment target; `LUCID_CONFIG_PATH` is computed from
   these values to select the generated JSON filename. Verify language-country
@@ -379,7 +392,8 @@ Use this structure:
   secret values.
 - `Qualification files`: real files generated and temporary placeholder JSON
   files created, with placeholders clearly marked as needing regeneration.
-- `Translation files`: per-target `.po` status.
+- `Translation files`: per-target `.po` status, warnings for missing files, and
+  the exact `psynet translate ...` command needed to create them later.
 - `Validation run`: commands run and whether they passed.
 - `What the experimenter needs to know`: concise explanations of locale, Lucid
   tags, wage, qualification files, selected filters, API access, and timing/
@@ -448,6 +462,9 @@ Parameter review notes
 
 What the experimenter needs to know
 - locale controls the participant language and must match an existing .po file.
+  If a target .po file is missing, Cint scaffolding can still proceed, but the
+  experimenter must run psynet translate for that locale and review the
+  translation before deployment.
 - LANGUAGE and COUNTRY are Lucid market tags; the computed LUCID_CONFIG_PATH
   uses them to select the lucid-<LANGUAGE>-<COUNTRY>.json filename. Run
   psynet lucid locale with Lucid API access to verify market pairs; locally
