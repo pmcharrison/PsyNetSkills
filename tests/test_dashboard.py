@@ -223,6 +223,14 @@ def test_collect_challenges_reports_attempt_metadata(tmp_path: Path) -> None:
         "## Methods\n\n"
         "Run a simple participant flow.\n",
     )
+    write(
+        attempt_dir / "PLAN_DETAILS.md",
+        "# Plan details\n\n"
+        "## Section status\n\n"
+        "| Section | Status |\n"
+        "|---|---|\n"
+        "| Method | approved (2026-06-01) |\n",
+    )
 
     attempt = collect_challenges(tmp_path)[0].attempts[0]
 
@@ -233,6 +241,12 @@ def test_collect_challenges_reports_attempt_metadata(tmp_path: Path) -> None:
     assert attempt.url == "challenges/example/2026-06-01-10-10/"
     assert attempt.evaluation == "Attempt body.\n"
     assert attempt.plan == "## Methods\n\nRun a simple participant flow.\n"
+    assert attempt.plan_details == (
+        "## Section status\n\n"
+        "| Section | Status |\n"
+        "|---|---|\n"
+        "| Method | approved (2026-06-01) |\n"
+    )
     assert attempt.timeline == (
         "- T+00:00:00 [agent-start] Started.\n"
         "- T+00:05:00 [agent-stop] Paused for feedback.\n"
@@ -881,6 +895,13 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
     )
     write(
         tmp_path
+        / "challenges/example/attempts/2026-06-01-10-10/PLAN_DETAILS.md",
+        "# Plan details\n\n"
+        "## Decision log\n\n"
+        "- 2026-06-01 — Trial structure: static over chain.\n",
+    )
+    write(
+        tmp_path
         / "challenges/example/attempts/2026-06-01-10-10/EVALUATION.md",
         evaluation(),
     )
@@ -1140,6 +1161,10 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
     assert parsed_data["challenges"][0]["open_actions"] == 1
     assert exported_attempt["open_actions"] == 1
     assert exported_attempt["plan"] == "## Methods\n\nUse a static trial maker.\n"
+    assert exported_attempt["plan_details"] == (
+        "## Decision log\n\n"
+        "- 2026-06-01 — Trial structure: static over chain.\n"
+    )
     assert parsed_data["attempts"][0]["challenge_title"] == "Example challenge"
     assert parsed_data["attempts"][0]["url"] == (
         "challenges/example/2026-06-01-10-10/"

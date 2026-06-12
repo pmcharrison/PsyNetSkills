@@ -491,6 +491,12 @@ td {
   border-color: #80b7ff;
 }
 
+.plan-details-link {
+  margin-top: 1rem;
+  margin-bottom: 0;
+  font-weight: 600;
+}
+
 .attempt-panel > h2:first-child,
 .attempt-panel > summary {
   margin-top: 0;

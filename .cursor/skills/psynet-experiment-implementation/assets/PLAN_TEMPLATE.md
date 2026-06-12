@@ -40,5 +40,7 @@ locally. Keep exhaustive construct-level detail in PLAN_DETAILS.md.>
 ---
 
 The full binding specification — section status, per-stage decision tables,
-decision log, and the exact technical plan — is in `PLAN_DETAILS.md` in this
-folder. Implementation must follow that file exactly.
+decision log, and the exact technical plan — is in `PLAN_DETAILS.md` next to
+this file. Implementation must follow that file exactly. On the dashboard
+attempt page, the detailed plan is rendered as a collapsed section at the end
+of the page, reachable from the link below this plan.

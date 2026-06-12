@@ -26,9 +26,10 @@ specification or research idea.
 Planning turns the original idea or specification into two companion files,
 filled **one section at a time** (Science, then Method, then Implementation).
 Save both at the attempt root in challenge mode (the dashboard renders
-`PLAN.md` at the attempt page's `#plan` anchor; `PLAN_DETAILS.md` is not
-rendered) or in the experiment project folder in interactive mode; if no
-folder exists yet, ask the user where to save them.
+`PLAN.md` at the attempt page's `#plan` anchor and `PLAN_DETAILS.md` as a
+collapsed section at the end of the page) or in the experiment project folder
+in interactive mode; if no folder exists yet, ask the user where to save
+them.
 
 - `PLAN.md`, from `assets/PLAN_TEMPLATE.md`: the human-readable plan that the
   dashboard renders. Flowing prose covering science, method, and

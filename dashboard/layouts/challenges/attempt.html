@@ -7,7 +7,7 @@
     {{ $challenge = index $challengeMatches 0 }}
   {{ end }}
   {{ $attemptMatches := where $challenge.attempts "name" $attemptName }}
-  {{ $attempt := dict "code_files" (slice) "evidence_files" (slice) "timeline_entries" (slice) "name" $attemptName "path" "" "plan" "" "agent_json" "{}" }}
+  {{ $attempt := dict "code_files" (slice) "evidence_files" (slice) "timeline_entries" (slice) "name" $attemptName "path" "" "plan" "" "plan_details" "" "agent_json" "{}" }}
   {{ if gt (len $attemptMatches) 0 }}
     {{ $attempt = index $attemptMatches 0 }}
   {{ end }}
@@ -91,6 +91,7 @@
   {{ end }}
   {{ $hasTimeline := gt (len $attempt.timeline_entries) 0 }}
   {{ $hasPlan := gt (len $attempt.plan) 0 }}
+  {{ $hasPlanDetails := gt (len $attempt.plan_details) 0 }}
   {{ $attemptActions := where (where hugo.Data.psynetsk.actions "challenge_slug" $challengeSlug) "attempt_name" $attemptName }}
 
   <article class="prose attempt-detail">
@@ -172,6 +173,11 @@
         <div class="attempt-markdown">
           {{ $attempt.plan | markdownify }}
         </div>
+        {{ if $hasPlanDetails }}
+          <p class="plan-details-link">
+            <a href="#plan-details" data-plan-details-link>View the full plan specification (PLAN_DETAILS.md) ↓</a>
+          </p>
+        {{ end }}
       </section>
     {{ end }}
 
@@ -606,5 +612,24 @@
         <p>No challenge snapshot files were found for this attempt.</p>
       {{ end }}
     </details>
+
+    {{ if $hasPlanDetails }}
+      <details id="plan-details" class="attempt-panel">
+        <summary>Detailed plan (PLAN_DETAILS.md)</summary>
+        <div class="section-heading">
+          <p class="artifact-note">
+            Authoritative plan specification: section status, decision tables,
+            decision log, and the exact technical plan. Implementation must
+            match this file; <a href="#plan">PLAN.md</a> is the readable summary.
+          </p>
+          {{ with $attempt.path }}
+            {{ partial "edit-in-github.html" (printf "%s/PLAN_DETAILS.md" .) }}
+          {{ end }}
+        </div>
+        <div class="attempt-markdown">
+          {{ $attempt.plan_details | markdownify }}
+        </div>
+      </details>
+    {{ end }}
   </article>
 {{ end }}
