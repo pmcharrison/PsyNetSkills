@@ -8,3 +8,6 @@
 - T+00:04:00 [agent] Created attempt folder and challenge snapshot without opening hidden criteria or prior attempts.
 - T+00:06:00 [agent] Drafted `PLAN.md` for the required human planning review before implementation.
 - T+00:06:30 [agent-stop] Paused before implementation pending human plan approval and author metadata.
+- T+00:09:30 [agent-start] Resumed repository-process work after the draft PR preview validation ran.
+- T+00:10:00 [agent] Added tracked placeholders for `code/` and `evidence/`; preview validation still requires author metadata, implementation evidence, and criteria handling after the workflow gates.
+- T+00:10:30 [agent-stop] Paused pending human plan approval and author metadata.
