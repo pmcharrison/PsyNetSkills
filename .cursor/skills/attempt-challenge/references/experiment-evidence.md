@@ -40,7 +40,10 @@ Provide these artifacts or document the blocker in `EVALUATION.md`:
   state what remains unverified.
 
 The `evidence/analyses/` directory is optional because not every experiment
-implementation challenge needs analysis beyond the standard artifacts.
+implementation challenge needs analysis beyond the standard artifacts. When a
+Jupyter notebook is part of the analysis evidence, prefer the canonical filename
+`evidence/analyses/analysis.ipynb`; the dashboard renders that notebook
+prominently on the attempt page.
 
 ## Participant-flow evidence
 

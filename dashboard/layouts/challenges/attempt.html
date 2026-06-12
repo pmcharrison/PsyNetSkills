@@ -71,9 +71,13 @@
   {{ end }}
   {{ $hasData := gt (len $dataFiles) 0 }}
   {{ $analysisFiles := slice }}
+  {{ $analysisNotebookFiles := slice }}
   {{ range $attempt.evidence_files }}
     {{ if strings.HasPrefix .path "analyses/" }}
       {{ $analysisFiles = $analysisFiles | append . }}
+    {{ end }}
+    {{ if and (strings.HasPrefix .path "analyses/") (eq .kind "ipynb") }}
+      {{ $analysisNotebookFiles = $analysisNotebookFiles | append . }}
     {{ end }}
   {{ end }}
   {{ $hasAnalyses := gt (len $analysisFiles) 0 }}
@@ -81,11 +85,24 @@
   {{ if $hasAnalyses }}
     {{ $analysisFile = index $analysisFiles 0 }}
   {{ end }}
+  {{ $analysisNotebookFile := dict }}
+  {{ $canonicalAnalysisNotebook := where $analysisNotebookFiles "path" "analyses/analysis.ipynb" }}
+  {{ if gt (len $canonicalAnalysisNotebook) 0 }}
+    {{ $analysisNotebookFile = index $canonicalAnalysisNotebook 0 }}
+  {{ else if gt (len $analysisNotebookFiles) 0 }}
+    {{ $analysisNotebookFile = index $analysisNotebookFiles 0 }}
+  {{ end }}
+  {{ $hasAnalysisNotebook := and (gt (len $analysisNotebookFiles) 0) $analysisNotebookFile.content }}
+  {{ $analysisNotebook := dict }}
+  {{ if $hasAnalysisNotebook }}
+    {{ $analysisNotebook = $analysisNotebookFile.content | transform.Unmarshal }}
+  {{ end }}
   {{ $visibleEvidenceFiles := slice }}
   {{ range $attempt.evidence_files }}
     {{ $isScreenshot := and (strings.HasPrefix .path "screenshots/") (in $screenshotExts .kind) }}
     {{ $isScreenshotManifest := or (eq .path "screenshots/manifest.json") (eq .path "screenshots/README.md") }}
-    {{ if and (ne .path "participant.mp4") (not $isScreenshot) (not $isScreenshotManifest) }}
+    {{ $isRenderedNotebook := and $hasAnalysisNotebook (eq .path $analysisNotebookFile.path) }}
+    {{ if and (ne .path "participant.mp4") (not $isScreenshot) (not $isScreenshotManifest) (not $isRenderedNotebook) }}
       {{ $visibleEvidenceFiles = $visibleEvidenceFiles | append . }}
     {{ end }}
   {{ end }}
@@ -156,6 +173,12 @@
         <div>
           <dt>Plan</dt>
           <dd><a href="#plan">Review plan</a></dd>
+        </div>
+      {{ end }}
+      {{ if $hasAnalysisNotebook }}
+        <div>
+          <dt>Analysis</dt>
+          <dd><a href="#analysis-notebook">Review notebook</a></dd>
         </div>
       {{ end }}
     </dl>
@@ -272,6 +295,51 @@
       </section>
     {{ end }}
 
+    {{ if $hasAnalysisNotebook }}
+      <section id="analysis-notebook" class="attempt-panel analysis-notebook-panel">
+        <div class="section-heading">
+          <h2>Analysis notebook</h2>
+          <a href="{{ $analysisNotebookFile.url | relURL }}">Open raw notebook</a>
+        </div>
+        <p class="artifact-note">
+          Rendered from <code>{{ $analysisNotebookFile.path }}</code>.
+        </p>
+        <div class="notebook-preview">
+          {{ range $index, $cell := $analysisNotebook.cells }}
+            <section class="notebook-cell notebook-cell-{{ $cell.cell_type }}">
+              {{ $source := delimit $cell.source "" }}
+              {{ if eq $cell.cell_type "markdown" }}
+                <div class="attempt-markdown">
+                  {{ $source | markdownify }}
+                </div>
+              {{ else if eq $cell.cell_type "code" }}
+                <div class="notebook-code">
+                  {{ highlight $source "python" "" }}
+                </div>
+                {{ with $cell.outputs }}
+                  <div class="notebook-outputs">
+                    {{ range . }}
+                      {{ with .text }}
+                        <pre><code>{{ delimit . "" }}</code></pre>
+                      {{ else }}
+                        {{ with .data }}
+                          {{ with index . "text/plain" }}
+                            <pre><code>{{ delimit . "" }}</code></pre>
+                          {{ end }}
+                        {{ end }}
+                      {{ end }}
+                    {{ end }}
+                  </div>
+                {{ end }}
+              {{ else }}
+                <pre><code>{{ $source }}</code></pre>
+              {{ end }}
+            </section>
+          {{ end }}
+        </div>
+      </section>
+    {{ end }}
+
     <section class="attempt-panel">
       <h2>Review evidence</h2>
       {{ if $hasParticipantVideo }}
@@ -346,8 +414,10 @@
           {{ end }}
         </li>
         <li>
-          {{ if $hasAnalyses }}
-            <a href="{{ $analysisFile.url | relURL }}">View analysis summary</a>
+          {{ if $hasAnalysisNotebook }}
+            <a href="#analysis-notebook">View analysis notebook</a>
+          {{ else if $hasAnalyses }}
+            <a href="{{ $analysisFile.url | relURL }}">View analysis artifact</a>
           {{ else }}
             <span class="missing-artifact">Analysis summary missing</span>
           {{ end }}

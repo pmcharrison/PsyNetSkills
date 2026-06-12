@@ -14,7 +14,7 @@ I ran `psynet simulate` after setting `Exp.test_n_bots = 24`, producing a simula
 
 ## Analysis
 
-The analysis notebook and script live in `evidence/analyses/`. The analysis reads the simulated trial export, verifies that each simulated participant has exactly one rating for red, green, and blue, and writes:
+The canonical dashboard-rendered analysis notebook is `evidence/analyses/analysis.ipynb`, with the runnable script in `evidence/analyses/summarize_ratings.py`. The analysis reads the simulated trial export, verifies that each simulated participant has exactly one rating for red, green, and blue, and writes:
 
 - `rating_summary.csv`
 - `rating_summary.json`

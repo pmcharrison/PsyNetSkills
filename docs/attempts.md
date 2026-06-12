@@ -108,7 +108,10 @@ say so in `EVALUATION.md` rather than presenting a one-bot smoke test as
 complete performance evidence.
 `monitor.html` snapshots the PsyNet dashboard monitor view. `data.zip` contains
 exported experiment data. `analyses/` contains challenge-specific scientific
-checks, typically figures or concise reports.
+checks, typically figures or concise reports. When an attempt includes a Jupyter
+analysis notebook, use `evidence/analyses/analysis.ipynb` as the canonical path;
+the dashboard renders that notebook prominently near the top of the attempt page
+and falls back to the first notebook in `evidence/analyses/` for older attempts.
 
 The dashboard publishes `evidence/data.zip`, but it does not publish other ZIP
 files from attempt `evidence/`, generated `code/`, or attempt `challenge/`

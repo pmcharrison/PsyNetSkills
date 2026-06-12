@@ -491,6 +491,43 @@ td {
   border-color: #80b7ff;
 }
 
+.analysis-notebook-panel {
+  background: #f6f8fa;
+}
+
+.notebook-preview {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.notebook-cell {
+  background: var(--background);
+  border: 1px solid var(--border);
+  border-radius: 0.45rem;
+  padding: 0.85rem;
+}
+
+.notebook-cell > :first-child,
+.notebook-cell .attempt-markdown > :first-child {
+  margin-top: 0;
+}
+
+.notebook-cell > :last-child,
+.notebook-cell .attempt-markdown > :last-child {
+  margin-bottom: 0;
+}
+
+.notebook-code .highlight,
+.notebook-outputs pre {
+  margin: 0;
+}
+
+.notebook-outputs {
+  border-top: 1px solid var(--border);
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+}
+
 .attempt-panel > h2:first-child,
 .attempt-panel > summary {
   margin-top: 0;
