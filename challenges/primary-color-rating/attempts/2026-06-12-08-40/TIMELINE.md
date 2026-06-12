@@ -11,3 +11,7 @@
 - T+00:09:30 [agent-start] Resumed repository-process work after the draft PR preview validation ran.
 - T+00:10:00 [agent] Added tracked placeholders for `code/` and `evidence/`; preview validation still requires author metadata, implementation evidence, and criteria handling after the workflow gates.
 - T+00:10:30 [agent-stop] Paused pending human plan approval and author metadata.
+- T+00:11:00 [agent-start] Resumed to update repository support for paused attempts and dashboard plan review links.
+- T+00:15:30 [agent] Added early in-progress `agent.json` metadata with `ended_at` set to null while authorship remains pending.
+- T+00:28:00 [agent] Validated paused-at-plan support with repository checks, dashboard export/build, and manual dashboard preview.
+- T+00:28:30 [agent-stop] Paused again pending human plan approval and author metadata.

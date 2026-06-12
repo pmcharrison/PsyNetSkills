@@ -7,7 +7,7 @@
     {{ $challenge = index $challengeMatches 0 }}
   {{ end }}
   {{ $attemptMatches := where $challenge.attempts "name" $attemptName }}
-  {{ $attempt := dict "code_files" (slice) "evidence_files" (slice) "timeline_entries" (slice) "name" $attemptName "path" "" }}
+  {{ $attempt := dict "code_files" (slice) "evidence_files" (slice) "timeline_entries" (slice) "name" $attemptName "path" "" "plan" "" "agent_json" "{}" }}
   {{ if gt (len $attemptMatches) 0 }}
     {{ $attempt = index $attemptMatches 0 }}
   {{ end }}
@@ -90,6 +90,7 @@
     {{ end }}
   {{ end }}
   {{ $hasTimeline := gt (len $attempt.timeline_entries) 0 }}
+  {{ $hasPlan := gt (len $attempt.plan) 0 }}
   {{ $attemptActions := where (where hugo.Data.psynetsk.actions "challenge_slug" $challengeSlug) "attempt_name" $attemptName }}
 
   <article class="prose attempt-detail">
@@ -151,7 +152,28 @@
         <dt>Attempt path</dt>
         <dd><code>{{ $attempt.path }}</code></dd>
       </div>
+      {{ if $hasPlan }}
+        <div>
+          <dt>Plan</dt>
+          <dd><a href="#plan">Review plan</a></dd>
+        </div>
+      {{ end }}
     </dl>
+
+    {{ if $hasPlan }}
+      <section id="plan" class="attempt-panel plan-panel">
+        <div class="section-heading">
+          <h2>Plan</h2>
+          {{ with $attempt.path }}
+            {{ partial "edit-in-github.html" (printf "%s/PLAN.md" .) }}
+          {{ end }}
+        </div>
+        <p class="artifact-note">Implementation plan captured before experiment code and evidence collection.</p>
+        <div class="attempt-markdown">
+          {{ $attempt.plan | markdownify }}
+        </div>
+      </section>
+    {{ end }}
 
     <section class="attempt-panel challenge-brief">
       <h2>Challenge instructions</h2>
@@ -454,6 +476,7 @@
       <ul class="artifact-checklist">
         <li class="present">challenge/ <span>{{ len $attempt.challenge_files }} file{{ if ne (len $attempt.challenge_files) 1 }}s{{ end }}</span></li>
         <li class="present">agent.json <span>metadata captured</span></li>
+        <li class="{{ if $hasPlan }}present{{ else }}missing{{ end }}">PLAN.md <span>{{ if $hasPlan }}present{{ else }}missing{{ end }}</span></li>
         <li class="{{ if $hasTimeline }}present{{ else }}missing{{ end }}">TIMELINE.md <span>{{ if $hasTimeline }}present{{ else }}missing{{ end }}</span></li>
         <li class="{{ if $hasExperiment }}present{{ else }}missing{{ end }}">code/experiment.py <span>{{ if $hasExperiment }}present{{ else }}missing{{ end }}</span></li>
         <li class="{{ if $hasParticipantVideo }}present{{ else }}missing{{ end }}">evidence/participant.mp4 <span>{{ if $hasParticipantVideo }}present{{ else }}missing{{ end }}</span></li>

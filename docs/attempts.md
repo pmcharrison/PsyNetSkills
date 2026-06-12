@@ -34,6 +34,12 @@ skill commit, attempt start/end time, Cursor conversation ID when available,
 PsyNet checkout metadata, and optional derived cost metadata. `code/` contains
 the generated implementation. `evidence/` contains the materials used to
 evaluate whether the implementation worked.
+Agents should create `agent.json` near the beginning of the attempt. If the
+attempt pauses before implementation is complete, keep `ended_at` as `null`; the
+validator treats that explicit state as in progress and does not require
+completion-only artifacts such as implemented code, evidence, or a copied
+criteria checklist yet. Fill authors and `ended_at` before marking the attempt
+complete.
 `TIMELINE.md` records major attempt events with timestamps relative to the start
 of the attempt, including manual events and explicit intervention tags. The
 dashboard derives implementation time from completed `[agent-start]` to
@@ -110,6 +116,12 @@ snapshot directories. Those ZIPs remain listed with size metadata so reviewers
 know they exist, but the static dashboard omits the bytes to avoid duplicating
 large implementation bundles and top-level challenge reference assets.
 
+When the experiment implementation workflow pauses for human review of
+`PLAN.md`, the dashboard renders that plan near the top of the attempt page at
+the `#plan` anchor. Agents should share the preview URL with that anchor after a
+successful preview build. If the preview build is unavailable, paste the plan
+text into the chat so the reviewer can still approve or revise it.
+
 Command logs may also be included in `evidence/` when they help reviewers
 understand what ran and what failed. Keep logs concise when practical, and do
 not include custom or real credentials in logs or other artifacts.
@@ -163,9 +175,11 @@ PsyNet checkout cannot be updated to the latest `origin/master`, record the
 blocker in `TIMELINE.md` and `EVALUATION.md`.
 
 This metadata is required for all real attempts so reviewers can identify the
-framework checkout associated with the work. If metadata is backfilled for an
-older attempt, say so in `agent.json` notes rather than presenting it as exact
-historical provenance.
+framework checkout associated with the work. During an in-progress pause,
+`authors` may be empty only when the human author is still being identified and
+`ended_at` is `null`; complete attempts must list one or more author keys from
+`authors.yaml`. If metadata is backfilled for an older attempt, say so in
+`agent.json` notes rather than presenting it as exact historical provenance.
 
 ## Cursor cost metadata
 

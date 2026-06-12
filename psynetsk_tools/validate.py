@@ -197,9 +197,14 @@ def validate_agent_metadata(
         return [f"{agent_file}: metadata must be a JSON object"]
 
     problems: list[str] = []
-    problems.extend(
-        validate_author_references(agent_file, agent.get("authors"), registry)
-    )
+    if not is_in_progress_agent(agent):
+        problems.extend(
+            validate_author_references(agent_file, agent.get("authors"), registry)
+        )
+    elif agent.get("authors") not in (None, []):
+        problems.extend(
+            validate_author_references(agent_file, agent.get("authors"), registry)
+        )
     psynet = agent.get("psynet")
     if psynet is None:
         problems.append(f"{agent_file}: missing psynet metadata")
@@ -221,6 +226,25 @@ def validate_agent_metadata(
         problems.extend(validate_run_cost_metadata(agent_file, run_cost))
 
     return problems
+
+
+def is_in_progress_agent(agent: dict[str, object]) -> bool:
+    """Return whether attempt metadata explicitly marks unfinished work."""
+
+    return "ended_at" in agent and agent.get("ended_at") is None
+
+
+def attempt_is_in_progress(attempt_dir: Path) -> bool:
+    """Return whether an attempt is explicitly marked as unfinished."""
+
+    agent_file = attempt_dir / "agent.json"
+    if not agent_file.exists():
+        return False
+    try:
+        agent = json.loads(agent_file.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return False
+    return isinstance(agent, dict) and is_in_progress_agent(agent)
 
 
 def validate_run_cost_metadata(agent_file: Path, run_cost: Any) -> list[str]:
@@ -427,7 +451,10 @@ def validate_attempt(
 ) -> list[str]:
     """Validate one challenge attempt folder."""
     problems: list[str] = []
-    required = ["challenge", "agent.json", "code", "evidence", "EVALUATION.md"]
+    in_progress = attempt_is_in_progress(attempt_dir)
+    required = ["challenge", "agent.json", "EVALUATION.md"]
+    if not in_progress:
+        required.extend(["code", "evidence"])
     for name in required:
         if not (attempt_dir / name).exists():
             problems.append(f"{attempt_dir}: missing {name}")
@@ -442,7 +469,8 @@ def validate_attempt(
         if score is not None and not 1 <= score <= 10:
             problems.append(f"{evaluation_file}: score must be between 1 and 10")
         if (
-            not attempt_dir.name.startswith("example-")
+            not in_progress
+            and not attempt_dir.name.startswith("example-")
             and (challenge_dir / "CRITERIA.md").exists()
             and not has_evaluation_checklist(evaluation_file)
         ):
