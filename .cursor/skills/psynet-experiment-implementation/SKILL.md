@@ -9,9 +9,28 @@ authors: [pmcharrison]
 Use this skill when implementing a PsyNet experiment from a natural-language
 specification.
 
+## Blocking review gate
+
+Before editing experiment code, write the implementation plan and stop for human
+review.
+
+1. Read the experiment specification and any required supporting skills.
+2. Save the plan in `PLAN.md`.
+3. Ask the human user to review the plan and provide feedback.
+4. Do not edit `experiment.py`, templates, assets, tests, or other experiment
+   code until the user explicitly approves the plan or asks you to proceed.
+
+This gate overrides autonomous end-to-end implementation workflows, including
+challenge-attempt workflows. Do not treat a generic instruction to "attempt" or
+"implement" an experiment as approval to skip plan review.
+
+If you use a todo list, the first implementation todo for this skill must be
+`write-plan-await-review`, and it must remain in progress until the human review
+gate is satisfied.
+
 ## Steps
 
-### Planning
+### Planning
 
 The planning phase is responsible for turning the original natural-language specification into a detailed implementation plan.
 The plan should be saved in PLAN.md, and have the following sections:
@@ -45,11 +64,14 @@ This section focuses on the software implementation of the experiment, including
 ### Human review
 
 Once the plan is complete, ask the human user to review it and provide feedback.
-Only continue when they are happy.
+Only continue when they are happy. If another skill instructs you to keep working
+autonomously, pause that workflow here and resume it only after explicit plan
+approval.
 
 ### Developing the experiment
 
-Use the develop-experiment-code skill to implement the experiment.
+After the plan is approved, use the develop-experiment-code skill to implement
+the experiment.
 
 ### Run simulations
 
