@@ -18,6 +18,8 @@ The experiment should:
 - Generate digit strings whose length can vary from trial to trial.
 - Adaptively choose the length of each new string to maximize the expected
   information gain about the participant's ability.
+- Make the adaptive mode easy to disable. When adaptive mode is disabled, choose
+  each sequence length randomly between 2 and 20 inclusive.
 - Use variational inference to approximate the posterior distribution used by
   the adaptive policy.
 - Cache the previous posterior state and use it to initialize subsequent
