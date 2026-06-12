@@ -61,21 +61,15 @@ Use the develop-experiment-code skill to implement the experiment.
 ### Run simulations
 
 Use `psynet simulate` to simulate participants and produce an example dataset.
-This dataset should contain a decent number of participants representative of a real study.
-For small experiments, increase `Exp.test_n_bots` or the relevant test setting
-before simulation when the default would only produce a token one-participant
-dataset. Save the simulated export with the attempt evidence, typically as
-`evidence/simulated_data.zip`.
+This dataset should contain a decent number of participants representative of a real study;
+adjust `Exp.test_n_bots` to ensure this. Save the simulated export at `evidence/simulated_data.zip`.
 
 ### Develop analysis scripts
 
 Write scripts to analyze the generated data. Use a Jupyter notebook for this,
 with the canonical filename `evidence/analyses/analysis.ipynb` when working in a
-challenge attempt. The notebook should be self-contained for review: read the
-exported CSV data directly, construct the analysis tables in visible code cells,
-display summary tables inline, and render plots inline. These notebooks should
-include inferential statistics and plots designed to address relevant research
-questions.
+challenge attempt. The notebook should be self-contained for review,
+including all code, tables, and plots.
 If the implementation is inspired by a published paper, replicate the analyses reported in the paper as closely as possible.
 
 ### Review
