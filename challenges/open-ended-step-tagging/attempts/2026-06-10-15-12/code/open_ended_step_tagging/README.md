@@ -22,6 +22,35 @@ From this directory, with the PsyNet virtual environment active:
 The committed demo audio is synthetic and 15 seconds long. Replace it with real
 15-second study excerpts before running a real study.
 
+## Cint/Lucid readiness
+
+`experiment.py` includes Cint/Lucid recruiter settings and a class-level
+`Exp.config` with `locale`, `wage_per_hour`, `publish_experiment`, and
+`recruiter_settings`. The current placeholder target is English — United
+Kingdom, so the Lucid config path points to
+`qualifications/lucid/lucid-ENG-GB.json`. That JSON follows the expected Lucid
+shape but should be regenerated with `create_qualifications.py` in the local
+repo terminal before any real Cint deployment. Real generation requires valid
+Lucid API credentials in the local/deployment environment.
+`cint_deployment_targets.csv` records the target locale/tag review table; it is
+pre-filled with the ENG-GB target and leaves `wage_per_hour` blank for human
+review.
+
+To prepare real Cint qualifications:
+
+1. Choose deployment language-country pairs.
+2. Verify each Lucid tag pair with `psynet lucid locale`.
+3. Verify `locales/<locale>/LC_MESSAGES/experiment.po` exists for each target.
+4. Update `create_qualifications.py` by uncommenting only requested
+   `country_language_tags` and qualification filters.
+5. Configure Lucid API access in the local/deployment environment; real
+   qualification JSON generation cannot run without it.
+6. Run `python create_qualifications.py`.
+7. Update `LANGUAGE`, `COUNTRY`, `LUCID_CONFIG_PATH`, `locale`, and
+   `wage_per_hour` in `experiment.py` for the active deployment target.
+
+The mock Lucid file is not deployable.
+
 ## Replacing stimuli
 
 Edit `data/stimuli.csv` and put the corresponding `.wav` files under
