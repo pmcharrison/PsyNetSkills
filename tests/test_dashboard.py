@@ -931,6 +931,22 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
                         "outputs": [{"output_type": "stream", "text": ["ok\n"]}],
                         "metadata": {},
                     },
+                    {
+                        "cell_type": "code",
+                        "source": ["plot_svg"],
+                        "outputs": [
+                            {
+                                "output_type": "display_data",
+                                "data": {
+                                    "image/svg+xml": [
+                                        "<svg xmlns=\"http://www.w3.org/2000/svg\"><circle cx=\"5\" cy=\"5\" r=\"5\" /></svg>"
+                                    ],
+                                },
+                                "metadata": {},
+                            },
+                        ],
+                        "metadata": {},
+                    },
                 ],
                 "metadata": {},
                 "nbformat": 4,

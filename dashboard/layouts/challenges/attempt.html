@@ -323,8 +323,20 @@
                         <pre><code>{{ delimit . "" }}</code></pre>
                       {{ else }}
                         {{ with .data }}
-                          {{ with index . "text/plain" }}
-                            <pre><code>{{ delimit . "" }}</code></pre>
+                          {{ with index . "image/svg+xml" }}
+                            <div class="notebook-svg">
+                              {{ delimit . "" | safeHTML }}
+                            </div>
+                          {{ else }}
+                            {{ with index . "text/html" }}
+                              <div class="notebook-html">
+                                {{ delimit . "" | safeHTML }}
+                              </div>
+                            {{ else }}
+                              {{ with index . "text/plain" }}
+                                <pre><code>{{ delimit . "" }}</code></pre>
+                              {{ end }}
+                            {{ end }}
                           {{ end }}
                         {{ end }}
                       {{ end }}

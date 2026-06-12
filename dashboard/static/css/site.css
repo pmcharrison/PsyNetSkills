@@ -528,6 +528,35 @@ td {
   padding-top: 0.75rem;
 }
 
+.notebook-html {
+  overflow-x: auto;
+}
+
+.notebook-html table {
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  margin: 0;
+  width: auto;
+}
+
+.notebook-html th,
+.notebook-html td {
+  border: 1px solid var(--border);
+  padding: 0.35rem 0.55rem;
+  text-align: right;
+}
+
+.notebook-html th:first-child,
+.notebook-html td:first-child {
+  text-align: left;
+}
+
+.notebook-svg svg {
+  display: block;
+  height: auto;
+  max-width: 100%;
+}
+
 .attempt-panel > h2:first-child,
 .attempt-panel > summary {
   margin-top: 0;
