@@ -42,7 +42,7 @@ async function waitForPageChange(page, previousUuid) {
     previousUuid,
     { timeout: 10000 },
   );
-  await page.waitForTimeout(visualMode ? 600 : 150);
+  await page.waitForTimeout(100);
 }
 
 test.describe.configure({ mode: 'serial' });

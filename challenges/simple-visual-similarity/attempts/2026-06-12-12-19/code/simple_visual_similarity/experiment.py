@@ -31,7 +31,7 @@ RATING_LABELS = [
     "5 Completely similar",
 ]
 RATING_KEYS = ["Digit1", "Digit2", "Digit3", "Digit4", "Digit5"]
-FIXATION_DURATION = 0.8
+FIXATION_DURATION = 1.2
 
 
 def parse_local_time(value: str) -> datetime:
