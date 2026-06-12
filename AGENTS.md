@@ -179,14 +179,9 @@ PsyNet commands need sandboxing disabled in Cursor (`required_permissions: ["all
 
 When a Cursor Cloud Agent opens or updates a pull request from a branch in this
 repository, use the `dashboard-preview-links` skill before sharing dashboard
-preview links. Poll for up to 75 seconds total for the matching `Deploy
-dashboard PR preview` workflow and its following GitHub Pages deployment. Do not
-wait for the separate `Validate` workflow. If polling confirms publication,
-provide the preview URL. If polling times out or sees a missing, pending,
-cancelled, or failed run, provide the deterministic preview URL and the
-branch-filtered workflow-runs link, and state that the preview may 404 for new
-pull requests or show an older build for existing pull requests until publishing
-finishes.
+preview links. The skill owns the polling procedure, freshness checks, timeout
+fallback wording, and distinction between preview publication and the separate
+`Validate` workflow.
 
 Include these links when first creating/updating the PR, after changes that
 affect dashboard rendering or challenge attempt pages, and in the final response.
