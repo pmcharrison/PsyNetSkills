@@ -12,3 +12,8 @@ source_code.zip
 .idea
 __pycache__
 *.DS_Store
+
+# Node/Playwright local dependencies and reports
+node_modules/
+playwright-report/
+test-results/
