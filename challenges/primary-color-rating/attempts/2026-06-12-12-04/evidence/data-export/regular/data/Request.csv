@@ -1,0 +1,29 @@
+id,duration,time,unique_id,method,endpoint,params,class
+1,0.002112601010594517,2026-06-12 12:22:32,,GET,/ad,"{'generate_tokens': 'true', 'recruiter': 'hotair'}",Request
+2,0.03808261701487936,2026-06-12 12:22:32,,GET,/ad,"{'recruiter': 'hotair', 'hitId': '0X1ROK', 'assignmentId': '8RRONK', 'workerId': 'AU9G5K'}",Request
+3,0.0021131559915374964,2026-06-12 12:22:50,,GET,/ad,"{'generate_tokens': 'true', 'recruiter': 'hotair'}",Request
+4,0.03489128401270136,2026-06-12 12:22:50,,GET,/ad,"{'recruiter': 'hotair', 'hitId': 'N14XXU', 'assignmentId': 'P59T4Z', 'workerId': '4LMTH9'}",Request
+5,0.027151452988618985,2026-06-12 12:22:50,,GET,/consent,"{'recruiter': 'hotair', 'hitId': 'N14XXU', 'assignmentId': 'P59T4Z', 'workerId': '4LMTH9'}",Request
+6,0.00964380198274739,2026-06-12 12:22:51,,GET,/start,"{'recruiter': 'hotair', 'hitId': 'N14XXU', 'assignmentId': 'P59T4Z', 'workerId': '4LMTH9'}",Request
+7,0.11336370999924839,2026-06-12 12:22:51,4LMTH9:P59T4Z,GET,/timeline,{'unique_id': '4LMTH9:P59T4Z'},Request
+8,0.17407091398490593,2026-06-12 12:22:51,,POST,/response,{},Request
+9,0.10530079097952694,2026-06-12 12:22:51,4LMTH9:P59T4Z,GET,/timeline,{'unique_id': '4LMTH9:P59T4Z'},Request
+10,0.04520643700379878,2026-06-12 12:22:52,,POST,/response,{},Request
+11,0.10358745697885752,2026-06-12 12:22:52,4LMTH9:P59T4Z,GET,/timeline,{'unique_id': '4LMTH9:P59T4Z'},Request
+12,0.03943244900438003,2026-06-12 12:22:52,,POST,/response,{},Request
+13,0.10253598401322961,2026-06-12 12:22:52,4LMTH9:P59T4Z,GET,/timeline,{'unique_id': '4LMTH9:P59T4Z'},Request
+14,0.029649003001395613,2026-06-12 12:22:52,,POST,/response,{},Request
+15,0.10135214298497885,2026-06-12 12:22:53,4LMTH9:P59T4Z,GET,/timeline,{'unique_id': '4LMTH9:P59T4Z'},Request
+16,0.0005992150108795613,2026-06-12 12:22:53,,GET,/ad,"{'generate_tokens': 'true', 'recruiter': 'hotair'}",Request
+17,0.0328679209924303,2026-06-12 12:22:53,,GET,/ad,"{'recruiter': 'hotair', 'hitId': 'ROUYSS', 'assignmentId': '4YAE8S', 'workerId': '1Q3NET'}",Request
+18,0.027973915974143893,2026-06-12 12:22:55,,GET,/consent,"{'recruiter': 'hotair', 'hitId': 'ROUYSS', 'assignmentId': '4YAE8S', 'workerId': '1Q3NET'}",Request
+19,0.009076529007870704,2026-06-12 12:22:55,,GET,/start,"{'recruiter': 'hotair', 'hitId': 'ROUYSS', 'assignmentId': '4YAE8S', 'workerId': '1Q3NET'}",Request
+20,0.10632694399100728,2026-06-12 12:22:56,1Q3NET:4YAE8S,GET,/timeline,{'unique_id': '1Q3NET:4YAE8S'},Request
+21,0.033578119007870555,2026-06-12 12:22:58,,POST,/response,{},Request
+22,0.10749799900804646,2026-06-12 12:22:58,1Q3NET:4YAE8S,GET,/timeline,{'unique_id': '1Q3NET:4YAE8S'},Request
+23,0.039283724006963894,2026-06-12 12:23:01,,POST,/response,{},Request
+24,0.11004296399187297,2026-06-12 12:23:01,1Q3NET:4YAE8S,GET,/timeline,{'unique_id': '1Q3NET:4YAE8S'},Request
+25,0.03922951300046407,2026-06-12 12:23:04,,POST,/response,{},Request
+26,0.10828478701296262,2026-06-12 12:23:04,1Q3NET:4YAE8S,GET,/timeline,{'unique_id': '1Q3NET:4YAE8S'},Request
+27,0.024779603991191834,2026-06-12 12:23:06,,POST,/response,{},Request
+28,0.1033601610106416,2026-06-12 12:23:07,1Q3NET:4YAE8S,GET,/timeline,{'unique_id': '1Q3NET:4YAE8S'},Request

@@ -9,6 +9,9 @@ source_code.zip
 .idea
 __pycache__
 *.DS_Store
+node_modules/
+test-results/
+playwright-report/
 
 develop/
 deploy/

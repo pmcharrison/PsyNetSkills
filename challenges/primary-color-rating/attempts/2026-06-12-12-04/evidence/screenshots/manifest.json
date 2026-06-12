@@ -1,0 +1,9 @@
+{
+  "captions": {
+    "01-welcome.png": "Welcome page before the color-rating trials.",
+    "02-red-trial.png": "Red trial with the 1 to 7 pleasantness rating scale.",
+    "03-green-trial.png": "Green trial with the 1 to 7 pleasantness rating scale.",
+    "04-blue-trial.png": "Blue trial with the 1 to 7 pleasantness rating scale.",
+    "05-thank-you.png": "Thank-you page after all three ratings are submitted."
+  }
+}
