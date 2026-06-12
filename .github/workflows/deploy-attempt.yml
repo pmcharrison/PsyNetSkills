@@ -186,6 +186,7 @@ jobs:
       AWS_ROLE_ARN: ${{ vars.ATTEMPT_DEPLOY_AWS_ROLE_ARN }}
       DASHBOARD_USER: ${{ secrets.ATTEMPT_DEPLOY_DASHBOARD_USER }}
       DASHBOARD_PASSWORD: ${{ secrets.ATTEMPT_DEPLOY_DASHBOARD_PASSWORD }}
+      VENV_PATH: ${{ runner.temp }}/attempt-deploy-venv
     steps:
       - uses: actions/checkout@v4
         with:
@@ -213,8 +214,8 @@ jobs:
         run: |
           set -euo pipefail
 
-          uv venv --python 3.13 .venv
-          source .venv/bin/activate
+          uv venv --python 3.13 "${VENV_PATH}"
+          source "${VENV_PATH}/bin/activate"
 
           if [ -f requirements.txt ] && [ -f constraints.txt ]; then
             uv pip install -r requirements.txt -c constraints.txt
@@ -271,7 +272,7 @@ jobs:
         working-directory: ${{ inputs.attempt_path }}
         run: |
           set -euo pipefail
-          source .venv/bin/activate
+          source "${VENV_PATH}/bin/activate"
 
           dallinger ec2 provision \
             --name "${SERVER_NAME}" \
@@ -285,7 +286,7 @@ jobs:
         working-directory: ${{ inputs.attempt_path }}
         run: |
           set -euo pipefail
-          source .venv/bin/activate
+          source "${VENV_PATH}/bin/activate"
 
           psynet deploy ssh \
             --app "${APP_NAME}" \
