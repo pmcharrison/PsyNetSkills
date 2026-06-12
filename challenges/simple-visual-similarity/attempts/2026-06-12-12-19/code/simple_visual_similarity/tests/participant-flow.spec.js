@@ -65,7 +65,8 @@ test('participant can complete visual similarity flow', async ({ page }) => {
     for (const rating of ratings) {
       await expect(page.getByRole('button', { name: rating })).toBeVisible();
     }
-    await expect.poll(async () => page.locator('svg circle').count(), { timeout: 5000 }).toBeGreaterThanOrEqual(2);
+    await expect(page.locator('#svs-stimuli')).toBeVisible({ timeout: 5000 });
+    await expect.poll(async () => page.locator('#svs-stimuli circle').count(), { timeout: 5000 }).toBe(2);
     await expect(page.getByRole('button', { name: /^3$/ })).toBeEnabled();
     if (trial === 1) {
       await saveScreenshot(page, '04-first-trial.png');

@@ -13,7 +13,7 @@ from pathlib import Path
 
 import psynet.experiment
 from psynet.bot import Bot, BotResponse
-from psynet.graphics import Circle, Frame, GraphicPrompt, Text
+from markupsafe import Markup
 from psynet.modular_page import KeyboardPushButtonControl, ModularPage
 from psynet.page import InfoPage
 from psynet.participant import Participant
@@ -80,6 +80,34 @@ def get_nodes() -> list[StaticNode]:
     return [StaticNode(definition=pair) for pair in get_pairs()]
 
 
+def visual_prompt(stimulus_a: dict, stimulus_b: dict) -> Markup:
+    return Markup(
+        f"""
+        <div class="similarity-question">How similar are these two circles?</div>
+        <div class="similarity-display">
+          <div id="svs-fixation" class="similarity-fixation">+</div>
+          <svg id="svs-stimuli" class="similarity-stimuli" viewBox="0 0 640 260" aria-label="Circle pair">
+            <circle cx="230" cy="130" r="{stimulus_a['radius']}" fill="{stimulus_a['color']}" stroke="#222222" stroke-width="2" />
+            <circle cx="410" cy="130" r="{stimulus_b['radius']}" fill="{stimulus_b['color']}" stroke="#222222" stroke-width="2" />
+          </svg>
+        </div>
+        <script>
+          psynet.trial.onEvent("trialStart", function() {{
+            $(".push-button").css("visibility", "hidden");
+            $("#svs-stimuli").css("visibility", "hidden");
+            $("#svs-fixation").show();
+            setTimeout(function() {{
+              $("#svs-fixation").hide();
+              $("#svs-stimuli").css("visibility", "visible");
+              $(".push-button").css("visibility", "visible");
+              psynet.trial.registerEvent("stimulusShown", {{once: true}});
+            }}, {round(FIXATION_DURATION * 1000)});
+          }});
+        </script>
+        """
+    )
+
+
 class SimilarityTrial(StaticTrial):
     time_estimate = 8
 
@@ -88,56 +116,7 @@ class SimilarityTrial(StaticTrial):
         stimulus_b = self.definition["stimulus_b"]
         return ModularPage(
             "similarity_rating",
-            prompt=GraphicPrompt(
-                text="How similar are these two circles?",
-                dimensions=[640, 260],
-                viewport_width=0.82,
-                frames=[
-                    Frame(
-                        [
-                            Text(
-                                "fixation",
-                                "+",
-                                x=320,
-                                y=130,
-                                attributes={"font-size": 42, "font-weight": "bold"},
-                            )
-                        ],
-                        duration=FIXATION_DURATION,
-                    ),
-                    Frame(
-                        [
-                            Circle(
-                                "left_circle",
-                                x=230,
-                                y=130,
-                                radius=stimulus_a["radius"],
-                                attributes={
-                                    "fill": stimulus_a["color"],
-                                    "stroke": "#222222",
-                                    "stroke-width": 2,
-                                },
-                            ),
-                            Circle(
-                                "right_circle",
-                                x=410,
-                                y=130,
-                                radius=stimulus_b["radius"],
-                                attributes={
-                                    "fill": stimulus_b["color"],
-                                    "stroke": "#222222",
-                                    "stroke-width": 2,
-                                },
-                            ),
-                        ],
-                        duration=None,
-                        activate_control_response=True,
-                        activate_control_submit=True,
-                    ),
-                ],
-                prevent_control_response=True,
-                prevent_control_submit=True,
-            ),
+            prompt=visual_prompt(stimulus_a, stimulus_b),
             control=KeyboardPushButtonControl(
                 choices=RATING_CHOICES,
                 labels=RATING_LABELS,
@@ -148,12 +127,35 @@ class SimilarityTrial(StaticTrial):
             ),
             events={
                 "responseEnable": Event(
-                    is_triggered_by="graphicPromptEnableResponse",
-                    js="$('.push-button').css('visibility', 'visible');",
+                    is_triggered_by="stimulusShown",
                 ),
-                "submitEnable": Event(is_triggered_by="graphicPromptEnableSubmit"),
+                "submitEnable": Event(is_triggered_by="stimulusShown"),
             },
-            css=".push-button { visibility: hidden; }",
+            css="""
+            .similarity-question { margin-bottom: 1rem; }
+            .similarity-display {
+                position: relative;
+                width: min(82vw, 720px);
+                height: 292px;
+                margin: 0 auto 1rem auto;
+                border: 1px solid #dddddd;
+            }
+            .similarity-fixation {
+                position: absolute;
+                inset: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 42px;
+                font-weight: bold;
+            }
+            .similarity-stimuli {
+                width: 100%;
+                height: 100%;
+                visibility: hidden;
+            }
+            .push-button { visibility: hidden; }
+            """,
             session_id=f"similarity_rating_{self.id or self.definition['pair_id']}",
             time_estimate=self.time_estimate,
         )
