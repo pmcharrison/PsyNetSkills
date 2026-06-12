@@ -35,36 +35,36 @@ msgstr ""
 msgid "Click an animal, or press A, S, or D on your keyboard."
 msgstr ""
 
-#: experiment.py:171
+#: experiment.py:166
 msgid "Animal choices"
 msgstr ""
 
-#: experiment.py:174
+#: experiment.py:169
 msgid ""
 "In this short experiment, you will answer two questions about familiar "
 "animals."
 msgstr ""
 
-#: experiment.py:184
+#: experiment.py:179
 msgid "On each page, choose one animal from cat, dog, and bird."
 msgstr ""
 
-#: experiment.py:189
+#: experiment.py:184
 msgid ""
 "There are only two questions. Your answers help us compare simple animal "
 "preferences across language or locale groups."
 msgstr ""
 
-#: experiment.py:194
+#: experiment.py:189
 msgid ""
 "We record your experiment locale and browser platform, but we do not ask for"
 " identifying cultural information."
 msgstr ""
 
-#: experiment.py:204
+#: experiment.py:199
 msgid "Thank you"
 msgstr ""
 
-#: experiment.py:205
+#: experiment.py:200
 msgid "You have completed the animal choice experiment."
 msgstr ""
