@@ -1,21 +1,21 @@
-# Deploying PsyNet attempts with human approval
+# Deploying PsyNet attempts
 
-This repository includes a gated `deploy-attempt` workflow for publishing a
-PsyNet attempt to an EC2 instance with Dallinger/PsyNet SSH deployment.
+This repository includes a `deploy-attempt` workflow for publishing a PsyNet
+attempt to an EC2 instance with Dallinger/PsyNet SSH deployment.
 
-The intended safety boundary is:
+The current setup is no-reviewer mode:
 
 1. An agent or developer can trigger a dry run or queue a deployment request.
 2. GitHub runs the non-privileged `prepare` job and writes a deployment plan.
-3. The privileged `deploy` job waits on the protected `attempt-deploy`
-   Environment.
-4. A human reviewer approves the Environment in GitHub.
-5. Only then can the job request a GitHub OIDC token, assume the AWS IAM role,
-   reconstruct the SSH private key from Environment secrets, provision EC2, and
-   deploy the experiment.
+3. If `dry_run=false`, the `deploy` job uses the `attempt-deploy` Environment
+   variables/secrets, requests a GitHub OIDC token, assumes the AWS IAM role,
+   reconstructs the SSH private key from Environment secrets, provisions EC2,
+   and deploys the experiment.
 
-Agents should not have AWS credentials, GitHub Environment admin rights, or
-membership in the required reviewer team.
+Agents should not have AWS credentials or GitHub Environment admin rights. In
+no-reviewer mode, any identity that can dispatch the workflow can start a real
+EC2 deployment, so dispatch permission should be limited to trusted automation
+or humans. Add required reviewers later if a separate approval gate is needed.
 
 ## One-time setup
 
@@ -31,7 +31,7 @@ membership in the required reviewer team.
    ```
 
 2. In GitHub, create an Environment named `attempt-deploy`.
-3. Add required reviewers and enable prevent self-review.
+3. Do not add required reviewers for no-approval deploys.
 4. Add the Environment variables printed by the setup script:
    `ATTEMPT_DEPLOY_AWS_ROLE_ARN`, `ATTEMPT_DEPLOY_AWS_REGION`, and
    `ATTEMPT_DEPLOY_SSH_KEY_NAME`.
@@ -40,7 +40,7 @@ membership in the required reviewer team.
    `ATTEMPT_DEPLOY_DASHBOARD_PASSWORD`.
 
 The setup script creates an IAM role whose trust policy accepts GitHub OIDC
-tokens only for the protected Environment subject:
+tokens only for the `attempt-deploy` Environment subject:
 `repo:OWNER/REPO:environment:attempt-deploy`.
 
 ## Running a deployment request
@@ -59,15 +59,14 @@ python3 .cursor/skills/deploy-attempt/scripts/deploy_attempt.py <attempt> --requ
 ```
 
 The helper triggers the workflow when its GitHub token has permission, then
-prints the workflow run URL for human approval. If dispatch is unavailable, it
+prints the workflow run URL. If dispatch is unavailable, it
 prints the exact workflow inputs for a human to paste into GitHub.
 
 If dispatch fails with `Resource not accessible by integration`, the GitHub
 identity running the helper lacks Actions/workflows write permission for
-`workflow_dispatch`. This is separate from AWS credentials and the protected
-Environment gate. The fix is either to let a human run the workflow in GitHub,
-or to configure a dispatch-only GitHub App/token that can start workflow runs
-but is not allowed to approve the `attempt-deploy` Environment.
+`workflow_dispatch`. This is separate from AWS credentials. The fix is either
+to let a human run the workflow in GitHub, or to configure a dispatch-capable
+GitHub App/token.
 
 The `Deploy PsyNet attempt` workflow accepts:
 
@@ -78,14 +77,12 @@ The `Deploy PsyNet attempt` workflow accepts:
 - `dns_host`: Route53 host to publish; it must match
   `<label>.cursor.cap-experiments.com`.
 - `region`, `instance_type`, `storage_gb`, and `security_group_name`.
-- `dry_run`: keep `true` to only generate a plan; set `false` to request
-  human approval for a real deployment.
+- `dry_run`: keep `true` to only generate a plan; set `false` to run a real
+  deployment.
 
-Agents can safely trigger this workflow on `main` with `dry_run=false` because
-the AWS-capable job remains blocked until a required human reviewer approves
-the protected Environment. The user-facing handoff link is the workflow run page;
-the reviewer opens it, clicks `Review deployments`, selects `attempt-deploy`,
-and approves or rejects.
+The user-facing handoff link is the workflow run page. In no-reviewer mode,
+there is no `Review deployments` step; the deploy job starts automatically once
+the prepare job succeeds.
 
 ## Why provision then deploy works
 
@@ -99,11 +96,10 @@ as `psynet deploy ssh`. This matters because Dallinger's EC2 provision command:
 - prepares Docker on the new host; and
 - stores the DNS host in Dallinger's configured host list.
 
-The workflow reconstructs the private key from a protected GitHub Environment
-secret after human approval, writes `~/.dallingerconfig`, runs
-`dallinger ec2 provision`, and then runs `psynet deploy ssh` in the same job.
-The private key, Dallinger config, and stored host entry therefore remain
-available for the SSH deploy step.
+The workflow reconstructs the private key from a GitHub Environment secret,
+writes `~/.dallingerconfig`, runs `dallinger ec2 provision`, and then runs
+`psynet deploy ssh` in the same job. The private key, Dallinger config, and
+stored host entry therefore remain available for the SSH deploy step.
 
 ## Operational notes
 
