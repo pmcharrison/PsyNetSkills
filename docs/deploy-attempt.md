@@ -45,20 +45,40 @@ tokens only for the protected Environment subject:
 
 ## Running a deployment request
 
-Trigger the `Deploy PsyNet attempt` workflow with:
+Agents should not ask users to type these values manually. Use the helper from
+the `/deploy-attempt` skill to derive defaults:
+
+```bash
+python3 .cursor/skills/deploy-attempt/scripts/deploy_attempt.py <attempt>
+```
+
+To queue a real deployment request, the agent runs:
+
+```bash
+python3 .cursor/skills/deploy-attempt/scripts/deploy_attempt.py <attempt> --request-deploy
+```
+
+The helper triggers the workflow when its GitHub token has permission, then
+prints the workflow run URL for human approval. If dispatch is unavailable, it
+prints the exact workflow inputs for a human to paste into GitHub.
+
+The `Deploy PsyNet attempt` workflow accepts:
 
 - `attempt_ref`: commit SHA or branch containing the attempt code.
 - `attempt_path`: relative path to the PsyNet experiment folder.
 - `app_name`: Dallinger/PsyNet app name.
 - `server_name`: EC2 instance name.
-- `dns_host`: Route53 host to publish.
+- `dns_host`: Route53 host to publish; it must match
+  `<label>.cursor.cap-experiments.com`.
 - `region`, `instance_type`, `storage_gb`, and `security_group_name`.
 - `dry_run`: keep `true` to only generate a plan; set `false` to request
   human approval for a real deployment.
 
 Agents can safely trigger this workflow on `main` with `dry_run=false` because
 the AWS-capable job remains blocked until a required human reviewer approves
-the protected Environment.
+the protected Environment. The user-facing handoff link is the workflow run page;
+the reviewer opens it, clicks `Review deployments`, selects `attempt-deploy`,
+and approves or rejects.
 
 ## Why provision then deploy works
 
