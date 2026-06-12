@@ -22,6 +22,9 @@ Provide these artifacts or document the blocker in `EVALUATION.md`:
   `psynet-experiment-implementation/references/validation.md` for the command.
 - `evidence/monitor.html` contains a PsyNet dashboard monitor snapshot.
 - `evidence/data.zip` contains exported experiment data.
+  Use an absolute export path under `evidence/` when running PsyNet export
+  commands; some local export subprocesses resolve relative paths from temporary
+  deployment directories.
 - `EVALUATION.md` has the copied criteria checklist when the challenge includes
   copied criteria.
 - If the challenge's central requirement is a real external service or
