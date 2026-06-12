@@ -25,3 +25,5 @@ python simulate_policy.py --output-dir ../../evidence/analyses
 ```
 
 The script simulates low-, medium-, and high-ability participants and writes CSV/JSON evidence showing selected lengths and posterior ability estimates over trials.
+
+It also simulates 30 adaptive and 30 non-adaptive participants by default, fits a per-participant HMC posterior for memory ability, and writes an adaptive/non-adaptive accuracy comparison to `evidence/analyses/hmc_accuracy_summary.json`.

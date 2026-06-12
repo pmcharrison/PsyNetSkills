@@ -7,6 +7,7 @@ from adaptive_memory import (
     fit_posterior,
     initial_posterior_state,
 )
+from simulate_policy import hmc_accuracy_report, simulate_cohort
 
 
 def test_fit_posterior_updates_cache_from_observations():
@@ -42,3 +43,12 @@ def test_random_mode_stays_inside_candidate_bounds():
     assert min(lengths) >= 2
     assert max(lengths) <= 20
     assert len(set(lengths)) > 1
+
+
+def test_hmc_accuracy_report_compares_adaptive_and_nonadaptive_modes():
+    rows = simulate_cohort(n_participants_per_mode=2, seed=123)
+    estimates, summary = hmc_accuracy_report(rows)
+    assert len(estimates) == 4
+    assert summary["adaptive"]["n_participants"] == 2
+    assert summary["nonadaptive"]["n_participants"] == 2
+    assert "adaptive_minus_nonadaptive_mae" in summary

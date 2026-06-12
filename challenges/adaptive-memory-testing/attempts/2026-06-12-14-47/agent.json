@@ -19,7 +19,7 @@
   },
   "run_cost": null,
   "notes": [
-    "Implementation is paused for required human PLAN.md review before coding.",
-    "Human author attribution is pending; fill authors before marking the attempt complete."
+    "Implementation and first-pass evidence collection are complete.",
+    "Human author attribution is pending; fill authors and ended_at before marking the attempt complete."
   ]
 }
