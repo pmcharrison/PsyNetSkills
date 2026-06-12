@@ -11,6 +11,7 @@ __pycache__
 *.DS_Store
 node_modules/
 data/
+test-results/
 develop/
 deploy/
 deploy_logs/
