@@ -16,8 +16,8 @@ code until all sections are approved or explicitly out of scope.
 - **Purpose:** <simple implementation / replication or adaptation / new
   science question> — <one line on what success means>.
 - **Mode:** <interactive / challenge attempt>.
-- **Source / canonical reference:** <citation plus `references/literature/`
-  path or URL, or "none">.
+- **Source / canonical reference:** <citation plus `references/` path or URL,
+  or "none">.
 
 ## Science
 
@@ -67,7 +67,7 @@ model, outcomes, decision rules).>
 
 <Technical plan: closest PsyNet demo, experiment architecture, timeline shape,
 core PsyNet constructs, configuration strategy, stimulus and asset pipeline,
-data schema, bot/simulation path, testing plan, deployment boundary. Bullets
+data schema, bot/simulation path, local testing and evidence plan. Bullets
 are fine here.>
 
 ### Key decisions
@@ -77,8 +77,7 @@ are fine here.>
 | Base demo | | |
 | Experiment architecture | | |
 | Data schema highlights | | |
-| Testing plan | | |
-| Deployment boundary | | |
+| Testing and evidence plan | | |
 
 ## Decision log
 

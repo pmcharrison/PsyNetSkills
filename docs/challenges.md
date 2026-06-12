@@ -36,19 +36,6 @@ criteria and `references/` for supporting material. `CRITERIA.md` is optional:
 when present, agents should not read it before implementing the challenge, but
 it should be used during conversational evaluation.
 
-Reference material is split by kind inside `references/`:
-
-```text
-references/
-├── experiment/   # Development-related files: mock experiments, implementation
-│                 # notes, dossiers, interface sketches, stimulus manifests
-└── literature/   # Verified research papers and citation notes
-```
-
-A `README.md` describing the folder may sit at the top level of `references/`.
-Historical attempt snapshots (`attempts/*/challenge/references/`) are frozen
-records and keep whatever layout they were created with.
-
 ## Challenge instructions
 
 `INSTRUCTIONS.md` should state the task in ordinary language, with enough detail

@@ -25,11 +25,11 @@ code during planning.
   dependent variable in the Science section has a concrete field.
 - **Bot and simulation path**: bot responses, deterministic vs. stochastic
   simulation, and parity between bot and browser submissions.
-- **Testing plan**: expected `psynet test local` behavior, custom assertions,
-  participant video path, performance checks, export checks, and analysis
-  script checks (see `validation.md`).
-- **Deployment boundary**: local-only, SSH, Heroku, or other target;
-  credentials policy (local ephemeral defaults only); export safety.
+- **Testing and evidence plan**: expected `psynet test local` behavior, custom
+  assertions, participant video path, performance checks, export checks, and
+  analysis script checks (see `validation.md`). Experiments in this workflow
+  run, test, and record evidence locally; do not plan a real deployment, and
+  use only local ephemeral PsyNet/Dallinger defaults for credentials.
 
 Cover when relevant:
 
@@ -54,6 +54,6 @@ materials as a separate preparatory project first.
 
 - The architecture is consistent with every Method key decision.
 - Each dependent variable maps to a saved field.
-- The testing plan names the commands and artifacts that will prove the
-  experiment works locally.
+- The testing and evidence plan names the commands and artifacts that will
+  prove the experiment works locally.
 - No experiment code has been written yet.

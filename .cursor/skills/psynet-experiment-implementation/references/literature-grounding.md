@@ -18,7 +18,7 @@ procedure applies when verifying reference materials for a challenge via the
    summaries, or bibliographic details. If a claimed paper cannot be located,
    say so rather than approximating.
 4. **Store and record.** Put verified materials in the experiment or
-   challenge folder under `references/literature/`:
+   challenge folder under `references/`:
    - If the license permits redistribution, store a copy (PDF or HTML).
    - Otherwise store a short notes file with the citation, URL, and the
      specific facts extracted, and record only citation plus URL in PLAN.md.
@@ -32,8 +32,7 @@ procedure applies when verifying reference materials for a challenge via the
 
 ## Outputs
 
-- Verified files or notes under `references/literature/` of the experiment or
-  challenge folder (development materials such as mock experiments, manifests,
-  and sketches belong under `references/experiment/` instead).
+- Verified files or notes under `references/` of the experiment or challenge
+  folder.
 - A canonical-reference line at the top of PLAN.md.
 - Decision-log entries for any source that was considered and rejected.

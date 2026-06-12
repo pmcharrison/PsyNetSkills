@@ -79,7 +79,7 @@ plan is self-describing). Otherwise:
 - For a replication or adaptation, follow
   `references/literature-grounding.md` to locate and verify the source study
   and store materials under the experiment or challenge folder's
-  `references/literature/`. Transcribe the question, hypotheses, measures,
+  `references/`. Transcribe the question, hypotheses, measures,
   and key procedure values from the source; the gate question becomes "did we
   faithfully capture the source study?".
 - Gate: present the drafted section; iterate until approved.
@@ -112,14 +112,13 @@ appropriate.
 - Read `references/implementation-checklist.md` and
   `references/experiment-patterns.md`.
 - Identify the closest PsyNet demo, the experiment architecture, the timeline
-  shape, the stimulus pipeline, the data schema, the testing plan, and the
-  deployment boundary. Do not write experiment code at this stage.
+  shape, the stimulus pipeline, the data schema, and the local testing and
+  evidence plan. Do not write experiment code at this stage.
 - Gate: present the drafted section; iterate until approved.
 
 ### Developing the experiment
 
-Use the `develop-experiment-code` skill to implement the experiment,
-including its PsyNet build contract checklist.
+Use the `develop-experiment-code` skill to implement the experiment.
 
 ### Run simulations
 
