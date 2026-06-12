@@ -1,0 +1,10 @@
+{
+  "captions": {
+    "01-welcome.png": "Welcome page explaining the short primary-color pleasantness task.",
+    "02-red-rating.png": "Red color trial with the 1-7 pleasantness rating control.",
+    "03-green-rating.png": "Green color trial with the 1-7 pleasantness rating control.",
+    "04-blue-rating.png": "Blue color trial with the 1-7 pleasantness rating control.",
+    "05-thank-you.png": "Thank-you page after the three color ratings.",
+    "06-completion.png": "Completion state after the participant submits the thank-you page."
+  }
+}
