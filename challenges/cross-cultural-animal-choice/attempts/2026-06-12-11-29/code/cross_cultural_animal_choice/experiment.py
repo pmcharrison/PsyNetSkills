@@ -160,11 +160,6 @@ class Exp(psynet.experiment.Experiment):
     label = "Cross-cultural animal choice"
     test_n_bots = 3
 
-    config = {
-        "locale": "en",
-        "supported_locales": "[]",
-    }
-
     timeline = Timeline(
         InfoPage(
             tags.div(
