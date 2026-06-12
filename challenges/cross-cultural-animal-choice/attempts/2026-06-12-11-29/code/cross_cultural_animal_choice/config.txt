@@ -1,0 +1,11 @@
+[Config]
+title = Cross-cultural Animal Choice Experiment
+description = A short two-trial study where participants choose among cat, dog, and bird.
+contact_email_on_error = researcher@example.com
+organization_name = PsyNetSkills
+
+recruiter = generic
+currency = $
+wage_per_hour = 12.0
+locale = en
+supported_locales = []
