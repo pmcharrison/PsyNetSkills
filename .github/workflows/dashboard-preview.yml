@@ -43,7 +43,7 @@ jobs:
 
           preview_path="pr-preview/pr-${{ github.event.pull_request.number }}"
           preview_url="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/${preview_path}/"
-          artifact_url="${preview_url}artifacts/blobs/sha256"
+          artifact_url="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/artifacts/blobs/sha256"
 
           echo "path=${preview_path}" >> "${GITHUB_OUTPUT}"
           echo "url=${preview_url}" >> "${GITHUB_OUTPUT}"
@@ -83,18 +83,7 @@ jobs:
           git -C "${pages_dir}" config user.name "github-actions[bot]"
           git -C "${pages_dir}" config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          python - "${pages_dir}/${PREVIEW_PATH}" <<'PY'
-          import shutil
-          import sys
-          from pathlib import Path
-
-          target = Path(sys.argv[1])
-          if target.exists():
-              shutil.rmtree(target)
-          target.mkdir(parents=True)
-          PY
-
-          cp -a public/. "${pages_dir}/${PREVIEW_PATH}/"
+          python .github/scripts/prepare-preview-pages.py "${pages_dir}" "public" "${PREVIEW_PATH}"
           touch "${pages_dir}/.nojekyll"
 
           git -C "${pages_dir}" add -A
