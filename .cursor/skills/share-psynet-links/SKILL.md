@@ -24,6 +24,22 @@ work.
   `psynet-experiment-implementation` to decide which links exist for the current
   workflow.
 
+## Content to share
+
+Share links that let the user review the newest content with the least friction:
+
+- Prefer a live dev-server link when the agent has started one. Live previews
+  reflect the current workspace immediately, before asynchronous preview builds
+  finish.
+- Expose the live dev server through `public-tunnel` when the user needs to open
+  it from a normal browser. Local `127.0.0.1` URLs are usually not useful outside
+  the Cloud Desktop environment.
+- Include a deterministic backup dashboard preview when one is available. Backup
+  previews are slower to publish, but they keep working after the agent sleeps or
+  the live tunnel stops.
+- For PsyNet experiments, include participant and dashboard links when they help
+  the user review the running experiment; otherwise omit them.
+
 ## Format
 
 Use Markdown links, omit unavailable links, and choose concise labels that match
