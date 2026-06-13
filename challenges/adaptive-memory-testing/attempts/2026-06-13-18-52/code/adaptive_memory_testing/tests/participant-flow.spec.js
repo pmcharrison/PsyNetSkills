@@ -41,6 +41,15 @@ async function advanceUntilVisible(page, selector, maxClicks = 8) {
   await page.waitForSelector(selector, { timeout: 60000 });
 }
 
+async function waitAndClickNext(page, timeoutMs = 5000) {
+  const deadline = Date.now() + timeoutMs;
+  while (Date.now() < deadline) {
+    if (await clickNextIfVisible(page)) return true;
+    await page.waitForTimeout(100);
+  }
+  return false;
+}
+
 test('participant completes adaptive memory flow', async ({ page }) => {
   test.setTimeout(180000);
   ensureEvidenceDirs();
@@ -60,12 +69,12 @@ test('participant completes adaptive memory flow', async ({ page }) => {
       await page.screenshot({ path: path.join(screenshotDir, '02-digit-display.png'), fullPage: true });
     }
 
-    await page.waitForTimeout(600);
-    expect(await clickNextIfVisible(page)).toBeTruthy();
     await page.waitForSelector('input[type="text"], textarea', { timeout: 60000 });
     const input = page.locator('input[type="text"], textarea').first();
     await expect(input).toBeVisible();
+    await expect(input).toBeEnabled({ timeout: 60000 });
     await input.fill(target);
+    await page.waitForTimeout(150);
     if (!capturedTrial) {
       await page.screenshot({ path: path.join(screenshotDir, '03-recall-input.png'), fullPage: true });
       capturedTrial = true;

@@ -7,7 +7,7 @@ from typing import Any
 import psynet.experiment
 from dominate import tags
 from psynet.field import PythonDict, PythonList, PythonObject, register_extra_var
-from psynet.modular_page import ModularPage, NullControl, TextControl
+from psynet.modular_page import ModularPage, TextControl
 from psynet.page import InfoPage, SuccessfulEndPage
 from psynet.timeline import Event, ProgressDisplay, ProgressStage, Timeline
 from psynet.trial.static import StaticNode, StaticTrial, StaticTrialMaker
@@ -176,46 +176,36 @@ class MemoryRecallTrial(StaticTrial):
     def show_trial(self, experiment, participant):
         target = self.definition["target_string"]
         display_seconds = self.definition["display_seconds"]
-        display_prompt = tags.div(cls="memory-display")
-        with display_prompt:
+        prompt = tags.div(cls="memory-display")
+        with prompt:
             tags.p(f"Trial {self.position + 1} of {N_TRIALS}")
             tags.p("Memorize this digit string. It will disappear before you continue.")
             tags.div(target, cls="digit-string")
-        recall_prompt = tags.div(cls="memory-recall")
-        with recall_prompt:
-            tags.p(f"Trial {self.position + 1} of {N_TRIALS}")
-            tags.p("Type the digit string exactly as you remember it.")
-        return [
-            ModularPage(
-                "memorize_digits",
-                display_prompt,
-                control=NullControl(),
-                time_estimate=display_seconds,
-                events={
-                    "hideDigits": Event(
-                        is_triggered_by="trialStart",
-                        delay=display_seconds,
-                        js="document.querySelector('.digit-string').style.visibility = 'hidden';",
-                        message="Now click Next.",
-                    ),
-                    "submitEnable": Event(is_triggered_by="hideDigits"),
-                },
-                progress_display=ProgressDisplay(
-                    [ProgressStage(display_seconds, "Memorize", color="green")]
-                ),
+            tags.p("When the string disappears, type it exactly from memory.")
+        return ModularPage(
+            "recall_digits",
+            prompt,
+            DigitRecallTextControl(
+                width="260px",
+                text_align="center",
+                block_copy_paste=True,
+                bot_response=lambda bot: self.bot_response(bot),
             ),
-            ModularPage(
-                "recall_digits",
-                recall_prompt,
-                DigitRecallTextControl(
-                    width="260px",
-                    text_align="center",
-                    block_copy_paste=True,
-                    bot_response=lambda bot: self.bot_response(bot),
+            time_estimate=display_seconds + 6,
+            events={
+                "hideDigits": Event(
+                    is_triggered_by="trialStart",
+                    delay=display_seconds,
+                    js="document.querySelectorAll('.digit-string').forEach((elt) => { elt.style.visibility = 'hidden'; });",
+                    message="Now type the string.",
                 ),
-                time_estimate=6,
+                "responseEnable": Event(is_triggered_by="hideDigits"),
+                "submitEnable": Event(is_triggered_by="responseEnable"),
+            },
+            progress_display=ProgressDisplay(
+                [ProgressStage(display_seconds, "Memorize", color="green")]
             ),
-        ]
+        )
 
     def bot_response(self, bot) -> str:
         true_r = synthetic_ability_for_id(bot.id)
