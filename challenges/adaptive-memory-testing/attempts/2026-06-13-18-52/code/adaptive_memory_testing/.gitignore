@@ -6,5 +6,6 @@ __pycache__/
 .deploy/
 exports/
 local.db
+dump.rdb
 source_code.zip
 static/
