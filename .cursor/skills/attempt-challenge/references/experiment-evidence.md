@@ -21,10 +21,6 @@ Provide these artifacts or document the blocker in `EVALUATION.md`:
   the performance test could not run. Use
   `psynet-experiment-implementation/references/validation.md` for the command.
 - `evidence/monitor.html` contains a PsyNet dashboard monitor snapshot.
-- `evidence/data.zip` contains exported experiment data.
-  Use an absolute export path under `evidence/` when running PsyNet export
-  commands; some local export subprocesses resolve relative paths from temporary
-  deployment directories.
 - `evidence/simulated_data.zip` contains a `psynet simulate` export with enough
   simulated participants to exercise the experiment's analysis pipeline. If the
   default simulation would only run one bot for a simple experiment, increase the
