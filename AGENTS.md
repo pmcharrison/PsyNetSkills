@@ -203,6 +203,22 @@ Use the `dashboard-preview-links` skill to share the durable PR preview URL and
 the branch-filtered workflow link. Forked pull requests do not publish static
 previews because the workflow needs write access to the `gh-pages` branch.
 
+When sharing preview links, use this template and omit links that are not
+available for the current task:
+
+**Temporary preview links** *(these may expire when the agent goes to sleep; ask
+me to refresh them if needed)*
+
+* **PsyNetSkills dashboard:** {live-dashboard-url}
+* **Experiment participant link:** {participant-url}
+* **Experiment dashboard:** {dashboard-url-with-credentials}
+
+**Persistent PsyNetSkills preview link:** {pr-preview-url}  
+*(This might take a couple of minutes to build. Check build status here:
+{workflow-url})*
+
+To publish your changes, merge the pull request.
+
 ### Dashboard and documentation review artifacts
 
 For README, documentation, and general dashboard-content changes, do not record

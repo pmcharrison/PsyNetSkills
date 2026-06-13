@@ -104,7 +104,8 @@ challenge before starting a fresh attempt.
      `#plan` anchor and the branch-filtered workflow link, noting that the static
      preview may take a few minutes to build. Point the user to the PR diff or
      code viewer for the full `PLAN.md` and include only a brief chat summary to
-     avoid making the reviewer wonder where the full plan went.
+     avoid making the reviewer wonder where the full plan went. Use the preview
+     handoff template from `AGENTS.md`.
    - Do not make challenge code depend on files outside its attempt directory
      unless absolutely necessary.
    - For runnable PsyNet experiments, prefer a non-conflicting nested directory

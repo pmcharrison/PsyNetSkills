@@ -16,6 +16,14 @@ Poll briefly for publication status, but always give the user the deterministic
 preview URL and branch-filtered workflow link if polling does not confirm
 publication.
 
+When sharing only the durable preview, use this template:
+
+**Persistent PsyNetSkills preview link:** {pr-preview-url}  
+*(This might take a couple of minutes to build. Check build status here:
+{workflow-url})*
+
+To publish your changes, merge the pull request.
+
 ## Workflow
 
 1. Identify the PR number, branch name, and latest pushed commit SHA:

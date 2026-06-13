@@ -38,6 +38,21 @@ Pages PR preview URL plus the branch-filtered workflow status link. Tell the
 user that live tunnel URLs may expire when the agent goes to sleep and can be
 refreshed on request, while PR previews may take a few minutes to build.
 
+Use this handoff template, omitting links that are not available:
+
+**Temporary preview links** *(these may expire when the agent goes to sleep; ask
+me to refresh them if needed)*
+
+* **PsyNetSkills dashboard:** {live-dashboard-url}
+* **Experiment participant link:** {participant-url}
+* **Experiment dashboard:** {dashboard-url-with-credentials}
+
+**Persistent PsyNetSkills preview link:** {pr-preview-url}  
+*(This might take a couple of minutes to build. Check build status here:
+{workflow-url})*
+
+To publish your changes, merge the pull request.
+
 ## Safety
 
 - Do not commit `public/`; Hugo writes it only for static builds.
