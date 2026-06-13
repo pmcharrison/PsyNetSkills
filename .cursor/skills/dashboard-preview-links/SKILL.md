@@ -6,11 +6,11 @@ authors: [pmcharrison]
 
 # Dashboard preview links
 
-Use this skill after creating or updating a pull request that affects dashboard,
-documentation, skill, or challenge-attempt pages. These durable GitHub Pages PR
-preview links complement live tunnel previews: live links are immediate but may
-expire, while PR preview links support asynchronous review but may take a few
-minutes to build.
+Use this skill when a caller needs the durable GitHub Pages PR preview URL and
+publication status for a pull request that affects dashboard, documentation,
+skill, or challenge-attempt pages. These previews complement live tunnel
+previews: live links are immediate but may expire, while PR preview links support
+asynchronous review but may take a few minutes to build.
 
 Poll briefly for publication status, but always give the user the deterministic
 preview URL and branch-filtered workflow link if polling does not confirm
@@ -18,6 +18,9 @@ publication.
 
 When handing the durable preview to the user for review, use
 `share-psynet-links` for the user-facing link format.
+
+Do not invoke this skill merely to format an already-known preview URL; use
+`share-psynet-links` directly in that case.
 
 To publish your changes, merge the pull request.
 

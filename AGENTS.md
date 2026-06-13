@@ -199,9 +199,9 @@ https://pmcharrison.github.io/PsyNetSkills/pr-preview/pr-<number>/challenges/<ch
 
 https://github.com/pmcharrison/PsyNetSkills/actions/workflows/dashboard-preview.yml?query=branch%3A<branch-name>
 
-Use the `dashboard-preview-links` skill to share the durable PR preview URL and
-the branch-filtered workflow link. Forked pull requests do not publish static
-previews because the workflow needs write access to the `gh-pages` branch.
+Use the `dashboard-preview-links` skill when you need to check durable PR preview
+publication status. Forked pull requests do not publish static previews because
+the workflow needs write access to the `gh-pages` branch.
 
 ### Review links
 
