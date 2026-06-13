@@ -269,7 +269,7 @@ class Exp(psynet.experiment.Experiment):
     test_n_bots = 12
     test_mode = "serial"
 
-    css = """
+    css = ["""
     .digit-string {
         font-family: monospace;
         font-size: 2.8rem;
@@ -284,7 +284,7 @@ class Exp(psynet.experiment.Experiment):
     .memory-display, .memory-recall {
         text-align: center;
     }
-    """
+    """]
 
     timeline = Timeline(
         InfoPage(
