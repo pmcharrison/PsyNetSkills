@@ -25,6 +25,9 @@ instead.
 - Read `~/PsyNet/docs/getting_started/chain_experiments.rst` and inspect the
   closest PsyNet chain, graph, Gibbs, MCMCP, or create-and-rate demo before
   coding.
+- Read `references/chain-information-flow.md` when you need to explain or
+  implement how `ChainNode`, `ChainTrialMaker`, and `ChainTrial.show_trial`
+  pass state through a state-dependent round loop.
 - For grouped allocation or barriers, also read
   `psynet-synchronous-experiments/SKILL.md`.
 - For live websocket interaction inside a trial, also read
@@ -50,6 +53,10 @@ Use explicit PsyNet node/trial-maker architecture when:
 - Define the node as the state PsyNet allocates, the trial as the
   participant-facing response unit, and the trial maker as the owner of
   allocation, quotas, network growth, and completion.
+- For one-round-per-node designs, put the state needed to start a round in
+  `ChainNode.definition`, put the participant's completed round outcome in the
+  trial answer, and let the node transition logic derive the next node's
+  definition from completed trials.
 - Implement `summarize_trials` when completed trial answers must produce the next
   node definition, a node-level summary, or downstream allocation state.
 - Do not replace a needed `TrialMaker` with a hand-built sequence of
