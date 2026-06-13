@@ -40,16 +40,20 @@ refreshed on request, while PR previews may take a few minutes to build.
 
 Use this handoff template, omitting links that are not available:
 
-**Temporary preview links** *(these may expire when the agent goes to sleep; ask
-me to refresh them if needed)*
+**Links**
 
-* **PsyNetSkills dashboard:** {live-dashboard-url}
-* **Experiment participant link:** {participant-url}
-* **Experiment dashboard:** {dashboard-url-with-credentials}
+- [Plan]({live-dashboard-url})
+- [Experiment participant link]({participant-url})
+- [Experiment dashboard]({dashboard-url-with-credentials})
 
-**Persistent PsyNetSkills preview link:** {pr-preview-url}  
-*(This might take a couple of minutes to build. Check build status here:
-{workflow-url})*
+*These temporary links will fail once the agent goes to sleep. In that case, you
+can ask for new links, or use the [backup dashboard preview]({pr-preview-url}).*
+
+Use a concise first-link label that matches the live dashboard target, such as
+`Plan`, `Attempt`, or `Dashboard`.
+
+If no live tunnel is available, share the durable PR preview URL and
+branch-filtered workflow link from `dashboard-preview-links`.
 
 To publish your changes, merge the pull request.
 
