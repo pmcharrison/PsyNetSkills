@@ -1,0 +1,193 @@
+============================= test session starts ==============================
+platform linux -- Python 3.13.13, pytest-9.0.3, pluggy-1.6.0
+rootdir: /workspace/challenges/adaptive-memory-testing/attempts/2026-06-13-18-52/code/adaptive_memory_testing
+configfile: pytest.ini
+plugins: anyio-4.13.0, dallinger-12.2.0, Faker-40.15.0, psynet-13.3.0a0, dependency-0.6.0, mock-3.14.1, test-groups-1.2.1, timeout-2.4.0
+collected 1 item
+
+test.py::test_experiment[/workspace/challenges/adaptive-memory-testing/attempts/2026-06-13-18-52/code/adaptive_memory_testing] 
+-------------------------------- live log call ---------------------------------
+INFO     psynet:experiment.py:1394 Testing experiment with 12 serial bot(s)...
+INFO     psynet:bot.py:74 Waiting for experiment launch to complete....
+INFO     psynet:bot.py:37 Initializing bot with worker ID 9ada55b6-347e-44c4-aeaa-6972bdfa6d81.
+INFO     psynet:bot.py:74 Waiting for experiment launch to complete....
+INFO     psynet:bot.py:37 Initializing bot with worker ID fef7ec81-2c73-4e83-bcf4-3ac5c7f615c0.
+INFO     psynet:bot.py:74 Waiting for experiment launch to complete....
+INFO     psynet:bot.py:37 Initializing bot with worker ID b7dfbafe-a293-4e22-a5ed-94252fb01324.
+INFO     psynet:bot.py:74 Waiting for experiment launch to complete....
+INFO     psynet:bot.py:37 Initializing bot with worker ID a2d37ffd-71fe-4c8b-8619-0911a58e5956.
+INFO     psynet:bot.py:74 Waiting for experiment launch to complete....
+INFO     psynet:bot.py:37 Initializing bot with worker ID eafec5e1-2bcc-48c3-8d78-075d1a6c7f5a.
+INFO     psynet:bot.py:74 Waiting for experiment launch to complete....
+INFO     psynet:bot.py:37 Initializing bot with worker ID 384f1324-109b-4f11-b4fe-acbe849cff20.
+INFO     psynet:bot.py:74 Waiting for experiment launch to complete....
+INFO     psynet:bot.py:37 Initializing bot with worker ID 8e12aa28-5595-418b-be18-c55d9c9b2673.
+INFO     psynet:bot.py:74 Waiting for experiment launch to complete....
+INFO     psynet:bot.py:37 Initializing bot with worker ID c70162c7-5f68-4ba2-ae0c-e77b83f1c733.
+INFO     psynet:bot.py:74 Waiting for experiment launch to complete....
+INFO     psynet:bot.py:37 Initializing bot with worker ID f2d6f0d3-df83-44b5-adf4-b43242d9da48.
+INFO     psynet:bot.py:74 Waiting for experiment launch to complete....
+INFO     psynet:bot.py:37 Initializing bot with worker ID 02b53ff9-ea4c-403d-a1bd-008baf06d362.
+INFO     psynet:bot.py:74 Waiting for experiment launch to complete....
+INFO     psynet:bot.py:37 Initializing bot with worker ID 25cb3d44-bb47-41ee-872b-bd206939c988.
+INFO     psynet:bot.py:74 Waiting for experiment launch to complete....
+INFO     psynet:bot.py:37 Initializing bot with worker ID 28a713d6-8fb0-4d76-a03b-15fcce5bae23.
+INFO     psynet:participant.py:1125 ParticipantDriver 1 has finished the experiment (took 23 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 20.216 seconds).
+INFO     psynet:participant.py:1125 ParticipantDriver 2 has finished the experiment (took 23 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 12.250 seconds).
+INFO     psynet:participant.py:1125 ParticipantDriver 3 has finished the experiment (took 23 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 12.046 seconds).
+INFO     psynet:participant.py:1125 ParticipantDriver 4 has finished the experiment (took 23 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 12.415 seconds).
+INFO     psynet:participant.py:1125 ParticipantDriver 5 has finished the experiment (took 23 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 12.268 seconds).
+INFO     psynet:participant.py:1125 ParticipantDriver 6 has finished the experiment (took 23 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 12.578 seconds).
+INFO     psynet:participant.py:1125 ParticipantDriver 7 has finished the experiment (took 23 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 12.143 seconds).
+INFO     psynet:participant.py:1125 ParticipantDriver 8 has finished the experiment (took 23 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 11.815 seconds).
+INFO     psynet:participant.py:1125 ParticipantDriver 9 has finished the experiment (took 23 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 11.901 seconds).
+INFO     psynet:participant.py:1125 ParticipantDriver 10 has finished the experiment (took 23 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 11.668 seconds).
+INFO     psynet:participant.py:1125 ParticipantDriver 11 has finished the experiment (took 23 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 11.659 seconds).
+INFO     psynet:participant.py:1125 ParticipantDriver 12 has finished the experiment (took 23 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 12.304 seconds).
+INFO     psynet:experiment.py:1370 Mean HTTP request duration: 0.274 seconds
+PASSED                                                                   [100%]
+
+======================== 1 passed in 165.46s (0:02:45) =========================
+{
+    "psynet_version": "13.3.0a0",
+    "dallinger_version": "12.2.0",
+    "python_version": "3.13.13",
+    "hard_max_experiment_payment_email_sent": false,
+    "soft_max_experiment_payment_email_sent": false,
+    "hard_max_experiment_payment": 1100.0,
+    "soft_max_experiment_payment": 1000.0,
+    "max_participant_payment": 25.0,
+    "deployment_id": "adaptive-memory-testing__mode=debug__launch=2026-06-13--19-18-11",
+    "label": "Adaptive memory testing",
+    "deployment_config": {
+        "aws_region": "us-east-1",
+        "ec2_default_pem": "dallinger",
+        "ec2_default_security_group": "dallinger",
+        "dallinger_develop_directory": "/tmp/dallinger_develop",
+        "smtp_host": "smtp.gmail.com:587",
+        "smtp_username": "???",
+        "contact_email_on_error": "example@example.com",
+        "dallinger_email_address": "dallinger@mailinator.com",
+        "docker_worker_cpu_shares": 1024,
+        "enable_global_experiment_registry": false,
+        "language": "en",
+        "lock_table_when_creating_participant": false,
+        "mode": "debug",
+        "replay": false,
+        "auto_recruit": false,
+        "assign_qualifications": true,
+        "allow_repeat_worker_ids": false,
+        "us_only": false,
+        "disable_when_duration_exceeded": false,
+        "webdriver_type": "chrome_headless",
+        "chrome-path": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+        "clock_on": true,
+        "sentry": false,
+        "redis_size": "premium-0",
+        "worker_multiplier": 1.5,
+        "num_dynos_web": 1,
+        "num_dynos_worker": 1,
+        "prolific_api_version": "v1",
+        "prolific_estimated_completion_minutes": 4,
+        "prolific_is_custom_screening": false,
+        "prolific_completion_config": "{}",
+        "prolific_recruitment_config": "{}",
+        "disable_browser_autotranslate": true,
+        "protected_routes": "[\"/network/<network_id>\", \"/question/<participant_id>\", \"/node/<int:node_id>/neighbors\", \"/node/<participant_id>\", \"/node/<int:node_id>/vectors\", \"/node/<int:node_id>/connect/<int:other_node_id>\", \"/info/<int:node_id>/<int:info_id>\", \"/node/<int:node_id>/infos\", \"/node/<int:node_id>/received_infos\", \"/tracking_event/<int:node_id>\", \"/info/<int:node_id>\", \"/node/<int:node_id>/transmissions\", \"/node/<int:node_id>/transmit\", \"/node/<int:node_id>/transformations\", \"/transformation/<int:node_id>/<int:info_in_id>/<int:info_out_id>\"]",
+        "host": "0.0.0.0",
+        "base_port": 5000,
+        "logfile": "/workspace/challenges/adaptive-memory-testing/attempts/2026-06-13-18-52/code/adaptive_memory_testing/server.log",
+        "loglevel": 1,
+        "loglevel_worker": 1,
+        "threads": "1",
+        "whimsical": true,
+        "allow_mobile_devices": false,
+        "base_payment": 0.8,
+        "big_base_payment": false,
+        "check_dallinger_version": false,
+        "color_mode": "light",
+        "currency": "$",
+        "default_translator": "chat_gpt",
+        "docker_volumes": "${HOME}/psynet-data/assets:/psynet-data/assets",
+        "duration": 100000000.0,
+        "experimenter_name": "unknown",
+        "force_google_chrome": true,
+        "notifier": "logger",
+        "leave_comments_on_every_page": false,
+        "force_incognito_mode": false,
+        "openai_default_model": "gpt-4o",
+        "openai_default_temperature": "0",
+        "initial_recruitment_size": 1,
+        "label": "adaptive_memory_testing",
+        "min_accumulated_reward_for_abort": 0.2,
+        "min_browser_version": "80.0",
+        "prolific_enable_return_for_bonus": true,
+        "show_abort_button": false,
+        "show_footer": true,
+        "show_progress_bar": true,
+        "show_reward": true,
+        "needs_internet_access": true,
+        "check_participant_opened_devtools": false,
+        "supported_locales": "[]",
+        "wage_per_hour": 12.0,
+        "window_height": 768,
+        "window_width": 1024,
+        "mute_same_warning_for_n_hours": 1.0,
+        "resource_warning_pct": 0.9,
+        "resource_danger_pct": 0.95,
+        "minimal_disk_space_warning_gb": 5.0,
+        "minimal_disk_space_danger_gb": 2.0,
+        "title": "Adaptive memory testing experiment",
+        "description": "This local workshop experiment estimates digit-memory ability using ten adaptive number-string recall trials. Please use a Chrome browser.",
+        "organization_name": "PsyNetSkills",
+        "recruiter": "generic",
+        "id": "179a93b5-e9d3-3304-3829-7624ba643903",
+        "heroku_app_id_root": "179a93b5-e9d3-3304-3829-7624ba643903",
+        "port": 5000
+    }
+}
+
+❯❯ Exporting raw database content to data/simulated_data/anonymous/database.zip
+
+Preparing to export the data...
+Zipping up the package...
+Done. Local export available in data/local-data.zip
+/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/yaspin/core.py:172: UserWarning: color, on_color and attrs are not supported when output stream is not a TTY
+  self._color = self._set_color(color) if color else color
+
+⠋ Completed.             ✔ Completed.
+Bot:   0%|          | 0/12 [00:00<?, ?it/s]Bot: 100%|██████████| 12/12 [00:00<00:00, 1543.49it/s]
+StaticNetwork:   0%|          | 0/19 [00:00<?, ?it/s]StaticNetwork: 100%|██████████| 19/19 [00:00<00:00, 21393.77it/s]
+StaticNode:   0%|          | 0/19 [00:00<?, ?it/s]StaticNode: 100%|██████████| 19/19 [00:00<00:00, 18336.81it/s]
+MemoryRecallTrial:   0%|          | 0/120 [00:00<?, ?it/s]MemoryRecallTrial: 100%|██████████| 120/120 [00:00<00:00, 2149.19it/s]
+Response:   0%|          | 0/264 [00:00<?, ?it/s]Response: 100%|██████████| 264/264 [00:00<00:00, 23295.32it/s]
+ChainTrialMakerState:   0%|          | 0/12 [00:00<?, ?it/s]ChainTrialMakerState: 100%|██████████| 12/12 [00:00<00:00, 13203.48it/s]
+Request:   0%|          | 0/540 [00:00<?, ?it/s]Request: 100%|██████████| 540/540 [00:00<00:00, 197121.34it/s]
+ExperimentConfig:   0%|          | 0/1 [00:00<?, ?it/s]ExperimentConfig: 100%|██████████| 1/1 [00:00<00:00, 4271.19it/s]
+⠋ Completed.             ✔ Completed.
+
+❯❯ Exporting assets to data/simulated_data
+[Parallel(n_jobs=1)]: Done   0 out of   0 | elapsed:    0.0s finished
+
+❯❯ Export complete. You can find your results at: data/simulated_data
+
+❯❯ Exporting raw database content to data/simulated_data/regular/database.zip
+
+Preparing to export the data...
+Zipping up the package...
+Done. Local export available in data/local-data.zip
+⠋ Completed.             ✔ Completed.
+Bot:   0%|          | 0/12 [00:00<?, ?it/s]Bot: 100%|██████████| 12/12 [00:00<00:00, 1585.50it/s]
+StaticNetwork:   0%|          | 0/19 [00:00<?, ?it/s]StaticNetwork: 100%|██████████| 19/19 [00:00<00:00, 21099.23it/s]
+StaticNode:   0%|          | 0/19 [00:00<?, ?it/s]StaticNode: 100%|██████████| 19/19 [00:00<00:00, 17960.73it/s]
+MemoryRecallTrial:   0%|          | 0/120 [00:00<?, ?it/s]MemoryRecallTrial: 100%|██████████| 120/120 [00:00<00:00, 2120.08it/s]
+Response:   0%|          | 0/264 [00:00<?, ?it/s]Response: 100%|██████████| 264/264 [00:00<00:00, 24203.73it/s]
+ChainTrialMakerState:   0%|          | 0/12 [00:00<?, ?it/s]ChainTrialMakerState: 100%|██████████| 12/12 [00:00<00:00, 13008.96it/s]
+Request:   0%|          | 0/540 [00:00<?, ?it/s]Request: 100%|██████████| 540/540 [00:00<00:00, 202859.31it/s]
+ExperimentConfig:   0%|          | 0/1 [00:00<?, ?it/s]ExperimentConfig: 100%|██████████| 1/1 [00:00<00:00, 4029.11it/s]
+⠋ Completed.             ✔ Completed.
+
+❯❯ Exporting assets to data/simulated_data
+[Parallel(n_jobs=1)]: Done   0 out of   0 | elapsed:    0.0s finished
+
+❯❯ Export complete. You can find your results at: data/simulated_data
