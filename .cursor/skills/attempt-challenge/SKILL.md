@@ -33,12 +33,7 @@ challenge before starting a fresh attempt.
 ## Preview links
 
 Whenever handing a challenge attempt over to the user for review, use
-`share-psynet-links` to format the review links. This includes plan-review
-pauses, live dashboard attempt pages, participant/experiment previews, evidence
-review handoffs, and final attempt review links. Caller workflows still own
-starting local services, opening or updating PRs, following
-`preview-dashboard-live` and `dashboard-preview-links` when needed, and checking
-that the links work.
+`share-psynet-links` to format the review links.
 
 ## Workflow
 

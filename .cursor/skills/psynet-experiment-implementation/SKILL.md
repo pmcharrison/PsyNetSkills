@@ -19,11 +19,7 @@ specification.
 ## Preview links
 
 Whenever handing an experiment over to the user for review, use
-`share-psynet-links` to format the review links. This includes plan reviews,
-live participant-flow reviews, experiment dashboard reviews, and final review
-handoffs. Caller workflows still own starting the experiment, exposing any live
-URLs through `public-tunnel`, deriving participant/dashboard URLs, and checking
-that the links work.
+`share-psynet-links` to format the review links.
 
 ## Steps
 
