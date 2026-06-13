@@ -203,11 +203,10 @@ Use the `dashboard-preview-links` skill to share the durable PR preview URL and
 the branch-filtered workflow link. Forked pull requests do not publish static
 previews because the workflow needs write access to the `gh-pages` branch.
 
-When sharing live preview links, use the `share-psynet-links` skill. Dashboard
-and experiment preview skills should add the links relevant to their workflow,
-such as dashboard page, attempt section, participant, or experiment dashboard
-links. If no live tunnel is available, share the durable PR preview URL and
-branch-filtered workflow link from `dashboard-preview-links`.
+### Review links
+
+Use the `share-psynet-links` skill to share links that help the user review new
+content, including live previews and durable backup previews when available.
 
 To publish your changes, merge the pull request.
 
