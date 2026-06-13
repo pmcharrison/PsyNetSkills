@@ -11,7 +11,7 @@ import sys
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Sequence
-from urllib.parse import unquote, urlsplit
+from urllib.parse import parse_qs, unquote, urlsplit
 
 
 PUBLIC_TUNNEL_SCRIPTS = Path(__file__).resolve().parents[2] / "public-tunnel" / "scripts"
@@ -84,7 +84,9 @@ class HandoffState:
             self.username = unquote(parsed.username)
             self.password = unquote(parsed.password)
         if is_local_url(url) and parsed.path == "/ad":
-            self.local_participant_url = strip_userinfo(url)
+            clean_url = strip_userinfo(url)
+            if is_generated_token_url(clean_url) or self.local_participant_url is None:
+                self.local_participant_url = clean_url
 
     def set_public_tunnel_url(self, url: str) -> None:
         """Record the public tunnel base URL."""
@@ -130,17 +132,16 @@ class HandoffState:
         public_dashboard_url = to_public_url(
             with_path(self.local_participant_url, "/dashboard/develop"),
             self.public_tunnel_url,
-            username=self.username,
-            password=self.password,
         )
 
         print("\n=== Run attempt public tunnel ===")
-        print(f"Add new participant (public tunnel): {public_participant_url}")
+        print(f"Try as participant (public tunnel): {public_participant_url}")
         print(f"Dashboard (public tunnel): {public_dashboard_url}")
         print("Credentials:")
         print(f"  Username: {self.username}")
         print(f"  Password: {self.password}")
-        print("Open the public dashboard link in Cursor Desktop and leave it ready.")
+        print("Use the participant link repeatedly; it generates fresh debug tokens.")
+        print("Open the dashboard link and enter the credentials above.")
         print("=== End run attempt public tunnel ===\n", flush=True)
         self.public_announced = True
 
@@ -161,6 +162,14 @@ class HandoffState:
         """Return whether public tunnel links and credentials are available."""
 
         return self.is_local_complete and self.public_tunnel_url is not None
+
+
+def is_generated_token_url(url: str) -> bool:
+    """Return whether a URL lets PsyNet generate participant tokens."""
+
+    parsed = urlsplit(url)
+    query = parse_qs(parsed.query)
+    return parsed.path == "/ad" and query.get("generate_tokens") == ["true"]
 
 
 def find_repo_root(start: Path) -> Path:

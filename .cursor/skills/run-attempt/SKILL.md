@@ -48,10 +48,12 @@ created successfully.
 8. If the user wants a public tunnel, follow the `public-tunnel` skill for port
    `5000` while keeping the `run-attempt` tmux session running. Watch the tunnel
    output for the public URL. Derive and show:
-   - the public participant URL by replacing the local participant URL origin
-     with the public tunnel origin;
-   - the public dashboard/develop URL by replacing the local dashboard URL
-     origin with the public tunnel origin and preserving embedded credentials.
+   - the public participant URL by replacing the local `/ad` URL origin with the
+     public tunnel origin. Prefer PsyNet's generated-token URL, for example
+     `/ad?generate_tokens=true&recruiter=hotair`, so the user can take the
+     experiment repeatedly;
+   - the public dashboard/develop URL without embedded credentials;
+   - the dashboard username and password as separate fields.
 
 ## Helper usage
 

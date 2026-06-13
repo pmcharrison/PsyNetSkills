@@ -162,6 +162,9 @@ def test_run_attempt_handoff_prints_public_links_when_tunnel_is_set(capsys) -> N
     handoff.update_from_url(
         "http://127.0.0.1:5000/ad?recruiter=hotair&assignmentId=A1"
     )
+    handoff.update_from_url(
+        "http://127.0.0.1:5000/ad?generate_tokens=true&recruiter=hotair"
+    )
     handoff.set_public_tunnel_url("https://example.loca.lt")
     handoff.maybe_print()
     handoff.maybe_print()
@@ -171,15 +174,34 @@ def test_run_attempt_handoff_prints_public_links_when_tunnel_is_set(capsys) -> N
     assert output.count("=== Run attempt public tunnel ===") == 1
     assert "http://127.0.0.1:5000" not in output
     assert (
-        "Add new participant (public tunnel): "
-        "https://example.loca.lt/ad?recruiter=hotair&assignmentId=A1"
+        "Try as participant (public tunnel): "
+        "https://example.loca.lt/ad?generate_tokens=true&recruiter=hotair"
     ) in output
     assert (
         "Dashboard (public tunnel): "
-        "https://admin:secret@example.loca.lt/dashboard/develop"
+        "https://example.loca.lt/dashboard/develop"
     ) in output
+    assert "https://admin:secret@" not in output
     assert "Username: admin" in output
     assert "Password: secret" in output
+    assert "Use the participant link repeatedly" in output
+
+
+def test_run_attempt_handoff_keeps_generated_token_url_when_seen_first() -> None:
+    module = load_run_attempt_module()
+    handoff = module.HandoffState()
+
+    handoff.update_from_url(
+        "http://127.0.0.1:5000/ad?generate_tokens=true&recruiter=hotair"
+    )
+    handoff.update_from_url(
+        "http://127.0.0.1:5000/ad?recruiter=hotair&assignmentId=A1"
+    )
+
+    assert (
+        handoff.local_participant_url
+        == "http://127.0.0.1:5000/ad?generate_tokens=true&recruiter=hotair"
+    )
 
 
 def test_run_attempt_public_tunnel_is_disabled_by_default(
