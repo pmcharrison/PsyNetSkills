@@ -18,6 +18,18 @@ service credentials, DNS changes, open inbound ports, or a production
 deployment. The helper owns Cloudflare/localtunnel command selection and
 temporary `cloudflared` bootstrap.
 
+## Helper role
+
+The skill describes the review workflow. The helper script implements the
+reusable tunnel mechanics so caller skills do not duplicate shell snippets. It:
+
+- chooses `cloudflared`, `localtunnel`, or `npx -y localtunnel`;
+- downloads a temporary `/tmp/cloudflared` when needed and supported;
+- streams tunnel output and prints a `Public tunnel ready` block when it finds a
+  supported public URL;
+- exposes URL utilities that caller skills can use to rewrite local links to the
+  public tunnel origin.
+
 ## Workflow
 
 1. Confirm the local service is already running and responds locally, for
