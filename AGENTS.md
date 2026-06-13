@@ -175,18 +175,22 @@ PsyNet commands need sandboxing disabled in Cursor (`required_permissions: ["all
 - `dashboard/data/` and related Hugo inputs are written by `psynetsk-export-dashboard-data`.
 - `public/` is the Hugo build output; do not commit unless policy changes.
 
-### Dashboard preview links
+### Dashboard live previews
 
-When a Cursor Cloud Agent opens or updates a pull request from a branch in this
-repository, use the `dashboard-preview-links` skill for sharing dashboard
-preview links.
+For active Cursor Cloud review of dashboard, documentation, skill, or challenge
+attempt page changes, use the `preview-dashboard-live` skill by default. It
+starts the Hugo dashboard locally and exposes it through a temporary public
+tunnel.
 
-Include these links when first creating/updating the PR, after changes that
-affect dashboard rendering or challenge attempt pages, and in the final response.
+Static GitHub Pages PR previews are legacy compatibility for already-open
+branches and for users who explicitly ask for the old durable preview URL. If
+needed, use the `dashboard-preview-links` skill for those legacy links.
+
+Live tunnel URLs are temporary and expire when the tunnel process or VM stops.
 Write generated URLs as ordinary Markdown text so they are clickable; do not put
-them in fenced code blocks or inline code. When the work is a general dashboard
-or docs change, provide only the preview index URL. When the work completes a
-challenge attempt, provide the direct challenge attempt page URL instead.
+them in fenced code blocks or inline code.
+
+Legacy static preview link formats:
 
 https://pmcharrison.github.io/PsyNetSkills/pr-preview/pr-<number>/
 
@@ -194,17 +198,18 @@ https://pmcharrison.github.io/PsyNetSkills/pr-preview/pr-<number>/challenges/<ch
 
 https://github.com/pmcharrison/PsyNetSkills/actions/workflows/dashboard-preview.yml?query=branch%3A<branch-name>
 
-The preview workflow also posts this URL to the pull request. Forked pull
-requests do not publish previews because the workflow needs write access to the
+The legacy preview workflow updates existing dashboard preview bot comments but
+does not create new comments for new branches. Forked pull requests do not
+publish static previews because the workflow needs write access to the
 `gh-pages` branch.
 
 ### Dashboard and documentation review artifacts
 
 For README, documentation, and general dashboard-content changes, do not record
 screen walkthroughs unless the user explicitly asks for one. These changes are
-best reviewed through the PR diff and dashboard preview links. Validate the site
-with the standard export/build commands, then provide the specific preview page
-or GitHub file links that are worth reviewing.
+best reviewed through the PR diff and a live dashboard preview. Validate the
+site with the standard export/build commands, then provide the specific preview
+page or GitHub file links that are worth reviewing.
 
 Use screenshots or recordings only when they add information that a reviewer
 cannot easily get from the live preview, such as participant-facing challenge

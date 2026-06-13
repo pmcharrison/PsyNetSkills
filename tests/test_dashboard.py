@@ -213,6 +213,7 @@ def test_edit_in_github_uses_default_branch_without_workflow_context(
         'href="https://github.com/pmcharrison/PsyNetSkills/edit/main/'
         '.cursor/skills/example-skill/SKILL.md"'
     ) in html
+    assert "Static PR previews are legacy compatibility" not in html
 
 
 def test_edit_in_github_uses_pr_preview_branch(tmp_path: Path) -> None:
@@ -233,6 +234,8 @@ def test_edit_in_github_uses_pr_preview_branch(tmp_path: Path) -> None:
         'href="https://github.com/pmcharrison/PsyNetSkills/edit/cursor%2Fexample/'
         '.cursor/skills/example-skill/SKILL.md"'
     ) in html
+    assert "Static PR previews are legacy compatibility for existing branches." in html
+    assert "preview-dashboard-live" in html
 
 
 def test_collect_challenges_reports_latest_score(tmp_path: Path) -> None:

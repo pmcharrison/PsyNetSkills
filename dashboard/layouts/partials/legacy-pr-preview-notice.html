@@ -1,0 +1,9 @@
+{{ $context := hugo.Data.workflow_context | default dict }}
+{{ $mode := default "local" $context.mode }}
+{{ if eq $mode "pr-preview" }}
+  <aside class="legacy-pr-preview-notice" role="note" aria-label="Legacy PR preview notice">
+    Static PR previews are legacy compatibility for existing branches. For live
+    branch review, ask your Cursor Cloud Agent to run
+    <code>preview-dashboard-live</code>.
+  </aside>
+{{ end }}

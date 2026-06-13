@@ -102,7 +102,11 @@ jobs:
             const previewUrl = '${{ steps.preview.outputs.url }}';
             const body = [
               marker,
-              `Dashboard preview: ${previewUrl}`,
+              'Legacy dashboard PR preview:',
+              previewUrl,
+              '',
+              'Static PR previews are being replaced by live tunnel previews.',
+              'For active Cursor Cloud review, ask the agent to run `preview-dashboard-live`.',
               '',
               `Built from commit \`${context.payload.pull_request.head.sha.slice(0, 7)}\`.`
             ].join('\n');
@@ -124,12 +128,7 @@ jobs:
                 body,
               });
             } else {
-              await github.rest.issues.createComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: context.issue.number,
-                body,
-              });
+              core.info('No existing dashboard preview comment found; not creating a new legacy static preview comment.');
             }
 
   cleanup-preview:

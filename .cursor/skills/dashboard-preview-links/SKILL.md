@@ -1,14 +1,23 @@
 ---
 name: dashboard-preview-links
-description: Share deterministic dashboard PR preview links after briefly polling for publication status.
+description: Share legacy deterministic dashboard PR preview links after briefly polling for publication status.
 authors: [pmcharrison]
 ---
 
 # Dashboard preview links
 
-Use this skill before sharing dashboard preview links after creating or updating
-a pull request. Poll briefly for publication status, but always give the user
-the deterministic preview URL if polling does not confirm publication.
+Use this legacy compatibility skill only for already-open branches that still
+depend on static GitHub Pages PR previews, or when the user explicitly asks for
+the old durable preview URL. For active Cursor Cloud review, prefer the
+`preview-dashboard-live` skill.
+
+When using this legacy path, poll briefly for publication status, but always
+give the user the deterministic preview URL if polling does not confirm
+publication.
+
+The legacy preview workflow updates existing dashboard preview bot comments but
+does not create new comments for new branches. Share these links in chat only
+when this compatibility path is actually needed.
 
 ## Workflow
 

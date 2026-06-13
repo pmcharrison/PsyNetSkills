@@ -39,7 +39,7 @@ That script:
 
 ## Caller responsibilities
 
-- Dashboard-preview skills should start Hugo first.
+- `preview-dashboard-live` should start Hugo first.
 - Experiment-preview skills should start PsyNet first.
 - Caller skills decide whether to rewrite local links, include dashboard
   credentials, or expose participant links.
