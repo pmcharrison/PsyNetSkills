@@ -6,12 +6,14 @@ from typing import Any
 
 import psynet.experiment
 from dominate import tags
-from psynet.field import claim_field
+from psynet.field import PythonDict, PythonList, PythonObject, register_extra_var
 from psynet.modular_page import ModularPage, NullControl, TextControl
 from psynet.page import InfoPage, SuccessfulEndPage
 from psynet.timeline import Event, ProgressDisplay, ProgressStage, Timeline
 from psynet.trial.static import StaticNode, StaticTrial, StaticTrialMaker
 from psynet.utils import get_logger
+from sqlalchemy import Boolean, Column, Float, Integer, String
+from sqlalchemy.orm import declared_attr, deferred
 
 try:
     from .adaptive import (
@@ -66,6 +68,32 @@ def participant_key(participant) -> str:
     return f"participant-{participant.id}"
 
 
+def reusable_claim_field(name: str, extra_vars: dict, field_type=object):
+    register_extra_var(extra_vars, name, field_type=field_type)
+    if field_type is int:
+        column_type = Integer
+    elif field_type is float:
+        column_type = Float
+    elif field_type is bool:
+        column_type = Boolean
+    elif field_type is str:
+        column_type = String
+    elif field_type is list:
+        column_type = PythonList
+    elif field_type is dict:
+        column_type = PythonDict
+    elif field_type is object:
+        column_type = PythonObject
+    else:
+        raise NotImplementedError
+
+    @declared_attr
+    def field(cls):
+        return deferred(cls.__table__.c.get(name, Column(column_type)))
+
+    return field
+
+
 class DigitRecallTextControl(TextControl):
     def validate(self, response, **kwargs):
         answer = str(response.answer).strip()
@@ -79,26 +107,26 @@ class MemoryRecallTrial(StaticTrial):
     wait_for_feedback = True
 
     __extra_vars__ = StaticTrial.__extra_vars__.copy()
-    selected_length = claim_field("selected_length", __extra_vars__, int)
-    target_string = claim_field("target_string", __extra_vars__, str)
-    raw_response = claim_field("raw_response", __extra_vars__, str)
-    y = claim_field("y", __extra_vars__, int)
-    z = claim_field("z", __extra_vars__, dict)
-    adaptive = claim_field("adaptive", __extra_vars__, bool)
-    acquisition_value = claim_field("acquisition_value", __extra_vars__, float)
-    candidate_acquisition_values = claim_field(
+    selected_length = reusable_claim_field("selected_length", __extra_vars__, int)
+    target_string = reusable_claim_field("target_string", __extra_vars__, str)
+    raw_response = reusable_claim_field("raw_response", __extra_vars__, str)
+    y = reusable_claim_field("y", __extra_vars__, int)
+    z = reusable_claim_field("z", __extra_vars__, dict)
+    adaptive = reusable_claim_field("adaptive", __extra_vars__, bool)
+    acquisition_value = reusable_claim_field("acquisition_value", __extra_vars__, float)
+    candidate_acquisition_values = reusable_claim_field(
         "candidate_acquisition_values", __extra_vars__, list
     )
-    posterior_snapshot_id = claim_field("posterior_snapshot_id", __extra_vars__, str)
-    posterior_snapshot = claim_field("posterior_snapshot", __extra_vars__, dict)
-    posterior_version = claim_field("posterior_version", __extra_vars__, int)
-    posterior_r_mean = claim_field("posterior_r_mean", __extra_vars__, float)
-    posterior_r_sd = claim_field("posterior_r_sd", __extra_vars__, float)
-    posterior_predictive_y = claim_field("posterior_predictive_y", __extra_vars__, list)
-    model_version = claim_field("model_version", __extra_vars__, str)
-    optimizer_version = claim_field("optimizer_version", __extra_vars__, str)
-    timing_ms = claim_field("timing_ms", __extra_vars__, dict)
-    data_cutoff = claim_field("data_cutoff", __extra_vars__, int)
+    posterior_snapshot_id = reusable_claim_field("posterior_snapshot_id", __extra_vars__, str)
+    posterior_snapshot = reusable_claim_field("posterior_snapshot", __extra_vars__, dict)
+    posterior_version = reusable_claim_field("posterior_version", __extra_vars__, int)
+    posterior_r_mean = reusable_claim_field("posterior_r_mean", __extra_vars__, float)
+    posterior_r_sd = reusable_claim_field("posterior_r_sd", __extra_vars__, float)
+    posterior_predictive_y = reusable_claim_field("posterior_predictive_y", __extra_vars__, list)
+    model_version = reusable_claim_field("model_version", __extra_vars__, str)
+    optimizer_version = reusable_claim_field("optimizer_version", __extra_vars__, str)
+    timing_ms = reusable_claim_field("timing_ms", __extra_vars__, dict)
+    data_cutoff = reusable_claim_field("data_cutoff", __extra_vars__, int)
 
     def finalize_definition(self, definition, experiment, participant):
         selected_length = int(definition["selected_length"])
