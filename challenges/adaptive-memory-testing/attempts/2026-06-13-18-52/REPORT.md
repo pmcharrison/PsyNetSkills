@@ -16,7 +16,7 @@ In the completed simulation, the adaptive policy selected shorter strings for lo
 
 Functional PsyNet bot validation passed with 12 serial bots, each completing the 10-trial flow. Playwright completed a participant flow and produced screenshots plus `evidence/participant.mp4`. `psynet simulate` exported 120 `MemoryRecallTrial` rows to `evidence/simulated_data.zip`, and `evidence/analyses/analysis.ipynb` reads that export directly.
 
-The 40-bot, 5-minute performance test completed and wrote `evidence/performance.json`, but it is a warning result: no bots completed within the five-minute window, median response time was 0.833 s, p95 response time was 7.505 s, and request errors were observed. The main pressure point is repeated VI fitting in the participant response path under high concurrency.
+The 40-bot, 5-minute performance test completed and wrote `evidence/performance.json`, but it is a warning result: no bots completed within the five-minute window, median response time was 0.914 s, p95 response time was 14.187 s, and request errors were observed. The main pressure point is repeated VI fitting in the participant response path under high concurrency.
 
 ## Remaining issues
 

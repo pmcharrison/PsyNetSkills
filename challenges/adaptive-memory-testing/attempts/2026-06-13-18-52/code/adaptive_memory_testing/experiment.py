@@ -209,6 +209,7 @@ class MemoryRecallTrial(StaticTrial):
             progress_display=ProgressDisplay(
                 [ProgressStage(display_seconds, "Memorize", color="green")]
             ),
+            css="#next-button { display: none; }",
         )
 
     def bot_response(self, bot) -> str:
