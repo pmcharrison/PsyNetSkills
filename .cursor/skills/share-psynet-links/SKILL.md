@@ -37,7 +37,8 @@ page or section, not just an attempt plan.
 - [Experiment dashboard]({dashboard-url-with-credentials})
 
 *These temporary links will fail once the agent goes to sleep. In that case, you
-can ask for new links, or use the [backup dashboard preview]({pr-preview-url}).*
+can ask for new links, or use the [backup dashboard preview (will take a few
+minutes to build)]({pr-preview-url}).*
 
 If no durable backup preview exists, end the italic sentence after "ask for new
 links." If the main dashboard target is more specific, replace `Dashboard` with
