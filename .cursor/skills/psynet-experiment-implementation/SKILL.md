@@ -16,6 +16,15 @@ specification.
 - Read `references/validation.md` before finalizing functional, interactive, or
   performance checks.
 
+## Preview links
+
+Whenever handing an experiment over to the user for review, use
+`share-psynet-links` to format the review links. This includes plan reviews,
+live participant-flow reviews, experiment dashboard reviews, and final review
+handoffs. Caller workflows still own starting the experiment, exposing any live
+URLs through `public-tunnel`, deriving participant/dashboard URLs, and checking
+that the links work.
+
 ## Steps
 
 ### Planning
@@ -78,9 +87,8 @@ Review the outcomes of the previous steps and identify any serious issues that n
 Return to previous steps if necessary to address these.
 
 When a live experiment preview is useful for human review during implementation,
-start the PsyNet experiment, expose the participant and/or dashboard URLs through
-`public-tunnel`, and use `share-psynet-links` for the user handoff. This applies
-to active experiment development generally, not only to `/run-attempt` handoffs.
+start the PsyNet experiment and expose the participant and/or dashboard URLs
+through `public-tunnel`.
 
 ### Final report
 
