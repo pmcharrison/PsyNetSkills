@@ -38,22 +38,11 @@ Pages PR preview URL plus the branch-filtered workflow status link. Tell the
 user that live tunnel URLs may expire when the agent goes to sleep and can be
 refreshed on request, while PR previews may take a few minutes to build.
 
-Use this handoff template, omitting links that are not available:
-
-**Links**
-
-- [Plan]({live-dashboard-url})
-- [Experiment participant link]({participant-url})
-- [Experiment dashboard]({dashboard-url-with-credentials})
-
-*These temporary links will fail once the agent goes to sleep. In that case, you
-can ask for new links, or use the [backup dashboard preview]({pr-preview-url}).*
-
-Use a concise first-link label that matches the live dashboard target, such as
-`Plan`, `Attempt`, or `Dashboard`.
-
-If no live tunnel is available, share the durable PR preview URL and
-branch-filtered workflow link from `dashboard-preview-links`.
+For the user handoff, use the Markdown-link format owned by `public-tunnel`.
+For plan-review pauses, label the live dashboard link `Plan` and include the
+durable PR preview as the backup dashboard preview. If no live tunnel is
+available, share the durable PR preview URL and branch-filtered workflow link
+from `dashboard-preview-links`.
 
 To publish your changes, merge the pull request.
 

@@ -44,6 +44,25 @@ That script:
 - Caller skills decide whether to rewrite local links, include dashboard
   credentials, or expose participant links.
 
+## Handoff format
+
+When sharing public tunnel URLs, use this Markdown-link format and omit links
+that are not available for the current task:
+
+**Links**
+
+- [Plan]({live-dashboard-url})
+- [Experiment participant link]({participant-url})
+- [Experiment dashboard]({dashboard-url-with-credentials})
+
+*These temporary links will fail once the agent goes to sleep. In that case, you
+can ask for new links, or use the [backup dashboard preview]({pr-preview-url}).*
+
+Use a concise first-link label that matches the live dashboard target, such as
+`Plan`, `Attempt`, or `Dashboard`. Include the backup dashboard preview clause
+only when a durable preview exists; otherwise end the sentence after asking for
+new links.
+
 ## Safety
 
 - Do not use this for production deployment or durable review archives.

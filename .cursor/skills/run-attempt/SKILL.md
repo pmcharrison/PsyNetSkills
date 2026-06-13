@@ -54,9 +54,9 @@ created successfully.
      experiment repeatedly;
    - the public dashboard/develop URL with embedded local debug credentials;
    - a caveat that live tunnel links may expire and can be refreshed if needed.
-   Use the preview handoff template from `AGENTS.md`; for this skill the relevant
-   temporary links are **Experiment participant link** and **Experiment
-   dashboard**.
+   Use the Markdown-link handoff format from `public-tunnel`; for this skill the
+   relevant temporary links are `Experiment participant link` and `Experiment
+   dashboard`.
 
 ## Helper usage
 

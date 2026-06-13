@@ -77,6 +77,11 @@ If the implementation is inspired by a published paper, replicate the analyses r
 Review the outcomes of the previous steps and identify any serious issues that need to be addressed.
 Return to previous steps if necessary to address these.
 
+When a live experiment preview is useful for human review during implementation,
+start the PsyNet experiment, expose the participant and/or dashboard URLs through
+`public-tunnel`, and use that skill's Markdown-link handoff format. This applies
+to active experiment development generally, not only to `/run-attempt` handoffs.
+
 ### Final report
 
 Compile a final report of the experiment (REPORT.md), summarizing the process taken
