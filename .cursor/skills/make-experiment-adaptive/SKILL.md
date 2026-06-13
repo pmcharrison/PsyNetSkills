@@ -14,8 +14,10 @@ another policy that selects future trials from data already collected.
 
 - Read `psynet-experiment-implementation/SKILL.md` for the general experiment
   workflow and validation expectations.
-- Read `simple-round-structure/SKILL.md` before changing the trial, node, or
-  network architecture.
+- Read `simple-round-structure/SKILL.md` before changing static repeated-round
+  architecture.
+- Read `state-dependent-round-structure/SKILL.md` when adaptive selection changes
+  later rounds based on data from completed earlier rounds.
 - Read `psynet-deployment-ops/SKILL.md` when persistence, deployment,
   recruitment, or exported data safety matters.
 - Inspect the closest existing experiment and the current PsyNet trial-maker
