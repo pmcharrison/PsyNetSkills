@@ -111,6 +111,7 @@ def test_public_tunnel_filters_supported_urls() -> None:
     assert module.is_public_tunnel_url("https://puny-ends-allow.loca.lt")
     assert not module.is_public_tunnel_url("https://www.cloudflare.com/website-terms/")
     assert not module.is_public_tunnel_url("http://127.0.0.1:5000/dashboard")
+    assert not module.is_public_tunnel_url("https://[config.yml")
 
 
 def test_public_tunnel_rewrites_local_urls() -> None:

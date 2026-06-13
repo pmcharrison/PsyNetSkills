@@ -238,7 +238,10 @@ def is_local_url(url: str) -> bool:
 def is_public_tunnel_url(url: str) -> bool:
     """Return whether a URL is from a supported public tunnel provider."""
 
-    hostname = urlsplit(url).hostname or ""
+    try:
+        hostname = urlsplit(url).hostname or ""
+    except ValueError:
+        return False
     return hostname.endswith(".trycloudflare.com") or hostname.endswith(".loca.lt")
 
 
