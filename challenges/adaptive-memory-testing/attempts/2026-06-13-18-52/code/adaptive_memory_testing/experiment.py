@@ -13,19 +13,34 @@ from psynet.timeline import Event, ProgressDisplay, ProgressStage, Timeline
 from psynet.trial.static import StaticNode, StaticTrial, StaticTrialMaker
 from psynet.utils import get_logger
 
-from adaptive import (
-    CANDIDATE_LENGTHS,
-    DEFAULT_SEED,
-    MODEL_VERSION,
-    OPTIMIZER_VERSION,
-    Observation,
-    choose_length,
-    generate_digit_string,
-    incorrect_digit_string,
-    response_probability,
-    y_from_answer,
-    z_from_participant,
-)
+try:
+    from .adaptive import (
+        CANDIDATE_LENGTHS,
+        DEFAULT_SEED,
+        MODEL_VERSION,
+        OPTIMIZER_VERSION,
+        Observation,
+        choose_length,
+        generate_digit_string,
+        incorrect_digit_string,
+        response_probability,
+        y_from_answer,
+        z_from_participant,
+    )
+except ImportError:  # Allows `python experiment.py` from the experiment directory.
+    from adaptive import (
+        CANDIDATE_LENGTHS,
+        DEFAULT_SEED,
+        MODEL_VERSION,
+        OPTIMIZER_VERSION,
+        Observation,
+        choose_length,
+        generate_digit_string,
+        incorrect_digit_string,
+        response_probability,
+        y_from_answer,
+        z_from_participant,
+    )
 
 logger = get_logger()
 N_TRIALS = 10
