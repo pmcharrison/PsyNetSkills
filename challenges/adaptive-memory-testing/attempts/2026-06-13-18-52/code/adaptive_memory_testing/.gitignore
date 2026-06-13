@@ -4,6 +4,7 @@ __pycache__/
 *.pyc
 *.log
 .deploy/
+data/
 exports/
 local.db
 dump.rdb
