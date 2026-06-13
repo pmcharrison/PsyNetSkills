@@ -27,4 +27,4 @@ the result here.
 
 - Score and feedback should come from a human evaluator, captured
   conversationally when working with Cursor Cloud Agents.
-- This retry is paused at the required `PLAN.md` review gate before implementation.
+- Implementation and first-pass evidence collection are complete.

@@ -20,6 +20,7 @@
   "run_cost": null,
   "notes": [
     "Authorship was not provided in the retry request, so authors is left empty until the human author selects an existing authors.yaml key.",
-    "Experiment implementation is paused at the required PLAN.md review gate before coding."
+    "The plan was approved conversationally and implementation evidence is complete.",
+    "ended_at remains null because validation requires a human GitHub author key before the attempt can be marked complete."
   ]
 }
