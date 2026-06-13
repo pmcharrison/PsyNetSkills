@@ -75,15 +75,22 @@ which choices are assumptions.
 drawn from the generative model itself
 - Lower-level computational logic (such as Bayesian computations) should be located in
 a separate file (`adaptive.py`) imported from `experiment.py` and any other script
-that needs these procedures.
+that needs these procedures. Avoid duplicating the core model specification.
 - Implementations should include a concise standalone simulation script (`simulate_procedure.py`) that:
    - Simulates the adaptive setup against a static baseline outside psynet,
    on a reasonable number of participants. 
    - If an approximate inference scheme is used, check the accuracy of posterior estimates
    in these simulations, using less approximate inference strategies such as HMC.
-   - Produces diagnostic plots, in particular posterior predictive checks,
+   - Perform performance checks (average posterior reconstruction time and average design selection time),
+   to detect and isolate performance issues owing to the computations themslves.
+   - Produces accuracy diagnostic plots, in particular posterior predictive checks,
    to confirm that Bayesian computations are reliable.
-
+- If performance is insufficient, consider using more approximate sampling methods,
+or lowering the number of samples, but always make sure the accuracy does not degrade too much.
+- If simulations within psynet are sufficiently slower than simulations outside of psynet, make sure that
+performance is not degraded by using inefficient data retrieval techniques when updating the posteriors.
+For instance, avoid relying on the varstore. Optimize the SQL queries retrieving the data.
+  
 ## Posterior update strategy
 
 Choose one of these strategies explicitly:
@@ -111,13 +118,13 @@ Choose one of these strategies explicitly:
 
 - Match dependencies to the chosen model and policy, balancing performance,
   clarity, deployment cost, and future extensibility.
-- Prefer NumPy/SciPy for conjugate models, closed-form sufficient statistics,
-  simple Beta-Bernoulli or Gaussian updates, and lightweight bandit policies.
-- Prefer a probabilistic programming library when the model is hierarchical,
+- Prefer a probabilistic programming library in general. This is especially curcial when the model is hierarchical,
   non-conjugate, likely to evolve, or needs reusable posterior predictive
-  simulation. Pyro is appropriate for complex VI/EIG designs but is heavy.
-- Do not add Pyro, Stan, PyMC, or similar dependencies just to compute simple
-  closed-form objectives.
+  simulation. Pyro is useful when sophisticated EIG computations strategies are required.
+  NumPyro can be used when variational inference is needed but the EIG can be estimated
+  through classic methods (Nested Monte-Carlo, Rao–Blackwellization).
+- Prefer NumPy/SciPy for trivial conjugate models with closed-form posteriors, such as
+  simple Beta-Bernoulli multi-arm bandits.
 - If adding dependencies, pin or constrain them using the experiment's normal
   dependency workflow and verify local and deployment compatibility.
 
@@ -134,6 +141,8 @@ Choose one of these strategies explicitly:
 - Review timing logs and fail the design if posterior fitting, objective
   scoring, or DB scans exceed the real-time budget for the participant response
   path.
+- Include accuracy and performance diagnostics in your pull requests.
+- If you cannot reconcile performance and accuracy requirements in the tests, warn the user.
 
 ## Common failures
 
