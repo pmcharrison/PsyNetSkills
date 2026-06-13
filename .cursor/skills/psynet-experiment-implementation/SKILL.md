@@ -16,6 +16,11 @@ specification.
 - Read `references/validation.md` before finalizing functional, interactive, or
   performance checks.
 
+## Preview links
+
+Whenever handing an experiment over to the user for review, use
+`share-psynet-links` to format the review links.
+
 ## Steps
 
 ### Planning
@@ -76,6 +81,10 @@ If the implementation is inspired by a published paper, replicate the analyses r
 
 Review the outcomes of the previous steps and identify any serious issues that need to be addressed.
 Return to previous steps if necessary to address these.
+
+When a live experiment preview is useful for human review during implementation,
+start the PsyNet experiment and expose the participant and/or dashboard URLs
+through `public-tunnel`.
 
 ### Final report
 

@@ -30,6 +30,11 @@ challenge before starting a fresh attempt.
   `prepare-for-translation/SKILL.md` before implementing participant-facing
   text. That skill owns translation-readiness requirements.
 
+## Preview links
+
+Whenever handing a challenge attempt over to the user for review, use
+`share-psynet-links` to format the review links.
+
 ## Workflow
 
 1. Read `INSTRUCTIONS.md` from the target challenge, including its YAML
@@ -104,8 +109,8 @@ challenge before starting a fresh attempt.
      `#plan` anchor and the branch-filtered workflow link, noting that the static
      preview may take a few minutes to build. Point the user to the PR diff or
      code viewer for the full `PLAN.md` and include only a brief chat summary to
-     avoid making the reviewer wonder where the full plan went. Use the preview
-     handoff template from `AGENTS.md`.
+     avoid making the reviewer wonder where the full plan went. Use
+     `share-psynet-links` for the user handoff.
    - Do not make challenge code depend on files outside its attempt directory
      unless absolutely necessary.
    - For runnable PsyNet experiments, prefer a non-conflicting nested directory

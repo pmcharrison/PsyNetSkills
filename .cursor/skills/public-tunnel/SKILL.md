@@ -44,6 +44,12 @@ That script:
 - Caller skills decide whether to rewrite local links, include dashboard
   credentials, or expose participant links.
 
+## Handoff
+
+When sharing public tunnel URLs with the user, use the `share-psynet-links`
+skill. This skill owns tunnel creation and verification; `share-psynet-links`
+owns the Markdown presentation format.
+
 ## Safety
 
 - Do not use this for production deployment or durable review archives.

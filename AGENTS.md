@@ -199,23 +199,14 @@ https://pmcharrison.github.io/PsyNetSkills/pr-preview/pr-<number>/challenges/<ch
 
 https://github.com/pmcharrison/PsyNetSkills/actions/workflows/dashboard-preview.yml?query=branch%3A<branch-name>
 
-Use the `dashboard-preview-links` skill to share the durable PR preview URL and
-the branch-filtered workflow link. Forked pull requests do not publish static
-previews because the workflow needs write access to the `gh-pages` branch.
+Use the `dashboard-preview-links` skill when you need to check durable PR preview
+publication status. Forked pull requests do not publish static previews because
+the workflow needs write access to the `gh-pages` branch.
 
-When sharing preview links, use this template and omit links that are not
-available for the current task:
+### Review links
 
-**Temporary preview links** *(these may expire when the agent goes to sleep; ask
-me to refresh them if needed)*
-
-* **PsyNetSkills dashboard:** {live-dashboard-url}
-* **Experiment participant link:** {participant-url}
-* **Experiment dashboard:** {dashboard-url-with-credentials}
-
-**Persistent PsyNetSkills preview link:** {pr-preview-url}  
-*(This might take a couple of minutes to build. Check build status here:
-{workflow-url})*
+Use the `share-psynet-links` skill to share links that help the user review new
+content, including live previews and durable backup previews when available.
 
 To publish your changes, merge the pull request.
 
