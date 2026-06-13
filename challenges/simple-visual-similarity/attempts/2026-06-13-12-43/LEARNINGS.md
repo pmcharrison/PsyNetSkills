@@ -41,6 +41,23 @@ experiment-implementation attempt that produces a canonical analysis notebook.
 
 - **PsyNetSkills:** Consider adding the analysis-notebook tooling to the cloud-agent environment setup (or documenting the install command in the experiment-implementation evidence reference) so attempts do not each rediscover the missing dependencies. Confidence: high. Impact: medium. Status: considering.
 
+## Dashboard truncates text files >100KB, breaking notebook `transform.Unmarshal`
+
+The dashboard export (`psynetsk_tools/dashboard.py`, `max_bytes = 100_000`)
+truncates the inline `content` of any text file, including `.ipynb`. The
+`challenges/attempt.html` template then calls `transform.Unmarshal` on the
+notebook content unconditionally, so a truncated (and therefore invalid-JSON)
+`analysis.ipynb` crashes the Hugo build with
+`unmarshal failed: invalid character '\n' in string literal`. An executed
+analysis notebook with embedded plot PNGs easily exceeds 100KB. The workaround
+here was to lower the figure DPI so the notebook stays under ~100KB; without that
+the dashboard PR preview build fails.
+
+*Actions:*
+
+- **PsyNetSkills:** Make `challenges/attempt.html` resilient to truncated/unparseable notebook content — guard the `transform.Unmarshal` (e.g. only unmarshal when the file is not `truncated`, or wrap in a way that degrades to a download link) so a large analysis notebook cannot break the whole dashboard build. Confidence: high. Impact: high. Status: considering.
+- **PsyNetSkills:** Document the ~100KB inline limit in the experiment-evidence reference and advise keeping `analysis.ipynb` small (low-DPI inline figures, or link out large figures), so attempts do not unknowingly produce a notebook that breaks the preview build. Confidence: high. Impact: medium. Status: considering.
+
 ## Playwright needs its bundled ffmpeg for video recording
 
 `@playwright/test` records video via a separate ffmpeg binary that is not the
