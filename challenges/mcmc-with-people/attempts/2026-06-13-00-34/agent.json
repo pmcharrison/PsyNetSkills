@@ -1,0 +1,26 @@
+{
+  "authors": [],
+  "agent": "Cursor Cloud Agent",
+  "client": "cursor",
+  "model": "GPT-5.5",
+  "started_at": "2026-06-13T00:34:08Z",
+  "ended_at": null,
+  "cursor_conversation_id": "bc-a8f4ec8e-8357-4c94-a126-0b899ccd5538",
+  "skills_commit": "ffd4c1d99cb9bc94e046b4d7fba381dac2cada71",
+  "psynet": {
+    "checkout_path": "~/PsyNet",
+    "branch": "master",
+    "commit": "d39dab1133b41d8414cf74b91ca153ab796db5e8",
+    "version": "13.3.0a0",
+    "updated_from": "origin/master",
+    "updated_at": "2026-06-13T00:34:08Z",
+    "update_command": "git pull --ff-only origin master",
+    "dirty": false
+  },
+  "run_cost": null,
+  "notes": [
+    "Attempt is paused for required human review of PLAN.md before experiment implementation.",
+    "Human author attribution is pending; fill authors before marking the attempt complete.",
+    "The challenge currently exists on remote branch cursor/mcmc-with-people-challenge-20e9, not origin/main."
+  ]
+}
