@@ -6,6 +6,8 @@
 - T+00:07:30 [agent] Refreshed the local PsyNet checkout and recorded metadata.
 - T+00:15:00 [agent] Drafted implementation plan for human review.
 - T+00:18:00 [agent-stop] Work paused for the required human review of `PLAN.md` before implementation.
+- T+00:26:00 [manual] User approved the plan and asked the agent to proceed.
+- T+00:26:10 [agent-start] Resumed autonomous implementation work.
 
 <!-- Close active implementation segments with [agent-stop] when work pauses or completes. -->
 <!-- Tag path-changing human guidance as: [manual] [intervention] Description. -->
