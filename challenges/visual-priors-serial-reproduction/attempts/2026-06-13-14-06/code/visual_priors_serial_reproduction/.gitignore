@@ -16,6 +16,7 @@ node_modules/
 test-results/
 playwright-report/
 blob_storage/
+dump.rdb
 
 develop/
 deploy/
