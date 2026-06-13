@@ -28,12 +28,12 @@ Do not implement an adaptive experiment until the user supplies the specificatio
 below, unless they explicitly ask you to propose a design. If anything is
 missing, list the decisions they must make and wait for their answer.
 
-- `y`: the mapping from raw trial answers to model observations.
-- `z`: the mapping from participant or context data to model covariates.
+- `y`: the mapping from raw trial answers to model observations. You can use human-readable names in your implementation.
+- `z`: the mapping from participant or context data to model covariates. You can use human-readable names in your implementation.
 - Adaptive unit: what the policy selects, such as a network, node, condition,
   stimulus, item, block, or trial family.
 - Generative model: likelihood, latent parameters, priors, and how `y`, `z`,
-  and the adaptive unit enter the model.
+  and the adaptive unit enter the model. You can use human-readable names in your implementation.
 - Posterior strategy: how posterior beliefs are fit or sampled.
 - Optimization policy: objective and decision rule, such as EIG, expected free
   energy, Thompson sampling, greedy utility, or an early-stopping rule.
@@ -48,12 +48,9 @@ which choices are assumptions.
 
 - Use `y` for trial-level observations and `z` for participant or context
   covariates throughout adaptive code, logs, and exports.
-- Ask for or implement explicit mapping logic from raw answers to `y`, and from
-  participant/context data to `z`.
-- Prefer custom persisted attributes for core adaptive variables (`y`, `z`,
-  objective values, posterior snapshot IDs) over ad hoc JSON var storage. Use
-  PsyNet field patterns such as `claim_field` when the value deserves a real
-  queryable/exported column. Use vars only for small, incidental metadata.
+- Ask for or implement explicit mapping logic from raw answers to observations `y`, and covariates `z`.
+- Prefer custom persisted attributes for core adaptive variables (e.g. `y`, `z`) over ad hoc JSON varstores, unless they have complex formats. Use PsyNet field patterns such as `claim_field` when the value deserves a real
+  queryable/exported column. Use vars only for metadata that has complex types or that does not need to be retrieved in large batches.
 - Keep raw answer data available for audit; do not replace it with only `y`.
 - Log each adaptive decision: candidate IDs, chosen ID, objective components,
   posterior version or snapshot, data cutoff, and optimizer version.
@@ -74,7 +71,7 @@ which choices are assumptions.
 - If bot_response logic is not already supplied, override the default with answers
 drawn from the generative model itself
 - Lower-level computational logic (such as Bayesian computations) should be located in
-a separate file (`adaptive.py`) imported from `experiment.py` and any other script
+a separate file (`adaptive_logic.py`) imported from `experiment.py` and any other script
 that needs these procedures. Avoid duplicating the core model specification.
 - Implementations should include a concise standalone simulation script (`simulate_procedure.py`) that:
    - Simulates the adaptive setup against a static baseline outside psynet,
@@ -150,6 +147,9 @@ Choose one of these strategies explicitly:
   policy, and persistence needs.
 - Recomputing from every trial with expensive probabilistic programming code
   without timing or scalability checks.
+- Do NOT deviate from the modelling or optimization strategy decided by the user.
+If there is a performance issue under these choices, the user will make an informed decision
+about what to improve.
 - Storing core adaptive state only in JSON vars when it should be queryable,
   versioned, or exported as a first-class field.
 - Using online learning without concurrency protection.
