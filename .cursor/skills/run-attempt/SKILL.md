@@ -52,8 +52,8 @@ created successfully.
      public tunnel origin. Prefer PsyNet's generated-token URL, for example
      `/ad?generate_tokens=true&recruiter=hotair`, so the user can take the
      experiment repeatedly;
-   - the public dashboard/develop URL without embedded credentials;
-   - the dashboard username and password as separate fields.
+   - the public dashboard/develop URL with embedded local debug credentials;
+   - a caveat that live tunnel links may expire and can be refreshed if needed.
 
 ## Helper usage
 

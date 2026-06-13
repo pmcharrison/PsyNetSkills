@@ -175,22 +175,23 @@ PsyNet commands need sandboxing disabled in Cursor (`required_permissions: ["all
 - `dashboard/data/` and related Hugo inputs are written by `psynetsk-export-dashboard-data`.
 - `public/` is the Hugo build output; do not commit unless policy changes.
 
-### Dashboard live previews
+### Dashboard live and durable previews
 
 For active Cursor Cloud review of dashboard, documentation, skill, or challenge
 attempt page changes, use the `preview-dashboard-live` skill by default. It
 starts the Hugo dashboard locally and exposes it through a temporary public
 tunnel.
 
-Static GitHub Pages PR previews are legacy compatibility for already-open
-branches and for users who explicitly ask for the old durable preview URL. If
-needed, use the `dashboard-preview-links` skill for those legacy links.
+Also provide the durable GitHub Pages PR preview URL when a PR exists. Live
+tunnel URLs are best for immediate interaction, but they may expire when the
+agent goes to sleep; the user can ask the agent to refresh them if needed. PR
+preview URLs are best for asynchronous review, but they may take a few minutes
+to build.
 
-Live tunnel URLs are temporary and expire when the tunnel process or VM stops.
 Write generated URLs as ordinary Markdown text so they are clickable; do not put
 them in fenced code blocks or inline code.
 
-Legacy static preview link formats:
+Durable PR preview link formats:
 
 https://pmcharrison.github.io/PsyNetSkills/pr-preview/pr-<number>/
 
@@ -198,10 +199,9 @@ https://pmcharrison.github.io/PsyNetSkills/pr-preview/pr-<number>/challenges/<ch
 
 https://github.com/pmcharrison/PsyNetSkills/actions/workflows/dashboard-preview.yml?query=branch%3A<branch-name>
 
-The legacy preview workflow updates existing dashboard preview bot comments but
-does not create new comments for new branches. Forked pull requests do not
-publish static previews because the workflow needs write access to the
-`gh-pages` branch.
+Use the `dashboard-preview-links` skill to share the durable PR preview URL and
+the branch-filtered workflow link. Forked pull requests do not publish static
+previews because the workflow needs write access to the `gh-pages` branch.
 
 ### Dashboard and documentation review artifacts
 

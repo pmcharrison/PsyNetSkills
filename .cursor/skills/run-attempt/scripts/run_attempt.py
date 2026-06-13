@@ -132,16 +132,16 @@ class HandoffState:
         public_dashboard_url = to_public_url(
             with_path(self.local_participant_url, "/dashboard/develop"),
             self.public_tunnel_url,
+            username=self.username,
+            password=self.password,
         )
 
         print("\n=== Run attempt public tunnel ===")
         print(f"Try as participant (public tunnel): {public_participant_url}")
         print(f"Dashboard (public tunnel): {public_dashboard_url}")
-        print("Credentials:")
-        print(f"  Username: {self.username}")
-        print(f"  Password: {self.password}")
         print("Use the participant link repeatedly; it generates fresh debug tokens.")
-        print("Open the dashboard link and enter the credentials above.")
+        print("The dashboard link includes local ephemeral debug credentials.")
+        print("These live links may expire; ask the agent to refresh them if needed.")
         print("=== End run attempt public tunnel ===\n", flush=True)
         self.public_announced = True
 

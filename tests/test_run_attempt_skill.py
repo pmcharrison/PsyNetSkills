@@ -172,19 +172,21 @@ def test_run_attempt_handoff_prints_public_links_when_tunnel_is_set(capsys) -> N
     output = capsys.readouterr().out
     assert output.count("=== Run attempt Cloud Desktop handoff ===") == 1
     assert output.count("=== Run attempt public tunnel ===") == 1
+    public_output = output.split("=== Run attempt public tunnel ===", 1)[1]
     assert "http://127.0.0.1:5000" not in output
     assert (
         "Try as participant (public tunnel): "
         "https://example.loca.lt/ad?generate_tokens=true&recruiter=hotair"
-    ) in output
+    ) in public_output
     assert (
         "Dashboard (public tunnel): "
-        "https://example.loca.lt/dashboard/develop"
-    ) in output
-    assert "https://admin:secret@" not in output
-    assert "Username: admin" in output
-    assert "Password: secret" in output
-    assert "Use the participant link repeatedly" in output
+        "https://admin:secret@example.loca.lt/dashboard/develop"
+    ) in public_output
+    assert "Username: admin" not in public_output
+    assert "Password: secret" not in public_output
+    assert "Use the participant link repeatedly" in public_output
+    assert "includes local ephemeral debug credentials" in public_output
+    assert "ask the agent to refresh them if needed" in public_output
 
 
 def test_run_attempt_handoff_keeps_generated_token_url_when_seen_first() -> None:

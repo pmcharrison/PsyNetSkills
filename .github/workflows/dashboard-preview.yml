@@ -11,7 +11,7 @@ permissions:
 
 concurrency:
   group: dashboard-preview-pr-${{ github.event.pull_request.number }}
-  cancel-in-progress: true
+  queue: max
 
 jobs:
   deploy-preview:
@@ -102,11 +102,11 @@ jobs:
             const previewUrl = '${{ steps.preview.outputs.url }}';
             const body = [
               marker,
-              'Legacy dashboard PR preview:',
+              'Durable dashboard PR preview:',
               previewUrl,
               '',
-              'Static PR previews are being replaced by live tunnel previews.',
-              'For active Cursor Cloud review, ask the agent to run `preview-dashboard-live`.',
+              'For immediate interactive review, ask the agent to run `preview-dashboard-live`.',
+              'This static preview may take a few minutes to publish after each push.',
               '',
               `Built from commit \`${context.payload.pull_request.head.sha.slice(0, 7)}\`.`
             ].join('\n');
@@ -128,7 +128,12 @@ jobs:
                 body,
               });
             } else {
-              core.info('No existing dashboard preview comment found; not creating a new legacy static preview comment.');
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body,
+              });
             }
 
   cleanup-preview:

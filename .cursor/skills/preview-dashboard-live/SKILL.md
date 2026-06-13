@@ -32,9 +32,11 @@ This skill starts the local Hugo dashboard server. It then uses the
 
 ## Use with pull requests
 
-Use live dashboard previews by default for active Cursor Cloud review. Static
-GitHub Pages PR previews are legacy compatibility for already-open branches and
-for users who explicitly ask for the old durable preview URL.
+Use live dashboard previews for active Cursor Cloud review. If a pull request
+exists, also follow `dashboard-preview-links` and provide the durable GitHub
+Pages PR preview URL plus the branch-filtered workflow status link. Tell the
+user that live tunnel URLs may expire when the agent goes to sleep and can be
+refreshed on request, while PR previews may take a few minutes to build.
 
 ## Safety
 
