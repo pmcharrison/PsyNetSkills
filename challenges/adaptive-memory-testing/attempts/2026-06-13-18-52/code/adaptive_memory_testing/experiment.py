@@ -179,7 +179,7 @@ class MemoryRecallTrial(StaticTrial):
         display_prompt = tags.div(cls="memory-display")
         with display_prompt:
             tags.p(f"Trial {self.position + 1} of {N_TRIALS}")
-            tags.p("Memorize this digit string. It will disappear automatically.")
+            tags.p("Memorize this digit string. It will disappear before you continue.")
             tags.div(target, cls="digit-string")
         recall_prompt = tags.div(cls="memory-recall")
         with recall_prompt:
@@ -189,12 +189,16 @@ class MemoryRecallTrial(StaticTrial):
             ModularPage(
                 "memorize_digits",
                 display_prompt,
-                control=NullControl(show_next_button=False),
-                show_next_button=False,
+                control=NullControl(),
                 time_estimate=display_seconds,
                 events={
-                    "submitEnable": Event(is_triggered_by="trialStart", delay=display_seconds),
-                    "autoSubmit": Event(is_triggered_by="submitEnable"),
+                    "hideDigits": Event(
+                        is_triggered_by="trialStart",
+                        delay=display_seconds,
+                        js="document.querySelector('.digit-string').style.visibility = 'hidden';",
+                        message="Now click Next.",
+                    ),
+                    "submitEnable": Event(is_triggered_by="hideDigits"),
                 },
                 progress_display=ProgressDisplay(
                     [ProgressStage(display_seconds, "Memorize", color="green")]

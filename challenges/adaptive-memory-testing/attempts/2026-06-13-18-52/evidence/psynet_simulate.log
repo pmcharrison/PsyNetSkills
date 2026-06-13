@@ -9,45 +9,45 @@ test.py::test_experiment[/workspace/challenges/adaptive-memory-testing/attempts/
 -------------------------------- live log call ---------------------------------
 INFO     psynet:experiment.py:1394 Testing experiment with 12 serial bot(s)...
 INFO     psynet:bot.py:74 Waiting for experiment launch to complete....
-INFO     psynet:bot.py:37 Initializing bot with worker ID 9ada55b6-347e-44c4-aeaa-6972bdfa6d81.
+INFO     psynet:bot.py:37 Initializing bot with worker ID d3807e85-50fe-4a55-b1ff-04c633dec94b.
 INFO     psynet:bot.py:74 Waiting for experiment launch to complete....
-INFO     psynet:bot.py:37 Initializing bot with worker ID fef7ec81-2c73-4e83-bcf4-3ac5c7f615c0.
+INFO     psynet:bot.py:37 Initializing bot with worker ID f59cff01-4664-4446-9f8e-b67b5be5fd36.
 INFO     psynet:bot.py:74 Waiting for experiment launch to complete....
-INFO     psynet:bot.py:37 Initializing bot with worker ID b7dfbafe-a293-4e22-a5ed-94252fb01324.
+INFO     psynet:bot.py:37 Initializing bot with worker ID 8021a0ae-0014-4509-bffa-f0c6a347b593.
 INFO     psynet:bot.py:74 Waiting for experiment launch to complete....
-INFO     psynet:bot.py:37 Initializing bot with worker ID a2d37ffd-71fe-4c8b-8619-0911a58e5956.
+INFO     psynet:bot.py:37 Initializing bot with worker ID 54b69c5b-5153-4580-88bb-6950918f9dc7.
 INFO     psynet:bot.py:74 Waiting for experiment launch to complete....
-INFO     psynet:bot.py:37 Initializing bot with worker ID eafec5e1-2bcc-48c3-8d78-075d1a6c7f5a.
+INFO     psynet:bot.py:37 Initializing bot with worker ID 8b609537-2466-4a6b-97cc-5c0d4ecbb9ff.
 INFO     psynet:bot.py:74 Waiting for experiment launch to complete....
-INFO     psynet:bot.py:37 Initializing bot with worker ID 384f1324-109b-4f11-b4fe-acbe849cff20.
+INFO     psynet:bot.py:37 Initializing bot with worker ID 3e565950-9791-491d-b7c1-5791df021032.
 INFO     psynet:bot.py:74 Waiting for experiment launch to complete....
-INFO     psynet:bot.py:37 Initializing bot with worker ID 8e12aa28-5595-418b-be18-c55d9c9b2673.
+INFO     psynet:bot.py:37 Initializing bot with worker ID 49335697-3df0-4b4f-97b6-b5d620496b36.
 INFO     psynet:bot.py:74 Waiting for experiment launch to complete....
-INFO     psynet:bot.py:37 Initializing bot with worker ID c70162c7-5f68-4ba2-ae0c-e77b83f1c733.
+INFO     psynet:bot.py:37 Initializing bot with worker ID 6cdd360f-5e36-4714-85f0-56f0ac8c3ca1.
 INFO     psynet:bot.py:74 Waiting for experiment launch to complete....
-INFO     psynet:bot.py:37 Initializing bot with worker ID f2d6f0d3-df83-44b5-adf4-b43242d9da48.
+INFO     psynet:bot.py:37 Initializing bot with worker ID 8f92448c-4d0f-4d66-a24a-feaa5171d2a7.
 INFO     psynet:bot.py:74 Waiting for experiment launch to complete....
-INFO     psynet:bot.py:37 Initializing bot with worker ID 02b53ff9-ea4c-403d-a1bd-008baf06d362.
+INFO     psynet:bot.py:37 Initializing bot with worker ID ce25153e-8314-4ce8-b637-3b18d663fd8c.
 INFO     psynet:bot.py:74 Waiting for experiment launch to complete....
-INFO     psynet:bot.py:37 Initializing bot with worker ID 25cb3d44-bb47-41ee-872b-bd206939c988.
+INFO     psynet:bot.py:37 Initializing bot with worker ID dca60c91-e5f7-4784-9e56-39ff1b1af1ea.
 INFO     psynet:bot.py:74 Waiting for experiment launch to complete....
-INFO     psynet:bot.py:37 Initializing bot with worker ID 28a713d6-8fb0-4d76-a03b-15fcce5bae23.
-INFO     psynet:participant.py:1125 ParticipantDriver 1 has finished the experiment (took 23 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 20.216 seconds).
-INFO     psynet:participant.py:1125 ParticipantDriver 2 has finished the experiment (took 23 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 12.250 seconds).
-INFO     psynet:participant.py:1125 ParticipantDriver 3 has finished the experiment (took 23 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 12.046 seconds).
-INFO     psynet:participant.py:1125 ParticipantDriver 4 has finished the experiment (took 23 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 12.415 seconds).
-INFO     psynet:participant.py:1125 ParticipantDriver 5 has finished the experiment (took 23 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 12.268 seconds).
-INFO     psynet:participant.py:1125 ParticipantDriver 6 has finished the experiment (took 23 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 12.578 seconds).
-INFO     psynet:participant.py:1125 ParticipantDriver 7 has finished the experiment (took 23 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 12.143 seconds).
-INFO     psynet:participant.py:1125 ParticipantDriver 8 has finished the experiment (took 23 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 11.815 seconds).
-INFO     psynet:participant.py:1125 ParticipantDriver 9 has finished the experiment (took 23 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 11.901 seconds).
-INFO     psynet:participant.py:1125 ParticipantDriver 10 has finished the experiment (took 23 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 11.668 seconds).
-INFO     psynet:participant.py:1125 ParticipantDriver 11 has finished the experiment (took 23 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 11.659 seconds).
-INFO     psynet:participant.py:1125 ParticipantDriver 12 has finished the experiment (took 23 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 12.304 seconds).
-INFO     psynet:experiment.py:1370 Mean HTTP request duration: 0.274 seconds
+INFO     psynet:bot.py:37 Initializing bot with worker ID 9f34c864-d9ce-412c-b099-854aa8db4c36.
+INFO     psynet:participant.py:1125 ParticipantDriver 1 has finished the experiment (took 23 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 19.876 seconds).
+INFO     psynet:participant.py:1125 ParticipantDriver 2 has finished the experiment (took 23 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 11.874 seconds).
+INFO     psynet:participant.py:1125 ParticipantDriver 3 has finished the experiment (took 23 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 11.610 seconds).
+INFO     psynet:participant.py:1125 ParticipantDriver 4 has finished the experiment (took 23 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 12.022 seconds).
+INFO     psynet:participant.py:1125 ParticipantDriver 5 has finished the experiment (took 23 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 11.683 seconds).
+INFO     psynet:participant.py:1125 ParticipantDriver 6 has finished the experiment (took 23 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 11.918 seconds).
+INFO     psynet:participant.py:1125 ParticipantDriver 7 has finished the experiment (took 23 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 11.751 seconds).
+INFO     psynet:participant.py:1125 ParticipantDriver 8 has finished the experiment (took 23 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 12.103 seconds).
+INFO     psynet:participant.py:1125 ParticipantDriver 9 has finished the experiment (took 23 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 11.726 seconds).
+INFO     psynet:participant.py:1125 ParticipantDriver 10 has finished the experiment (took 23 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 11.684 seconds).
+INFO     psynet:participant.py:1125 ParticipantDriver 11 has finished the experiment (took 23 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 11.606 seconds).
+INFO     psynet:participant.py:1125 ParticipantDriver 12 has finished the experiment (took 23 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 12.078 seconds).
+INFO     psynet:experiment.py:1370 Mean HTTP request duration: 0.268 seconds
 PASSED                                                                   [100%]
 
-======================== 1 passed in 165.46s (0:02:45) =========================
+======================== 1 passed in 162.39s (0:02:42) =========================
 {
     "psynet_version": "13.3.0a0",
     "dallinger_version": "12.2.0",
@@ -57,7 +57,7 @@ PASSED                                                                   [100%]
     "hard_max_experiment_payment": 1100.0,
     "soft_max_experiment_payment": 1000.0,
     "max_participant_payment": 25.0,
-    "deployment_id": "adaptive-memory-testing__mode=debug__launch=2026-06-13--19-18-11",
+    "deployment_id": "adaptive-memory-testing__mode=debug__launch=2026-06-13--19-33-34",
     "label": "Adaptive memory testing",
     "deployment_config": {
         "aws_region": "us-east-1",
@@ -141,8 +141,8 @@ PASSED                                                                   [100%]
         "description": "This local workshop experiment estimates digit-memory ability using ten adaptive number-string recall trials. Please use a Chrome browser.",
         "organization_name": "PsyNetSkills",
         "recruiter": "generic",
-        "id": "179a93b5-e9d3-3304-3829-7624ba643903",
-        "heroku_app_id_root": "179a93b5-e9d3-3304-3829-7624ba643903",
+        "id": "c1de50f7-824e-a2e4-d22d-2dc709f34d00",
+        "heroku_app_id_root": "c1de50f7-824e-a2e4-d22d-2dc709f34d00",
         "port": 5000
     }
 }
@@ -156,14 +156,14 @@ Done. Local export available in data/local-data.zip
   self._color = self._set_color(color) if color else color
 
 ⠋ Completed.             ✔ Completed.
-Bot:   0%|          | 0/12 [00:00<?, ?it/s]Bot: 100%|██████████| 12/12 [00:00<00:00, 1543.49it/s]
-StaticNetwork:   0%|          | 0/19 [00:00<?, ?it/s]StaticNetwork: 100%|██████████| 19/19 [00:00<00:00, 21393.77it/s]
-StaticNode:   0%|          | 0/19 [00:00<?, ?it/s]StaticNode: 100%|██████████| 19/19 [00:00<00:00, 18336.81it/s]
-MemoryRecallTrial:   0%|          | 0/120 [00:00<?, ?it/s]MemoryRecallTrial: 100%|██████████| 120/120 [00:00<00:00, 2149.19it/s]
-Response:   0%|          | 0/264 [00:00<?, ?it/s]Response: 100%|██████████| 264/264 [00:00<00:00, 23295.32it/s]
-ChainTrialMakerState:   0%|          | 0/12 [00:00<?, ?it/s]ChainTrialMakerState: 100%|██████████| 12/12 [00:00<00:00, 13203.48it/s]
-Request:   0%|          | 0/540 [00:00<?, ?it/s]Request: 100%|██████████| 540/540 [00:00<00:00, 197121.34it/s]
-ExperimentConfig:   0%|          | 0/1 [00:00<?, ?it/s]ExperimentConfig: 100%|██████████| 1/1 [00:00<00:00, 4271.19it/s]
+Bot:   0%|          | 0/12 [00:00<?, ?it/s]Bot: 100%|██████████| 12/12 [00:00<00:00, 1572.72it/s]
+StaticNetwork:   0%|          | 0/19 [00:00<?, ?it/s]StaticNetwork: 100%|██████████| 19/19 [00:00<00:00, 20960.49it/s]
+StaticNode:   0%|          | 0/19 [00:00<?, ?it/s]StaticNode: 100%|██████████| 19/19 [00:00<00:00, 18839.66it/s]
+MemoryRecallTrial:   0%|          | 0/120 [00:00<?, ?it/s]MemoryRecallTrial: 100%|██████████| 120/120 [00:00<00:00, 2154.36it/s]
+Response:   0%|          | 0/264 [00:00<?, ?it/s]Response: 100%|██████████| 264/264 [00:00<00:00, 23300.71it/s]
+ChainTrialMakerState:   0%|          | 0/12 [00:00<?, ?it/s]ChainTrialMakerState: 100%|██████████| 12/12 [00:00<00:00, 14082.72it/s]
+Request:   0%|          | 0/540 [00:00<?, ?it/s]Request: 100%|██████████| 540/540 [00:00<00:00, 203863.56it/s]
+ExperimentConfig:   0%|          | 0/1 [00:00<?, ?it/s]ExperimentConfig: 100%|██████████| 1/1 [00:00<00:00, 4297.44it/s]
 ⠋ Completed.             ✔ Completed.
 
 ❯❯ Exporting assets to data/simulated_data
@@ -177,14 +177,14 @@ Preparing to export the data...
 Zipping up the package...
 Done. Local export available in data/local-data.zip
 ⠋ Completed.             ✔ Completed.
-Bot:   0%|          | 0/12 [00:00<?, ?it/s]Bot: 100%|██████████| 12/12 [00:00<00:00, 1585.50it/s]
-StaticNetwork:   0%|          | 0/19 [00:00<?, ?it/s]StaticNetwork: 100%|██████████| 19/19 [00:00<00:00, 21099.23it/s]
-StaticNode:   0%|          | 0/19 [00:00<?, ?it/s]StaticNode: 100%|██████████| 19/19 [00:00<00:00, 17960.73it/s]
-MemoryRecallTrial:   0%|          | 0/120 [00:00<?, ?it/s]MemoryRecallTrial: 100%|██████████| 120/120 [00:00<00:00, 2120.08it/s]
-Response:   0%|          | 0/264 [00:00<?, ?it/s]Response: 100%|██████████| 264/264 [00:00<00:00, 24203.73it/s]
-ChainTrialMakerState:   0%|          | 0/12 [00:00<?, ?it/s]ChainTrialMakerState: 100%|██████████| 12/12 [00:00<00:00, 13008.96it/s]
-Request:   0%|          | 0/540 [00:00<?, ?it/s]Request: 100%|██████████| 540/540 [00:00<00:00, 202859.31it/s]
-ExperimentConfig:   0%|          | 0/1 [00:00<?, ?it/s]ExperimentConfig: 100%|██████████| 1/1 [00:00<00:00, 4029.11it/s]
+Bot:   0%|          | 0/12 [00:00<?, ?it/s]Bot: 100%|██████████| 12/12 [00:00<00:00, 1588.05it/s]
+StaticNetwork:   0%|          | 0/19 [00:00<?, ?it/s]StaticNetwork: 100%|██████████| 19/19 [00:00<00:00, 22899.94it/s]
+StaticNode:   0%|          | 0/19 [00:00<?, ?it/s]StaticNode: 100%|██████████| 19/19 [00:00<00:00, 19638.19it/s]
+MemoryRecallTrial:   0%|          | 0/120 [00:00<?, ?it/s]MemoryRecallTrial: 100%|██████████| 120/120 [00:00<00:00, 2145.85it/s]
+Response:   0%|          | 0/264 [00:00<?, ?it/s]Response: 100%|██████████| 264/264 [00:00<00:00, 24198.97it/s]
+ChainTrialMakerState:   0%|          | 0/12 [00:00<?, ?it/s]ChainTrialMakerState: 100%|██████████| 12/12 [00:00<00:00, 14961.85it/s]
+Request:   0%|          | 0/540 [00:00<?, ?it/s]Request: 100%|██████████| 540/540 [00:00<00:00, 213611.63it/s]
+ExperimentConfig:   0%|          | 0/1 [00:00<?, ?it/s]ExperimentConfig: 100%|██████████| 1/1 [00:00<00:00, 4215.38it/s]
 ⠋ Completed.             ✔ Completed.
 
 ❯❯ Exporting assets to data/simulated_data

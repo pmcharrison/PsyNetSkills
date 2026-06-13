@@ -199,8 +199,8 @@ def fit_posterior(
     previous_snapshot: PosteriorSnapshot | dict | None = None,
     *,
     seed: int = DEFAULT_SEED,
-    n_steps: int = 350,
-    n_samples: int = 384,
+    n_steps: int = 120,
+    n_samples: int = 256,
 ) -> PosteriorSnapshot:
     ensure_numpyro_available()
     previous_snapshot = PosteriorSnapshot.from_json_dict(previous_snapshot) if isinstance(previous_snapshot, dict) else previous_snapshot
