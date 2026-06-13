@@ -203,23 +203,11 @@ Use the `dashboard-preview-links` skill to share the durable PR preview URL and
 the branch-filtered workflow link. Forked pull requests do not publish static
 previews because the workflow needs write access to the `gh-pages` branch.
 
-When sharing live preview links, use this Markdown-link format and omit links
-that are not available for the current task:
-
-**Links**
-
-- [Plan]({live-dashboard-url})
-- [Experiment participant link]({participant-url})
-- [Experiment dashboard]({dashboard-url-with-credentials})
-
-*These temporary links will fail once the agent goes to sleep. In that case, you
-can ask for new links, or use the [backup dashboard preview]({pr-preview-url}).*
-
-Use a concise first-link label that matches the live dashboard target, such as
-`Plan`, `Attempt`, or `Dashboard`.
-
-If no live tunnel is available, share the durable PR preview URL and
-branch-filtered workflow link from `dashboard-preview-links`.
+When sharing live preview links, use the Markdown-link handoff template from the
+`preview-dashboard-live` skill. That skill owns the live-link format, including
+the backup dashboard preview sentence. If no live tunnel is available, share the
+durable PR preview URL and branch-filtered workflow link from
+`dashboard-preview-links`.
 
 To publish your changes, merge the pull request.
 
