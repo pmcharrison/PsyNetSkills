@@ -11,7 +11,7 @@ permissions:
 
 concurrency:
   group: dashboard-preview-pr-${{ github.event.pull_request.number }}
-  cancel-in-progress: true
+  queue: max
 
 jobs:
   deploy-preview:
@@ -102,7 +102,11 @@ jobs:
             const previewUrl = '${{ steps.preview.outputs.url }}';
             const body = [
               marker,
-              `Dashboard preview: ${previewUrl}`,
+              'Durable dashboard PR preview:',
+              previewUrl,
+              '',
+              'For immediate interactive review, ask the agent to run `preview-dashboard-live`.',
+              'This static preview may take a few minutes to publish after each push.',
               '',
               `Built from commit \`${context.payload.pull_request.head.sha.slice(0, 7)}\`.`
             ].join('\n');

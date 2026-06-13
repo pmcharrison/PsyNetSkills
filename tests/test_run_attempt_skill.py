@@ -162,6 +162,9 @@ def test_run_attempt_handoff_prints_public_links_when_tunnel_is_set(capsys) -> N
     handoff.update_from_url(
         "http://127.0.0.1:5000/ad?recruiter=hotair&assignmentId=A1"
     )
+    handoff.update_from_url(
+        "http://127.0.0.1:5000/ad?generate_tokens=true&recruiter=hotair"
+    )
     handoff.set_public_tunnel_url("https://example.loca.lt")
     handoff.maybe_print()
     handoff.maybe_print()
@@ -169,87 +172,38 @@ def test_run_attempt_handoff_prints_public_links_when_tunnel_is_set(capsys) -> N
     output = capsys.readouterr().out
     assert output.count("=== Run attempt Cloud Desktop handoff ===") == 1
     assert output.count("=== Run attempt public tunnel ===") == 1
+    public_output = output.split("=== Run attempt public tunnel ===", 1)[1]
     assert "http://127.0.0.1:5000" not in output
     assert (
-        "Add new participant (public tunnel): "
-        "https://example.loca.lt/ad?recruiter=hotair&assignmentId=A1"
-    ) in output
+        "Try as participant (public tunnel): "
+        "https://example.loca.lt/ad?generate_tokens=true&recruiter=hotair"
+    ) in public_output
     assert (
         "Dashboard (public tunnel): "
         "https://admin:secret@example.loca.lt/dashboard/develop"
-    ) in output
-    assert "Username: admin" in output
-    assert "Password: secret" in output
+    ) in public_output
+    assert "Username: admin" not in public_output
+    assert "Password: secret" not in public_output
+    assert "Use the participant link repeatedly" in public_output
+    assert "includes local ephemeral debug credentials" in public_output
+    assert "ask the agent to refresh them if needed" in public_output
 
 
-def test_run_attempt_public_tunnel_prefers_cloudflared(monkeypatch) -> None:
+def test_run_attempt_handoff_keeps_generated_token_url_when_seen_first() -> None:
     module = load_run_attempt_module()
     handoff = module.HandoffState()
 
-    monkeypatch.setattr(module.shutil, "which", lambda command: "/usr/bin/cloudflared" if command == "cloudflared" else None)
-
-    tunnel = module.PublicTunnel(5000, handoff)
-
-    assert tunnel.command == [
-        "/usr/bin/cloudflared",
-        "tunnel",
-        "--url",
-        "http://127.0.0.1:5000",
-    ]
-
-
-def test_run_attempt_public_tunnel_downloads_cloudflared(
-    monkeypatch,
-    tmp_path: Path,
-) -> None:
-    module = load_run_attempt_module()
-    cached_binary = tmp_path / "cloudflared"
-    commands = []
-
-    monkeypatch.setattr(module, "CLOUDFLARED_CACHE", cached_binary)
-    monkeypatch.setattr(module.platform, "machine", lambda: "x86_64")
-    monkeypatch.setattr(module.shutil, "which", lambda command: None)
-    monkeypatch.setattr(module, "command_available", lambda command: command == "curl")
-
-    def fake_run_quietly(command, timeout=15):
-        commands.append(command)
-        cached_binary.write_text("#!/bin/sh\n")
-        return module.subprocess.CompletedProcess(command, 0, "", "")
-
-    monkeypatch.setattr(module, "run_quietly", fake_run_quietly)
-
-    assert module.resolve_cloudflared_command() == str(cached_binary)
-    assert cached_binary.exists()
-    assert commands[0][-1].endswith("cloudflared-linux-amd64")
-
-
-def test_run_attempt_public_tunnel_falls_back_to_localtunnel(monkeypatch) -> None:
-    module = load_run_attempt_module()
-    handoff = module.HandoffState()
-
-    monkeypatch.setattr(module, "resolve_cloudflared_command", lambda: None)
-    monkeypatch.setattr(module, "command_available", lambda command: command == "localtunnel")
-
-    tunnel = module.PublicTunnel(5000, handoff)
-
-    assert tunnel.command == [
-        "localtunnel",
-        "--port",
-        "5000",
-        "--local-host",
-        "127.0.0.1",
-    ]
-
-
-def test_run_attempt_filters_public_tunnel_urls() -> None:
-    module = load_run_attempt_module()
-
-    assert module.is_public_tunnel_url(
-        "https://northern-ordering-instant-thrown.trycloudflare.com"
+    handoff.update_from_url(
+        "http://127.0.0.1:5000/ad?generate_tokens=true&recruiter=hotair"
     )
-    assert module.is_public_tunnel_url("https://puny-ends-allow.loca.lt")
-    assert not module.is_public_tunnel_url("https://www.cloudflare.com/website-terms/")
-    assert not module.is_public_tunnel_url("http://127.0.0.1:5000/dashboard")
+    handoff.update_from_url(
+        "http://127.0.0.1:5000/ad?recruiter=hotair&assignmentId=A1"
+    )
+
+    assert (
+        handoff.local_participant_url
+        == "http://127.0.0.1:5000/ad?generate_tokens=true&recruiter=hotair"
+    )
 
 
 def test_run_attempt_public_tunnel_is_disabled_by_default(

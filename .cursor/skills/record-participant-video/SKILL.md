@@ -115,7 +115,7 @@ document why calibration was not possible.
 When sharing a recorded video inline in a Cursor final response, warn the user
 if the evidence depends on audio: the Cursor agent video player may not play the
 audio track. Tell them to download the MP4 directly or view it through the
-dashboard/PR preview to hear the audio.
+dashboard live preview to hear the audio.
 
 ## Linux
 

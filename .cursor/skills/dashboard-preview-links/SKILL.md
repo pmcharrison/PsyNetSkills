@@ -1,14 +1,20 @@
 ---
 name: dashboard-preview-links
-description: Share deterministic dashboard PR preview links after briefly polling for publication status.
+description: Share durable dashboard PR preview links and workflow status after briefly polling for publication status.
 authors: [pmcharrison]
 ---
 
 # Dashboard preview links
 
-Use this skill before sharing dashboard preview links after creating or updating
-a pull request. Poll briefly for publication status, but always give the user
-the deterministic preview URL if polling does not confirm publication.
+Use this skill after creating or updating a pull request that affects dashboard,
+documentation, skill, or challenge-attempt pages. These durable GitHub Pages PR
+preview links complement live tunnel previews: live links are immediate but may
+expire, while PR preview links support asynchronous review but may take a few
+minutes to build.
+
+Poll briefly for publication status, but always give the user the deterministic
+preview URL and branch-filtered workflow link if polling does not confirm
+publication.
 
 ## Workflow
 
@@ -69,8 +75,8 @@ the deterministic preview URL if polling does not confirm publication.
 
 5. If both the matching preview run and matching Pages deployment complete
    successfully within the polling window, tell the user the preview has been
-   published for the latest commit and provide the preview URL. Do not print
-   workflow run links in the user-facing response unless the user asks for them.
+   published for the latest commit and provide the preview URL. Include the
+   branch-filtered workflow link when the user may want to monitor future builds.
 
 6. If the matching Pages deployment is cancelled, check whether a newer
    `pages-build-deployment` run on `gh-pages` completed successfully after the
