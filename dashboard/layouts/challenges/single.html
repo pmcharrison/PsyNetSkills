@@ -17,14 +17,22 @@
       <h1>{{ $challenge.title }}</h1>
       {{ partial "edit-in-github.html" (printf "%s/INSTRUCTIONS.md" $challenge.path) }}
     </div>
-    <p><strong>Type:</strong> {{ $challenge.type }}</p>
-    <p><strong>Difficulty:</strong> {{ $challenge.difficulty }}</p>
-    {{ with $challenge.authors }}
-      <p>
-        <strong>Author{{ if ne (len .) 1 }}s{{ end }}:</strong>
-        {{ partial "authors.html" . }}
-      </p>
-    {{ end }}
+    <dl class="metadata-grid challenge-frontmatter">
+      <div>
+        <dt>Type</dt>
+        <dd>{{ $challenge.type }}</dd>
+      </div>
+      <div>
+        <dt>Difficulty</dt>
+        <dd>{{ $challenge.difficulty }}</dd>
+      </div>
+      {{ with $challenge.authors }}
+        <div>
+          <dt>Author{{ if ne (len .) 1 }}s{{ end }}</dt>
+          <dd>{{ partial "authors.html" . }}</dd>
+        </div>
+      {{ end }}
+    </dl>
 
     {{ $challenge.instructions | markdownify }}
 
