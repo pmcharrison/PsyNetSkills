@@ -170,12 +170,6 @@
         <dt>Attempt path</dt>
         <dd><code>{{ $attempt.path }}</code></dd>
       </div>
-      {{ if $hasPlan }}
-        <div>
-          <dt>Plan</dt>
-          <dd><a href="#plan">Review plan</a></dd>
-        </div>
-      {{ end }}
       {{ if $hasAnalysisNotebook }}
         <div>
           <dt>Analysis</dt>
@@ -184,70 +178,68 @@
       {{ end }}
     </dl>
 
-    {{ if $hasPlan }}
-      <section id="plan" class="attempt-panel plan-panel">
-        <div class="section-heading">
-          <h2>Plan</h2>
-          {{ with $attempt.path }}
-            {{ partial "edit-in-github.html" (printf "%s/PLAN.md" .) }}
+    <div class="attempt-layout">
+      <aside class="attempt-sidebar" aria-label="Attempt sections">
+        <nav class="attempt-section-nav">
+          <ol>
+            <li><a href="#challenge">Challenge</a></li>
+            {{ if $hasPlan }}
+              <li><a href="#plan">Plan</a></li>
+            {{ end }}
+            <li><a href="#evaluation">Evaluation</a></li>
+            {{ with $attempt.learnings }}
+              <li><a href="#learnings">Learnings</a></li>
+            {{ end }}
+            <li><a href="#evidence">Evidence</a></li>
+            <li><a href="#timeline">Timeline</a></li>
+          </ol>
+        </nav>
+      </aside>
+
+      <div class="attempt-main">
+        <details id="challenge" class="attempt-panel challenge-brief" open>
+          <summary><h2>Challenge</h2></summary>
+          {{ with $attempt.challenge_instructions }}
+            <div class="attempt-markdown">
+              {{ . | markdownify }}
+            </div>
+          {{ else }}
+            <p>No rendered challenge instructions were found for this attempt.</p>
           {{ end }}
-        </div>
+          {{ with $attempt.challenge_criteria }}
+            <h3>Evaluation criteria</h3>
+            <p class="criteria-note">
+              These criteria are shown for review. The implementing agent was not
+              allowed to inspect them before evidence collection.
+            </p>
+            <div class="attempt-markdown">
+              {{ . | markdownify }}
+            </div>
+          {{ end }}
+        </details>
+
+        {{ if $hasPlan }}
+      <details id="plan" class="attempt-panel plan-panel" open>
+        <summary><h2>Plan</h2></summary>
+          {{ with $attempt.path }}
+            <div class="collapsible-actions">
+              {{ partial "edit-in-github.html" (printf "%s/PLAN.md" .) }}
+            </div>
+          {{ end }}
         <p class="artifact-note">Implementation plan captured before experiment code and evidence collection.</p>
         <div class="attempt-markdown">
           {{ $plan | markdownify }}
         </div>
-      </section>
-    {{ end }}
-
-    <section class="attempt-panel challenge-brief">
-      <h2>Challenge instructions</h2>
-      {{ with $attempt.challenge_instructions }}
-        <div class="attempt-markdown">
-          {{ . | markdownify }}
-        </div>
-      {{ else }}
-        <p>No rendered challenge instructions were found for this attempt.</p>
-      {{ end }}
-      {{ with $attempt.challenge_criteria }}
-        <h2>Evaluation criteria</h2>
-        <p class="criteria-note">
-          These criteria are shown for review. The implementing agent was not
-          allowed to inspect them before evidence collection.
-        </p>
-        <div class="attempt-markdown">
-          {{ . | markdownify }}
-        </div>
-      {{ end }}
-    </section>
-
-    <section class="attempt-panel timeline-panel">
-      <h2>Timeline</h2>
-      {{ if $hasTimeline }}
-        <ol class="timeline-list">
-          {{ range $attempt.timeline_entries }}
-            <li class="timeline-entry timeline-entry-{{ .actor }}">
-              <span class="timeline-time">{{ .timestamp }}</span>
-              <span class="timeline-actor">{{ replace .actor "-" " " }}</span>
-              <span class="timeline-description">{{ .description | markdownify }}</span>
-            </li>
-          {{ end }}
-        </ol>
-      {{ else if $attempt.timeline }}
-        <div class="attempt-markdown timeline-markdown">
-          {{ $attempt.timeline | markdownify }}
-        </div>
-      {{ else }}
-        <p>No timeline was found for this attempt.</p>
-      {{ end }}
-    </section>
-
-    <section class="attempt-panel">
-      <div class="section-heading">
-        <h2>Evaluation</h2>
-        {{ with $attempt.path }}
-          {{ partial "edit-in-github.html" (printf "%s/EVALUATION.md" .) }}
+      </details>
         {{ end }}
-      </div>
+
+    <details id="evaluation" class="attempt-panel" open>
+      <summary><h2>Evaluation</h2></summary>
+        {{ with $attempt.path }}
+          <div class="collapsible-actions">
+            {{ partial "edit-in-github.html" (printf "%s/EVALUATION.md" .) }}
+          </div>
+        {{ end }}
       {{ with $attempt.evaluation }}
         <div class="attempt-markdown">
           {{ . | markdownify }}
@@ -255,16 +247,16 @@
       {{ else }}
         <p>No evaluation file was found for this attempt.</p>
       {{ end }}
-    </section>
+    </details>
 
     {{ with $attempt.learnings }}
-      <section class="attempt-panel">
-        <div class="section-heading">
-          <h2>Learnings</h2>
+      <details id="learnings" class="attempt-panel" open>
+        <summary><h2>Learnings</h2></summary>
           {{ with $attempt.path }}
-            {{ partial "edit-in-github.html" (printf "%s/LEARNINGS.md" .) }}
+            <div class="collapsible-actions">
+              {{ partial "edit-in-github.html" (printf "%s/LEARNINGS.md" .) }}
+            </div>
           {{ end }}
-        </div>
         {{ if $attemptActions }}
           {{ partial "action-copy-toolbar.html" . }}
           {{ partial "action-copy-data.html" $attemptActions }}
@@ -293,68 +285,11 @@
           {{ end }}
           {{ $learningHtml | safeHTML }}
         </div>
-      </section>
+      </details>
     {{ end }}
 
-    {{ if $hasAnalysisNotebook }}
-      <section id="analysis-notebook" class="attempt-panel analysis-notebook-panel">
-        <div class="section-heading">
-          <h2>Analysis notebook</h2>
-          <a href="{{ $analysisNotebookFile.url | relURL }}">Open raw notebook</a>
-        </div>
-        <p class="artifact-note">
-          Rendered from <code>{{ $analysisNotebookFile.path }}</code>.
-        </p>
-        <div class="notebook-preview">
-          {{ range $index, $cell := $analysisNotebook.cells }}
-            <section class="notebook-cell notebook-cell-{{ $cell.cell_type }}">
-              {{ $source := delimit $cell.source "" }}
-              {{ if eq $cell.cell_type "markdown" }}
-                <div class="attempt-markdown">
-                  {{ $source | markdownify }}
-                </div>
-              {{ else if eq $cell.cell_type "code" }}
-                <div class="notebook-code">
-                  {{ highlight $source "python" "" }}
-                </div>
-                {{ with $cell.outputs }}
-                  <div class="notebook-outputs">
-                    {{ range . }}
-                      {{ with .text }}
-                        <pre><code>{{ delimit . "" }}</code></pre>
-                      {{ else }}
-                        {{ with .data }}
-                          {{ with index . "image/svg+xml" }}
-                            <div class="notebook-svg">
-                              {{ delimit . "" | safeHTML }}
-                            </div>
-                          {{ else }}
-                            {{ with index . "text/html" }}
-                              <div class="notebook-html">
-                                {{ delimit . "" | safeHTML }}
-                              </div>
-                            {{ else }}
-                              {{ with index . "text/plain" }}
-                                <pre><code>{{ delimit . "" }}</code></pre>
-                              {{ end }}
-                            {{ end }}
-                          {{ end }}
-                        {{ end }}
-                      {{ end }}
-                    {{ end }}
-                  </div>
-                {{ end }}
-              {{ else }}
-                <pre><code>{{ $source }}</code></pre>
-              {{ end }}
-            </section>
-          {{ end }}
-        </div>
-      </section>
-    {{ end }}
-
-    <section class="attempt-panel">
-      <h2>Review evidence</h2>
+    <details id="evidence" class="attempt-panel" open>
+      <summary><h2>Evidence</h2></summary>
       {{ if $hasParticipantVideo }}
         <video class="attempt-video" controls preload="metadata">
           <source src="{{ $participantVideo.url | relURL }}" type="video/mp4">
@@ -436,6 +371,63 @@
           {{ end }}
         </li>
       </ul>
+
+      {{ if $hasAnalysisNotebook }}
+        <section id="analysis-notebook" class="analysis-notebook-panel evidence-subsection">
+          <div class="section-heading">
+            <h3>Analysis notebook</h3>
+            <a href="{{ $analysisNotebookFile.url | relURL }}">Open raw notebook</a>
+          </div>
+          <p class="artifact-note">
+            Rendered from <code>{{ $analysisNotebookFile.path }}</code>.
+          </p>
+          <div class="notebook-preview">
+            {{ range $index, $cell := $analysisNotebook.cells }}
+              <section class="notebook-cell notebook-cell-{{ $cell.cell_type }}">
+                {{ $source := delimit $cell.source "" }}
+                {{ if eq $cell.cell_type "markdown" }}
+                  <div class="attempt-markdown">
+                    {{ $source | markdownify }}
+                  </div>
+                {{ else if eq $cell.cell_type "code" }}
+                  <div class="notebook-code">
+                    {{ highlight $source "python" "" }}
+                  </div>
+                  {{ with $cell.outputs }}
+                    <div class="notebook-outputs">
+                      {{ range . }}
+                        {{ with .text }}
+                          <pre><code>{{ delimit . "" }}</code></pre>
+                        {{ else }}
+                          {{ with .data }}
+                            {{ with index . "image/svg+xml" }}
+                              <div class="notebook-svg">
+                                {{ delimit . "" | safeHTML }}
+                              </div>
+                            {{ else }}
+                              {{ with index . "text/html" }}
+                                <div class="notebook-html">
+                                  {{ delimit . "" | safeHTML }}
+                                </div>
+                              {{ else }}
+                                {{ with index . "text/plain" }}
+                                  <pre><code>{{ delimit . "" }}</code></pre>
+                                {{ end }}
+                              {{ end }}
+                            {{ end }}
+                          {{ end }}
+                        {{ end }}
+                      {{ end }}
+                    </div>
+                  {{ end }}
+                {{ else }}
+                  <pre><code>{{ $source }}</code></pre>
+                {{ end }}
+              </section>
+            {{ end }}
+          </div>
+        </section>
+      {{ end }}
 
       {{ if $hasPerformance }}
         <section class="performance-result">
@@ -552,10 +544,8 @@
           {{ end }}
         </section>
       {{ end }}
-    </section>
-
-    <section class="attempt-panel">
-      <h2>Artifact completeness</h2>
+    <section class="evidence-subsection">
+      <h3>Artifact completeness</h3>
       <ul class="artifact-checklist">
         <li class="present">challenge/ <span>{{ len $attempt.challenge_files }} file{{ if ne (len $attempt.challenge_files) 1 }}s{{ end }}</span></li>
         <li class="present">agent.json <span>metadata captured</span></li>
@@ -569,7 +559,7 @@
         <li class="{{ if $hasData }}present{{ else }}missing{{ end }}">evidence/data.zip <span>{{ if $hasData }}present{{ else }}missing{{ end }}</span></li>
         <li class="{{ if $hasAnalyses }}present{{ else }}missing{{ end }}">evidence/analyses/ <span>{{ if $hasAnalyses }}{{ len $analysisFiles }} file{{ if ne (len $analysisFiles) 1 }}s{{ end }}{{ else }}missing{{ end }}</span></li>
       </ul>
-    </section>
+    </details>
 
     <details class="attempt-panel">
       <summary>All code files</summary>
@@ -689,5 +679,29 @@
         <p>No challenge snapshot files were found for this attempt.</p>
       {{ end }}
     </details>
+    </section>
+
+    <details id="timeline" class="attempt-panel timeline-panel">
+      <summary><h2>Timeline</h2></summary>
+      {{ if $hasTimeline }}
+        <ol class="timeline-list">
+          {{ range $attempt.timeline_entries }}
+            <li class="timeline-entry timeline-entry-{{ .actor }}">
+              <span class="timeline-time">{{ .timestamp }}</span>
+              <span class="timeline-actor">{{ replace .actor "-" " " }}</span>
+              <span class="timeline-description">{{ .description | markdownify }}</span>
+            </li>
+          {{ end }}
+        </ol>
+      {{ else if $attempt.timeline }}
+        <div class="attempt-markdown timeline-markdown">
+          {{ $attempt.timeline | markdownify }}
+        </div>
+      {{ else }}
+        <p>No timeline was found for this attempt.</p>
+      {{ end }}
+    </details>
+      </div>
+    </div>
   </article>
 {{ end }}
