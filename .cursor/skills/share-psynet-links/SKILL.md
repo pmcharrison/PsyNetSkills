@@ -28,9 +28,10 @@ work.
 
 Share links that let the user review the newest content with the least friction:
 
-- Prefer a live dev-server link when the agent has started one. Live previews
-  reflect the current workspace immediately, before asynchronous preview builds
-  finish.
+- Prefer a live dev-server link. If the relevant dashboard or experiment dev
+  server is not already running, start it before handing work over for review.
+  Live previews reflect the current workspace immediately, before asynchronous
+  preview builds finish.
 - Expose the live dev server through `public-tunnel` when the user needs to open
   it from a normal browser. Local `127.0.0.1` URLs are usually not useful outside
   the Cloud Desktop environment.
