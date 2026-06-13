@@ -11,17 +11,19 @@ Cursor Cloud Agent through a temporary public URL. This skill owns the generic
 tunnel setup only; caller skills still own how to start and validate the local
 service.
 
+This skill uses `.cursor/skills/public-tunnel/scripts/public_tunnel.py` to do
+the actual tunneling work. The skill file is the agent-facing procedure; the
+script is the reusable implementation.
+
 ## Goal
 
 Expose a local HTTP service through an ephemeral HTTPS URL without requiring
 service credentials, DNS changes, open inbound ports, or a production
-deployment. The helper owns Cloudflare/localtunnel command selection and
-temporary `cloudflared` bootstrap.
+deployment.
 
-## Helper role
+## Script role
 
-The skill describes the review workflow. The helper script implements the
-reusable tunnel mechanics so caller skills do not duplicate shell snippets. It:
+`.cursor/skills/public-tunnel/scripts/public_tunnel.py`:
 
 - chooses `cloudflared`, `localtunnel`, or `npx -y localtunnel`;
 - downloads a temporary `/tmp/cloudflared` when needed and supported;
@@ -35,18 +37,18 @@ reusable tunnel mechanics so caller skills do not duplicate shell snippets. It:
 1. Confirm the local service is already running and responds locally, for
    example:
    `curl -I --max-time 10 http://127.0.0.1:<port>/`
-2. Start the tunnel in a separate tmux session so the local service keeps
-   running independently:
+2. Start `.cursor/skills/public-tunnel/scripts/public_tunnel.py` in a separate
+   tmux session so the local service keeps running independently:
    `tmux -f /exec-daemon/tmux.portal.conf new-session -d -s <name>-public-tunnel -- uv run python .cursor/skills/public-tunnel/scripts/public_tunnel.py --port <port>`
-3. Watch the tmux output for the `Public tunnel ready` block and copy the
-   `https://...trycloudflare.com` URL.
+3. Watch that tmux session for the script's `Public tunnel ready` block and copy
+   the public URL.
 4. Verify the public URL before handing it to the user:
    `curl -I --max-time 20 <public-url>`
 5. Tell the user the public URL, the local service session, and the tunnel
    session. Make clear that the URL is temporary and dies when the VM or tunnel
    process stops.
 
-## Helper usage
+## Script usage
 
 Run from the repository root:
 
@@ -60,7 +62,7 @@ Useful options:
 
 ## Common failures
 
-- If no public URL appears, inspect the helper output first. It reports when no
+- If no public URL appears, inspect the script output first. It reports when no
   supported tunnel command is available or when Cloudflare setup falls back to
   another provider.
 - Quick Tunnel URLs are accountless and temporary. Do not use them for
