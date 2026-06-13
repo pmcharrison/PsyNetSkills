@@ -15,8 +15,8 @@ service.
 
 Expose a local HTTP service through an ephemeral HTTPS URL without requiring
 service credentials, DNS changes, open inbound ports, or a production
-deployment. Prefer Cloudflare Quick Tunnel, and fall back to localtunnel only
-when Cloudflare setup is unavailable.
+deployment. The helper owns Cloudflare/localtunnel command selection and
+temporary `cloudflared` bootstrap.
 
 ## Workflow
 
@@ -48,11 +48,9 @@ Useful options:
 
 ## Common failures
 
-- If `cloudflared` is missing, the helper downloads a temporary binary to
-  `/tmp/cloudflared` when `curl` and the current CPU architecture are supported.
-- If Cloudflare setup fails because downloads or outbound tunnel connections are
-  blocked, the helper falls back to `localtunnel` or `npx -y localtunnel` when
-  available.
+- If no public URL appears, inspect the helper output first. It reports when no
+  supported tunnel command is available or when Cloudflare setup falls back to
+  another provider.
 - Quick Tunnel URLs are accountless and temporary. Do not use them for
   production deployment, durable review archives, or links that must survive
   agent teardown.
