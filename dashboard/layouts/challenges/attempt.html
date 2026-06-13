@@ -107,7 +107,8 @@
     {{ end }}
   {{ end }}
   {{ $hasTimeline := gt (len $attempt.timeline_entries) 0 }}
-  {{ $hasPlan := gt (len $attempt.plan) 0 }}
+  {{ $plan := default "" $attempt.plan }}
+  {{ $hasPlan := gt (len $plan) 0 }}
   {{ $attemptActions := where (where hugo.Data.psynetsk.actions "challenge_slug" $challengeSlug) "attempt_name" $attemptName }}
 
   <article class="prose attempt-detail">
@@ -193,7 +194,7 @@
         </div>
         <p class="artifact-note">Implementation plan captured before experiment code and evidence collection.</p>
         <div class="attempt-markdown">
-          {{ $attempt.plan | markdownify }}
+          {{ $plan | markdownify }}
         </div>
       </section>
     {{ end }}

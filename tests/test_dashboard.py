@@ -1,5 +1,9 @@
 import json
+import shutil
+import subprocess
 from pathlib import Path
+
+import pytest
 
 from psynetsk_tools.dashboard import (
     collect_challenges,
@@ -27,6 +31,63 @@ def write(path: Path, text: str = "") -> None:
 def write_bytes(path: Path, data: bytes) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_bytes(data)
+
+
+def render_example_skill_page(tmp_path: Path, workflow_context_data: dict) -> str:
+    hugo = shutil.which("hugo")
+    if hugo is None:
+        pytest.skip("hugo is required to test dashboard templates")
+
+    repo_root = Path(__file__).resolve().parents[1]
+    dashboard = tmp_path / "dashboard"
+    shutil.copytree(repo_root / "dashboard/layouts", dashboard / "layouts")
+    shutil.copy2(repo_root / "dashboard/hugo.toml", dashboard / "hugo.toml")
+    write(dashboard / "content/_index.md", "# Home\n")
+    write(
+        dashboard / "content/skills/example-skill/index.md",
+        "---\n"
+        'title: "Example skill"\n'
+        'layout: "single"\n'
+        'skill: "example-skill"\n'
+        "---\n\n"
+        "Example skill page.\n",
+    )
+    write(dashboard / "data/workflow_context.json", json.dumps(workflow_context_data))
+    write(
+        dashboard / "data/psynetsk.json",
+        json.dumps(
+            {
+                "actions": [],
+                "attempts": [],
+                "challenges": [],
+                "skills": [
+                    {
+                        "description": "Use when testing dashboard templates.",
+                        "name": "example-skill",
+                        "path": ".cursor/skills/example-skill/SKILL.md",
+                        "title": "Example skill",
+                    },
+                ],
+            },
+        ),
+    )
+
+    public = tmp_path / "public"
+    subprocess.run(
+        [
+            hugo,
+            "--source",
+            str(dashboard),
+            "--destination",
+            str(public),
+            "--cleanDestinationDir",
+            "--quiet",
+        ],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    return (public / "skills/example-skill/index.html").read_text(encoding="utf-8")
 
 
 def authors_yaml() -> str:
@@ -130,6 +191,48 @@ def test_workflow_context_reports_pr_preview_head(tmp_path: Path) -> None:
         "repo": "PsyNetSkills",
         "workflow_file": "dashboard-preview.yml",
     }
+
+
+def test_edit_in_github_uses_default_branch_without_workflow_context(
+    tmp_path: Path,
+) -> None:
+    html = render_example_skill_page(
+        tmp_path,
+        {
+            "branch": "",
+            "enabled": False,
+            "head_sha": "",
+            "mode": "local",
+            "owner": "pmcharrison",
+            "repo": "PsyNetSkills",
+            "workflow_file": "",
+        },
+    )
+
+    assert (
+        'href="https://github.com/pmcharrison/PsyNetSkills/edit/main/'
+        '.cursor/skills/example-skill/SKILL.md"'
+    ) in html
+
+
+def test_edit_in_github_uses_pr_preview_branch(tmp_path: Path) -> None:
+    html = render_example_skill_page(
+        tmp_path,
+        {
+            "branch": "cursor/example",
+            "enabled": True,
+            "head_sha": "abc123",
+            "mode": "pr-preview",
+            "owner": "pmcharrison",
+            "repo": "PsyNetSkills",
+            "workflow_file": "dashboard-preview.yml",
+        },
+    )
+
+    assert (
+        'href="https://github.com/pmcharrison/PsyNetSkills/edit/cursor%2Fexample/'
+        '.cursor/skills/example-skill/SKILL.md"'
+    ) in html
 
 
 def test_collect_challenges_reports_latest_score(tmp_path: Path) -> None:
