@@ -38,8 +38,9 @@ Pages PR preview URL plus the branch-filtered workflow status link. Tell the
 user that live tunnel URLs may expire when the agent goes to sleep and can be
 refreshed on request, while PR previews may take a few minutes to build.
 
-For the user handoff, use the Markdown-link format owned by `public-tunnel`.
-For plan-review pauses, label the live dashboard link `Plan` and include the
+For the user handoff, use `share-psynet-links`. Label the live dashboard link
+for the specific page or section being reviewed, such as `Dashboard`,
+`Dashboard home`, `Attempt`, or `Plan`. If a pull request exists, include the
 durable PR preview as the backup dashboard preview. If no live tunnel is
 available, share the durable PR preview URL and branch-filtered workflow link
 from `dashboard-preview-links`.
