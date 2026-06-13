@@ -276,9 +276,10 @@ def _entropy_bernoulli(p: float) -> float:
 
 def score_candidate(snapshot: PosteriorSnapshot, length: int) -> dict:
     p = posterior_predictive_probability(snapshot, length)
-    # A fast VI-compatible proxy for EIG: high predictive uncertainty and posterior spread are most informative.
+    # A fast VI-compatible proxy for EIG: choose where predictive uncertainty
+    # is high and the participant-level posterior still has room to move.
     spread = max(float(snapshot.posterior_summary["target_participant"]["r_sd"]), EPS)
-    eig = _entropy_bernoulli(p) * math.log1p(spread) / math.sqrt(length)
+    eig = _entropy_bernoulli(p) * math.log1p(spread)
     return {
         "length": int(length),
         "expected_information_gain": float(eig),
