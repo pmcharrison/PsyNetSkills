@@ -27,3 +27,7 @@ the result here.
 
 - Score and feedback should come from a human evaluator, captured
   conversationally when working with Cursor Cloud Agents.
+- `challenge/CRITERIA.md` is present in this attempt's snapshot for the evaluator;
+  it was intentionally not opened during implementation.
+- The attempt's `agent.json` `authors` is still empty — fill it with the crediting
+  GitHub id before marking the attempt complete.

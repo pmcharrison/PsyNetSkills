@@ -19,7 +19,8 @@
   },
   "run_cost": null,
   "notes": [
-    "Human author pending: authors must be filled with the crediting GitHub id before this attempt is marked complete.",
-    "ended_at is null because the attempt is paused for human review of PLAN.md before implementation."
+    "Plan was reviewed and approved by the user before implementation began.",
+    "Implementation and first-pass evidence collection are complete (see TIMELINE.md [agent-stop] at T+01:55:34).",
+    "ended_at is left null because the attempt is not yet fully complete: the human author is still pending (authors is empty; must not be inferred) and the EVALUATION.md criteria checklist awaits a human evaluator. Set ended_at and fill authors once the crediting GitHub id is provided."
   ]
 }
