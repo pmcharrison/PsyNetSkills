@@ -193,10 +193,14 @@ class MemoryRecallTrial(StaticTrial):
             ),
             time_estimate=display_seconds + 6,
             events={
+                "hideNextButton": Event(
+                    is_triggered_by="trialStart",
+                    js="$('#next-button').hide();",
+                ),
                 "hideDigits": Event(
                     is_triggered_by="trialStart",
                     delay=display_seconds,
-                    js="document.querySelectorAll('.digit-string').forEach((elt) => { elt.style.visibility = 'hidden'; });",
+                    js="document.querySelectorAll('.digit-string').forEach((elt) => { elt.style.visibility = 'hidden'; }); $('#next-button').show();",
                     message="Now type the string.",
                 ),
                 "responseEnable": Event(is_triggered_by="hideDigits"),
