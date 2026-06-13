@@ -68,6 +68,11 @@ def participant_key(participant) -> str:
     return f"participant-{participant.id}"
 
 
+def synthetic_ability_for_id(id_: int) -> float:
+    abilities = [0.45, 0.75, 1.0, 1.5, 2.25, 3.5]
+    return abilities[int(id_) % len(abilities)]
+
+
 def reusable_claim_field(name: str, extra_vars: dict, field_type=object):
     register_extra_var(extra_vars, name, field_type=field_type)
     if field_type is int:
@@ -209,7 +214,7 @@ class MemoryRecallTrial(StaticTrial):
         ]
 
     def bot_response(self, bot) -> str:
-        true_r = float(bot.var.get("memory_r", 1.0))
+        true_r = synthetic_ability_for_id(bot.id)
         p = response_probability(self.selected_length, true_r)
         rng = random.Random(DEFAULT_SEED + int(bot.id) * 100 + self.position)
         if rng.random() < p:
@@ -346,12 +351,6 @@ class Exp(psynet.experiment.Experiment):
         ),
         SuccessfulEndPage(),
     )
-
-    def run_bot(self, bot=None, **kwargs):
-        if bot is not None:
-            abilities = [0.45, 0.75, 1.0, 1.5, 2.25, 3.5]
-            bot.var.memory_r = abilities[int(bot.id) % len(abilities)]
-        return super().run_bot(bot=bot, **kwargs)
 
     def test_check_bot(self, bot, **kwargs):
         trials = MemoryRecallTrial.query.filter_by(participant_id=bot.id).all()
