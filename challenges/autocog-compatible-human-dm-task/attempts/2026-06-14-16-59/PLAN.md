@@ -46,5 +46,8 @@ Final evidence will include the generated experiment under `code/`, logs proving
 ## Human review questions
 
 - Should the generator include only the supplied example config, or should it also expose a documented CLI for arbitrary config files during review?
+  - A: It should request the config file at the start of the skill implementation in CLI
 - Should `max_trials` smaller than the number of configured pairs truncate the list to `max_trials`, or should that be treated as invalid because it does not use all configured pairs?
+   - A: rpeat the pairs integer number of times such that total trials is always less than or equal to max trials
 - Should feature labels be generic (`Feature 1`, `Feature 2`, ...) or should the config schema be extended to allow optional feature names?
+  - Call it rating 1, 2, ...
