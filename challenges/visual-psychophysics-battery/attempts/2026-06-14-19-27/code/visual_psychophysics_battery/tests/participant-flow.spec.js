@@ -38,11 +38,15 @@ async function screenshotOnce(page, name, taken) {
 async function answerTrial(page, trialIndex) {
   await page.waitForLoadState("domcontentloaded").catch(() => {});
   const bodyText = await page.locator("body").innerText({ timeout: 15000 });
-  if ((await page.locator("button#different").count()) > 0) {
+  if ((await page.locator("button#different:visible").count()) > 0) {
+    if ((await page.locator("button#different:visible:not([disabled])").count()) === 0) {
+      await page.waitForTimeout(300);
+      return false;
+    }
     await clickButton(page, "button#different, button:has-text('Different')");
-  } else if ((await page.locator('button[id="3"]').count()) > 0) {
+  } else if ((await page.locator('button[id="3"]:visible').count()) > 0) {
     await clickButton(page, 'button[id="3"]');
-  } else if (bodyText.includes("Choose the number") && (await page.locator('button[id="1"]').count()) > 0) {
+  } else if (bodyText.includes("Choose the number") && (await page.locator('button[id="1"]:visible').count()) > 0) {
     await clickButton(page, 'button[id="1"]');
   } else {
     return false;
@@ -107,6 +111,7 @@ async function answerTrial(page, trialIndex) {
   }
 
   await expect(page).toHaveURL(/recruiter-exit/, { timeout: 30000 });
+  expect(trialIndex).toBe(30);
   await screenshotOnce(page, "05_completion", taken);
 
   const dashboard = await context.newPage();

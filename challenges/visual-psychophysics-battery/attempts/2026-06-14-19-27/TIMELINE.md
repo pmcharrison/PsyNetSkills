@@ -12,3 +12,8 @@
 - T+00:35:45 [agent] Implemented the self-contained PsyNet visual battery and generated constraints.
 - T+00:38:13 [agent] Ran `psynet test local`; 24 bots completed 30 trials each and the test passed.
 - T+00:42:20 [agent] Ran `psynet simulate`, packaged `evidence/simulated_data.zip`, and executed the analysis notebook.
+- T+01:10:00 [agent] Found and fixed browser-only discrimination response activation issues while collecting Playwright evidence.
+- T+01:11:30 [agent] Captured participant video, screenshots, and monitor snapshot with 30 clicked trial responses.
+- T+01:16:00 [agent] Ran the 40-bot, 5-minute PsyNet performance test and saved `evidence/performance.json`.
+- T+01:19:46 [agent] Reran final `psynet test local`; 24 bots completed the full battery and the test passed.
+- T+01:19:46 [agent-stop] Implementation and first-pass evidence collection complete.

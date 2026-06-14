@@ -519,11 +519,16 @@ class VisualBatteryTrial(StaticTrial):
                 control=control,
                 time_estimate=self.time_estimate,
                 events={
-                    "responseEnable": Event(
+                    "enableDiscriminationResponse": Event(
                         is_triggered_by="trialStart",
                         delay=FIXATION_DURATION + PAIR_DURATION + BLANK_DURATION + 0.05,
+                        js="""
+                            psynet.trial.registerEvent("responseEnable");
+                            psynet.trial.registerEvent("submitEnable");
+                            psynet.response.enable();
+                            psynet.submit.enable();
+                        """,
                     ),
-                    "submitEnable": Event(is_triggered_by="responseEnable"),
                 },
             )
         elif block == "similarity":
