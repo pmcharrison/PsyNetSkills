@@ -21,7 +21,9 @@ fs.mkdirSync(videoDir, { recursive: true });
 async function clickButton(page, selector) {
   const locator = selector
     ? page.locator(selector).first()
-    : page.locator("button:visible, input[type=submit]:visible").first();
+    : page
+        .locator("button:visible:not([disabled]), input[type=submit]:visible:not([disabled])")
+        .first();
   await locator.waitFor({ state: "visible", timeout: 15000 });
   await expect(locator).toBeEnabled({ timeout: 15000 });
   await locator.click();
@@ -85,6 +87,13 @@ async function answerTrial(page, bodyText, trialIndex) {
       trialIndex += 1;
       await answerTrial(page, bodyText, trialIndex);
     } else {
+      const enabledButtons = await page
+        .locator("button:visible:not([disabled]), input[type=submit]:visible:not([disabled])")
+        .count();
+      if (enabledButtons === 0) {
+        await page.waitForTimeout(800);
+        continue;
+      }
       await clickButton(page);
       await page.waitForTimeout(120);
     }

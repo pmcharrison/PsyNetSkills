@@ -549,8 +549,8 @@ class VisualBatteryTrial(StaticTrial):
             time_estimate=FIXATION_DURATION + PAIR_DURATION + BLANK_DURATION,
             events={
                 "nextPage": Event(
-                    is_triggered_by="promptEnd",
-                    delay=0.05,
+                    is_triggered_by="trialStart",
+                    delay=FIXATION_DURATION + PAIR_DURATION + BLANK_DURATION + 0.05,
                     js="psynet.nextPage()",
                 )
             },
