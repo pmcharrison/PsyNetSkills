@@ -14,7 +14,7 @@ without `answer` is the pattern that keeps the bot path identical to the browser
 
 *Actions:*
 
-- **PsyNet:** The `bot_response` parameter conflates "no bot response provided" with an explicit `None` answer, which is an easy footgun when a custom control needs its `get_bot_response`/`format_answer` to run. Consider documenting this in the `OptionControl`/`Control` docstrings or warning when `bot_response=None` is passed to a control that overrides `get_bot_response`. Confidence: high. Impact: medium. Status: considering.
+- **PsyNet:** The `bot_response` parameter conflates "no bot response provided" with an explicit `None` answer, which is an easy footgun when a custom control needs its `get_bot_response`/`format_answer` to run. Consider documenting this in the `OptionControl`/`Control` docstrings or warning when `bot_response=None` is passed to a control that overrides `get_bot_response`. Confidence: high. Impact: medium. Status: completed. Notes: Implemented as PsyNet MR !1088 (https://gitlab.com/PsyNetDev/PsyNet/-/merge_requests/1088) — adds the warning in `Control.call__get_bot_response`, clarifies the `bot_response` docstring, and adds an isolated unit test; reviewer Peter Harrison. Open pending maintainer review/merge.
 
 ## Reaction time can be derived from the native event log without custom JS
 
