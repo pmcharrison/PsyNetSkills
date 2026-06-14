@@ -1,0 +1,15 @@
+{
+  "name": "adaptive_memory_testing",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "participant-flow": "playwright test tests/participant-flow.spec.js --reporter=line"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.60.0"
+  }
+}

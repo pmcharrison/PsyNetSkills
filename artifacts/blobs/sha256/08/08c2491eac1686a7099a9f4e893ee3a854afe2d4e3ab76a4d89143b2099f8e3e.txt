@@ -1,0 +1,15 @@
+[Config]
+title = Ultimatum game experiment (Chrome browser, 10 minutes to complete)
+description = Play a repeated two-player Ultimatum game. Please use a Chrome browser in incognito mode. Your performance bonus is based on the coins you earn.
+contact_email_on_error = researcher@example.com
+organization_name = PsyNetSkills
+recruiter = generic
+currency = $
+wage_per_hour = 12.0
+base_payment = 0.20
+show_reward = true
+
+[Prolific]
+auto_recruit = false
+prolific_estimated_completion_minutes = 10
+base_payment = 0.20

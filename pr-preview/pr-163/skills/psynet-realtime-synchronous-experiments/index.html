@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    
+    
+      <meta name="description" content="Page author: @pmcharrison">
+    
+    <title>Implement real-time synchronous PsyNet experiments | PsyNetSkills</title>
+    <link rel="stylesheet" href="/PsyNetSkills/pr-preview/pr-163/css/chroma.css">
+    <link rel="stylesheet" href="/PsyNetSkills/pr-preview/pr-163/css/site.css">
+  </head>
+  <body>
+    <header class="site-header">
+      <nav class="primary-nav" aria-label="Main navigation">
+        <span class="nav-links">
+          <a
+            
+            href="/PsyNetSkills/pr-preview/pr-163/"
+          >PsyNetSkills</a>
+          <a
+            aria-current="page" class="current"
+            href="/PsyNetSkills/pr-preview/pr-163/skills/"
+          >Skills</a>
+          <a
+            
+            href="/PsyNetSkills/pr-preview/pr-163/challenges/"
+          >Challenges</a>
+        </span>
+        
+
+
+
+
+
+
+  
+  
+  
+  <span class="branch-context" aria-label="Draft branch cursor/similarity-discrimination-identification-cf81">
+    <span class="branch-context-label-wrap" tabindex="0" aria-describedby="branch-context-popover" data-branch-context-label>
+      <span class="branch-context-label">Draft:</span>
+      
+        <span class="branch-context-popover" id="branch-context-popover" role="tooltip" hidden>
+          This is a draft preview for the branch. Merge the pull request to release these changes on the main dashboard.
+        </span>
+      
+    </span>
+    <a class="branch-context-link" href="https://github.com/pmcharrison/PsyNetSkills/tree/cursor%2Fsimilarity-discrimination-identification-cf81" target="_blank" rel="noopener noreferrer">cursor/similarity-discrimination-identification-cf81</a>
+  </span>
+
+
+        <span class="nav-actions">
+          
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+  
+
+<a
+  class="workflow-status-link workflow-status-unknown workflow-freshness-current"
+  href="https://github.com/pmcharrison/PsyNetSkills/actions/workflows/dashboard-preview.yml?query=branch%3Acursor%2Fsimilarity-discrimination-identification-cf81"
+  target="_blank"
+  rel="noopener noreferrer"
+  aria-label="Checking dashboard-preview.yml workflow status for cursor/similarity-discrimination-identification-cf81."
+  aria-describedby="workflow-status-popover"
+  data-workflow-status
+  data-enabled="true"
+  data-owner="pmcharrison"
+  data-repo="PsyNetSkills"
+  data-workflow="dashboard-preview.yml"
+  data-branch="cursor/similarity-discrimination-identification-cf81"
+  data-rendered-sha="63ecbde8e1137954ab98942d093afdfc10a8f3a8"
+  data-mode="pr-preview"
+  data-poll-ms="90000"
+  data-hidden-poll-ms="300000"
+>
+  <span class="workflow-status-icon" aria-hidden="true">?</span>
+  <span class="workflow-freshness-badge" aria-hidden="true">!</span>
+  <span class="workflow-status-popover" id="workflow-status-popover" role="tooltip" hidden>
+    <span>Checking dashboard-preview.yml workflow status for cursor/similarity-discrimination-identification-cf81.</span>
+  </span>
+  <span class="visually-hidden">Workflow status</span>
+</a>
+
+          
+            <a class="github-nav-link" href="https://github.com/pmcharrison/PsyNetSkills" aria-label="PsyNetSkills on GitHub" target="_blank" rel="noopener noreferrer">
+              <svg class="github-nav-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+                <path d="M8 0C3.58 0 0 3.69 0 8.25c0 3.64 2.29 6.73 5.47 7.82.4.08.55-.18.55-.4v-1.4c-2.23.5-2.7-1.1-2.7-1.1-.36-.95-.89-1.2-.89-1.2-.73-.52.06-.51.06-.51.8.06 1.23.85 1.23.85.72 1.27 1.88.9 2.34.69.07-.53.28-.9.51-1.11-1.78-.21-3.64-.92-3.64-4.08 0-.9.31-1.64.82-2.22-.08-.21-.36-1.05.08-2.19 0 0 .67-.22 2.2.85A7.4 7.4 0 0 1 8 3.98c.68 0 1.36.09 2 .27 1.52-1.07 2.19-.85 2.19-.85.44 1.14.16 1.98.08 2.19.51.58.82 1.32.82 2.22 0 3.17-1.87 3.87-3.65 4.07.29.26.54.76.54 1.53v2.26c0 .22.15.48.55.4A8.2 8.2 0 0 0 16 8.25C16 3.69 12.42 0 8 0Z" />
+              </svg>
+            </a>
+          
+        </span>
+      </nav>
+    </header>
+    <main>
+      
+  
+  
+  
+  
+    
+  
+
+  <article class="prose">
+    
+    <div class="page-heading">
+      <h1>Implement real-time synchronous PsyNet experiments</h1>
+      
+
+
+  <p class="page-actions">
+    <a class="edit-source-link" href="https://github.com/pmcharrison/PsyNetSkills/edit/main/.cursor/skills/psynet-realtime-synchronous-experiments/SKILL.md">
+      Edit in GitHub
+    </a>
+  </p>
+
+
+    </div>
+    <p>Design and implement PsyNet websocket experiments with live synchronous interactions between multiple participants in the same trial.</p>
+    
+      <p>
+        <strong>Author:</strong>
+        <a href="https://github.com/pmcharrison">Peter Harrison</a>
+      </p>
+    
+    <p><strong>Source:</strong> <code>.cursor/skills/psynet-realtime-synchronous-experiments/SKILL.md</code></p>
+    <p>Use this skill when a PsyNet experiment needs websocket or other live
+interactions between multiple participants within the same trial.</p>
+<h2 id="required-reads">Required reads</h2>
+<ul>
+<li>Read <code>psynet-experiment-implementation/SKILL.md</code> for the general PsyNet
+implementation workflow, setup reminders, and validation expectations.</li>
+<li>Inspect the closest PsyNet demos and framework APIs for groups, trials,
+nodes, events, websocket handling, and participant routing before designing
+custom frontend behavior.</li>
+</ul>
+<h2 id="design-workflow">Design workflow</h2>
+<ol>
+<li>Model each live interaction as a server-owned session. Interactions within a
+trial belong to a session, and the server tracks each session state at every
+point in time.</li>
+<li>Treat the server as the authority for shared state. It should accept actions,
+reject out-of-turn or duplicate actions, advance turns, and broadcast the
+resulting state snapshot.</li>
+<li>Move experiment logic to the server side as much as is reasonable. This
+reduces out-of-sync client bugs and keeps page templates from accumulating
+complex JavaScript experiment logic.</li>
+<li>Make page reloads resumable from the current server session state.</li>
+<li>After every accepted update, send each participant only the current session
+state information they are allowed to see. The browser should render that
+filtered snapshot instead of reconstructing or tracking the session
+independently.</li>
+<li>Keep browser state as a rendering cache only. Clients may show pending UI
+feedback, timers, animations, or sounds, but they should not decide what the
+session state is.</li>
+<li>Integrate live sessions with PsyNet&rsquo;s node and trial system even when many
+interactions happen inside one trial. Load live-session input parameters from
+the trial&rsquo;s node definition.</li>
+<li>Record important trial outputs, such as the accepted event sequence, in the
+trial answer so <code>summarize_trials</code> can build subsequent nodes from the
+accumulated data. Not every event needs to be in the trial answer, but all
+information needed for downstream node construction should be there.</li>
+</ol>
+<h2 id="data-boundaries">Data boundaries</h2>
+<ul>
+<li>Keep websocket payloads scoped to what each participant is allowed to know. Do
+not send private information to the wrong client for local UI convenience, and
+do not rely on the browser to hide fields that should not have been sent.</li>
+<li>Separate three data concepts instead of mixing them in one table or payload:
+raw submitted events, reconstructed or checkpointed session state, and
+participant-specific outbound deliveries.</li>
+<li>Treat the raw event log as the private source of truth. It should contain the
+complete submitted action and any information needed to update the session
+state or analyze the data.</li>
+<li>Record outbound deliveries separately when it matters what each participant
+actually received. Delivery records should contain only the public payload sent
+to that participant, plus routing and status metadata.</li>
+</ul>
+<h2 id="validation">Validation</h2>
+<ul>
+<li>Test multi-participant flows with separate browser profiles or contexts so
+participants have independent identities and routing.</li>
+<li>Test out-of-turn, duplicate, reload/resume, and participant-specific visibility
+cases, not only the happy path.</li>
+<li>Verify that trial answers contain enough accepted-session data for
+<code>summarize_trials</code> or later analysis to reconstruct the relevant outcome.</li>
+</ul>
+
+  </article>
+
+    </main>
+    
+      
+
+
+
+  <section class="comments" aria-label="Comments">
+    <script
+      src="https://giscus.app/client.js"
+      data-repo="pmcharrison/PsyNetSkills"
+      data-repo-id="R_kgDOSw3rlA"
+      data-category="Announcements"
+      data-category-id="DIC_kwDOSw3rlM4C-xgp"
+      data-mapping="pathname"
+      data-strict="1"
+      data-reactions-enabled="1"
+      data-emit-metadata="0"
+      data-input-position="bottom"
+      data-theme="light"
+      data-lang="en"
+      crossorigin="anonymous"
+      async
+    ></script>
+  </section>
+
+
+    
+    <footer>
+    </footer>
+    <script src="/PsyNetSkills/pr-preview/pr-163/js/workflow-status.js" defer></script>
+  </body>
+</html>

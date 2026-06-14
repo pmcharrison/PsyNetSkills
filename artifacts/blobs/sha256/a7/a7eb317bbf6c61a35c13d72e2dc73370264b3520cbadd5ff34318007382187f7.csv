@@ -1,0 +1,13 @@
+participant_id,run_id,profile,profile_description,simulator,started_at,status
+initial-P11,initial,psynet_bot_rule,Rule-following PsyNet bot profile that selects the target answer.,psynet_bot,2026-06-11T14:19:20+00:00,approved
+initial-P12,initial,psynet_bot_rule,Rule-following PsyNet bot profile that selects the target answer.,psynet_bot,2026-06-11T14:19:20+00:00,approved
+initial-P13,initial,psynet_bot_rule,Rule-following PsyNet bot profile that selects the target answer.,psynet_bot,2026-06-11T14:19:20+00:00,approved
+initial-P21,initial,scripted_noisy,Scripted inattentive profile with stochastic guesses and long response times.,local_script,2026-06-11T14:19:20+00:00,approved
+initial-P22,initial,scripted_noisy,Scripted inattentive profile with stochastic guesses and long response times.,local_script,2026-06-11T14:19:20+00:00,approved
+initial-P23,initial,scripted_noisy,Scripted inattentive profile with stochastic guesses and long response times.,local_script,2026-06-11T14:19:20+00:00,approved
+initial-P31,initial,mock_llm_memory_limited,Prompt-style mock LLM profile with limited ordered memory.,local_script,2026-06-11T14:19:20+00:00,approved
+initial-P32,initial,mock_llm_memory_limited,Prompt-style mock LLM profile with limited ordered memory.,local_script,2026-06-11T14:19:20+00:00,approved
+initial-P33,initial,mock_llm_memory_limited,Prompt-style mock LLM profile with limited ordered memory.,local_script,2026-06-11T14:19:20+00:00,approved
+initial-P41,initial,semantic_bias,Scripted profile that overweights semantically related alternatives.,local_script,2026-06-11T14:19:20+00:00,approved
+initial-P42,initial,semantic_bias,Scripted profile that overweights semantically related alternatives.,local_script,2026-06-11T14:19:20+00:00,approved
+initial-P43,initial,semantic_bias,Scripted profile that overweights semantically related alternatives.,local_script,2026-06-11T14:19:20+00:00,approved

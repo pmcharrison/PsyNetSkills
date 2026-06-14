@@ -1,0 +1,11 @@
+{
+  "name": "participant-runner",
+  "private": true,
+  "description": "Playwright participant-flow runner for video evidence collection",
+  "scripts": {
+    "run": "node run.js"
+  },
+  "dependencies": {
+    "@playwright/test": "^1.53.0"
+  }
+}

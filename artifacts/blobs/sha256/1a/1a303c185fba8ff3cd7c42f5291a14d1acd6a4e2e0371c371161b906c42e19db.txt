@@ -1,0 +1,9 @@
+[Config]
+title = Primary color rating experiment
+description = Rate how pleasant red, green, and blue are on a 1 to 7 scale.
+contact_email_on_error = researcher@example.com
+organization_name = PsyNetSkills
+
+recruiter = generic
+currency = $
+wage_per_hour = 12.0

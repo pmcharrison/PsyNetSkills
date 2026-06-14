@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <base href="./">
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title> -  Dashboard</title>
+        
+          <link rel="stylesheet" href="./static/css/bootstrap.min.css" type="text/css">
+          <link rel="stylesheet" href="./static/css/dashboard.css" type="text/css">
+          
+    <style>
+        .dev-tools-section {
+            margin-top: 30px;
+            margin-bottom: 30px;
+        }
+    </style>
+
+        
+        
+        
+    
+        <style>
+          body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            margin: 1rem;
+          }
+          .container { max-width: none; }
+          #dashboard-navigation, #logout { display: none; }
+          #monitor-wrapper { display: flex; gap: 1rem; align-items: flex-start; }
+          #sidebar { flex: 0 0 18rem; }
+          #timeline-wrapper, #timeline, main { flex: 1 1 auto; min-width: 0; }
+          table { border-collapse: collapse; width: 100%; }
+          th, td {
+            border: 1px solid #d0d7de;
+            padding: 0.4rem;
+            text-align: left;
+            vertical-align: top;
+          }
+          button {
+            border: 1px solid #d0d7de;
+            border-radius: 0.35rem;
+            background: #f6f8fa;
+            padding: 0.3rem 0.6rem;
+          }
+        </style>
+    </head>
+    <body>
+      <div class="container">
+        
+          <nav id="dashboard-navigation">
+            <ul class="nav nav-tabs">
+              
+                
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Config</a>
+                  </li>
+                
+              
+                
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Deployments</a>
+                  </li>
+                
+              
+                
+                <li class="nav-item">
+                  <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Monitor</a>
+                  <div class="dropdown-menu">
+                    
+                      <a class="dropdown-item" href="#">Monitoring</a>
+                    
+                      <a class="dropdown-item" href="#">Timeline</a>
+                    
+                      <a class="dropdown-item" href="#">Resources</a>
+                    
+                      <a class="dropdown-item" href="#">Participants</a>
+                    
+                      <a class="dropdown-item" href="#">Logger</a>
+                    
+                      <a class="dropdown-item" href="#">Errors</a>
+                    
+                  </div>
+                </li>
+                
+              
+                
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Basic data</a>
+                  </li>
+                
+              
+                
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Export</a>
+                  </li>
+                
+              
+                
+                <li class="nav-item">
+                  <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Database</a>
+                  <div class="dropdown-menu">
+                    
+                      <a class="dropdown-item" href="#">ChainTrialMakerState</a>
+                    
+                      <a class="dropdown-item" href="#">ExperimentConfig</a>
+                    
+                      <a class="dropdown-item" href="#">ExperimentStatus</a>
+                    
+                      <a class="dropdown-item" href="#">MemoryTrial</a>
+                    
+                      <a class="dropdown-item" href="#">Participant</a>
+                    
+                      <a class="dropdown-item" href="#">Request</a>
+                    
+                      <a class="dropdown-item" href="#">Response</a>
+                    
+                      <a class="dropdown-item" href="#">StaticNetwork</a>
+                    
+                      <a class="dropdown-item" href="#">StaticNode</a>
+                    
+                  </div>
+                </li>
+                
+              
+                
+                  <li class="nav-item">
+                    <a class="nav-link active" href="#">Development</a>
+                  </li>
+                
+              
+            </ul>
+          </nav>
+          
+        
+        
+          
+          
+        
+        
+        
+    <h1>Development Mode Tools</h1>
+
+    <div class="dev-tools-section">
+        <p>
+            You can update your experiment code while the experiment is running;
+            if you refresh the browser, you should be able to see your changes.
+        </p>
+        <p>
+            <strong>Note:</strong>
+            Certain files (in particular, JS scripts) are cached by the browser,
+            and so might not be updated by an ordinary refresh.
+            In such cases you may need to force the browser to do a non-cached refresh.
+            The shortcut for this is typically Cmd-Shift-R (Mac) or Ctrl-Shift-R (Linux, Windows).
+        </p>
+    </div>
+
+    <div class="dev-tools-section">
+        <button id="new-participant" class="btn btn-primary" onclick="handleNewParticipant()">New participant</button>
+        
+            <button id="init-db" class="btn btn-danger" onclick="handleInitDB()">Reset database</button>
+        
+    </div>
+
+    <div class="dev-tools-section">
+        <h2>Messages</h2>
+
+        <pre id="messages"></pre>
+    </div>
+
+
+        <footer>
+          
+          
+        </footer>
+      </div>
+      
+      <script src="./static/scripts/jquery-3.7.1.min.js"></script>
+      <script src="./static/scripts/popper.min.js"></script>
+      <script src="./static/scripts/bootstrap.min.js"></script>
+      <script src="./static/scripts/clipboard.min.js"></script>
+      
+      
+    <script type="text/javascript">
+        function log(data) {
+            let messages = $("#messages");
+            let time = new Date().toLocaleTimeString();
+            let text = JSON.stringify(data, null, 4)
+            messages.append("\n" + time + " - " + text);
+        }
+
+        function handleNewParticipant() {
+            let url = "/ad?generate_tokens=true&recruiter=hotair&source=dashboard";
+            log("Recruiting new participant...");
+            // Use origin to avoid propagating any credentials in window.location.href.
+            let participantUrl = new URL(url, window.location.origin);
+            window.open(participantUrl.toString(), "_blank").focus();
+        }
+
+        function handleInitDB() {
+            if (confirm("Are you sure you want to reset the database? All existing data will be lost.")) {
+                log("Initializing database reset...");
+                $.ajax({
+                    type: "POST",
+                    url: "/dashboard/init_db",
+                    success: log
+                });
+            }
+        }
+    </script>
+
+    </body>
+</html>

@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "psynet_version": "13.3.0a0",
+  "dallinger_version": "12.2.0",
+  "python_version": "3.13.13",
+  "platform": "Linux-6.12.58+-x86_64-with-glibc2.39",
+  "experiment_label": "Audio memory sequence",
+  "started_at": "2026-06-07T23:07:53",
+  "finished_at": "2026-06-07T23:08:00",
+  "options": {
+    "n_bots_sweep": [
+      1
+    ],
+    "duration_minutes": 0.1,
+    "stagger_interval_s": 0.1,
+    "time_factor": 0.0
+  },
+  "results": [
+    {
+      "n_bots": 1,
+      "duration_minutes": 0.1,
+      "actual_duration": 6.284290313720703,
+      "total_bots_started": 2,
+      "completed_during_test": 2,
+      "bots_succeeded": 2,
+      "bots_failed": 0,
+      "bots_incomplete": 0,
+      "total_requests": 30,
+      "requests_per_sec": 4.77380873612729,
+      "bot_errors": 0,
+      "avg_response_time": 0.07071127680052693,
+      "median_response_time": 0.09973761000219383,
+      "p95_response_time": 0.10942955410318973,
+      "p99_response_time": 0.11253246941349063,
+      "stddev_response_time": 0.03971776463260573,
+      "max_response_time": 0.1137514470028691,
+      "avg_bot_duration": 1.5728574991226196,
+      "avg_init_time": 1.2047582864761353,
+      "initialization_times": [
+        1.204725742340088,
+        1.2047908306121826
+      ],
+      "request_errors": 0,
+      "median_wait_page_time": 0.0,
+      "p95_wait_page_time": 0.0,
+      "max_wait_page_time": 0.0,
+      "n_wait_page_samples": 2,
+      "avg_succeeded_duration": 1.5229215621948242,
+      "avg_failed_duration": 1.622793436050415,
+      "avg_incomplete_duration": null,
+      "q_delay_p95": null,
+      "process_stats": [],
+      "min_trial_count": 4,
+      "median_trial_count": 4,
+      "max_trial_count": 4,
+      "n_succeeded_bots": 2,
+      "n_rq_workers": 1
+    }
+  ]
+}

@@ -1,0 +1,352 @@
+{% macro melody_select_control(config) %}
+<div class="grid-select-control">
+    <div class='pool-wrap'>
+        <div class='pool-grid' id='proposals-pool'>
+            {% for proposal in config.proposals_data %}
+            <div class='grid-item'
+                 data-proposal-id='{{ proposal.id }}'
+                 data-proposed-to='{{ proposal.proposed_to }}'
+                 data-adopted-by='{{ proposal.adopted_by }}'
+                 data-melody='{{ proposal.melody | tojson | safe }}'>
+
+                <div class='grid-shell'>
+                    <div class="melody-preview-label">Melody {{ proposal.label }}</div>
+                    <button type="button" class="play-proposal-btn">Play melody</button>
+                    <svg class="waveform" viewBox="0 0 144 56" preserveAspectRatio="none" aria-hidden="true">
+                        <line x1="0" y1="28" x2="144" y2="28" class="waveform-midline" />
+                        {% for sample in proposal.waveform %}
+                        <rect
+                            x="{{ loop.index0 * 4 }}"
+                            y="{{ 28 - (sample * 26) }}"
+                            width="2.75"
+                            height="{{ [2, sample * 52] | max }}"
+                            class="waveform-bar" />
+                        {% endfor %}
+                    </svg>
+                </div>
+
+                {% if config.display_popularity %}
+                <div class='copy-count'>
+                    <div class='ratio-circles'>
+                        {% if proposal.proposed_to > 0 %}
+                            {% for i in range(proposal.proposed_to) %}
+                                <span class='circle {{ "filled" if i < proposal.adopted_by else "empty" }}'></span>
+                            {% endfor %}
+                        {% else %}
+                            <!--<span class='new-badge'>NEW</span>-->
+                        {% endif %}
+                    </div>
+                    <div class='ratio-text'>
+                        {{ 'Never selected (New)' if proposal.proposed_to == 0 else 'Never selected in the last %s round(s)'|format(proposal.proposed_to) if proposal.adopted_by == 0 else 'Won %s time(s) in the last %s round(s)'|format(proposal.adopted_by, proposal.proposed_to) }}
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if config.display_popularity %}
+                <div class='custom-tooltip'>
+                    This item has been proposed to {{ proposal.proposed_to }} participant(s) before you, and selected by {{ proposal.adopted_by }}
+                </div>
+                {% else %}
+                <div class='custom-tooltip'>
+                    Click on the item to select it
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <input type="hidden" id="selected-proposal" value="">
+</div>
+
+<style>
+    .grid-select-control {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 2px 10px;
+    }
+
+    .pool-wrap {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .pool-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        gap: 15px;
+        width: 100%;
+        padding: 10px;
+    }
+
+    .grid-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        padding: 10px;
+        background: #f8f9fa;
+        border: 2px solid #dee2e6;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        position: relative;
+    }
+
+    .grid-item:hover {
+        background: #e9ecef;
+        border-color: #adb5bd;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .grid-item.selected {
+        background: #d4edda;
+        border-color: #28a745;
+        border-width: 3px;
+    }
+
+    .copy-count {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        font-size: 13px;
+        font-weight: 600;
+        color: #495057;
+        background: #fff;
+        padding: 4px 4px;
+        border-radius: 12px;
+        border: 1px solid #dee2e6;
+        text-align: center;
+        width: fit-content;
+    }
+
+    .ratio-circles {
+        display: flex;
+        gap: 2px;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .circle {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        border: 2px solid #495057;
+        display: inline-block;
+    }
+
+    .circle.filled {
+        background-color: #28a745;
+        border-color: #28a745;
+    }
+
+    .circle.empty {
+        background-color: transparent;
+        border-color: #adb5bd;
+    }
+
+    .new-badge {
+        font-size: 11px;
+        font-weight: 700;
+        color: #007bff;
+        padding: 2px 6px;
+        background: #e7f3ff;
+        border-radius: 4px;
+    }
+
+    .ratio-text {
+        font-size: 11px;
+        line-height: 1.2;
+    }
+
+    .grid-shell {
+        transition: filter 150ms ease, opacity 150ms ease;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .melody-preview-label {
+        font-size: 13px;
+        font-weight: 700;
+        color: #495057;
+        text-align: center;
+    }
+
+    .play-proposal-btn {
+        border: 0;
+        border-radius: 6px;
+        padding: 5px 8px;
+        background: #007bff;
+        color: #fff;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+    .waveform {
+        width: 140px;
+        height: 60px;
+        background: #fff;
+        border: 1px solid #dee2e6;
+        border-radius: 6px;
+        padding: 2px;
+    }
+
+    .waveform-bar {
+        fill: #007bff;
+        opacity: 0.9;
+    }
+
+    .waveform-midline {
+        stroke: #adb5bd;
+        stroke-width: 0.6;
+    }
+
+    .custom-tooltip {
+        position: absolute;
+        bottom: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0, 0, 0, 0.9);
+        color: white;
+        padding: 8px 12px;
+        border-radius: 6px;
+        font-size: 12px;
+        white-space: nowrap;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.15s ease;
+        margin-bottom: 8px;
+        z-index: 1000;
+    }
+
+    .custom-tooltip::after {
+        content: '';
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        border: 6px solid transparent;
+        border-top-color: rgba(0, 0, 0, 0.9);
+    }
+
+    .grid-item:hover .custom-tooltip {
+        opacity: 1;
+    }
+
+    @media (max-width: 768px) {
+        .pool-grid {
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 10px;
+        }
+
+        .custom-tooltip {
+            white-space: normal;
+            max-width: 200px;
+            text-align: center;
+        }
+
+        .circle {
+            width: 8px;
+            height: 8px;
+        }
+    }
+</style>
+
+<script>
+(function(){
+    const pool = document.getElementById('proposals-pool');
+    const selectedInput = document.getElementById('selected-proposal');
+
+    if (!pool) return;
+
+    const choices = {{ config.choices | tojson | safe }};
+    const noteFrequencies = {{ config.note_frequencies | tojson | safe }};
+    const gridItems = Array.from(pool.querySelectorAll('.grid-item'));
+    const stepDuration = 0.22;
+    let selectedGrid = null;
+    let audioContext = null;
+
+    function ensureAudioContext() {
+        if (!audioContext) {
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        return audioContext;
+    }
+
+    function playMelody(sequence) {
+        const ctx = ensureAudioContext();
+        const start = ctx.currentTime + 0.04;
+        sequence.forEach((rowValues, rowIndex) => {
+            rowValues.forEach((active, stepIndex) => {
+                if (!active) return;
+                const activeInStep = Math.max(1, sequence.reduce((total, row) => total + (row[stepIndex] ? 1 : 0), 0));
+                const peakGain = 0.24 / activeInStep;
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = "sine";
+                osc.frequency.value = noteFrequencies[rowIndex];
+                gain.gain.setValueAtTime(0.0001, start + stepIndex * stepDuration);
+                gain.gain.exponentialRampToValueAtTime(peakGain, start + stepIndex * stepDuration + 0.015);
+                gain.gain.exponentialRampToValueAtTime(0.0001, start + (stepIndex + 0.85) * stepDuration);
+                osc.connect(gain).connect(ctx.destination);
+                osc.start(start + stepIndex * stepDuration);
+                osc.stop(start + (stepIndex + 0.9) * stepDuration);
+            });
+        });
+    }
+
+    function clearSelection() {
+        gridItems.forEach(item => item.classList.remove('selected'));
+        selectedGrid = null;
+        selectedInput.value = '';
+    }
+
+    function setSelection(gridEl) {
+        if (selectedGrid === gridEl) {
+            clearSelection();
+            return;
+        }
+
+        clearSelection();
+
+        selectedGrid = gridEl;
+        selectedGrid.classList.add('selected');
+        selectedInput.value = gridEl.dataset.proposalId;
+    }
+
+    pool.addEventListener('click', (e) => {
+        const playButton = e.target.closest('.play-proposal-btn');
+        const grid = e.target.closest('.grid-item');
+        if (grid && pool.contains(grid)) {
+            if (playButton) {
+                playMelody(JSON.parse(grid.dataset.melody));
+                e.stopPropagation();
+            } else {
+                setSelection(grid);
+            }
+        }
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') clearSelection();
+    });
+
+    psynet.stageResponse = function () {
+        const selectedId = selectedInput.value;
+        const id = (selectedId && choices.includes(parseInt(selectedId))) ? parseInt(selectedId) : null;
+        psynet.response.staged.rawAnswer = { adopt: id };
+    };
+
+    retrieveResponse = function() {
+        let selectedId = selectedInput.value;
+        const id = (selectedId && choices.includes(parseInt(selectedId))) ? parseInt(selectedId) : null;
+        return { rawAnswer: { adopt: id } };
+    }
+})();
+</script>
+{% endmacro %}

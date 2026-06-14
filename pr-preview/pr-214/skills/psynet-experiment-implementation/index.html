@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    
+    
+      <meta name="description" content="Page author: @pmcharrison">
+    
+    <title>Implement PsyNet experiments | PsyNetSkills</title>
+    <link rel="stylesheet" href="/PsyNetSkills/pr-preview/pr-214/css/chroma.css">
+    <link rel="stylesheet" href="/PsyNetSkills/pr-preview/pr-214/css/site.css">
+  </head>
+  <body>
+    <header class="site-header">
+      <nav class="primary-nav" aria-label="Main navigation">
+        <span class="nav-links">
+          <a
+            
+            href="/PsyNetSkills/pr-preview/pr-214/"
+          >PsyNetSkills</a>
+          <a
+            aria-current="page" class="current"
+            href="/PsyNetSkills/pr-preview/pr-214/skills/"
+          >Skills</a>
+          <a
+            
+            href="/PsyNetSkills/pr-preview/pr-214/challenges/"
+          >Challenges</a>
+          <a
+            
+            href="/PsyNetSkills/pr-preview/pr-214/attempts/"
+          >Attempts</a>
+          <a
+            
+            href="/PsyNetSkills/pr-preview/pr-214/actions/"
+          >Actions</a>
+        </span>
+        
+
+
+
+
+
+
+  
+  
+  
+  <span class="branch-context" aria-label="Draft branch cursor/refine-experiment-implementation-skill-9504">
+    <span class="branch-context-label-wrap" tabindex="0" aria-describedby="branch-context-popover" data-branch-context-label>
+      <span class="branch-context-label">Draft:</span>
+      
+        <span class="branch-context-popover" id="branch-context-popover" role="tooltip" hidden>
+          This is a draft preview for the branch. Merge the pull request to release these changes on the main dashboard.
+        </span>
+      
+    </span>
+    <a class="branch-context-link" href="https://github.com/pmcharrison/PsyNetSkills/tree/cursor%2Frefine-experiment-implementation-skill-9504" target="_blank" rel="noopener noreferrer">cursor/refine-experiment-implementation-skill-9504</a>
+  </span>
+
+
+        <span class="nav-actions">
+          
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+  
+
+<a
+  class="workflow-status-link workflow-status-unknown workflow-freshness-current"
+  href="https://github.com/pmcharrison/PsyNetSkills/actions/workflows/dashboard-preview.yml?query=branch%3Acursor%2Frefine-experiment-implementation-skill-9504"
+  target="_blank"
+  rel="noopener noreferrer"
+  aria-label="Checking dashboard-preview.yml workflow status for cursor/refine-experiment-implementation-skill-9504."
+  aria-describedby="workflow-status-popover"
+  data-workflow-status
+  data-enabled="true"
+  data-owner="pmcharrison"
+  data-repo="PsyNetSkills"
+  data-workflow="dashboard-preview.yml"
+  data-branch="cursor/refine-experiment-implementation-skill-9504"
+  data-rendered-sha="32ca4777e13037fdc525e258882d0d9c299e55e8"
+  data-mode="pr-preview"
+  data-poll-ms="90000"
+  data-hidden-poll-ms="300000"
+>
+  <span class="workflow-status-icon" aria-hidden="true">?</span>
+  <span class="workflow-freshness-badge" aria-hidden="true">!</span>
+  <span class="workflow-status-popover" id="workflow-status-popover" role="tooltip" hidden>
+    <span>Checking dashboard-preview.yml workflow status for cursor/refine-experiment-implementation-skill-9504.</span>
+  </span>
+  <span class="visually-hidden">Workflow status</span>
+</a>
+
+          
+            <a class="github-nav-link" href="https://github.com/pmcharrison/PsyNetSkills" aria-label="PsyNetSkills on GitHub" target="_blank" rel="noopener noreferrer">
+              <svg class="github-nav-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+                <path d="M8 0C3.58 0 0 3.69 0 8.25c0 3.64 2.29 6.73 5.47 7.82.4.08.55-.18.55-.4v-1.4c-2.23.5-2.7-1.1-2.7-1.1-.36-.95-.89-1.2-.89-1.2-.73-.52.06-.51.06-.51.8.06 1.23.85 1.23.85.72 1.27 1.88.9 2.34.69.07-.53.28-.9.51-1.11-1.78-.21-3.64-.92-3.64-4.08 0-.9.31-1.64.82-2.22-.08-.21-.36-1.05.08-2.19 0 0 .67-.22 2.2.85A7.4 7.4 0 0 1 8 3.98c.68 0 1.36.09 2 .27 1.52-1.07 2.19-.85 2.19-.85.44 1.14.16 1.98.08 2.19.51.58.82 1.32.82 2.22 0 3.17-1.87 3.87-3.65 4.07.29.26.54.76.54 1.53v2.26c0 .22.15.48.55.4A8.2 8.2 0 0 0 16 8.25C16 3.69 12.42 0 8 0Z" />
+              </svg>
+            </a>
+          
+        </span>
+      </nav>
+    </header>
+    <main>
+      
+  
+  
+  
+  
+    
+  
+
+  <article class="prose">
+    
+    <div class="page-heading">
+      <h1>Implement PsyNet experiments</h1>
+      
+
+
+  <p class="page-actions">
+    <a class="edit-source-link" href="https://github.com/pmcharrison/PsyNetSkills/edit/main/.cursor/skills/psynet-experiment-implementation/SKILL.md">
+      Edit in GitHub
+    </a>
+  </p>
+
+
+    </div>
+    <p>A structured, gated process for implementing PsyNet experiments. Confirms the purpose and user intention first, then plans Science, Method, and Implementation as separately reviewed sections of a human-readable PLAN.md backed by an authoritative PLAN_DETAILS.md, before any coding, simulations, analysis, and reporting.</p>
+    
+      <p>
+        <strong>Author:</strong>
+        <a href="https://github.com/pmcharrison">Peter Harrison</a>
+      </p>
+    
+    <p><strong>Source:</strong> <code>.cursor/skills/psynet-experiment-implementation/SKILL.md</code></p>
+    <p>Use this skill when implementing a PsyNet experiment from a natural-language
+specification or research idea.</p>
+<h2 id="modes">Modes</h2>
+<ul>
+<li><strong>Interactive mode</strong> (default): a user brings an idea in conversation. Run
+the staged planning gates below, pausing for explicit user confirmation at
+each gate.</li>
+<li><strong>Challenge mode</strong>: the experiment is a PsyNetSkills challenge attempt run
+under the <code>attempt-challenge</code> skill, which forbids asking for supplementary
+instructions at attempt time. Infer the purpose and high-stakes decisions
+from <code>INSTRUCTIONS.md</code>, record each inference and the options you considered
+in the <code>PLAN_DETAILS.md</code> decision log, draft all sections in one pass, and surface
+everything at the single plan-review pause required by <code>attempt-challenge</code>.</li>
+</ul>
+<h2 id="planning">Planning</h2>
+<p>Planning turns the original idea or specification into two companion files,
+filled <strong>one section at a time</strong> (Science, then Method, then Implementation).
+Save both at the attempt root in challenge mode (the dashboard renders
+<code>PLAN.md</code> at the attempt page&rsquo;s <code>#plan</code> anchor and <code>PLAN_DETAILS.md</code> as a
+collapsed section at the end of the page) or in the experiment project folder
+in interactive mode; if no folder exists yet, ask the user where to save
+them.</p>
+<ul>
+<li><code>PLAN.md</code>, from <code>assets/PLAN_TEMPLATE.md</code>: the human-readable plan that the
+dashboard renders. Flowing prose covering science, method, and
+implementation that a reviewer can absorb in one pass, ending with a
+pointer to the details file. No status tables, decision tables, or decision
+log here.</li>
+<li><code>PLAN_DETAILS.md</code>, from <code>assets/PLAN_DETAILS_TEMPLATE.md</code>: the
+<strong>authoritative specification</strong>. Section status table, per-stage decision
+tables, decision log, and the exact technical plan. Implementation must
+match this file exactly; readable prose in <code>PLAN.md</code> never licenses
+deviation from it. Keep the status table current at every step so any
+reader (or a resumed agent session) can see where the workflow stands.</li>
+</ul>
+<p>Core planning rules:</p>
+<ul>
+<li>Do not start drafting a section until the previous section is approved
+(interactive mode).</li>
+<li>Do not write any experiment code until all sections are approved.</li>
+<li><strong>Propose, don&rsquo;t decide.</strong> Whenever a decision could change the scientific
+meaning, participant experience, data interpretation, or PsyNet
+architecture, present 2-3 concrete options with trade-offs and a
+recommendation, then wait for the user&rsquo;s choice. Batch the options for a
+stage into one message; never present a menu for something you can safely
+default. Low-stakes gaps get a reasonable default, stated briefly and marked
+overridable.</li>
+<li>Write <code>PLAN.md</code> in plain academic prose, scaled to the purpose: a simple
+demo needs a few paragraphs, a formal experiment proportionally more. Keep
+checklist labels (Required/Optional) and workflow scaffolding out of it;
+the coverage checklists in this skill&rsquo;s <code>references/</code> are for you, not the
+reader.</li>
+<li>Record decisions in the <code>PLAN_DETAILS.md</code> decision log <strong>only where a real
+alternative existed or a nontrivial inference was made</strong>: what was chosen,
+over what alternatives, why, and who approved it (or that it was a
+default). Do not log choices forced by the instructions.</li>
+<li>Keep the two files in sync after every agreed revision. If they conflict,
+fix the conflict at review; <code>PLAN_DETAILS.md</code> wins in the meantime.</li>
+</ul>
+<h3 id="stage-0-purpose-intake">Stage 0: Purpose intake</h3>
+<p>Before drafting anything, confirm the purpose of the implementation, because
+it configures the rest of the workflow:</p>
+<table>
+	<thead>
+			<tr>
+					<th>Purpose</th>
+					<th>Science section</th>
+					<th>Method section</th>
+					<th>Literature step</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Simple implementation / technical demo</td>
+					<td>Skipped; recorded as out of scope in the plan</td>
+					<td>Light: defaults allowed, decision tables still required in PLAN_DETAILS.md</td>
+					<td>None</td>
+			</tr>
+			<tr>
+					<td>Replication / adaptation of an existing study</td>
+					<td>Transcribed from the source study, not invented</td>
+					<td>Fidelity-driven: deviations from the source are the negotiation points</td>
+					<td>Required: locate and verify the source</td>
+			</tr>
+			<tr>
+					<td>New science question</td>
+					<td>Full: propose 2-3 candidate framings for user choice</td>
+					<td>Full decision matrix with alternatives</td>
+					<td>Recommended: grounding and expected effect sizes</td>
+			</tr>
+	</tbody>
+</table>
+<p>In interactive mode, ask the user which purpose applies (with these options
+described) together with any blocking ambiguities in the idea itself. In
+challenge mode, infer the purpose from the challenge instructions and record
+the inference in the decision log. Write the purpose at the top of <code>PLAN.md</code>.</p>
+<h3 id="stage-1-science">Stage 1: Science</h3>
+<p>Skip for simple implementations (record &ldquo;out of scope&rdquo; with the reason so the
+plan is self-describing). Otherwise:</p>
+<ul>
+<li>Read <code>references/science-checklist.md</code> and work through it while drafting.</li>
+<li>For a new science question, propose 2-3 candidate framings (research
+question, construct, hypotheses, question archetype) with what each can and
+cannot claim; let the user pick or merge before writing the section.</li>
+<li>For a replication or adaptation, follow
+<code>references/literature-grounding.md</code> to locate and verify the source study
+and store materials under the experiment or challenge folder&rsquo;s
+<code>references/</code>. Transcribe the question, hypotheses, measures,
+and key procedure values from the source; the gate question becomes &ldquo;did we
+faithfully capture the source study?&rdquo;.</li>
+<li>Gate: present the drafted section; iterate until approved.</li>
+</ul>
+<h3 id="stage-2-method">Stage 2: Method</h3>
+<p>This section should read like the Methods section of a paper (Design,
+Participants, Materials, Procedure, Analysis), in prose.</p>
+<ul>
+<li>Read <code>references/method-checklist.md</code> and work through its design-decision
+matrix. The matrix items (within vs. between participants, static trials
+vs. chain/network, synchronous structure, AI involvement, prescreening,
+sample size, analysis plan) must never be skipped or silently defaulted.</li>
+<li>Delegate specialised decisions to their owner skills:
+<code>simple-round-structure</code> for trial/chain classification,
+<code>psynet-synchronous-experiments</code> and
+<code>psynet-realtime-synchronous-experiments</code> for synchronous designs,
+<code>participant-filtering-and-prescreening</code> for prescreens,
+<code>turn-pure-experiment-to-ai-hybrid</code> and <code>verify-ai-model-usability</code> for AI
+or hybrid participation.</li>
+<li>Treat the analysis plan as locked once the section is approved: later
+deviations must be recorded in the decision log, never made silently.</li>
+<li>Gate: present the drafted section; iterate until approved.</li>
+</ul>
+<h3 id="stage-3-implementation-plan">Stage 3: Implementation plan</h3>
+<p>This section is technical; bullets, file paths, and PsyNet class names are
+appropriate.</p>
+<ul>
+<li>Read <code>references/implementation-checklist.md</code> and
+<code>references/experiment-patterns.md</code>.</li>
+<li>Identify the closest PsyNet demo, the experiment architecture, the timeline
+shape, the stimulus pipeline, the data schema, and the local testing and
+evidence plan. Do not write experiment code at this stage.</li>
+<li>Gate: present the drafted section; iterate until approved.</li>
+</ul>
+<h3 id="developing-the-experiment">Developing the experiment</h3>
+<p>Use the <code>develop-experiment-code</code> skill to implement the experiment.</p>
+<h3 id="run-simulations">Run simulations</h3>
+<p>Use <code>psynet simulate</code> to simulate participants and produce an example dataset.
+This dataset should contain a decent number of participants representative of
+a real study.</p>
+<h3 id="develop-analysis-scripts">Develop analysis scripts</h3>
+<p>Write scripts to analyze the generated data. Use Jupyter notebooks for this.
+These notebooks should include inferential statistics and plots, designed to
+address relevant research questions. Follow the analysis plan approved in the
+Method section; if the implementation is inspired by a published paper,
+replicate the analyses reported in the paper as closely as possible. Log any
+deviation from the approved analysis plan in the <code>PLAN_DETAILS.md</code> decision
+log.</p>
+<h3 id="review">Review</h3>
+<p>Review the outcomes of the previous steps and identify any serious issues that
+need to be addressed. Use <code>references/validation.md</code> for functional and
+performance checks. Return to previous steps if necessary.</p>
+<h3 id="final-report">Final report</h3>
+<p>Compile a final report of the experiment (REPORT.md), summarizing the process
+taken and any findings that arose.</p>
+<h2 id="common-failures">Common failures</h2>
+<ul>
+<li>Do not decide unilaterally whether the science section is needed; that is
+what the purpose intake is for.</li>
+<li>Do not assume &ldquo;chain&rdquo; means one trial per participant; confirm whether the
+unit of contribution is a participant, trial, chain node, or repeated
+session.</li>
+<li>Do not let hidden AI memory become part of the experimental treatment unless
+it is explicitly planned, logged, and scientifically justified.</li>
+<li>Do not skip lineage decisions in iterative tasks: the plan must state which
+prior versions are visible, selectable, inherited, and exported.</li>
+<li>Do not leave AI failure behavior vague; participants need a planned path for
+model timeouts, invalid output, or render failures.</li>
+<li>Do not copy the agent-facing checklist labels into the plan files; the
+document the user reviews should be plain prose.</li>
+<li>Do not let workflow scaffolding (status tables, decision tables, decision
+logs) leak into PLAN.md; it belongs in PLAN_DETAILS.md. Conversely, do not
+let readable prose in PLAN.md drift from the binding specification in
+PLAN_DETAILS.md.</li>
+</ul>
+
+  </article>
+
+    </main>
+    
+      
+
+
+
+  <section class="comments" aria-label="Comments">
+    <script
+      src="https://giscus.app/client.js"
+      data-repo="pmcharrison/PsyNetSkills"
+      data-repo-id="R_kgDOSw3rlA"
+      data-category="Announcements"
+      data-category-id="DIC_kwDOSw3rlM4C-xgp"
+      data-mapping="pathname"
+      data-strict="1"
+      data-reactions-enabled="1"
+      data-emit-metadata="0"
+      data-input-position="bottom"
+      data-theme="light"
+      data-lang="en"
+      crossorigin="anonymous"
+      async
+    ></script>
+  </section>
+
+
+    
+    <footer>
+    </footer>
+    <script src="/PsyNetSkills/pr-preview/pr-214/js/workflow-status.js" defer></script>
+    <script src="/PsyNetSkills/pr-preview/pr-214/js/actions-copy.js" defer></script>
+    <script src="/PsyNetSkills/pr-preview/pr-214/js/screenshot-gallery.js" defer></script>
+    <script src="/PsyNetSkills/pr-preview/pr-214/js/plan-details.js" defer></script>
+  </body>
+</html>

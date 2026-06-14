@@ -1,0 +1,10 @@
+.dallinger
+__pycache__/
+.pytest_cache/
+*.pyc
+.deploy/
+node_modules/
+data/
+static/assets
+*.log
+source_code.zip

@@ -1,0 +1,300 @@
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: experiment.py
+msgid "Which apartment would you rent?"
+msgstr "Quel appartement loueriez-vous ?"
+
+#: experiment.py
+msgid "Apartment A"
+msgstr "Appartement A"
+
+#: experiment.py
+msgid "Close to the city center"
+msgstr "Proche du centre-ville"
+
+#: experiment.py
+msgid "Small balcony"
+msgstr "Petit balcon"
+
+#: experiment.py
+msgid "Higher monthly rent"
+msgstr "Loyer mensuel plus élevé"
+
+#: experiment.py
+msgid "Apartment B"
+msgstr "Appartement B"
+
+#: experiment.py
+msgid "Quiet neighborhood"
+msgstr "Quartier calme"
+
+#: experiment.py
+msgid "Spacious living room"
+msgstr "Salon spacieux"
+
+#: experiment.py
+msgid "Long commute to work"
+msgstr "Long trajet pour aller au travail"
+
+#: experiment.py
+msgid "Lower monthly rent"
+msgstr "Loyer mensuel plus bas"
+
+#: experiment.py
+msgid "Which job offer would you accept?"
+msgstr "Quelle offre d'emploi accepteriez-vous ?"
+
+#: experiment.py
+msgid "Job A"
+msgstr "Emploi A"
+
+#: experiment.py
+msgid "Higher salary"
+msgstr "Salaire plus élevé"
+
+#: experiment.py
+msgid "Frequent overtime"
+msgstr "Heures supplémentaires fréquentes"
+
+#: experiment.py
+msgid "Prestigious company"
+msgstr "Entreprise prestigieuse"
+
+#: experiment.py
+msgid "Few opportunities to learn new skills"
+msgstr "Peu d'occasions d'apprendre de nouvelles compétences"
+
+#: experiment.py
+msgid "Job B"
+msgstr "Emploi B"
+
+#: experiment.py
+msgid "Flexible working hours"
+msgstr "Horaires de travail flexibles"
+
+#: experiment.py
+msgid "Supportive colleagues"
+msgstr "Collègues bienveillants"
+
+#: experiment.py
+msgid "Which restaurant would you go to for dinner?"
+msgstr "Dans quel restaurant iriez-vous dîner ?"
+
+#: experiment.py
+msgid "Restaurant A"
+msgstr "Restaurant A"
+
+#: experiment.py
+msgid "Traditional local cuisine"
+msgstr "Cuisine locale traditionnelle"
+
+#: experiment.py
+msgid "Often fully booked"
+msgstr "Souvent complet"
+
+#: experiment.py
+msgid "Restaurant B"
+msgstr "Restaurant B"
+
+#: experiment.py
+msgid "International menu"
+msgstr "Menu international"
+
+#: experiment.py
+msgid "Quick service"
+msgstr "Service rapide"
+
+#: experiment.py
+msgid "Average reviews"
+msgstr "Avis moyens"
+
+#: experiment.py
+msgid "Which vacation would you book?"
+msgstr "Quelles vacances réserveriez-vous ?"
+
+#: experiment.py
+msgid "Vacation A"
+msgstr "Vacances A"
+
+#: experiment.py
+msgid "Beach resort"
+msgstr "Station balnéaire"
+
+#: experiment.py
+msgid "All meals included"
+msgstr "Tous les repas inclus"
+
+#: experiment.py
+msgid "Crowded in high season"
+msgstr "Bondé en haute saison"
+
+#: experiment.py
+msgid "Short flight"
+msgstr "Vol court"
+
+#: experiment.py
+msgid "Limited cultural activities"
+msgstr "Activités culturelles limitées"
+
+#: experiment.py
+msgid "Vacation B"
+msgstr "Vacances B"
+
+#: experiment.py
+msgid "Mountain hiking"
+msgstr "Randonnée en montagne"
+
+#: experiment.py
+msgid "Quiet surroundings"
+msgstr "Environnement calme"
+
+#: experiment.py
+msgid "Unpredictable weather"
+msgstr "Météo imprévisible"
+
+#: experiment.py
+msgid "Which phone would you buy?"
+msgstr "Quel téléphone achèteriez-vous ?"
+
+#: experiment.py
+msgid "Phone A"
+msgstr "Téléphone A"
+
+#: experiment.py
+msgid "Excellent camera"
+msgstr "Excellent appareil photo"
+
+#: experiment.py
+msgid "Expensive"
+msgstr "Cher"
+
+#: experiment.py
+msgid "Large screen"
+msgstr "Grand écran"
+
+#: experiment.py
+msgid "Phone B"
+msgstr "Téléphone B"
+
+#: experiment.py
+msgid "Affordable price"
+msgstr "Prix abordable"
+
+#: experiment.py
+msgid "Long battery life"
+msgstr "Longue autonomie de batterie"
+
+#: experiment.py
+msgid "Slower processor"
+msgstr "Processeur plus lent"
+
+#: experiment.py
+msgid "Compact size"
+msgstr "Taille compacte"
+
+#: experiment.py
+msgid "Water resistant"
+msgstr "Résistant à l'eau"
+
+#: experiment.py
+msgid "How would you spend your free Saturday?"
+msgstr "Comment passeriez-vous votre samedi libre ?"
+
+#: experiment.py
+msgid "Plan A"
+msgstr "Plan A"
+
+#: experiment.py
+msgid "Picnic in the park with friends"
+msgstr "Pique-nique au parc avec des amis"
+
+#: experiment.py
+msgid "Depends on good weather"
+msgstr "Dépend du beau temps"
+
+#: experiment.py
+msgid "Plan B"
+msgstr "Plan B"
+
+#: experiment.py
+msgid "Visit to a museum"
+msgstr "Visite d'un musée"
+
+#: experiment.py
+msgid "Entrance fee required"
+msgstr "Billet d'entrée requis"
+
+#: experiment.py
+msgid "Indoor activity"
+msgstr "Activité en intérieur"
+
+#: experiment.py
+msgid "New special exhibition"
+msgstr "Nouvelle exposition temporaire"
+
+#: experiment.py
+msgid "On each trial you will see two options side by side."
+msgstr "À chaque essai, vous verrez deux options côte à côte."
+
+#: experiment.py
+msgid "Each option is described by a list of features."
+msgstr "Chaque option est décrite par une liste de caractéristiques."
+
+#: experiment.py
+msgid "Read the features of both options carefully."
+msgstr "Lisez attentivement les caractéristiques des deux options."
+
+#: experiment.py
+msgid "Then click the button of the option you would choose."
+msgstr "Cliquez ensuite sur le bouton de l'option que vous choisiriez."
+
+#: experiment.py
+msgid ""
+"There are no right or wrong answers; we are interested in your personal "
+"preferences."
+msgstr ""
+"Il n'y a pas de bonnes ou de mauvaises réponses ; nous nous intéressons à "
+"vos préférences personnelles."
+
+#: experiment.py
+msgid "Welcome!"
+msgstr "Bienvenue !"
+
+#: experiment.py
+msgid "Thank you for joining this study on decision making."
+msgstr "Merci de participer à cette étude sur la prise de décision."
+
+#: experiment.py
+msgid "Press 'Next' to continue."
+msgstr "Appuyez sur « Suivant » pour continuer."
+
+#: experiment.py
+msgid "Instructions"
+msgstr "Instructions"
+
+#: experiment.py
+msgid "Press 'Next' to start the experiment."
+msgstr "Appuyez sur « Suivant » pour commencer l'expérience."
+
+#: experiment.py
+msgid "Thank you!"
+msgstr "Merci !"
+
+#: experiment.py
+msgid "You have completed all the choices."
+msgstr "Vous avez terminé tous les choix."
+
+#: experiment.py
+msgid "Your responses have been recorded."
+msgstr "Vos réponses ont été enregistrées."
+
+#: experiment.py
+msgid "Instructions (click to expand)"
+msgstr "Instructions (cliquez pour développer)"

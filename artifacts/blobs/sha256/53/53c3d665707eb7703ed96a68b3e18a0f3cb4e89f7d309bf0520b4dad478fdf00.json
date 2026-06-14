@@ -1,0 +1,24 @@
+{
+  "selected_lengths": [
+    10,
+    15,
+    20,
+    20,
+    20,
+    20,
+    20,
+    20,
+    20,
+    20
+  ],
+  "captions": {
+    "01_ad_page.png": "Debug recruiter ad page.",
+    "02_consent.png": "Consent handoff page.",
+    "03_instructions.png": "Digit-memory task instructions.",
+    "04_trial_1_target.png": "First adaptive target display.",
+    "05_recall_validation.png": "Recall page after validation check.",
+    "06_recall_response.png": "Recall response page with exact target entry.",
+    "13_trial_10_target.png": "Final target display after adaptive updates.",
+    "07_completion.png": "Completion or recruiter exit state."
+  }
+}

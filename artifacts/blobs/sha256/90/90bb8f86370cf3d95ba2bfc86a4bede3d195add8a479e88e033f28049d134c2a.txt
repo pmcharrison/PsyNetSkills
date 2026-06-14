@@ -1,0 +1,9 @@
+[Config]
+title = Prisoner's Dilemma experiment (Chrome browser, 3 minutes to complete)
+description = This experiment asks you to play a repeated Prisoner's Dilemma game against a simulated partner. Please use a Chrome browser in incognito mode.
+contact_email_on_error = XXX@gmail.com
+organization_name = XXX
+
+recruiter = generic
+currency = $
+wage_per_hour = 12.0

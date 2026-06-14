@@ -1,0 +1,105 @@
+{% macro sequence_recall(params) %}
+    <style>
+        .sequence-recall-panel {
+            max-width: 640px;
+            margin: 0 auto 1.5rem auto;
+            text-align: center;
+        }
+
+        .sequence-recall-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            justify-content: center;
+            margin: 1rem 0;
+        }
+
+        .sequence-recall-button {
+            min-width: 120px;
+        }
+
+        .sequence-recall-response {
+            min-height: 2rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+    </style>
+
+    <div class="sequence-recall-panel">
+        <p>
+            Enter {{ params.target_length }} tones in order.
+        </p>
+
+        <div class="sequence-recall-buttons">
+            {% for choice in params.choices %}
+                <button
+                    type="button"
+                    class="btn btn-primary response sequence-recall-button"
+                    data-choice="{{ choice }}"
+                    disabled="true"
+                    onclick="sequenceRecallAdd('{{ choice }}')"
+                >
+                    {{ params.labels[loop.index0] }}
+                </button>
+            {% endfor %}
+            <button
+                type="button"
+                class="btn btn-secondary response"
+                disabled="true"
+                onclick="sequenceRecallReset()"
+            >
+                Reset
+            </button>
+        </div>
+
+        <p class="sequence-recall-response" id="sequence-recall-response">
+            No tones entered yet.
+        </p>
+    </div>
+
+    <script>
+        const sequenceRecallLabels = JSON.parse(`{{ params.labels | tojson }}`);
+        const sequenceRecallChoices = JSON.parse(`{{ params.choices | tojson }}`);
+        const sequenceRecallTargetLength = {{ params.target_length }};
+        let sequenceRecallResponse = [];
+
+        function sequenceRecallLabel(choice) {
+            const index = sequenceRecallChoices.indexOf(choice);
+            return sequenceRecallLabels[index];
+        }
+
+        function sequenceRecallRender() {
+            const display = document.getElementById("sequence-recall-response");
+            if (sequenceRecallResponse.length === 0) {
+                display.innerText = "No tones entered yet.";
+            } else {
+                display.innerText = sequenceRecallResponse.map(sequenceRecallLabel).join(" → ");
+            }
+        }
+
+        function sequenceRecallStage() {
+            psynet.response.staged.rawAnswer = sequenceRecallResponse.slice();
+        }
+
+        function sequenceRecallAdd(choice) {
+            if (sequenceRecallResponse.length >= sequenceRecallTargetLength) {
+                psynet.alert("You have already entered the required number of tones. Use Reset to change your response.");
+                return;
+            }
+
+            sequenceRecallResponse.push(choice);
+            sequenceRecallStage();
+            sequenceRecallRender();
+        }
+
+        function sequenceRecallReset() {
+            sequenceRecallResponse = [];
+            sequenceRecallStage();
+            sequenceRecallRender();
+        }
+
+        psynet.stageResponse = sequenceRecallStage;
+        sequenceRecallStage();
+        sequenceRecallRender();
+    </script>
+{% endmacro %}

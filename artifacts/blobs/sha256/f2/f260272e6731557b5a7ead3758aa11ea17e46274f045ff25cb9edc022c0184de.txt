@@ -1,0 +1,9 @@
+[Config]
+title = Primary color rating (Chrome browser, 1 minute to complete)
+description = This short local PsyNet task asks participants to rate red, green, and blue for pleasantness.
+contact_email_on_error = local-testing@example.com
+organization_name = PsyNetSkills
+
+recruiter = generic
+currency = $
+wage_per_hour = 12.0

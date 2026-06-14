@@ -1,0 +1,19 @@
+{
+  "participant_count": 3,
+  "trial_count": 18,
+  "conditions": {
+    "ordinary": {
+      "n_trials": 9,
+      "mean_curiosity_rating": 3.667,
+      "min_curiosity_rating": 3.0,
+      "max_curiosity_rating": 4.0
+    },
+    "surprising": {
+      "n_trials": 9,
+      "mean_curiosity_rating": 6.667,
+      "min_curiosity_rating": 6.0,
+      "max_curiosity_rating": 7.0
+    }
+  },
+  "source": "../../evidence/data.zip"
+}

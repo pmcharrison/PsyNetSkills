@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="en">
+  <head>
+	<meta name="generator" content="Hugo 0.162.1">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    
+    
+    <title>PsyNetSkills</title>
+    <link rel="stylesheet" href="/PsyNetSkills/pr-preview/pr-240/css/chroma.css">
+    <link rel="stylesheet" href="/PsyNetSkills/pr-preview/pr-240/css/site.css">
+  </head>
+  <body>
+    <header class="site-header">
+      <nav class="primary-nav" aria-label="Main navigation">
+        <span class="nav-links">
+          <a
+            aria-current="page" class="current"
+            href="/PsyNetSkills/pr-preview/pr-240/"
+          >PsyNetSkills</a>
+          <a
+            
+            href="/PsyNetSkills/pr-preview/pr-240/skills/"
+          >Skills</a>
+          <a
+            
+            href="/PsyNetSkills/pr-preview/pr-240/challenges/"
+          >Challenges</a>
+          <a
+            
+            href="/PsyNetSkills/pr-preview/pr-240/attempts/"
+          >Attempts</a>
+          <a
+            
+            href="/PsyNetSkills/pr-preview/pr-240/actions/"
+          >Actions</a>
+        </span>
+        
+
+
+
+
+
+
+  
+  
+  
+  <span class="branch-context" aria-label="Draft branch cursor/setup-dev-environment-cbdd">
+    <span class="branch-context-label-wrap" tabindex="0" aria-describedby="branch-context-popover" data-branch-context-label>
+      <span class="branch-context-label">Draft:</span>
+      
+        <span class="branch-context-popover" id="branch-context-popover" role="tooltip" hidden>
+          This is a draft preview for the branch. Merge the pull request to release these changes on the main dashboard.
+        </span>
+      
+    </span>
+    <a class="branch-context-link" href="https://github.com/pmcharrison/PsyNetSkills/tree/cursor%2Fsetup-dev-environment-cbdd" target="_blank" rel="noopener noreferrer">cursor/setup-dev-environment-cbdd</a>
+  </span>
+
+
+        <span class="nav-actions">
+          
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+  
+
+<a
+  class="workflow-status-link workflow-status-unknown workflow-freshness-current"
+  href="https://github.com/pmcharrison/PsyNetSkills/actions/workflows/dashboard-preview.yml?query=branch%3Acursor%2Fsetup-dev-environment-cbdd"
+  target="_blank"
+  rel="noopener noreferrer"
+  aria-label="Checking dashboard-preview.yml workflow status for cursor/setup-dev-environment-cbdd."
+  aria-describedby="workflow-status-popover"
+  data-workflow-status
+  data-enabled="true"
+  data-owner="pmcharrison"
+  data-repo="PsyNetSkills"
+  data-workflow="dashboard-preview.yml"
+  data-branch="cursor/setup-dev-environment-cbdd"
+  data-rendered-sha="26c206177b59e72247930bb093691dd38453c66b"
+  data-mode="pr-preview"
+  data-poll-ms="90000"
+  data-hidden-poll-ms="300000"
+>
+  <span class="workflow-status-icon" aria-hidden="true">?</span>
+  <span class="workflow-freshness-badge" aria-hidden="true">!</span>
+  <span class="workflow-status-popover" id="workflow-status-popover" role="tooltip" hidden>
+    <span>Checking dashboard-preview.yml workflow status for cursor/setup-dev-environment-cbdd.</span>
+  </span>
+  <span class="visually-hidden">Workflow status</span>
+</a>
+
+          
+            <a class="github-nav-link" href="https://github.com/pmcharrison/PsyNetSkills" aria-label="PsyNetSkills on GitHub" target="_blank" rel="noopener noreferrer">
+              <svg class="github-nav-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+                <path d="M8 0C3.58 0 0 3.69 0 8.25c0 3.64 2.29 6.73 5.47 7.82.4.08.55-.18.55-.4v-1.4c-2.23.5-2.7-1.1-2.7-1.1-.36-.95-.89-1.2-.89-1.2-.73-.52.06-.51.06-.51.8.06 1.23.85 1.23.85.72 1.27 1.88.9 2.34.69.07-.53.28-.9.51-1.11-1.78-.21-3.64-.92-3.64-4.08 0-.9.31-1.64.82-2.22-.08-.21-.36-1.05.08-2.19 0 0 .67-.22 2.2.85A7.4 7.4 0 0 1 8 3.98c.68 0 1.36.09 2 .27 1.52-1.07 2.19-.85 2.19-.85.44 1.14.16 1.98.08 2.19.51.58.82 1.32.82 2.22 0 3.17-1.87 3.87-3.65 4.07.29.26.54.76.54 1.53v2.26c0 .22.15.48.55.4A8.2 8.2 0 0 0 16 8.25C16 3.69 12.42 0 8 0Z" />
+              </svg>
+            </a>
+          
+        </span>
+      </nav>
+    </header>
+    <main>
+      
+  <p>The repository is maintained by Peter Harrison (<a href="mailto:pmch2@cam.ac.uk">pmch2@cam.ac.uk</a>),
+feel free to ask him questions by email or on Slack.</p>
+<p>The PsyNetSkills repository represents an ongoing initiative to make
+AI agents better at building <a href="https://gitlab.com/PsyNetDev/PsyNet">PsyNet</a> experiments.
+The repository contains an expanding collection of
+<a href="https://pmcharrison.github.io/PsyNetSkills/skills/">agent skills</a>,
+<a href="https://pmcharrison.github.io/PsyNetSkills/challenges/">challenges</a> for testing those skills,
+and records of past challenge attempts, all exposed through a <a href="https://pmcharrison.github.io/PsyNetSkills/">live dashboard</a>.</p>
+<p>We encourage users to contribute to these resources by implementing and testing challenges
+that reflect their own research areas. This will help the generalizability of future AI agents.</p>
+<p>We propose the following workflow:</p>
+<ol>
+<li>Write or choose a challenge that represents a real PsyNet experiment task.</li>
+<li>Instruct an agent to attempt this challenge.</li>
+<li>Review the results and identify any weaknesses in the implementation process.</li>
+<li>Propose corresponding adjustments/additions to the agent skills and/or to PsyNet itself.</li>
+<li>Repeat from Step 1.</li>
+</ol>
+<h2 id="background">Background</h2>
+<h3 id="psynet-and-agent-skills">PsyNet and agent skills</h3>
+<p>PsyNet is a Python framework; you can see its source code on <a href="https://gitlab.com/PsyNetDev/PsyNet/">GitLab</a>.
+It is very flexible, and supports a diverse range of complex of experiment designs,
+such as adaptive psychophysics, iterated learning, network experiments, cultural
+evolution, and multimedia experiments.
+However, PsyNet has always had a pretty steep learning curve, as you have to learn about lots of new concepts
+before you are ready to implement experiments.</p>
+<p>Current frontier agents (e.g. ChatGPT 5.x, Claude Opus) are already pretty good at working with PsyNet.
+They automatically process PsyNet&rsquo;s documentation,
+demos, and source code to get a good feel for how experiment design works.
+However, the agents lack real-world experience using PsyNet, and consequently
+make various mistakes that need to be corrected before the experiment can be used for real.</p>
+<p>Agent skills provide an approach for guiding these agents to perform these tasks better.
+Each agent skill is, at its core, a simple markdown file that provides instructions about
+how to perform a given task, for example implementing a particular kind of experiment paradigm.
+In the first instance, we will focus our skill development on experiment implementation,
+but long-term we want our skills to cover experiment deployment too.</p>
+<h3 id="cursor-cloud-agents">Cursor Cloud Agents</h3>
+<p>Most programmers nowadays have at least some experience with agentic software development,
+where one delivers instructions to an agent via a chat-message interface, and the agent
+carries out software development tasks on behalf of the user.
+Cursor is a popular software solution for agentic software development, which integrates
+under-the-hood with prominent LLM providers like OpenAI and Anthropic.</p>
+<p>One way to use Cursor is as a traditional IDE, installed on one&rsquo;s local machine,
+and running code in a local environment.
+However, we strongly encourage collaborators to try Cursor Cloud Agents for this project.
+Cursor Cloud Agents can be spun up via Cursor&rsquo;s <a href="https://cursor.com/agents">web interface</a>,
+or (if you prefer) from a local IDE installation.
+Each Cloud Agent operates on a separate virtual machine that inherits a base image
+with relevant dependencies preinstalled (here: PsyNet, Postgresql, Redis, &hellip;).
+From a security perspective, this is really helpful, as one does not have to worry about the agent
+causing trouble on one&rsquo;s own computer; as a result, the agent can run for long periods without
+asking the user permission to perform system tasks.
+From a workflow perspective, the crucial further implication is that many Cloud Agents can be
+created in parallel, which allows users to work on many problems simultaneously.</p>
+<p>Cursor Cloud Agents are closely linked to Git workflows. When a Cloud Agent generates outputs,
+it puts those outputs in a pull request on GitHub; this pull request is updated whenever you
+request changes from the agent. This pull request can then undergo code review (where someone looks
+at the code to decide whether it&rsquo;s ok to merge), and then if everyone&rsquo;s happy it can be merged
+into the main codebase. If you are not familiar with these key terms (pull request, code review, merging),
+please do a bit of online research into Git basics before starting your own contributions.</p>
+<p>In this repository, the Cloud Agents are encouraged to create pull requests either to
+PsyNetSkills or to PsyNet. Pull requests to PsyNetSkills may contribute challenges or skills;
+they can also contribute artifacts produced by a given challenge attempt.
+Pull requests to PsyNet meanwhile contribute changes to the PsyNet source code itself.</p>
+<p>If you just want to make a small textual change to a given skill or challenge,
+you don&rsquo;t need to go through a Cloud Agent, however. You can just click on the &lsquo;Edit in GitHub&rsquo; button
+on the corresponding website page, and this will give you a simple interface for contributing
+changes to that file.</p>
+<p>We assume that collaborators on this project will be part of Nori Jacoby&rsquo;s
+Cursor team. This should enable you to create Cloud Agents for this repository
+via the online <a href="https://cursor.com/agents">agents page</a>. If you have problems with this, please let us know.</p>
+<p>An important question is which LLM you should configure the Cloud Agent to use.
+In general, my experience is that a lot of pain can be saved by defaulting to top-tier models.
+However, it is worthwhile also to see if we can get PsyNet performing well with cheaper agents,
+so please feel free to attempt challenges using such agents.
+Just be wary of making substantial code changes with cheap models. A good strategy could be to complete
+the challenge attempt with a cheap model, merge the results, then start a fresh cloud agent with a
+top-tier model to review and implement the action points proposed by the cheap model.</p>
+<h2 id="quickstart">Quickstart</h2>
+<p>The guide below is written assuming Cursor Cloud Agent use;
+more advanced users are welcome to customize these steps to a local workflow instead.</p>
+<h3 id="implementing-a-challenge">Implementing a challenge</h3>
+<p>Here &ldquo;implementing a challenge&rdquo; means writing a new challenge for future agents
+to attempt.</p>
+<p>In most cases, the idea here is that your challenge should correspond to a request
+you can imagine a real user wanting to ask the agent. In the early days of this project,
+we are focusing primarily on experiment implementation challenges.
+So, your challenge might contain a request to implement a particular kind of experiment,
+explaining the general order of events, the nature of the stimuli, the response options, and so on.</p>
+<p>It is also possible to specify some hidden evaluation criteria. These will not be shared with the
+agent, but they will be reviewed at evaluation time. This is a good place to describe certain
+pitfalls that you want to make sure the model doesn&rsquo;t hit.</p>
+<p>You can browse existing challenges on the
+<a href="https://pmcharrison.github.io/PsyNetSkills/challenges/">Challenges page</a>. The
+detailed challenge format is documented in the
+<a href="https://github.com/pmcharrison/PsyNetSkills/blob/main/docs/challenges.md">challenge specification</a>.</p>
+<h3 id="attempting-a-challenge">Attempting a challenge</h3>
+<p>Ask a Cursor Cloud Agent to attempt a specific challenge, for example:</p>
+<blockquote>
+<p>Attempt the <code>primary-color-rating</code> challenge.</p>
+</blockquote>
+<p>Do not provide extra implementation instructions at attempt time. The point is to
+test whether the current challenge and skills are sufficient. If the challenge is
+underspecified, update the challenge in a separate change and then start a fresh
+attempt.</p>
+<p>The agent will proceed to carry out the task, and produce various pieces of evidence
+for you to review (see
+<a href="https://github.com/pmcharrison/PsyNetSkills/blob/main/docs/attempts.md">attempt specification</a>).</p>
+<h3 id="evaluating-an-attempt">Evaluating an attempt</h3>
+<p>Once the agent has completed its attempt, it should prompt you to review the generated evidence
+via the dashboard (it should print you a link to visit).
+This evidence should include things like code, videos, performance tests, and so on.
+The agent will store your verdict in <code>EVALUATION.md</code>.</p>
+<h3 id="learning-notes">Learning notes</h3>
+<p>The agent should initialize a collection of learning notes in <code>LEARNINGS.md</code>
+when it creates the attempt, then add concrete action points as implementation
+and evaluation reveal ways to improve PsyNetSkills and PsyNet. These will need
+review from you, and possibly from other collaborators.
+Action points each have a &lsquo;status&rsquo; attribute, taking values from
+<code>considering</code>, <code>planned</code>, <code>in_progress</code>, <code>completed</code>, <code>dismissed</code>, or <code>superseded</code>.
+The agent can help you keep these up to date.</p>
+<h3 id="updating-skills">Updating skills</h3>
+<p>One possible action is to update skills in PsyNetSkills. The agent can help you draft new skills
+or edit existing ones, and these can be contributed as part of your attempt pull request.
+You should exercise manual review here; be warned that LLMs often generate overly verbose skills.</p>
+<p>You can browse existing skills on the
+<a href="https://pmcharrison.github.io/PsyNetSkills/skills/">Skills page</a>. The detailed
+skill format is documented in the
+<a href="https://github.com/pmcharrison/PsyNetSkills/blob/main/docs/skills.md">skill specification</a>.</p>
+<h3 id="updating-psynet">Updating PsyNet</h3>
+<p>Another possible action (possibly complementary to the skills contribution)
+is to contribute a change to PsyNet. The agent can again help you with this;
+it should take responsibility for managing the Git workflow as well as testing.</p>
+<h3 id="leaving-tasks-for-later">Leaving tasks for later</h3>
+<p>Note that you don&rsquo;t have to resolve all action points right away.
+Often you will want to leave some for others to review and discuss.
+That&rsquo;s totally fine! The <a href="https://pmcharrison.github.io/PsyNetSkills/challenges/">challenges dashboard</a>
+provides a handy visualization of unresolved actions so that they don&rsquo;t get forgotten about.</p>
+<h3 id="finishing-up">Finishing up</h3>
+<p>Once you&rsquo;ve finished your challenge attempt and corresponding skill contributions,
+you will want to merge your contribution to the main repository branch.
+First you will want to take your pull request out of Draft status.
+You then should review the changes made in the pull request, using either the Cursor diff interface
+or the GitHub changes interface. Try and be critical here, especially of changes to agent skills,
+as these could affect lots of people.
+During the June 2026 workshop we are thinking that we won&rsquo;t require external code review for pull requests,
+given the different time zones at play.
+However, this makes it doubly critical to be self-critical about one&rsquo;s code.
+A good strategy is to ask the agent to review your pull request before merging it.</p>
+<p>If someone has been working on similar parts of the codebase to you, you might encounter merge conflicts.
+Don&rsquo;t panic! Normally the agent can solve this for you if you ask nicely.</p>
+<p>Once you&rsquo;ve successfully merged, you can start the workflow again from the first step
+with a fresh Cloud Agent! While in theory you could reuse your pre-existing one,
+it&rsquo;s normally good to start a fresh one to keep the context clean.</p>
+<h2 id="local-workflow-advanced-users-only">Local workflow (advanced users only)</h2>
+<p>The workflow above can be straightforwardly customized for local development if needed.
+Here are some useful commands.</p>
+<p>To build the website locally:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">uv sync --group dev
+</span></span><span class="line"><span class="cl">uv run psynetsk-validate
+</span></span><span class="line"><span class="cl">uv run pytest
+</span></span><span class="line"><span class="cl">uv run psynetsk-export-dashboard-data
+</span></span><span class="line"><span class="cl">hugo --source dashboard --destination ../public --cleanDestinationDir
+</span></span></code></pre></div><p>For dashboard preview during local documentation work:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">uv run psynetsk-export-dashboard-data
+</span></span><span class="line"><span class="cl">hugo server --source dashboard --bind 0.0.0.0 --port <span class="m">1313</span>
+</span></span></code></pre></div><p>You should maintain a PsyNet checkout at <code>~/PsyNet</code>. Make sure you are always
+on an up-to-date version of the master branch:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nb">cd</span> ~/PsyNet
+</span></span><span class="line"><span class="cl">git checkout master
+</span></span><span class="line"><span class="cl">git pull --ff-only origin master
+</span></span></code></pre></div><p>Note that large attempt evidence such as videos and data exports should be committed with Git LFS.</p>
+<h2 id="further-resources">Further resources</h2>
+<ul>
+<li><a href="https://github.com/pmcharrison/PsyNetSkills/blob/main/docs/skills.md">Skill specification</a></li>
+<li><a href="https://github.com/pmcharrison/PsyNetSkills/blob/main/docs/challenges.md">Challenge specification</a></li>
+<li><a href="https://github.com/pmcharrison/PsyNetSkills/blob/main/docs/attempts.md">Attempt and evidence specification</a></li>
+<li><a href="https://github.com/pmcharrison/PsyNetSkills/blob/main/docs/authors.md">Author registry specification</a></li>
+<li><a href="https://github.com/pmcharrison/PsyNetSkills/blob/main/docs/architecture.md">PsyNetSkills repository architecture</a></li>
+<li><a href="https://github.com/pmcharrison/PsyNetSkills/blob/main/docs/dashboard.md">Dashboard build and preview notes</a></li>
+<li><a href="https://github.com/pmcharrison/PsyNetSkills/blob/main/docs/psynet-reference.md">PsyNet local reference</a></li>
+<li><a href="https://psynetdev.gitlab.io/PsyNet/">PsyNet documentation</a></li>
+<li><a href="https://gitlab.com/PsyNetDev/PsyNet">PsyNet source repository</a></li>
+</ul>
+
+
+    </main>
+    
+      
+
+
+
+  <section class="comments" aria-label="Comments">
+    <script
+      src="https://giscus.app/client.js"
+      data-repo="pmcharrison/PsyNetSkills"
+      data-repo-id="R_kgDOSw3rlA"
+      data-category="Announcements"
+      data-category-id="DIC_kwDOSw3rlM4C-xgp"
+      data-mapping="pathname"
+      data-strict="1"
+      data-reactions-enabled="1"
+      data-emit-metadata="0"
+      data-input-position="bottom"
+      data-theme="light"
+      data-lang="en"
+      crossorigin="anonymous"
+      async
+    ></script>
+  </section>
+
+
+    
+    <footer>
+    </footer>
+    <script src="/PsyNetSkills/pr-preview/pr-240/js/workflow-status.js" defer></script>
+    <script src="/PsyNetSkills/pr-preview/pr-240/js/actions-copy.js" defer></script>
+    <script src="/PsyNetSkills/pr-preview/pr-240/js/screenshot-gallery.js" defer></script>
+  </body>
+</html>

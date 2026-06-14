@@ -1,0 +1,10 @@
+env/
+.venv/
+.deploy/
+server.log
+static/assets
+source_code.zip
+data/
+.idea
+__pycache__
+*.DS_Store
