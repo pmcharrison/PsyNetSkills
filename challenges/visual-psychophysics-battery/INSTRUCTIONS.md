@@ -26,12 +26,6 @@ The stimulus set consisted of 30 simple colors, each presented as a colored circ
 5. Next a two-alternative response appears asking participants to indicate whether the stimuli were the same or different.
 6. Participants complete a set of 10 trials each.
 
-### Implementation details
-
-1. Use psychophysics skill for guidlines for implementation.
-2. Measure reaction time and store this information for every trial.
-3. Allow participants in the forced choice to respond by pressing a buttons on keyboard.
-
 ## Block 2: Simple Visual Similarity Experiment
 
 ### Background
@@ -40,7 +34,7 @@ The experiment investigates explicit similarity judgments between simple visual 
 
 ### Stimuli
 
-The stimulus set consists of colored circles with a fixed size. The implementation should allow additional dimensions, such as size, to be added later.
+Same as block 1.
 
 ### Procedure
 
@@ -54,13 +48,6 @@ All stimulus pairs should be presented. For each trial, the exact stimulus pair,
 
 Each participant completes 10 random trials.
 
-### Implementation details
-
-- Use psychophysics skills and other relevant skills available.
-- Measure reaction time and store this information in every trial.
-- Allow participants in the forced choice to respond by pressing a button on the keyboard.
-- Include an analysis script or notebook that summarizes similarity ratings as a heatmap, and reaction times as average over pairs of stimuli from exported or simulated data.
-
 ## Block 3: Simple Multi-Item Identification Experiment
 
 ### Background
@@ -69,7 +56,7 @@ The experiment investigates multi-item identification from briefly presented vis
 
 ### Stimuli
 
-The stimulus set consists of colored circles with a fixed size. The implementation should allow additional dimensions, such as size, to be added later. On each trial, a set of N stimuli is presented, where N can be 3, 4, or 5.
+Same as block 1.
 
 ### Procedure
 
@@ -91,7 +78,7 @@ For each trial, record the full stimulus set, item numbers, item positions, prob
 
 Each participant completes 10 random trials, sampled across set sizes N = 3, 4, and 5 and across probe conditions.
 
-### Implementation details
+## Implementation details
 
 Use psychophysics skills and other relevant skills available.
 
@@ -99,4 +86,4 @@ Measure reaction time and store this information in every trial.
 
 Allow participants to respond by pressing a button on the keyboard, while still enabling mouse clicks.
 
-Include an analysis script or notebook that summarizes identification accuracy, generalization choices, confusion probabilities across stimuli, and reaction times from exported or simulated data.
+Include an analysis script or jupyter notebook display that summarizes performance across the different conditions, as well as reaction times from exported or simulated data. Add a side-by-side visualization of the three empirical matrices (e.g. using plt.matshow) derived from each block based on simulated data (Block 1: count the number of times each pair of colors was labeled as same (normalized by the overall number of trials), Block 2: average similarity score per pair divided by 5 so that it varies between 0 and 1, and Block 3: number of times a stimulus was selected in response to a given probe (normalized by the total number of trials). Have the three subplots share the same color bar. In the simulation, you can use a simple probabilistic choice model where the similarity or confusion probabilities between two stimuli x and y is proportional to exp(-d(x,y)) where d is their hue distance on the color circle.
