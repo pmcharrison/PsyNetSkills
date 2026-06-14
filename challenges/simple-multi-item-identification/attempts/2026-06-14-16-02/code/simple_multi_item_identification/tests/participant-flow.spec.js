@@ -81,12 +81,8 @@ async function saveDashboardMonitor(page) {
         });
       }
       const enabled = await waitForEnabledResponse(page);
-      if (trialCount === 1) {
-        await page.keyboard.press("Digit1");
-      } else {
-        await enabled.first().click();
-      }
-      await page.waitForTimeout(250);
+      await enabled.first().click();
+      await page.waitForTimeout(2200);
     } else if ((await page.locator("#next-button:visible:not([disabled])").count()) > 0) {
       await page.locator("#next-button:visible:not([disabled])").click();
       await page.waitForTimeout(250);
