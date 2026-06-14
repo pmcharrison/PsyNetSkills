@@ -27,7 +27,7 @@ matching the psychophysics skill's guidance.
 
 *Actions:*
 
-- **PsyNetSkills:** The `psychophysics` skill recommends event-log reaction-time extraction but does not show a concrete recipe. Consider adding a short worked example (GraphicPrompt frame `activate_control_response` + `responseEnable`/`pushButtonClicked` event-log diff) to the psychophysics skill. Confidence: medium. Impact: medium. Status: considering.
+- **PsyNetSkills:** The `psychophysics` skill recommends event-log reaction-time extraction but does not show a concrete recipe. Consider adding a short worked example (GraphicPrompt frame `activate_control_response` + `responseEnable`/`pushButtonClicked` event-log diff) to the psychophysics skill. Confidence: medium. Impact: medium. Status: completed. Notes: Added a "Reaction time from the native event log" worked example (wiring + `format_answer` recipe + simulation note) to `.cursor/skills/psychophysics/SKILL.md` on this attempt branch (PR #241).
 
 ## Notebook tooling (matplotlib/jupyter/nbconvert) is not in the PsyNet venv
 
