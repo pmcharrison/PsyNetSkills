@@ -1,0 +1,24 @@
+{{ $file := .file }}
+{{ $previewMode := default "typed" .previewMode }}
+{{ with $file.content }}
+  {{ if and (eq $previewMode "typed") (eq $file.kind "md") }}
+    <div class="file-preview markdown-preview">
+      {{ replaceRE "(?s)^# [^\n]*\n+" "" . | markdownify }}
+    </div>
+  {{ else if and (eq $previewMode "typed") (eq $file.kind "py") }}
+    <div class="file-preview code-preview">
+      {{ highlight . "python" "" }}
+    </div>
+  {{ else }}
+    <pre class="file-preview"><code>{{ . }}</code></pre>
+  {{ end }}
+{{ else }}
+  <p class="file-preview binary-preview">
+    {{ if eq $file.published false }}
+      {{ $file.publication_note }}
+    {{ else }}
+      Preview is not available.
+      <a href="{{ $file.url | relURL }}">Open artifact</a>.
+    {{ end }}
+  </p>
+{{ end }}

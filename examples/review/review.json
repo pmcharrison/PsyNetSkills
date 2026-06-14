@@ -1,0 +1,124 @@
+{
+  "schema_version": "1.0",
+  "created_at": "2026-06-14T13:00:00Z",
+  "updated_at": "2026-06-14T13:00:00Z",
+  "experiment": {
+    "slug": "pitch-discrimination-demo",
+    "source_path": ".",
+    "entry_point": "experiment.py",
+    "git_commit": "0123456789abcdef",
+    "psynet_version": "12.0.0"
+  },
+  "implementation": {
+    "summary": "A PsyNet experiment that presents two tones and asks participants which tone is higher.",
+    "plan_path": "PLAN.md"
+  },
+  "environment": {
+    "os": "linux",
+    "python_version": "3.13",
+    "psynet_checkout": {
+      "path": "~/PsyNet",
+      "branch": "master",
+      "commit": "abcdef0123456789",
+      "dirty": false
+    },
+    "services": ["postgresql", "redis"]
+  },
+  "report": "REPORT.md",
+  "artifacts": [
+    {
+      "id": "participant_video",
+      "kind": "video",
+      "path": "artifacts/participant.mp4",
+      "title": "Participant walkthrough",
+      "description": "Shows instructions, representative trials, response submission, and completion.",
+      "required": true,
+      "status": "present",
+      "created_by": "agent",
+      "command": "node tests/participant-flow.spec.js",
+      "metadata": {
+        "duration_seconds": 92,
+        "width": 1280,
+        "height": 720
+      }
+    },
+    {
+      "id": "performance_result",
+      "kind": "performance",
+      "path": "artifacts/performance.json",
+      "title": "Performance test result",
+      "description": "Records concurrent bot completion and response latency.",
+      "required": true,
+      "status": "present",
+      "created_by": "cli",
+      "command": "psynet performance-test local --json-output review/artifacts/performance.json"
+    },
+    {
+      "id": "monitor_snapshot",
+      "kind": "monitor_snapshot",
+      "path": "artifacts/monitor.html",
+      "title": "Monitor snapshot",
+      "description": "Static snapshot of the PsyNet monitor after local validation.",
+      "required": true,
+      "status": "present",
+      "created_by": "cli"
+    },
+    {
+      "id": "simulation_export",
+      "kind": "data_export",
+      "path": "artifacts/simulated_data.zip",
+      "title": "Simulated data export",
+      "description": "Export produced by simulated participants for analysis review.",
+      "required": true,
+      "status": "present",
+      "created_by": "cli",
+      "command": "psynet simulate"
+    },
+    {
+      "id": "analysis_notebook",
+      "kind": "notebook",
+      "path": "analyses/analysis.ipynb",
+      "title": "Analysis notebook",
+      "description": "Executed notebook that reads the simulated export and summarizes the responses.",
+      "required": true,
+      "status": "present",
+      "created_by": "agent",
+      "command": "jupyter nbconvert --to notebook --execute --inplace review/analyses/analysis.ipynb"
+    },
+    {
+      "id": "review_report",
+      "kind": "report",
+      "path": "REPORT.md",
+      "title": "Review report",
+      "description": "Summary of implementation, validation, analysis, and remaining issues.",
+      "required": true,
+      "status": "present",
+      "created_by": "agent"
+    }
+  ],
+  "checks": [
+    {
+      "id": "manifest_valid",
+      "title": "Manifest validates against schema",
+      "status": "pass",
+      "command": "psynet-review validate"
+    },
+    {
+      "id": "local_test",
+      "title": "PsyNet local test",
+      "status": "pass",
+      "command": "psynet test local"
+    },
+    {
+      "id": "notebook_executed",
+      "title": "Analysis notebook executed",
+      "status": "pass",
+      "command": "jupyter nbconvert --to notebook --execute --inplace review/analyses/analysis.ipynb"
+    }
+  ],
+  "blockers": [],
+  "render": {
+    "site_path": "site",
+    "generator": "psynet-review"
+  }
+}
