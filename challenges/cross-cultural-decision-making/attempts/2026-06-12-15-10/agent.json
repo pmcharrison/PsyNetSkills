@@ -1,0 +1,25 @@
+{
+  "authors": [],
+  "agent": "Cursor Cloud Agent",
+  "client": "cursor",
+  "model": "GPT-5.5",
+  "started_at": "2026-06-12T15:10:00Z",
+  "ended_at": null,
+  "cursor_conversation_id": "bc-ea204d17-fe6b-4671-814b-7fa5e8e57fec",
+  "skills_commit": "5f3ede03ea470a981762c373f5bec840a443a586",
+  "psynet": {
+    "checkout_path": "~/PsyNet",
+    "branch": "master",
+    "commit": "d84382b300c4d4cc8a0b0648428152e0740ab7d2",
+    "version": "13.3.0a0",
+    "updated_from": "origin/master",
+    "updated_at": "2026-06-12T15:12:24Z",
+    "update_command": "git pull --ff-only origin master",
+    "dirty": false
+  },
+  "run_cost": null,
+  "notes": [
+    "Attempt paused for required human review of PLAN.md before experiment implementation.",
+    "Human author metadata is pending; fill authors with the appropriate GitHub key before marking the attempt complete."
+  ]
+}
