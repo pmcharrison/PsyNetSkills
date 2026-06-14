@@ -55,6 +55,6 @@ The code will be implemented as a self-contained experiment under this attempt's
    - Participant evidence: Playwright-driven screenshots and `evidence/participant.mp4`.
    - Simulation and analysis: `psynet simulate` export to `evidence/simulated_data.zip`, executable `evidence/analyses/analysis.ipynb`, and `REPORT.md`.
 
-## Open decisions for review
+## Decision log
 
-1. Should unsupported camera access immediately fail the trial, or allow progression while marking the trial as a recording failure? (Current plan: allow progression with explicit failure state to preserve participant flow and diagnostics.)
+1. Unsupported camera/media/upload failures will **not** hard-stop participant progress. The implementation will allow progression while recording an explicit failure state and diagnostic metadata. (Approved by user review.)
