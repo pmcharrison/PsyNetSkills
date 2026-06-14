@@ -1,5 +1,4 @@
 import json
-from pathlib import Path
 
 import pandas as pd
 from dominate import tags
@@ -13,14 +12,9 @@ from psynet.timeline import Timeline
 from psynet.trial.static import StaticNode, StaticTrial, StaticTrialMaker
 from psynet.utils import get_translator
 
+from trial_manifest import TRIAL_MANIFEST
+
 _ = get_translator(namespace="experiment")
-
-MANIFEST_PATH = Path(__file__).parent / "data" / "trials.json"
-
-
-def load_trial_manifest():
-    with MANIFEST_PATH.open(encoding="utf-8") as file:
-        return json.load(file)
 
 
 def get_feature_label(feature_id):
@@ -47,7 +41,7 @@ def get_feature_label(feature_id):
 def get_nodes():
     return [
         StaticNode(definition=trial_definition, block="main")
-        for trial_definition in load_trial_manifest()
+        for trial_definition in TRIAL_MANIFEST
     ]
 
 
@@ -176,8 +170,8 @@ trial_maker = StaticTrialMaker(
     id_="decision_choices",
     trial_class=ChoiceTrial,
     nodes=get_nodes,
-    expected_trials_per_participant=len(load_trial_manifest()),
-    max_trials_per_participant=len(load_trial_manifest()),
+    expected_trials_per_participant=len(TRIAL_MANIFEST),
+    max_trials_per_participant=len(TRIAL_MANIFEST),
     recruit_mode="n_participants",
     target_n_participants=1,
 )
@@ -203,7 +197,7 @@ class Exp(psynet.experiment.Experiment):
     def test_check_bot(self, bot: Bot, **kwargs):
         super().test_check_bot(bot, **kwargs)
         assert not bot.failed
-        assert len(bot.alive_trials) == len(load_trial_manifest())
+        assert len(bot.alive_trials) == len(TRIAL_MANIFEST)
         assert all(trial.complete for trial in bot.alive_trials)
         assert all(trial.finalized for trial in bot.alive_trials)
         assert all(trial.answer in {"option_a", "option_b"} for trial in bot.alive_trials)

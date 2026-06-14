@@ -13,6 +13,7 @@
 - T+00:36:00 [agent] Fixed standalone translation namespace and removed an unnecessary performance-check flag found by startup validation.
 - T+00:43:00 [agent] Installed missing `gettext` system package for `xgettext` and generated translation files.
 - T+00:48:00 [agent] Added complete non-fuzzy Hindi and French translations and verified `psynet translate hi fr`.
+- T+00:56:00 [agent] Fixed Dallinger packaging by moving the trial manifest from JSON into an importable Python module.
 
 <!-- Close active implementation segments with [agent-stop] when work pauses or completes. -->
 <!-- Tag path-changing human guidance as: [manual] [intervention] Description. -->

@@ -6,148 +6,148 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: experiment.py:28
+#: experiment.py:22
 msgid "Quality"
 msgstr ""
 
-#: experiment.py:29
+#: experiment.py:23
 msgid "Cost saving"
 msgstr ""
 
-#: experiment.py:30
+#: experiment.py:24
 msgid "Community benefit"
 msgstr ""
 
-#: experiment.py:31
+#: experiment.py:25
 msgid "Comfort"
 msgstr ""
 
-#: experiment.py:32
+#: experiment.py:26
 msgid "Environmental impact"
 msgstr ""
 
-#: experiment.py:33
+#: experiment.py:27
 msgid "Long-term value"
 msgstr ""
 
-#: experiment.py:34
+#: experiment.py:28
 msgid "Fit with local needs"
 msgstr ""
 
-#: experiment.py:35
+#: experiment.py:29
 msgid "Reliability"
 msgstr ""
 
-#: experiment.py:36
+#: experiment.py:30
 msgid "Flexibility"
 msgstr ""
 
-#: experiment.py:37
+#: experiment.py:31
 msgid "Family preference"
 msgstr ""
 
-#: experiment.py:38
+#: experiment.py:32
 msgid "Time saving"
 msgstr ""
 
-#: experiment.py:39
+#: experiment.py:33
 msgid "Safety"
 msgstr ""
 
-#: experiment.py:40
+#: experiment.py:34
 msgid "Social approval"
 msgstr ""
 
-#: experiment.py:41
+#: experiment.py:35
 msgid "Future opportunity"
 msgstr ""
 
-#: experiment.py:42
+#: experiment.py:36
 msgid "Low effort required"
 msgstr ""
 
-#: experiment.py:56
+#: experiment.py:50
 msgid "Instructions"
 msgstr ""
 
-#: experiment.py:59
+#: experiment.py:53
 msgid ""
 "On each trial you will see two options side by side. Each option has several"
 " features."
 msgstr ""
 
-#: experiment.py:64
+#: experiment.py:58
 msgid ""
 "Every feature has a value from 0 to 100 and a validity from 0 to 1. Higher "
 "validity means the feature is a more reliable cue."
 msgstr ""
 
-#: experiment.py:69
+#: experiment.py:63
 msgid ""
 "Please compare the two options carefully and choose the option you would "
 "prefer."
 msgstr ""
 
-#: experiment.py:74
+#: experiment.py:68
 msgid ""
 "There are no right or wrong answers. We are interested in your decision."
 msgstr ""
 
-#: experiment.py:83
+#: experiment.py:77
 msgid "Welcome"
 msgstr ""
 
-#: experiment.py:86
+#: experiment.py:80
 msgid "Thank you for taking part in this decision-making study."
 msgstr ""
 
-#: experiment.py:91
+#: experiment.py:85
 msgid "You will make a short series of choices between two described options."
 msgstr ""
 
-#: experiment.py:104
+#: experiment.py:98
 msgid "Feature"
 msgstr ""
 
-#: experiment.py:105
+#: experiment.py:99
 msgid "Value"
 msgstr ""
 
-#: experiment.py:106
+#: experiment.py:100
 msgid "Validity"
 msgstr ""
 
-#: experiment.py:126 experiment.py:127
+#: experiment.py:120 experiment.py:121
 #, python-brace-format
 msgid "Option {LETTER}"
 msgstr ""
 
-#: experiment.py:128
+#: experiment.py:122
 #, python-brace-format
 msgid "Trial {NUMBER}"
 msgstr ""
 
-#: experiment.py:134
+#: experiment.py:128
 msgid ""
 "Review the feature values and validities, then choose the option you would "
 "prefer."
 msgstr ""
 
-#: experiment.py:139
+#: experiment.py:133
 msgid ""
 "Full instructions: values range from 0 to 100, validities range from 0 to 1,"
 " and higher validity means a more reliable cue."
 msgstr ""
 
-#: experiment.py:161 experiment.py:162
+#: experiment.py:155 experiment.py:156
 #, python-brace-format
 msgid "Choose Option {LETTER}"
 msgstr ""
 
-#: experiment.py:196
+#: experiment.py:190
 msgid "Thank you"
 msgstr ""
 
-#: experiment.py:197
+#: experiment.py:191
 msgid "Thank you for completing the decision-making study."
 msgstr ""
