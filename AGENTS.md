@@ -75,7 +75,7 @@ before proceeding. Do not maintain a second editable copy of the skills.
 ### System dependencies (not managed by `uv sync`)
 
 - **uv** — Python env and package management (`~/.local/bin` should be on `PATH`).
-- **Hugo** — Dashboard build/preview (`hugo --source dashboard ...`). CI uses the latest extended Hugo release.
+- **Hugo** — Dashboard build/preview (`hugo --source dashboard ...`). Use the **extended** build, and match the version pinned in CI (`.github/workflows/validate.yml` / `pages.yml`, currently `0.162.1`). The dashboard templates use `hugo.Data`, so an older Hugo (e.g. 0.151) fails the build with `can't evaluate field Data in type interface {}`.
 - **gettext / xgettext** — Required by PsyNet translation extraction (`psynet
   translate`) for Python strings. On Debian/Ubuntu install the `gettext` system
   package.
