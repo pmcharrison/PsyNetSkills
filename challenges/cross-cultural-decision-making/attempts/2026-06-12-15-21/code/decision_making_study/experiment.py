@@ -13,9 +13,9 @@ from psynet.trial.static import StaticNode, StaticTrial, StaticTrialMaker
 from psynet.utils import get_translator
 
 if __package__:
-    from .trial_manifest import TRIAL_MANIFEST
+    from .trial_manifest import FEATURE_IDS, TRIAL_MANIFEST
 else:
-    from trial_manifest import TRIAL_MANIFEST
+    from trial_manifest import FEATURE_IDS, TRIAL_MANIFEST
 
 _ = get_translator(namespace="experiment")
 
@@ -194,6 +194,15 @@ class Exp(psynet.experiment.Experiment):
         assert all(trial.complete for trial in bot.alive_trials)
         assert all(trial.finalized for trial in bot.alive_trials)
         assert all(trial.answer in {"option_a", "option_b"} for trial in bot.alive_trials)
+        for trial in bot.alive_trials:
+            option_a_features = [
+                feature["feature_id"] for feature in trial.definition["option_a"]["features"]
+            ]
+            option_b_features = [
+                feature["feature_id"] for feature in trial.definition["option_b"]["features"]
+            ]
+            assert option_a_features == FEATURE_IDS
+            assert option_b_features == FEATURE_IDS
 
     @classmethod
     def get_basic_data(cls, context=None, **kwargs):

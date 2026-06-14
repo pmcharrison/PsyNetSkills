@@ -1,3 +1,11 @@
+FEATURE_IDS = [
+    "quality",
+    "cost_saving",
+    "community_benefit",
+    "time_saving",
+    "safety",
+]
+
 TRIAL_MANIFEST = [
     {
         "trial_id": "choice_01",
