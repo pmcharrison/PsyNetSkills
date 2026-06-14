@@ -11,6 +11,9 @@
 - T+00:09:10 [agent] Ran `uv run psynetsk-validate`; validation passed.
 - T+00:09:45 [agent] Ran `uv run pytest`; all tests passed.
 - T+00:10:10 [agent-stop] Work paused for required human review of `PLAN.md` and author metadata before experiment coding.
+- T+00:23:00 [manual] User approved the plan after requesting terminology change from `match`/`lure` to `identification`/`generalization`.
+- T+00:23:30 [agent-start] Resumed autonomous implementation work.
+- T+00:24:00 [agent] Updated `PLAN.md` with the approved terminology.
 
 <!-- Close active implementation segments with [agent-stop] when work pauses or completes. -->
 <!-- Tag path-changing human guidance as: [manual] [intervention] Description. -->

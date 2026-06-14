@@ -2,7 +2,7 @@
 
 ## Science
 
-This experiment measures how accurately participants identify a briefly presented item from a small visual array when later shown a single probe. On match trials, the probe is one of the original items and the task yields an objective identification accuracy score. On lure trials, the probe is a new colored item and the response is interpreted as a similarity-based generalization choice, supporting confusion-probability summaries across the displayed stimuli.
+This experiment measures how accurately participants identify a briefly presented item from a small visual array when later shown a single probe. On identification trials, the probe is one of the original items and the task yields an objective identification accuracy score. On generalization trials, the probe is a new colored item and the response is interpreted as a similarity-based generalization choice, supporting confusion-probability summaries across the displayed stimuli.
 
 ## Methods
 
@@ -15,7 +15,7 @@ The trial sequence will be:
 3. A blank interval of at least 500 ms.
 4. A single probe circle presented at fixation or near the center with response controls enabled.
 
-The probe condition will be either `match` or `lure`. For `match` trials, the probe color will exactly match one item from the original set and the correct answer will be that item's number. For `lure` trials, the probe color will be generated between or near the presented colors while avoiding exact equality, and the selected item number will be recorded as the participant's generalization choice without an accuracy score.
+The probe condition will be either `identification` or `generalization`. For `identification` trials, the probe color will exactly match one item from the original set and the correct answer will be that item's number. For `generalization` trials, the probe color will be generated between or near the presented colors while avoiding exact equality, and the selected item number will be recorded as the participant's generalization choice without an accuracy score.
 
 Responses will use numbered buttons labeled `1` through `N`, centered below the probe. Participants will be able to click the buttons or press the corresponding digit keys. Reaction time will be measured from probe onset to the button/key response.
 
@@ -38,7 +38,7 @@ Stimulus generation will be deterministic at node-construction time. The code wi
 
 The visual display will follow the psychophysics guidance: no extra labels or prompts inside the stimulus field beyond item numbers, no visible panel frame around the white stimulus area, no lingering fixation during probe response unless included in the probe frame by design, and neutral button styling.
 
-Bot behavior will be implemented via `get_bot_response`, returning `BotResponse` metadata with a synthetic `responseEnable` and `pushButtonClicked` event pair so the same answer-formatting path records simulated reaction times. Match-trial bots will usually choose the correct response; lure-trial bots will choose the nearest color by circular hue distance.
+Bot behavior will be implemented via `get_bot_response`, returning `BotResponse` metadata with a synthetic `responseEnable` and `pushButtonClicked` event pair so the same answer-formatting path records simulated reaction times. Identification-trial bots will usually choose the correct response; generalization-trial bots will choose the nearest color by circular hue distance.
 
 Validation and evidence after plan approval will include:
 
@@ -52,4 +52,4 @@ Validation and evidence after plan approval will include:
 
 ## Human review
 
-Implementation is paused until the human reviewer approves this plan or requests changes.
+The human reviewer approved this plan after the terminology change from `match`/`lure` to `identification`/`generalization`.
