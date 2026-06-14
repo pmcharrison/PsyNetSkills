@@ -14,7 +14,7 @@ without `answer` is the pattern that keeps the bot path identical to the browser
 
 *Actions:*
 
-- **PsyNet:** The `bot_response` parameter conflates "no bot response provided" with an explicit `None` answer, which is an easy footgun when a custom control needs its `get_bot_response`/`format_answer` to run. Consider documenting this in the `OptionControl`/`Control` docstrings or warning when `bot_response=None` is passed to a control that overrides `get_bot_response`. Confidence: high. Impact: medium. Status: considering.
+- **PsyNet:** The `bot_response` parameter conflates "no bot response provided" with an explicit `None` answer, which is an easy footgun when a custom control needs its `get_bot_response`/`format_answer` to run. Consider documenting this in the `OptionControl`/`Control` docstrings or warning when `bot_response=None` is passed to a control that overrides `get_bot_response`. Confidence: high. Impact: medium. Status: completed. Notes: Implemented as PsyNet MR !1088 (https://gitlab.com/PsyNetDev/PsyNet/-/merge_requests/1088) — adds the warning in `Control.call__get_bot_response`, clarifies the `bot_response` docstring, and adds an isolated unit test; reviewer Peter Harrison. Open pending maintainer review/merge.
 
 ## Reaction time can be derived from the native event log without custom JS
 
@@ -27,7 +27,7 @@ matching the psychophysics skill's guidance.
 
 *Actions:*
 
-- **PsyNetSkills:** The `psychophysics` skill recommends event-log reaction-time extraction but does not show a concrete recipe. Consider adding a short worked example (GraphicPrompt frame `activate_control_response` + `responseEnable`/`pushButtonClicked` event-log diff) to the psychophysics skill. Confidence: medium. Impact: medium. Status: considering.
+- **PsyNetSkills:** The `psychophysics` skill recommends event-log reaction-time extraction but does not show a concrete recipe. Consider adding a short worked example (GraphicPrompt frame `activate_control_response` + `responseEnable`/`pushButtonClicked` event-log diff) to the psychophysics skill. Confidence: medium. Impact: medium. Status: completed. Notes: Added a "Reaction time from the native event log" worked example (wiring + `format_answer` recipe + simulation note) to `.cursor/skills/psychophysics/SKILL.md` on this attempt branch (PR #241).
 
 ## Notebook tooling (matplotlib/jupyter/nbconvert) is not in the PsyNet venv
 
@@ -39,7 +39,7 @@ experiment-implementation attempt that produces a canonical analysis notebook.
 
 *Actions:*
 
-- **PsyNetSkills:** Consider adding the analysis-notebook tooling to the cloud-agent environment setup (or documenting the install command in the experiment-implementation evidence reference) so attempts do not each rediscover the missing dependencies. Confidence: high. Impact: medium. Status: considering.
+- **PsyNetSkills:** Consider adding the analysis-notebook tooling to the cloud-agent environment setup (or documenting the install command in the experiment-implementation evidence reference) so attempts do not each rediscover the missing dependencies. Confidence: high. Impact: medium. Status: completed. Notes: Documented the install command (`uv pip install matplotlib jupyter nbconvert nbformat ipykernel`) and headless-execute step in `psynet-experiment-implementation/SKILL.md` and `attempt-challenge/references/experiment-evidence.md` (PR #241). The persistent fix — baking the tooling into the cloud-agent environment — still needs an env-setup agent run from Cursor web.
 
 ## Dashboard truncates text files >100KB, breaking notebook `transform.Unmarshal`
 
@@ -56,7 +56,7 @@ the dashboard PR preview build fails.
 *Actions:*
 
 - **PsyNetSkills:** Make `challenges/attempt.html` resilient to truncated/unparseable notebook content — guard the `transform.Unmarshal` (e.g. only unmarshal when the file is not `truncated`, or wrap in a way that degrades to a download link) so a large analysis notebook cannot break the whole dashboard build. Confidence: high. Impact: high. Status: considering.
-- **PsyNetSkills:** Document the ~100KB inline limit in the experiment-evidence reference and advise keeping `analysis.ipynb` small (low-DPI inline figures, or link out large figures), so attempts do not unknowingly produce a notebook that breaks the preview build. Confidence: high. Impact: medium. Status: considering.
+- **PsyNetSkills:** Document the ~100KB inline limit in the experiment-evidence reference and advise keeping `analysis.ipynb` small (low-DPI inline figures, or link out large figures), so attempts do not unknowingly produce a notebook that breaks the preview build. Confidence: high. Impact: medium. Status: completed. Notes: Documented the ~100KB inline-truncation limit, its consequence (truncated notebook = invalid JSON = broken attempt-page render / preview build), and both mitigations (low-DPI inline figures or link out large figures) in `attempt-challenge/references/experiment-evidence.md` (PR #241).
 
 ## Playwright needs its bundled ffmpeg for video recording
 
@@ -67,4 +67,4 @@ for participant-flow video evidence.
 
 *Actions:*
 
-- **PsyNetSkills:** Consider noting `npx playwright install ffmpeg` in the `record-participant-video` skill for the JavaScript Playwright path, since system ffmpeg alone is insufficient for Playwright's built-in video recording. Confidence: high. Impact: low. Status: considering.
+- **PsyNetSkills:** Consider noting `npx playwright install ffmpeg` in the `record-participant-video` skill for the JavaScript Playwright path, since system ffmpeg alone is insufficient for Playwright's built-in video recording. Confidence: high. Impact: low. Status: completed. Notes: Added a bullet to the JavaScript Playwright guidance in `record-participant-video/SKILL.md` (install Playwright's bundled ffmpeg, then re-encode the `.webm` to `participant.mp4`) (PR #241).
