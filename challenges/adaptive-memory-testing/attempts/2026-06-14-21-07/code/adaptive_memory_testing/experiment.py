@@ -20,14 +20,24 @@ from psynet.page import InfoPage
 from psynet.timeline import FailedValidation, Timeline, join
 from psynet.trial.chain import ChainNode, ChainTrial, ChainTrialMaker
 
-from adaptive_logic import (
-    CANDIDATE_LENGTHS,
-    Observation,
-    PosteriorState,
-    make_digit_string,
-    sample_synthetic_response,
-    select_length,
-)
+try:
+    from .adaptive_logic import (
+        CANDIDATE_LENGTHS,
+        Observation,
+        PosteriorState,
+        make_digit_string,
+        sample_synthetic_response,
+        select_length,
+    )
+except ImportError:
+    from adaptive_logic import (
+        CANDIDATE_LENGTHS,
+        Observation,
+        PosteriorState,
+        make_digit_string,
+        sample_synthetic_response,
+        select_length,
+    )
 
 N_TRIALS = 10
 ADAPTIVE_DEFAULT = os.environ.get("ADAPTIVE_MEMORY_ADAPTIVE", "1") != "0"
