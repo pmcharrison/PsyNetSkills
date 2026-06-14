@@ -82,7 +82,7 @@ from psynet.trial.static import StaticNode, StaticTrial, StaticTrialMaker
 from psynet.utils import get_translator
 
 
-_ = get_translator()
+_ = get_translator(namespace="experiment")
 ROOT = Path(__file__).parent
 TRIALS = json.loads((ROOT / "generated_trials.json").read_text(encoding="utf-8"))
 DESIGN_METADATA = json.loads((ROOT / "design_metadata.json").read_text(encoding="utf-8"))
