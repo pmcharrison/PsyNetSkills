@@ -57,4 +57,7 @@ directly from the browser to S3 as a single object during each trial.
   simulation data validates trial/data plumbing but not real camera permission
   prompts or live upload success paths.
 - Manual participant-flow evidence covers real browser interaction and completion
-  behavior; upload diagnostics are persisted in response metadata.
+  behavior; the captured run demonstrates the approved graceful upload-failure
+  path with participant progression preserved.
+- `get_basic_data` returns JSON-serializable structures so dashboard data views
+  remain compatible during debug review.

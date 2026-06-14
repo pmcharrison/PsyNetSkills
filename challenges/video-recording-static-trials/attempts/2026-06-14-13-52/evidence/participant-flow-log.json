@@ -3,7 +3,7 @@
   "eventLog": [
     {
       "step": "open_participant_url",
-      "url": "http://127.0.0.1:5000/ad?recruiter=hotair&hitId=6QLW1Q&assignmentId=0NF7U2&workerId=UFWBJV"
+      "url": "http://127.0.0.1:5000/ad?recruiter=hotair&hitId=MMBFNA&assignmentId=R3APYN&workerId=SCD35B"
     },
     {
       "step": "clicked_start_selector",
@@ -22,6 +22,11 @@
       "step": "captured_exit",
       "completed": true,
       "url": "http://127.0.0.1:5000/recruiter-exit?participant_id=2"
+    },
+    {
+      "step": "streaming_summary",
+      "summary": null,
+      "s3_head_status": null
     }
   ]
 }

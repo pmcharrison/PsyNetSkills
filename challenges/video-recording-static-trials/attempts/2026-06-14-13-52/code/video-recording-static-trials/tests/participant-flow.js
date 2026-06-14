@@ -36,7 +36,13 @@ async function chooseTrialResponse(page) {
 }
 
 async function run() {
-  const browser = await chromium.launch({ headless: true });
+  const browser = await chromium.launch({
+    headless: true,
+    args: [
+      "--use-fake-ui-for-media-stream",
+      "--use-fake-device-for-media-stream",
+    ],
+  });
   const context = await browser.newContext({
     viewport: { width: 1280, height: 720 },
     recordVideo: {
@@ -44,8 +50,10 @@ async function run() {
       size: { width: 1280, height: 720 },
     },
   });
+  await context.grantPermissions(["camera"], { origin: "http://127.0.0.1:5000" });
   const page = await context.newPage();
   const eventLog = [];
+  let lastStreamingSummary = null;
 
   try {
     await page.goto(participantUrl, { waitUntil: "networkidle", timeout: 120000 });
@@ -79,11 +87,19 @@ async function run() {
 
     await page.click("#next-button");
     await page.waitForSelector("#question", { timeout: 60000 });
+    await page.waitForFunction(() => !!window.psynetStreamingVideoUploader, {
+      timeout: 10000,
+    }).catch(() => null);
     await page.screenshot({
       path: path.join(screenshotsDir, "02-first-streaming-trial.png"),
       fullPage: true,
     });
     eventLog.push({ step: "captured_first_trial" });
+    lastStreamingSummary = await page.evaluate(() =>
+      window.psynetStreamingVideoUploader
+        ? window.psynetStreamingVideoUploader.getSummary()
+        : null,
+    );
 
     let completed = false;
     let trialScreensCaptured = 1;
@@ -113,6 +129,12 @@ async function run() {
           fullPage: true,
         });
       }
+
+      lastStreamingSummary = await page.evaluate(() =>
+        window.psynetStreamingVideoUploader
+          ? window.psynetStreamingVideoUploader.getSummary()
+          : null,
+      );
     }
 
     await page.waitForTimeout(1000);
@@ -124,6 +146,23 @@ async function run() {
       fullPage: true,
     });
     eventLog.push({ step: "captured_exit", completed, url: page.url() });
+
+    let s3HeadStatus = null;
+    if (lastStreamingSummary && lastStreamingSummary.s3_object_url) {
+      try {
+        const response = await fetch(lastStreamingSummary.s3_object_url, {
+          method: "HEAD",
+        });
+        s3HeadStatus = response.status;
+      } catch (error) {
+        s3HeadStatus = `head-request-failed: ${error.message}`;
+      }
+    }
+    eventLog.push({
+      step: "streaming_summary",
+      summary: lastStreamingSummary,
+      s3_head_status: s3HeadStatus,
+    });
 
     fs.writeFileSync(
       path.join(evidenceRoot, "participant-flow-log.json"),

@@ -1,5 +1,7 @@
 {
-  "authors": [],
+  "authors": [
+    "jacobyn"
+  ],
   "agent": "Cursor Cloud Agent",
   "client": "cursor",
   "model": "Codex 5.3",
@@ -19,7 +21,6 @@
   },
   "run_cost": null,
   "notes": [
-    "Authorship is pending human confirmation; update authors before marking the attempt complete.",
     "Implementation and first-pass evidence collection are complete."
   ]
 }

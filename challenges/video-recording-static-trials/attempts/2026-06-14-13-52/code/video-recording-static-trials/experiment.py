@@ -4,7 +4,6 @@ import hashlib
 import random
 from datetime import datetime, timezone
 
-import pandas as pd
 from markupsafe import Markup
 
 import psynet.experiment
@@ -393,10 +392,7 @@ class Exp(psynet.experiment.Experiment):
             }
             for participant in Participant.query.all()
         ]
-        return {
-            "trial": pd.DataFrame.from_records(trials),
-            "participant": pd.DataFrame.from_records(participants),
-        }
+        return {"trial": trials, "participant": participants}
 
     def check_network_participants_relationship(self, participant):
         """
