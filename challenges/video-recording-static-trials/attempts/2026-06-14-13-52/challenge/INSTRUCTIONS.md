@@ -41,14 +41,11 @@ page.
 - Use standard web frontend streaming techniques to capture camera video and
   upload it directly from the participant's browser to S3. Do not store the
   recording through PsyNet's existing media-management tools.
-- For upload, use **streaming mode** so that:
-  - each trial produces a single uploaded file/object in S3;
-  - upload proceeds continuously during the trial and does not wait until trial
-    end to begin.
-- If needed, the trial may wait before continuing so that streaming upload
-  finalization completes and all video content is persisted to S3.
+- The straaming should occur as soon as possible and in paralell to the trial.
+  If needed, the trial should wait to all teh propert content streamed to S3,
+  before coninuing to the next trial so all video is uploaded before moving forward.
 - Receive the appropriate S3 bucket link, upload endpoint, or signed/public
-  upload configuration from the backend.
+  upload configuration from the backend. 
 - Save each recording under a filename derived from a backend-provided hashed
   trial-specific value. Store that hashed identifier in the trial definition and
   in the saved trial response data so that researchers can recover the matching
@@ -58,7 +55,7 @@ page.
   S3 object location or error state.
 - Make sure that the implemented experiment really uses S3 for upload.
 
-## Throughout, use this bucket:
+## Throughout use this bucket:
 - Bucket name: video-recording-test-292651677991
 - Region: us-east-1
 - Base public URL: https://video-recording-test-292651677991.s3.amazonaws.com/
