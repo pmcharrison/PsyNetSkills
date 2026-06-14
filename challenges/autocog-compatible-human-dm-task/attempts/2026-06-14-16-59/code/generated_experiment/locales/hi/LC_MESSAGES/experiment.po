@@ -71,16 +71,15 @@ msgstr "प्रत्येक ट्रायल में विकल्प
 
 #: experiment.py
 msgid ""
-"Each row shows a feature, its validity from 0 to 1, and each option's "
-"rating."
+"Each row shows a rating, its validity from 0 to 1, and each option's value."
 msgstr ""
-"प्रत्येक पंक्ति एक विशेषता, 0 से 1 तक उसकी वैधता, और प्रत्येक विकल्प की "
-"रेटिंग दिखाती है।"
+"प्रत्येक पंक्ति एक रेटिंग, 0 से 1 तक उसकी वैधता, और प्रत्येक विकल्प का मान "
+"दिखाती है।"
 
 #: experiment.py
 msgid ""
-"Higher validities indicate features that are more predictive in the design."
-msgstr "अधिक वैधता वाली विशेषताएं इस डिजाइन में अधिक पूर्वानुमानकारी हैं।"
+"Higher validities indicate ratings that are more predictive in the design."
+msgstr "अधिक वैधता वाली रेटिंग इस डिजाइन में अधिक पूर्वानुमानकारी हैं।"
 
 #: experiment.py
 msgid ""

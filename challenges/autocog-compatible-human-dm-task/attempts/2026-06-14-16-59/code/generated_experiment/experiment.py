@@ -137,12 +137,12 @@ class Exp(psynet.experiment.Experiment):
                 tags.p(_("On each trial, compare Option A and Option B.")),
                 tags.p(
                     _(
-                        "Each row shows a feature, its validity from 0 to 1, and each option's rating."
+                        "Each row shows a rating, its validity from 0 to 1, and each option's value."
                     )
                 ),
                 tags.p(
                     _(
-                        "Higher validities indicate features that are more predictive in the design."
+                        "Higher validities indicate ratings that are more predictive in the design."
                     )
                 ),
                 tags.p(

@@ -70,13 +70,12 @@ msgstr ""
 
 #: experiment.py:140
 msgid ""
-"Each row shows a feature, its validity from 0 to 1, and each option's "
-"rating."
+"Each row shows a rating, its validity from 0 to 1, and each option's value."
 msgstr ""
 
 #: experiment.py:145
 msgid ""
-"Higher validities indicate features that are more predictive in the design."
+"Higher validities indicate ratings that are more predictive in the design."
 msgstr ""
 
 #: experiment.py:150

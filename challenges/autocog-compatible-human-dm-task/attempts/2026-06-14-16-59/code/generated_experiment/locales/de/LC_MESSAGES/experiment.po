@@ -73,17 +73,16 @@ msgstr "Vergleichen Sie in jedem Durchgang Option A und Option B."
 
 #: experiment.py
 msgid ""
-"Each row shows a feature, its validity from 0 to 1, and each option's "
-"rating."
+"Each row shows a rating, its validity from 0 to 1, and each option's value."
 msgstr ""
-"Jede Zeile zeigt ein Merkmal, seine Validität von 0 bis 1 und die Bewertung "
+"Jede Zeile zeigt eine Bewertung, ihre Validität von 0 bis 1 und den Wert "
 "jeder Option."
 
 #: experiment.py
 msgid ""
-"Higher validities indicate features that are more predictive in the design."
+"Higher validities indicate ratings that are more predictive in the design."
 msgstr ""
-"Höhere Validitäten kennzeichnen Merkmale, die in diesem Design "
+"Höhere Validitäten kennzeichnen Bewertungen, die in diesem Design "
 "aussagekräftiger sind."
 
 #: experiment.py

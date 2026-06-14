@@ -25,8 +25,8 @@ TRANSLATIONS = {
         "You will compare two options described by numerical feature ratings.": "आप संख्यात्मक विशेषता रेटिंग से वर्णित दो विकल्पों की तुलना करेंगे।",
         "Instructions": "निर्देश",
         "On each trial, compare Option A and Option B.": "प्रत्येक ट्रायल में विकल्प A और विकल्प B की तुलना करें।",
-        "Each row shows a feature, its validity from 0 to 1, and each option's rating.": "प्रत्येक पंक्ति एक विशेषता, 0 से 1 तक उसकी वैधता, और प्रत्येक विकल्प की रेटिंग दिखाती है।",
-        "Higher validities indicate features that are more predictive in the design.": "अधिक वैधता वाली विशेषताएं इस डिजाइन में अधिक पूर्वानुमानकारी हैं।",
+        "Each row shows a rating, its validity from 0 to 1, and each option's value.": "प्रत्येक पंक्ति एक रेटिंग, 0 से 1 तक उसकी वैधता, और प्रत्येक विकल्प का मान दिखाती है।",
+        "Higher validities indicate ratings that are more predictive in the design.": "अधिक वैधता वाली रेटिंग इस डिजाइन में अधिक पूर्वानुमानकारी हैं।",
         "Choose the option you would prefer. There are no right or wrong answers.": "वह विकल्प चुनें जिसे आप पसंद करेंगे। कोई सही या गलत उत्तर नहीं है।",
         "Decision {TRIAL_NUMBER} of {TOTAL_TRIALS}": "{TOTAL_TRIALS} में से निर्णय {TRIAL_NUMBER}",
         "Please compare both options before choosing.": "चुनने से पहले दोनों विकल्पों की तुलना करें।",
@@ -47,8 +47,8 @@ TRANSLATIONS = {
         "You will compare two options described by numerical feature ratings.": "Sie vergleichen zwei Optionen, die durch numerische Merkmalsbewertungen beschrieben werden.",
         "Instructions": "Anleitung",
         "On each trial, compare Option A and Option B.": "Vergleichen Sie in jedem Durchgang Option A und Option B.",
-        "Each row shows a feature, its validity from 0 to 1, and each option's rating.": "Jede Zeile zeigt ein Merkmal, seine Validität von 0 bis 1 und die Bewertung jeder Option.",
-        "Higher validities indicate features that are more predictive in the design.": "Höhere Validitäten kennzeichnen Merkmale, die in diesem Design aussagekräftiger sind.",
+        "Each row shows a rating, its validity from 0 to 1, and each option's value.": "Jede Zeile zeigt eine Bewertung, ihre Validität von 0 bis 1 und den Wert jeder Option.",
+        "Higher validities indicate ratings that are more predictive in the design.": "Höhere Validitäten kennzeichnen Bewertungen, die in diesem Design aussagekräftiger sind.",
         "Choose the option you would prefer. There are no right or wrong answers.": "Wählen Sie die Option, die Sie bevorzugen würden. Es gibt keine richtigen oder falschen Antworten.",
         "Decision {TRIAL_NUMBER} of {TOTAL_TRIALS}": "Entscheidung {TRIAL_NUMBER} von {TOTAL_TRIALS}",
         "Please compare both options before choosing.": "Bitte vergleichen Sie beide Optionen, bevor Sie wählen.",
@@ -206,12 +206,12 @@ class Exp(psynet.experiment.Experiment):
                 tags.p(_("On each trial, compare Option A and Option B.")),
                 tags.p(
                     _(
-                        "Each row shows a feature, its validity from 0 to 1, and each option's rating."
+                        "Each row shows a rating, its validity from 0 to 1, and each option's value."
                     )
                 ),
                 tags.p(
                     _(
-                        "Higher validities indicate features that are more predictive in the design."
+                        "Higher validities indicate ratings that are more predictive in the design."
                     )
                 ),
                 tags.p(

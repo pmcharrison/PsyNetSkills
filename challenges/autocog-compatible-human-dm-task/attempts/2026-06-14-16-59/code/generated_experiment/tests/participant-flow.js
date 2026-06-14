@@ -40,6 +40,7 @@ async function run() {
 
   await expect(page.getByRole("button").first()).toBeVisible();
   await page.screenshot({ path: path.join(screenshotDir, `${locale}-01-ad.png`), fullPage: true });
+  await page.waitForTimeout(500);
   await page.getByRole("button").first().click();
 
   await page.waitForURL(/\/consent/);
@@ -48,9 +49,11 @@ async function run() {
   await page.waitForURL(/\/timeline/);
   await expect(page.locator("body")).toContainText(locale === "en" ? "Welcome" : /.+/);
   await page.screenshot({ path: path.join(screenshotDir, `${locale}-02-welcome.png`), fullPage: true });
+  await page.waitForTimeout(900);
   await clickSubmit(page);
 
   await page.screenshot({ path: path.join(screenshotDir, `${locale}-03-instructions.png`), fullPage: true });
+  await page.waitForTimeout(1200);
   await clickSubmit(page);
 
   await expect(page.locator("table").first()).toBeVisible();
@@ -58,6 +61,7 @@ async function run() {
     throw new Error(`Expected two visible option tables for locale ${locale}`);
   }
   await page.screenshot({ path: path.join(screenshotDir, `${locale}-04-choice.png`), fullPage: true });
+  await page.waitForTimeout(900);
 
   let choices = 0;
   while (!page.url().includes("recruiter-exit")) {
