@@ -26,52 +26,12 @@ msgid "Community benefit"
 msgstr "सामुदायिक लाभ"
 
 #: experiment.py
-msgid "Comfort"
-msgstr "आराम"
-
-#: experiment.py
-msgid "Environmental impact"
-msgstr "पर्यावरणीय प्रभाव"
-
-#: experiment.py
-msgid "Long-term value"
-msgstr "दीर्घकालिक मूल्य"
-
-#: experiment.py
-msgid "Fit with local needs"
-msgstr "स्थानीय आवश्यकताओं से मेल"
-
-#: experiment.py
-msgid "Reliability"
-msgstr "विश्वसनीयता"
-
-#: experiment.py
-msgid "Flexibility"
-msgstr "लचीलापन"
-
-#: experiment.py
-msgid "Family preference"
-msgstr "परिवार की पसंद"
-
-#: experiment.py
 msgid "Time saving"
 msgstr "समय की बचत"
 
 #: experiment.py
 msgid "Safety"
 msgstr "सुरक्षा"
-
-#: experiment.py
-msgid "Social approval"
-msgstr "सामाजिक स्वीकृति"
-
-#: experiment.py
-msgid "Future opportunity"
-msgstr "भविष्य का अवसर"
-
-#: experiment.py
-msgid "Low effort required"
-msgstr "कम प्रयास आवश्यक"
 
 #: experiment.py
 msgid "Instructions"

@@ -26,52 +26,12 @@ msgid "Community benefit"
 msgstr "Bénéfice pour la communauté"
 
 #: experiment.py
-msgid "Comfort"
-msgstr "Confort"
-
-#: experiment.py
-msgid "Environmental impact"
-msgstr "Impact environnemental"
-
-#: experiment.py
-msgid "Long-term value"
-msgstr "Valeur à long terme"
-
-#: experiment.py
-msgid "Fit with local needs"
-msgstr "Adaptation aux besoins locaux"
-
-#: experiment.py
-msgid "Reliability"
-msgstr "Fiabilité"
-
-#: experiment.py
-msgid "Flexibility"
-msgstr "Flexibilité"
-
-#: experiment.py
-msgid "Family preference"
-msgstr "Préférence familiale"
-
-#: experiment.py
 msgid "Time saving"
 msgstr "Gain de temps"
 
 #: experiment.py
 msgid "Safety"
 msgstr "Sécurité"
-
-#: experiment.py
-msgid "Social approval"
-msgstr "Approbation sociale"
-
-#: experiment.py
-msgid "Future opportunity"
-msgstr "Opportunité future"
-
-#: experiment.py
-msgid "Low effort required"
-msgstr "Faible effort requis"
 
 #: experiment.py
 msgid "Instructions"
