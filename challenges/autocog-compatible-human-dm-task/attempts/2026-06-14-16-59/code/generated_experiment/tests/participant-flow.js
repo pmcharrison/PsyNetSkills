@@ -60,9 +60,10 @@ async function run() {
 
   let choices = 0;
   while (!page.url().includes("recruiter-exit")) {
-    const choiceButtons = page.locator("button.push-button:visible:not([disabled])");
-    const onChoicePage = (await page.locator("table:visible").count()) >= 2;
-    if (onChoicePage && (await choiceButtons.count()) > 0) {
+    const choiceButtons = page.locator(
+      "button.push-button:visible:not([disabled])#option_a, button.push-button:visible:not([disabled])#option_b"
+    );
+    if ((await choiceButtons.count()) > 0) {
       await choiceButtons.first().click();
       choices += 1;
     } else if ((await page.locator("button.submit:visible:not([disabled])").count()) > 0) {
