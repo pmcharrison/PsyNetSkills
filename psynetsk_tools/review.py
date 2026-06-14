@@ -9,7 +9,6 @@ import platform
 import re
 import shutil
 import sys
-from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
@@ -17,9 +16,15 @@ from typing import Any
 from psynetsk_tools.review_artifacts import (
     HASHED_ARTIFACTS_DIR,
     MONITOR_STATIC_ARTIFACTS_DIR,
-    ArtifactPublication,
     write_hashed_artifact,
     write_shared_monitor_static_assets,
+)
+from psynetsk_tools.review_model import (
+    ReviewEvidenceView,
+    ReviewFile,
+    classify_review_evidence,
+    file_kind,
+    screenshot_caption,
 )
 from psynetsk_tools.validate import validate_evidence_video
 
@@ -69,21 +74,6 @@ STARTER_REPORT = """# Review report
 
 Summarize the implementation, validation, analysis, and any unresolved issues.
 """
-
-
-@dataclass(frozen=True)
-class RenderedArtifact:
-    """An artifact prepared for static review rendering."""
-
-    id: str
-    kind: str
-    title: str
-    description: str
-    status: str
-    required: bool
-    path: str
-    url: str
-    publication: ArtifactPublication
 
 
 def read_review_manifest(review_dir: Path) -> dict[str, Any]:
@@ -554,7 +544,7 @@ def publish_review_artifacts(
     review_dir: Path,
     site_dir: Path,
     manifest: dict[str, Any],
-) -> list[RenderedArtifact]:
+) -> list[ReviewFile]:
     """Publish present artifacts and return render metadata."""
 
     target_root = site_dir / "static" / HASHED_ARTIFACTS_DIR
@@ -564,46 +554,49 @@ def publish_review_artifacts(
     target_root.mkdir(parents=True, exist_ok=True)
     write_shared_monitor_static_assets(shared_static_root)
 
-    rendered: list[RenderedArtifact] = []
+    rendered: list[ReviewFile] = []
     for artifact in manifest.get("artifacts", []):
         if not isinstance(artifact, dict):
             continue
         relative_path = str(artifact.get("path") or "")
         status = str(artifact.get("status") or "missing")
-        publication = ArtifactPublication("", published=False, note="")
-        if relative_path and status == "present":
-            source_file = review_dir / relative_path
-            if source_file.is_file():
-                publication = ArtifactPublication(
-                    artifact_output_url(
-                        write_hashed_artifact(
-                            source_file,
-                            target_root,
-                            HASHED_ARTIFACTS_DIR,
-                        ),
-                    ),
-                )
-            else:
-                publication = ArtifactPublication(
-                    "",
-                    published=False,
-                    note="Artifact marked present but file is missing.",
-                )
-
+        if not relative_path or status != "present":
+            continue
+        source_file = review_dir / relative_path
+        if not source_file.is_file():
+            continue
+        artifact_url = artifact_output_url(
+            write_hashed_artifact(
+                source_file,
+                target_root,
+                HASHED_ARTIFACTS_DIR,
+            ),
+        )
         rendered.append(
-            RenderedArtifact(
-                id=str(artifact.get("id") or relative_path),
-                kind=str(artifact.get("kind") or "other"),
-                title=str(artifact.get("title") or relative_path),
-                description=str(artifact.get("description") or ""),
-                status=status,
-                required=bool(artifact.get("required")),
+            ReviewFile(
                 path=relative_path,
-                url=publication.url,
-                publication=publication,
+                url=artifact_url,
+                content=read_review_artifact_content(source_file),
+                size_bytes=source_file.stat().st_size,
+                kind=file_kind(relative_path),
             )
         )
     return rendered
+
+
+def read_review_artifact_content(source_file: Path, max_bytes: int = 100_000) -> str | None:
+    """Read text artifact content for review classification."""
+
+    try:
+        data = source_file.read_bytes()
+    except OSError:
+        return None
+    if len(data) > max_bytes:
+        data = data[:max_bytes]
+    try:
+        return data.decode("utf-8")
+    except UnicodeDecodeError:
+        return None
 
 
 def render_report(report_path: Path) -> str:
@@ -615,35 +608,182 @@ def render_report(report_path: Path) -> str:
     return f"<pre>{html.escape(text)}</pre>"
 
 
-def render_artifact_card(artifact: RenderedArtifact) -> str:
+def render_artifact_card(artifact: ReviewFile) -> str:
     """Render one artifact card."""
 
-    title = html.escape(artifact.title)
-    description = html.escape(artifact.description)
-    status = html.escape(artifact.status)
     path = html.escape(artifact.path)
     kind = html.escape(artifact.kind)
-    required = "required" if artifact.required else "optional"
 
     if artifact.url:
         action = f'<a href="{html.escape(artifact.url)}">Open artifact</a>'
-    elif artifact.publication.note:
-        action = f"<span>{html.escape(artifact.publication.note)}</span>"
     else:
         action = "<span>No artifact file published.</span>"
 
     return (
         '<article class="artifact-card">'
-        f"<h3>{title}</h3>"
-        f"<p>{description}</p>"
+        f"<h3><code>{path}</code></h3>"
         "<dl>"
-        f"<dt>Status</dt><dd>{status}</dd>"
         f"<dt>Kind</dt><dd>{kind}</dd>"
-        f"<dt>Path</dt><dd><code>{path}</code></dd>"
-        f"<dt>Requirement</dt><dd>{required}</dd>"
+        f"<dt>Size</dt><dd>{artifact.size_bytes} bytes</dd>"
         "</dl>"
         f"<p>{action}</p>"
         "</article>"
+    )
+
+
+def render_participant_video(evidence: ReviewEvidenceView) -> str:
+    """Render participant video evidence."""
+
+    video = evidence.participant_video
+    if video is None:
+        return "<p>No participant recording was found.</p>"
+    return (
+        '<video class="attempt-video" controls preload="metadata">'
+        f'<source src="{html.escape(video.url)}" type="video/mp4">'
+        "Your browser does not support embedded video."
+        "</video>"
+        f'<p class="artifact-note"><code>{html.escape(video.path)}</code> '
+        f"· {video.size_bytes} bytes</p>"
+    )
+
+
+def render_screenshot_gallery(evidence: ReviewEvidenceView) -> str:
+    """Render screenshot evidence."""
+
+    if not evidence.screenshots:
+        return ""
+    figures: list[str] = []
+    for screenshot in evidence.screenshots:
+        caption = screenshot_caption(screenshot, evidence.screenshot_captions)
+        figures.append(
+            '<figure class="screenshot-card">'
+            f'<a href="{html.escape(screenshot.url)}">'
+            f'<img src="{html.escape(screenshot.url)}" alt="{html.escape(caption)}">'
+            "</a>"
+            f"<figcaption>{html.escape(caption)}</figcaption>"
+            "</figure>"
+        )
+    return (
+        '<section class="screenshot-gallery">'
+        "<h3>Screenshot walkthrough</h3>"
+        '<div class="screenshot-frame">'
+        + "\n".join(figures)
+        + "</div></section>"
+    )
+
+
+def render_evidence_actions(evidence: ReviewEvidenceView) -> str:
+    """Render direct evidence artifact links."""
+
+    actions = [
+        ("Monitor snapshot", evidence.monitor_file, "Open monitor snapshot"),
+        ("Performance result", evidence.performance_file, "View performance test result"),
+        ("Data export", evidence.data_file, "Download data export"),
+        ("Simulated data export", evidence.simulated_data_file, "Download simulated data"),
+        ("Analysis notebook", evidence.analysis_notebook_file, "Open analysis notebook"),
+    ]
+    items: list[str] = []
+    for label, file, action in actions:
+        if file is None:
+            items.append(
+                f'<li><span class="missing-artifact">{html.escape(label)} missing</span></li>',
+            )
+        else:
+            items.append(
+                f'<li><a href="{html.escape(file.url)}">{html.escape(action)}</a></li>',
+            )
+    return '<ul class="evidence-actions">' + "\n".join(items) + "</ul>"
+
+
+def render_performance_result(evidence: ReviewEvidenceView) -> str:
+    """Render performance results when available."""
+
+    if evidence.performance_file is None:
+        return ""
+    rows = evidence.performance_results
+    if not rows:
+        return (
+            '<section class="performance-result">'
+            "<h3>Performance test result</h3>"
+            '<p class="artifact-note">This performance artifact does not contain '
+            "tabular result rows.</p></section>"
+        )
+
+    body: list[str] = []
+    for row in rows:
+        errors = int(row.get("request_errors") or 0) + int(row.get("bot_errors") or 0)
+        body.append(
+            "<tr>"
+            f"<td>{html.escape(str(row.get('n_bots', '')))}</td>"
+            f"<td>{html.escape(str(row.get('total_bots_started', '')))}</td>"
+            f"<td>{html.escape(str(row.get('bots_succeeded', '')))}</td>"
+            f"<td>{html.escape(str(row.get('total_requests', '')))}</td>"
+            f"<td>{format_metric(row.get('median_response_time'))}</td>"
+            f"<td>{format_metric(row.get('p95_response_time'))}</td>"
+            f"<td>{format_metric(row.get('q_delay_p95'))}</td>"
+            f"<td>{errors}</td>"
+            "</tr>"
+        )
+    return (
+        '<section class="performance-result">'
+        "<h3>Performance test result</h3>"
+        f'<p><a href="{html.escape(evidence.performance_file.url)}">Raw JSON</a></p>'
+        '<table class="performance-table"><thead><tr>'
+        "<th>Concurrent target</th><th>Bots started</th><th>Succeeded</th>"
+        "<th>Requests</th><th>Resp Med (s)</th><th>Resp P95 (s)</th>"
+        "<th>Q P95 all (s)</th><th>Errors</th>"
+        "</tr></thead><tbody>"
+        + "\n".join(body)
+        + "</tbody></table></section>"
+    )
+
+
+def format_metric(value: object) -> str:
+    """Format a numeric performance metric."""
+
+    if isinstance(value, int | float) and not isinstance(value, bool):
+        return f"{value:.3f}"
+    return "N/A"
+
+
+def render_completeness(evidence: ReviewEvidenceView) -> str:
+    """Render artifact completeness rows."""
+
+    items = [
+        f'<li class="{"present" if item.present else "missing"}">'
+        f"{html.escape(item.label)} <span>{html.escape(item.detail)}</span></li>"
+        for item in evidence.completeness
+    ]
+    return (
+        '<section class="evidence-subsection">'
+        "<h3>Artifact completeness</h3>"
+        '<ul class="artifact-checklist">'
+        + "\n".join(items)
+        + "</ul></section>"
+    )
+
+
+def render_visible_artifacts(evidence: ReviewEvidenceView) -> str:
+    """Render remaining evidence files."""
+
+    if not evidence.visible_files:
+        return "<p>No additional evidence files were found.</p>"
+    cards = "\n".join(render_artifact_card(file) for file in evidence.visible_files)
+    return f'<div class="artifact-grid">{cards}</div>'
+
+
+def render_evidence_section(evidence: ReviewEvidenceView) -> str:
+    """Render the main evidence section."""
+
+    return (
+        '<section id="evidence">'
+        "<h2>Evidence</h2>"
+        f"{render_participant_video(evidence)}"
+        f"{render_screenshot_gallery(evidence)}"
+        f"{render_evidence_actions(evidence)}"
+        f"{render_performance_result(evidence)}"
+        f"{render_completeness(evidence)}"
+        "</section>"
     )
 
 
@@ -706,7 +846,6 @@ def render_review_site(review_dir: Path, site_dir: Path | None = None) -> Path:
     site_dir.mkdir(parents=True, exist_ok=True)
     rendered_artifacts = publish_review_artifacts(review_dir, site_dir, manifest)
 
-    experiment = manifest.get("experiment", {})
     implementation = manifest.get("implementation", {})
     title = review_display_title(review_dir, manifest)
     summary = (
@@ -715,7 +854,7 @@ def render_review_site(review_dir: Path, site_dir: Path | None = None) -> Path:
         else ""
     )
     report_path = review_dir / str(manifest.get("report") or "REPORT.md")
-    artifact_cards = "\n".join(render_artifact_card(artifact) for artifact in rendered_artifacts)
+    evidence = classify_review_evidence(rendered_artifacts)
 
     html_text = f"""<!doctype html>
 <html lang="en">
@@ -728,6 +867,16 @@ def render_review_site(review_dir: Path, site_dir: Path | None = None) -> Path:
     main {{ max-width: 70rem; }}
     .artifact-grid {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); gap: 1rem; }}
     .artifact-card {{ border: 1px solid #d0d7de; border-radius: 0.5rem; padding: 1rem; }}
+    .attempt-video {{ width: 100%; max-width: 56rem; border: 1px solid #d0d7de; border-radius: 0.5rem; }}
+    .screenshot-frame {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 1rem; }}
+    .screenshot-card {{ border: 1px solid #d0d7de; border-radius: 0.5rem; padding: 0.75rem; }}
+    .screenshot-card img {{ max-width: 100%; height: auto; }}
+    .evidence-actions {{ display: flex; flex-wrap: wrap; gap: 0.75rem; padding-left: 0; list-style: none; }}
+    .performance-table {{ border-collapse: collapse; width: 100%; }}
+    .performance-table th, .performance-table td {{ border: 1px solid #d0d7de; padding: 0.4rem; text-align: left; }}
+    .artifact-checklist {{ list-style: none; padding-left: 0; }}
+    .artifact-checklist li {{ display: flex; justify-content: space-between; border-bottom: 1px solid #d0d7de; padding: 0.35rem 0; }}
+    .artifact-checklist .missing, .missing-artifact {{ color: #9a6700; }}
     dt {{ font-weight: 700; }}
     dd {{ margin: 0 0 0.5rem; }}
     pre {{ white-space: pre-wrap; background: #f6f8fa; padding: 1rem; overflow: auto; }}
@@ -745,11 +894,10 @@ def render_review_site(review_dir: Path, site_dir: Path | None = None) -> Path:
       <h2>Report</h2>
       {render_report(report_path)}
     </section>
+    {render_evidence_section(evidence)}
     <section>
-      <h2>Artifacts</h2>
-      <div class="artifact-grid">
-        {artifact_cards}
-      </div>
+      <h2>Additional Files</h2>
+      {render_visible_artifacts(evidence)}
     </section>
     <section>
       <h2>Checks</h2>

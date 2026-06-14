@@ -11,6 +11,11 @@ def write(path: Path, text: str) -> None:
     path.write_text(text, encoding="utf-8")
 
 
+def write_bytes(path: Path, data: bytes) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_bytes(data)
+
+
 def review_manifest() -> dict[str, object]:
     return {
         "schema_version": "1.0",
@@ -117,6 +122,128 @@ def test_render_review_site_publishes_sanitized_artifacts(tmp_path: Path) -> Non
         site_dir
         / "static/artifacts/monitor-static/vis@4.17.0/dist/vis.min.js"
     ).exists()
+
+
+def test_render_review_site_renders_evidence_view(tmp_path: Path) -> None:
+    review_dir = tmp_path / "pitch-discrimination-demo" / "review"
+    manifest = review_manifest()
+    artifacts = manifest["artifacts"]
+    assert isinstance(artifacts, list)
+    notebook = artifacts[2]
+    assert isinstance(notebook, dict)
+    notebook["status"] = "present"
+    artifacts.extend(
+        [
+            {
+                "id": "participant_video",
+                "kind": "video",
+                "path": "artifacts/participant.mp4",
+                "title": "Participant walkthrough",
+                "description": "Participant video.",
+                "required": True,
+                "status": "present",
+                "created_by": "agent",
+            },
+            {
+                "id": "screenshots",
+                "kind": "screenshot",
+                "path": "artifacts/screenshots/01-intro.png",
+                "title": "Intro screenshot",
+                "description": "Intro screen.",
+                "required": False,
+                "status": "present",
+                "created_by": "agent",
+            },
+            {
+                "id": "screenshot_manifest",
+                "kind": "screenshot",
+                "path": "artifacts/screenshots/manifest.json",
+                "title": "Screenshot manifest",
+                "description": "Screenshot captions.",
+                "required": False,
+                "status": "present",
+                "created_by": "agent",
+            },
+            {
+                "id": "performance_result",
+                "kind": "performance",
+                "path": "artifacts/performance.json",
+                "title": "Performance",
+                "description": "Performance result.",
+                "required": True,
+                "status": "present",
+                "created_by": "agent",
+            },
+            {
+                "id": "data_export",
+                "kind": "data_export",
+                "path": "artifacts/data.zip",
+                "title": "Data export",
+                "description": "Exported data.",
+                "required": True,
+                "status": "present",
+                "created_by": "agent",
+            },
+            {
+                "id": "simulation_export",
+                "kind": "data_export",
+                "path": "artifacts/simulated_data.zip",
+                "title": "Simulated data",
+                "description": "Simulated export.",
+                "required": True,
+                "status": "present",
+                "created_by": "agent",
+            },
+        ]
+    )
+    manifest["blockers"] = []
+    write(review_dir / "review.json", json.dumps(manifest) + "\n")
+    write(review_dir / "REPORT.md", "# Report\n")
+    write(review_dir / "artifacts/psynet_debug.log", "debug\n")
+    write(review_dir / "artifacts/monitor.html", "<html><head></head><body></body></html>")
+    write_bytes(review_dir / "artifacts/participant.mp4", b"video bytes")
+    write_bytes(review_dir / "artifacts/screenshots/01-intro.png", b"png bytes")
+    write(
+        review_dir / "artifacts/screenshots/manifest.json",
+        json.dumps({"captions": {"screenshots/01-intro.png": "Intro screen"}}),
+    )
+    write(
+        review_dir / "artifacts/performance.json",
+        json.dumps(
+            {
+                "results": [
+                    {
+                        "n_bots": 4,
+                        "total_bots_started": 5,
+                        "bots_succeeded": 4,
+                        "total_requests": 12,
+                        "median_response_time": 0.1234,
+                        "p95_response_time": 0.4567,
+                        "q_delay_p95": 0.0,
+                        "request_errors": 1,
+                        "bot_errors": 2,
+                    }
+                ]
+            }
+        ),
+    )
+    write_bytes(review_dir / "artifacts/data.zip", b"data")
+    write_bytes(review_dir / "artifacts/simulated_data.zip", b"simulated")
+    write(review_dir / "analyses/analysis.ipynb", json.dumps({"cells": []}))
+
+    site_dir = render_review_site(review_dir)
+
+    index = (site_dir / "index.html").read_text(encoding="utf-8")
+    assert "<video" in index
+    assert "Screenshot walkthrough" in index
+    assert "Intro screen" in index
+    assert "Performance test result" in index
+    assert "<td>4</td>" in index
+    assert "<td>3</td>" in index
+    assert "Download data export" in index
+    assert "simulated_data.zip" in index
+    assert "participant.mp4 <span>present</span>" in index
+    assert "screenshots/ <span>1 image</span>" in index
 
 
 def write_valid_review(review_dir: Path) -> None:
