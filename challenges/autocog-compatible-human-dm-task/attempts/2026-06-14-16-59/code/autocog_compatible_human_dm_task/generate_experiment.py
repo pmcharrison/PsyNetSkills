@@ -380,6 +380,7 @@ def po_file(locale: str) -> str:
         "",
     ]
     for msgid, msgstr in TRANSLATIONS[locale].items():
+        lines.append("#: experiment.py")
         if "{" in msgid:
             lines.append("#, python-brace-format")
         lines.extend([f"msgid {po_quote(msgid)}", f"msgstr {po_quote(msgstr)}", ""])
