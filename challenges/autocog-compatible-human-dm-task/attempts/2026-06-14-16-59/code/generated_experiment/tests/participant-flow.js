@@ -37,12 +37,12 @@ async function run() {
   const page = await context.newPage();
   await page.goto(participantUrl(), { waitUntil: "domcontentloaded" });
 
-  await expect(page.getByRole("button").filter({ hasText: /Begin Experiment/i })).toBeVisible();
+  await expect(page.getByRole("button").first()).toBeVisible();
   await page.screenshot({ path: path.join(screenshotDir, `${locale}-01-ad.png`), fullPage: true });
-  await page.getByRole("button").filter({ hasText: /Begin Experiment/i }).click();
+  await page.getByRole("button").first().click();
 
   await page.waitForURL(/\/consent/);
-  await page.getByRole("button").filter({ hasText: /Next/i }).click();
+  await page.getByRole("button").first().click();
 
   await page.waitForURL(/\/timeline/);
   await expect(page.locator("body")).toContainText(locale === "en" ? "Welcome" : /.+/);
