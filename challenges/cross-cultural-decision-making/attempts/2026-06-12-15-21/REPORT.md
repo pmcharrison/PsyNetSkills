@@ -4,8 +4,8 @@
 
 Implemented a self-contained PsyNet decision-making experiment in
 `code/decision_making_study/`. Participants see two side-by-side options on six
-independent trials, compare variable-length feature tables, and choose one
-option per trial. The saved response values are stable identifiers
+independent trials, compare the same fixed five-feature set for both options in
+every task, and choose one option per trial. The saved response values are stable identifiers
 (`option_a`, `option_b`) while the participant-facing labels are translated.
 
 ## Translation readiness

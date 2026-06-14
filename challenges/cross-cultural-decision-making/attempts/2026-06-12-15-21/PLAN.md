@@ -8,7 +8,7 @@ The experiment will measure simple preferential choices between two multi-featur
 
 Participants will first see a short welcome page followed by concise task instructions. The instructions will explain that each trial contains two options, that every option has several feature rows, that each row has a value and a validity, and that the participant should choose the option they would prefer.
 
-The main task will contain a fixed manifest of independent choice trials. Each trial will display two cards side by side. Option cards will have fixed numbers of features, specified by the user, for example five rows per option, and every row will display a stable feature label, a value between 0 and 100, and a validity for each feature lying between 0 and 1. The number of features is fixed between option A and option B on the same trial. Participants will respond with a two-button choice, choosing either option A or option B. One response will be saved for each trial.
+The main task will contain a fixed manifest of independent choice trials. Each trial will display two cards side by side. Option cards will have the same fixed five-feature set in every task: quality, cost saving, community benefit, time saving, and safety. Every row will display a stable feature label, a value between 0 and 100, and a validity for each feature lying between 0 and 1. The number and identity of features is fixed between option A and option B on every trial. Participants will respond with a two-button choice, choosing either option A or option B. One response will be saved for each trial.
 
 After the final trial, participants will see a short thank-you page. No real external services, custom credentials, or production recruiter settings will be used. English will be the source locale, with Hindi and French used for local evidence runs.
 
@@ -27,16 +27,16 @@ The round structure is a simple independent repeated-choice design. I will use `
 - a `StaticTrialMaker` whose `expected_trials_per_participant` matches the manifest length;
 - a bot check that completes all expected trials and asserts one saved answer per trial.
 
-For translation readiness, I will keep `locale` and `supported_locales` together in `config.txt`, with `supported_locales = ["en", "hi", "de"]`. I will avoid f-strings or concatenation inside gettext calls, use `.format(...)` only with uppercase placeholders if placeholders are needed, and keep numeric feature definitions out of translation units. Because challenge attempts must not use real translation credentials, I will create complete Hindi and German `.po` files manually, run PsyNet extraction/consistency checks, and inspect `locales/experiment.pot` for expected strings.
+For translation readiness, I will keep `locale` and `supported_locales` together in `config.txt`, with `supported_locales = ["en", "hi", "fr"]`. I will avoid f-strings or concatenation inside gettext calls, use `.format(...)` only with uppercase placeholders if placeholders are needed, and keep numeric feature definitions out of translation units. Because challenge attempts must not use real translation credentials, I will create complete Hindi and French `.po` files manually, run PsyNet extraction/consistency checks, and inspect `locales/experiment.pot` for expected strings.
 
 Validation and evidence will include:
 
 - `python experiment.py` from the experiment directory;
-- `psynet translate hi de` or the strongest credential-free extraction/consistency command supported by the refreshed PsyNet checkout;
+- `psynet translate hi fr` or the strongest credential-free extraction/consistency command supported by the refreshed PsyNet checkout;
 - `psynet test local` with the source locale and, if launch configuration supports it cleanly, repeated local runs for Hindi and French;
 - `psynet simulate` with enough bots to produce an example dataset;
 - an analysis notebook or script summarizing choices by trial and option features;
-- participant-flow screenshots and `participant.mp4` evidence for English, Hindi, and German using the `record-participant-video` skill;
+- participant-flow screenshots and `participant.mp4` evidence for English, Hindi, and French using the `record-participant-video` skill;
 - `psynet performance-test local --n-bots 40 --duration-minutes 5 --time-factor 1.0` with JSON output under `evidence/`;
 - a monitor snapshot and exported `data.zip` under `evidence/`;
 - `REPORT.md` summarizing implementation, validation, translation readiness, and any remaining risks.

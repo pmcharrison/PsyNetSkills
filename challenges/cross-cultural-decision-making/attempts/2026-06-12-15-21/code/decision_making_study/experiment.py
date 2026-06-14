@@ -25,18 +25,8 @@ def get_feature_label(feature_id):
         "quality": _("Quality"),
         "cost_saving": _("Cost saving"),
         "community_benefit": _("Community benefit"),
-        "comfort": _("Comfort"),
-        "environmental_impact": _("Environmental impact"),
-        "long_term_value": _("Long-term value"),
-        "local_fit": _("Fit with local needs"),
-        "reliability": _("Reliability"),
-        "flexibility": _("Flexibility"),
-        "family_preference": _("Family preference"),
         "time_saving": _("Time saving"),
         "safety": _("Safety"),
-        "social_approval": _("Social approval"),
-        "future_opportunity": _("Future opportunity"),
-        "effort_required": _("Low effort required"),
     }
     return labels[feature_id]
 
