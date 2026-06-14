@@ -1,0 +1,43 @@
+{
+  "participants": 12,
+  "trial_rows": 72,
+  "unique_trials": 6,
+  "choices": [
+    "option_a",
+    "option_b"
+  ],
+  "all_trials_complete": true,
+  "all_trials_finalized": true,
+  "choice_counts": [
+    {
+      "trial_id": "choice_01",
+      "option_a": 5,
+      "option_b": 7
+    },
+    {
+      "trial_id": "choice_02",
+      "option_a": 7,
+      "option_b": 5
+    },
+    {
+      "trial_id": "choice_03",
+      "option_a": 8,
+      "option_b": 4
+    },
+    {
+      "trial_id": "choice_04",
+      "option_a": 8,
+      "option_b": 4
+    },
+    {
+      "trial_id": "choice_05",
+      "option_a": 7,
+      "option_b": 5
+    },
+    {
+      "trial_id": "choice_06",
+      "option_a": 7,
+      "option_b": 5
+    }
+  ]
+}

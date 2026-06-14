@@ -1,0 +1,113 @@
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: experiment.py:25
+msgid "Quality"
+msgstr ""
+
+#: experiment.py:26
+msgid "Cost saving"
+msgstr ""
+
+#: experiment.py:27
+msgid "Community benefit"
+msgstr ""
+
+#: experiment.py:28
+msgid "Time saving"
+msgstr ""
+
+#: experiment.py:29
+msgid "Safety"
+msgstr ""
+
+#: experiment.py:43
+msgid "Instructions"
+msgstr ""
+
+#: experiment.py:46
+msgid ""
+"On each trial you will see two options side by side. Each option has several"
+" features."
+msgstr ""
+
+#: experiment.py:51
+msgid ""
+"Every feature has a value from 0 to 100 and a validity from 0 to 1. Higher "
+"validity means the feature is a more reliable cue."
+msgstr ""
+
+#: experiment.py:56
+msgid ""
+"Please compare the two options carefully and choose the option you would "
+"prefer."
+msgstr ""
+
+#: experiment.py:61
+msgid ""
+"There are no right or wrong answers. We are interested in your decision."
+msgstr ""
+
+#: experiment.py:70
+msgid "Welcome"
+msgstr ""
+
+#: experiment.py:73
+msgid "Thank you for taking part in this decision-making study."
+msgstr ""
+
+#: experiment.py:78
+msgid "You will make a short series of choices between two described options."
+msgstr ""
+
+#: experiment.py:91
+msgid "Feature"
+msgstr ""
+
+#: experiment.py:92
+msgid "Value"
+msgstr ""
+
+#: experiment.py:93
+msgid "Validity"
+msgstr ""
+
+#: experiment.py:113 experiment.py:114
+#, python-brace-format
+msgid "Option {LETTER}"
+msgstr ""
+
+#: experiment.py:115
+#, python-brace-format
+msgid "Trial {NUMBER}"
+msgstr ""
+
+#: experiment.py:121
+msgid ""
+"Review the feature values and validities, then choose the option you would "
+"prefer."
+msgstr ""
+
+#: experiment.py:126
+msgid ""
+"Full instructions: values range from 0 to 100, validities range from 0 to 1,"
+" and higher validity means a more reliable cue."
+msgstr ""
+
+#: experiment.py:148 experiment.py:149
+#, python-brace-format
+msgid "Choose Option {LETTER}"
+msgstr ""
+
+#: experiment.py:183
+msgid "Thank you"
+msgstr ""
+
+#: experiment.py:184
+msgid "Thank you for completing the decision-making study."
+msgstr ""
