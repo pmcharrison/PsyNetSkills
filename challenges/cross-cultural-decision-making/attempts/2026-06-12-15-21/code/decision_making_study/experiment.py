@@ -176,7 +176,7 @@ trial_maker = StaticTrialMaker(
     expected_trials_per_participant=len(TRIAL_MANIFEST),
     max_trials_per_participant=len(TRIAL_MANIFEST),
     recruit_mode="n_participants",
-    target_n_participants=1,
+    target_n_participants=12,
 )
 
 
