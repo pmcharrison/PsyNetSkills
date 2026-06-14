@@ -170,7 +170,8 @@ class DigitRecallPage(ModularPage):
             time_estimate=6,
         )
 
-    def get_bot_response(self, bot: Bot) -> str:
+    def get_bot_response(self, experiment, bot: Bot) -> str:
+        del experiment
         ability = float(bot.var.memory_ability)
         response, _ = sample_synthetic_response(self.target_string, ability)
         return response
