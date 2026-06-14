@@ -218,6 +218,7 @@ class IdentificationTrial(StaticTrial):
                 prevent_control_submit=True,
             ),
             control=IdentificationControl(self.definition),
+            css="button.response:disabled { visibility: hidden; }",
             time_estimate=self.time_estimate,
         )
 
