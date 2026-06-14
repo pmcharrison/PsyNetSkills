@@ -18,7 +18,7 @@ function participantUrl() {
 }
 
 async function clickSubmit(page) {
-  await page.locator("button.submit:visible").first().click();
+  await page.locator("button.submit:visible:not([disabled])").first().click();
   await page.waitForTimeout(250);
 }
 
@@ -60,11 +60,11 @@ async function run() {
 
   let choices = 0;
   while (!page.url().includes("recruiter-exit")) {
-    const choiceButtons = page.locator("button.push-button:visible");
+    const choiceButtons = page.locator("button.push-button:visible:not([disabled])");
     if ((await choiceButtons.count()) > 0) {
       await choiceButtons.first().click();
       choices += 1;
-    } else if ((await page.locator("button.submit:visible").count()) > 0) {
+    } else if ((await page.locator("button.submit:visible:not([disabled])").count()) > 0) {
       await clickSubmit(page);
     } else {
       await page.waitForTimeout(250);
