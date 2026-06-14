@@ -1,0 +1,16 @@
+[Config]
+title = Decision-making study
+description = This study asks participants to choose between pairs of options described by numerical features.
+contact_email_on_error = research@example.invalid
+organization_name = PsyNetSkills
+
+recruiter = generic
+currency = $
+wage_per_hour = 12.0
+locale = en
+supported_locales = ["en", "hi", "fr"]
+
+[Prolific]
+auto_recruit = false
+prolific_estimated_completion_minutes = 3
+base_payment = 0.60
