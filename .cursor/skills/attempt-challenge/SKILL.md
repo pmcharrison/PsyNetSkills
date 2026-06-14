@@ -100,16 +100,9 @@ Note the `cloud-agent-links` skill for sharing user review links.
 9. Implement the challenge in `code/`.
    - For experiment implementation challenges, first follow
      `psynet-experiment-implementation/SKILL.md`, including its requirement to
-     stop for human review of `PLAN.md` before coding. After opening or updating
-     the PR, follow both `preview-dashboard-live` and `dashboard-preview-links`.
-     Give the user the live dashboard attempt URL with the `#plan` anchor for
-     immediate review, noting that live tunnel links may expire and can be
-     refreshed on request. Also provide the durable PR preview URL with the
-     `#plan` anchor and the branch-filtered workflow link, noting that the static
-     preview may take a few minutes to build. Point the user to the PR diff or
-     code viewer for the full `PLAN.md` and include only a brief chat summary to
-     avoid making the reviewer wonder where the full plan went.
-     For cloud agents, use `cloud-agent-links` skill for the handoff.
+     stop for human review of `PLAN.md` before coding.
+     For cloud agents, use `cloud-agent-links` skill for the handoff,
+     pointing the user to the Plan section of the challenge attempt page.
    - Do not make challenge code depend on files outside its attempt directory
      unless absolutely necessary.
    - For runnable PsyNet experiments, prefer a non-conflicting nested directory
