@@ -56,7 +56,7 @@ the dashboard PR preview build fails.
 *Actions:*
 
 - **PsyNetSkills:** Make `challenges/attempt.html` resilient to truncated/unparseable notebook content — guard the `transform.Unmarshal` (e.g. only unmarshal when the file is not `truncated`, or wrap in a way that degrades to a download link) so a large analysis notebook cannot break the whole dashboard build. Confidence: high. Impact: high. Status: considering.
-- **PsyNetSkills:** Document the ~100KB inline limit in the experiment-evidence reference and advise keeping `analysis.ipynb` small (low-DPI inline figures, or link out large figures), so attempts do not unknowingly produce a notebook that breaks the preview build. Confidence: high. Impact: medium. Status: considering.
+- **PsyNetSkills:** Document the ~100KB inline limit in the experiment-evidence reference and advise keeping `analysis.ipynb` small (low-DPI inline figures, or link out large figures), so attempts do not unknowingly produce a notebook that breaks the preview build. Confidence: high. Impact: medium. Status: completed. Notes: Documented the ~100KB inline-truncation limit, its consequence (truncated notebook = invalid JSON = broken attempt-page render / preview build), and both mitigations (low-DPI inline figures or link out large figures) in `attempt-challenge/references/experiment-evidence.md` (PR #241).
 
 ## Playwright needs its bundled ffmpeg for video recording
 
