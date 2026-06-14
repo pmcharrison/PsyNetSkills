@@ -35,17 +35,20 @@ async function screenshotOnce(page, name, taken) {
   await page.screenshot({ path: path.join(screenshotDir, `${name}.png`), fullPage: true });
 }
 
-async function answerTrial(page, bodyText, trialIndex) {
-  if (bodyText.includes("same or different") || bodyText.includes("Same (S)")) {
+async function answerTrial(page, trialIndex) {
+  await page.waitForLoadState("domcontentloaded").catch(() => {});
+  const bodyText = await page.locator("body").innerText({ timeout: 15000 });
+  if ((await page.locator("button#different").count()) > 0) {
     await clickButton(page, "button#different, button:has-text('Different')");
-  } else if (bodyText.includes("Rate how similar")) {
+  } else if ((await page.locator('button[id="3"]').count()) > 0) {
     await clickButton(page, 'button[id="3"]');
-  } else if (bodyText.includes("Choose the number")) {
+  } else if (bodyText.includes("Choose the number") && (await page.locator('button[id="1"]').count()) > 0) {
     await clickButton(page, 'button[id="1"]');
   } else {
-    await clickButton(page);
+    return false;
   }
   await page.waitForTimeout(trialIndex < 4 ? 350 : 80);
+  return true;
 }
 
 (async () => {
@@ -84,8 +87,12 @@ async function answerTrial(page, bodyText, trialIndex) {
         .count()) > 0;
 
     if (hasTrialButtons) {
-      trialIndex += 1;
-      await answerTrial(page, bodyText, trialIndex);
+      const answered = await answerTrial(page, trialIndex + 1);
+      if (answered) {
+        trialIndex += 1;
+      } else {
+        await page.waitForTimeout(500);
+      }
     } else {
       const enabledButtons = await page
         .locator("button:visible:not([disabled]), input[type=submit]:visible:not([disabled])")

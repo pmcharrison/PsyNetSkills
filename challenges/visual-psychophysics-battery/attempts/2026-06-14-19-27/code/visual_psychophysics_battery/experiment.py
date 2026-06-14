@@ -568,6 +568,10 @@ class VisualBatteryTrial(StaticTrial):
                 keys=["KeyS", "KeyD"],
             ),
             time_estimate=3,
+            events={
+                "responseEnable": Event(is_triggered_by="trialStart"),
+                "submitEnable": Event(is_triggered_by="trialStart"),
+            },
         )
 
 
