@@ -1,10 +1,14 @@
 __pycache__/
 .pytest_cache/
 .dallinger/
+.deploy/
 local_config.txt
 data/
+Dockertag
 source_code.zip
 node_modules/
 test-results/
 playwright-report/
+static/
+*.mo
 *.pyc

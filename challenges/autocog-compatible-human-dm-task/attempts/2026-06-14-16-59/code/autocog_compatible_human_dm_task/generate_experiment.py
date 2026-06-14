@@ -438,12 +438,16 @@ def generate(config_path: Path, output_dir: Path, psynet_commit: str) -> None:
         __pycache__/
         .pytest_cache/
         .dallinger/
+        .deploy/
         local_config.txt
         data/
+        Dockertag
         source_code.zip
         node_modules/
         test-results/
         playwright-report/
+        static/
+        *.mo
         *.pyc
         """
     )
