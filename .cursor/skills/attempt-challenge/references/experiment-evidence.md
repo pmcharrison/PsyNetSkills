@@ -29,7 +29,13 @@ Provide these artifacts or document the blocker in `EVALUATION.md`:
 - `evidence/analyses/analysis.ipynb` is the canonical analysis notebook. It must
   read the exported CSV data directly and show the analysis inline, including
   visible code, summary tables, plots, and interpretation. Avoid replacing this
-  with a thin notebook that only calls a hidden script.
+  with a thin notebook that only calls a hidden script. The notebook tooling is
+  not part of the PsyNet install; install it first with
+  `uv pip install matplotlib jupyter nbconvert nbformat ipykernel`, then execute
+  the notebook in place
+  (`jupyter nbconvert --to notebook --execute --inplace ...`). Keep the executed
+  notebook under ~100KB (use low-DPI inline figures) so the dashboard can render
+  it; larger files are truncated and fail to render.
 - `REPORT.md` summarizes the implementation, simulation, analysis, validation,
   and any findings.
 - `EVALUATION.md` has the copied criteria checklist when the challenge includes
