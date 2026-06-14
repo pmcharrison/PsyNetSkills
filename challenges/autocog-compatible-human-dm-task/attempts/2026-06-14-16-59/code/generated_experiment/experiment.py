@@ -61,7 +61,7 @@ def option_card(option_id, ratings, validities):
 
 
 class ChoiceTrial(StaticTrial):
-    time_estimate = 2
+    time_estimate = 0.5
 
     def show_trial(self, experiment, participant):
         definition = self.definition
@@ -129,7 +129,7 @@ class Exp(psynet.experiment.Experiment):
                     )
                 ),
             ),
-            time_estimate=2,
+            time_estimate=0.5,
         ),
         InfoPage(
             tags.div(
@@ -151,7 +151,7 @@ class Exp(psynet.experiment.Experiment):
                     )
                 ),
             ),
-            time_estimate=4,
+            time_estimate=1.0,
         ),
         trial_maker,
         InfoPage(
@@ -159,7 +159,7 @@ class Exp(psynet.experiment.Experiment):
                 tags.h2(_("Thank you")),
                 tags.p(_("Thank you for completing the decision-making task.")),
             ),
-            time_estimate=2,
+            time_estimate=0.5,
         ),
     )
 
