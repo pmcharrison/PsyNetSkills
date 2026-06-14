@@ -283,7 +283,7 @@ def test_edit_in_github_uses_pr_preview_branch(tmp_path: Path) -> None:
     ) in html
 
 
-def test_challenges_table_shows_author_and_past_editors(tmp_path: Path) -> None:
+def test_challenges_table_shows_author_only(tmp_path: Path) -> None:
     html = render_challenges_list_page(
         tmp_path,
         [
@@ -312,9 +312,9 @@ def test_challenges_table_shows_author_and_past_editors(tmp_path: Path) -> None:
     )
 
     assert "<th>Author</th>" in html
-    assert "<th>Past editors</th>" in html
+    assert "<th>Past editors</th>" not in html
     assert "Peter Harrison" in html
-    assert "Harin Lee" in html
+    assert "Harin Lee" not in html
 
 
 def test_collect_challenges_reports_latest_score(tmp_path: Path) -> None:
