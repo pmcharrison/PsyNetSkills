@@ -84,16 +84,21 @@ Missing artifacts should never be presented as passing checks.
 
 ## CLI surface
 
-The first implemented command is `psynet-review render`, which reads
-`review/review.json`, publishes present artifacts through the shared sanitizer
-and content-addressed artifact store, and writes a static review page.
+The first implemented commands are:
+
+- `psynet-review validate`, which checks `review/review.json`, required
+  artifact paths, blocker coverage, report presence, video limits, and notebook
+  JSON readiness.
+- `psynet-review render`, which reads `review/review.json`, publishes present
+  artifacts through the shared sanitizer and content-addressed artifact store,
+  and writes a static review page.
 
 The intended CLI surface is:
 
 - `psynet-review init`: create `review/`, `review.json`, `REPORT.md`, and
   ignored output directories.
 - `psynet-review validate`: validate `review.json`, required paths, video
-  limits, notebook JSON, static monitor safety, and known credential redactions.
+  limits, notebook JSON, and blocker coverage.
 - `psynet-review render`: build `review/site/` as a self-contained static
   review report.
 - `psynet-review archive`: produce a shareable `review.zip`.

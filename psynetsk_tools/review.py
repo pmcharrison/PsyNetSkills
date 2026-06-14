@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import html
 import json
+import re
 import shutil
 from dataclasses import dataclass
 from pathlib import Path
@@ -17,6 +18,50 @@ from psynetsk_tools.review_artifacts import (
     write_hashed_artifact,
     write_shared_monitor_static_assets,
 )
+from psynetsk_tools.validate import validate_evidence_video
+
+REVIEW_TOP_LEVEL_REQUIRED = {
+    "schema_version",
+    "created_at",
+    "updated_at",
+    "experiment",
+    "implementation",
+    "environment",
+    "report",
+    "artifacts",
+    "checks",
+    "blockers",
+}
+ARTIFACT_REQUIRED_FIELDS = {
+    "id",
+    "kind",
+    "path",
+    "title",
+    "description",
+    "required",
+    "status",
+    "created_by",
+}
+BLOCKER_REQUIRED_FIELDS = {"artifact_id", "severity", "reason", "next_step"}
+CHECK_REQUIRED_FIELDS = {"id", "title", "status"}
+ARTIFACT_ID_RE = re.compile(r"^[a-z0-9]+(?:_[a-z0-9]+)*$")
+ARTIFACT_KINDS = {
+    "video",
+    "screenshot",
+    "notebook",
+    "data_export",
+    "performance",
+    "monitor_snapshot",
+    "log",
+    "report",
+    "source",
+    "other",
+}
+ARTIFACT_STATUSES = {"present", "missing", "blocked", "not_applicable"}
+ARTIFACT_CREATORS = {"agent", "cli", "manual", "unknown"}
+BLOCKER_SEVERITIES = {"warning", "error"}
+CHECK_STATUSES = {"pass", "fail", "warning", "not_run"}
+MAX_REVIEW_NOTEBOOK_BYTES = 100_000
 
 
 @dataclass(frozen=True)
@@ -43,6 +88,247 @@ def read_review_manifest(review_dir: Path) -> dict[str, Any]:
     if not isinstance(manifest, dict):
         raise ValueError(f"{manifest_path}: manifest must be a JSON object")
     return manifest
+
+
+def relative_review_path(
+    review_dir: Path,
+    path_text: object,
+    label: str,
+) -> tuple[Path | None, list[str]]:
+    """Resolve a manifest path and ensure it stays inside the review directory."""
+
+    if not isinstance(path_text, str) or not path_text:
+        return None, [f"{label}: path must be a non-empty string"]
+
+    relative_path = Path(path_text)
+    if relative_path.is_absolute():
+        return None, [f"{label}: path must be relative to the review directory"]
+
+    review_root = review_dir.resolve()
+    resolved_path = (review_dir / relative_path).resolve()
+    if not resolved_path.is_relative_to(review_root):
+        return None, [f"{label}: path must stay inside the review directory"]
+    return resolved_path, []
+
+
+def validate_review_notebook(notebook_file: Path) -> list[str]:
+    """Validate that a review notebook is parseable and small enough to render."""
+
+    problems: list[str] = []
+    size_bytes = notebook_file.stat().st_size
+    if size_bytes > MAX_REVIEW_NOTEBOOK_BYTES:
+        problems.append(
+            f"{notebook_file}: review notebooks must be at most "
+            f"{MAX_REVIEW_NOTEBOOK_BYTES} bytes",
+        )
+    try:
+        notebook = json.loads(notebook_file.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        problems.append(f"{notebook_file}: invalid notebook JSON: {exc}")
+        return problems
+    if not isinstance(notebook, dict):
+        problems.append(f"{notebook_file}: notebook must be a JSON object")
+    return problems
+
+
+def validate_review_blockers(
+    review_dir: Path,
+    manifest: dict[str, Any],
+) -> tuple[set[str], list[str]]:
+    """Validate blocker records and return the artifact IDs they cover."""
+
+    blockers = manifest.get("blockers")
+    if not isinstance(blockers, list):
+        return set(), [f"{review_dir / 'review.json'}: blockers must be a list"]
+
+    blocker_ids: set[str] = set()
+    problems: list[str] = []
+    for index, blocker in enumerate(blockers):
+        label = f"{review_dir / 'review.json'}: blockers[{index}]"
+        if not isinstance(blocker, dict):
+            problems.append(f"{label}: blocker must be a JSON object")
+            continue
+        for field in sorted(BLOCKER_REQUIRED_FIELDS):
+            if field not in blocker:
+                problems.append(f"{label}: missing {field}")
+        artifact_id = blocker.get("artifact_id")
+        if not isinstance(artifact_id, str) or not ARTIFACT_ID_RE.fullmatch(artifact_id):
+            problems.append(f"{label}: artifact_id must be a valid artifact ID")
+        else:
+            blocker_ids.add(artifact_id)
+        if blocker.get("severity") not in BLOCKER_SEVERITIES:
+            problems.append(f"{label}: severity must be warning or error")
+        for field in ("reason", "next_step"):
+            if not isinstance(blocker.get(field), str) or not blocker[field].strip():
+                problems.append(f"{label}: {field} must be a non-empty string")
+    return blocker_ids, problems
+
+
+def validate_review_checks(review_dir: Path, manifest: dict[str, Any]) -> list[str]:
+    """Validate check records in a review manifest."""
+
+    checks = manifest.get("checks")
+    if not isinstance(checks, list):
+        return [f"{review_dir / 'review.json'}: checks must be a list"]
+
+    problems: list[str] = []
+    for index, check in enumerate(checks):
+        label = f"{review_dir / 'review.json'}: checks[{index}]"
+        if not isinstance(check, dict):
+            problems.append(f"{label}: check must be a JSON object")
+            continue
+        for field in sorted(CHECK_REQUIRED_FIELDS):
+            if field not in check:
+                problems.append(f"{label}: missing {field}")
+        check_id = check.get("id")
+        if not isinstance(check_id, str) or not ARTIFACT_ID_RE.fullmatch(check_id):
+            problems.append(f"{label}: id must be a valid check ID")
+        if not isinstance(check.get("title"), str) or not check["title"].strip():
+            problems.append(f"{label}: title must be a non-empty string")
+        if check.get("status") not in CHECK_STATUSES:
+            problems.append(
+                f"{label}: status must be pass, fail, warning, or not_run",
+            )
+    return problems
+
+
+def validate_review_artifacts(
+    review_dir: Path,
+    manifest: dict[str, Any],
+    blocker_ids: set[str],
+) -> list[str]:
+    """Validate artifact records and their files."""
+
+    artifacts = manifest.get("artifacts")
+    if not isinstance(artifacts, list):
+        return [f"{review_dir / 'review.json'}: artifacts must be a list"]
+
+    problems: list[str] = []
+    artifact_ids: set[str] = set()
+    for index, artifact in enumerate(artifacts):
+        label = f"{review_dir / 'review.json'}: artifacts[{index}]"
+        if not isinstance(artifact, dict):
+            problems.append(f"{label}: artifact must be a JSON object")
+            continue
+        for field in sorted(ARTIFACT_REQUIRED_FIELDS):
+            if field not in artifact:
+                problems.append(f"{label}: missing {field}")
+
+        artifact_id = artifact.get("id")
+        if not isinstance(artifact_id, str) or not ARTIFACT_ID_RE.fullmatch(artifact_id):
+            problems.append(f"{label}: id must be a valid artifact ID")
+            artifact_id = None
+        elif artifact_id in artifact_ids:
+            problems.append(f"{label}: duplicate artifact ID {artifact_id!r}")
+        else:
+            artifact_ids.add(artifact_id)
+
+        if artifact.get("kind") not in ARTIFACT_KINDS:
+            problems.append(f"{label}: kind is not recognized")
+        status = artifact.get("status")
+        if status not in ARTIFACT_STATUSES:
+            problems.append(f"{label}: status is not recognized")
+        if artifact.get("created_by") not in ARTIFACT_CREATORS:
+            problems.append(f"{label}: created_by is not recognized")
+        if not isinstance(artifact.get("required"), bool):
+            problems.append(f"{label}: required must be a boolean")
+        for field in ("title", "description"):
+            if not isinstance(artifact.get(field), str) or not artifact[field].strip():
+                problems.append(f"{label}: {field} must be a non-empty string")
+
+        artifact_path, path_problems = relative_review_path(
+            review_dir,
+            artifact.get("path"),
+            label,
+        )
+        problems.extend(path_problems)
+        if artifact_path is None:
+            continue
+
+        if status == "present":
+            if not artifact_path.is_file():
+                problems.append(
+                    f"{label}: artifact marked present but file is missing: "
+                    f"{artifact_path}",
+                )
+                continue
+            if artifact_path.suffix.lower() == ".mp4":
+                problems.extend(validate_evidence_video(artifact_path))
+            if artifact_path.suffix.lower() == ".ipynb":
+                problems.extend(validate_review_notebook(artifact_path))
+
+        if artifact.get("required") is True and status != "present":
+            if artifact_id is None or artifact_id not in blocker_ids:
+                problems.append(
+                    f"{label}: required artifact must be present or have a "
+                    "matching blocker",
+                )
+    return problems
+
+
+def validate_review_manifest(review_dir: Path, manifest: dict[str, Any]) -> list[str]:
+    """Validate review manifest structure and local artifact files."""
+
+    problems: list[str] = []
+    manifest_path = review_dir / "review.json"
+    for field in sorted(REVIEW_TOP_LEVEL_REQUIRED):
+        if field not in manifest:
+            problems.append(f"{manifest_path}: missing {field}")
+
+    if manifest.get("schema_version") != "1.0":
+        problems.append(f"{manifest_path}: schema_version must be '1.0'")
+    for field in ("created_at", "updated_at"):
+        if not isinstance(manifest.get(field), str) or not manifest[field].strip():
+            problems.append(f"{manifest_path}: {field} must be a non-empty string")
+    for field in ("experiment", "implementation", "environment"):
+        if not isinstance(manifest.get(field), dict):
+            problems.append(f"{manifest_path}: {field} must be a JSON object")
+
+    if isinstance(manifest.get("experiment"), dict):
+        experiment = manifest["experiment"]
+        if not isinstance(experiment.get("title"), str) or not experiment["title"].strip():
+            problems.append(f"{manifest_path}: experiment.title must be a non-empty string")
+        if "source_path" not in experiment:
+            problems.append(f"{manifest_path}: experiment missing source_path")
+    if isinstance(manifest.get("implementation"), dict):
+        implementation = manifest["implementation"]
+        if (
+            not isinstance(implementation.get("summary"), str)
+            or not implementation["summary"].strip()
+        ):
+            problems.append(
+                f"{manifest_path}: implementation.summary must be a non-empty string",
+            )
+
+    report_path, report_problems = relative_review_path(
+        review_dir,
+        manifest.get("report"),
+        f"{manifest_path}: report",
+    )
+    problems.extend(report_problems)
+    if report_path is not None and not report_path.is_file():
+        problems.append(f"{manifest_path}: report file is missing: {report_path}")
+
+    blocker_ids, blocker_problems = validate_review_blockers(review_dir, manifest)
+    problems.extend(blocker_problems)
+    problems.extend(validate_review_checks(review_dir, manifest))
+    problems.extend(validate_review_artifacts(review_dir, manifest, blocker_ids))
+    return problems
+
+
+def validate_review(review_dir: Path) -> list[str]:
+    """Validate a standalone review directory."""
+
+    manifest_path = review_dir / "review.json"
+    if not manifest_path.exists():
+        return [f"{manifest_path}: missing review manifest"]
+    try:
+        manifest = read_review_manifest(review_dir)
+    except json.JSONDecodeError as exc:
+        return [f"{manifest_path}: invalid JSON: {exc}"]
+    except ValueError as exc:
+        return [str(exc)]
+    return validate_review_manifest(review_dir, manifest)
 
 
 def artifact_output_url(relative_url: str) -> str:
@@ -277,6 +563,17 @@ def build_parser() -> argparse.ArgumentParser:
 
     parser = argparse.ArgumentParser(description=__doc__)
     subparsers = parser.add_subparsers(dest="command", required=True)
+    validate_parser = subparsers.add_parser(
+        "validate",
+        help="validate a review directory",
+    )
+    validate_parser.add_argument(
+        "review_dir",
+        nargs="?",
+        default="review",
+        type=Path,
+        help="review directory containing review.json",
+    )
     render_parser = subparsers.add_parser("render", help="render a static review site")
     render_parser.add_argument(
         "review_dir",
@@ -298,7 +595,14 @@ def main(argv: list[str] | None = None) -> None:
 
     parser = build_parser()
     args = parser.parse_args(argv)
-    if args.command == "render":
+    if args.command == "validate":
+        problems = validate_review(args.review_dir)
+        if problems:
+            for problem in problems:
+                print(problem)
+            raise SystemExit(1)
+        print(f"Review validation passed: {args.review_dir}")
+    elif args.command == "render":
         site_dir = render_review_site(args.review_dir, args.output)
         print(f"Rendered review site to {site_dir}")
 

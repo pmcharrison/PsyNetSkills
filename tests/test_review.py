@@ -1,7 +1,9 @@
 import json
 from pathlib import Path
 
-from psynetsk_tools.review import render_review_site
+import pytest
+
+from psynetsk_tools.review import main, render_review_site, validate_review
 
 
 def write(path: Path, text: str) -> None:
@@ -116,3 +118,90 @@ def test_render_review_site_publishes_sanitized_artifacts(tmp_path: Path) -> Non
         site_dir
         / "static/artifacts/monitor-static/vis@4.17.0/dist/vis.min.js"
     ).exists()
+
+
+def write_valid_review(review_dir: Path) -> None:
+    write(review_dir / "review.json", json.dumps(review_manifest()) + "\n")
+    write(review_dir / "REPORT.md", "# Report\n\nExperiment behaves as expected.\n")
+    write(
+        review_dir / "artifacts/psynet_debug.log",
+        "Dashboard user: admin password: local-password\n",
+    )
+    write(
+        review_dir / "artifacts/monitor.html",
+        '<!doctype html><html><head><link href="/static/css/dashboard.css"></head>'
+        '<body><a href="/dashboard/index">Dashboard</a>'
+        '<script src="/static/vis@4.17.0/dist/vis.min.js"></script>'
+        '<script src="/static/scripts/network-monitor.js"></script></body></html>',
+    )
+
+
+def test_validate_review_accepts_blocked_required_artifact_with_blocker(
+    tmp_path: Path,
+) -> None:
+    review_dir = tmp_path / "review"
+    write_valid_review(review_dir)
+
+    assert validate_review(review_dir) == []
+
+
+def test_validate_review_fails_when_present_artifact_file_is_missing(
+    tmp_path: Path,
+) -> None:
+    review_dir = tmp_path / "review"
+    write_valid_review(review_dir)
+    (review_dir / "artifacts/psynet_debug.log").unlink()
+
+    problems = validate_review(review_dir)
+
+    assert any("artifact marked present but file is missing" in problem for problem in problems)
+
+
+def test_validate_review_fails_when_required_artifact_lacks_blocker(
+    tmp_path: Path,
+) -> None:
+    review_dir = tmp_path / "review"
+    manifest = review_manifest()
+    manifest["blockers"] = []
+    write(review_dir / "review.json", json.dumps(manifest) + "\n")
+    write(review_dir / "REPORT.md", "# Report\n")
+    write(review_dir / "artifacts/psynet_debug.log", "ok\n")
+    write(review_dir / "artifacts/monitor.html", "<html><head></head><body></body></html>")
+
+    problems = validate_review(review_dir)
+
+    assert any("required artifact must be present" in problem for problem in problems)
+
+
+def test_validate_review_fails_for_invalid_notebook_json(tmp_path: Path) -> None:
+    review_dir = tmp_path / "review"
+    manifest = review_manifest()
+    artifacts = manifest["artifacts"]
+    assert isinstance(artifacts, list)
+    notebook = artifacts[2]
+    assert isinstance(notebook, dict)
+    notebook["status"] = "present"
+    manifest["blockers"] = []
+    write(review_dir / "review.json", json.dumps(manifest) + "\n")
+    write(review_dir / "REPORT.md", "# Report\n")
+    write(review_dir / "artifacts/psynet_debug.log", "ok\n")
+    write(review_dir / "artifacts/monitor.html", "<html><head></head><body></body></html>")
+    write(review_dir / "analyses/analysis.ipynb", "{not json")
+
+    problems = validate_review(review_dir)
+
+    assert any("invalid notebook JSON" in problem for problem in problems)
+
+
+def test_validate_review_cli_exits_nonzero_on_problems(
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    review_dir = tmp_path / "review"
+    write(review_dir / "review.json", json.dumps(review_manifest()) + "\n")
+
+    with pytest.raises(SystemExit) as exc_info:
+        main(["validate", str(review_dir)])
+
+    assert exc_info.value.code == 1
+    assert "report file is missing" in capsys.readouterr().out
