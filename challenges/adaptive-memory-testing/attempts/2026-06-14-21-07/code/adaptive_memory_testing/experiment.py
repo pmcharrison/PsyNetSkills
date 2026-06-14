@@ -14,7 +14,7 @@ from sqlalchemy import Boolean, Column, Float, Integer, String
 import psynet.experiment
 from psynet.bot import Bot
 from psynet.data import SQLBase, SQLMixin, register_table
-from psynet.field import PythonObject, claim_field
+from psynet.field import PythonObject
 from psynet.modular_page import ModularPage, Prompt, TextControl
 from psynet.page import InfoPage
 from psynet.timeline import FailedValidation, Timeline, join
@@ -186,27 +186,7 @@ class DigitRecallPage(ModularPage):
 
 
 class MemoryRecallTrial(ChainTrial):
-    __extra_vars__ = {**ChainTrial.__extra_vars__}
-    selected_length = claim_field("selected_length", __extra_vars__, int)
-    target_string = claim_field("target_string", __extra_vars__, str)
-    correctness = claim_field("correctness", __extra_vars__, int)
-    acquisition_value = claim_field("acquisition_value", __extra_vars__, float)
-    posterior_snapshot_id = claim_field("posterior_snapshot_id", __extra_vars__, int)
-    adaptive_enabled = claim_field("adaptive_enabled", __extra_vars__, bool)
-
     time_estimate = 10
-
-    def finalize_definition(self, definition, experiment, participant):
-        self.selected_length = int(definition["selected_length"])
-        self.target_string = definition["target_string"]
-        self.acquisition_value = (
-            None
-            if definition["acquisition_value"] is None
-            else float(definition["acquisition_value"])
-        )
-        self.posterior_snapshot_id = int(definition["posterior_snapshot_id"])
-        self.adaptive_enabled = bool(definition["adaptive_enabled"])
-        return definition
 
     def show_trial(self, experiment, participant):
         return join(
@@ -223,10 +203,6 @@ class MemoryRecallTrial(ChainTrial):
 
     def score_answer(self, answer, definition):
         return int(str(answer) == definition["target_string"])
-
-    def on_finalized(self):
-        super().on_finalized()
-        self.correctness = int(self.score)
 
 
 class Exp(psynet.experiment.Experiment):
