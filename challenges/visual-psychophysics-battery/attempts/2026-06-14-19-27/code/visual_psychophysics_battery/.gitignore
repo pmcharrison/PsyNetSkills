@@ -4,6 +4,9 @@ env/
 server.log
 static/assets
 source_code.zip
+data/
+dump.rdb
+Dockertag
 .idea
 __pycache__
 *.DS_Store
