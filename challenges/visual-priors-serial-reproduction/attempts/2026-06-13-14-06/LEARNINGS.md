@@ -25,7 +25,7 @@ is experimentally intentional.
 
 *Actions:*
 
-- **PsyNetSkills:** Add front-end review guidance that white-background image or stimulus displays should avoid default borders and container frames unless the challenge or experiment design explicitly calls for a frame. Confidence: high. Impact: medium. Status: considering.
+- **PsyNetSkills:** Add front-end review guidance that white-background image or stimulus displays should avoid default borders and container frames unless the challenge or experiment design explicitly calls for a frame. Confidence: high. Impact: medium. Status: completed. Notes: Added this requirement to `psychophysics/SKILL.md`.
 
 ## Reconsider PsyNet Graphics before custom JavaScript
 
