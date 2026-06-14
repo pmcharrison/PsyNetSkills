@@ -19,7 +19,7 @@
   },
   "run_cost": null,
   "notes": [
-    "Implementation is paused at the required PLAN.md human-review gate.",
+    "Implementation and first-pass evidence collection are complete, but ended_at remains null because human author metadata is still pending.",
     "A human author key must be added before the attempt is marked complete."
   ]
 }

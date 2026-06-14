@@ -13,3 +13,11 @@ source_code.zip
 __pycache__
 *.pyc
 *.DS_Store
+
+# Local evidence/test scratch output
+data/
+dump.rdb
+node_modules/
+test-results/
+playwright-report/
+locales/*/LC_MESSAGES/*.mo

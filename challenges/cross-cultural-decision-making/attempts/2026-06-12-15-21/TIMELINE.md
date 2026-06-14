@@ -14,6 +14,11 @@
 - T+00:43:00 [agent] Installed missing `gettext` system package for `xgettext` and generated translation files.
 - T+00:48:00 [agent] Added complete non-fuzzy Hindi and French translations and verified `psynet translate hi fr`.
 - T+00:56:00 [agent] Fixed Dallinger packaging by moving the trial manifest from JSON into an importable Python module.
+- T+01:05:00 [agent] Fixed package/script import compatibility and verified `psynet test local` passed.
+- T+01:18:00 [agent] Increased `test_n_bots` to 12 and verified `psynet test local` plus `psynet simulate`.
+- T+01:25:00 [agent] Completed a 40-bot, 5-minute `psynet performance-test local` run with zero bot errors.
+- T+01:35:00 [agent] Collected Playwright screenshots and MP4 participant-flow recordings for English, Hindi, and French.
+- T+01:42:00 [agent] Saved monitor, exported-data, analysis, report, and learning-note evidence.
 
 <!-- Close active implementation segments with [agent-stop] when work pauses or completes. -->
 <!-- Tag path-changing human guidance as: [manual] [intervention] Description. -->
