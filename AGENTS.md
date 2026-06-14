@@ -175,40 +175,10 @@ PsyNet commands need sandboxing disabled in Cursor (`required_permissions: ["all
 - `dashboard/data/` and related Hugo inputs are written by `psynetsk-export-dashboard-data`.
 - `public/` is the Hugo build output; do not commit unless policy changes.
 
-### Dashboard live and durable previews
+### Generating links
 
-For active Cursor Cloud review of dashboard, documentation, skill, or challenge
-attempt page changes, use the `preview-dashboard-live` skill by default. It
-starts the Hugo dashboard locally and exposes it through a temporary public
-tunnel.
-
-Also provide the durable GitHub Pages PR preview URL when a PR exists. Live
-tunnel URLs are best for immediate interaction, but they may expire when the
-agent goes to sleep; the user can ask the agent to refresh them if needed. PR
-preview URLs are best for asynchronous review, but they may take a few minutes
-to build.
-
-Write generated URLs as ordinary Markdown text so they are clickable; do not put
-them in fenced code blocks or inline code.
-
-Durable PR preview link formats:
-
-https://pmcharrison.github.io/PsyNetSkills/pr-preview/pr-<number>/
-
-https://pmcharrison.github.io/PsyNetSkills/pr-preview/pr-<number>/challenges/<challenge-slug>/<attempt-name>/
-
-https://github.com/pmcharrison/PsyNetSkills/actions/workflows/dashboard-preview.yml?query=branch%3A<branch-name>
-
-Use the `dashboard-preview-links` skill when you need to check durable PR preview
-publication status. Forked pull requests do not publish static previews because
-the workflow needs write access to the `gh-pages` branch.
-
-### Review links
-
-Use the `share-psynet-links` skill to share links that help the user review new
-content, including live previews and durable backup previews when available.
-
-To publish your changes, merge the pull request.
+When handing off to the user, provide links to help them review generated content,
+using the `cloud-agent-links` skill.
 
 ### Dashboard and documentation review artifacts
 

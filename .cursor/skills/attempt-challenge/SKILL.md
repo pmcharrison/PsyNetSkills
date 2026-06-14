@@ -32,8 +32,7 @@ challenge before starting a fresh attempt.
 
 ## Preview links
 
-Whenever handing a challenge attempt over to the user for review, use
-`share-psynet-links` to format the review links.
+Note the `cloud-agent-links` skill for sharing user review links.
 
 ## Workflow
 
@@ -109,8 +108,8 @@ Whenever handing a challenge attempt over to the user for review, use
      `#plan` anchor and the branch-filtered workflow link, noting that the static
      preview may take a few minutes to build. Point the user to the PR diff or
      code viewer for the full `PLAN.md` and include only a brief chat summary to
-     avoid making the reviewer wonder where the full plan went. Use
-     `share-psynet-links` for the user handoff.
+     avoid making the reviewer wonder where the full plan went.
+     For cloud agents, use `cloud-agent-links` skill for the handoff.
    - Do not make challenge code depend on files outside its attempt directory
      unless absolutely necessary.
    - For runnable PsyNet experiments, prefer a non-conflicting nested directory

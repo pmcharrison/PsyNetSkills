@@ -1,6 +1,6 @@
 ---
 name: run-attempt
-description: Start a runnable PsyNet challenge attempt with psynet debug local, an opened Cloud Desktop dashboard, credentials, and optional public tunnel links for live review.
+description: Start a runnable PsyNet challenge attempt with psynet debug local.
 authors: [lucasgautheron]
 disable-model-invocation: true
 ---
@@ -15,10 +15,7 @@ asks to start an existing attempt for live interactive review.
 Start the PsyNet experiment stored in an existing challenge attempt, open the
 live experiment dashboard/develop page in the Cursor Desktop browser or remote
 desktop, show the dashboard credentials, and leave the server running so the user
-can take control there. Do not show local `127.0.0.1` review links in the user
-handoff, because they are only useful inside the Cloud Desktop environment. Do
-not start or show public links unless the user asks for a tunnel and it has been
-created successfully.
+can take control there.
 
 ## Workflow
 
