@@ -9,3 +9,5 @@
 - T+00:05:30 [agent-stop] Paused before coding for required human review of PLAN.md.
 - T+00:09:00 [manual] User approved the plan with a 3-sentence subset, author `raja-marjieh`, and no TTS preference.
 - T+00:09:30 [agent-start] Resumed autonomous implementation work.
+- T+00:18:00 [agent] Implemented the 3-sentence PsyNet experiment, deterministic bot policy, audio generator, and generated audio assets.
+- T+00:19:30 [agent] Generated PsyNet constraints and prepared the pre-test implementation revision.
