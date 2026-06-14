@@ -440,6 +440,7 @@ def generate(config_path: Path, output_dir: Path, psynet_commit: str) -> None:
         .dallinger/
         local_config.txt
         data/
+        source_code.zip
         *.pyc
         """
     )

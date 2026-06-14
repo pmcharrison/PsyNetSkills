@@ -3,4 +3,5 @@ __pycache__/
 .dallinger/
 local_config.txt
 data/
+source_code.zip
 *.pyc
