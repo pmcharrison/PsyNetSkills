@@ -6,6 +6,8 @@ specifications for contributors and agents.
 
 - `skills.md` describes skill format and iteration practice.
 - `challenges.md` describes challenge format and authoring guidance.
+- `experiment-plan.md` proposes a shared human-agent scaffold for experiment
+  science, design, and implementation oversight before coding begins.
 - `attempts.md` describes attempt structure, evidence, timelines, evaluations,
   learnings, and credential policy.
 - `authors.md` describes the central author registry and attribution workflow.
