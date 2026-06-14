@@ -1,0 +1,173 @@
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: cross-cultural-decision-making 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: Cursor Cloud Agent\n"
+"Language-Team: fr\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: experiment.py
+msgid "Quality"
+msgstr "Qualité"
+
+#: experiment.py
+msgid "Cost saving"
+msgstr "Économie de coût"
+
+#: experiment.py
+msgid "Community benefit"
+msgstr "Bénéfice pour la communauté"
+
+#: experiment.py
+msgid "Comfort"
+msgstr "Confort"
+
+#: experiment.py
+msgid "Environmental impact"
+msgstr "Impact environnemental"
+
+#: experiment.py
+msgid "Long-term value"
+msgstr "Valeur à long terme"
+
+#: experiment.py
+msgid "Fit with local needs"
+msgstr "Adaptation aux besoins locaux"
+
+#: experiment.py
+msgid "Reliability"
+msgstr "Fiabilité"
+
+#: experiment.py
+msgid "Flexibility"
+msgstr "Flexibilité"
+
+#: experiment.py
+msgid "Family preference"
+msgstr "Préférence familiale"
+
+#: experiment.py
+msgid "Time saving"
+msgstr "Gain de temps"
+
+#: experiment.py
+msgid "Safety"
+msgstr "Sécurité"
+
+#: experiment.py
+msgid "Social approval"
+msgstr "Approbation sociale"
+
+#: experiment.py
+msgid "Future opportunity"
+msgstr "Opportunité future"
+
+#: experiment.py
+msgid "Low effort required"
+msgstr "Faible effort requis"
+
+#: experiment.py
+msgid "Instructions"
+msgstr "Instructions"
+
+#: experiment.py
+msgid ""
+"On each trial you will see two options side by side. Each option has several"
+" features."
+msgstr ""
+"À chaque essai, vous verrez deux options côte à côte. Chaque option comporte"
+" plusieurs caractéristiques."
+
+#: experiment.py
+msgid ""
+"Every feature has a value from 0 to 100 and a validity from 0 to 1. Higher "
+"validity means the feature is a more reliable cue."
+msgstr ""
+"Chaque caractéristique a une valeur de 0 à 100 et une validité de 0 à 1. Une"
+" validité plus élevée signifie que la caractéristique est un indice plus "
+"fiable."
+
+#: experiment.py
+msgid ""
+"Please compare the two options carefully and choose the option you would "
+"prefer."
+msgstr ""
+"Veuillez comparer attentivement les deux options et choisir celle que vous "
+"préféreriez."
+
+#: experiment.py
+msgid ""
+"There are no right or wrong answers. We are interested in your decision."
+msgstr ""
+"Il n’y a pas de bonnes ou de mauvaises réponses. Votre décision nous "
+"intéresse."
+
+#: experiment.py
+msgid "Welcome"
+msgstr "Bienvenue"
+
+#: experiment.py
+msgid "Thank you for taking part in this decision-making study."
+msgstr "Merci de participer à cette étude sur la prise de décision."
+
+#: experiment.py
+msgid "You will make a short series of choices between two described options."
+msgstr "Vous ferez une courte série de choix entre deux options décrites."
+
+#: experiment.py
+msgid "Feature"
+msgstr "Caractéristique"
+
+#: experiment.py
+msgid "Value"
+msgstr "Valeur"
+
+#: experiment.py
+msgid "Validity"
+msgstr "Validité"
+
+#: experiment.py
+#, python-brace-format
+msgid "Option {LETTER}"
+msgstr "Option {LETTER}"
+
+#: experiment.py
+#, python-brace-format
+msgid "Trial {NUMBER}"
+msgstr "Essai {NUMBER}"
+
+#: experiment.py
+msgid ""
+"Review the feature values and validities, then choose the option you would "
+"prefer."
+msgstr ""
+"Examinez les valeurs et les validités des caractéristiques, puis choisissez "
+"l’option que vous préféreriez."
+
+#: experiment.py
+msgid ""
+"Full instructions: values range from 0 to 100, validities range from 0 to 1,"
+" and higher validity means a more reliable cue."
+msgstr ""
+"Instructions complètes : les valeurs vont de 0 à 100, les validités vont de "
+"0 à 1, et une validité plus élevée signifie un indice plus fiable."
+
+#: experiment.py
+#, python-brace-format
+msgid "Choose Option {LETTER}"
+msgstr "Choisir l’option {LETTER}"
+
+#: experiment.py
+msgid "Thank you"
+msgstr "Merci"
+
+#: experiment.py
+msgid "Thank you for completing the decision-making study."
+msgstr "Merci d’avoir terminé l’étude sur la prise de décision."

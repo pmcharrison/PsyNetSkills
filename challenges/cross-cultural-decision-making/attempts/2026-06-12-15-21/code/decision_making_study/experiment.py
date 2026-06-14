@@ -13,7 +13,7 @@ from psynet.timeline import Timeline
 from psynet.trial.static import StaticNode, StaticTrial, StaticTrialMaker
 from psynet.utils import get_translator
 
-_ = get_translator()
+_ = get_translator(namespace="experiment")
 
 MANIFEST_PATH = Path(__file__).parent / "data" / "trials.json"
 
@@ -180,7 +180,6 @@ trial_maker = StaticTrialMaker(
     max_trials_per_participant=len(load_trial_manifest()),
     recruit_mode="n_participants",
     target_n_participants=1,
-    check_performance_at_end=True,
 )
 
 
