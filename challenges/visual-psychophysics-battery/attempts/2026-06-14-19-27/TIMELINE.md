@@ -16,4 +16,6 @@
 - T+01:11:30 [agent] Captured participant video, screenshots, and monitor snapshot with 30 clicked trial responses.
 - T+01:16:00 [agent] Ran the 40-bot, 5-minute PsyNet performance test and saved `evidence/performance.json`.
 - T+01:19:46 [agent] Reran final `psynet test local`; 24 bots completed the full battery and the test passed.
-- T+01:19:46 [agent-stop] Implementation and first-pass evidence collection complete.
+- T+01:34:00 [agent] Video review found raw CSS, sequencing, and Block 3 label issues; fixed and recaptured evidence.
+- T+01:56:00 [agent] Refreshed simulation, analysis notebook, performance evidence, and participant video for the final architecture.
+- T+01:59:00 [agent-stop] Implementation and first-pass evidence collection complete.

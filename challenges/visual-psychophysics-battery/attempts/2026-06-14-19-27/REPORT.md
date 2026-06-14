@@ -3,9 +3,10 @@
 ## Implementation
 
 The attempt implements a self-contained PsyNet experiment in
-`code/visual_psychophysics_battery/`. The battery uses a single
-`StaticTrialMaker` with three PsyNet blocks: discrimination, similarity, and
-identification. Trial definitions are represented as `StaticNode` objects with
+`code/visual_psychophysics_battery/`. The battery uses three sequential
+`StaticTrialMaker` blocks: discrimination, similarity, and identification, each
+preceded by its own instruction page. Trial definitions are represented as
+`StaticNode` objects with
 recorded color ids, conditions, set sizes, array positions, item numbers, and
 probe identities.
 
@@ -29,7 +30,7 @@ summarizes block performance and reaction times, and plots the three empirical
 ## Participant evidence
 
 The Playwright evidence runner completed one participant flow with 30 clicked
-trial responses. It saved a 52-second, 1280 x 720 participant video at
+trial responses. It saved a 55-second, 1280 x 720 participant video at
 `evidence/participant.mp4`, targeted screenshots under `evidence/screenshots/`,
 and a local dashboard snapshot at `evidence/monitor.html`.
 

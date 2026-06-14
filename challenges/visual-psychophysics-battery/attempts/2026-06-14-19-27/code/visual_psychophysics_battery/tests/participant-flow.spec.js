@@ -73,15 +73,31 @@ async function answerTrial(page, trialIndex) {
     const bodyText = await page.locator("body").innerText({ timeout: 15000 });
 
     if (bodyText.includes("Visual Psychophysics Battery")) {
+      const first = !taken.has("01_intro");
       await screenshotOnce(page, "01_intro", taken);
+      if (first) await page.waitForTimeout(700);
     }
     if (bodyText.includes("Block 1: same or different")) {
+      const first = !taken.has("02_discrimination_instructions");
       await screenshotOnce(page, "02_discrimination_instructions", taken);
+      if (first) await page.waitForTimeout(900);
     }
     if (bodyText.includes("Rate how similar")) {
+      if (!taken.has("03_similarity_trial")) {
+        await page.waitForTimeout(900);
+      }
       await screenshotOnce(page, "03_similarity_trial", taken);
     }
+    if (bodyText.includes("Block 2: similarity ratings")) {
+      await page.waitForTimeout(700);
+    }
+    if (bodyText.includes("Block 3: multi-item identification")) {
+      await page.waitForTimeout(700);
+    }
     if (bodyText.includes("Choose the number")) {
+      if (!taken.has("04_identification_probe")) {
+        await page.waitForTimeout(2300);
+      }
       await screenshotOnce(page, "04_identification_probe", taken);
     }
 

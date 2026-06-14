@@ -134,8 +134,10 @@ def item_label(object_id, label, x, y):
         x=x,
         y=y,
         attributes={
-            "fill": "#111111",
-            "font-size": 20,
+            "fill": "#ffffff",
+            "stroke": "#111111",
+            "stroke-width": 0.6,
+            "font-size": 22,
             "font-weight": "bold",
             "text-anchor": "middle",
         },
@@ -231,7 +233,7 @@ def identification_frames(definition):
                 f"label_{position['item_number']}",
                 position["item_number"],
                 position["x"],
-                position["y"] + SMALL_CIRCLE_RADIUS + 18,
+                position["y"],
             )
         )
     return [
@@ -286,20 +288,14 @@ def synthetic_event_log(raw_answer, rt_msec):
     ]
 
 
-def block_header(block):
-    html = tags.div()
-    with html:
-        tags.div(PAGE_CSS)
-        tags.h3(BLOCK_LABELS[block])
-    return html
-
-
 def reminder(text):
-    html = tags.div()
-    with html:
-        tags.div(PAGE_CSS)
-        tags.div(text, cls="visual-task-reminder")
-    return html
+    return Markup(f"<div class='visual-task-reminder'>{text}</div>")
+
+
+def clean_graphic_prompt(**kwargs):
+    prompt = GraphicPrompt(**kwargs)
+    prompt.border_width = "0px"
+    return prompt
 
 
 class TrialControl(KeyboardPushButtonControl):
@@ -499,7 +495,7 @@ class VisualBatteryTrial(StaticTrial):
         definition = self.definition
         block = definition["block"]
         if block == "discrimination":
-            prompt = GraphicPrompt(
+            prompt = clean_graphic_prompt(
                 text=reminder("Watch the two circles, then answer after they disappear."),
                 dimensions=[DISPLAY_WIDTH, DISPLAY_HEIGHT],
                 viewport_width=0.58,
@@ -518,6 +514,7 @@ class VisualBatteryTrial(StaticTrial):
                 prompt=prompt,
                 control=control,
                 time_estimate=self.time_estimate,
+                css=PAGE_CSS,
                 events={
                     "enableDiscriminationResponse": Event(
                         is_triggered_by="trialStart",
@@ -532,7 +529,7 @@ class VisualBatteryTrial(StaticTrial):
                 },
             )
         elif block == "similarity":
-            prompt = GraphicPrompt(
+            prompt = clean_graphic_prompt(
                 text=reminder("Rate how similar the two circles look."),
                 dimensions=[DISPLAY_WIDTH, DISPLAY_HEIGHT],
                 viewport_width=0.58,
@@ -556,7 +553,7 @@ class VisualBatteryTrial(StaticTrial):
             )
         else:
             choices = [str(item["item_number"]) for item in definition["items"]]
-            prompt = GraphicPrompt(
+            prompt = clean_graphic_prompt(
                 text=reminder("Choose the number of the original item most similar to the probe."),
                 dimensions=[DISPLAY_WIDTH, DISPLAY_HEIGHT],
                 viewport_width=0.58,
@@ -575,36 +572,40 @@ class VisualBatteryTrial(StaticTrial):
             prompt=prompt,
             control=control,
             time_estimate=self.time_estimate,
+            css=PAGE_CSS,
         )
 
 
-class VisualBatteryTrialMaker(StaticTrialMaker):
-    def choose_block_order(self, experiment, participant, blocks):
-        assert set(blocks) == set(BLOCK_ORDER)
-        return BLOCK_ORDER
+def make_trial_maker(block, nodes):
+    return StaticTrialMaker(
+        id_=f"{block}_block",
+        trial_class=VisualBatteryTrial,
+        nodes=nodes,
+        expected_trials_per_participant=10,
+        max_trials_per_participant=10,
+        allow_repeated_nodes=True,
+        balance_across_nodes=True,
+        target_n_participants=24,
+        recruit_mode="n_participants",
+    )
 
 
-trial_maker = VisualBatteryTrialMaker(
-    id_="visual_psychophysics_battery",
-    trial_class=VisualBatteryTrial,
-    nodes=make_nodes(),
-    expected_trials_per_participant=30,
-    max_trials_per_block=10,
-    allow_repeated_nodes=True,
-    balance_across_nodes=True,
-    target_n_participants=24,
-    recruit_mode="n_participants",
+discrimination_trial_maker = make_trial_maker(
+    "discrimination", make_discrimination_nodes()
+)
+similarity_trial_maker = make_trial_maker("similarity", make_similarity_nodes())
+identification_trial_maker = make_trial_maker(
+    "identification", make_identification_nodes()
 )
 
 
 def instructions_page(block, body):
     html = tags.div()
     with html:
-        tags.div(PAGE_CSS)
         tags.h2(BLOCK_LABELS[block])
         for paragraph in body:
             tags.p(paragraph)
-    return InfoPage(html, time_estimate=8)
+    return InfoPage(Markup(html.render()), time_estimate=8, css=PAGE_CSS)
 
 
 class Exp(psynet.experiment.Experiment):
@@ -630,6 +631,7 @@ class Exp(psynet.experiment.Experiment):
                 "A fixation cross appears first, then the circles, then a blank display, and then the response buttons.",
             ],
         ),
+        discrimination_trial_maker,
         instructions_page(
             "similarity",
             [
@@ -637,6 +639,7 @@ class Exp(psynet.experiment.Experiment):
                 "Use 1 for completely dissimilar and 5 for completely similar.",
             ],
         ),
+        similarity_trial_maker,
         instructions_page(
             "identification",
             [
@@ -644,7 +647,7 @@ class Exp(psynet.experiment.Experiment):
                 "After a short blank delay, choose the number of the original item that is identical or most similar to the probe.",
             ],
         ),
-        trial_maker,
+        identification_trial_maker,
         InfoPage(
             Markup(PAGE_CSS + "<h2>Finished</h2><p>Thank you for completing the visual battery.</p>"),
             time_estimate=5,
