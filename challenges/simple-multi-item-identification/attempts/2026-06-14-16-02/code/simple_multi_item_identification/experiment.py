@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+from copy import deepcopy
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
@@ -166,15 +167,15 @@ class IdentificationControl(KeyboardPushButtonControl):
         return {
             "trial_id": self.definition["trial_id"],
             "set_size": self.definition["set_size"],
-            "stimulus_set": self.definition["stimuli"],
+            "stimulus_set": deepcopy(self.definition["stimuli"]),
             "item_numbers": [
                 stimulus["item_number"] for stimulus in self.definition["stimuli"]
             ],
             "item_positions": {
-                str(stimulus["item_number"]): stimulus["position"]
+                str(stimulus["item_number"]): dict(stimulus["position"])
                 for stimulus in self.definition["stimuli"]
             },
-            "probe": self.definition["probe"],
+            "probe": deepcopy(self.definition["probe"]),
             "probe_condition": self.definition["probe_condition"],
             "response": response,
             "accuracy": (response == correct_response) if is_identification else None,
