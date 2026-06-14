@@ -109,6 +109,14 @@ def fixation_object():
     )
 
 
+def invisible_anchor(object_id="response_anchor"):
+    return Path(
+        object_id,
+        "M0,0 L0,0",
+        attributes={"stroke": "none", "fill": "none", "opacity": 0},
+    )
+
+
 def circle_object(object_id, color_id, x, y, radius=CIRCLE_RADIUS):
     return Circle(
         object_id,
@@ -153,7 +161,7 @@ def pair_frames(left_id, right_id, response_on_pair):
         frames.append(blank_frame(duration=BLANK_DURATION))
         frames.append(
             Frame(
-                [],
+                [invisible_anchor()],
                 duration=None,
                 activate_control_response=True,
                 activate_control_submit=True,
