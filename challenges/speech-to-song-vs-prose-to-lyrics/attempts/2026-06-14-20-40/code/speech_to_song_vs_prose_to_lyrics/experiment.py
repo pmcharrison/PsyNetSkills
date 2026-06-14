@@ -16,7 +16,10 @@ from psynet.participant import Participant
 from psynet.timeline import Event, Timeline
 from psynet.trial.static import StaticNode, StaticTrial, StaticTrialMaker
 
-from generate_audio import REPETITION_LEVELS, SENTENCES, ensure_audio_assets
+try:
+    from generate_audio import REPETITION_LEVELS, SENTENCES, ensure_audio_assets
+except ModuleNotFoundError:
+    from .generate_audio import REPETITION_LEVELS, SENTENCES, ensure_audio_assets
 
 ROOT = Path(__file__).parent
 SCALE_CHOICES = [str(value) for value in range(7)]
