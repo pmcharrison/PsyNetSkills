@@ -15,13 +15,16 @@ async function clickVisible(page, selector) {
   await locator.click();
 }
 
-async function waitForEnabledResponse(page) {
+async function waitForEnabledResponse(page, dwellMs = 1200) {
   await page.waitForFunction(() => {
     return [...document.querySelectorAll("button.response")].some(
       (button) => !button.disabled && /^[1-5]$/.test(button.id)
     );
   });
-  await page.waitForTimeout(1200);
+  await page.waitForTimeout(dwellMs);
+}
+
+async function clickEnabledResponse(page) {
   return page.evaluate(() => {
     const button = [...document.querySelectorAll("button.response")].find(
       (candidate) => !candidate.disabled && /^[1-5]$/.test(candidate.id)
@@ -82,18 +85,20 @@ async function saveDashboardMonitor(page) {
     if ((await countNumericResponseButtons(page)) > 0) {
       trialCount += 1;
       if (trialCount === 1) {
-        await page.waitForTimeout(850);
+        await page.waitForTimeout(1500);
         await page.screenshot({
           path: path.join(SCREENSHOT_DIR, "02_numbered_array.png"),
           fullPage: true,
         });
-        await page.waitForTimeout(1200);
+        await waitForEnabledResponse(page, 1200);
         await page.screenshot({
           path: path.join(SCREENSHOT_DIR, "03_probe_response.png"),
           fullPage: true,
         });
+      } else {
+        await waitForEnabledResponse(page, 1200);
       }
-      await waitForEnabledResponse(page);
+      await clickEnabledResponse(page);
       await page.waitForTimeout(2200);
     } else if ((await page.locator("#next-button:visible:not([disabled])").count()) > 0) {
       await page.locator("#next-button:visible:not([disabled])").click();
