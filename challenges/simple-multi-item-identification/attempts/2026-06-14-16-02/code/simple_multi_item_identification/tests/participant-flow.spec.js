@@ -21,7 +21,7 @@ async function waitForEnabledResponse(page) {
       (button) => !button.disabled && /^[1-5]$/.test(button.id)
     );
   });
-  await page.waitForTimeout(700);
+  await page.waitForTimeout(1200);
   return page.evaluate(() => {
     const button = [...document.querySelectorAll("button.response")].find(
       (candidate) => !candidate.disabled && /^[1-5]$/.test(candidate.id)

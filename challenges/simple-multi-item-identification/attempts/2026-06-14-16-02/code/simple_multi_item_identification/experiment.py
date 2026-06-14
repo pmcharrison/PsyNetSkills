@@ -17,9 +17,9 @@ from psynet.trial.static import StaticNode, StaticTrial, StaticTrialMaker
 N_TRIALS_PER_PARTICIPANT = 10
 MANIFEST_PATH = Path(__file__).parent / "stimulus_manifest.json"
 GRAPHIC_DIMENSIONS = [480, 420]
-FIXATION_SEC = 0.6
-ARRAY_SEC = 0.75
-BLANK_SEC = 0.55
+FIXATION_SEC = 0.7
+ARRAY_SEC = 1.0
+BLANK_SEC = 0.7
 
 
 def load_manifest() -> list[dict]:
