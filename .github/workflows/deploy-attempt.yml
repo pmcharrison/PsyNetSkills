@@ -147,7 +147,7 @@ jobs:
 
           \`psynet deploy ssh --app "${APP_NAME}" --dns-host "${DNS_HOST}" --server "${DNS_HOST}"\`
 
-          Teardown commands for a separately approved teardown run:
+          Teardown commands for a separately controlled teardown run:
 
           \`psynet destroy ssh --app "${APP_NAME}" --server "${DNS_HOST}"\`
 
