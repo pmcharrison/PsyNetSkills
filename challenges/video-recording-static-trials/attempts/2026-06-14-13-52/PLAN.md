@@ -10,7 +10,7 @@ The participant flow will begin with an explicit recording-consent information p
 
 ### Materials
 
-The task stimuli will remain the static demo text prompts (animal preference questions), with no changes to core stimulus content beyond adding recording metadata fields. The technical recording material will be the participant camera stream captured with browser media APIs (`navigator.mediaDevices.getUserMedia` and `MediaRecorder`) and uploaded as chunked or sequential blobs via HTTP `PUT` directly to S3 object URLs. The challenge-specified bucket configuration will be used:
+The task stimuli will remain the static demo text prompts (animal preference questions), with no changes to core stimulus content beyond adding recording metadata fields. The technical recording material will be the participant camera stream captured with browser media APIs (`navigator.mediaDevices.getUserMedia` and `MediaRecorder`) and uploaded in true streaming mode via a single HTTP `PUT` request body to one S3 object key. The upload stream will begin while the trial is active (not after trial end), and each recorder chunk will be forwarded immediately into that same request stream. The challenge-specified bucket configuration will be used:
 
 - Bucket: `video-recording-test-292651677991`
 - Region: `us-east-1`
@@ -18,7 +18,7 @@ The task stimuli will remain the static demo text prompts (animal preference que
 
 ### Procedure
 
-Participants first read an information page stating that video recording is used and that they should exit if they do not consent. On each recording-enabled trial page, camera acquisition is attempted during trial initialization. If permission is denied, media APIs are unavailable, or upload fails, the participant receives a clear on-page status message and the trial records a structured error payload for diagnosis. If recording succeeds, capture begins automatically at the configured start event and ends at the configured stop event; upload is performed continuously during the trial where possible and finalized at trial end. If final upload completion lags behind trial interaction, trial completion waits until upload finalization or terminal failure state is recorded.
+Participants first read an information page stating that video recording is used and that they should exit if they do not consent. On each recording-enabled trial page, camera acquisition is attempted during trial initialization. If permission is denied, media APIs are unavailable, or upload fails, the participant receives a clear on-page status message and the trial records a structured error payload for diagnosis. If recording succeeds, capture begins automatically at the configured start event and ends at the configured stop event; upload begins before/at recording start through a persistent streaming request and continues during the trial as chunks are produced. The trial only advances after recorder stop plus stream flush completion (or a terminal failure state) so the single object is finalized before moving to the next trial.
 
 ## Implementation
 
@@ -31,7 +31,8 @@ The code will be implemented as a self-contained experiment under this attempt's
 
 2. **Frontend recorder/uploader module**
    - Add static JS that listens to PsyNet trial events and manages recorder lifecycle.
-   - Implement `getUserMedia` setup, `MediaRecorder` chunk handling, progressive direct uploads to S3 object URLs via `PUT`, and finalization checks.
+   - Implement `getUserMedia` setup, `MediaRecorder` chunk handling, and a `ReadableStream` + `fetch(..., { method: "PUT", body: stream, duplex: "half" })` uploader so all chunks are written to a single S3 object continuously while the trial runs.
+   - Introduce a small JS streaming coordinator (queue + backpressure-aware writer lifecycle) to bridge recorder chunk events into the upload stream and close the stream cleanly on stop.
    - Persist runtime state (`started_at`, `stopped_at`, upload attempts, bytes/chunks uploaded, final object URL, terminal error code/message) into the trial response payload.
 
 3. **Backend recording config + hashed keys**
@@ -56,5 +57,4 @@ The code will be implemented as a self-contained experiment under this attempt's
 
 ## Open decisions for review
 
-1. For upload reliability, prefer many small sequential `PUT` objects (manifest-based) or a single finalized object upload at `recordStop`? (The challenge asks for streaming "as soon as possible"; I currently plan progressive uploads plus finalization metadata.)
-2. Should unsupported camera access immediately fail the trial, or allow progression while marking the trial as a recording failure? (Current plan: allow progression with explicit failure state to preserve participant flow and diagnostics.)
+1. Should unsupported camera access immediately fail the trial, or allow progression while marking the trial as a recording failure? (Current plan: allow progression with explicit failure state to preserve participant flow and diagnostics.)

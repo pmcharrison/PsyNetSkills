@@ -11,6 +11,10 @@
 - T+00:11:20 [agent] Committed and pushed the attempt scaffold; opened draft PR for review context.
 - T+00:12:00 [agent] Ran `uv run psynetsk-validate` to confirm the in-progress attempt structure validates.
 - T+00:12:05 [agent-stop] Paused before coding to await human review of PLAN.md.
+- T+00:21:00 [manual] [intervention] User requested explicit single-file continuous streaming upload mode in the plan.
+- T+00:21:05 [agent-start] Resumed to revise the plan with the requested streaming constraint.
+- T+00:22:10 [agent] Updated PLAN.md to require one-object streaming PUT upload during trial runtime.
+- T+00:22:15 [agent-stop] Paused after plan revision for user confirmation before coding.
 
 <!-- Close active implementation segments with [agent-stop] when work pauses or completes. -->
 <!-- Tag path-changing human guidance as: [manual] [intervention] Description. -->
