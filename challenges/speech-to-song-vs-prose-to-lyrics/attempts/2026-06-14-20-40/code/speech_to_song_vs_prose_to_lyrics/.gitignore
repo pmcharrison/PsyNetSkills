@@ -4,6 +4,8 @@ env/
 server.log
 static/assets
 source_code.zip
+data/local-data.zip
+data/simulated_data/
 .idea
 __pycache__
 *.DS_Store

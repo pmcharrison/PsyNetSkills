@@ -12,3 +12,6 @@
 - T+00:18:00 [agent] Implemented the 3-sentence PsyNet experiment, deterministic bot policy, audio generator, and generated audio assets.
 - T+00:19:30 [agent] Generated PsyNet constraints and prepared the pre-test implementation revision.
 - T+00:22:00 [agent] First `psynet test local` run exposed a package/script import mismatch for `generate_audio`; updated the import path.
+- T+00:28:00 [agent] Re-ran `python experiment.py` and `psynet test local`; both passed.
+- T+00:29:30 [agent] Ran `psynet simulate`, packaged `evidence/simulated_data.zip`, and executed the analysis notebook.
+- T+00:43:00 [agent] Ran the 5-minute 40-bot performance test and saved JSON/log evidence.
