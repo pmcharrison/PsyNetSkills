@@ -1,5 +1,5 @@
 {
-  "authors": [],
+  "authors": ["raja-marjieh"],
   "agent": "Cursor Cloud Agent",
   "client": "cursor",
   "model": "GPT-5.5",
@@ -19,6 +19,6 @@
   },
   "run_cost": null,
   "notes": [
-    "Plan-review pause: human author must be supplied before the attempt is marked complete."
+    "Plan reviewed by the user on 2026-06-14; implementation should use a 3-sentence subset and any suitable deterministic local TTS tool."
   ]
 }
