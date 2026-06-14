@@ -494,7 +494,16 @@ def test_collect_challenges_reports_missing_or_ambiguous_cost(
     challenge_dir = tmp_path / "challenges/example"
     write(challenge_dir / "INSTRUCTIONS.md", challenge_instructions())
     missing_dir = challenge_dir / "attempts/2026-06-01-10-10"
-    write(missing_dir / "agent.json", '{"model": "test-model"}\n')
+    write(
+        missing_dir / "agent.json",
+        json.dumps(
+            {
+                "model": "test-model",
+                "cursor_conversation_id": "bc-pending",
+            },
+        )
+        + "\n",
+    )
     ambiguous_dir = challenge_dir / "attempts/2026-06-02-10-10"
     write(
         ambiguous_dir / "agent.json",
@@ -513,8 +522,21 @@ def test_collect_challenges_reports_missing_or_ambiguous_cost(
 
     attempts = collect_challenges(tmp_path)[0].attempts
 
-    assert attempts[0].run_cost_display == "-"
-    assert attempts[1].run_cost_display == "-"
+    assert attempts[0].run_cost_display == "Pending import"
+    assert attempts[1].run_cost_display == "Pending import"
+
+
+def test_collect_challenges_reports_untracked_cost_for_local_attempt(
+    tmp_path: Path,
+) -> None:
+    challenge_dir = tmp_path / "challenges/example"
+    write(challenge_dir / "INSTRUCTIONS.md", challenge_instructions())
+    local_dir = challenge_dir / "attempts/2026-06-01-10-10"
+    write(local_dir / "agent.json", '{"model": "test-model"}\n')
+
+    attempt = collect_challenges(tmp_path)[0].attempts[0]
+
+    assert attempt.run_cost_display == "-"
 
 
 def test_collect_challenges_prefers_snapshotted_criteria(

@@ -199,8 +199,11 @@ Detailed Cursor cost import and attribution rules live in the
 `cursor-cost-estimation` skill. In brief: do not commit raw Cursor usage CSV
 exports; record `cursor_conversation_id` for Cursor Cloud attempts; and only
 treat exact `cursor_conversation_id` to CSV `Cloud Agent ID` matches as resolved
-automatic cost attribution. The importer reports ambiguous matches but does not
-write them by default.
+automatic cost attribution. Completed Cursor Cloud attempts should not leave
+`run_cost` as `null`: if exact CSV attribution is still pending, register
+`run_cost` with `amount: null` and `attribution_status: "unavailable"` so the
+dashboard and validation can track outstanding imports. The importer reports
+ambiguous matches but does not write them by default.
 
 ## Timeline notes
 

@@ -452,23 +452,44 @@ def read_agent_json(agent_file: Path) -> tuple[dict[str, object], str]:
 def run_cost_metadata(agent: dict[str, object]) -> tuple[int | float | None, str, str, str]:
     """Return normalized Cursor cost metadata for dashboard display."""
 
+    conversation_id = agent.get("cursor_conversation_id")
+    has_cloud_agent_id = isinstance(conversation_id, str) and bool(conversation_id.strip())
     run_cost = agent.get("run_cost")
     if not isinstance(run_cost, dict):
-        return None, "", "", "-"
+        return (
+            None,
+            "",
+            "",
+            "Pending import" if has_cloud_agent_id else "-",
+        )
 
     amount = run_cost.get("amount")
     currency = run_cost.get("currency")
-    status = run_cost.get("attribution_status")
+    status = str(run_cost.get("attribution_status") or "")
+    amount_is_numeric = (
+        isinstance(amount, int | float)
+        and not isinstance(amount, bool)
+        and amount >= 0
+    )
+    amount_is_usd = amount_is_numeric and currency == "USD"
+    if amount_is_usd and status == "matched_cloud_agent_id":
+        return amount, "USD", status, f"${amount:.2f}"
+    if amount_is_usd and status == "matched_time_window":
+        return amount, "USD", status, f"~${amount:.2f}"
+    if status in {"ambiguous", "unavailable", "matched_time_window"}:
+        return (
+            amount if amount_is_numeric else None,
+            str(currency or ""),
+            status,
+            "Pending import",
+        )
     if (
-        isinstance(amount, bool)
-        or not isinstance(amount, int | float)
-        or amount < 0
-        or currency != "USD"
-        or status != "matched_cloud_agent_id"
+        amount_is_numeric
+        and currency == "USD"
+        and status
     ):
-        return None, str(currency or ""), str(status or ""), "-"
-
-    return amount, currency, status, f"${amount:.2f}"
+        return amount, "USD", status, f"${amount:.2f}"
+    return None, str(currency or ""), status, "Pending import"
 
 
 def file_kind(path: Path) -> str:

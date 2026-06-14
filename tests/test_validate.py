@@ -522,6 +522,38 @@ def test_validate_agent_metadata_accepts_run_cost(tmp_path: Path) -> None:
     assert validate_agent_metadata(agent_file) == []
 
 
+def test_validate_agent_metadata_requires_completed_cloud_run_cost(
+    tmp_path: Path,
+) -> None:
+    agent_file = tmp_path / "agent.json"
+    metadata = json.loads(agent_json())
+    metadata["cursor_conversation_id"] = "bc-example"
+    metadata["ended_at"] = "2026-06-10T10:30:00Z"
+    metadata["run_cost"] = None
+    write(agent_file, json.dumps(metadata) + "\n")
+
+    problems = validate_agent_metadata(agent_file)
+
+    assert any(
+        "completed Cursor Cloud attempts must include non-null run_cost metadata"
+        in problem
+        for problem in problems
+    )
+
+
+def test_validate_agent_metadata_allows_in_progress_cloud_missing_cost(
+    tmp_path: Path,
+) -> None:
+    agent_file = tmp_path / "agent.json"
+    metadata = json.loads(agent_json())
+    metadata["cursor_conversation_id"] = "bc-example"
+    metadata["ended_at"] = None
+    metadata["run_cost"] = None
+    write(agent_file, json.dumps(metadata) + "\n")
+
+    assert validate_agent_metadata(agent_file) == []
+
+
 def test_validate_agent_metadata_rejects_malformed_run_cost(tmp_path: Path) -> None:
     agent_file = tmp_path / "agent.json"
     metadata = json.loads(agent_json())

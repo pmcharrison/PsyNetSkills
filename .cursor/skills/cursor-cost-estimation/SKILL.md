@@ -33,6 +33,9 @@ For Cursor Cloud attempts, record:
 
 `CURSOR_CONVERSATION_ID` is available as an environment variable in Cursor Cloud
 and corresponds to the `Cloud Agent ID` column in Cursor team usage CSV exports.
+If a completed Cloud attempt cannot yet be matched to CSV usage, register
+`run_cost` with `amount: null` and `attribution_status: "unavailable"` instead
+of leaving `run_cost` as `null`.
 
 ## Batch import workflow
 
