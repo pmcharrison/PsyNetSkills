@@ -12,7 +12,10 @@ from psynet.timeline import Timeline
 from psynet.trial.static import StaticNode, StaticTrial, StaticTrialMaker
 from psynet.utils import get_translator
 
-from trial_manifest import TRIAL_MANIFEST
+if __package__:
+    from .trial_manifest import TRIAL_MANIFEST
+else:
+    from trial_manifest import TRIAL_MANIFEST
 
 _ = get_translator(namespace="experiment")
 
