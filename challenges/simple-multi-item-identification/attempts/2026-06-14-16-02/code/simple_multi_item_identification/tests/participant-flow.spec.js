@@ -97,6 +97,12 @@ async function saveDashboardMonitor(page) {
     } else if ((await page.locator("#next-button:visible:not([disabled])").count()) > 0) {
       await page.locator("#next-button:visible:not([disabled])").click();
       await page.waitForTimeout(250);
+    } else if (
+      trialCount >= 10 &&
+      (await page.locator("button.response:visible:not([disabled])").count()) > 0
+    ) {
+      await page.locator("button.response:visible:not([disabled])").first().click();
+      await page.waitForTimeout(500);
     } else if ((await page.locator("button.push-button:visible:not(.response)").count()) > 0) {
       await page.locator("button.push-button:visible:not(.response)").first().click();
       await page.waitForTimeout(500);
