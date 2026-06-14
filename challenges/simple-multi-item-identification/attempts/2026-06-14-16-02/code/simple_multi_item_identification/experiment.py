@@ -20,6 +20,22 @@ GRAPHIC_DIMENSIONS = [480, 420]
 FIXATION_SEC = 1.2
 ARRAY_SEC = 1.0
 BLANK_SEC = 0.7
+NEUTRAL_UI_CSS = """
+#timeline-progress-bar {
+    background-color: #777777 !important;
+}
+.progress {
+    background-color: #e6e6e6 !important;
+}
+"""
+TRIAL_CSS = (
+    NEUTRAL_UI_CSS
+    + """
+button.response:disabled {
+    visibility: hidden;
+}
+"""
+)
 
 
 def load_manifest() -> list[dict]:
@@ -61,7 +77,7 @@ def circle_with_number(prefix: str, stimulus: dict) -> list:
             y,
             attributes={
                 "fill": "#111111",
-                "font-size": 18,
+                "font-size": 22,
                 "font-weight": "bold",
             },
         ),
@@ -210,7 +226,7 @@ class IdentificationTrial(StaticTrial):
         return ModularPage(
             "multi_item_identification",
             prompt=BorderlessGraphicPrompt(
-                text="",
+                text="Choose the number of the original item most similar to the probe.",
                 dimensions=GRAPHIC_DIMENSIONS,
                 viewport_width=0.42,
                 frames=trial_frames(self.definition),
@@ -218,7 +234,7 @@ class IdentificationTrial(StaticTrial):
                 prevent_control_submit=True,
             ),
             control=IdentificationControl(self.definition),
-            css="button.response:disabled { visibility: hidden; }",
+            css=TRIAL_CSS,
             time_estimate=self.time_estimate,
         )
 
@@ -235,7 +251,7 @@ def instructions_page():
         tags.p(
             "You can respond by clicking a numbered button or pressing the matching number key."
         )
-    return InfoPage(content, time_estimate=8)
+    return InfoPage(content, time_estimate=8, css=NEUTRAL_UI_CSS)
 
 
 class Exp(psynet.experiment.Experiment):
