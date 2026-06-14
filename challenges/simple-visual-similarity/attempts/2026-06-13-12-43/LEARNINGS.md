@@ -67,4 +67,4 @@ for participant-flow video evidence.
 
 *Actions:*
 
-- **PsyNetSkills:** Consider noting `npx playwright install ffmpeg` in the `record-participant-video` skill for the JavaScript Playwright path, since system ffmpeg alone is insufficient for Playwright's built-in video recording. Confidence: high. Impact: low. Status: considering.
+- **PsyNetSkills:** Consider noting `npx playwright install ffmpeg` in the `record-participant-video` skill for the JavaScript Playwright path, since system ffmpeg alone is insufficient for Playwright's built-in video recording. Confidence: high. Impact: low. Status: completed. Notes: Added a bullet to the JavaScript Playwright guidance in `record-participant-video/SKILL.md` (install Playwright's bundled ffmpeg, then re-encode the `.webm` to `participant.mp4`) (PR #241).
