@@ -147,6 +147,8 @@ def _make_trial_definition(participant, adaptive_enabled: bool = ADAPTIVE_DEFAUL
 
 class MemoryNode(ChainNode):
     def make_next_definition(self, experiment, participant):
+        if participant is None:
+            participant = self.completed_and_processed_trials[0].participant
         return _make_trial_definition(
             participant=participant,
             adaptive_enabled=experiment.adaptive_enabled,
