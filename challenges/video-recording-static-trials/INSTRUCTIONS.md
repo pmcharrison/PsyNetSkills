@@ -17,7 +17,7 @@ implemented at the `ModularPage` level, for example as a reusable subclass,
 mixin, or page wrapper, rather than as logic that is specific to a single demo
 page.
 
-The participant experience should include:
+## The participant experience should include:
 
 - An information page at the beginning of the timeline that explains that the
   experiment uses video recording and tells participants to exit the experiment
@@ -32,7 +32,7 @@ The participant experience should include:
   to diagnose what happened.
 
 
-The recording and upload behavior should:
+## The recording and upload behavior should:
 
 - Use PsyNet's native event-based system so that recording commands can be
   issued with standard PsyNet events, such as `events = ...`. The default events
@@ -41,10 +41,11 @@ The recording and upload behavior should:
 - Use standard web frontend streaming techniques to capture camera video and
   upload it directly from the participant's browser to S3. Do not store the
   recording through PsyNet's existing media-management tools.
+- The straaming should occur as soon as possible and in paralell to the trial.
+  If needed, the trial should wait to all teh propert content streamed to S3,
+  before coninuing to the next trial so all video is uploaded before moving forward.
 - Receive the appropriate S3 bucket link, upload endpoint, or signed/public
-  upload configuration from the backend. Permission management should be handled
-  through PsyNet's existing S3 management tools, and the implementation must not
-  hard-code service credentials.
+  upload configuration from the backend. 
 - Save each recording under a filename derived from a backend-provided hashed
   trial-specific value. Store that hashed identifier in the trial definition and
   in the saved trial response data so that researchers can recover the matching
@@ -54,25 +55,8 @@ The recording and upload behavior should:
   S3 object location or error state.
 - Make sure that the implemented experiment really uses S3 for upload.
 
-For development and automated testing, it is acceptable to use an S3-compatible
-simulator or mock, such as Moto, LocalStack, MinIO, or a botocore stub, provided
-the test exercises the same bucket preparation, upload-configuration,
-presigned-upload, object-key, and metadata code paths that would be used with
-real S3. Such evidence should be labeled as simulated S3 evidence, not as a
-successful real-S3 deployment.
-
-The submitted evidence should demonstrate that recordings are captured for
-multiple static trials, uploaded through the S3 upload path, and linked back to
-the corresponding PsyNet trial data through the hashed recording identifier and
-saved metadata. If real S3 credentials are not available in the attempt
-environment, the submission should include:
-
-- An automated test or scripted run that creates or prepares a simulated
-  S3-compatible bucket using PsyNet's S3-management logic or a faithful mock of
-  that logic.
-- Verification that uploaded objects exist at the expected hashed filenames and
-  contain non-trivial video payloads, not placeholder files.
-- Clear local instructions for rerunning the same bucket creation/preparation
-  and upload workflow against real S3 when the user supplies their own AWS/PsyNet
-  S3 credentials locally. Do not commit credentials or require production
-  secrets for review.
+## Throughout use this bucket:
+- Bucket name: video-recording-test-292651677991
+- Region: us-east-1
+- Base public URL: https://video-recording-test-292651677991.s3.amazonaws.com/
+- Behavior: Public unauthenticated uploads are allowed with PUT.
