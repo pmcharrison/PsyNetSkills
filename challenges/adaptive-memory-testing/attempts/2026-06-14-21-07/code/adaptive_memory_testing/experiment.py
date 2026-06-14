@@ -209,7 +209,6 @@ class Exp(psynet.experiment.Experiment):
     label = "Adaptive memory testing"
     adaptive_enabled = ADAPTIVE_DEFAULT
     test_n_bots = 6
-    test_serial_run_bots = True
 
     timeline = Timeline(
         InfoPage(
