@@ -82,9 +82,13 @@ Required artifacts should either have `status: "present"` and an existing path,
 or a blocker that explains what was attempted, what failed, and the next step.
 Missing artifacts should never be presented as passing checks.
 
-## Proposed CLI
+## CLI surface
 
-The first useful CLI surface is:
+The first implemented command is `psynet-review render`, which reads
+`review/review.json`, publishes present artifacts through the shared sanitizer
+and content-addressed artifact store, and writes a static review page.
+
+The intended CLI surface is:
 
 - `psynet-review init`: create `review/`, `review.json`, `REPORT.md`, and
   ignored output directories.
