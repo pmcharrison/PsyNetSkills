@@ -197,13 +197,18 @@ class IdentificationControl(KeyboardPushButtonControl):
         )
 
 
+class BorderlessGraphicPrompt(GraphicPrompt):
+    border_style = "none"
+    border_width = "0px"
+
+
 class IdentificationTrial(StaticTrial):
     time_estimate = 5
 
     def show_trial(self, experiment, participant):
         return ModularPage(
             "multi_item_identification",
-            prompt=GraphicPrompt(
+            prompt=BorderlessGraphicPrompt(
                 text="",
                 dimensions=GRAPHIC_DIMENSIONS,
                 viewport_width=0.62,
