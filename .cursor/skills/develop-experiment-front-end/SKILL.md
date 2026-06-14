@@ -69,6 +69,13 @@ PsyNet bots submit the value returned by `get_bot_response` as the formatted
 answer, so the bot path can bypass `format_answer` unless you explicitly
 call it or otherwise match its output.
 
+When repeating custom `Page` classes with JavaScript event handlers, avoid
+reusing the default `session_id` unless the code explicitly handles PsyNet's
+`pageUpdated` event. Consecutive pages with the same session can preserve the
+browser context and update the DOM without rerunning page scripts. Use distinct
+`session_id` values for repeated interactive pages when each trial needs fresh
+handler installation.
+
 ## Examples
 
 Refer to the explore-psynet-repository skill for examples to work from.

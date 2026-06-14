@@ -14,7 +14,7 @@ Consecutive custom `Page` instances with the default `session_id` can preserve t
 
 *Actions:*
 
-- **PsyNetSkills:** Add a note to the front-end experiment development skill that repeated custom `Page` classes with JavaScript event handlers need unique `session_id` values or `pageUpdated` handling. Confidence: high. Impact: medium. Status: considering.
+- **PsyNetSkills:** Add a note to the front-end experiment development skill that repeated custom `Page` classes with JavaScript event handlers need unique `session_id` values or `pageUpdated` handling. Confidence: high. Impact: medium. Status: completed. Notes: Added this requirement to `develop-experiment-front-end/SKILL.md`.
 
 ## White visual fields should not show frames
 
