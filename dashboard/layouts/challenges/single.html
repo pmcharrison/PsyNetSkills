@@ -1,7 +1,7 @@
 {{ define "main" }}
   {{ $challengeSlug := .Params.challenge }}
   {{ $matches := where hugo.Data.psynetsk.challenges "slug" $challengeSlug }}
-  {{ $challenge := dict "attempts" (slice) "difficulty" "" "instructions" "" "title" $challengeSlug "type" "" }}
+  {{ $challenge := dict "attempts" (slice) "difficulty" "" "instructions" "" "past_editors" (slice) "title" $challengeSlug "type" "" }}
   {{ if gt (len $matches) 0 }}
     {{ $challenge = index $matches 0 }}
   {{ end }}
@@ -29,6 +29,12 @@
       {{ with $challenge.authors }}
         <div>
           <dt>Author{{ if ne (len .) 1 }}s{{ end }}</dt>
+          <dd>{{ partial "authors.html" . }}</dd>
+        </div>
+      {{ end }}
+      {{ with $challenge.past_editors }}
+        <div>
+          <dt>Past editor{{ if ne (len .) 1 }}s{{ end }}</dt>
           <dd>{{ partial "authors.html" . }}</dd>
         </div>
       {{ end }}

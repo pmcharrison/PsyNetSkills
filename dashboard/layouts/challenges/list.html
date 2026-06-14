@@ -5,6 +5,8 @@
     <thead>
       <tr>
         <th>Challenge</th>
+        <th>Author</th>
+        <th>Past editors</th>
         <th>Difficulty</th>
         <th>Latest score</th>
         <th>Open actions</th>
@@ -21,6 +23,8 @@
         {{ end }}
         <tr>
           <td><a href="{{ .url | relURL }}">{{ .title }}</a></td>
+          <td>{{ with .authors }}{{ partial "authors.html" . }}{{ else }}-{{ end }}</td>
+          <td>{{ with .past_editors }}{{ partial "authors.html" . }}{{ else }}-{{ end }}</td>
           <td>{{ .difficulty }}</td>
           <td>{{ with .latest_score }}{{ . }}{{ else }}Not scored{{ end }}</td>
           <td><span class="open-actions-count {{ $openActionsClass }}">{{ $openActions }}</span></td>

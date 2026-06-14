@@ -8,6 +8,7 @@ import json
 import os
 import re
 import shutil
+import subprocess
 import tempfile
 from collections.abc import Mapping
 from dataclasses import asdict, dataclass
@@ -99,6 +100,9 @@ WORKFLOW_CONTEXT_FILES_BY_NAME = {
     "Deploy dashboard PR preview": "dashboard-preview.yml",
     "Deploy dashboard to GitHub Pages": "pages.yml",
 }
+GITHUB_NOREPLY_RE = re.compile(
+    r"(?:\d+\+)?(?P<github_id>[a-z0-9][a-z0-9-]{0,37}[a-z0-9])@users\.noreply\.github\.com$",
+)
 
 
 def read_github_event(env: Mapping[str, str]) -> dict[str, object]:
@@ -251,6 +255,7 @@ class Challenge:
     type: str
     difficulty: int | None
     authors: list[Author]
+    past_editors: list[Author]
     instructions: str
     path: str
     url: str
@@ -835,6 +840,80 @@ def attempt_section_urls(
     }
 
 
+def resolve_commit_author_id(
+    name: str,
+    email: str,
+    author_registry: Mapping[str, Author],
+) -> str | None:
+    """Resolve one git commit author identity to an author registry id."""
+
+    normalized_name = name.strip().casefold()
+    if normalized_name:
+        for author_id, author in author_registry.items():
+            if author.name.casefold() == normalized_name:
+                return author_id
+
+    normalized_email = email.strip().lower()
+    match = GITHUB_NOREPLY_RE.search(normalized_email)
+    if match is not None:
+        github_id = match.group("github_id")
+        if github_id in author_registry:
+            return github_id
+
+    local_part = normalized_email.split("@", 1)[0]
+    if local_part in author_registry:
+        return local_part
+    return None
+
+
+def collect_past_editors(
+    root: Path,
+    relative_path: Path,
+    current_authors: list[Author],
+    author_registry: Mapping[str, Author],
+) -> list[Author]:
+    """Collect past editors from git history for a repository path."""
+
+    if not author_registry:
+        return []
+
+    result = subprocess.run(
+        [
+            "git",
+            "log",
+            "--follow",
+            "--format=%aN%x00%aE",
+            "--",
+            relative_path.as_posix(),
+        ],
+        cwd=root,
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    if result.returncode != 0:
+        return []
+
+    current_author_ids = {author.id for author in current_authors}
+    editor_ids: list[str] = []
+    seen_editor_ids: set[str] = set()
+    for line in result.stdout.splitlines():
+        name, separator, email = line.partition("\x00")
+        if not separator:
+            continue
+        author_id = resolve_commit_author_id(name, email, author_registry)
+        if (
+            author_id is None
+            or author_id in current_author_ids
+            or author_id in seen_editor_ids
+        ):
+            continue
+        seen_editor_ids.add(author_id)
+        editor_ids.append(author_id)
+
+    return resolve_authors(editor_ids, dict(author_registry))
+
+
 def collect_challenges(
     root: Path,
     author_registry: dict[str, Author] | None = None,
@@ -855,6 +934,10 @@ def collect_challenges(
         frontmatter, _ = read_markdown_frontmatter(instructions_file)
         instructions = strip_challenge_frontmatter(instructions_markdown)
         slug = challenge_dir.name
+        challenge_authors = resolve_authors(
+            author_ids_from_value(frontmatter.get("authors")),
+            author_registry,
+        )
         challenges.append(
             Challenge(
                 slug=slug,
@@ -864,8 +947,11 @@ def collect_challenges(
                 ),
                 type=frontmatter.get("type", ""),
                 difficulty=parse_difficulty(instructions_file),
-                authors=resolve_authors(
-                    author_ids_from_value(frontmatter.get("authors")),
+                authors=challenge_authors,
+                past_editors=collect_past_editors(
+                    root,
+                    instructions_file.relative_to(root),
+                    challenge_authors,
                     author_registry,
                 ),
                 instructions=instructions,
@@ -1354,6 +1440,7 @@ def export_dashboard(root: Path, dashboard_dir: Path) -> None:
                 type=challenge["type"],
                 difficulty=challenge["difficulty"],
                 authors=challenge["authors"],
+                past_editors=challenge["past_editors"],
                 instructions=challenge["instructions"],
                 path=challenge["path"],
                 url=challenge["url"],
