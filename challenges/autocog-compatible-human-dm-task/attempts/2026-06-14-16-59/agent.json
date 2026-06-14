@@ -4,7 +4,7 @@
   "client": "cursor",
   "model": "GPT-5.5",
   "started_at": "2026-06-14T16:59:00Z",
-  "ended_at": null,
+  "ended_at": "2026-06-14T18:24:36Z",
   "cursor_conversation_id": "bc-ea204d17-fe6b-4671-814b-7fa5e8e57fec",
   "skills_commit": "0b094cffe0dd904990f28bd6311b895b53c33a91",
   "psynet": {
@@ -19,6 +19,7 @@
   },
   "run_cost": null,
   "notes": [
-    "Attempt paused for required human review of PLAN.md before experiment implementation."
+    "Plan was approved by the user before implementation.",
+    "Performance evidence completed with zero bot/request errors, but 40 concurrent bots did not finish the full 50-trial task within the fixed 5-minute window."
   ]
 }
