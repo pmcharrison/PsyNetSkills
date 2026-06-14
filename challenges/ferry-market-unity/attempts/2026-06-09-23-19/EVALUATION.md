@@ -1,5 +1,5 @@
 ---
-score:
+score: 8
 ---
 
 # Evaluation
