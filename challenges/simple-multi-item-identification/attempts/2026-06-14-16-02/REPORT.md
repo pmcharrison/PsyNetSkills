@@ -50,6 +50,14 @@ array, blank, probe-with-buttons sequence; response buttons are hidden before
 the probe, the white stimulus field is borderless, and the flow reaches the
 completion page.
 
+## Post-evaluation repairs
+
+After the evaluator scored the attempt 6/10, the participant interface was
+revised to keep concise task guidance visible on every trial, set the top
+progress bar to neutral gray, and increase circle radius from 22 to 32. The
+participant evidence was regenerated, and video review confirmed the repaired
+trial display.
+
 ## Open metadata
 
 The human author GitHub username is still pending. `agent.json` therefore keeps

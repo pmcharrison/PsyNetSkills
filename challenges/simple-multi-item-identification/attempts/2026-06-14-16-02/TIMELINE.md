@@ -28,6 +28,14 @@
 - T+01:25:00 [agent] Final participant video review confirmed borderless white field, fixation-array-blank-probe sequence, response buttons visible only at probe, and successful completion.
 - T+01:29:00 [agent] Added `REPORT.md`, copied evaluator criteria into `EVALUATION.md`, and recorded learning notes.
 - T+01:30:00 [agent-stop] Implementation and first-pass evidence collection complete; author metadata remains pending.
+- T+01:44:00 [manual] User evaluated the attempt as 6/10 and requested per-trial instruction text, gray progress bar styling, and larger circles.
+- T+01:44:30 [agent-start] Resumed autonomous revision work.
+- T+01:47:00 [agent] Recorded the evaluator score and feedback in `EVALUATION.md` and updated `LEARNINGS.md`.
+- T+01:48:00 [agent] Added per-trial instruction text, neutral gray progress bar CSS, and radius-32 stimuli/probes.
+- T+01:52:00 [agent] Reran `psynet test local` and `psynet simulate`; both passed after stopping the previous debug server that occupied port 5000.
+- T+01:54:00 [agent] Rebuilt `evidence/simulated_data.zip` and reran the analysis notebook.
+- T+01:58:00 [agent] Recaptured participant screenshots/video and verified the repaired UI with video review.
+- T+01:59:00 [agent-stop] Post-evaluation repairs and evidence refresh complete; author metadata remains pending.
 
 <!-- Close active implementation segments with [agent-stop] when work pauses or completes. -->
 <!-- Tag path-changing human guidance as: [manual] [intervention] Description. -->
