@@ -18,10 +18,10 @@ async function clickVisible(page, selector) {
 async function waitForEnabledResponse(page) {
   await page.waitForFunction(() => {
     return [...document.querySelectorAll("button.response")].some(
-      (button) => !button.disabled
+      (button) => !button.disabled && /^[1-5]$/.test(button.id)
     );
   });
-  return page.locator("button.response:not([disabled])");
+  return page.locator("button.response:not([disabled])").filter({ hasText: /^[1-5]$/ });
 }
 
 async function saveDashboardMonitor(page) {
@@ -66,7 +66,7 @@ async function saveDashboardMonitor(page) {
 
   let trialCount = 0;
   while (!page.url().includes("/recruiter-exit")) {
-    if ((await page.locator("button.response").count()) > 0) {
+    if ((await page.locator("button.response").filter({ hasText: /^[1-5]$/ }).count()) > 0) {
       trialCount += 1;
       if (trialCount === 1) {
         await page.waitForTimeout(850);
