@@ -11,7 +11,7 @@ running local PsyNet experiment.
 
 ## Workflow
 
-1. Start the experiment with the relevant caller skill, usually `run-attempt`.
+1. Start the experiment with the relevant caller skill, usually `review-attempt`.
 2. Follow the `public-tunnel` skill for port `5000`.
 3. Derive the public participant and dashboard/develop links:
    - the public participant link is the public tunnel origin with `/ad?generate_tokens=true&recruiter=hotair` appended

@@ -17,7 +17,7 @@ Note that the URL is temporary and dies when the tunnel process or VM stops.
 - downloads temporary `/tmp/cloudflared` if needed;
 - starts the tunnel to `http://127.0.0.1:<port>`;
 - prints `Public tunnel ready` when it detects the public URL;
-- provides URL helpers for caller scripts such as `run-attempt`.
+- provides URL helpers for caller workflows.
 
 ## Workflow
 
