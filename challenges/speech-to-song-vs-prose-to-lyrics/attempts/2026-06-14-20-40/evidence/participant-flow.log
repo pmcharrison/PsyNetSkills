@@ -1,0 +1,41 @@
+2026-06-14T21:12:11.087Z Opening http://127.0.0.1:5000/ad?generate_tokens=true&recruiter=hotair
+2026-06-14T21:12:11.624Z Clicking navigation button: Begin Experiment
+2026-06-14T21:12:12.310Z Clicking navigation button: Next
+2026-06-14T21:12:13.162Z Clicking navigation button: I agree
+2026-06-14T21:12:13.825Z Clicking navigation button: Next
+2026-06-14T21:12:14.398Z Captured text trial screenshot.
+2026-06-14T21:12:14.691Z Completed text trial 1.
+2026-06-14T21:12:15.238Z Completed text trial 2.
+2026-06-14T21:12:15.792Z Completed text trial 3.
+2026-06-14T21:12:16.337Z Completed text trial 4.
+2026-06-14T21:12:16.888Z Completed text trial 5.
+2026-06-14T21:12:17.442Z Completed text trial 6.
+2026-06-14T21:12:17.991Z Completed text trial 7.
+2026-06-14T21:12:18.541Z Completed text trial 8.
+2026-06-14T21:12:19.091Z Completed text trial 9.
+2026-06-14T21:12:19.641Z Completed text trial 10.
+2026-06-14T21:12:20.187Z Completed text trial 11.
+2026-06-14T21:12:20.753Z Completed text trial 12.
+2026-06-14T21:12:21.305Z Completed text trial 13.
+2026-06-14T21:12:21.854Z Completed text trial 14.
+2026-06-14T21:12:22.406Z Completed text trial 15.
+2026-06-14T21:12:23.470Z Clicking navigation button: Next
+2026-06-14T21:12:24.018Z Clicking navigation button: Next
+2026-06-14T21:12:24.580Z Captured audio trial screenshot.
+2026-06-14T21:12:24.871Z Completed audio trial 1.
+2026-06-14T21:12:25.420Z Completed audio trial 2.
+2026-06-14T21:12:26.004Z Completed audio trial 3.
+2026-06-14T21:12:26.569Z Completed audio trial 4.
+2026-06-14T21:12:27.120Z Completed audio trial 5.
+2026-06-14T21:12:27.656Z Completed audio trial 6.
+2026-06-14T21:12:28.222Z Completed audio trial 7.
+2026-06-14T21:12:28.754Z Completed audio trial 8.
+2026-06-14T21:12:29.337Z Completed audio trial 9.
+2026-06-14T21:12:29.869Z Completed audio trial 10.
+2026-06-14T21:12:30.403Z Completed audio trial 11.
+2026-06-14T21:12:30.955Z Completed audio trial 12.
+2026-06-14T21:12:31.488Z Completed audio trial 13.
+2026-06-14T21:12:32.038Z Completed audio trial 14.
+2026-06-14T21:12:32.605Z Completed audio trial 15.
+2026-06-14T21:12:32.898Z Clicking completion button: Next
+2026-06-14T21:12:33.191Z Completed participant flow with 15 text trials and 15 audio trials.

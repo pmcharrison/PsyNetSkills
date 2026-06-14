@@ -27,5 +27,7 @@ the result here after implementation and evidence collection are complete.
 
 - Score and feedback should come from a human evaluator, captured
   conversationally when working with Cursor Cloud Agents.
-- `agent.json` intentionally leaves `authors` empty and `ended_at` null during
-  the plan-review pause.
+- The participant MP4 is visual-only because Playwright video capture did not
+  include system audio. Audio behavior is supported by generated WAV assets,
+  the manifest, `psynet test local`, `psynet simulate`, and exported completed
+  audio-trial data.

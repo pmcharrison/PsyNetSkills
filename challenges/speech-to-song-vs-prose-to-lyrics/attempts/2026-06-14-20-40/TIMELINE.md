@@ -15,3 +15,6 @@
 - T+00:28:00 [agent] Re-ran `python experiment.py` and `psynet test local`; both passed.
 - T+00:29:30 [agent] Ran `psynet simulate`, packaged `evidence/simulated_data.zip`, and executed the analysis notebook.
 - T+00:43:00 [agent] Ran the 5-minute 40-bot performance test and saved JSON/log evidence.
+- T+00:50:00 [agent] Collected Playwright participant-flow screenshots, visual participant MP4, log evidence, and dashboard monitor snapshot.
+- T+00:58:00 [agent] Completed a manual browser walkthrough and verified the replacement video showed successful audio-trial response submission.
+- T+01:00:00 [agent-stop] Implementation and first-pass evidence collection complete.

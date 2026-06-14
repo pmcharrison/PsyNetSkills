@@ -63,6 +63,14 @@ Completed validation artifacts include:
 - `psynet test local` bot run through both phases;
 - `psynet simulate` export at `evidence/simulated_data.zip`;
 - executed notebook at `evidence/analyses/analysis.ipynb`.
+- Playwright participant-flow screenshots and a visual-only
+  `evidence/participant.mp4` showing the full 15 text + 15 audio trial flow.
 
 Additional participant-flow, monitor, and performance evidence is collected
 separately in `evidence/`.
+
+The committed participant MP4 is visual-only because Playwright's built-in video
+capture does not record system audio in this environment. Audio-specific
+validation is covered by the committed WAV stimuli, the generated manifest, the
+audio trial screenshots, and exported trial records showing completed audio
+trials against the expected stimulus IDs.
