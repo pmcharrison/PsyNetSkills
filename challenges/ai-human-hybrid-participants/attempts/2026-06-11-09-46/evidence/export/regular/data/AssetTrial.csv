@@ -1,0 +1,8 @@
+vars,creation_time,local_key,trial_id,asset_id,type,class,object_type
+{},2026-06-11 10:09:26,async_post_trial,1,1,AssetTrial,AssetTrial,AssetTrial
+{},2026-06-11 10:09:58,async_post_trial,2,2,AssetTrial,AssetTrial,AssetTrial
+{},2026-06-11 10:10:13,async_post_trial,3,3,AssetTrial,AssetTrial,AssetTrial
+{},2026-06-11 10:10:28,async_post_trial,4,4,AssetTrial,AssetTrial,AssetTrial
+{},2026-06-11 10:10:42,async_post_trial,5,5,AssetTrial,AssetTrial,AssetTrial
+{},2026-06-11 10:10:58,async_post_trial,6,6,AssetTrial,AssetTrial,AssetTrial
+{},2026-06-11 10:11:15,async_post_trial,7,7,AssetTrial,AssetTrial,AssetTrial
