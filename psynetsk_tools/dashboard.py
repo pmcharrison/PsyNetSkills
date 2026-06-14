@@ -449,6 +449,44 @@ def read_agent_json(agent_file: Path) -> tuple[dict[str, object], str]:
     return agent, json.dumps(agent, indent=2, sort_keys=True)
 
 
+def cost_so_far_from_usage(run_cost: Mapping[str, object]) -> float | None:
+    """Return usage-derived USD cost for unresolved run cost metadata."""
+
+    usage = run_cost.get("usage")
+    if not isinstance(usage, Mapping):
+        return None
+
+    total_cost = usage.get("total_cost")
+    if (
+        isinstance(total_cost, int | float)
+        and not isinstance(total_cost, bool)
+        and total_cost >= 0
+    ):
+        return float(total_cost)
+
+    models = usage.get("models")
+    if not isinstance(models, list):
+        return None
+
+    subtotal = 0.0
+    found = False
+    for model_usage in models:
+        if not isinstance(model_usage, Mapping):
+            continue
+        model_cost = model_usage.get("cost")
+        if (
+            isinstance(model_cost, int | float)
+            and not isinstance(model_cost, bool)
+            and model_cost >= 0
+        ):
+            subtotal += float(model_cost)
+            found = True
+
+    if found:
+        return subtotal
+    return None
+
+
 def run_cost_metadata(agent: dict[str, object]) -> tuple[int | float | None, str, str, str]:
     """Return normalized Cursor cost metadata for dashboard display."""
 
@@ -476,12 +514,19 @@ def run_cost_metadata(agent: dict[str, object]) -> tuple[int | float | None, str
         return amount, "USD", status, f"${amount:.2f}"
     if amount_is_usd and status == "matched_time_window":
         return amount, "USD", status, f"~${amount:.2f}"
-    if status in {"ambiguous", "unavailable", "matched_time_window"}:
+
+    usage_cost_so_far = (
+        cost_so_far_from_usage(run_cost)
+        if currency in {"", "USD", None}
+        else None
+    )
+    unresolved_cost = amount if amount_is_usd else usage_cost_so_far
+    if unresolved_cost is not None and status in {"ambiguous", "unavailable"}:
         return (
-            amount if amount_is_numeric else None,
-            str(currency or ""),
+            unresolved_cost,
+            "USD",
             status,
-            "Pending import",
+            f"~${unresolved_cost:.2f}" if unresolved_cost > 0 else "$0.00",
         )
     if (
         amount_is_numeric
@@ -489,6 +534,13 @@ def run_cost_metadata(agent: dict[str, object]) -> tuple[int | float | None, str
         and status
     ):
         return amount, "USD", status, f"${amount:.2f}"
+    if usage_cost_so_far is not None:
+        return (
+            usage_cost_so_far,
+            "USD",
+            status,
+            f"~${usage_cost_so_far:.2f}" if usage_cost_so_far > 0 else "$0.00",
+        )
     return None, str(currency or ""), status, "Pending import"
 
 

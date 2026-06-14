@@ -514,6 +514,12 @@ def test_collect_challenges_reports_missing_or_ambiguous_cost(
                     "currency": "USD",
                     "amount": None,
                     "attribution_status": "ambiguous",
+                    "usage": {
+                        "models": [
+                            {"model": "gpt-5", "cost": 0.75},
+                            {"model": "gpt-5-mini", "cost": 0.25},
+                        ],
+                    },
                 },
             },
         )
@@ -523,7 +529,7 @@ def test_collect_challenges_reports_missing_or_ambiguous_cost(
     attempts = collect_challenges(tmp_path)[0].attempts
 
     assert attempts[0].run_cost_display == "Pending import"
-    assert attempts[1].run_cost_display == "Pending import"
+    assert attempts[1].run_cost_display == "~$1.00"
 
 
 def test_collect_challenges_reports_untracked_cost_for_local_attempt(
