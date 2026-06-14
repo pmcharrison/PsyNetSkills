@@ -15,7 +15,13 @@ Follow the general workflow in `psynet-experiment-implementation/SKILL.md`.
   graphical elements that are not specified.
 
 - Do not display any additional elements that are not mentioned in the task
-  description.
+  description, including participant-facing text overlays inside the visual
+  stimulus area.
+
+- During visual presentation frames, do not insert prompts or labels such as
+  "same or different" between/over stimuli unless the instructions explicitly
+  require that text to appear within the visual display itself. Put decision
+  wording in instructions or response controls otherwise.
 
 - For white image or stimulus backgrounds, avoid visible borders, container
   frames, or contrasting panels unless the experiment design explicitly calls
