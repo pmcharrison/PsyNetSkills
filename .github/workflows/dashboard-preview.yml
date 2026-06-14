@@ -105,7 +105,7 @@ jobs:
               'Durable dashboard PR preview:',
               previewUrl,
               '',
-              'For immediate interactive review, ask the agent to run `preview-dashboard-live`.',
+              'For immediate interactive review, ask the agent to use `prepare-dashboard-tunnel`.',
               'This static preview may take a few minutes to publish after each push.',
               '',
               `Built from commit \`${context.payload.pull_request.head.sha.slice(0, 7)}\`.`
