@@ -36,6 +36,9 @@ async function saveDashboardMonitor(page) {
 (async () => {
   fs.mkdirSync(SCREENSHOT_DIR, { recursive: true });
   fs.mkdirSync(VIDEO_TMP_DIR, { recursive: true });
+  for (const name of fs.readdirSync(VIDEO_TMP_DIR)) {
+    fs.rmSync(path.join(VIDEO_TMP_DIR, name), { recursive: true, force: true });
+  }
 
   const browser = await chromium.launch({
     executablePath: "/usr/local/bin/google-chrome",
@@ -84,8 +87,8 @@ async function saveDashboardMonitor(page) {
         await enabled.first().click();
       }
       await page.waitForTimeout(250);
-    } else if ((await page.locator("#next-button:visible").count()) > 0) {
-      await page.locator("#next-button").click();
+    } else if ((await page.locator("#next-button:visible:not([disabled])").count()) > 0) {
+      await page.locator("#next-button:visible:not([disabled])").click();
       await page.waitForTimeout(250);
     } else if ((await page.locator("button.push-button:visible").count()) > 0) {
       await page.locator("button.push-button:visible").first().click();
