@@ -31,6 +31,10 @@ Test throughout the implementation process.
 Use `psynet test local` as the main workhorse; this runs a participant through
 the experiment end to end. Override `Experiment` methods like `test_check_bot`
 to assert that behavior is as expected.
+For `ChainTrial`/`ChainNode` experiments where visible rounds should become
+chain nodes, use
+`state-dependent-round-structure/references/chain-structure-integrity.md` for
+the node/trial cardinality assertions.
 Use video review sparingly as it is time-consuming.
 
 ## Fidelity
