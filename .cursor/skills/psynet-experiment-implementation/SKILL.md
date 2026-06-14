@@ -76,6 +76,19 @@ challenge attempt. The notebook should be self-contained for review,
 including all code, tables, and plots.
 If the implementation is inspired by a published paper, replicate the analyses reported in the paper as closely as possible.
 
+The analysis-notebook tooling is not part of the PsyNet editable install. Install
+it into the PsyNet virtualenv before executing the notebook, and execute it
+headlessly so its outputs are embedded for review:
+
+```bash
+uv pip install matplotlib jupyter nbconvert nbformat ipykernel
+jupyter nbconvert --to notebook --execute --inplace evidence/analyses/analysis.ipynb
+```
+
+Keep the executed notebook small (the dashboard truncates inline file content
+above ~100KB, which breaks notebook rendering): prefer low-DPI inline figures
+(e.g. `plt.rcParams["figure.dpi"] = 50`) or link out large figures.
+
 ### Review
 
 Review the outcomes of the previous steps and identify any serious issues that need to be addressed.

@@ -39,7 +39,7 @@ experiment-implementation attempt that produces a canonical analysis notebook.
 
 *Actions:*
 
-- **PsyNetSkills:** Consider adding the analysis-notebook tooling to the cloud-agent environment setup (or documenting the install command in the experiment-implementation evidence reference) so attempts do not each rediscover the missing dependencies. Confidence: high. Impact: medium. Status: considering.
+- **PsyNetSkills:** Consider adding the analysis-notebook tooling to the cloud-agent environment setup (or documenting the install command in the experiment-implementation evidence reference) so attempts do not each rediscover the missing dependencies. Confidence: high. Impact: medium. Status: completed. Notes: Documented the install command (`uv pip install matplotlib jupyter nbconvert nbformat ipykernel`) and headless-execute step in `psynet-experiment-implementation/SKILL.md` and `attempt-challenge/references/experiment-evidence.md` (PR #241). The persistent fix — baking the tooling into the cloud-agent environment — still needs an env-setup agent run from Cursor web.
 
 ## Dashboard truncates text files >100KB, breaking notebook `transform.Unmarshal`
 
