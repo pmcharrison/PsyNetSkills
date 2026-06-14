@@ -124,6 +124,13 @@ def _extract_choice(answer):
     return answer
 
 
+CHOICE_LABELS = {
+    "not_at_all": "Not at all",
+    "a_little": "A little",
+    "very_much": "Very much",
+}
+
+
 class StreamingVideoModularPage(ModularPage):
     """Reusable page wrapper that binds streaming video recorder lifecycle to events."""
 
@@ -248,13 +255,12 @@ class AnimalTrial(StaticTrial):
             "animal_trial_streaming_video",
             prompt,
             RadioButtonControl(
-                choices=["Not at all", "A little", "Very much"],
+                choices=list(CHOICE_LABELS.keys()),
                 labels=[
-                    "Not at all",
-                    "A little",
-                    "Very much",
+                    CHOICE_LABELS["not_at_all"],
+                    CHOICE_LABELS["a_little"],
+                    CHOICE_LABELS["very_much"],
                 ],
-                bot_response="Very much",
             ),
             recording_config=recording_config,
             time_estimate=self.time_estimate,
@@ -264,7 +270,7 @@ class AnimalTrial(StaticTrial):
 
     def score_answer(self, answer, definition):
         choice = _extract_choice(answer)
-        if choice == "Not at all":
+        if choice == "not_at_all":
             return 0.0
         return 1.0
 
@@ -279,7 +285,7 @@ class AnimalTrialMaker(StaticTrialMaker):
         failed = False
         for trial in participant_trials:
             choice = _extract_choice(trial.answer)
-            if choice == "Not at all":
+            if choice == "not_at_all":
                 failed = True
             else:
                 score += 1
@@ -332,7 +338,7 @@ recording_notice_page = InfoPage(
 
 class Exp(psynet.experiment.Experiment):
     label = "Static demo with continuous streaming video uploads"
-    test_n_bots = 2
+    test_n_bots = 12
 
     timeline = Timeline(
         recording_notice_page,
@@ -362,6 +368,7 @@ class Exp(psynet.experiment.Experiment):
                     "animal": trial.definition.get("animal"),
                     "block": trial.block,
                     "answer_choice": answer.get("choice"),
+                    "answer_choice_label": CHOICE_LABELS.get(answer.get("choice")),
                     "answer_recording_hash": answer.get("recording_hash"),
                     "definition_recording_hash": trial.definition.get("recording_hash"),
                     "recording_object_key": trial.definition.get("recording_object_key"),

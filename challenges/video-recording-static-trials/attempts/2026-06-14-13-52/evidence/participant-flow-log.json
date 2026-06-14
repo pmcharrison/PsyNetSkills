@@ -1,0 +1,27 @@
+{
+  "completed": true,
+  "eventLog": [
+    {
+      "step": "open_participant_url",
+      "url": "http://127.0.0.1:5000/ad?recruiter=hotair&hitId=6QLW1Q&assignmentId=0NF7U2&workerId=UFWBJV"
+    },
+    {
+      "step": "clicked_start_selector",
+      "selector": "button:has-text('Begin')"
+    },
+    {
+      "step": "accepted_consent"
+    },
+    {
+      "step": "captured_notice"
+    },
+    {
+      "step": "captured_first_trial"
+    },
+    {
+      "step": "captured_exit",
+      "completed": true,
+      "url": "http://127.0.0.1:5000/recruiter-exit?participant_id=2"
+    }
+  ]
+}
