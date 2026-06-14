@@ -198,6 +198,7 @@ class IdentificationControl(KeyboardPushButtonControl):
 
 
 class BorderlessGraphicPrompt(GraphicPrompt):
+    margin = "10px"
     border_style = "none"
     border_width = "0px"
 
@@ -211,7 +212,7 @@ class IdentificationTrial(StaticTrial):
             prompt=BorderlessGraphicPrompt(
                 text="",
                 dimensions=GRAPHIC_DIMENSIONS,
-                viewport_width=0.62,
+                viewport_width=0.42,
                 frames=trial_frames(self.definition),
                 prevent_control_response=True,
                 prevent_control_submit=True,
