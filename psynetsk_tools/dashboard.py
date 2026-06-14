@@ -41,6 +41,12 @@ from psynetsk_tools.review_artifacts import (
     write_hashed_artifact,
     write_shared_monitor_static_assets,
 )
+from psynetsk_tools.review_model import (
+    CompletenessItem,
+    ReviewFile,
+    classify_review_evidence,
+    screenshot_caption,
+)
 from psynetsk_tools.validate import (
     SKILLS_ROOT,
     parse_difficulty,
@@ -214,6 +220,7 @@ class Attempt:
     challenge_files: list[AttemptFile]
     code_files: list[AttemptFile]
     evidence_files: list[AttemptFile]
+    evidence_view: dict[str, object]
 
 
 @dataclass(frozen=True)
@@ -511,6 +518,72 @@ def collect_attempt_files(
     return files
 
 
+def review_file_data(file: ReviewFile | None) -> dict[str, object] | None:
+    """Return dashboard-safe metadata for one review file."""
+
+    if file is None:
+        return None
+    return {
+        "path": file.path,
+        "url": file.url,
+        "kind": file.kind,
+        "size_bytes": file.size_bytes,
+        "published": file.published,
+        "publication_note": file.publication_note,
+        "truncated": file.truncated,
+    }
+
+
+def completeness_item_data(item: CompletenessItem) -> dict[str, object]:
+    """Return dashboard-safe metadata for one completeness item."""
+
+    return {
+        "key": item.key,
+        "label": item.label,
+        "present": item.present,
+        "detail": item.detail,
+    }
+
+
+def evidence_view_data(evidence_files: list[AttemptFile]) -> dict[str, object]:
+    """Return dashboard-ready shared evidence classification data."""
+
+    view = classify_review_evidence(evidence_files)
+    return {
+        "participant_video": review_file_data(view.participant_video),
+        "screenshots": [
+            {
+                **(review_file_data(screenshot) or {}),
+                "caption": screenshot_caption(screenshot, view.screenshot_captions),
+            }
+            for screenshot in view.screenshots
+        ],
+        "screenshot_captions": view.screenshot_captions,
+        "performance_file": review_file_data(view.performance_file),
+        "performance_data": view.performance_data,
+        "performance_results": view.performance_results,
+        "monitor_file": review_file_data(view.monitor_file),
+        "data_file": review_file_data(view.data_file),
+        "simulated_data_file": review_file_data(view.simulated_data_file),
+        "analysis_files": [
+            review_file_data(file)
+            for file in view.analysis_files
+            if review_file_data(file) is not None
+        ],
+        "analysis_notebook_file": review_file_data(view.analysis_notebook_file),
+        "analysis_notebook": view.analysis_notebook,
+        "visible_files": [
+            review_file_data(file)
+            for file in view.visible_files
+            if review_file_data(file) is not None
+        ],
+        "completeness": [
+            completeness_item_data(item)
+            for item in view.completeness
+        ],
+    }
+
+
 def attempt_artifact_url_prefix(challenge_slug: str, attempt_name: str) -> str:
     """Return the public URL prefix for an attempt's copied artifacts."""
 
@@ -592,6 +665,36 @@ def collect_attempts(
             challenge_dir.name,
             attempt_dir.name,
         )
+        challenge_files = collect_attempt_files(
+            attempt_dir / "challenge",
+            f"{artifact_prefix}/challenge",
+            attempt_section_urls(
+                artifact_publications,
+                challenge_dir.name,
+                attempt_dir.name,
+                "challenge",
+            ),
+        )
+        code_files = collect_attempt_files(
+            attempt_dir / "code",
+            f"{artifact_prefix}/code",
+            attempt_section_urls(
+                artifact_publications,
+                challenge_dir.name,
+                attempt_dir.name,
+                "code",
+            ),
+        )
+        evidence_files = collect_attempt_files(
+            attempt_dir / "evidence",
+            f"{artifact_prefix}/evidence",
+            attempt_section_urls(
+                artifact_publications,
+                challenge_dir.name,
+                attempt_dir.name,
+                "evidence",
+            ),
+        )
         attempts.append(
             Attempt(
                 name=attempt_dir.name,
@@ -645,36 +748,10 @@ def collect_attempts(
                     challenge_dir,
                     attempt_dir,
                 ),
-                challenge_files=collect_attempt_files(
-                    attempt_dir / "challenge",
-                    f"{artifact_prefix}/challenge",
-                    attempt_section_urls(
-                        artifact_publications,
-                        challenge_dir.name,
-                        attempt_dir.name,
-                        "challenge",
-                    ),
-                ),
-                code_files=collect_attempt_files(
-                    attempt_dir / "code",
-                    f"{artifact_prefix}/code",
-                    attempt_section_urls(
-                        artifact_publications,
-                        challenge_dir.name,
-                        attempt_dir.name,
-                        "code",
-                    ),
-                ),
-                evidence_files=collect_attempt_files(
-                    attempt_dir / "evidence",
-                    f"{artifact_prefix}/evidence",
-                    attempt_section_urls(
-                        artifact_publications,
-                        challenge_dir.name,
-                        attempt_dir.name,
-                        "evidence",
-                    ),
-                ),
+                challenge_files=challenge_files,
+                code_files=code_files,
+                evidence_files=evidence_files,
+                evidence_view=evidence_view_data(evidence_files),
             )
         )
     return attempts
