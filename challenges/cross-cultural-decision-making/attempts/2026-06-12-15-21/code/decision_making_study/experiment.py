@@ -182,7 +182,7 @@ trial_maker = StaticTrialMaker(
 
 class Exp(psynet.experiment.Experiment):
     label = "Cross-cultural decision-making study"
-    test_n_bots = 3
+    test_n_bots = 12
 
     timeline = Timeline(
         welcome_page(),
