@@ -36,6 +36,10 @@
 - T+01:54:00 [agent] Rebuilt `evidence/simulated_data.zip` and reran the analysis notebook.
 - T+01:58:00 [agent] Recaptured participant screenshots/video and verified the repaired UI with video review.
 - T+01:59:00 [agent-stop] Post-evaluation repairs and evidence refresh complete; author metadata remains pending.
+- T+02:29:00 [manual] User revised the evaluation score to 9/10 and requested that the psychophysics skill be extended with the task-guidance and neutral-UI lessons.
+- T+02:29:30 [agent-start] Resumed autonomous repository-update work.
+- T+02:31:00 [agent] Updated `EVALUATION.md`, marked the relevant learning actions complete, and extended `.cursor/skills/psychophysics/SKILL.md`.
+- T+02:32:00 [agent-stop] Skill update complete; author metadata remains pending.
 
 <!-- Close active implementation segments with [agent-stop] when work pauses or completes. -->
 <!-- Tag path-changing human guidance as: [manual] [intervention] Description. -->

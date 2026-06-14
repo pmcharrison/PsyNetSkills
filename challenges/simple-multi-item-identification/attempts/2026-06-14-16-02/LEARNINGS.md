@@ -23,5 +23,5 @@ the same neutral gray treatment as buttons in color-sensitive tasks.
 
 *Actions:*
 
-- **PsyNetSkills:** Update `psychophysics/SKILL.md` to clarify that agents should avoid text inside the stimulus area while still preserving concise per-trial task instructions outside the stimulus field when the task would otherwise be ambiguous. Confidence: high. Impact: medium. Status: considering.
-- **PsyNetSkills:** Update `psychophysics/SKILL.md` to mention PsyNet's default top progress bar color and instruct agents to neutralize progress-bar styling alongside buttons for color-related experiments. Confidence: high. Impact: medium. Status: considering.
+- **PsyNetSkills:** Update `psychophysics/SKILL.md` to clarify that agents should avoid text inside the stimulus area while still preserving concise per-trial task instructions outside the stimulus field when the task would otherwise be ambiguous. Confidence: high. Impact: medium. Status: completed.
+- **PsyNetSkills:** Update `psychophysics/SKILL.md` to mention PsyNet's default top progress bar color and instruct agents to neutralize progress-bar styling alongside buttons for color-related experiments. Confidence: high. Impact: medium. Status: completed.

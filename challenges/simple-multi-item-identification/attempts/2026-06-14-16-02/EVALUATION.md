@@ -1,15 +1,14 @@
 ---
-score: 6
+score: 9
 ---
 
 # Evaluation
 
 ## Summary
 
-The human evaluator scored the attempt 6/10. The main implementation was
-functional, but the first submitted version lacked enough per-trial instruction,
-kept the progress bar blue despite neutral-color psychophysics guidance, and
-used circles that were too small.
+The human evaluator revised the attempt score to 9/10 after post-evaluation
+repairs. The repaired version keeps concise task guidance visible on each trial,
+uses neutral gray progress/button styling, and increases circle size.
 
 ## Strengths
 
@@ -48,6 +47,7 @@ Ask the evaluator about each criterion and record the result here.
 
 ## Notes
 
+- Revised user feedback: "great, I score this now 9/10."
 - User feedback: "I would score this 6/10. Removing all instructions on each
   trial is confusing, you should still say to the participant, chose the number
   of the most similar item to the probe. Also, as stated in the psychophysics

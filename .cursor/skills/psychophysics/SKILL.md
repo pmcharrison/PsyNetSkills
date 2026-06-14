@@ -60,6 +60,19 @@ Follow the general workflow in `psynet-experiment-implementation/SKILL.md`.
 - Use a neutral color theme for psynet buttons and progress bars (e.g. gray) to
   avoid biasing color-related experiments.
 
+## Task guidance and neutral UI chrome
+
+- Avoid putting decision prompts or labels inside the stimulus area, but do not
+  remove all trial-level guidance when the participant's task would become
+  ambiguous. Put concise task guidance outside the visual field, for example
+  above the `GraphicPrompt`, when participants need a reminder such as "Choose
+  the number of the original item most similar to the probe."
+
+- PsyNet's top progress bar may keep its default blue styling even when response
+  buttons are customized. For color-related or color-sensitive experiments,
+  neutralize the progress bar along with buttons and other UI chrome, for
+  example by adding page CSS for `#timeline-progress-bar` and `.progress`.
+
 ## Reaction time from the native event log
 
 Reaction time can usually be recorded without any bespoke timing JavaScript. Drive
