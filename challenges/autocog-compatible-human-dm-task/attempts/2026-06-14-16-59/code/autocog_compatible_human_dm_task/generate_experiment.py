@@ -441,6 +441,9 @@ def generate(config_path: Path, output_dir: Path, psynet_commit: str) -> None:
         local_config.txt
         data/
         source_code.zip
+        node_modules/
+        test-results/
+        playwright-report/
         *.pyc
         """
     )
