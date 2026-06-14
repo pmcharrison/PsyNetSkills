@@ -1,0 +1,68 @@
+msgid ""
+msgstr ""
+"Language: hi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Welcome"
+msgstr "स्वागत है"
+
+msgid "Welcome to this decision-making task."
+msgstr "इस निर्णय-निर्माण कार्य में आपका स्वागत है।"
+
+msgid "You will compare two options described by numerical feature ratings."
+msgstr "आप संख्यात्मक विशेषता रेटिंग से वर्णित दो विकल्पों की तुलना करेंगे।"
+
+msgid "Instructions"
+msgstr "निर्देश"
+
+msgid "On each trial, compare Option A and Option B."
+msgstr "प्रत्येक ट्रायल में विकल्प A और विकल्प B की तुलना करें।"
+
+msgid "Each row shows a feature, its validity from 0 to 1, and each option's rating."
+msgstr "प्रत्येक पंक्ति एक विशेषता, 0 से 1 तक उसकी वैधता, और प्रत्येक विकल्प की रेटिंग दिखाती है।"
+
+msgid "Higher validities indicate features that are more predictive in the design."
+msgstr "अधिक वैधता वाली विशेषताएं इस डिजाइन में अधिक पूर्वानुमानकारी हैं।"
+
+msgid "Choose the option you would prefer. There are no right or wrong answers."
+msgstr "वह विकल्प चुनें जिसे आप पसंद करेंगे। कोई सही या गलत उत्तर नहीं है।"
+
+#, python-brace-format
+msgid "Decision {TRIAL_NUMBER} of {TOTAL_TRIALS}"
+msgstr "{TOTAL_TRIALS} में से निर्णय {TRIAL_NUMBER}"
+
+msgid "Please compare both options before choosing."
+msgstr "चुनने से पहले दोनों विकल्पों की तुलना करें।"
+
+msgid "Feature"
+msgstr "विशेषता"
+
+#, python-brace-format
+msgid "Feature {FEATURE_NUMBER}"
+msgstr "विशेषता {FEATURE_NUMBER}"
+
+msgid "Validity"
+msgstr "वैधता"
+
+msgid "Rating"
+msgstr "रेटिंग"
+
+msgid "Option A"
+msgstr "विकल्प A"
+
+msgid "Option B"
+msgstr "विकल्प B"
+
+msgid "Choose Option A"
+msgstr "विकल्प A चुनें"
+
+msgid "Choose Option B"
+msgstr "विकल्प B चुनें"
+
+msgid "Thank you"
+msgstr "धन्यवाद"
+
+msgid "Thank you for completing the decision-making task."
+msgstr "निर्णय-निर्माण कार्य पूरा करने के लिए धन्यवाद।"
