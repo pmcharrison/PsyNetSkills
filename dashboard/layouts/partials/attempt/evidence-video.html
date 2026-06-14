@@ -1,0 +1,13 @@
+{{ if .hasParticipantVideo }}
+  {{ $participantVideo := .participantVideo }}
+  <video class="attempt-video" controls preload="metadata">
+    <source src="{{ $participantVideo.url | relURL }}" type="video/mp4">
+    Your browser does not support embedded video.
+  </video>
+  <p class="artifact-note">
+    <code>{{ $participantVideo.path }}</code>
+    · {{ $participantVideo.size_bytes }} bytes
+  </p>
+{{ else }}
+  <p>No participant recording was found.</p>
+{{ end }}

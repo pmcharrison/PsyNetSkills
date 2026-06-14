@@ -227,267 +227,16 @@
 
     <details id="evidence" class="attempt-panel" open>
       <summary><h2>Evidence</h2></summary>
-      {{ if $hasParticipantVideo }}
-        <video class="attempt-video" controls preload="metadata">
-          <source src="{{ $participantVideo.url | relURL }}" type="video/mp4">
-          Your browser does not support embedded video.
-        </video>
-        <p class="artifact-note">
-          <code>{{ $participantVideo.path }}</code>
-          · {{ $participantVideo.size_bytes }} bytes
-        </p>
-      {{ else }}
-        <p>No participant recording was found.</p>
-      {{ end }}
+      {{ partial "attempt/evidence-video.html" (dict "hasParticipantVideo" $hasParticipantVideo "participantVideo" $participantVideo) }}
 
-      {{ if $hasScreenshots }}
-        <section class="screenshot-gallery" aria-labelledby="screenshot-gallery-heading">
-          <div class="screenshot-gallery-header">
-            <h3 id="screenshot-gallery-heading">Screenshot walkthrough</h3>
-            <p class="artifact-note">
-              Targeted participant-facing states captured with Playwright.
-            </p>
-          </div>
-          <div class="screenshot-frame">
-            <div class="screenshot-carousel" data-screenshot-gallery tabindex="0">
-              {{ range $index, $file := $screenshotFiles }}
-                {{ $caption := default (replace (replace (replaceRE "\\.[^.]+$" "" (replaceRE "^.*/" "" .path)) "-" " ") "_" " ") .caption }}
-                <figure class="screenshot-card" data-screenshot-card data-screenshot-caption-text="{{ $caption }}"{{ if ne $index 0 }} hidden{{ end }}>
-                  <a href="{{ .url | relURL }}" aria-label="Open full-size screenshot">
-                    <img src="{{ .url | relURL }}" alt="{{ $caption }}">
-                  </a>
-                </figure>
-              {{ end }}
-            </div>
-            <div class="screenshot-caption-panel">
-              <div class="screenshot-controls" aria-label="Screenshot navigation">
-                <button class="screenshot-nav" type="button" data-screenshot-prev aria-label="Previous screenshot">‹</button>
-                <span class="screenshot-counter" data-screenshot-counter>1 / {{ len $screenshotFiles }}</span>
-                <button class="screenshot-nav" type="button" data-screenshot-next aria-label="Next screenshot">›</button>
-              </div>
-              <p class="screenshot-caption" data-screenshot-caption></p>
-            </div>
-          </div>
-        </section>
-      {{ end }}
+      {{ partial "attempt/evidence-screenshots.html" (dict "hasScreenshots" $hasScreenshots "screenshotFiles" $screenshotFiles) }}
 
-      <ul class="evidence-actions">
-        <li>
-          {{ if $hasMonitor }}
-            <a href="{{ $monitorFile.url | relURL }}">Open monitor snapshot</a>
-          {{ else }}
-            <span class="missing-artifact">Monitor snapshot missing</span>
-          {{ end }}
-        </li>
-        <li>
-          {{ if $hasPerformance }}
-            <a href="{{ $performanceFile.url | relURL }}">View performance test result</a>
-          {{ else }}
-            <span class="missing-artifact">Performance result missing</span>
-          {{ end }}
-        </li>
-        <li>
-          {{ if $hasData }}
-            <a href="{{ $dataFile.url | relURL }}">Download data export</a>
-          {{ else }}
-            <span class="missing-artifact">Data export missing</span>
-          {{ end }}
-        </li>
-        <li>
-          {{ if $hasAnalysisNotebook }}
-            <a href="#analysis-notebook">View analysis notebook</a>
-          {{ else if $hasAnalyses }}
-            <a href="{{ $analysisFile.url | relURL }}">View analysis artifact</a>
-          {{ else }}
-            <span class="missing-artifact">Analysis summary missing</span>
-          {{ end }}
-        </li>
-      </ul>
+      {{ partial "attempt/evidence-actions.html" (dict "hasMonitor" $hasMonitor "monitorFile" $monitorFile "hasPerformance" $hasPerformance "performanceFile" $performanceFile "hasData" $hasData "dataFile" $dataFile "hasAnalysisNotebook" $hasAnalysisNotebook "hasAnalyses" $hasAnalyses "analysisFile" $analysisFile) }}
 
-      {{ if $hasAnalysisNotebook }}
-        <section id="analysis-notebook" class="analysis-notebook-panel evidence-subsection">
-          <div class="section-heading">
-            <h3>Analysis notebook</h3>
-            <a href="{{ $analysisNotebookFile.url | relURL }}">Open raw notebook</a>
-          </div>
-          <p class="artifact-note">
-            Rendered from <code>{{ $analysisNotebookFile.path }}</code>.
-          </p>
-          <div class="notebook-preview">
-            {{ range $index, $cell := $analysisNotebook.cells }}
-              <section class="notebook-cell notebook-cell-{{ $cell.cell_type }}">
-                {{ $source := delimit $cell.source "" }}
-                {{ if eq $cell.cell_type "markdown" }}
-                  <div class="attempt-markdown">
-                    {{ $source | markdownify }}
-                  </div>
-                {{ else if eq $cell.cell_type "code" }}
-                  <div class="notebook-code">
-                    {{ highlight $source "python" "" }}
-                  </div>
-                  {{ with $cell.outputs }}
-                    <div class="notebook-outputs">
-                      {{ range . }}
-                        {{ with .text }}
-                          <pre><code>{{ delimit . "" }}</code></pre>
-                        {{ else }}
-                          {{ with .data }}
-                            {{ with index . "image/svg+xml" }}
-                              <div class="notebook-svg">
-                                {{ delimit . "" | safeHTML }}
-                              </div>
-                            {{ else }}
-                              {{ with index . "text/html" }}
-                                <div class="notebook-html">
-                                  {{ delimit . "" | safeHTML }}
-                                </div>
-                              {{ else }}
-                                {{ with index . "text/plain" }}
-                                  <pre><code>{{ delimit . "" }}</code></pre>
-                                {{ end }}
-                              {{ end }}
-                            {{ end }}
-                          {{ end }}
-                        {{ end }}
-                      {{ end }}
-                    </div>
-                  {{ end }}
-                {{ else }}
-                  <pre><code>{{ $source }}</code></pre>
-                {{ end }}
-              </section>
-            {{ end }}
-          </div>
-        </section>
-      {{ end }}
+      {{ partial "attempt/evidence-notebook.html" (dict "hasAnalysisNotebook" $hasAnalysisNotebook "analysisNotebookFile" $analysisNotebookFile "analysisNotebook" $analysisNotebook) }}
 
-      {{ if $hasPerformance }}
-        <section class="performance-result">
-          <header class="performance-result-header">
-            <div>
-              <h3>
-                <span class="header-popover" tabindex="0">
-                  Performance test result
-                  <span class="info-popover-content" role="tooltip">
-                    A performance test starts a local PsyNet server, repeatedly launches automated bot participants,
-                    and records how many complete the experiment, how many requests they make, and how quickly key
-                    pages respond under load.
-                  </span>
-                </span>
-              </h3>
-            </div>
-            <a href="{{ $performanceFile.url | relURL }}">Raw JSON</a>
-          </header>
-          {{ with $performanceData.options }}
-            <dl class="performance-options">
-              <div>
-                <dt>Target concurrent bots</dt>
-                <dd>{{ delimit .n_bots_sweep ", " }}</dd>
-              </div>
-              <div>
-                <dt>Duration</dt>
-                <dd>{{ printf "%.2f min" .duration_minutes }}</dd>
-              </div>
-              <div>
-                <dt>Start stagger</dt>
-                <dd>{{ printf "%.1fs" .stagger_interval_s }}</dd>
-              </div>
-              <div>
-                <dt>Time factor</dt>
-                <dd>{{ .time_factor }}</dd>
-              </div>
-            </dl>
-          {{ end }}
-          {{ if $hasPerformanceResults }}
-            <div class="performance-table-wrap">
-              <table class="performance-table">
-                <thead>
-                  <tr>
-                    <th>
-                      <span class="header-popover" tabindex="0">
-                        Concurrent target
-                        <span class="info-popover-content" role="tooltip">The target number of bot participants kept active during this load-test run.</span>
-                      </span>
-                    </th>
-                    <th>
-                      <span class="header-popover" tabindex="0">
-                        Bots started
-                        <span class="info-popover-content" role="tooltip">Total bot participants launched during the run, including replacements started as earlier bots finish.</span>
-                      </span>
-                    </th>
-                    <th>
-                      <span class="header-popover" tabindex="0">
-                        Succeeded
-                        <span class="info-popover-content" role="tooltip">Bots that completed the experiment successfully during the test window.</span>
-                      </span>
-                    </th>
-                    <th>
-                      <span class="header-popover" tabindex="0">
-                        Requests
-                        <span class="info-popover-content" role="tooltip">HTTP requests observed for key participant endpoints such as timeline and response routes.</span>
-                      </span>
-                    </th>
-                    <th>
-                      <span class="header-popover" tabindex="0">
-                        Resp Med (s)
-                        <span class="info-popover-content" role="tooltip">Median HTTP response time, in seconds, for key participant endpoints.</span>
-                      </span>
-                    </th>
-                    <th>
-                      <span class="header-popover" tabindex="0">
-                        Resp P95 (s)
-                        <span class="info-popover-content" role="tooltip">95th percentile HTTP response time, in seconds, for key participant endpoints; higher values show slower tail latency.</span>
-                      </span>
-                    </th>
-                    <th>
-                      <span class="header-popover" tabindex="0">
-                        Q P95 all (s)
-                        <span class="info-popover-content" role="tooltip">95th percentile async-process queue delay across trial makers, when queue metrics are available.</span>
-                      </span>
-                    </th>
-                    <th>
-                      <span class="header-popover" tabindex="0">
-                        Errors
-                        <span class="info-popover-content" role="tooltip">Request errors plus bot errors recorded during the run.</span>
-                      </span>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {{ range $performanceResults }}
-                    <tr>
-                      <td>{{ .n_bots }}</td>
-                      <td>{{ .total_bots_started }}</td>
-                      <td>{{ .bots_succeeded }}</td>
-                      <td>{{ .total_requests }}</td>
-                      <td>{{ with .median_response_time }}{{ printf "%.3f" . }}{{ else }}N/A{{ end }}</td>
-                      <td>{{ with .p95_response_time }}{{ printf "%.3f" . }}{{ else }}N/A{{ end }}</td>
-                      <td>{{ with .q_delay_p95 }}{{ printf "%.3f" . }}{{ else }}N/A{{ end }}</td>
-                      <td>{{ add (or .request_errors 0) (or .bot_errors 0) }}</td>
-                    </tr>
-                  {{ end }}
-                </tbody>
-              </table>
-            </div>
-          {{ else }}
-            <p class="artifact-note">
-              This performance artifact does not contain tabular result rows.
-            </p>
-          {{ end }}
-        </section>
-      {{ end }}
-    <section class="evidence-subsection">
-      <h3>Artifact completeness</h3>
-      <ul class="artifact-checklist">
-        <li class="present">challenge/ <span>{{ len $attempt.challenge_files }} file{{ if ne (len $attempt.challenge_files) 1 }}s{{ end }}</span></li>
-        <li class="present">agent.json <span>metadata captured</span></li>
-        <li class="{{ if $hasPlan }}present{{ else }}missing{{ end }}">PLAN.md <span>{{ if $hasPlan }}present{{ else }}missing{{ end }}</span></li>
-        <li class="{{ if $hasTimeline }}present{{ else }}missing{{ end }}">TIMELINE.md <span>{{ if $hasTimeline }}present{{ else }}missing{{ end }}</span></li>
-        <li class="{{ if $hasExperiment }}present{{ else }}missing{{ end }}">code/experiment.py <span>{{ if $hasExperiment }}present{{ else }}missing{{ end }}</span></li>
-        {{ range $evidenceCompleteness }}
-          <li class="{{ if .present }}present{{ else }}missing{{ end }}">evidence/{{ .label }} <span>{{ .detail }}</span></li>
-        {{ end }}
-      </ul>
+      {{ partial "attempt/evidence-performance.html" (dict "hasPerformance" $hasPerformance "performanceData" $performanceData "performanceFile" $performanceFile "performanceResults" $performanceResults "hasPerformanceResults" $hasPerformanceResults) }}
+      {{ partial "attempt/evidence-completeness.html" (dict "challengeFiles" $attempt.challenge_files "hasPlan" $hasPlan "hasTimeline" $hasTimeline "hasExperiment" $hasExperiment "evidenceCompleteness" $evidenceCompleteness) }}
     </details>
 
     <details class="attempt-panel">
@@ -495,37 +244,7 @@
       {{ with $attempt.code_files }}
         <div class="file-grid">
           {{ range . }}
-            {{ $file := . }}
-            <details class="attempt-file">
-              <summary class="file-header">
-                <h3><code>{{ $file.path }}</code></h3>
-                <span>{{ $file.kind }}</span>
-                <span>{{ $file.size_bytes }} bytes</span>
-                {{ if $file.truncated }}<span>truncated</span>{{ end }}
-              </summary>
-              {{ with $file.content }}
-                {{ if eq $file.kind "md" }}
-                  <div class="file-preview markdown-preview">
-                    {{ replaceRE "(?s)^# [^\n]*\n+" "" . | markdownify }}
-                  </div>
-                {{ else if eq $file.kind "py" }}
-                  <div class="file-preview code-preview">
-                    {{ highlight . "python" "" }}
-                  </div>
-                {{ else }}
-                  <pre class="file-preview"><code>{{ . }}</code></pre>
-                {{ end }}
-              {{ else }}
-                <p class="file-preview binary-preview">
-                  {{ if eq $file.published false }}
-                    {{ $file.publication_note }}
-                  {{ else }}
-                    Preview is not available.
-                    <a href="{{ $file.url | relURL }}">Open artifact</a>.
-                  {{ end }}
-                </p>
-              {{ end }}
-            </details>
+            {{ partial "attempt/file-card.html" (dict "file" . "container" "details" "previewMode" "typed") }}
           {{ end }}
         </div>
       {{ else }}
@@ -538,37 +257,7 @@
       {{ with $visibleEvidenceFiles }}
         <div class="file-grid">
           {{ range . }}
-            {{ $file := . }}
-            <section class="attempt-file">
-              <header class="file-header">
-                <h3><code>{{ $file.path }}</code></h3>
-                <span>{{ $file.kind }}</span>
-                <span>{{ $file.size_bytes }} bytes</span>
-                {{ if $file.truncated }}<span>truncated</span>{{ end }}
-              </header>
-              {{ with $file.content }}
-                {{ if eq $file.kind "md" }}
-                  <div class="file-preview markdown-preview">
-                    {{ replaceRE "(?s)^# [^\n]*\n+" "" . | markdownify }}
-                  </div>
-                {{ else if eq $file.kind "py" }}
-                  <div class="file-preview code-preview">
-                    {{ highlight . "python" "" }}
-                  </div>
-                {{ else }}
-                  <pre class="file-preview"><code>{{ . }}</code></pre>
-                {{ end }}
-              {{ else }}
-                <p class="file-preview binary-preview">
-                  {{ if eq $file.published false }}
-                    {{ $file.publication_note }}
-                  {{ else }}
-                    Preview is not available.
-                    <a href="{{ $file.url | relURL }}">Open artifact</a>.
-                  {{ end }}
-                </p>
-              {{ end }}
-            </section>
+            {{ partial "attempt/file-card.html" (dict "file" . "container" "section" "previewMode" "typed") }}
           {{ end }}
         </div>
       {{ else }}
@@ -586,22 +275,7 @@
       {{ with $attempt.challenge_files }}
         <div class="file-grid">
           {{ range . }}
-            {{ $file := . }}
-            <section class="attempt-file">
-              <header class="file-header">
-                <h3><code>{{ $file.path }}</code></h3>
-                <span>{{ $file.kind }}</span>
-                <span>{{ $file.size_bytes }} bytes</span>
-              </header>
-              {{ with $file.content }}
-                <pre class="file-preview"><code>{{ . }}</code></pre>
-              {{ else }}
-                <p class="file-preview binary-preview">
-                  Preview is not available.
-                  <a href="{{ $file.url | relURL }}">Open artifact</a>.
-                </p>
-              {{ end }}
-            </section>
+            {{ partial "attempt/file-card.html" (dict "file" . "container" "section" "previewMode" "plain") }}
           {{ end }}
         </div>
       {{ else }}

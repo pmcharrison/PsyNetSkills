@@ -1,0 +1,118 @@
+{{ if .hasPerformance }}
+  {{ $performanceData := .performanceData }}
+  {{ $performanceFile := .performanceFile }}
+  {{ $performanceResults := .performanceResults }}
+  <section class="performance-result">
+    <header class="performance-result-header">
+      <div>
+        <h3>
+          <span class="header-popover" tabindex="0">
+            Performance test result
+            <span class="info-popover-content" role="tooltip">
+              A performance test starts a local PsyNet server, repeatedly launches automated bot participants,
+              and records how many complete the experiment, how many requests they make, and how quickly key
+              pages respond under load.
+            </span>
+          </span>
+        </h3>
+      </div>
+      <a href="{{ $performanceFile.url | relURL }}">Raw JSON</a>
+    </header>
+    {{ with $performanceData.options }}
+      <dl class="performance-options">
+        <div>
+          <dt>Target concurrent bots</dt>
+          <dd>{{ delimit .n_bots_sweep ", " }}</dd>
+        </div>
+        <div>
+          <dt>Duration</dt>
+          <dd>{{ printf "%.2f min" .duration_minutes }}</dd>
+        </div>
+        <div>
+          <dt>Start stagger</dt>
+          <dd>{{ printf "%.1fs" .stagger_interval_s }}</dd>
+        </div>
+        <div>
+          <dt>Time factor</dt>
+          <dd>{{ .time_factor }}</dd>
+        </div>
+      </dl>
+    {{ end }}
+    {{ if .hasPerformanceResults }}
+      <div class="performance-table-wrap">
+        <table class="performance-table">
+          <thead>
+            <tr>
+              <th>
+                <span class="header-popover" tabindex="0">
+                  Concurrent target
+                  <span class="info-popover-content" role="tooltip">The target number of bot participants kept active during this load-test run.</span>
+                </span>
+              </th>
+              <th>
+                <span class="header-popover" tabindex="0">
+                  Bots started
+                  <span class="info-popover-content" role="tooltip">Total bot participants launched during the run, including replacements started as earlier bots finish.</span>
+                </span>
+              </th>
+              <th>
+                <span class="header-popover" tabindex="0">
+                  Succeeded
+                  <span class="info-popover-content" role="tooltip">Bots that completed the experiment successfully during the test window.</span>
+                </span>
+              </th>
+              <th>
+                <span class="header-popover" tabindex="0">
+                  Requests
+                  <span class="info-popover-content" role="tooltip">HTTP requests observed for key participant endpoints such as timeline and response routes.</span>
+                </span>
+              </th>
+              <th>
+                <span class="header-popover" tabindex="0">
+                  Resp Med (s)
+                  <span class="info-popover-content" role="tooltip">Median HTTP response time, in seconds, for key participant endpoints.</span>
+                </span>
+              </th>
+              <th>
+                <span class="header-popover" tabindex="0">
+                  Resp P95 (s)
+                  <span class="info-popover-content" role="tooltip">95th percentile HTTP response time, in seconds, for key participant endpoints; higher values show slower tail latency.</span>
+                </span>
+              </th>
+              <th>
+                <span class="header-popover" tabindex="0">
+                  Q P95 all (s)
+                  <span class="info-popover-content" role="tooltip">95th percentile async-process queue delay across trial makers, when queue metrics are available.</span>
+                </span>
+              </th>
+              <th>
+                <span class="header-popover" tabindex="0">
+                  Errors
+                  <span class="info-popover-content" role="tooltip">Request errors plus bot errors recorded during the run.</span>
+                </span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {{ range $performanceResults }}
+              <tr>
+                <td>{{ .n_bots }}</td>
+                <td>{{ .total_bots_started }}</td>
+                <td>{{ .bots_succeeded }}</td>
+                <td>{{ .total_requests }}</td>
+                <td>{{ with .median_response_time }}{{ printf "%.3f" . }}{{ else }}N/A{{ end }}</td>
+                <td>{{ with .p95_response_time }}{{ printf "%.3f" . }}{{ else }}N/A{{ end }}</td>
+                <td>{{ with .q_delay_p95 }}{{ printf "%.3f" . }}{{ else }}N/A{{ end }}</td>
+                <td>{{ add (or .request_errors 0) (or .bot_errors 0) }}</td>
+              </tr>
+            {{ end }}
+          </tbody>
+        </table>
+      </div>
+    {{ else }}
+      <p class="artifact-note">
+        This performance artifact does not contain tabular result rows.
+      </p>
+    {{ end }}
+  </section>
+{{ end }}

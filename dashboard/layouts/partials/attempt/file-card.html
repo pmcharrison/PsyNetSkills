@@ -1,0 +1,24 @@
+{{ $file := .file }}
+{{ $container := default "section" .container }}
+{{ $previewMode := default "typed" .previewMode }}
+{{ if eq $container "details" }}
+  <details class="attempt-file">
+    <summary class="file-header">
+      <h3><code>{{ $file.path }}</code></h3>
+      <span>{{ $file.kind }}</span>
+      <span>{{ $file.size_bytes }} bytes</span>
+      {{ if $file.truncated }}<span>truncated</span>{{ end }}
+    </summary>
+    {{ partial "attempt/file-preview.html" (dict "file" $file "previewMode" $previewMode) }}
+  </details>
+{{ else }}
+  <section class="attempt-file">
+    <header class="file-header">
+      <h3><code>{{ $file.path }}</code></h3>
+      <span>{{ $file.kind }}</span>
+      <span>{{ $file.size_bytes }} bytes</span>
+      {{ if $file.truncated }}<span>truncated</span>{{ end }}
+    </header>
+    {{ partial "attempt/file-preview.html" (dict "file" $file "previewMode" $previewMode) }}
+  </section>
+{{ end }}
