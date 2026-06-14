@@ -21,7 +21,19 @@ async function waitForEnabledResponse(page) {
       (button) => !button.disabled && /^[1-5]$/.test(button.id)
     );
   });
-  return page.locator("button.response:not([disabled])").filter({ hasText: /^[1-5]$/ });
+  return page.evaluate(() => {
+    const button = [...document.querySelectorAll("button.response")].find(
+      (candidate) => !candidate.disabled && /^[1-5]$/.test(candidate.id)
+    );
+    button.click();
+    return button.id;
+  });
+}
+
+async function countNumericResponseButtons(page) {
+  return page.locator("button.response").evaluateAll((buttons) =>
+    buttons.filter((button) => /^[1-5]$/.test(button.id)).length
+  );
 }
 
 async function saveDashboardMonitor(page) {
@@ -66,7 +78,7 @@ async function saveDashboardMonitor(page) {
 
   let trialCount = 0;
   while (!page.url().includes("/recruiter-exit")) {
-    if ((await page.locator("button.response").filter({ hasText: /^[1-5]$/ }).count()) > 0) {
+    if ((await countNumericResponseButtons(page)) > 0) {
       trialCount += 1;
       if (trialCount === 1) {
         await page.waitForTimeout(850);
@@ -80,14 +92,13 @@ async function saveDashboardMonitor(page) {
           fullPage: true,
         });
       }
-      const enabled = await waitForEnabledResponse(page);
-      await enabled.first().click();
+      await waitForEnabledResponse(page);
       await page.waitForTimeout(2200);
     } else if ((await page.locator("#next-button:visible:not([disabled])").count()) > 0) {
       await page.locator("#next-button:visible:not([disabled])").click();
       await page.waitForTimeout(250);
-    } else if ((await page.locator("button.push-button:visible").count()) > 0) {
-      await page.locator("button.push-button:visible").first().click();
+    } else if ((await page.locator("button.push-button:visible:not(.response)").count()) > 0) {
+      await page.locator("button.push-button:visible:not(.response)").first().click();
       await page.waitForTimeout(500);
     } else {
       await page.waitForTimeout(500);
