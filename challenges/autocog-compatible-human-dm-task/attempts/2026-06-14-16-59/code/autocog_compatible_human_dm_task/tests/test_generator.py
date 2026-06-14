@@ -19,13 +19,11 @@ def test_expand_trials_repeats_full_cycles_to_max_trials():
     assert all(trial["validities"] == config["validities"] for trial in trials)
 
 
-def test_max_trials_truncates_when_shorter_than_source_pairs():
+def test_max_trials_must_allow_at_least_one_full_source_cycle():
     short_config = {**config, "max_trials": 3}
 
-    trials = expand_trials(short_config)
-
-    assert len(trials) == 3
-    assert [trial["source_pair_index"] for trial in trials] == [0, 1, 2]
+    with pytest.raises(ValueError, match="complete integer repetitions"):
+        expand_trials(short_config)
 
 
 def test_rejects_mismatched_rating_vector_length():

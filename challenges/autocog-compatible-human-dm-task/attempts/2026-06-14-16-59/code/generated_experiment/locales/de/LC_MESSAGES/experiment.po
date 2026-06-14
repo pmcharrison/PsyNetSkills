@@ -36,18 +36,18 @@ msgstr "Entscheidung {TRIAL_NUMBER} von {TOTAL_TRIALS}"
 msgid "Please compare both options before choosing."
 msgstr "Bitte vergleichen Sie beide Optionen, bevor Sie wählen."
 
-msgid "Feature"
-msgstr "Merkmal"
+msgid "Rating"
+msgstr "Bewertung"
 
 #, python-brace-format
-msgid "Feature {FEATURE_NUMBER}"
-msgstr "Merkmal {FEATURE_NUMBER}"
+msgid "Rating {RATING_NUMBER}"
+msgstr "Bewertung {RATING_NUMBER}"
 
 msgid "Validity"
 msgstr "Validität"
 
-msgid "Rating"
-msgstr "Bewertung"
+msgid "Value"
+msgstr "Wert"
 
 msgid "Option A"
 msgstr "Option A"

@@ -36,18 +36,18 @@ msgstr "{TOTAL_TRIALS} में से निर्णय {TRIAL_NUMBER}"
 msgid "Please compare both options before choosing."
 msgstr "चुनने से पहले दोनों विकल्पों की तुलना करें।"
 
-msgid "Feature"
-msgstr "विशेषता"
+msgid "Rating"
+msgstr "रेटिंग"
 
 #, python-brace-format
-msgid "Feature {FEATURE_NUMBER}"
-msgstr "विशेषता {FEATURE_NUMBER}"
+msgid "Rating {RATING_NUMBER}"
+msgstr "रेटिंग {RATING_NUMBER}"
 
 msgid "Validity"
 msgstr "वैधता"
 
-msgid "Rating"
-msgstr "रेटिंग"
+msgid "Value"
+msgstr "मान"
 
 msgid "Option A"
 msgstr "विकल्प A"

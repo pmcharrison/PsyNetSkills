@@ -30,10 +30,10 @@ TRANSLATIONS = {
         "Choose the option you would prefer. There are no right or wrong answers.": "वह विकल्प चुनें जिसे आप पसंद करेंगे। कोई सही या गलत उत्तर नहीं है।",
         "Decision {TRIAL_NUMBER} of {TOTAL_TRIALS}": "{TOTAL_TRIALS} में से निर्णय {TRIAL_NUMBER}",
         "Please compare both options before choosing.": "चुनने से पहले दोनों विकल्पों की तुलना करें।",
-        "Feature": "विशेषता",
-        "Feature {FEATURE_NUMBER}": "विशेषता {FEATURE_NUMBER}",
-        "Validity": "वैधता",
         "Rating": "रेटिंग",
+        "Rating {RATING_NUMBER}": "रेटिंग {RATING_NUMBER}",
+        "Validity": "वैधता",
+        "Value": "मान",
         "Option A": "विकल्प A",
         "Option B": "विकल्प B",
         "Choose Option A": "विकल्प A चुनें",
@@ -52,10 +52,10 @@ TRANSLATIONS = {
         "Choose the option you would prefer. There are no right or wrong answers.": "Wählen Sie die Option, die Sie bevorzugen würden. Es gibt keine richtigen oder falschen Antworten.",
         "Decision {TRIAL_NUMBER} of {TOTAL_TRIALS}": "Entscheidung {TRIAL_NUMBER} von {TOTAL_TRIALS}",
         "Please compare both options before choosing.": "Bitte vergleichen Sie beide Optionen, bevor Sie wählen.",
-        "Feature": "Merkmal",
-        "Feature {FEATURE_NUMBER}": "Merkmal {FEATURE_NUMBER}",
-        "Validity": "Validität",
         "Rating": "Bewertung",
+        "Rating {RATING_NUMBER}": "Bewertung {RATING_NUMBER}",
+        "Validity": "Validität",
+        "Value": "Wert",
         "Option A": "Option A",
         "Option B": "Option B",
         "Choose Option A": "Option A wählen",
@@ -105,8 +105,8 @@ def option_choice_label(option_id):
     raise ValueError(f"Unknown option ID: {option_id}")
 
 
-def feature_label(feature_index):
-    return _("Feature {FEATURE_NUMBER}").format(FEATURE_NUMBER=feature_index + 1)
+def rating_label(rating_index):
+    return _("Rating {RATING_NUMBER}").format(RATING_NUMBER=rating_index + 1)
 
 
 def option_card(option_id, ratings, validities):
@@ -117,13 +117,13 @@ def option_card(option_id, ratings, validities):
             with tags.table(_class="table table-sm align-middle mb-0"):
                 with tags.thead():
                     with tags.tr():
-                        tags.th(_("Feature"), scope="col")
-                        tags.th(_("Validity"), scope="col")
                         tags.th(_("Rating"), scope="col")
+                        tags.th(_("Validity"), scope="col")
+                        tags.th(_("Value"), scope="col")
                 with tags.tbody():
                     for i, (validity, rating) in enumerate(zip(validities, ratings)):
                         with tags.tr():
-                            tags.td(feature_label(i))
+                            tags.td(rating_label(i))
                             tags.td(f"{validity:.2f}")
                             tags.td(str(rating))
     return card
@@ -332,16 +332,18 @@ def validate_config(config: dict[str, Any]) -> None:
     max_trials = config["max_trials"]
     if not isinstance(max_trials, int) or max_trials <= 0:
         raise ValueError("'max_trials' must be a positive integer.")
+    if max_trials < len(a_ratings):
+        raise ValueError(
+            "'max_trials' must be at least the number of configured rating pairs "
+            "because generated trial lists use complete integer repetitions."
+        )
 
 
 def expand_trials(config: dict[str, Any]) -> list[dict[str, Any]]:
     validate_config(config)
     pair_count = len(config["trial_a_ratings"])
     max_trials = config["max_trials"]
-    if max_trials < pair_count:
-        n_trials = max_trials
-    else:
-        n_trials = (max_trials // pair_count) * pair_count
+    n_trials = (max_trials // pair_count) * pair_count
     trials = []
     for trial_index in range(n_trials):
         pair_index = trial_index % pair_count

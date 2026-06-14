@@ -36,8 +36,8 @@ def option_choice_label(option_id):
     raise ValueError(f"Unknown option ID: {option_id}")
 
 
-def feature_label(feature_index):
-    return _("Feature {FEATURE_NUMBER}").format(FEATURE_NUMBER=feature_index + 1)
+def rating_label(rating_index):
+    return _("Rating {RATING_NUMBER}").format(RATING_NUMBER=rating_index + 1)
 
 
 def option_card(option_id, ratings, validities):
@@ -48,13 +48,13 @@ def option_card(option_id, ratings, validities):
             with tags.table(_class="table table-sm align-middle mb-0"):
                 with tags.thead():
                     with tags.tr():
-                        tags.th(_("Feature"), scope="col")
-                        tags.th(_("Validity"), scope="col")
                         tags.th(_("Rating"), scope="col")
+                        tags.th(_("Validity"), scope="col")
+                        tags.th(_("Value"), scope="col")
                 with tags.tbody():
                     for i, (validity, rating) in enumerate(zip(validities, ratings)):
                         with tags.tr():
-                            tags.td(feature_label(i))
+                            tags.td(rating_label(i))
                             tags.td(f"{validity:.2f}")
                             tags.td(str(rating))
     return card
