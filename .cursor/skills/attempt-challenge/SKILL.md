@@ -137,11 +137,15 @@ Note the `cloud-agent-links` skill for sharing user review links.
       `EVALUATION.md`.
 11. When implementation and first-pass evidence collection are complete, close
    `TIMELINE.md` with `[agent-stop]` and set `ended_at` in `agent.json` to the
-   matching UTC ISO timestamp. Leave `run_cost` as `null`; maintainers can
-   periodically run `psynetsk-import-cursor-costs <cursor-usage.csv>` to backfill
-   derived cost metadata from Cursor CSV exports without committing the raw CSV.
+   matching UTC ISO timestamp. For completed Cursor Cloud attempts with a
+   `cursor_conversation_id`, do not leave `run_cost` as `null`: if exact CSV
+   attribution is not available yet, register a pending block with
+   `attribution_status: "unavailable"` and `amount: null` so dashboard/validation
+   track that import work is still outstanding. Maintainers can then run
+   `psynetsk-import-cursor-costs <cursor-usage.csv>` to replace pending metadata
+   with exact `matched_cloud_agent_id` amounts without committing the raw CSV.
    The importer only treats exact `cursor_conversation_id` / `Cloud Agent ID`
-   matches as resolved. Local attempts without a Cloud Agent ID should keep
+   matches as resolved. Local attempts without a Cloud Agent ID may keep
    `run_cost` as `null` unless a human records a manual cost. Use the
    `cursor-cost-estimation` skill when importing, auditing, or backfilling costs.
 12. Reflect on the timeline of events. Did anything take disproportionately long?

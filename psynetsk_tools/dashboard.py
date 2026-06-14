@@ -449,26 +449,99 @@ def read_agent_json(agent_file: Path) -> tuple[dict[str, object], str]:
     return agent, json.dumps(agent, indent=2, sort_keys=True)
 
 
+def cost_so_far_from_usage(run_cost: Mapping[str, object]) -> float | None:
+    """Return usage-derived USD cost for unresolved run cost metadata."""
+
+    usage = run_cost.get("usage")
+    if not isinstance(usage, Mapping):
+        return None
+
+    total_cost = usage.get("total_cost")
+    if (
+        isinstance(total_cost, int | float)
+        and not isinstance(total_cost, bool)
+        and total_cost >= 0
+    ):
+        return float(total_cost)
+
+    models = usage.get("models")
+    if not isinstance(models, list):
+        return None
+
+    subtotal = 0.0
+    found = False
+    for model_usage in models:
+        if not isinstance(model_usage, Mapping):
+            continue
+        model_cost = model_usage.get("cost")
+        if (
+            isinstance(model_cost, int | float)
+            and not isinstance(model_cost, bool)
+            and model_cost >= 0
+        ):
+            subtotal += float(model_cost)
+            found = True
+
+    if found:
+        return subtotal
+    return None
+
+
 def run_cost_metadata(agent: dict[str, object]) -> tuple[int | float | None, str, str, str]:
     """Return normalized Cursor cost metadata for dashboard display."""
 
+    conversation_id = agent.get("cursor_conversation_id")
+    has_cloud_agent_id = isinstance(conversation_id, str) and bool(conversation_id.strip())
     run_cost = agent.get("run_cost")
     if not isinstance(run_cost, dict):
-        return None, "", "", "-"
+        return (
+            None,
+            "",
+            "",
+            "Pending import" if has_cloud_agent_id else "-",
+        )
 
     amount = run_cost.get("amount")
     currency = run_cost.get("currency")
-    status = run_cost.get("attribution_status")
-    if (
-        isinstance(amount, bool)
-        or not isinstance(amount, int | float)
-        or amount < 0
-        or currency != "USD"
-        or status != "matched_cloud_agent_id"
-    ):
-        return None, str(currency or ""), str(status or ""), "-"
+    status = str(run_cost.get("attribution_status") or "")
+    amount_is_numeric = (
+        isinstance(amount, int | float)
+        and not isinstance(amount, bool)
+        and amount >= 0
+    )
+    amount_is_usd = amount_is_numeric and currency == "USD"
+    if amount_is_usd and status == "matched_cloud_agent_id":
+        return amount, "USD", status, f"${amount:.2f}"
+    if amount_is_usd and status == "matched_time_window":
+        return amount, "USD", status, f"~${amount:.2f}"
 
-    return amount, currency, status, f"${amount:.2f}"
+    usage_cost_so_far = (
+        cost_so_far_from_usage(run_cost)
+        if currency in {"", "USD", None}
+        else None
+    )
+    unresolved_cost = amount if amount_is_usd else usage_cost_so_far
+    if unresolved_cost is not None and status in {"ambiguous", "unavailable"}:
+        return (
+            unresolved_cost,
+            "USD",
+            status,
+            f"~${unresolved_cost:.2f}" if unresolved_cost > 0 else "$0.00",
+        )
+    if (
+        amount_is_numeric
+        and currency == "USD"
+        and status
+    ):
+        return amount, "USD", status, f"${amount:.2f}"
+    if usage_cost_so_far is not None:
+        return (
+            usage_cost_so_far,
+            "USD",
+            status,
+            f"~${usage_cost_so_far:.2f}" if usage_cost_so_far > 0 else "$0.00",
+        )
+    return None, str(currency or ""), status, "Pending import"
 
 
 def file_kind(path: Path) -> str:

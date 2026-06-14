@@ -225,6 +225,18 @@ def validate_agent_metadata(
             problems.append(f"{agent_file}: psynet.{field} must not be empty")
 
     run_cost = agent.get("run_cost")
+    cursor_conversation_id = agent.get("cursor_conversation_id")
+    has_cloud_agent_id = (
+        isinstance(cursor_conversation_id, str)
+        and bool(cursor_conversation_id.strip())
+    )
+    if has_cloud_agent_id and not is_in_progress_agent(agent) and run_cost is None:
+        problems.append(
+            f"{agent_file}: completed Cursor Cloud attempts must include "
+            "non-null run_cost metadata (use attribution_status "
+            "'matched_cloud_agent_id' after CSV import, or 'unavailable' when "
+            "cost import is still pending)",
+        )
     if run_cost is not None:
         problems.extend(validate_run_cost_metadata(agent_file, run_cost))
 

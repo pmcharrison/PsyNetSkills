@@ -19,6 +19,31 @@
     "update_command": "git pull --ff-only origin master",
     "dirty": false
   },
-  "run_cost": null,
+  "run_cost": {
+    "currency": "USD",
+    "amount": null,
+    "source": "cursor_cost_registration_pending",
+    "recorded_at": "2026-06-14T16:39:55.860563Z",
+    "attribution_status": "unavailable",
+    "window_started_at": null,
+    "window_ended_at": null,
+    "matched_started_at": null,
+    "matched_ended_at": null,
+    "matched_cloud_agent_ids": [
+      "bc-3cc69c09-408a-486b-a33c-8bc265748993"
+    ],
+    "usage": {
+      "rows": 0,
+      "input_with_cache_write": 0,
+      "input_without_cache_write": 0,
+      "cache_read": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "models": {}
+    },
+    "notes": [
+      "Pending exact cost import from Cursor usage export by cursor_conversation_id."
+    ]
+  },
   "notes": []
 }
