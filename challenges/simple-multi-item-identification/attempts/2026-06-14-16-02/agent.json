@@ -20,6 +20,7 @@
   "run_cost": null,
   "notes": [
     "Human author key is pending and must be filled before the attempt is marked complete.",
-    "Experiment implementation is paused at the required PLAN.md human-review gate."
+    "Implementation, validation, first-pass evidence, analysis, and report are complete.",
+    "ended_at remains null until a human author GitHub username is supplied."
   ]
 }
