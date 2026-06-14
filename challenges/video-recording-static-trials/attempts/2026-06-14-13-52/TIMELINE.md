@@ -39,6 +39,9 @@
 - T+01:28:00 [agent] Updated `EVALUATION.md` with full criteria checklist and finalized `agent.json` author metadata.
 - T+01:29:00 [agent] Re-ran `psynet test local` and `uv run psynetsk-validate`; both passed after final cleanup.
 - T+01:29:05 [agent-stop] Attempt artifacts finalized for human evaluation.
+- T+02:30:00 [manual] [intervention] Human evaluator provided score 6 and feedback: "still not perfect, I had to do multiple updates locally."
+- T+02:31:00 [agent-start] Resumed in evaluation mode to record evaluator feedback.
+- T+02:33:00 [agent] Updated `EVALUATION.md` frontmatter/summary/checklist and revised `LEARNINGS.md` with a reusable lesson on reducing local fix churn.
 
 <!-- Close active implementation segments with [agent-stop] when work pauses or completes. -->
 <!-- Tag path-changing human guidance as: [manual] [intervention] Description. -->
