@@ -28,6 +28,15 @@ simple objects, shapes, or images presented in a timed sequence within a
 single trial. Simple interactions, such as clicking on a shape, can also be
 handled with PsyNet Graphics.
 
+For visual experiments involving images, geometric shapes, or simple spatial
+interactions, include an explicit PsyNet Graphics feasibility check before
+choosing custom JavaScript. Record the result in the implementation plan or
+technical notes: either identify the PsyNet Graphics components/events that will
+be used, or explain the concrete requirement that makes custom JavaScript
+necessary. Do not choose custom JavaScript only because it seems more familiar
+or because image presentation appears easier without first checking whether
+PsyNet Graphics can handle the same display and interaction.
+
 ## Events
 
 Changes that occur within a trial should be controlled using PsyNet's event
@@ -59,6 +68,13 @@ returns the same structured, formatted answer that the browser path records.
 PsyNet bots submit the value returned by `get_bot_response` as the formatted
 answer, so the bot path can bypass `format_answer` unless you explicitly
 call it or otherwise match its output.
+
+When repeating custom `Page` classes with JavaScript event handlers, avoid
+reusing the default `session_id` unless the code explicitly handles PsyNet's
+`pageUpdated` event. Consecutive pages with the same session can preserve the
+browser context and update the DOM without rerunning page scripts. Use distinct
+`session_id` values for repeated interactive pages when each trial needs fresh
+handler installation.
 
 ## Examples
 

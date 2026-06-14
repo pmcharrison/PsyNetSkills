@@ -17,6 +17,12 @@ Follow the general workflow in `psynet-experiment-implementation/SKILL.md`.
 - Do not display any additional elements that are not mentioned in the task
   description.
 
+- For white image or stimulus backgrounds, avoid visible borders, container
+  frames, or contrasting panels unless the experiment design explicitly calls
+  for them. A frame around a white visual field can change the apparent stimulus
+  context; white stimulus backgrounds should normally blend into the surrounding
+  white page background.
+
 - Make sure that PsyNet node and trial constructs are used correctly.
 
 - Measure reaction time with JavaScript only when needed, and keep it minimal.
