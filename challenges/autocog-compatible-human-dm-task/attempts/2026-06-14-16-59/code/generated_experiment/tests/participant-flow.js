@@ -52,7 +52,10 @@ async function run() {
   await page.screenshot({ path: path.join(screenshotDir, `${locale}-03-instructions.png`), fullPage: true });
   await clickSubmit(page);
 
-  await expect(page.locator("table")).toBeVisible();
+  await expect(page.locator("table").first()).toBeVisible();
+  if ((await page.locator("table:visible").count()) < 2) {
+    throw new Error(`Expected two visible option tables for locale ${locale}`);
+  }
   await page.screenshot({ path: path.join(screenshotDir, `${locale}-04-choice.png`), fullPage: true });
 
   let choices = 0;
