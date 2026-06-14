@@ -12,7 +12,7 @@ from psynet.graphics import Circle, Frame, GraphicPrompt, Path, Text
 from psynet.modular_page import KeyboardPushButtonControl, ModularPage
 from psynet.page import InfoPage
 from psynet.participant import Participant
-from psynet.timeline import Event, Timeline, join
+from psynet.timeline import Event, Timeline
 from psynet.trial.static import StaticNode, StaticTrial, StaticTrialMaker
 
 
@@ -157,6 +157,20 @@ def pair_presentation_frames(left_id, right_id):
             duration=PAIR_DURATION,
         ),
         blank_frame(duration=BLANK_DURATION),
+    ]
+
+
+def discrimination_frames(left_id, right_id):
+    return [
+        Frame([fixation_object()], duration=FIXATION_DURATION),
+        Frame(
+            [
+                circle_object("left", left_id, 105, 120),
+                circle_object("right", right_id, 255, 120),
+            ],
+            duration=PAIR_DURATION,
+        ),
+        blank_frame(duration=None),
     ]
 
 
@@ -485,11 +499,34 @@ class VisualBatteryTrial(StaticTrial):
         definition = self.definition
         block = definition["block"]
         if block == "discrimination":
-            return join(
-                self.show_discrimination_display(definition),
-                self.show_discrimination_response(definition),
+            prompt = GraphicPrompt(
+                text=reminder("Watch the two circles, then answer after they disappear."),
+                dimensions=[DISPLAY_WIDTH, DISPLAY_HEIGHT],
+                viewport_width=0.58,
+                frames=discrimination_frames(
+                    definition["left_id"], definition["right_id"]
+                ),
             )
-        if block == "similarity":
+            control = TrialControl(
+                definition,
+                choices=["same", "different"],
+                labels=["Same (S)", "Different (D)"],
+                keys=["KeyS", "KeyD"],
+            )
+            return ModularPage(
+                "discrimination_trial",
+                prompt=prompt,
+                control=control,
+                time_estimate=self.time_estimate,
+                events={
+                    "responseEnable": Event(
+                        is_triggered_by="trialStart",
+                        delay=FIXATION_DURATION + PAIR_DURATION + BLANK_DURATION + 0.05,
+                    ),
+                    "submitEnable": Event(is_triggered_by="responseEnable"),
+                },
+            )
+        elif block == "similarity":
             prompt = GraphicPrompt(
                 text=reminder("Rate how similar the two circles look."),
                 dimensions=[DISPLAY_WIDTH, DISPLAY_HEIGHT],
@@ -533,45 +570,6 @@ class VisualBatteryTrial(StaticTrial):
             prompt=prompt,
             control=control,
             time_estimate=self.time_estimate,
-        )
-
-    def show_discrimination_display(self, definition):
-        return ModularPage(
-            "discrimination_display",
-            prompt=GraphicPrompt(
-                text=reminder("Watch the two circles. You will answer after they disappear."),
-                dimensions=[DISPLAY_WIDTH, DISPLAY_HEIGHT],
-                viewport_width=0.58,
-                frames=pair_presentation_frames(
-                    definition["left_id"], definition["right_id"]
-                ),
-            ),
-            time_estimate=FIXATION_DURATION + PAIR_DURATION + BLANK_DURATION,
-            events={
-                "nextPage": Event(
-                    is_triggered_by="trialStart",
-                    delay=FIXATION_DURATION + PAIR_DURATION + BLANK_DURATION + 0.05,
-                    js="psynet.nextPage()",
-                )
-            },
-            show_next_button=False,
-        )
-
-    def show_discrimination_response(self, definition):
-        return ModularPage(
-            "discrimination_response",
-            prompt=reminder("Were the two circles the same or different?"),
-            control=TrialControl(
-                definition,
-                choices=["same", "different"],
-                labels=["Same (S)", "Different (D)"],
-                keys=["KeyS", "KeyD"],
-            ),
-            time_estimate=3,
-            events={
-                "responseEnable": Event(is_triggered_by="trialStart"),
-                "submitEnable": Event(is_triggered_by="trialStart"),
-            },
         )
 
 
