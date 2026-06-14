@@ -18,94 +18,31 @@
       {{ $hasExperiment = true }}
     {{ end }}
   {{ end }}
-  {{ $participantVideos := where $attempt.evidence_files "path" "participant.mp4" }}
-  {{ $hasParticipantVideo := gt (len $participantVideos) 0 }}
-  {{ $participantVideo := dict }}
-  {{ if $hasParticipantVideo }}
-    {{ $participantVideo = index $participantVideos 0 }}
-  {{ end }}
-  {{ $screenshotExts := slice "gif" "jpeg" "jpg" "png" "webp" }}
-  {{ $screenshotFiles := slice }}
-  {{ range $attempt.evidence_files }}
-    {{ if and (strings.HasPrefix .path "screenshots/") (in $screenshotExts .kind) }}
-      {{ $screenshotFiles = $screenshotFiles | append . }}
-    {{ end }}
-  {{ end }}
+  {{ $evidenceView := default (dict) $attempt.evidence_view }}
+  {{ $participantVideo := default (dict) $evidenceView.participant_video }}
+  {{ $hasParticipantVideo := $participantVideo }}
+  {{ $screenshotFiles := default (slice) $evidenceView.screenshots }}
   {{ $hasScreenshots := gt (len $screenshotFiles) 0 }}
-  {{ $screenshotCaptionFiles := where $attempt.evidence_files "path" "screenshots/manifest.json" }}
-  {{ $screenshotCaptions := dict }}
-  {{ if gt (len $screenshotCaptionFiles) 0 }}
-    {{ $screenshotCaptionFile := index $screenshotCaptionFiles 0 }}
-    {{ with $screenshotCaptionFile.content }}
-      {{ $screenshotManifest := . | transform.Unmarshal }}
-      {{ with $screenshotManifest.captions }}
-        {{ $screenshotCaptions = . }}
-      {{ end }}
-    {{ end }}
-  {{ end }}
-  {{ $performanceFiles := where $attempt.evidence_files "path" "performance.json" }}
-  {{ $performanceFile := dict }}
-  {{ if gt (len $performanceFiles) 0 }}
-    {{ $performanceFile = index $performanceFiles 0 }}
-  {{ end }}
-  {{ $hasPerformance := gt (len $performanceFiles) 0 }}
-  {{ $performanceData := dict }}
-  {{ $performanceResults := slice }}
-  {{ if and $hasPerformance $performanceFile.content }}
-    {{ $performanceData = $performanceFile.content | transform.Unmarshal }}
-    {{ with $performanceData.results }}
-      {{ $performanceResults = . }}
-    {{ end }}
-  {{ end }}
+  {{ $performanceFile := default (dict) $evidenceView.performance_file }}
+  {{ $hasPerformance := $performanceFile }}
+  {{ $performanceData := default (dict) $evidenceView.performance_data }}
+  {{ $performanceResults := default (slice) $evidenceView.performance_results }}
   {{ $hasPerformanceResults := gt (len $performanceResults) 0 }}
-  {{ $monitorFiles := where $attempt.evidence_files "path" "monitor.html" }}
-  {{ $monitorFile := dict }}
-  {{ if gt (len $monitorFiles) 0 }}
-    {{ $monitorFile = index $monitorFiles 0 }}
-  {{ end }}
-  {{ $hasMonitor := gt (len $monitorFiles) 0 }}
-  {{ $dataFiles := where $attempt.evidence_files "path" "data.zip" }}
-  {{ $dataFile := dict }}
-  {{ if gt (len $dataFiles) 0 }}
-    {{ $dataFile = index $dataFiles 0 }}
-  {{ end }}
-  {{ $hasData := gt (len $dataFiles) 0 }}
-  {{ $analysisFiles := slice }}
-  {{ $analysisNotebookFiles := slice }}
-  {{ range $attempt.evidence_files }}
-    {{ if strings.HasPrefix .path "analyses/" }}
-      {{ $analysisFiles = $analysisFiles | append . }}
-    {{ end }}
-    {{ if and (strings.HasPrefix .path "analyses/") (eq .kind "ipynb") }}
-      {{ $analysisNotebookFiles = $analysisNotebookFiles | append . }}
-    {{ end }}
-  {{ end }}
+  {{ $monitorFile := default (dict) $evidenceView.monitor_file }}
+  {{ $hasMonitor := $monitorFile }}
+  {{ $dataFile := default (dict) $evidenceView.data_file }}
+  {{ $hasData := $dataFile }}
+  {{ $analysisFiles := default (slice) $evidenceView.analysis_files }}
   {{ $hasAnalyses := gt (len $analysisFiles) 0 }}
   {{ $analysisFile := dict }}
   {{ if $hasAnalyses }}
     {{ $analysisFile = index $analysisFiles 0 }}
   {{ end }}
-  {{ $analysisNotebookFile := dict }}
-  {{ $canonicalAnalysisNotebook := where $analysisNotebookFiles "path" "analyses/analysis.ipynb" }}
-  {{ if gt (len $canonicalAnalysisNotebook) 0 }}
-    {{ $analysisNotebookFile = index $canonicalAnalysisNotebook 0 }}
-  {{ else if gt (len $analysisNotebookFiles) 0 }}
-    {{ $analysisNotebookFile = index $analysisNotebookFiles 0 }}
-  {{ end }}
-  {{ $hasAnalysisNotebook := and (gt (len $analysisNotebookFiles) 0) $analysisNotebookFile.content }}
-  {{ $analysisNotebook := dict }}
-  {{ if $hasAnalysisNotebook }}
-    {{ $analysisNotebook = $analysisNotebookFile.content | transform.Unmarshal }}
-  {{ end }}
-  {{ $visibleEvidenceFiles := slice }}
-  {{ range $attempt.evidence_files }}
-    {{ $isScreenshot := and (strings.HasPrefix .path "screenshots/") (in $screenshotExts .kind) }}
-    {{ $isScreenshotManifest := or (eq .path "screenshots/manifest.json") (eq .path "screenshots/README.md") }}
-    {{ $isRenderedNotebook := and $hasAnalysisNotebook (eq .path $analysisNotebookFile.path) }}
-    {{ if and (ne .path "participant.mp4") (not $isScreenshot) (not $isScreenshotManifest) (not $isRenderedNotebook) }}
-      {{ $visibleEvidenceFiles = $visibleEvidenceFiles | append . }}
-    {{ end }}
-  {{ end }}
+  {{ $analysisNotebookFile := default (dict) $evidenceView.analysis_notebook_file }}
+  {{ $analysisNotebook := default (dict) $evidenceView.analysis_notebook }}
+  {{ $hasAnalysisNotebook := and $analysisNotebookFile $analysisNotebook }}
+  {{ $visibleEvidenceFiles := default (slice) $evidenceView.visible_files }}
+  {{ $evidenceCompleteness := default (slice) $evidenceView.completeness }}
   {{ $hasTimeline := gt (len $attempt.timeline_entries) 0 }}
   {{ $plan := default "" $attempt.plan }}
   {{ $hasPlan := gt (len $plan) 0 }}
@@ -314,12 +251,7 @@
           <div class="screenshot-frame">
             <div class="screenshot-carousel" data-screenshot-gallery tabindex="0">
               {{ range $index, $file := $screenshotFiles }}
-                {{ $caption := replaceRE "\\.[^.]+$" "" (replaceRE "^.*/" "" .path) }}
-                {{ $caption = replace $caption "-" " " }}
-                {{ $caption = replace $caption "_" " " }}
-                {{ with index $screenshotCaptions .path }}
-                  {{ $caption = . }}
-                {{ end }}
+                {{ $caption := default (replace (replace (replaceRE "\\.[^.]+$" "" (replaceRE "^.*/" "" .path)) "-" " ") "_" " ") .caption }}
                 <figure class="screenshot-card" data-screenshot-card data-screenshot-caption-text="{{ $caption }}"{{ if ne $index 0 }} hidden{{ end }}>
                   <a href="{{ .url | relURL }}" aria-label="Open full-size screenshot">
                     <img src="{{ .url | relURL }}" alt="{{ $caption }}">
@@ -552,12 +484,9 @@
         <li class="{{ if $hasPlan }}present{{ else }}missing{{ end }}">PLAN.md <span>{{ if $hasPlan }}present{{ else }}missing{{ end }}</span></li>
         <li class="{{ if $hasTimeline }}present{{ else }}missing{{ end }}">TIMELINE.md <span>{{ if $hasTimeline }}present{{ else }}missing{{ end }}</span></li>
         <li class="{{ if $hasExperiment }}present{{ else }}missing{{ end }}">code/experiment.py <span>{{ if $hasExperiment }}present{{ else }}missing{{ end }}</span></li>
-        <li class="{{ if $hasParticipantVideo }}present{{ else }}missing{{ end }}">evidence/participant.mp4 <span>{{ if $hasParticipantVideo }}present{{ else }}missing{{ end }}</span></li>
-        <li class="{{ if $hasScreenshots }}present{{ else }}missing{{ end }}">evidence/screenshots/ <span>{{ if $hasScreenshots }}{{ len $screenshotFiles }} image{{ if ne (len $screenshotFiles) 1 }}s{{ end }}{{ else }}missing{{ end }}</span></li>
-        <li class="{{ if $hasPerformance }}present{{ else }}missing{{ end }}">evidence/performance.json <span>{{ if $hasPerformance }}present{{ else }}missing{{ end }}</span></li>
-        <li class="{{ if $hasMonitor }}present{{ else }}missing{{ end }}">evidence/monitor.html <span>{{ if $hasMonitor }}present{{ else }}missing{{ end }}</span></li>
-        <li class="{{ if $hasData }}present{{ else }}missing{{ end }}">evidence/data.zip <span>{{ if $hasData }}present{{ else }}missing{{ end }}</span></li>
-        <li class="{{ if $hasAnalyses }}present{{ else }}missing{{ end }}">evidence/analyses/ <span>{{ if $hasAnalyses }}{{ len $analysisFiles }} file{{ if ne (len $analysisFiles) 1 }}s{{ end }}{{ else }}missing{{ end }}</span></li>
+        {{ range $evidenceCompleteness }}
+          <li class="{{ if .present }}present{{ else }}missing{{ end }}">evidence/{{ .label }} <span>{{ .detail }}</span></li>
+        {{ end }}
       </ul>
     </details>
 
