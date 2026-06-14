@@ -7,6 +7,7 @@ import json
 import math
 import os
 import random
+import threading
 import time
 from dataclasses import dataclass
 from typing import Iterable, Sequence
@@ -33,6 +34,9 @@ EIG_FINAL_NUM_SAMPLES = int(os.environ.get("ADAPTIVE_MEMORY_EIG_FINAL_SAMPLES", 
 EIG_LR = float(os.environ.get("ADAPTIVE_MEMORY_EIG_LR", "0.03"))
 
 EPS = 1e-5
+torch.set_num_threads(int(os.environ.get("ADAPTIVE_MEMORY_TORCH_THREADS", "1")))
+_PYRO_LOCK = threading.Lock()
+_ACQUISITION_CACHE: dict[tuple, dict[int, float]] = {}
 
 
 @dataclass(frozen=True)
@@ -287,6 +291,18 @@ def acquisition_values(
     candidate_lengths: Sequence[int] = CANDIDATE_LENGTHS,
     seed: int = 5678,
 ) -> dict[int, float]:
+    loc, scale = _current_r_log_params(state, current_participant_id)
+    cache_key = (
+        round(loc, 4),
+        round(scale, 4),
+        tuple(candidate_lengths),
+        EIG_NUM_STEPS,
+        EIG_NUM_SAMPLES,
+        EIG_FINAL_NUM_SAMPLES,
+    )
+    if cache_key in _ACQUISITION_CACHE:
+        return dict(_ACQUISITION_CACHE[cache_key])
+
     pyro.clear_param_store()
     pyro.set_rng_seed(seed)
     model = _make_eig_model(state, current_participant_id)
@@ -303,7 +319,9 @@ def acquisition_values(
         final_num_samples=EIG_FINAL_NUM_SAMPLES,
     )
     values = eig.detach().cpu().reshape(-1).tolist()
-    return {int(length): float(value) for length, value in zip(candidate_lengths, values)}
+    result = {int(length): float(value) for length, value in zip(candidate_lengths, values)}
+    _ACQUISITION_CACHE[cache_key] = dict(result)
+    return result
 
 
 def select_length(
@@ -314,46 +332,49 @@ def select_length(
     rng: random.Random | None = None,
     seed: int = 1234,
 ) -> dict:
-    rng = rng or random.Random(seed)
-    start = time.perf_counter()
-    posterior = fit_posterior(
-        observations=observations,
-        current_participant_id=current_participant_id,
-        previous=previous,
-        seed=seed,
-    )
+    with _PYRO_LOCK:
+        rng = rng or random.Random(seed)
+        start = time.perf_counter()
+        posterior = fit_posterior(
+            observations=observations,
+            current_participant_id=current_participant_id,
+            previous=previous,
+            seed=seed,
+        )
 
-    if adaptive_enabled:
-        try:
-            acquisitions = acquisition_values(
-                posterior,
-                current_participant_id=current_participant_id,
-                candidate_lengths=CANDIDATE_LENGTHS,
-                seed=seed + 1,
-            )
-            selected_length = max(acquisitions, key=lambda length: acquisitions[length])
-            fallback_reason = None
-        except Exception as exc:  # pragma: no cover - exercised in runtime evidence.
+        if adaptive_enabled:
+            try:
+                acquisitions = acquisition_values(
+                    posterior,
+                    current_participant_id=current_participant_id,
+                    candidate_lengths=CANDIDATE_LENGTHS,
+                    seed=seed + 1,
+                )
+                selected_length = max(
+                    acquisitions, key=lambda length: acquisitions[length]
+                )
+                fallback_reason = None
+            except Exception as exc:  # pragma: no cover - exercised in runtime evidence.
+                acquisitions = {length: None for length in CANDIDATE_LENGTHS}
+                selected_length = 11
+                fallback_reason = f"marginal_eig_failed: {exc.__class__.__name__}: {exc}"
+        else:
             acquisitions = {length: None for length in CANDIDATE_LENGTHS}
-            selected_length = 11
-            fallback_reason = f"marginal_eig_failed: {exc.__class__.__name__}: {exc}"
-    else:
-        acquisitions = {length: None for length in CANDIDATE_LENGTHS}
-        selected_length = rng.randint(MIN_LENGTH, MAX_LENGTH)
-        fallback_reason = "adaptive_disabled"
+            selected_length = rng.randint(MIN_LENGTH, MAX_LENGTH)
+            fallback_reason = "adaptive_disabled"
 
-    elapsed_ms = (time.perf_counter() - start) * 1000
-    return {
-        "selected_length": int(selected_length),
-        "candidate_lengths": list(CANDIDATE_LENGTHS),
-        "acquisition_values": acquisitions,
-        "acquisition_value": acquisitions.get(int(selected_length)),
-        "posterior_state": posterior,
-        "posterior_summary": posterior.summary,
-        "policy_version": POLICY_VERSION,
-        "selection_elapsed_ms": elapsed_ms,
-        "fallback_reason": fallback_reason,
-    }
+        elapsed_ms = (time.perf_counter() - start) * 1000
+        return {
+            "selected_length": int(selected_length),
+            "candidate_lengths": list(CANDIDATE_LENGTHS),
+            "acquisition_values": acquisitions,
+            "acquisition_value": acquisitions.get(int(selected_length)),
+            "posterior_state": posterior,
+            "posterior_summary": posterior.summary,
+            "policy_version": POLICY_VERSION,
+            "selection_elapsed_ms": elapsed_ms,
+            "fallback_reason": fallback_reason,
+        }
 
 
 def observations_from_records(records: Iterable[dict]) -> list[Observation]:
