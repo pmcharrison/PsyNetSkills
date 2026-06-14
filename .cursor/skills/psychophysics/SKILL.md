@@ -57,6 +57,9 @@ Follow the general workflow in `psynet-experiment-implementation/SKILL.md`.
   single-display schematic is provided, the relative sizes are likely to be more
   indicative of the intended appearance.
 
+- Use a neutral color theme for psynet buttons and progress bars (e.g. gray) to
+  avoid biasing color-related experiments.
+
 ## Reaction time from the native event log
 
 Reaction time can usually be recorded without any bespoke timing JavaScript. Drive
