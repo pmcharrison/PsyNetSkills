@@ -272,8 +272,13 @@ def _make_eig_model(state: PosteriorState, current_participant_id: int):
 def _marginal_guide(design, observation_labels=None, target_labels=None):
     del observation_labels, target_labels
     with pyro.plate_stack("design_plate", design.shape):
-        q_logit = pyro.param("q_future_y_logit", torch.tensor(0.0))
-        pyro.sample("future_y", dist.Bernoulli(logits=q_logit.expand(design.shape)))
+        if design.ndim == 0:
+            q_logit = pyro.param("q_future_y_logit", torch.tensor(0.0))
+        else:
+            q_logit = pyro.param(
+                "q_future_y_logit", torch.zeros(design.shape[-1])
+            ).expand(design.shape)
+        pyro.sample("future_y", dist.Bernoulli(logits=q_logit))
 
 
 def acquisition_values(
