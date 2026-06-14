@@ -1,5 +1,5 @@
 {
-  "authors": [],
+  "authors": ["raja-marjieh"],
   "agent": "Cursor Cloud Agent",
   "client": "cursor",
   "model": "GPT-5.5",
@@ -19,7 +19,6 @@
   },
   "run_cost": null,
   "notes": [
-    "Attempt paused at the required PsyNet experiment implementation plan review gate.",
-    "Human author metadata is pending; fill authors before marking the attempt complete."
+    "Plan approved by the user before implementation resumed."
   ]
 }
