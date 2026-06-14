@@ -1,5 +1,11 @@
-def test_trial_count():
-    import experiment
+import os
 
-    assert experiment.TOTAL_TRIALS == 50
-    assert len(experiment.DESIGN_METADATA["validities"]) == 5
+import pytest
+
+pytest_plugins = ["pytest_dallinger", "pytest_psynet"]
+experiment_dir = os.path.dirname(__file__)
+
+
+@pytest.mark.parametrize("experiment_directory", [experiment_dir], indirect=True)
+def test_experiment(launched_experiment):
+    launched_experiment.test_experiment()
