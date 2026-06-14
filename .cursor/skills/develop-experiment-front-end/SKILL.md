@@ -28,6 +28,15 @@ simple objects, shapes, or images presented in a timed sequence within a
 single trial. Simple interactions, such as clicking on a shape, can also be
 handled with PsyNet Graphics.
 
+For visual experiments involving images, geometric shapes, or simple spatial
+interactions, include an explicit PsyNet Graphics feasibility check before
+choosing custom JavaScript. Record the result in the implementation plan or
+technical notes: either identify the PsyNet Graphics components/events that will
+be used, or explain the concrete requirement that makes custom JavaScript
+necessary. Do not choose custom JavaScript only because it seems more familiar
+or because image presentation appears easier without first checking whether
+PsyNet Graphics can handle the same display and interaction.
+
 ## Events
 
 Changes that occur within a trial should be controlled using PsyNet's event

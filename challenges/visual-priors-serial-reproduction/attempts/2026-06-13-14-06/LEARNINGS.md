@@ -36,4 +36,4 @@ JavaScript for visual experiments before choosing the custom route.
 
 *Actions:*
 
-- **PsyNetSkills:** Expand visual-experiment planning guidance to require an explicit PsyNet Graphics feasibility check before selecting custom JavaScript for image or geometry presentation. Confidence: medium. Impact: medium. Status: considering.
+- **PsyNetSkills:** Expand visual-experiment planning guidance to require an explicit PsyNet Graphics feasibility check before selecting custom JavaScript for image or geometry presentation. Confidence: medium. Impact: medium. Status: completed. Notes: Added this requirement to `develop-experiment-front-end/SKILL.md`.
