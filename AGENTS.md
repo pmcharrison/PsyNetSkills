@@ -66,11 +66,11 @@ workflow rather than committing or publishing them.
 
 ### Skill registration
 
-Repository skills live in `.cursor/skills/`. Before starting challenge or
-PsyNet experiment work, verify that the runtime has registered these skills and
-that they were attached to your session. If they are not registered, symlink or
-copy `.cursor/skills/` into the skills directory required by your agent runtime
-before proceeding. Do not maintain a second editable copy of the skills.
+Repository skills live in `.cursor/skills/`. At the start of each session,
+review the skills present in the checked-out repository and treat that directory
+as the authoritative source for the current skill set. If the session's attached
+skill metadata appears stale or incomplete, prefer the repository skills on disk
+and note the mismatch briefly before proceeding.
 
 ### System dependencies (not managed by `uv sync`)
 
