@@ -2,7 +2,7 @@
 
 ## Science
 
-The experiment estimates each participant's digit-span-like memory ability by choosing recall challenges that are maximally informative about that participant's latent ability. The observation `y` is binary exact-match recall correctness: `1` when the typed response exactly matches the target digit string and `0` otherwise. There are no planned participant-level covariates `z`; the hierarchical model pools information across participants through the population parameters `mu` and `alpha`.
+The experiment estimates each participant's digit-span-like memory ability by choosing recall challenges that are maximally informative about that participant's latent ability. The observation `y` is binary exact-match recall correctness: `1` when the typed response exactly matches the target digit string and `0` otherwise. Participant covariates are intentionally omitted (`z = {}`); the hierarchical model pools information across participants only through the population parameters `mu` and `alpha`.
 
 The response model will follow the public specification using Gamma shape-rate priors and `l_0 = 8`:
 
@@ -12,13 +12,13 @@ The response model will follow the public specification using Gamma shape-rate p
 - `p_ij = exp(-l_j / (l_0 * r_i))`
 - `y_ij ~ Bernoulli(p_ij)`
 
-The adaptive policy will choose the next sequence length by estimating the expected information gain about the current participant's `r_i`. For each candidate length `l`, posterior samples from the variational approximation will be used to compute the binary mutual information `H(E[p(y=1 | r_i, l)]) - E[H(p(y=1 | r_i, l))]`. This avoids running a fresh variational fit for every hypothetical outcome while still optimizing a posterior expected information objective.
+The adaptive policy will choose the next sequence length by estimating expected information gain about the current participant's `r_i` with Pyro's `pyro.contrib.oed.eig.marginal_eig`. Each candidate length `l` will be represented as a design tensor, with `y` as the future observation label and the current participant's ability as the target label. Because Pyro documents `marginal_eig` as a marginal variational estimator and warns about random effects, the implementation will include simulation diagnostics comparing adaptive choices and posterior recovery across synthetic participant abilities.
 
 ## Methods
 
 Participants will complete 10 trials. On each trial, the experiment will show a string of random digits, then ask the participant to reproduce the string from memory in a text box. Copy/paste will be blocked for the recall response. A response will be scored as correct only when it is exactly equal to the target string.
 
-Sequence lengths will be bounded to the public challenge range, 2 through 20 inclusive. In adaptive mode, every post-initial selection will evaluate all integer candidate lengths in that interval and choose the one with maximal expected information gain. The first trial will use the same policy with the prior/posterior predictive distribution; if the posterior fit is unavailable, it will fall back to the midpoint length with a recorded fallback reason. When adaptive mode is disabled, each trial length will be sampled uniformly at random from 2 through 20 inclusive.
+Sequence lengths will be bounded to the public challenge range, 2 through 20 inclusive. Adaptive mode will be the default participant-facing mode. In adaptive mode, every selection will evaluate all integer candidate lengths in that interval with `marginal_eig` and choose the candidate with maximal expected information gain. The first trial will use the same policy with the prior/posterior predictive distribution; if the posterior fit is unavailable, it will fall back to the midpoint length with a recorded fallback reason. When adaptive mode is disabled through configuration, each trial length will be sampled uniformly at random from 2 through 20 inclusive.
 
 The target digit string will be generated after the length is selected. Digits will be sampled uniformly and independently from `0` through `9`. The analysis will reconstruct target strings, responses, correctness, selected lengths, posterior snapshots, and acquisition values from exported trial metadata.
 
@@ -31,7 +31,7 @@ The runnable experiment will live under `code/adaptive_memory_testing/` to avoid
 Core files:
 
 - `experiment.py`: PsyNet experiment, chain node, chain trial, trial maker, pages, scoring, bot behavior, and validation hooks.
-- `adaptive_logic.py`: hierarchical model log densities, variational posterior representation, fitting, sampling, acquisition scoring, and random-policy fallback.
+- `adaptive_logic.py`: Pyro model and guide definitions, variational posterior representation, fitting, `marginal_eig` acquisition scoring, and random-policy fallback.
 - `simulate_procedure.py`: standalone synthetic simulation comparing adaptive and random policies, timing posterior fitting and design selection.
 - `analysis.py` or notebook helper code: reusable export-reading and summary functions for the canonical notebook.
 
@@ -54,9 +54,9 @@ Adaptive selection will be attached to PsyNet's chain growth rather than overrid
 
 For queryable audit fields, the trial or node classes will use PsyNet field patterns such as `claim_field` for selected length, correctness, acquisition value, and posterior snapshot ID. Raw answers will remain available in standard PsyNet trial exports.
 
-The posterior strategy will be `warm_start_from_previous_posterior`: each fit will include all finalized, non-failed relevant observations, but initialize the optimizer from the latest persisted posterior snapshot when the observation set matches or extends that snapshot. The cache will be represented by a custom persisted `PosteriorSnapshot` table with JSON columns for variational means, log scales, participant index mapping, optimizer diagnostics, observation count, observation hash, and timing. Stale snapshots will be treated only as initialization hints, not as proof that data has already been incorporated.
+The posterior strategy will be `warm_start_from_previous_posterior`: each fit will include all finalized, non-failed relevant observations, but initialize Pyro's parameter store and optimizer from the latest persisted posterior snapshot when the observation set matches or extends that snapshot. The cache will be represented by a custom persisted `PosteriorSnapshot` table with JSON columns for Pyro parameter tensors, participant index mapping, optimizer diagnostics, observation count, observation hash, and timing. Stale snapshots will be treated only as initialization hints, not as proof that data has already been incorporated.
 
-Variational inference will use a mean-field approximation over unconstrained log parameters for `mu`, `alpha`, and participant abilities `r_i`, with transformations back to the positive scale. The implementation will prefer NumPy/SciPy to avoid adding a probabilistic programming dependency unless local validation shows the optimizer is too brittle. The ELBO estimator will be deterministic under fixed seeds for tests and will expose timing logs for posterior fitting and acquisition scoring.
+Variational inference will use Pyro/PyTorch with a mean-field guide over positive `mu`, `alpha`, and participant abilities `r_i`. The experiment dependencies will include `pyro-ppl` and its PyTorch dependency through the normal PsyNet experiment dependency workflow. Fixed seeds will make bot tests and standalone simulations reproducible, and timing logs will cover posterior fitting, `marginal_eig` scoring, and candidate selection.
 
 Validation will include:
 
@@ -70,6 +70,4 @@ Validation will include:
 
 ## Human review questions
 
-- Should the implementation keep the planned no-covariate `z = {}` design, or should any participant-level metadata be included in the model?
-- Is the proposed mutual-information approximation acceptable for expected information gain, or should the implementation use nested posterior refits for each candidate and hypothetical outcome despite the response-path cost?
-- Should adaptive mode default to enabled for participants, with the random-length mode exposed through a config flag for tests and comparisons?
+- Please confirm that this revised plan is approved for implementation.
