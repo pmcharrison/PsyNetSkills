@@ -243,7 +243,7 @@ class Exp(psynet.experiment.Experiment):
 
     def initialize_bot(self, bot: Bot):
         abilities = [0.45, 0.8, 1.25, 2.0, 3.0]
-        bot.var.memory_ability = abilities[(bot.id - 1) % len(abilities)]
+        bot.var.memory_ability = random.choice(abilities)
 
     def test_check_bot(self, bot: Bot, **kwargs):
         trials = [trial for trial in bot.alive_trials if isinstance(trial, MemoryRecallTrial)]
