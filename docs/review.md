@@ -60,8 +60,9 @@ The manifest records:
 
 - `schema_version`: version of the review manifest schema.
 - `created_at` and `updated_at`: ISO 8601 timestamps.
-- `experiment`: title, source path, git commit, PsyNet version, and optional
-  entry point.
+- `experiment`: source path, optional slug, git commit, PsyNet version, and
+  optional entry point. The rendered display title is inferred from the review
+  folder location unless `experiment.title` is explicitly provided.
 - `implementation`: short implementation description and optional plan path.
 - `environment`: operating system, Python version, PsyNet checkout, and local
   services used.
@@ -86,6 +87,8 @@ Missing artifacts should never be presented as passing checks.
 
 The first implemented commands are:
 
+- `psynet-review init`, which creates a starter `review/` folder, `review.json`,
+  `REPORT.md`, artifact directories, analysis directory, and logs directory.
 - `psynet-review validate`, which checks `review/review.json`, required
   artifact paths, blocker coverage, report presence, video limits, and notebook
   JSON readiness.
@@ -102,6 +105,18 @@ The intended CLI surface is:
 - `psynet-review render`: build `review/site/` as a self-contained static
   review report.
 - `psynet-review archive`: produce a shareable `review.zip`.
+
+A minimal workflow is:
+
+```bash
+psynet-review init review
+psynet-review validate review
+psynet-review render review
+```
+
+`psynet-review init` does not run PsyNet or collect artifacts. It creates a
+valid starter manifest whose incomplete required artifacts are covered by
+starter blockers. Replace those blockers as artifacts are collected.
 
 Collection commands can be added incrementally:
 

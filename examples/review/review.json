@@ -3,7 +3,6 @@
   "created_at": "2026-06-14T13:00:00Z",
   "updated_at": "2026-06-14T13:00:00Z",
   "experiment": {
-    "title": "Pitch discrimination demo",
     "slug": "pitch-discrimination-demo",
     "source_path": ".",
     "entry_point": "experiment.py",

@@ -5,9 +5,12 @@ from __future__ import annotations
 import argparse
 import html
 import json
+import platform
 import re
 import shutil
+import sys
 from dataclasses import dataclass
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
@@ -62,6 +65,10 @@ ARTIFACT_CREATORS = {"agent", "cli", "manual", "unknown"}
 BLOCKER_SEVERITIES = {"warning", "error"}
 CHECK_STATUSES = {"pass", "fail", "warning", "not_run"}
 MAX_REVIEW_NOTEBOOK_BYTES = 100_000
+STARTER_REPORT = """# Review report
+
+Summarize the implementation, validation, analysis, and any unresolved issues.
+"""
 
 
 @dataclass(frozen=True)
@@ -88,6 +95,210 @@ def read_review_manifest(review_dir: Path) -> dict[str, Any]:
     if not isinstance(manifest, dict):
         raise ValueError(f"{manifest_path}: manifest must be a JSON object")
     return manifest
+
+
+def display_title_from_path(review_dir: Path) -> str:
+    """Derive a human-readable experiment title from a review path."""
+
+    source = review_dir.parent if review_dir.name == "review" else review_dir
+    normalized = re.sub(r"[-_]+", " ", source.name).strip()
+    return normalized.title() if normalized else "Experiment Review"
+
+
+def review_display_title(review_dir: Path, manifest: dict[str, Any]) -> str:
+    """Return the display title for a review."""
+
+    experiment = manifest.get("experiment")
+    if isinstance(experiment, dict):
+        title = experiment.get("title")
+        if isinstance(title, str) and title.strip():
+            return title
+    return display_title_from_path(review_dir)
+
+
+def utc_timestamp() -> str:
+    """Return a UTC ISO timestamp for generated review metadata."""
+
+    return datetime.now(UTC).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+
+
+def starter_artifact(
+    artifact_id: str,
+    kind: str,
+    path: str,
+    title: str,
+    description: str,
+    *,
+    required: bool,
+    status: str,
+    created_by: str = "unknown",
+) -> dict[str, object]:
+    """Create a starter artifact record."""
+
+    return {
+        "id": artifact_id,
+        "kind": kind,
+        "path": path,
+        "title": title,
+        "description": description,
+        "required": required,
+        "status": status,
+        "created_by": created_by,
+    }
+
+
+def starter_blocker(artifact_id: str, reason: str, next_step: str) -> dict[str, str]:
+    """Create a starter blocker for an incomplete required artifact."""
+
+    return {
+        "artifact_id": artifact_id,
+        "severity": "warning",
+        "reason": reason,
+        "next_step": next_step,
+    }
+
+
+def starter_review_manifest(source_path: str) -> dict[str, object]:
+    """Create a starter review manifest."""
+
+    timestamp = utc_timestamp()
+    return {
+        "schema_version": "1.0",
+        "created_at": timestamp,
+        "updated_at": timestamp,
+        "experiment": {
+            "source_path": source_path,
+        },
+        "implementation": {
+            "summary": "TODO: Summarize the experiment implementation.",
+        },
+        "environment": {
+            "os": platform.system().lower(),
+            "python_version": f"{sys.version_info.major}.{sys.version_info.minor}",
+        },
+        "report": "REPORT.md",
+        "artifacts": [
+            starter_artifact(
+                "review_report",
+                "report",
+                "REPORT.md",
+                "Review report",
+                "Summary of implementation, validation, analysis, and remaining issues.",
+                required=True,
+                status="present",
+                created_by="cli",
+            ),
+            starter_artifact(
+                "participant_video",
+                "video",
+                "artifacts/participant.mp4",
+                "Participant walkthrough",
+                "Participant-facing walkthrough video.",
+                required=True,
+                status="blocked",
+            ),
+            starter_artifact(
+                "screenshots",
+                "screenshot",
+                "artifacts/screenshots/manifest.json",
+                "Screenshot walkthrough",
+                "Manifest describing targeted participant-facing screenshots.",
+                required=False,
+                status="missing",
+            ),
+            starter_artifact(
+                "performance_result",
+                "performance",
+                "artifacts/performance.json",
+                "Performance test result",
+                "PsyNet performance-test output.",
+                required=True,
+                status="blocked",
+            ),
+            starter_artifact(
+                "monitor_snapshot",
+                "monitor_snapshot",
+                "artifacts/monitor.html",
+                "Monitor snapshot",
+                "Static PsyNet monitor snapshot.",
+                required=True,
+                status="blocked",
+            ),
+            starter_artifact(
+                "simulation_export",
+                "data_export",
+                "artifacts/simulated_data.zip",
+                "Simulated data export",
+                "Data export produced by simulated participants.",
+                required=True,
+                status="blocked",
+            ),
+            starter_artifact(
+                "analysis_notebook",
+                "notebook",
+                "analyses/analysis.ipynb",
+                "Analysis notebook",
+                "Executed notebook that reads the simulated export and summarizes results.",
+                required=True,
+                status="blocked",
+            ),
+        ],
+        "checks": [],
+        "blockers": [
+            starter_blocker(
+                "participant_video",
+                "Participant walkthrough has not been recorded yet.",
+                "Record or explicitly mark participant video as not applicable.",
+            ),
+            starter_blocker(
+                "performance_result",
+                "Performance test has not been run yet.",
+                "Run psynet performance-test and save artifacts/performance.json.",
+            ),
+            starter_blocker(
+                "monitor_snapshot",
+                "Monitor snapshot has not been captured yet.",
+                "Capture a static PsyNet monitor snapshot at artifacts/monitor.html.",
+            ),
+            starter_blocker(
+                "simulation_export",
+                "Simulation export has not been produced yet.",
+                "Run psynet simulate and save artifacts/simulated_data.zip.",
+            ),
+            starter_blocker(
+                "analysis_notebook",
+                "Analysis notebook has not been executed yet.",
+                "Create and execute analyses/analysis.ipynb.",
+            ),
+        ],
+        "render": {
+            "site_path": "site",
+            "generator": "psynet-review",
+        },
+    }
+
+
+def init_review(review_dir: Path, source_path: str = ".", force: bool = False) -> None:
+    """Create a starter review directory."""
+
+    manifest_path = review_dir / "review.json"
+    if manifest_path.exists() and not force:
+        raise FileExistsError(f"{manifest_path}: already exists; pass --force to replace it")
+
+    for directory in (
+        review_dir,
+        review_dir / "artifacts",
+        review_dir / "artifacts" / "screenshots",
+        review_dir / "analyses",
+        review_dir / "logs",
+    ):
+        directory.mkdir(parents=True, exist_ok=True)
+
+    manifest_path.write_text(
+        json.dumps(starter_review_manifest(source_path), indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+    (review_dir / "REPORT.md").write_text(STARTER_REPORT, encoding="utf-8")
 
 
 def relative_review_path(
@@ -286,7 +497,9 @@ def validate_review_manifest(review_dir: Path, manifest: dict[str, Any]) -> list
 
     if isinstance(manifest.get("experiment"), dict):
         experiment = manifest["experiment"]
-        if not isinstance(experiment.get("title"), str) or not experiment["title"].strip():
+        if "title" in experiment and (
+            not isinstance(experiment.get("title"), str) or not experiment["title"].strip()
+        ):
             problems.append(f"{manifest_path}: experiment.title must be a non-empty string")
         if "source_path" not in experiment:
             problems.append(f"{manifest_path}: experiment missing source_path")
@@ -495,11 +708,7 @@ def render_review_site(review_dir: Path, site_dir: Path | None = None) -> Path:
 
     experiment = manifest.get("experiment", {})
     implementation = manifest.get("implementation", {})
-    title = (
-        str(experiment.get("title"))
-        if isinstance(experiment, dict) and experiment.get("title")
-        else "Experiment review"
-    )
+    title = review_display_title(review_dir, manifest)
     summary = (
         str(implementation.get("summary"))
         if isinstance(implementation, dict) and implementation.get("summary")
@@ -563,6 +772,27 @@ def build_parser() -> argparse.ArgumentParser:
 
     parser = argparse.ArgumentParser(description=__doc__)
     subparsers = parser.add_subparsers(dest="command", required=True)
+    init_parser = subparsers.add_parser(
+        "init",
+        help="create a starter review directory",
+    )
+    init_parser.add_argument(
+        "review_dir",
+        nargs="?",
+        default="review",
+        type=Path,
+        help="review directory to create",
+    )
+    init_parser.add_argument(
+        "--source-path",
+        default=".",
+        help="experiment source path, relative to the review directory",
+    )
+    init_parser.add_argument(
+        "--force",
+        action="store_true",
+        help="replace an existing review.json and REPORT.md",
+    )
     validate_parser = subparsers.add_parser(
         "validate",
         help="validate a review directory",
@@ -595,7 +825,16 @@ def main(argv: list[str] | None = None) -> None:
 
     parser = build_parser()
     args = parser.parse_args(argv)
-    if args.command == "validate":
+    if args.command == "init":
+        try:
+            init_review(args.review_dir, args.source_path, args.force)
+        except FileExistsError as exc:
+            print(exc)
+            raise SystemExit(1) from exc
+        print(f"Initialized review directory: {args.review_dir}")
+        print(f"Next: psynet-review validate {args.review_dir}")
+        print(f"Next: psynet-review render {args.review_dir}")
+    elif args.command == "validate":
         problems = validate_review(args.review_dir)
         if problems:
             for problem in problems:

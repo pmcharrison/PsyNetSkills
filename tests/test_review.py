@@ -3,7 +3,7 @@ from pathlib import Path
 
 import pytest
 
-from psynetsk_tools.review import main, render_review_site, validate_review
+from psynetsk_tools.review import init_review, main, render_review_site, validate_review
 
 
 def write(path: Path, text: str) -> None:
@@ -17,7 +17,6 @@ def review_manifest() -> dict[str, object]:
         "created_at": "2026-06-14T13:00:00Z",
         "updated_at": "2026-06-14T13:00:00Z",
         "experiment": {
-            "title": "Pitch discrimination demo",
             "source_path": ".",
             "entry_point": "experiment.py",
         },
@@ -80,7 +79,7 @@ def review_manifest() -> dict[str, object]:
 
 
 def test_render_review_site_publishes_sanitized_artifacts(tmp_path: Path) -> None:
-    review_dir = tmp_path / "review"
+    review_dir = tmp_path / "pitch-discrimination-demo" / "review"
     write(review_dir / "review.json", json.dumps(review_manifest()) + "\n")
     write(review_dir / "REPORT.md", "# Report\n\nExperiment behaves as expected.\n")
     write(
@@ -98,7 +97,7 @@ def test_render_review_site_publishes_sanitized_artifacts(tmp_path: Path) -> Non
     site_dir = render_review_site(review_dir)
 
     index = (site_dir / "index.html").read_text(encoding="utf-8")
-    assert "Pitch discrimination demo" in index
+    assert "Pitch Discrimination Demo" in index
     assert "Experiment behaves as expected." in index
     assert "psynet test local" in index
     assert "No simulated export has been produced yet." in index
@@ -205,3 +204,72 @@ def test_validate_review_cli_exits_nonzero_on_problems(
 
     assert exc_info.value.code == 1
     assert "report file is missing" in capsys.readouterr().out
+
+
+def test_init_review_creates_starter_structure_and_manifest(tmp_path: Path) -> None:
+    review_dir = tmp_path / "pitch-discrimination-demo" / "review"
+
+    init_review(review_dir)
+
+    assert (review_dir / "review.json").exists()
+    assert (review_dir / "REPORT.md").exists()
+    assert (review_dir / "artifacts/screenshots").is_dir()
+    assert (review_dir / "analyses").is_dir()
+    assert (review_dir / "logs").is_dir()
+    manifest = json.loads((review_dir / "review.json").read_text(encoding="utf-8"))
+    assert "title" not in manifest["experiment"]
+    assert manifest["experiment"]["source_path"] == "."
+    assert manifest["artifacts"][0]["id"] == "review_report"
+    assert manifest["artifacts"][0]["status"] == "present"
+    assert {
+        blocker["artifact_id"]
+        for blocker in manifest["blockers"]
+    } == {
+        "participant_video",
+        "performance_result",
+        "monitor_snapshot",
+        "simulation_export",
+        "analysis_notebook",
+    }
+    assert validate_review(review_dir) == []
+
+
+def test_init_review_cli_prints_next_steps(
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    review_dir = tmp_path / "review"
+
+    main(["init", str(review_dir), "--source-path", "../experiment"])
+
+    out = capsys.readouterr().out
+    assert "Initialized review directory" in out
+    assert f"psynet-review validate {review_dir}" in out
+    manifest = json.loads((review_dir / "review.json").read_text(encoding="utf-8"))
+    assert manifest["experiment"]["source_path"] == "../experiment"
+
+
+def test_init_review_refuses_to_overwrite_by_default(tmp_path: Path) -> None:
+    review_dir = tmp_path / "review"
+    init_review(review_dir)
+    original = (review_dir / "review.json").read_text(encoding="utf-8")
+
+    with pytest.raises(FileExistsError):
+        init_review(review_dir)
+
+    assert (review_dir / "review.json").read_text(encoding="utf-8") == original
+
+
+def test_init_review_force_replaces_starter_files(tmp_path: Path) -> None:
+    review_dir = tmp_path / "review"
+    init_review(review_dir)
+    (review_dir / "review.json").write_text("custom\n", encoding="utf-8")
+    (review_dir / "REPORT.md").write_text("custom\n", encoding="utf-8")
+
+    init_review(review_dir, source_path="..", force=True)
+
+    manifest = json.loads((review_dir / "review.json").read_text(encoding="utf-8"))
+    assert manifest["experiment"]["source_path"] == ".."
+    assert "Summarize the implementation" in (review_dir / "REPORT.md").read_text(
+        encoding="utf-8",
+    )
