@@ -13,7 +13,7 @@ const participantUrl =
   "http://127.0.0.1:5000/ad?generate_tokens=true&recruiter=hotair";
 const dashboardUrl =
   process.env.DASHBOARD_URL ||
-  "http://admin:PMmnEydn87MXpvugImD9@127.0.0.1:5000/dashboard/develop";
+  "http://127.0.0.1:5000/dashboard/develop";
 
 fs.mkdirSync(screenshotDir, { recursive: true });
 fs.mkdirSync(videoDir, { recursive: true });

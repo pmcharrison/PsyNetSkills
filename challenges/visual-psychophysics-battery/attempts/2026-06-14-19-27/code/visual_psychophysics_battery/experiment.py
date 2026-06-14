@@ -12,7 +12,7 @@ from psynet.graphics import Circle, Frame, GraphicPrompt, Path, Text
 from psynet.modular_page import KeyboardPushButtonControl, ModularPage
 from psynet.page import InfoPage
 from psynet.participant import Participant
-from psynet.timeline import Timeline
+from psynet.timeline import Event, Timeline, join
 from psynet.trial.static import StaticNode, StaticTrial, StaticTrialMaker
 
 
@@ -144,6 +144,20 @@ def item_label(object_id, label, x, y):
 
 def blank_frame(duration=BLANK_DURATION):
     return Frame([], duration=duration)
+
+
+def pair_presentation_frames(left_id, right_id):
+    return [
+        Frame([fixation_object()], duration=FIXATION_DURATION),
+        Frame(
+            [
+                circle_object("left", left_id, 105, 120),
+                circle_object("right", right_id, 255, 120),
+            ],
+            duration=PAIR_DURATION,
+        ),
+        blank_frame(duration=BLANK_DURATION),
+    ]
 
 
 def pair_frames(left_id, right_id, response_on_pair):
@@ -471,23 +485,11 @@ class VisualBatteryTrial(StaticTrial):
         definition = self.definition
         block = definition["block"]
         if block == "discrimination":
-            prompt = GraphicPrompt(
-                text=reminder("After the circles disappear, choose whether they were the same or different."),
-                dimensions=[DISPLAY_WIDTH, DISPLAY_HEIGHT],
-                viewport_width=0.58,
-                frames=pair_frames(
-                    definition["left_id"], definition["right_id"], response_on_pair=False
-                ),
-                prevent_control_response=True,
-                prevent_control_submit=True,
+            return join(
+                self.show_discrimination_display(definition),
+                self.show_discrimination_response(definition),
             )
-            control = TrialControl(
-                definition,
-                choices=["same", "different"],
-                labels=["Same (S)", "Different (D)"],
-                keys=["KeyS", "KeyD"],
-            )
-        elif block == "similarity":
+        if block == "similarity":
             prompt = GraphicPrompt(
                 text=reminder("Rate how similar the two circles look."),
                 dimensions=[DISPLAY_WIDTH, DISPLAY_HEIGHT],
@@ -531,6 +533,41 @@ class VisualBatteryTrial(StaticTrial):
             prompt=prompt,
             control=control,
             time_estimate=self.time_estimate,
+        )
+
+    def show_discrimination_display(self, definition):
+        return ModularPage(
+            "discrimination_display",
+            prompt=GraphicPrompt(
+                text=reminder("Watch the two circles. You will answer after they disappear."),
+                dimensions=[DISPLAY_WIDTH, DISPLAY_HEIGHT],
+                viewport_width=0.58,
+                frames=pair_presentation_frames(
+                    definition["left_id"], definition["right_id"]
+                ),
+            ),
+            time_estimate=FIXATION_DURATION + PAIR_DURATION + BLANK_DURATION,
+            events={
+                "nextPage": Event(
+                    is_triggered_by="promptEnd",
+                    delay=0.05,
+                    js="psynet.nextPage()",
+                )
+            },
+            show_next_button=False,
+        )
+
+    def show_discrimination_response(self, definition):
+        return ModularPage(
+            "discrimination_response",
+            prompt=reminder("Were the two circles the same or different?"),
+            control=TrialControl(
+                definition,
+                choices=["same", "different"],
+                labels=["Same (S)", "Different (D)"],
+                keys=["KeyS", "KeyD"],
+            ),
+            time_estimate=3,
         )
 
 
