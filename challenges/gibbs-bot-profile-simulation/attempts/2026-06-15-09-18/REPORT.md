@@ -19,7 +19,9 @@ The original network capacity was too small for a 10-bot run, so `max_nodes_per_
 - `evidence/profile_distribution_simulate.json` records the observed 5/5 distribution from the simulation/export run.
 - `evidence/analyses/analysis.ipynb` reads `evidence/simulated_data.zip` directly, checks profile and metadata invariants, and summarizes a lightweight behavioral comparison.
 - `evidence/performance.json` records a 40-bot, 5-minute `psynet performance-test local` run with zero bot errors.
-- `evidence/monitor.html` contains an authenticated local dashboard timeline snapshot.
+- `evidence/monitor.html` contains a profile-colored monitor dashboard generated
+  from the simulated export, with participant nodes labeled by assigned bot
+  profile and a legend mapping colors to observed counts.
 
 ## Simulation results
 
@@ -29,4 +31,4 @@ The analysis notebook shows the intended sanity-check distinction between profil
 
 ## Limitations
 
-No production services, recruiter credentials, or external APIs were used. Participant video was not collected because the implementation changes bot scheduling, bot response generation, and export metadata while leaving the original Gibbs participant interface intact; the interface was exercised through PsyNet's bot-rendered local flow and represented by the dashboard snapshot.
+No production services, recruiter credentials, or external APIs were used. Participant video was not collected because the implementation changes bot scheduling, bot response generation, and export metadata while leaving the original Gibbs participant interface intact; the interface was exercised through PsyNet's bot-rendered local flow and represented by the profile monitor dashboard.
