@@ -32,8 +32,8 @@
     "random": 35
   },
   "random_response_range": [
-    3,
-    254
+    12,
+    251
   ],
-  "normal_rgb_mean_abs_distance_from_start": 21.857142857142858
+  "normal_rgb_mean_abs_distance_from_start": 26.714285714285715
 }

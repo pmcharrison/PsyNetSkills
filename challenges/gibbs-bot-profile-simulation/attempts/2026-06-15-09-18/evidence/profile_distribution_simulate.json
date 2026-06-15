@@ -8,23 +8,23 @@
     "random": 5
   },
   "participant_group_counts": {
-    "B": 5,
-    "A": 5
+    "A": 5,
+    "B": 5
   },
   "completed_participant_ids_by_profile": {
     "random": [
-      2,
-      5,
-      6,
+      8,
       7,
-      8
+      6,
+      5,
+      2
     ],
     "normal_rgb": [
-      1,
-      3,
-      4,
+      10,
       9,
-      10
+      4,
+      3,
+      1
     ]
   },
   "color_trial_count_by_profile": {
@@ -32,8 +32,8 @@
     "random": 35
   },
   "random_response_range": [
-    19,
-    237
+    0,
+    248
   ],
-  "normal_rgb_mean_abs_distance_from_start": 27.057142857142857
+  "normal_rgb_mean_abs_distance_from_start": 21.34285714285714
 }

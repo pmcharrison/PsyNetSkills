@@ -13,3 +13,8 @@
 - T+00:12:00 [agent] Implemented profile-aware bot responses, balanced profile assignment, and automated profile assertions.
 - T+00:15:00 [agent] First `psynet test local` run showed the original network capacity depleted before 10 bots completed all trials; increased Gibbs chain capacity while keeping the across-chain structure.
 - T+00:21:00 [agent] `psynet test local` passed with 10 completed bots and observed 5/5 profile distribution; widened chain capacity for the required 40-bot performance check.
+- T+00:24:00 [agent] Re-ran `psynet test local`, `psynet simulate`, export packaging, and notebook execution against the final code.
+- T+00:31:00 [agent] Ran a 40-bot, 5-minute `psynet performance-test local` and saved JSON evidence.
+- T+00:37:00 [agent] Captured an authenticated dashboard timeline snapshot as `evidence/monitor.html`.
+- T+00:40:00 [agent] Drafted `REPORT.md`, `LEARNINGS.md`, and final evaluation notes.
+- T+00:41:00 [agent-stop] Implementation and first-pass evidence collection complete.
