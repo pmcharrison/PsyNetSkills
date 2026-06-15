@@ -96,7 +96,11 @@ substructures as well.
 
 Also generate a dashboard similar to the experiment monitor dashboard. Use
 `assets/monitor_dashboard_template.html` as a string template: load it, replace
-the `{{ ... }}` placeholders, and write the output HTML.
+the `{{ ... }}` placeholders, and write the output HTML. The dashboard must make
+participant profiles visually inspectable: use distinct colors for each profile,
+include the profile label in participant/node labels or titles, include the
+profile label in each node's detail pane, and include a legend or statistics
+section that maps colors to profile labels and observed counts.
 
 Build at least:
 
@@ -111,6 +115,9 @@ Build at least:
 The important contract is:
 
 - Each graph node should have a `detailId`.
+- Each participant/profile node should include a profile-specific `color`.
+- Each participant/profile node should expose a visible profile label, either in
+  its `label`, `title`, or both.
 - `detail_html_by_id_json` maps that `detailId` to HTML.
 - When a node is selected, the template puts that mapped HTML into
   `#element-details`.
@@ -120,8 +127,9 @@ Example graph node:
 ```json
 {
   "id": "node-1",
-  "label": "Node 1",
+  "label": "Participant 1\\nnormal_rgb",
   "detailId": "node-1",
+  "title": "Participant 1 — profile: normal_rgb",
   "color": {"background": "#4c78a8"}
 }
 ```
