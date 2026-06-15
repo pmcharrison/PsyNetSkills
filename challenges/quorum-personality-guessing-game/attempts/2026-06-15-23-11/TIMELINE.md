@@ -11,3 +11,5 @@
 - T+00:26:00 [manual] User approved the plan and identified `eandrade-lotero` as the attempt author.
 - T+00:26:10 [agent-start] Resumed autonomous implementation work.
 - T+00:45:00 [agent] Implemented the self-contained PsyNet experiment and generated pinned constraints before testing.
+- T+00:55:00 [agent] First `psynet test local` run launched successfully but exposed an unstable runtime node-count assertion.
+- T+00:57:00 [agent] Reworked the structural test to use the static lobby node manifest.

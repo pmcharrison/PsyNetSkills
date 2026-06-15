@@ -252,10 +252,12 @@ class LobbyTrialMaker(StaticTrialMaker):
         trial.answer = enriched_answer
 
 
+LOBBY_NODES = make_lobby_nodes()
+
 lobby_trial_maker = LobbyTrialMaker(
     id_="productive_lobby",
     trial_class=LobbyTrial,
-    nodes=make_lobby_nodes(),
+    nodes=LOBBY_NODES,
     expected_trials_per_participant=40,
     max_trials_per_participant=40,
     allow_repeated_nodes=False,
@@ -320,11 +322,11 @@ class Exp(psynet.experiment.Experiment):
     test_mode = "serial"
 
     def test_serial_run_bots(self, bots: List[BotDriver]):
-        assert len(lobby_trial_maker.nodes) == 40
-        assert [node.definition["task_type"] for node in lobby_trial_maker.nodes[:10]] == [
+        assert len(LOBBY_NODES) == 40
+        assert [node.definition["task_type"] for node in LOBBY_NODES[:10]] == [
             "personality"
         ] * 10
-        assert [node.definition["task_type"] for node in lobby_trial_maker.nodes[10:]] == [
+        assert [node.definition["task_type"] for node in LOBBY_NODES[10:]] == [
             "guessing"
         ] * 30
         assert guessing_feedback(0).startswith("Correct")
