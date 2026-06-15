@@ -670,6 +670,12 @@ td {
   max-width: 100%;
 }
 
+.notebook-image img {
+  display: block;
+  height: auto;
+  max-width: 100%;
+}
+
 .attempt-panel > h2:first-child,
 .attempt-panel > summary,
 .attempt-panel > .section-heading:first-child {

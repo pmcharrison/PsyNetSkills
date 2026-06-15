@@ -405,13 +405,19 @@
                                 {{ delimit . "" | safeHTML }}
                               </div>
                             {{ else }}
-                              {{ with index . "text/html" }}
-                                <div class="notebook-html">
-                                  {{ delimit . "" | safeHTML }}
+                              {{ with index . "image/png" }}
+                                <div class="notebook-image">
+                                  <img src="data:image/png;base64,{{ . }}" alt="Notebook image output">
                                 </div>
                               {{ else }}
-                                {{ with index . "text/plain" }}
-                                  <pre><code>{{ delimit . "" }}</code></pre>
+                                {{ with index . "text/html" }}
+                                  <div class="notebook-html">
+                                    {{ delimit . "" | safeHTML }}
+                                  </div>
+                                {{ else }}
+                                  {{ with index . "text/plain" }}
+                                    <pre><code>{{ delimit . "" }}</code></pre>
+                                  {{ end }}
                                 {{ end }}
                               {{ end }}
                             {{ end }}

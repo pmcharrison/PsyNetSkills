@@ -36,12 +36,14 @@ BUTTON_STYLE = (
     "border-color: #777777; color: #111111;"
 )
 PAGE_CSS = """
-<style>
-#timeline-progress-bar, .progress-bar {
-  background-color: #777777 !important;
-}
+.header .progress,
 .progress {
   background-color: #eeeeee !important;
+}
+#timeline-progress-bar,
+.header .progress > #timeline-progress-bar.progress-bar,
+.progress-bar[role="progressbar"] {
+  background-color: #777777 !important;
 }
 .push-button.btn-primary {
   background-color: #eeeeee !important;
@@ -53,7 +55,6 @@ PAGE_CSS = """
   text-align: center;
   font-weight: 600;
 }
-</style>
 """
 
 
@@ -615,14 +616,14 @@ class Exp(psynet.experiment.Experiment):
     timeline = Timeline(
         InfoPage(
             Markup(
-                PAGE_CSS
-                + """
+                """
                 <h2>Visual Psychophysics Battery</h2>
                 <p>You will complete three short visual tasks with colored circles.</p>
                 <p>Use the keyboard shortcuts shown on the buttons, or click with the mouse.</p>
                 """
             ),
             time_estimate=8,
+            css=PAGE_CSS,
         ),
         instructions_page(
             "discrimination",
@@ -649,8 +650,9 @@ class Exp(psynet.experiment.Experiment):
         ),
         identification_trial_maker,
         InfoPage(
-            Markup(PAGE_CSS + "<h2>Finished</h2><p>Thank you for completing the visual battery.</p>"),
+            Markup("<h2>Finished</h2><p>Thank you for completing the visual battery.</p>"),
             time_estimate=5,
+            css=PAGE_CSS,
         ),
     )
 

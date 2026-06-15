@@ -18,3 +18,15 @@ browser path while preserving event-log reaction times.
   response activation after timed graphics frames, including whether empty frames
   should trigger `activate_control_response`. Confidence: medium. Impact: medium.
   Status: considering.
+
+## Neutral UI chrome and analysis figures need explicit review artifacts
+
+The evaluator noted that the top progress bar stayed blue despite neutral button
+styling, and that the requested matrix figure was available in the notebook but
+not embedded as a standalone PNG in the attempt summary.
+
+*Actions:*
+- **PsyNetSkills:** Add concise psychophysics guidance requiring final visual
+  verification of PsyNet progress-bar selectors and standalone PNG embedding for
+  requested analysis figures. Confidence: high. Impact: medium. Status:
+  completed. Notes: Added to `.cursor/skills/psychophysics/SKILL.md`.

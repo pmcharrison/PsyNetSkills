@@ -19,3 +19,7 @@
 - T+01:34:00 [agent] Video review found raw CSS, sequencing, and Block 3 label issues; fixed and recaptured evidence.
 - T+01:56:00 [agent] Refreshed simulation, analysis notebook, performance evidence, and participant video for the final architecture.
 - T+01:59:00 [agent-stop] Implementation and first-pass evidence collection complete.
+- T+17:02:06 [manual] User evaluated the attempt as 8/10 and requested repairs for the progress bar, analysis PNG embedding, and psychophysics skill guidance.
+- T+17:02:30 [agent-start] Resumed post-evaluation repair work.
+- T+17:12:00 [agent] Neutralized the rendered top progress bar, embedded `empirical_matrices.png` in the report, updated evaluation notes, and augmented the psychophysics skill.
+- T+17:12:37 [agent-stop] Post-evaluation repairs complete.

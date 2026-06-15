@@ -27,12 +27,17 @@ proportional to `exp(-d(x, y))`, as requested. The executed notebook
 summarizes block performance and reaction times, and plots the three empirical
 30 x 30 matrices with a shared color bar.
 
+![Empirical matrices](evidence/analyses/empirical_matrices.png)
+
 ## Participant evidence
 
 The Playwright evidence runner completed one participant flow with 30 clicked
-trial responses. It saved a 55-second, 1280 x 720 participant video at
+trial responses. It saved a 54-second, 1280 x 720 participant video at
 `evidence/participant.mp4`, targeted screenshots under `evidence/screenshots/`,
-and a local dashboard snapshot at `evidence/monitor.html`.
+and a local dashboard snapshot at `evidence/monitor.html`. Video review confirmed
+the progress bar is neutral gray, block instructions are ordered, stimuli and
+probes are visible, buttons are usable, Block 3 labels are centered, and the
+flow reaches completion.
 
 ## Validation
 
