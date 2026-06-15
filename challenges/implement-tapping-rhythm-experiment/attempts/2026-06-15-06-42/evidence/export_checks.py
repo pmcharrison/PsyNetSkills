@@ -5,7 +5,6 @@ from __future__ import annotations
 import ast
 import csv
 import json
-import sys
 import tempfile
 import zipfile
 from pathlib import Path
@@ -21,7 +20,7 @@ def rows_by_file(export_zip: Path):
         with zipfile.ZipFile(export_zip) as zf:
             zf.extractall(tmp)
         root = Path(tmp)
-        csvs = {p.name: p for p in root.rglob('*.csv')}
+        csvs = {str(p.relative_to(root)): p for p in root.rglob('*.csv')}
         return {name: list(csv.DictReader(path.open(newline='', encoding='utf-8'))) for name, path in csvs.items()}
 
 
@@ -40,10 +39,15 @@ def main() -> int:
     assert EXPORT_ZIP.exists(), f'Missing export zip: {EXPORT_ZIP}'
     manifest_ids = {row['stimulus_id'] for row in json.loads(MANIFEST.read_text(encoding='utf-8'))['stimuli']}
     tables = rows_by_file(EXPORT_ZIP)
-    participant_rows = tables.get('participant.csv') or tables.get('participants.csv')
-    trial_rows = tables.get('trial.csv') or tables.get('trials.csv')
+    participant_rows = tables.get('regular/data/Bot.csv') or tables.get('anonymous/data/Bot.csv')
+    trial_rows = tables.get('regular/data/TappingTrial.csv') or tables.get('anonymous/data/TappingTrial.csv')
     assert participant_rows, 'participant rows exist'
     assert trial_rows, 'trial rows exist'
+    participant_profiles = {row.get('simulated_profile_id') for row in participant_rows}
+    missing_participant_profiles = REQUIRED_PROFILES - participant_profiles
+    assert not missing_participant_profiles, (
+        f'missing simulated profiles in participant metadata: {sorted(missing_participant_profiles)}'
+    )
 
     answers = [parse_answer(row.get('answer')) for row in trial_rows if row.get('answer')]
     tapping_answers = [answer for answer in answers if isinstance(answer, dict) and answer.get('trial_kind') in {'calibration', 'main'}]

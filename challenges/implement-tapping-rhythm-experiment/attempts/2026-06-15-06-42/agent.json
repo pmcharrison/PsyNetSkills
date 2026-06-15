@@ -19,6 +19,7 @@
   },
   "run_cost": null,
   "notes": [
-    "Human attempt author was not inferable from session context; add a GitHub author key before marking the attempt complete."
+    "Implementation and first-pass evidence collection are complete.",
+    "Human attempt author was not inferable from session context; add a GitHub author key and ended_at before marking the attempt complete."
   ]
 }
