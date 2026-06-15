@@ -1,0 +1,450 @@
+mining_scope: balanced
+source_scan:
+  generated_from: dashboard/data/psynetsk.json
+  helper_command: uv run python .cursor/skills/mine-skill-candidates/scripts/collect_sources.py --scope balanced
+  focus:
+    - planning/fidelity
+    - run-attempt/manual testing
+    - deployment safety
+    - participant evidence/video
+    - simulated participant profiles
+    - telemetry/AI-assistance review
+    - simulations
+    - export/analysis
+    - experiment monitoring/management
+
+candidates:
+  - id: final-handoff-reproducibility-gate
+    title: Final handoff reproducibility gate for challenge attempts
+    status: approved
+    urgency: high
+    necessity: >-
+      Repeated attempt failures were not caused by missing implementation effort
+      but by unstable final handoff: the submitted branch, local PsyNet run,
+      evidence, and repository validation were not rechecked together after late
+      fixes.
+    trigger: >-
+      Use when a runnable PsyNet challenge attempt is ready for handoff,
+      especially after manual evidence collection, local debugging, or late
+      correction passes.
+    proposed_disposition: extension
+    triage: candidate
+    overlap_notes: >-
+      Reviewed as an `attempt-challenge` checklist extension, with pointers to
+      `record-participant-video` and validation guidance as needed; a new
+      choreography skill would be too much process for this focused gate.
+    evidence_sources:
+      - video-recording-static-trials/2026-06-14-13-52/action-003
+      - challenges/video-recording-static-trials/attempts/2026-06-14-13-52/EVALUATION.md
+      - challenges/video-recording-static-trials/attempts/2026-06-14-13-52/LEARNINGS.md
+      - evidence-workflow-demo/example-playwright-evidence/action-001
+      - similarity-discrimination-identification/2026-06-10-00-38/action-003
+    source_ids:
+      - video-recording-static-trials/2026-06-14-13-52/action-003
+      - challenges/video-recording-static-trials/attempts/2026-06-14-13-52/EVALUATION.md
+      - challenges/video-recording-static-trials/attempts/2026-06-14-13-52/LEARNINGS.md
+      - evidence-workflow-demo/example-playwright-evidence/action-001
+      - similarity-discrimination-identification/2026-06-10-00-38/action-003
+    trace_status: sorted
+    summary: >-
+      Candidate guidance should require a last-pass command bundle on the final
+      committed branch, with `psynet test local`, challenge-specific evidence
+      checks, and `uv run psynetsk-validate` rerun immediately before handoff.
+      It should also require that participant-flow scripts assert the behavior
+      shown in evidence rather than merely launching pages.
+    review_notes: >-
+      Approved as a high-impact checklist addition, not a new skill. Evidence
+      supports a recurring handoff-quality failure mode, and the trigger is
+      narrow enough to add to `attempt-challenge` without duplicating validation
+      details.
+
+  - id: participant-evidence-semantic-review
+    title: Semantic review of participant evidence videos
+    status: approved
+    urgency: high
+    necessity: >-
+      Several attempts produced videos or screenshots that existed but did not
+      prove the required interaction semantics, visual fidelity, or full task
+      progression; this is a high-risk review gap because weak evidence can hide
+      broken experiment behavior.
+    trigger: >-
+      Use when collecting or reviewing participant evidence for tasks with
+      timing, visual layout, synchronous interaction, multiple response
+      dimensions, timeout paths, or other behavior that must be visible in the
+      recording.
+    proposed_disposition: extension
+    triage: candidate
+    overlap_notes: >-
+      Extends `record-participant-video`; a standalone new video skill would
+      duplicate the owner skill, but its review checklist should explicitly cover
+      semantic task progression.
+    evidence_sources:
+      - real-time-synchronous-game/2026-06-09-19-01/action-003
+      - challenges/real-time-synchronous-game/attempts/2026-06-09-19-01/LEARNINGS.md
+      - similarity-discrimination-identification/2026-06-10-02-03/action-004
+      - challenges/similarity-discrimination-identification/attempts/2026-06-10-02-03/EVALUATION.md
+      - challenges/similarity-discrimination-identification/attempts/2026-06-10-02-03/LEARNINGS.md
+      - continuous-music-emotion-slider/2026-06-11-06-46/action-003
+      - simple-multi-item-identification/2026-06-14-16-02/action-001
+      - ultimatum-game/2026-06-10-17-15/action-006
+    source_ids:
+      - real-time-synchronous-game/2026-06-09-19-01/action-003
+      - challenges/real-time-synchronous-game/attempts/2026-06-09-19-01/LEARNINGS.md
+      - similarity-discrimination-identification/2026-06-10-02-03/action-004
+      - challenges/similarity-discrimination-identification/attempts/2026-06-10-02-03/EVALUATION.md
+      - challenges/similarity-discrimination-identification/attempts/2026-06-10-02-03/LEARNINGS.md
+      - continuous-music-emotion-slider/2026-06-11-06-46/action-003
+      - simple-multi-item-identification/2026-06-14-16-02/action-001
+      - ultimatum-game/2026-06-10-17-15/action-006
+    trace_status: sorted
+    summary: >-
+      Candidate guidance should tell agents to inspect evidence for required
+      behavior, not only artifact presence: complete progression, active use of
+      required controls, alignment of timed visual elements, visible timeout or
+      payoff paths when central, and two-session semantics for interacting
+      participant tasks.
+    review_notes: >-
+      Approved as an extension to `record-participant-video`. The existing skill
+      already owns screenshots, recordings, and Playwright assertions; the missing
+      piece is an explicit semantic review checklist for videos that can look
+      complete while failing the scientific or interaction requirement.
+
+  - id: replication-fidelity-planning
+    title: Replication fidelity planning and escalation
+    status: approved
+    urgency: high
+    necessity: >-
+      Replication attempts can pass local tests while failing the scientific
+      fidelity bar when source materials, questionnaires, stimulus quality, or
+      participant-facing phrasing are reconstructed without an auditable plan or
+      escalation point.
+    trigger: >-
+      Use before implementing close replication tasks or studies whose success
+      depends on matching external materials, instruments, instructions,
+      scoring, media, or styling.
+    proposed_disposition: extension
+    triage: candidate
+    overlap_notes: >-
+      Extends `psynet-experiment-implementation` and related backend guidance;
+      existing planning instructions cover `PLAN.md`, but not enough
+      replication-specific fidelity checks.
+    evidence_sources:
+      - single-chord-emotion-replication/2026-06-10-12-44/action-003
+      - single-chord-emotion-replication/2026-06-10-12-44/action-004
+      - challenges/single-chord-emotion-replication/attempts/2026-06-10-12-44/EVALUATION.md
+      - challenges/single-chord-emotion-replication/attempts/2026-06-10-12-44/LEARNINGS.md
+      - rolling-inventory-melody-market/2026-06-10-20-01/action-002
+      - challenges/audio-memory-sequence/attempts/2026-06-08-09-29/EVALUATION.md
+    source_ids:
+      - single-chord-emotion-replication/2026-06-10-12-44/action-003
+      - single-chord-emotion-replication/2026-06-10-12-44/action-004
+      - challenges/single-chord-emotion-replication/attempts/2026-06-10-12-44/EVALUATION.md
+      - challenges/single-chord-emotion-replication/attempts/2026-06-10-12-44/LEARNINGS.md
+      - rolling-inventory-melody-market/2026-06-10-20-01/action-002
+      - challenges/audio-memory-sequence/attempts/2026-06-08-09-29/EVALUATION.md
+    trace_status: sorted
+    summary: >-
+      Candidate guidance should require local reference files or explicit source
+      citations for reconstructed instruments when licensing allows, early
+      decisions about practice/calibration/response modality, and a stop-and-ask
+      rule when core assets cannot be recreated at the requested fidelity.
+    review_notes: >-
+      Approved as an extension to `psynet-experiment-implementation` planning
+      guidance. The evidence shows scientific-validity risk rather than ordinary
+      implementation polish, and the right fix is a replication-fidelity planning
+      section rather than a separate skill.
+
+  - id: simulation-analysis-evidence-standard
+    title: Simulation and analysis evidence standard
+    status: deferred
+    urgency: high
+    necessity: >-
+      Multiple attempts ran code successfully but produced weak simulation or
+      analysis evidence: custom scripts replaced PsyNet-native simulation,
+      condition coverage was not inspected, response distributions were not
+      visualized, or replication analyses lacked notebook-like review outputs.
+    trigger: >-
+      Use when a challenge requires simulation, performance evidence, exported
+      data analysis, adaptive/non-adaptive comparison, or replication-oriented
+      analytical reconstruction.
+    proposed_disposition: pointer
+    triage: deferred
+    overlap_notes: >-
+      Mostly overlaps current `psynet-experiment-implementation` simulation and
+      analysis requirements plus the newly merged `psynet-simulated-participants`
+      skill from #269. Keep this deferred until those owner skills have been used
+      on more attempts.
+    evidence_sources:
+      - single-chord-emotion-replication/2026-06-10-12-44/action-005
+      - single-chord-emotion-replication/2026-06-10-12-44/action-006
+      - challenges/single-chord-emotion-replication/attempts/2026-06-10-12-44/EVALUATION.md
+      - challenges/single-chord-emotion-replication/attempts/2026-06-10-12-44/LEARNINGS.md
+      - similarity-discrimination-identification/2026-06-10-02-03/action-005
+      - challenges/similarity-discrimination-identification/attempts/2026-06-10-02-03/EVALUATION.md
+      - adaptive-memory-testing/2026-06-12-12-40/action-001
+      - cross-cultural-masked-affective-priming/2026-06-11-12-46/action-003
+    source_ids:
+      - single-chord-emotion-replication/2026-06-10-12-44/action-005
+      - single-chord-emotion-replication/2026-06-10-12-44/action-006
+      - challenges/single-chord-emotion-replication/attempts/2026-06-10-12-44/EVALUATION.md
+      - challenges/single-chord-emotion-replication/attempts/2026-06-10-12-44/LEARNINGS.md
+      - similarity-discrimination-identification/2026-06-10-02-03/action-005
+      - challenges/similarity-discrimination-identification/attempts/2026-06-10-02-03/EVALUATION.md
+      - adaptive-memory-testing/2026-06-12-12-40/action-001
+      - cross-cultural-masked-affective-priming/2026-06-11-12-46/action-003
+    trace_status: sorted
+    summary: >-
+      Candidate guidance should prefer PsyNet-native simulation when available,
+      define expected simulated participant counts or condition coverage before
+      running, inspect outputs for coverage and plausible distributions, and
+      produce reviewable tables plus figures or notebook-style reports for
+      analysis-heavy challenges.
+    review_notes: >-
+      Deferred to avoid duplicating #269 and the existing analysis-notebook
+      requirements. Reconsider only if future evaluations still show a gap after
+      agents follow `psynet-simulated-participants` and
+      `psynet-experiment-implementation`.
+
+  - id: simulated-profile-calibration-framing
+    title: Simulated profile calibration and conservative framing
+    status: implemented
+    urgency: high
+    necessity: >-
+      High-scoring attempts show the value of realistic simulated profiles and
+      conservative claims, while open actions show a recurring risk of treating
+      clean mock profiles or AI-assistance probes as calibrated evidence about
+      real humans, real providers, or real participant behavior.
+    trigger: >-
+      Use when designing simulated participants, mock LLM-style profiles,
+      AI-assistance probes, telemetry review fixtures, or analysis reports that
+      compare profile classes.
+    proposed_disposition: extension
+    triage: candidate
+    overlap_notes: >-
+      Implemented by #269 through the new `psynet-simulated-participants` skill,
+      with pointers from `psynet-experiment-implementation` and
+      `psynet-participant-quality-telemetry`.
+    evidence_sources:
+      - challenges/simulated-participant-study-replication-loop/attempts/2026-06-11-14-12/EVALUATION.md
+      - challenges/simulated-participant-study-replication-loop/attempts/2026-06-11-14-12/LEARNINGS.md
+      - simulated-participant-study-replication-loop/2026-06-11-14-12/action-004
+      - challenges/llm-assisted-participation-defense-kit/attempts/2026-06-11-14-29/EVALUATION.md
+      - challenges/llm-assisted-participation-defense-kit/attempts/2026-06-11-14-29/LEARNINGS.md
+      - llm-assisted-participation-defense-kit/2026-06-11-14-29/action-003
+      - challenges/apply-participant-quality-telemetry-skill/attempts/2026-06-11-19-08/EVALUATION.md
+      - continuous-music-emotion-slider/2026-06-11-06-46/action-004
+    source_ids:
+      - challenges/simulated-participant-study-replication-loop/attempts/2026-06-11-14-12/EVALUATION.md
+      - challenges/simulated-participant-study-replication-loop/attempts/2026-06-11-14-12/LEARNINGS.md
+      - simulated-participant-study-replication-loop/2026-06-11-14-12/action-004
+      - challenges/llm-assisted-participation-defense-kit/attempts/2026-06-11-14-29/EVALUATION.md
+      - challenges/llm-assisted-participation-defense-kit/attempts/2026-06-11-14-29/LEARNINGS.md
+      - llm-assisted-participation-defense-kit/2026-06-11-14-29/action-003
+      - challenges/apply-participant-quality-telemetry-skill/attempts/2026-06-11-19-08/EVALUATION.md
+      - continuous-music-emotion-slider/2026-06-11-06-46/action-004
+    trace_status: sorted
+    summary: >-
+      Candidate guidance should require profiles that test ambiguous and
+      condition-specific behavior, separate mechanics evidence from calibration
+      evidence, compare against richer real or experimentally controlled
+      distributions when calibration is claimed, and state that simulated results
+      are workflow evidence unless real populations or providers were tested.
+    review_notes: >-
+      Marked implemented because #269 added the owner skill covering profile
+      types, data-path parity, mock/live LLM boundaries, validation, and
+      limitation reporting. No additional candidate should remain open unless a
+      later review identifies a narrower uncovered telemetry-calibration gap.
+
+  - id: deployment-export-monitoring-safety
+    title: Deployment, export, and monitoring safety checks
+    status: approved
+    urgency: high
+    necessity: >-
+      Deployment and monitoring actions recur around irreversible operations,
+      export path ambiguity, dashboard authentication, monitor/export data
+      differences, and unclear evidence boundaries; failures here can lose data
+      or misrepresent deployment state.
+    trigger: >-
+      Use when auditing deployment readiness, reconstructing deployment logs,
+      collecting local or remote exports, capturing monitor snapshots, or
+      deciding whether a deployed experiment can be stopped or torn down.
+    proposed_disposition: extension
+    triage: candidate
+    overlap_notes: >-
+      Extends `psynet-deployment-ops`; export/analysis and dashboard evidence
+      pointers should stay concise and refer to existing data-processing owners
+      where appropriate.
+    evidence_sources:
+      - deployment-log-reconstruction/2026-06-10-00-29/action-001
+      - deployment-readiness-audit/2026-06-10-00-29/action-001
+      - primary-color-rating/2026-06-06-05-58/action-007
+      - real-time-synchronous-game/2026-06-09-19-01/action-002
+      - challenges/real-time-synchronous-game/attempts/2026-06-09-19-01/LEARNINGS.md
+      - video-recording-static-trials/2026-06-09-22-00/action-002
+      - continuous-music-emotion-slider/2026-06-11-06-46/action-004
+      - challenges/continuous-music-emotion-slider/attempts/2026-06-11-06-46/EVALUATION.md
+    source_ids:
+      - deployment-log-reconstruction/2026-06-10-00-29/action-001
+      - deployment-readiness-audit/2026-06-10-00-29/action-001
+      - primary-color-rating/2026-06-06-05-58/action-007
+      - real-time-synchronous-game/2026-06-09-19-01/action-002
+      - challenges/real-time-synchronous-game/attempts/2026-06-09-19-01/LEARNINGS.md
+      - video-recording-static-trials/2026-06-09-22-00/action-002
+      - continuous-music-emotion-slider/2026-06-11-06-46/action-004
+      - challenges/continuous-music-emotion-slider/attempts/2026-06-11-06-46/EVALUATION.md
+    trace_status: sorted
+    summary: >-
+      Candidate guidance should strengthen deployment and local-debug evidence
+      checks around export-before-teardown, absolute export paths, `--no-source`
+      use when source is not requested, monitor-vs-export serialization paths,
+      authentication assumptions, and explicit uncertainty in audit or
+      reconstruction reports.
+    review_notes: >-
+      Approved as a focused extension to `psynet-deployment-ops`. The existing
+      skill already owns deployment safety, but the cited actions support a
+      clearer monitoring/export evidence checklist for local debug, deployment
+      audits, and teardown decisions.
+
+  - id: standard-psynet-support-files
+    title: Standard PsyNet attempt support-file checklist
+    status: approved
+    urgency: medium
+    necessity: >-
+      This is a repeated setup-contract issue, but the fix is likely a concise
+      checklist edit rather than a new reusable skill.
+    trigger: >-
+      Use when updating attempt setup guidance for runnable PsyNet challenge
+      experiments.
+    proposed_disposition: extension
+    triage: small_edit
+    overlap_notes: >-
+      Belongs in `attempt-challenge` or `psynet-experiment-implementation`; do
+      not create a new skill.
+    evidence_sources:
+      - apply-participant-quality-telemetry-skill/2026-06-11-19-08/action-001
+      - llm-assisted-participation-defense-kit/2026-06-11-14-29/action-001
+      - rolling-inventory-melody-market/2026-06-10-17-06/action-001
+      - audio-memory-sequence/2026-06-08-09-29/action-006
+      - simulated-participant-study-replication-loop/2026-06-11-14-12/action-002
+    source_ids:
+      - apply-participant-quality-telemetry-skill/2026-06-11-19-08/action-001
+      - llm-assisted-participation-defense-kit/2026-06-11-14-29/action-001
+      - rolling-inventory-melody-market/2026-06-10-17-06/action-001
+      - audio-memory-sequence/2026-06-08-09-29/action-006
+      - simulated-participant-study-replication-loop/2026-06-11-14-12/action-002
+    trace_status: sorted
+    summary: >-
+      Add or consolidate one checklist naming `config.txt`, `test.py`,
+      `.gitignore`, `.python-version`, generated `constraints.txt`, and
+      `dallinger constraints generate` where relevant.
+    review_notes: >-
+      Approved as an obvious small edit to `attempt-challenge` or
+      `psynet-experiment-implementation`, not a skill-level intervention. Keep it
+      as a concise setup-contract checklist.
+
+  - id: package-safe-helper-imports
+    title: Package-safe helper imports in attempt experiments
+    status: approved
+    urgency: medium
+    necessity: >-
+      The issue is actionable and recurring enough to preserve, but it is a
+      narrow wording update rather than a standalone skill.
+    trigger: >-
+      Use when generated PsyNet attempt code has helper modules or scripts that
+      must run both under Dallinger package loading and direct local execution.
+    proposed_disposition: extension
+    triage: small_edit
+    overlap_notes: >-
+      Belongs in `psynet-experiment-implementation`; it should be a short
+      implementation note.
+    evidence_sources:
+      - audio-memory-sequence/2026-06-08-09-29/action-003
+      - simulated-participant-study-replication-loop/2026-06-11-14-12/action-001
+      - challenges/simulated-participant-study-replication-loop/attempts/2026-06-11-14-12/LEARNINGS.md
+    source_ids:
+      - audio-memory-sequence/2026-06-08-09-29/action-003
+      - simulated-participant-study-replication-loop/2026-06-11-14-12/action-001
+      - challenges/simulated-participant-study-replication-loop/attempts/2026-06-11-14-12/LEARNINGS.md
+    trace_status: sorted
+    summary: >-
+      Add one note recommending package-safe imports or a documented direct-run
+      fallback for helper modules.
+    review_notes: >-
+      Approved as a narrow owner-skill edit because two attempts hit the same
+      Dallinger package-loading issue. Do not expand this into broader Python
+      packaging guidance.
+
+  - id: local-tooling-preflight-checks
+    title: Local tooling preflight checks
+    status: rejected
+    urgency: medium
+    necessity: >-
+      Tooling failures around gettext, ports, and PsyNet performance-test modes
+      are disruptive, but each fix is a small preflight reminder.
+    trigger: >-
+      Use when editing setup or evidence guidance for translation-heavy,
+      debug-local, or performance-test workflows.
+    proposed_disposition: pointer
+    triage: small_edit
+    overlap_notes: >-
+      Route to the relevant owner skills rather than creating a new operations
+      skill.
+    evidence_sources:
+      - cross-cultural-animal-choice/2026-06-12-11-29/action-001
+      - video-recording-static-trials/2026-06-14-13-52/action-002
+      - challenges/video-recording-static-trials/attempts/2026-06-14-13-52/LEARNINGS.md
+      - simple-visual-discrimination/2026-06-11-21-12/action-002
+    source_ids:
+      - cross-cultural-animal-choice/2026-06-12-11-29/action-001
+      - video-recording-static-trials/2026-06-14-13-52/action-002
+      - challenges/video-recording-static-trials/attempts/2026-06-14-13-52/LEARNINGS.md
+      - simple-visual-discrimination/2026-06-11-21-12/action-002
+    trace_status: sorted
+    summary: >-
+      Add concise reminders for `xgettext --version`, stopping active debug
+      servers before automated PsyNet tests, and preferring normal
+      `psynet performance-test local` unless dashboard credentials are available.
+    review_notes: >-
+      Rejected as a skill candidate because it bundles unrelated one-line
+      preflight reminders. Route individual reminders to their owner skills only
+      when editing those skills for another reason.
+
+  - id: native-psynet-affordance-preference
+    title: Prefer native PsyNet affordances before custom code
+    status: rejected
+    urgency: medium
+    necessity: >-
+      Several actions ask for one-line reminders to prefer native PsyNet
+      controls, Graphics/Raphael, or simulation paths before custom HTML,
+      JavaScript, or scripts; this is useful but belongs as small owner-skill
+      edits.
+    trigger: >-
+      Use when updating experiment implementation or psychophysics guidance for
+      simple geometric stimuli, ordered responses, or simulation setup.
+    proposed_disposition: extension
+    triage: small_edit
+    overlap_notes: >-
+      Belongs in `psychophysics`, `psynet-experiment-implementation`, or
+      audio-specific guidance; do not create a separate generic skill.
+    evidence_sources:
+      - audio-memory-sequence/2026-06-08-09-29/action-001
+      - audio-memory-sequence/2026-06-08-09-29/action-002
+      - simple-visual-similarity/2026-06-12-12-19/action-002
+      - visual-priors-serial-reproduction/2026-06-10-12-35/action-001
+      - single-chord-emotion-replication/2026-06-10-12-44/action-005
+    source_ids:
+      - audio-memory-sequence/2026-06-08-09-29/action-001
+      - audio-memory-sequence/2026-06-08-09-29/action-002
+      - simple-visual-similarity/2026-06-12-12-19/action-002
+      - visual-priors-serial-reproduction/2026-06-10-12-35/action-001
+      - single-chord-emotion-replication/2026-06-10-12-44/action-005
+    trace_status: sorted
+    summary: >-
+      Add short owner-skill reminders to justify custom browser code or custom
+      simulation scripts when native PsyNet controls, Graphics/Raphael, or
+      simulation machinery are suitable.
+    review_notes: >-
+      Rejected as too broad and duplicative. `psychophysics` already covers
+      native controls and event-log timing, `psynet-simulated-participants`
+      covers simulation paths, and any remaining advice should be split into
+      specific owner-skill edits.
