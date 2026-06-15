@@ -11,3 +11,4 @@ develop/
 deploy/
 deploy_logs/
 data/
+dump.rdb
