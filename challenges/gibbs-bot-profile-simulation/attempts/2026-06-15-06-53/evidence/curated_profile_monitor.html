@@ -1,0 +1,546 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Curated profile monitor - Gibbs bot profile simulation</title>
+  <style>
+    body { font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; margin: 2rem; color: #111827; background: #f8fafc; }
+    h1 { margin-bottom: 0.25rem; }
+    .subtitle { color: #4b5563; margin-top: 0; }
+    .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin: 1.5rem 0; }
+    .summary-card, .network-card { background: white; border: 1px solid #e5e7eb; border-radius: 14px; padding: 1rem; box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08); }
+    table { border-collapse: collapse; width: 100%; }
+    td, th { border-bottom: 1px solid #e5e7eb; padding: 0.45rem; text-align: left; }
+    .pill { border-radius: 999px; color: white; display: inline-block; font-size: 0.8rem; font-weight: 700; padding: 0.18rem 0.55rem; }
+    .profile-random > details > summary, .pill.profile-random { background: #f58518; }
+    .profile-normal > details > summary, .pill.profile-normal { background: #4c78a8; }
+    .profile-mixed > details > summary, .pill.profile-mixed { background: #7b61ff; }
+    .profile-none > details > summary, .pill.profile-none { background: #9ca3af; }
+    .network-card.profile-random { border-top: 6px solid #f58518; }
+    .network-card.profile-normal { border-top: 6px solid #4c78a8; }
+    .network-card.profile-mixed { border-top: 6px solid #7b61ff; }
+    .network-card.profile-none { border-top: 6px solid #9ca3af; }
+    .tree { list-style: none; margin: 0.75rem 0 0 0; padding-left: 1rem; border-left: 2px solid #d1d5db; }
+    .tree-item { margin: 0.45rem 0; }
+    .tree-item summary { color: white; border-radius: 10px; cursor: pointer; display: flex; flex-wrap: wrap; gap: 0.55rem; align-items: center; padding: 0.55rem 0.75rem; }
+    .node-body { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 0 0 10px 10px; padding: 0.75rem; }
+    .trial-list { margin: 0.5rem 0 0 0; padding-left: 1.25rem; }
+    .trial-list li { margin: 0.55rem 0; }
+    .trial-list span { margin-right: 0.45rem; }
+    .curated, small, .counts { color: #4b5563; }
+    code { background: #e5e7eb; border-radius: 5px; padding: 0.1rem 0.25rem; }
+    </style>
+</head>
+<body>
+  <h1>Curated profile monitor</h1>
+  <p class="subtitle">Generated from <code>evidence/simulated_data.zip</code>. Node colors summarize participant profiles observed in finalized trials.</p>
+  <div class="summary-grid">
+    <div class="summary-card">
+      <h2>Completed participant profile distribution</h2>
+      <table><thead><tr><th>Profile</th><th>Completed participants</th></tr></thead><tbody><tr><td><span class='pill profile-normal'>normal_rgb</span></td><td>5</td></tr><tr><td><span class='pill profile-random'>random</span></td><td>5</td></tr></tbody></table>
+    </div>
+    <div class="summary-card">
+      <h2>Legend</h2>
+      <p><span class="pill profile-random">random</span> Uniform random valid RGB-channel responses.</p>
+      <p><span class="pill profile-normal">normal_rgb</span> Normal RGB responses centered on the active channel, SD 20.</p>
+      <p><span class="pill profile-mixed">mixed</span> Trials from both profiles appear under this node/network.</p>
+      <p><span class="pill profile-none">no trials</span> No finalized profile-labeled trials.</p>
+    </div>
+  </div>
+  
+            <section class="network-card profile-mixed">
+              <h2>Network 1: target tree, group A</h2>
+              <p>
+                <span class="pill profile-mixed">mixed</span>
+                normal_rgb: 2, random: 7
+              </p>
+              <ul class="tree">
+    <li class="tree-item profile-mixed">
+      <details open>
+        <summary>
+          <span class="node-dot"></span>
+          <strong>Node 1</strong>
+          <span>degree 0</span>
+          <span>group A</span>
+          <span>target tree</span>
+          <span>active blue</span>
+          <span class="pill profile-mixed">mixed</span>
+          <span class="counts">normal_rgb: 2, random: 3</span>
+        </summary>
+        <div class="node-body">
+          <p class="curated">Curated summary: Node contains trials from both simulated response profiles.</p>
+          <details>
+            <summary>Trials: participant ID, response, profile behavior</summary>
+            <ul class="trial-list"><li><strong>P2</strong> <span class='pill profile-normal'>normal_rgb</span> <span>main trial</span> <span>target <strong>tree</strong></span> <span>active <strong>blue</strong></span> <span>start RGB <code>[150, 219, 159]</code></span> <span>response <strong>117</strong></span> <span>|distance from start| <strong>42</strong></span><br><small>Normal sample around the presented active-channel value (SD 20 RGB units), clipped to 0-255.</small></li>
+<li><strong>P2</strong> <span class='pill profile-normal'>normal_rgb</span> <span>repeat trial</span> <span>target <strong>tree</strong></span> <span>active <strong>blue</strong></span> <span>start RGB <code>[150, 219, 159]</code></span> <span>response <strong>141</strong></span> <span>|distance from start| <strong>18</strong></span><br><small>Normal sample around the presented active-channel value (SD 20 RGB units), clipped to 0-255.</small></li>
+<li><strong>P4</strong> <span class='pill profile-random'>random</span> <span>main trial</span> <span>target <strong>tree</strong></span> <span>active <strong>blue</strong></span> <span>start RGB <code>[150, 219, 166]</code></span> <span>response <strong>208</strong></span> <span>|distance from start| <strong>42</strong></span><br><small>Uniform random valid RGB-channel response.</small></li>
+<li><strong>P6</strong> <span class='pill profile-random'>random</span> <span>main trial</span> <span>target <strong>tree</strong></span> <span>active <strong>blue</strong></span> <span>start RGB <code>[150, 219, 96]</code></span> <span>response <strong>71</strong></span> <span>|distance from start| <strong>25</strong></span><br><small>Uniform random valid RGB-channel response.</small></li>
+<li><strong>P6</strong> <span class='pill profile-random'>random</span> <span>repeat trial</span> <span>target <strong>tree</strong></span> <span>active <strong>blue</strong></span> <span>start RGB <code>[150, 219, 96]</code></span> <span>response <strong>241</strong></span> <span>|distance from start| <strong>145</strong></span><br><small>Uniform random valid RGB-channel response.</small></li></ul>
+          </details>
+          <ul class="tree">
+    <li class="tree-item profile-random">
+      <details open>
+        <summary>
+          <span class="node-dot"></span>
+          <strong>Node 15</strong>
+          <span>degree 1</span>
+          <span>group A</span>
+          <span>target tree</span>
+          <span>active red</span>
+          <span class="pill profile-random">random</span>
+          <span class="counts">random: 4</span>
+        </summary>
+        <div class="node-body">
+          <p class="curated">Curated summary: Uniform random valid RGB-channel response.</p>
+          <details>
+            <summary>Trials: participant ID, response, profile behavior</summary>
+            <ul class="trial-list"><li><strong>P8</strong> <span class='pill profile-random'>random</span> <span>main trial</span> <span>target <strong>tree</strong></span> <span>active <strong>red</strong></span> <span>start RGB <code>[125, 219, 132]</code></span> <span>response <strong>42</strong></span> <span>|distance from start| <strong>83</strong></span><br><small>Uniform random valid RGB-channel response.</small></li>
+<li><strong>P8</strong> <span class='pill profile-random'>random</span> <span>repeat trial</span> <span>target <strong>tree</strong></span> <span>active <strong>red</strong></span> <span>start RGB <code>[125, 219, 132]</code></span> <span>response <strong>251</strong></span> <span>|distance from start| <strong>126</strong></span><br><small>Uniform random valid RGB-channel response.</small></li>
+<li><strong>P10</strong> <span class='pill profile-random'>random</span> <span>main trial</span> <span>target <strong>tree</strong></span> <span>active <strong>red</strong></span> <span>start RGB <code>[22, 219, 132]</code></span> <span>response <strong>213</strong></span> <span>|distance from start| <strong>191</strong></span><br><small>Uniform random valid RGB-channel response.</small></li>
+<li><strong>P10</strong> <span class='pill profile-random'>random</span> <span>repeat trial</span> <span>target <strong>tree</strong></span> <span>active <strong>red</strong></span> <span>start RGB <code>[22, 219, 132]</code></span> <span>response <strong>159</strong></span> <span>|distance from start| <strong>137</strong></span><br><small>Uniform random valid RGB-channel response.</small></li></ul>
+          </details>
+          
+        </div>
+      </details>
+    </li>
+    </ul>
+        </div>
+      </details>
+    </li>
+    </ul>
+            </section>
+            
+            <section class="network-card profile-mixed">
+              <h2>Network 2: target tree, group B</h2>
+              <p>
+                <span class="pill profile-mixed">mixed</span>
+                normal_rgb: 7, random: 2
+              </p>
+              <ul class="tree">
+    <li class="tree-item profile-mixed">
+      <details open>
+        <summary>
+          <span class="node-dot"></span>
+          <strong>Node 2</strong>
+          <span>degree 0</span>
+          <span>group B</span>
+          <span>target tree</span>
+          <span>active blue</span>
+          <span class="pill profile-mixed">mixed</span>
+          <span class="counts">normal_rgb: 4, random: 2</span>
+        </summary>
+        <div class="node-body">
+          <p class="curated">Curated summary: Node contains trials from both simulated response profiles.</p>
+          <details>
+            <summary>Trials: participant ID, response, profile behavior</summary>
+            <ul class="trial-list"><li><strong>P1</strong> <span class='pill profile-normal'>normal_rgb</span> <span>main trial</span> <span>target <strong>tree</strong></span> <span>active <strong>blue</strong></span> <span>start RGB <code>[185, 113, 111]</code></span> <span>response <strong>113</strong></span> <span>|distance from start| <strong>2</strong></span><br><small>Normal sample around the presented active-channel value (SD 20 RGB units), clipped to 0-255.</small></li>
+<li><strong>P1</strong> <span class='pill profile-normal'>normal_rgb</span> <span>repeat trial</span> <span>target <strong>tree</strong></span> <span>active <strong>blue</strong></span> <span>start RGB <code>[185, 113, 111]</code></span> <span>response <strong>114</strong></span> <span>|distance from start| <strong>3</strong></span><br><small>Normal sample around the presented active-channel value (SD 20 RGB units), clipped to 0-255.</small></li>
+<li><strong>P3</strong> <span class='pill profile-normal'>normal_rgb</span> <span>main trial</span> <span>target <strong>tree</strong></span> <span>active <strong>blue</strong></span> <span>start RGB <code>[185, 113, 116]</code></span> <span>response <strong>122</strong></span> <span>|distance from start| <strong>6</strong></span><br><small>Normal sample around the presented active-channel value (SD 20 RGB units), clipped to 0-255.</small></li>
+<li><strong>P3</strong> <span class='pill profile-normal'>normal_rgb</span> <span>repeat trial</span> <span>target <strong>tree</strong></span> <span>active <strong>blue</strong></span> <span>start RGB <code>[185, 113, 116]</code></span> <span>response <strong>121</strong></span> <span>|distance from start| <strong>5</strong></span><br><small>Normal sample around the presented active-channel value (SD 20 RGB units), clipped to 0-255.</small></li>
+<li><strong>P5</strong> <span class='pill profile-random'>random</span> <span>main trial</span> <span>target <strong>tree</strong></span> <span>active <strong>blue</strong></span> <span>start RGB <code>[185, 113, 248]</code></span> <span>response <strong>142</strong></span> <span>|distance from start| <strong>106</strong></span><br><small>Uniform random valid RGB-channel response.</small></li>
+<li><strong>P5</strong> <span class='pill profile-random'>random</span> <span>repeat trial</span> <span>target <strong>tree</strong></span> <span>active <strong>blue</strong></span> <span>start RGB <code>[185, 113, 248]</code></span> <span>response <strong>18</strong></span> <span>|distance from start| <strong>230</strong></span><br><small>Uniform random valid RGB-channel response.</small></li></ul>
+          </details>
+          <ul class="tree">
+    <li class="tree-item profile-normal">
+      <details open>
+        <summary>
+          <span class="node-dot"></span>
+          <strong>Node 12</strong>
+          <span>degree 1</span>
+          <span>group B</span>
+          <span>target tree</span>
+          <span>active red</span>
+          <span class="pill profile-normal">normal_rgb</span>
+          <span class="counts">normal_rgb: 3</span>
+        </summary>
+        <div class="node-body">
+          <p class="curated">Curated summary: Normal sample around the presented active-channel value (SD 20 RGB units), clipped to 0-255.</p>
+          <details>
+            <summary>Trials: participant ID, response, profile behavior</summary>
+            <ul class="trial-list"><li><strong>P7</strong> <span class='pill profile-normal'>normal_rgb</span> <span>main trial</span> <span>target <strong>tree</strong></span> <span>active <strong>red</strong></span> <span>start RGB <code>[252, 113, 125.66666666666667]</code></span> <span>response <strong>238</strong></span> <span>|distance from start| <strong>14</strong></span><br><small>Normal sample around the presented active-channel value (SD 20 RGB units), clipped to 0-255.</small></li>
+<li><strong>P9</strong> <span class='pill profile-normal'>normal_rgb</span> <span>main trial</span> <span>target <strong>tree</strong></span> <span>active <strong>red</strong></span> <span>start RGB <code>[214, 113, 125.66666666666667]</code></span> <span>response <strong>240</strong></span> <span>|distance from start| <strong>26</strong></span><br><small>Normal sample around the presented active-channel value (SD 20 RGB units), clipped to 0-255.</small></li>
+<li><strong>P9</strong> <span class='pill profile-normal'>normal_rgb</span> <span>repeat trial</span> <span>target <strong>tree</strong></span> <span>active <strong>red</strong></span> <span>start RGB <code>[214, 113, 125.66666666666667]</code></span> <span>response <strong>201</strong></span> <span>|distance from start| <strong>13</strong></span><br><small>Normal sample around the presented active-channel value (SD 20 RGB units), clipped to 0-255.</small></li></ul>
+          </details>
+          
+        </div>
+      </details>
+    </li>
+    </ul>
+        </div>
+      </details>
+    </li>
+    </ul>
+            </section>
+            
+            <section class="network-card profile-mixed">
+              <h2>Network 3: target rock, group A</h2>
+              <p>
+                <span class="pill profile-mixed">mixed</span>
+                normal_rgb: 1, random: 7
+              </p>
+              <ul class="tree">
+    <li class="tree-item profile-mixed">
+      <details open>
+        <summary>
+          <span class="node-dot"></span>
+          <strong>Node 3</strong>
+          <span>degree 0</span>
+          <span>group A</span>
+          <span>target rock</span>
+          <span>active blue</span>
+          <span class="pill profile-mixed">mixed</span>
+          <span class="counts">normal_rgb: 1, random: 3</span>
+        </summary>
+        <div class="node-body">
+          <p class="curated">Curated summary: Node contains trials from both simulated response profiles.</p>
+          <details>
+            <summary>Trials: participant ID, response, profile behavior</summary>
+            <ul class="trial-list"><li><strong>P2</strong> <span class='pill profile-normal'>normal_rgb</span> <span>main trial</span> <span>target <strong>rock</strong></span> <span>active <strong>blue</strong></span> <span>start RGB <code>[64, 123, 60]</code></span> <span>response <strong>77</strong></span> <span>|distance from start| <strong>17</strong></span><br><small>Normal sample around the presented active-channel value (SD 20 RGB units), clipped to 0-255.</small></li>
+<li><strong>P4</strong> <span class='pill profile-random'>random</span> <span>main trial</span> <span>target <strong>rock</strong></span> <span>active <strong>blue</strong></span> <span>start RGB <code>[64, 123, 24]</code></span> <span>response <strong>244</strong></span> <span>|distance from start| <strong>220</strong></span><br><small>Uniform random valid RGB-channel response.</small></li>
+<li><strong>P4</strong> <span class='pill profile-random'>random</span> <span>repeat trial</span> <span>target <strong>rock</strong></span> <span>active <strong>blue</strong></span> <span>start RGB <code>[64, 123, 24]</code></span> <span>response <strong>42</strong></span> <span>|distance from start| <strong>18</strong></span><br><small>Uniform random valid RGB-channel response.</small></li>
+<li><strong>P6</strong> <span class='pill profile-random'>random</span> <span>main trial</span> <span>target <strong>rock</strong></span> <span>active <strong>blue</strong></span> <span>start RGB <code>[64, 123, 99]</code></span> <span>response <strong>227</strong></span> <span>|distance from start| <strong>128</strong></span><br><small>Uniform random valid RGB-channel response.</small></li></ul>
+          </details>
+          <ul class="tree">
+    <li class="tree-item profile-random">
+      <details open>
+        <summary>
+          <span class="node-dot"></span>
+          <strong>Node 13</strong>
+          <span>degree 1</span>
+          <span>group A</span>
+          <span>target rock</span>
+          <span>active red</span>
+          <span class="pill profile-random">random</span>
+          <span class="counts">random: 4</span>
+        </summary>
+        <div class="node-body">
+          <p class="curated">Curated summary: Uniform random valid RGB-channel response.</p>
+          <details>
+            <summary>Trials: participant ID, response, profile behavior</summary>
+            <ul class="trial-list"><li><strong>P8</strong> <span class='pill profile-random'>random</span> <span>main trial</span> <span>target <strong>rock</strong></span> <span>active <strong>red</strong></span> <span>start RGB <code>[132, 123, 182.66666666666666]</code></span> <span>response <strong>145</strong></span> <span>|distance from start| <strong>13</strong></span><br><small>Uniform random valid RGB-channel response.</small></li>
+<li><strong>P8</strong> <span class='pill profile-random'>random</span> <span>repeat trial</span> <span>target <strong>rock</strong></span> <span>active <strong>red</strong></span> <span>start RGB <code>[132, 123, 182.66666666666666]</code></span> <span>response <strong>55</strong></span> <span>|distance from start| <strong>77</strong></span><br><small>Uniform random valid RGB-channel response.</small></li>
+<li><strong>P10</strong> <span class='pill profile-random'>random</span> <span>main trial</span> <span>target <strong>rock</strong></span> <span>active <strong>red</strong></span> <span>start RGB <code>[132, 123, 182.66666666666666]</code></span> <span>response <strong>74</strong></span> <span>|distance from start| <strong>58</strong></span><br><small>Uniform random valid RGB-channel response.</small></li>
+<li><strong>P10</strong> <span class='pill profile-random'>random</span> <span>repeat trial</span> <span>target <strong>rock</strong></span> <span>active <strong>red</strong></span> <span>start RGB <code>[132, 123, 182.66666666666666]</code></span> <span>response <strong>45</strong></span> <span>|distance from start| <strong>87</strong></span><br><small>Uniform random valid RGB-channel response.</small></li></ul>
+          </details>
+          
+        </div>
+      </details>
+    </li>
+    </ul>
+        </div>
+      </details>
+    </li>
+    </ul>
+            </section>
+            
+            <section class="network-card profile-mixed">
+              <h2>Network 4: target rock, group B</h2>
+              <p>
+                <span class="pill profile-mixed">mixed</span>
+                normal_rgb: 6, random: 2
+              </p>
+              <ul class="tree">
+    <li class="tree-item profile-mixed">
+      <details open>
+        <summary>
+          <span class="node-dot"></span>
+          <strong>Node 4</strong>
+          <span>degree 0</span>
+          <span>group B</span>
+          <span>target rock</span>
+          <span>active blue</span>
+          <span class="pill profile-mixed">mixed</span>
+          <span class="counts">normal_rgb: 3, random: 2</span>
+        </summary>
+        <div class="node-body">
+          <p class="curated">Curated summary: Node contains trials from both simulated response profiles.</p>
+          <details>
+            <summary>Trials: participant ID, response, profile behavior</summary>
+            <ul class="trial-list"><li><strong>P1</strong> <span class='pill profile-normal'>normal_rgb</span> <span>main trial</span> <span>target <strong>rock</strong></span> <span>active <strong>blue</strong></span> <span>start RGB <code>[145, 33, 153]</code></span> <span>response <strong>168</strong></span> <span>|distance from start| <strong>15</strong></span><br><small>Normal sample around the presented active-channel value (SD 20 RGB units), clipped to 0-255.</small></li>
+<li><strong>P1</strong> <span class='pill profile-normal'>normal_rgb</span> <span>repeat trial</span> <span>target <strong>rock</strong></span> <span>active <strong>blue</strong></span> <span>start RGB <code>[145, 33, 153]</code></span> <span>response <strong>192</strong></span> <span>|distance from start| <strong>39</strong></span><br><small>Normal sample around the presented active-channel value (SD 20 RGB units), clipped to 0-255.</small></li>
+<li><strong>P3</strong> <span class='pill profile-normal'>normal_rgb</span> <span>main trial</span> <span>target <strong>rock</strong></span> <span>active <strong>blue</strong></span> <span>start RGB <code>[145, 33, 214]</code></span> <span>response <strong>250</strong></span> <span>|distance from start| <strong>36</strong></span><br><small>Normal sample around the presented active-channel value (SD 20 RGB units), clipped to 0-255.</small></li>
+<li><strong>P5</strong> <span class='pill profile-random'>random</span> <span>main trial</span> <span>target <strong>rock</strong></span> <span>active <strong>blue</strong></span> <span>start RGB <code>[145, 33, 143]</code></span> <span>response <strong>128</strong></span> <span>|distance from start| <strong>15</strong></span><br><small>Uniform random valid RGB-channel response.</small></li>
+<li><strong>P5</strong> <span class='pill profile-random'>random</span> <span>repeat trial</span> <span>target <strong>rock</strong></span> <span>active <strong>blue</strong></span> <span>start RGB <code>[145, 33, 143]</code></span> <span>response <strong>163</strong></span> <span>|distance from start| <strong>20</strong></span><br><small>Uniform random valid RGB-channel response.</small></li></ul>
+          </details>
+          <ul class="tree">
+    <li class="tree-item profile-normal">
+      <details open>
+        <summary>
+          <span class="node-dot"></span>
+          <strong>Node 10</strong>
+          <span>degree 1</span>
+          <span>group B</span>
+          <span>target rock</span>
+          <span>active red</span>
+          <span class="pill profile-normal">normal_rgb</span>
+          <span class="counts">normal_rgb: 3</span>
+        </summary>
+        <div class="node-body">
+          <p class="curated">Curated summary: Normal sample around the presented active-channel value (SD 20 RGB units), clipped to 0-255.</p>
+          <details>
+            <summary>Trials: participant ID, response, profile behavior</summary>
+            <ul class="trial-list"><li><strong>P7</strong> <span class='pill profile-normal'>normal_rgb</span> <span>main trial</span> <span>target <strong>rock</strong></span> <span>active <strong>red</strong></span> <span>start RGB <code>[42, 33, 182]</code></span> <span>response <strong>31</strong></span> <span>|distance from start| <strong>11</strong></span><br><small>Normal sample around the presented active-channel value (SD 20 RGB units), clipped to 0-255.</small></li>
+<li><strong>P7</strong> <span class='pill profile-normal'>normal_rgb</span> <span>repeat trial</span> <span>target <strong>rock</strong></span> <span>active <strong>red</strong></span> <span>start RGB <code>[42, 33, 182]</code></span> <span>response <strong>16</strong></span> <span>|distance from start| <strong>26</strong></span><br><small>Normal sample around the presented active-channel value (SD 20 RGB units), clipped to 0-255.</small></li>
+<li><strong>P9</strong> <span class='pill profile-normal'>normal_rgb</span> <span>main trial</span> <span>target <strong>rock</strong></span> <span>active <strong>red</strong></span> <span>start RGB <code>[15, 33, 182]</code></span> <span>response <strong>12</strong></span> <span>|distance from start| <strong>3</strong></span><br><small>Normal sample around the presented active-channel value (SD 20 RGB units), clipped to 0-255.</small></li></ul>
+          </details>
+          
+        </div>
+      </details>
+    </li>
+    </ul>
+        </div>
+      </details>
+    </li>
+    </ul>
+            </section>
+            
+            <section class="network-card profile-mixed">
+              <h2>Network 5: target carrot, group A</h2>
+              <p>
+                <span class="pill profile-mixed">mixed</span>
+                normal_rgb: 2, random: 7
+              </p>
+              <ul class="tree">
+    <li class="tree-item profile-mixed">
+      <details open>
+        <summary>
+          <span class="node-dot"></span>
+          <strong>Node 5</strong>
+          <span>degree 0</span>
+          <span>group A</span>
+          <span>target carrot</span>
+          <span>active green</span>
+          <span class="pill profile-mixed">mixed</span>
+          <span class="counts">normal_rgb: 2, random: 4</span>
+        </summary>
+        <div class="node-body">
+          <p class="curated">Curated summary: Node contains trials from both simulated response profiles.</p>
+          <details>
+            <summary>Trials: participant ID, response, profile behavior</summary>
+            <ul class="trial-list"><li><strong>P2</strong> <span class='pill profile-normal'>normal_rgb</span> <span>main trial</span> <span>target <strong>carrot</strong></span> <span>active <strong>green</strong></span> <span>start RGB <code>[5, 180, 52]</code></span> <span>response <strong>199</strong></span> <span>|distance from start| <strong>19</strong></span><br><small>Normal sample around the presented active-channel value (SD 20 RGB units), clipped to 0-255.</small></li>
+<li><strong>P2</strong> <span class='pill profile-normal'>normal_rgb</span> <span>repeat trial</span> <span>target <strong>carrot</strong></span> <span>active <strong>green</strong></span> <span>start RGB <code>[5, 180, 52]</code></span> <span>response <strong>184</strong></span> <span>|distance from start| <strong>4</strong></span><br><small>Normal sample around the presented active-channel value (SD 20 RGB units), clipped to 0-255.</small></li>
+<li><strong>P4</strong> <span class='pill profile-random'>random</span> <span>main trial</span> <span>target <strong>carrot</strong></span> <span>active <strong>green</strong></span> <span>start RGB <code>[5, 216, 52]</code></span> <span>response <strong>99</strong></span> <span>|distance from start| <strong>117</strong></span><br><small>Uniform random valid RGB-channel response.</small></li>
+<li><strong>P4</strong> <span class='pill profile-random'>random</span> <span>repeat trial</span> <span>target <strong>carrot</strong></span> <span>active <strong>green</strong></span> <span>start RGB <code>[5, 216, 52]</code></span> <span>response <strong>86</strong></span> <span>|distance from start| <strong>130</strong></span><br><small>Uniform random valid RGB-channel response.</small></li>
+<li><strong>P6</strong> <span class='pill profile-random'>random</span> <span>main trial</span> <span>target <strong>carrot</strong></span> <span>active <strong>green</strong></span> <span>start RGB <code>[5, 203, 52]</code></span> <span>response <strong>91</strong></span> <span>|distance from start| <strong>112</strong></span><br><small>Uniform random valid RGB-channel response.</small></li>
+<li><strong>P6</strong> <span class='pill profile-random'>random</span> <span>repeat trial</span> <span>target <strong>carrot</strong></span> <span>active <strong>green</strong></span> <span>start RGB <code>[5, 203, 52]</code></span> <span>response <strong>2</strong></span> <span>|distance from start| <strong>201</strong></span><br><small>Uniform random valid RGB-channel response.</small></li></ul>
+          </details>
+          <ul class="tree">
+    <li class="tree-item profile-random">
+      <details open>
+        <summary>
+          <span class="node-dot"></span>
+          <strong>Node 16</strong>
+          <span>degree 1</span>
+          <span>group A</span>
+          <span>target carrot</span>
+          <span>active blue</span>
+          <span class="pill profile-random">random</span>
+          <span class="counts">random: 3</span>
+        </summary>
+        <div class="node-body">
+          <p class="curated">Curated summary: Uniform random valid RGB-channel response.</p>
+          <details>
+            <summary>Trials: participant ID, response, profile behavior</summary>
+            <ul class="trial-list"><li><strong>P8</strong> <span class='pill profile-random'>random</span> <span>main trial</span> <span>target <strong>carrot</strong></span> <span>active <strong>blue</strong></span> <span>start RGB <code>[5, 129.66666666666666, 65]</code></span> <span>response <strong>69</strong></span> <span>|distance from start| <strong>4</strong></span><br><small>Uniform random valid RGB-channel response.</small></li>
+<li><strong>P10</strong> <span class='pill profile-random'>random</span> <span>main trial</span> <span>target <strong>carrot</strong></span> <span>active <strong>blue</strong></span> <span>start RGB <code>[5, 129.66666666666666, 255]</code></span> <span>response <strong>72</strong></span> <span>|distance from start| <strong>183</strong></span><br><small>Uniform random valid RGB-channel response.</small></li>
+<li><strong>P10</strong> <span class='pill profile-random'>random</span> <span>repeat trial</span> <span>target <strong>carrot</strong></span> <span>active <strong>blue</strong></span> <span>start RGB <code>[5, 129.66666666666666, 255]</code></span> <span>response <strong>240</strong></span> <span>|distance from start| <strong>15</strong></span><br><small>Uniform random valid RGB-channel response.</small></li></ul>
+          </details>
+          
+        </div>
+      </details>
+    </li>
+    </ul>
+        </div>
+      </details>
+    </li>
+    </ul>
+            </section>
+            
+            <section class="network-card profile-mixed">
+              <h2>Network 6: target carrot, group B</h2>
+              <p>
+                <span class="pill profile-mixed">mixed</span>
+                normal_rgb: 8, random: 1
+              </p>
+              <ul class="tree">
+    <li class="tree-item profile-mixed">
+      <details open>
+        <summary>
+          <span class="node-dot"></span>
+          <strong>Node 6</strong>
+          <span>degree 0</span>
+          <span>group B</span>
+          <span>target carrot</span>
+          <span>active red</span>
+          <span class="pill profile-mixed">mixed</span>
+          <span class="counts">normal_rgb: 4, random: 1</span>
+        </summary>
+        <div class="node-body">
+          <p class="curated">Curated summary: Node contains trials from both simulated response profiles.</p>
+          <details>
+            <summary>Trials: participant ID, response, profile behavior</summary>
+            <ul class="trial-list"><li><strong>P1</strong> <span class='pill profile-normal'>normal_rgb</span> <span>main trial</span> <span>target <strong>carrot</strong></span> <span>active <strong>red</strong></span> <span>start RGB <code>[8, 158, 194]</code></span> <span>response <strong>6</strong></span> <span>|distance from start| <strong>2</strong></span><br><small>Normal sample around the presented active-channel value (SD 20 RGB units), clipped to 0-255.</small></li>
+<li><strong>P1</strong> <span class='pill profile-normal'>normal_rgb</span> <span>repeat trial</span> <span>target <strong>carrot</strong></span> <span>active <strong>red</strong></span> <span>start RGB <code>[8, 158, 194]</code></span> <span>response <strong>23</strong></span> <span>|distance from start| <strong>15</strong></span><br><small>Normal sample around the presented active-channel value (SD 20 RGB units), clipped to 0-255.</small></li>
+<li><strong>P3</strong> <span class='pill profile-normal'>normal_rgb</span> <span>main trial</span> <span>target <strong>carrot</strong></span> <span>active <strong>red</strong></span> <span>start RGB <code>[165, 158, 194]</code></span> <span>response <strong>171</strong></span> <span>|distance from start| <strong>6</strong></span><br><small>Normal sample around the presented active-channel value (SD 20 RGB units), clipped to 0-255.</small></li>
+<li><strong>P3</strong> <span class='pill profile-normal'>normal_rgb</span> <span>repeat trial</span> <span>target <strong>carrot</strong></span> <span>active <strong>red</strong></span> <span>start RGB <code>[165, 158, 194]</code></span> <span>response <strong>197</strong></span> <span>|distance from start| <strong>32</strong></span><br><small>Normal sample around the presented active-channel value (SD 20 RGB units), clipped to 0-255.</small></li>
+<li><strong>P5</strong> <span class='pill profile-random'>random</span> <span>main trial</span> <span>target <strong>carrot</strong></span> <span>active <strong>red</strong></span> <span>start RGB <code>[146, 158, 194]</code></span> <span>response <strong>182</strong></span> <span>|distance from start| <strong>36</strong></span><br><small>Uniform random valid RGB-channel response.</small></li></ul>
+          </details>
+          <ul class="tree">
+    <li class="tree-item profile-normal">
+      <details open>
+        <summary>
+          <span class="node-dot"></span>
+          <strong>Node 9</strong>
+          <span>degree 1</span>
+          <span>group B</span>
+          <span>target carrot</span>
+          <span>active green</span>
+          <span class="pill profile-normal">normal_rgb</span>
+          <span class="counts">normal_rgb: 4</span>
+        </summary>
+        <div class="node-body">
+          <p class="curated">Curated summary: Normal sample around the presented active-channel value (SD 20 RGB units), clipped to 0-255.</p>
+          <details>
+            <summary>Trials: participant ID, response, profile behavior</summary>
+            <ul class="trial-list"><li><strong>P7</strong> <span class='pill profile-normal'>normal_rgb</span> <span>main trial</span> <span>target <strong>carrot</strong></span> <span>active <strong>green</strong></span> <span>start RGB <code>[119.66666666666667, 221, 194]</code></span> <span>response <strong>194</strong></span> <span>|distance from start| <strong>27</strong></span><br><small>Normal sample around the presented active-channel value (SD 20 RGB units), clipped to 0-255.</small></li>
+<li><strong>P7</strong> <span class='pill profile-normal'>normal_rgb</span> <span>repeat trial</span> <span>target <strong>carrot</strong></span> <span>active <strong>green</strong></span> <span>start RGB <code>[119.66666666666667, 221, 194]</code></span> <span>response <strong>231</strong></span> <span>|distance from start| <strong>10</strong></span><br><small>Normal sample around the presented active-channel value (SD 20 RGB units), clipped to 0-255.</small></li>
+<li><strong>P9</strong> <span class='pill profile-normal'>normal_rgb</span> <span>main trial</span> <span>target <strong>carrot</strong></span> <span>active <strong>green</strong></span> <span>start RGB <code>[119.66666666666667, 2, 194]</code></span> <span>response <strong>9</strong></span> <span>|distance from start| <strong>7</strong></span><br><small>Normal sample around the presented active-channel value (SD 20 RGB units), clipped to 0-255.</small></li>
+<li><strong>P9</strong> <span class='pill profile-normal'>normal_rgb</span> <span>repeat trial</span> <span>target <strong>carrot</strong></span> <span>active <strong>green</strong></span> <span>start RGB <code>[119.66666666666667, 2, 194]</code></span> <span>response <strong>0</strong></span> <span>|distance from start| <strong>2</strong></span><br><small>Normal sample around the presented active-channel value (SD 20 RGB units), clipped to 0-255.</small></li></ul>
+          </details>
+          
+        </div>
+      </details>
+    </li>
+    </ul>
+        </div>
+      </details>
+    </li>
+    </ul>
+            </section>
+            
+            <section class="network-card profile-mixed">
+              <h2>Network 7: target banana, group A</h2>
+              <p>
+                <span class="pill profile-mixed">mixed</span>
+                normal_rgb: 2, random: 7
+              </p>
+              <ul class="tree">
+    <li class="tree-item profile-mixed">
+      <details open>
+        <summary>
+          <span class="node-dot"></span>
+          <strong>Node 7</strong>
+          <span>degree 0</span>
+          <span>group A</span>
+          <span>target banana</span>
+          <span>active blue</span>
+          <span class="pill profile-mixed">mixed</span>
+          <span class="counts">normal_rgb: 2, random: 4</span>
+        </summary>
+        <div class="node-body">
+          <p class="curated">Curated summary: Node contains trials from both simulated response profiles.</p>
+          <details>
+            <summary>Trials: participant ID, response, profile behavior</summary>
+            <ul class="trial-list"><li><strong>P2</strong> <span class='pill profile-normal'>normal_rgb</span> <span>main trial</span> <span>target <strong>banana</strong></span> <span>active <strong>blue</strong></span> <span>start RGB <code>[41, 207, 170]</code></span> <span>response <strong>179</strong></span> <span>|distance from start| <strong>9</strong></span><br><small>Normal sample around the presented active-channel value (SD 20 RGB units), clipped to 0-255.</small></li>
+<li><strong>P2</strong> <span class='pill profile-normal'>normal_rgb</span> <span>repeat trial</span> <span>target <strong>banana</strong></span> <span>active <strong>blue</strong></span> <span>start RGB <code>[41, 207, 170]</code></span> <span>response <strong>135</strong></span> <span>|distance from start| <strong>35</strong></span><br><small>Normal sample around the presented active-channel value (SD 20 RGB units), clipped to 0-255.</small></li>
+<li><strong>P4</strong> <span class='pill profile-random'>random</span> <span>main trial</span> <span>target <strong>banana</strong></span> <span>active <strong>blue</strong></span> <span>start RGB <code>[41, 207, 52]</code></span> <span>response <strong>131</strong></span> <span>|distance from start| <strong>79</strong></span><br><small>Uniform random valid RGB-channel response.</small></li>
+<li><strong>P4</strong> <span class='pill profile-random'>random</span> <span>repeat trial</span> <span>target <strong>banana</strong></span> <span>active <strong>blue</strong></span> <span>start RGB <code>[41, 207, 52]</code></span> <span>response <strong>57</strong></span> <span>|distance from start| <strong>5</strong></span><br><small>Uniform random valid RGB-channel response.</small></li>
+<li><strong>P6</strong> <span class='pill profile-random'>random</span> <span>main trial</span> <span>target <strong>banana</strong></span> <span>active <strong>blue</strong></span> <span>start RGB <code>[41, 207, 54]</code></span> <span>response <strong>174</strong></span> <span>|distance from start| <strong>120</strong></span><br><small>Uniform random valid RGB-channel response.</small></li>
+<li><strong>P6</strong> <span class='pill profile-random'>random</span> <span>repeat trial</span> <span>target <strong>banana</strong></span> <span>active <strong>blue</strong></span> <span>start RGB <code>[41, 207, 54]</code></span> <span>response <strong>188</strong></span> <span>|distance from start| <strong>134</strong></span><br><small>Uniform random valid RGB-channel response.</small></li></ul>
+          </details>
+          <ul class="tree">
+    <li class="tree-item profile-random">
+      <details open>
+        <summary>
+          <span class="node-dot"></span>
+          <strong>Node 14</strong>
+          <span>degree 1</span>
+          <span>group A</span>
+          <span>target banana</span>
+          <span>active red</span>
+          <span class="pill profile-random">random</span>
+          <span class="counts">random: 3</span>
+        </summary>
+        <div class="node-body">
+          <p class="curated">Curated summary: Uniform random valid RGB-channel response.</p>
+          <details>
+            <summary>Trials: participant ID, response, profile behavior</summary>
+            <ul class="trial-list"><li><strong>P8</strong> <span class='pill profile-random'>random</span> <span>main trial</span> <span>target <strong>banana</strong></span> <span>active <strong>red</strong></span> <span>start RGB <code>[14, 207, 161.33333333333334]</code></span> <span>response <strong>255</strong></span> <span>|distance from start| <strong>241</strong></span><br><small>Uniform random valid RGB-channel response.</small></li>
+<li><strong>P8</strong> <span class='pill profile-random'>random</span> <span>repeat trial</span> <span>target <strong>banana</strong></span> <span>active <strong>red</strong></span> <span>start RGB <code>[14, 207, 161.33333333333334]</code></span> <span>response <strong>18</strong></span> <span>|distance from start| <strong>4</strong></span><br><small>Uniform random valid RGB-channel response.</small></li>
+<li><strong>P10</strong> <span class='pill profile-random'>random</span> <span>main trial</span> <span>target <strong>banana</strong></span> <span>active <strong>red</strong></span> <span>start RGB <code>[156, 207, 161.33333333333334]</code></span> <span>response <strong>76</strong></span> <span>|distance from start| <strong>80</strong></span><br><small>Uniform random valid RGB-channel response.</small></li></ul>
+          </details>
+          
+        </div>
+      </details>
+    </li>
+    </ul>
+        </div>
+      </details>
+    </li>
+    </ul>
+            </section>
+            
+            <section class="network-card profile-mixed">
+              <h2>Network 8: target banana, group B</h2>
+              <p>
+                <span class="pill profile-mixed">mixed</span>
+                normal_rgb: 7, random: 2
+              </p>
+              <ul class="tree">
+    <li class="tree-item profile-mixed">
+      <details open>
+        <summary>
+          <span class="node-dot"></span>
+          <strong>Node 8</strong>
+          <span>degree 0</span>
+          <span>group B</span>
+          <span>target banana</span>
+          <span>active green</span>
+          <span class="pill profile-mixed">mixed</span>
+          <span class="counts">normal_rgb: 3, random: 2</span>
+        </summary>
+        <div class="node-body">
+          <p class="curated">Curated summary: Node contains trials from both simulated response profiles.</p>
+          <details>
+            <summary>Trials: participant ID, response, profile behavior</summary>
+            <ul class="trial-list"><li><strong>P1</strong> <span class='pill profile-normal'>normal_rgb</span> <span>main trial</span> <span>target <strong>banana</strong></span> <span>active <strong>green</strong></span> <span>start RGB <code>[188, 189, 67]</code></span> <span>response <strong>184</strong></span> <span>|distance from start| <strong>5</strong></span><br><small>Normal sample around the presented active-channel value (SD 20 RGB units), clipped to 0-255.</small></li>
+<li><strong>P3</strong> <span class='pill profile-normal'>normal_rgb</span> <span>main trial</span> <span>target <strong>banana</strong></span> <span>active <strong>green</strong></span> <span>start RGB <code>[188, 89, 67]</code></span> <span>response <strong>102</strong></span> <span>|distance from start| <strong>13</strong></span><br><small>Normal sample around the presented active-channel value (SD 20 RGB units), clipped to 0-255.</small></li>
+<li><strong>P3</strong> <span class='pill profile-normal'>normal_rgb</span> <span>repeat trial</span> <span>target <strong>banana</strong></span> <span>active <strong>green</strong></span> <span>start RGB <code>[188, 89, 67]</code></span> <span>response <strong>94</strong></span> <span>|distance from start| <strong>5</strong></span><br><small>Normal sample around the presented active-channel value (SD 20 RGB units), clipped to 0-255.</small></li>
+<li><strong>P5</strong> <span class='pill profile-random'>random</span> <span>main trial</span> <span>target <strong>banana</strong></span> <span>active <strong>green</strong></span> <span>start RGB <code>[188, 130, 67]</code></span> <span>response <strong>237</strong></span> <span>|distance from start| <strong>107</strong></span><br><small>Uniform random valid RGB-channel response.</small></li>
+<li><strong>P5</strong> <span class='pill profile-random'>random</span> <span>repeat trial</span> <span>target <strong>banana</strong></span> <span>active <strong>green</strong></span> <span>start RGB <code>[188, 130, 67]</code></span> <span>response <strong>139</strong></span> <span>|distance from start| <strong>9</strong></span><br><small>Uniform random valid RGB-channel response.</small></li></ul>
+          </details>
+          <ul class="tree">
+    <li class="tree-item profile-normal">
+      <details open>
+        <summary>
+          <span class="node-dot"></span>
+          <strong>Node 11</strong>
+          <span>degree 1</span>
+          <span>group B</span>
+          <span>target banana</span>
+          <span>active blue</span>
+          <span class="pill profile-normal">normal_rgb</span>
+          <span class="counts">normal_rgb: 4</span>
+        </summary>
+        <div class="node-body">
+          <p class="curated">Curated summary: Normal sample around the presented active-channel value (SD 20 RGB units), clipped to 0-255.</p>
+          <details>
+            <summary>Trials: participant ID, response, profile behavior</summary>
+            <ul class="trial-list"><li><strong>P7</strong> <span class='pill profile-normal'>normal_rgb</span> <span>main trial</span> <span>target <strong>banana</strong></span> <span>active <strong>blue</strong></span> <span>start RGB <code>[188, 174.33333333333334, 171]</code></span> <span>response <strong>166</strong></span> <span>|distance from start| <strong>5</strong></span><br><small>Normal sample around the presented active-channel value (SD 20 RGB units), clipped to 0-255.</small></li>
+<li><strong>P7</strong> <span class='pill profile-normal'>normal_rgb</span> <span>repeat trial</span> <span>target <strong>banana</strong></span> <span>active <strong>blue</strong></span> <span>start RGB <code>[188, 174.33333333333334, 171]</code></span> <span>response <strong>159</strong></span> <span>|distance from start| <strong>12</strong></span><br><small>Normal sample around the presented active-channel value (SD 20 RGB units), clipped to 0-255.</small></li>
+<li><strong>P9</strong> <span class='pill profile-normal'>normal_rgb</span> <span>main trial</span> <span>target <strong>banana</strong></span> <span>active <strong>blue</strong></span> <span>start RGB <code>[188, 174.33333333333334, 214]</code></span> <span>response <strong>223</strong></span> <span>|distance from start| <strong>9</strong></span><br><small>Normal sample around the presented active-channel value (SD 20 RGB units), clipped to 0-255.</small></li>
+<li><strong>P9</strong> <span class='pill profile-normal'>normal_rgb</span> <span>repeat trial</span> <span>target <strong>banana</strong></span> <span>active <strong>blue</strong></span> <span>start RGB <code>[188, 174.33333333333334, 214]</code></span> <span>response <strong>197</strong></span> <span>|distance from start| <strong>17</strong></span><br><small>Normal sample around the presented active-channel value (SD 20 RGB units), clipped to 0-255.</small></li></ul>
+          </details>
+          
+        </div>
+      </details>
+    </li>
+    </ul>
+        </div>
+      </details>
+    </li>
+    </ul>
+            </section>
+            
+</body>
+</html>

@@ -24,6 +24,7 @@ The original participant-group behavior remains separate from response profile a
 - `evidence/analyses/analysis.ipynb` reads the exported CSVs directly and embeds tables, plots, and interpretation.
 - `evidence/performance.json` contains the 5-minute local performance-test output.
 - `evidence/monitor.html` contains a local PsyNet dashboard monitor snapshot.
+- `evidence/curated_profile_monitor.html` contains a profile-colored node/trial tree with curated participant id, response, and profile behavior summaries.
 
 Observed completed-participant profile distribution:
 
