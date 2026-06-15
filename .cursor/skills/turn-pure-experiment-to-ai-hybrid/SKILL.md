@@ -13,6 +13,9 @@ human participants into an AI-assisted or mixed human-AI experiment.
 
 - For local mock or stochastic participant profiles before live hybrid launch,
   read `psynet-simulated-participants/SKILL.md`.
+- For target participant distributions, bot profile mixes, live human-AI
+  scheduler validation, or monitor-style distribution reports, read
+  `simulated-participant-scheduling/SKILL.md`.
 - Start from the pure-human experiment and identify the participant-facing task,
   stimuli, instructions, response format, trial maker, recruitment target, and
   trial capacity.

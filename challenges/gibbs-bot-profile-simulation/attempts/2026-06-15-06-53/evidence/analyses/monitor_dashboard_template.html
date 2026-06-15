@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>{{ page_title }}</title>
+  <link rel="stylesheet" href="{{ bootstrap_css_url }}">
+  <link rel="stylesheet" href="{{ vis_network_css_url }}">
+  <style>
+    #monitor-wrapper { gap: 1rem; }
+    #mynetwork { height: 720px; border: 1px solid #dee2e6; border-radius: .25rem; background: #f8f9fa; margin-bottom: 1rem; }
+    #details-pane { border: 1px solid #dee2e6; border-radius: .25rem; padding: 1rem; margin-bottom: 1rem; background: #fff; }
+    aside#sidebar { width: 320px; min-width: 280px; }
+    .sidebar-pane { border: 1px solid #dee2e6; border-radius: .25rem; margin-bottom: 1rem; padding: .75rem; background: #f8f9fa; }
+    .profile-pill { border-radius: 999px; color: white; display: inline-block; font-size: .78rem; font-weight: 700; padding: .12rem .5rem; }
+    .curated-table th { width: 12rem; color: #495057; }
+    .curated-card { border-left: 5px solid #dee2e6; padding: .75rem 1rem; margin: .75rem 0; background: #f8f9fa; }
+    .network-expander { border: 1px solid #dee2e6; border-radius: .25rem; margin: .5rem 0; padding: .5rem .75rem; background: #fff; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <nav id="dashboard-navigation">{{ dashboard_nav_html }}</nav>
+    <h1>{{ heading }}</h1>
+    <p>{{ description_html }}</p>
+    <div id="monitor-wrapper" class="d-flex justify-content-between align-items-stretch">
+      <main class="flex-fill">
+        <section id="monitor-controls">{{ controls_html }}</section>
+        <section id="statistics" class="collapse show p-3 bg-light">{{ statistics_html }}</section>
+        <section id="advanced-filter" class="collapse show p-3 bg-light">{{ filters_html }}</section>
+        <section id="mynetwork"></section>
+        <section id="details-pane">
+          <h2>Details</h2>
+          <div id="element-details">{{ initial_detail_html }}</div>
+        </section>
+        <section id="summary-accordion">{{ expandable_summaries_html }}</section>
+      </main>
+      <aside id="sidebar">{{ sidebar_html }}</aside>
+    </div>
+  </div>
+  <script src="{{ vis_network_js_url }}"></script>
+  <script>
+    const graphNodes = {{ graph_nodes_json }};
+    const graphEdges = {{ graph_edges_json }};
+    const detailHtmlById = {{ detail_html_by_id_json }};
+
+    function renderMonitor() {
+      const data = {
+        nodes: new vis.DataSet(graphNodes),
+        edges: new vis.DataSet(graphEdges)
+      };
+      const options = {{ vis_options_json }};
+      const network = new vis.Network(document.getElementById("mynetwork"), data, options);
+      network.on("select", (params) => {
+        if (!params.nodes.length) return;
+        const node = data.nodes.get(params.nodes[0]);
+        document.getElementById("element-details").innerHTML =
+          detailHtmlById[node.detailId] || "{{ empty_detail_html }}";
+      });
+    }
+
+    window.addEventListener("load", renderMonitor);
+  </script>
+</body>
+</html>
