@@ -73,6 +73,11 @@ Follow the general workflow in `psynet-experiment-implementation/SKILL.md`.
   neutralize the progress bar along with buttons and other UI chrome, for
   example by adding page CSS for `#timeline-progress-bar` and `.progress`.
 
+- Verify neutral UI chrome in the final participant screenshot or video. For
+  PsyNet pages, target the actual header selectors, including
+  `#timeline-progress-bar`, `.progress-bar[role="progressbar"]`, and
+  `.header .progress`, not only response-button classes.
+
 ## Reaction time from the native event log
 
 Reaction time can usually be recorded without any bespoke timing JavaScript. Drive
