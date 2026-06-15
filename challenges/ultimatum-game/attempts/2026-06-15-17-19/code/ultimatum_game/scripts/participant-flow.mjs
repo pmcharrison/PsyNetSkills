@@ -10,6 +10,8 @@ const EVIDENCE_DIR = path.resolve(
   process.env.EVIDENCE_DIR || "../../evidence/screenshots",
 );
 const HEADLESS = process.env.HEADLESS !== "0";
+const VIEWPORT_WIDTH = Number(process.env.VIEWPORT_WIDTH || 640);
+const VIEWPORT_HEIGHT = Number(process.env.VIEWPORT_HEIGHT || 720);
 
 const offers = [5, 2, 7, 4, 6, 3, 5, 8, 1, 5];
 const decisions = [
@@ -34,11 +36,13 @@ async function launchParticipant(name, x) {
       "--no-sandbox",
       "--disable-dev-shm-usage",
       "--use-gl=swiftshader",
-      "--window-size=640,720",
+      `--window-size=${VIEWPORT_WIDTH},${VIEWPORT_HEIGHT}`,
       `--window-position=${x},0`,
     ],
   });
-  const page = await browser.newPage({ viewport: { width: 640, height: 720 } });
+  const page = await browser.newPage({
+    viewport: { width: VIEWPORT_WIDTH, height: VIEWPORT_HEIGHT },
+  });
   page.setDefaultTimeout(45000);
   page.on("console", (msg) => {
     if (msg.type() === "error") console.log(`[${name}] ${msg.text()}`);
@@ -164,7 +168,7 @@ async function playRound(p1, p2, roundIndex) {
 
 async function main() {
   const p1 = await launchParticipant("participant-1", 0);
-  const p2 = await launchParticipant("participant-2", 640);
+  const p2 = await launchParticipant("participant-2", VIEWPORT_WIDTH);
   try {
     await Promise.all([reachInstructions(p1), reachInstructions(p2)]);
     await Promise.all([clickTimedButton(p1, "Begin"), clickTimedButton(p2, "Begin")]);
