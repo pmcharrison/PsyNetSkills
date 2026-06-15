@@ -15,6 +15,8 @@ specification.
   framework APIs to copy.
 - Read `references/validation.md` before finalizing functional, interactive, or
   performance checks.
+- Read `psynet-simulated-participants/SKILL.md` before designing multi-profile,
+  stochastic, mock-LLM, or export-validation simulations.
 
 ## Preview links
 
@@ -67,6 +69,8 @@ Use the develop-experiment-code skill to implement the experiment.
 Use `psynet simulate` to simulate participants and produce an example dataset.
 This dataset should contain a decent number of participants representative of a real study;
 adjust `Exp.test_n_bots` to ensure this. Save the simulated export at `evidence/simulated_data.zip`.
+For profile design, data-path parity, mock-LLM patterns, and simulation
+limitations, follow `psynet-simulated-participants/SKILL.md`.
 
 ### Develop analysis scripts
 
