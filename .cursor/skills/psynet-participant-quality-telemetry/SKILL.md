@@ -1,7 +1,7 @@
 ---
 name: psynet-participant-quality-telemetry
 description: Implement PsyNet-native participant quality and AI-assistance telemetry for text-heavy or response-quality-sensitive experiments.
-authors: [ww577]
+authors: [williambotticelli-wells]
 ---
 
 # PsyNet participant quality telemetry

@@ -1,7 +1,7 @@
 ---
 name: psynet-tapping-experiments
 description: Implement PsyNet tapping, rhythm, beat perception, and sensorimotor synchronization experiments with audio recording, calibration, export checks, and conservative interpretation.
-authors: [ww577]
+authors: [williambotticelli-wells]
 ---
 
 # PsyNet tapping experiments
