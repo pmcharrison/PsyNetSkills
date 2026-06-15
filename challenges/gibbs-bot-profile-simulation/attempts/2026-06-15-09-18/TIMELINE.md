@@ -22,3 +22,8 @@
 - T+00:42:10 [agent-start] Resumed to update the skill and regenerate `evidence/monitor.html` as a profile-colored monitor dashboard.
 - T+00:44:00 [agent] Updated the scheduling skill and regenerated `evidence/monitor.html` from the simulated export with profile labels, colors, and count legend.
 - T+00:45:00 [agent-stop] Skill update and profile-monitor evidence update complete.
+- T+00:46:00 [manual] User clarified that profile monitor output should preserve the original experiment monitor structure and color trials by participant profile.
+- T+00:46:10 [agent-start] Resumed to clarify skill wording and regenerate `evidence/monitor.html` as a Gibbs network -> node -> trial monitor.
+- T+00:48:00 [agent] Regenerated `evidence/monitor.html` with 8 network nodes, 24 Gibbs nodes, and 70 profile-colored trial nodes plus clean click-through details.
+- T+00:49:00 [agent] Manually verified `evidence/monitor.html` in the browser and recorded a walkthrough video.
+- T+00:50:00 [agent-stop] Structured profile monitor follow-up complete.

@@ -20,8 +20,9 @@ The original network capacity was too small for a 10-bot run, so `max_nodes_per_
 - `evidence/analyses/analysis.ipynb` reads `evidence/simulated_data.zip` directly, checks profile and metadata invariants, and summarizes a lightweight behavioral comparison.
 - `evidence/performance.json` records a 40-bot, 5-minute `psynet performance-test local` run with zero bot errors.
 - `evidence/monitor.html` contains a profile-colored monitor dashboard generated
-  from the simulated export, with participant nodes labeled by assigned bot
-  profile and a legend mapping colors to observed counts.
+  from the simulated export. It preserves the Gibbs experiment structure as
+  network -> Gibbs node -> trial, colors trial nodes by the participant profile,
+  and provides clean click-through details for networks, nodes, and trials.
 
 ## Simulation results
 

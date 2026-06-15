@@ -94,13 +94,15 @@ the actual participant distribution in the experiment. If the experiment has
 substructures, such as chains or trials, summarize the distribution over the
 substructures as well.
 
-Also generate a dashboard similar to the experiment monitor dashboard. Use
-`assets/monitor_dashboard_template.html` as a string template: load it, replace
-the `{{ ... }}` placeholders, and write the output HTML. The dashboard must make
-participant profiles visually inspectable: use distinct colors for each profile,
-include the profile label in participant/node labels or titles, include the
-profile label in each node's detail pane, and include a legend or statistics
-section that maps colors to profile labels and observed counts.
+Also generate a dashboard with the same structure as the experiment's monitor
+dashboard. Use `assets/monitor_dashboard_template.html` as a string template:
+load it, replace the `{{ ... }}` placeholders, and write the output HTML. Keep
+the experiment structure intact (for example networks, chains, nodes, trials,
+participants, rounds, or groups); do not replace it with a profile-only summary
+graph. Overlay profile information onto that structure: color trial or
+participant-specific nodes by the participant's profile, show profile labels in
+node labels or titles where useful, and include a legend or statistics section
+that maps profile colors to labels and observed counts.
 
 Build at least:
 
@@ -115,21 +117,26 @@ Build at least:
 The important contract is:
 
 - Each graph node should have a `detailId`.
-- Each participant/profile node should include a profile-specific `color`.
-- Each participant/profile node should expose a visible profile label, either in
-  its `label`, `title`, or both.
+- Graph topology should follow the experiment's own structure, such as
+  network -> node -> trial, chain -> generation -> trial, or group -> round ->
+  participant, depending on the experiment.
+- Trial or participant-specific graph nodes should include a profile-specific
+  `color` based on the participant profile that produced the data.
+- Trial or participant-specific graph nodes should expose a visible profile
+  label, either in their `label`, `title`, or both.
 - `detail_html_by_id_json` maps that `detailId` to HTML.
 - When a node is selected, the template puts that mapped HTML into
-  `#element-details`.
+  `#element-details`; keep these click-through details clean, readable, and
+  review-focused, especially for trial and node metadata.
 
 Example graph node:
 
 ```json
 {
-  "id": "node-1",
-  "label": "Participant 1\\nnormal_rgb",
-  "detailId": "node-1",
-  "title": "Participant 1 — profile: normal_rgb",
+  "id": "trial-1",
+  "label": "Trial 1\\nP1 normal_rgb",
+  "detailId": "trial-1",
+  "title": "Trial 1 - participant 1 - profile: normal_rgb",
   "color": {"background": "#4c78a8"}
 }
 ```
@@ -138,7 +145,7 @@ Example detail map:
 
 ```json
 {
-  "node-1": "<h4>Node 1</h4><p>Profile: normal_rgb</p>"
+  "trial-1": "<h4>Trial 1</h4><p>Profile: normal_rgb</p>"
 }
 ```
 

@@ -23,4 +23,4 @@ No `CRITERIA.md` file was present for this challenge when criteria review became
 ## Notes
 
 - Score and feedback should come from a human evaluator, captured conversationally when working with Cursor Cloud Agents.
-- Participant video/screenshots were not collected because the attempt changes bot scheduling, bot responses, and export metadata while preserving the original Gibbs participant interface; local bot flow, simulated export evidence, analysis, performance JSON, and the profile-colored `evidence/monitor.html` cover the requested behavior.
+- Participant video/screenshots were not collected during the original attempt because the implementation changes bot scheduling, bot responses, and export metadata while preserving the original Gibbs participant interface; local bot flow, simulated export evidence, analysis, performance JSON, and the structured profile-colored `evidence/monitor.html` cover the requested behavior.
