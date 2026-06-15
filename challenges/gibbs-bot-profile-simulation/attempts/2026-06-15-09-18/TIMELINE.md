@@ -7,3 +7,7 @@
 - T+00:03:00 [agent] Reviewed the original PsyNet Gibbs demo source, config, test scaffold, and color-slider template.
 - T+00:05:00 [agent] Created the timestamped attempt folder, challenge snapshot, metadata, and planning artifact.
 - T+00:05:30 [agent-stop] Paused for required human review of PLAN.md before implementation.
+- T+00:06:00 [manual] Human approved PLAN.md and identified `zeroada` as the author.
+- T+00:06:05 [agent-start] Resumed implementation after plan approval.
+- T+00:06:30 [agent] Copied the original PsyNet Gibbs demo into the attempt code directory.
+- T+00:12:00 [agent] Implemented profile-aware bot responses, balanced profile assignment, and automated profile assertions.

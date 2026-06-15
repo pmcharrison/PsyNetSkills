@@ -1,5 +1,7 @@
 {
-  "authors": [],
+  "authors": [
+    "zeroada"
+  ],
   "agent": "Cursor Cloud Agent",
   "client": "cursor",
   "model": "GPT-5.5",
@@ -19,7 +21,6 @@
   },
   "run_cost": null,
   "notes": [
-    "Attempt is paused at the required PLAN.md human-review gate before implementation.",
-    "authors is intentionally empty until the human provides the GitHub username to credit; identify-author requires not inferring this value."
+    "Attempt is paused at the required PLAN.md human-review gate before implementation."
   ]
 }
