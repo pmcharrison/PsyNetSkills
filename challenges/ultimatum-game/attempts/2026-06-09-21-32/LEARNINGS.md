@@ -7,8 +7,7 @@ the participant timeline. Overriding `consume` and `render` as no-ops prevents
 bot/test participants from hitting the abstract base `Elt.consume`.
 
 *Actions:*
-- **PsyNetSkills:** Add this gotcha to experiment implementation guidance for custom realtime channels. Confidence: medium. Status: considering.
-
+- **PsyNetSkills:** Add guidance that handler-only custom `WebSocketElt` subclasses for realtime channels should implement no-op `consume` and `render` methods so bots and tests do not hit abstract base methods. Confidence: medium. Impact: medium. Status: considering.
 ## Bot fallback scoring requires saved round-page answers
 
 When browser WebSockets perform live scoring, automated bot tests still need a
@@ -16,8 +15,7 @@ non-WebSocket scoring path. The round page must persist bot answers before a
 post-round `GroupBarrier` can reconstruct proposals and decisions.
 
 *Actions:*
-- **PsyNetSkills:** Document the paired pattern of WebSocket live scoring plus barrier-backed bot fallback scoring for synchronous game challenges. Confidence: high. Status: considering.
-
+- **PsyNetSkills:** Document the paired pattern of WebSocket live scoring plus barrier-backed bot fallback scoring for synchronous game challenges. Confidence: high. Impact: low. Status: considering.
 ## Synchronous game evidence should cover every timeout role and reward mapping
 
 The evaluation identified that this attempt demonstrated proposer timeout but
@@ -27,4 +25,4 @@ exercise each timed decision role and include a check tying final payment logic
 to accumulated score.
 
 *Actions:*
-- **PsyNetSkills:** Expand experiment evidence guidance for synchronous economic games to require role-specific timeout coverage and reward-to-score validation. Confidence: high. Status: considering.
+- **PsyNetSkills:** Expand experiment evidence guidance for synchronous economic games to require role-specific timeout coverage and reward-to-score validation. Confidence: high. Impact: high. Status: considering.

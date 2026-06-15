@@ -1,0 +1,36 @@
+                    List of relations
+ Schema |            Name             | Type  |   Owner   
+--------+-----------------------------+-------+-----------
+ public | asset                       | table | dallinger
+ public | asset_module_state          | table | dallinger
+ public | asset_network               | table | dallinger
+ public | asset_node                  | table | dallinger
+ public | asset_participant           | table | dallinger
+ public | asset_trial                 | table | dallinger
+ public | chat_message                | table | dallinger
+ public | chat_room_member            | table | dallinger
+ public | error                       | table | dallinger
+ public | experiment                  | table | dallinger
+ public | experiment_status           | table | dallinger
+ public | info                        | table | dallinger
+ public | lucid_rid                   | table | dallinger
+ public | lucid_status                | table | dallinger
+ public | lucid_submissions           | table | dallinger
+ public | module_state                | table | dallinger
+ public | network                     | table | dallinger
+ public | node                        | table | dallinger
+ public | notification                | table | dallinger
+ public | participant                 | table | dallinger
+ public | participant_link_barrier    | table | dallinger
+ public | participant_link_sync_group | table | dallinger
+ public | process                     | table | dallinger
+ public | question                    | table | dallinger
+ public | recruitment                 | table | dallinger
+ public | request                     | table | dallinger
+ public | response                    | table | dallinger
+ public | sync_group                  | table | dallinger
+ public | transformation              | table | dallinger
+ public | transmission                | table | dallinger
+ public | vector                      | table | dallinger
+(31 rows)
+

@@ -18,19 +18,21 @@ Default introduction: I will help turn a prose challenge idea into a dashboard-r
 2. Use the `identify-author` skill before writing metadata.
 3. Create `challenges/<slug>/INSTRUCTIONS.md` with YAML frontmatter containing
    `title`, `type`, `difficulty`, and `authors`.
-4. Turn the user's input into more formal prose. When the instructions are vague,
+4. When updating an existing challenge, refresh `INSTRUCTIONS.md` frontmatter so
+   `authors` reflects the current owner(s) before running dashboard export.
+5. Turn the user's input into more formal prose. When the instructions are vague,
    ask them about potential clarifications. We want a moderate level of detail
    similar to what one might see in the Procedure section in a psychology research article.
-5. Ask the user if they want to provide any secret evaluation criteria.
+6. Ask the user if they want to provide any secret evaluation criteria.
    If provided, these should go into `challenges/<slug>/CRITERIA.md`. Do NOT autopopulate this with inferred content, this should only be provided by the user (and neatened up by the agent).
-6. Confirm where supporting reference materials should come from. Ask first
+7. Confirm where supporting reference materials should come from. Ask first
    whether the user wants to provide materials, and ask for approval before
    searching online. Verify any paper materials against real sources; do not
    invent citations, DOIs, URLs, summaries, or bibliographic details.
-7. Put any supporting public material in `challenges/<slug>/references/`.
-8. Create `challenges/<slug>/attempts/.gitkeep`.
-9. Run `uv run psynetsk-validate` and the narrowest useful additional checks.
-10. Show the resulting text to the user and ask them to approve it; iterate if necessary.
+8. Put any supporting public material in `challenges/<slug>/references/`.
+9. Create `challenges/<slug>/attempts/.gitkeep`.
+10. Run `uv run psynetsk-validate` and the narrowest useful additional checks.
+11. Show the resulting text to the user and ask them to approve it; iterate if necessary.
 
 ## Challenge folder structure
 

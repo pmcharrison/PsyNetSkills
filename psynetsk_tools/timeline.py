@@ -8,8 +8,9 @@ from dataclasses import dataclass
 TIMELINE_ENTRY_RE = re.compile(
     r"^- (?P<timestamp>T\+\d{2}:\d{2}:\d{2}) "
     r"\[(?P<actor>agent-start|agent|agent-stop|manual|system)\] "
-    r"(?P<description>.+)$"
+    r"(?P<details>.+)$"
 )
+TIMELINE_TAG_RE = re.compile(r"^\[(?P<tag>[a-z][a-z0-9-]*)\]\s+")
 
 
 @dataclass(frozen=True)
@@ -19,6 +20,7 @@ class TimelineEntry:
     timestamp: str
     actor: str
     description: str
+    tags: list[str]
 
 
 def parse_timeline_entries(markdown: str) -> list[TimelineEntry]:
@@ -28,11 +30,17 @@ def parse_timeline_entries(markdown: str) -> list[TimelineEntry]:
         match = TIMELINE_ENTRY_RE.fullmatch(line)
         if match is None:
             continue
+        details = match.group("details")
+        tags: list[str] = []
+        while tag_match := TIMELINE_TAG_RE.match(details):
+            tags.append(tag_match.group("tag"))
+            details = details[tag_match.end() :]
         entries.append(
             TimelineEntry(
                 timestamp=match.group("timestamp"),
                 actor=match.group("actor"),
-                description=match.group("description"),
+                description=details,
+                tags=tags,
             )
         )
     return entries
@@ -76,6 +84,24 @@ def implementation_time_seconds(entries: list[TimelineEntry]) -> int | None:
     if active_start is not None or total == 0:
         return None
     return total
+
+
+def human_intervention_count(entries: list[TimelineEntry]) -> int | None:
+    """Count manual entries explicitly tagged as interventions."""
+    if not entries:
+        return None
+    return sum(
+        1
+        for entry in entries
+        if entry.actor == "manual" and "intervention" in entry.tags
+    )
+
+
+def format_human_intervention_count(count: int | None) -> str:
+    """Format a human intervention count for dashboard display."""
+    if count is None:
+        return "Not recorded"
+    return str(count)
 
 
 def format_duration(seconds: int | None) -> str:

@@ -17,7 +17,7 @@ implemented at the `ModularPage` level, for example as a reusable subclass,
 mixin, or page wrapper, rather than as logic that is specific to a single demo
 page.
 
-The participant experience should include:
+## The participant experience should include:
 
 - An information page at the beginning of the timeline that explains that the
   experiment uses video recording and tells participants to exit the experiment
@@ -32,7 +32,7 @@ The participant experience should include:
   to diagnose what happened.
 
 
-The recording and upload behavior should:
+## The recording and upload behavior should:
 
 - Use PsyNet's native event-based system so that recording commands can be
   issued with standard PsyNet events, such as `events = ...`. The default events
@@ -41,10 +41,14 @@ The recording and upload behavior should:
 - Use standard web frontend streaming techniques to capture camera video and
   upload it directly from the participant's browser to S3. Do not store the
   recording through PsyNet's existing media-management tools.
+- For upload, use **streaming mode** so that:
+  - each trial produces a single uploaded file/object in S3;
+  - upload proceeds continuously during the trial and does not wait until trial
+    end to begin.
+- If needed, the trial may wait before continuing so that streaming upload
+  finalization completes and all video content is persisted to S3.
 - Receive the appropriate S3 bucket link, upload endpoint, or signed/public
-  upload configuration from the backend. Permission management should be handled
-  through PsyNet's existing S3 management tools, and the implementation must not
-  hard-code service credentials.
+  upload configuration from the backend.
 - Save each recording under a filename derived from a backend-provided hashed
   trial-specific value. Store that hashed identifier in the trial definition and
   in the saved trial response data so that researchers can recover the matching
@@ -52,9 +56,10 @@ The recording and upload behavior should:
 - Save sufficient metadata to associate each video with the participant, trial,
   experiment session, recording start and stop events, upload status, and final
   S3 object location or error state.
-- Make sure that the implemented experiment really use S3 for upload.
+- Make sure that the implemented experiment really uses S3 for upload.
 
-The submitted evidence should demonstrate that recordings are captured for
-multiple static trials, uploaded directly to S3 or an equivalent local/test S3
-endpoint, and linked back to the corresponding PsyNet trial data through the
-hashed recording identifier and saved metadata.
+## Throughout, use this bucket:
+- Bucket name: video-recording-test-292651677991
+- Region: us-east-1
+- Base public URL: https://video-recording-test-292651677991.s3.amazonaws.com/
+- Behavior: Public unauthenticated uploads are allowed with PUT.

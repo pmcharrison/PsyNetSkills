@@ -1,0 +1,114 @@
+{
+  "files": [
+    "anonymous/",
+    "anonymous/data/",
+    "anonymous/data/ChainTrialMakerState.csv",
+    "anonymous/data/ChainVector.csv",
+    "anonymous/data/ExperimentConfig.csv",
+    "anonymous/data/ImitationChainNetwork.csv",
+    "anonymous/data/Notification.csv",
+    "anonymous/data/Participant.csv",
+    "anonymous/data/Request.csv",
+    "anonymous/data/Response.csv",
+    "anonymous/data/SpatialMemoryNode.csv",
+    "anonymous/data/SpatialMemoryTrial.csv",
+    "anonymous/database.zip",
+    "regular/",
+    "regular/data/",
+    "regular/data/ChainTrialMakerState.csv",
+    "regular/data/ChainVector.csv",
+    "regular/data/ExperimentConfig.csv",
+    "regular/data/ImitationChainNetwork.csv",
+    "regular/data/Notification.csv",
+    "regular/data/Participant.csv",
+    "regular/data/Request.csv",
+    "regular/data/Response.csv",
+    "regular/data/SpatialMemoryNode.csv",
+    "regular/data/SpatialMemoryTrial.csv",
+    "regular/database.zip"
+  ],
+  "participant_count": 1,
+  "trial_count": 3,
+  "node_count": 6,
+  "trial_shapes": [
+    "square",
+    "triangle",
+    "circle"
+  ],
+  "trial_generations": [
+    0,
+    0,
+    0
+  ],
+  "click_coordinates": [
+    [
+      31.713846572169047,
+      32.040594749825324
+    ],
+    [
+      49.971616425676935,
+      34.009569930105584
+    ],
+    [
+      34.57781047075852,
+      34.90455864841479
+    ]
+  ],
+  "spawned_nodes": [
+    {
+      "shape": "square",
+      "shape_label": "square",
+      "x": 31.71,
+      "y": 32.04,
+      "generation": 1,
+      "seed_index": 1,
+      "chain_length": 3,
+      "source_trial_id": 1,
+      "source_participant_id": 1,
+      "source_answer": {
+        "clicked_object": "response_area",
+        "click_coordinates": [
+          31.713846572169047,
+          32.040594749825324
+        ]
+      }
+    },
+    {
+      "shape": "triangle",
+      "shape_label": "triangle",
+      "x": 49.97,
+      "y": 34.01,
+      "generation": 1,
+      "seed_index": 1,
+      "chain_length": 3,
+      "source_trial_id": 2,
+      "source_participant_id": 1,
+      "source_answer": {
+        "clicked_object": "response_area",
+        "click_coordinates": [
+          49.971616425676935,
+          34.009569930105584
+        ]
+      }
+    },
+    {
+      "shape": "circle",
+      "shape_label": "circle",
+      "x": 34.58,
+      "y": 34.9,
+      "generation": 1,
+      "seed_index": 1,
+      "chain_length": 3,
+      "source_trial_id": 3,
+      "source_participant_id": 1,
+      "source_answer": {
+        "clicked_object": "response_area",
+        "click_coordinates": [
+          34.57781047075852,
+          34.90455864841479
+        ]
+      }
+    }
+  ],
+  "spawned_nodes_with_source_trial": 3
+}
