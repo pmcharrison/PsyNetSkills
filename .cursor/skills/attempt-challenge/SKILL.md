@@ -23,6 +23,8 @@ challenge before starting a fresh attempt.
   `references/experiment-evidence.md` and
   `psynet-experiment-implementation/references/validation.md` before finalizing
   functional or performance evidence.
+- For deployment, export, teardown, or operations-plan challenges, also read
+  `psynet-deployment-ops/SKILL.md` before planning evidence.
 
 ## Workflow
 
@@ -138,6 +140,10 @@ local stub, and explain exactly what remains unverified.
 
 Do not imply a skipped check passed: record what was run, what happened, and why
 any required evidence is missing or blocked in `EVALUATION.md`.
+
+For deployment, export, teardown, or operations-plan challenges, follow
+`psynet-deployment-ops/SKILL.md` for evidence that separates validation commands
+from prohibited live operations.
 
 ## Credential policy
 
