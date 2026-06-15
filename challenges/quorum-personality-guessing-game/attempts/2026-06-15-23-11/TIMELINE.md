@@ -19,3 +19,8 @@
 - T+01:22:00 [agent] `psynet simulate` produced an export, then review of participant statuses showed an unused fifth test bot remained in progress.
 - T+01:24:00 [agent] Reduced the regression-test bot count to the four bots actually used by the recovery scenario.
 - T+01:32:00 [agent] Strengthened the serial bot scenario so one participant reaches guessing trials before quorum, covering all feedback tiers in the export.
+- T+01:37:00 [agent] Regenerated simulation evidence and confirmed the export contains personality rows, guessing rows, and all required feedback labels.
+- T+01:43:00 [agent] Ran the 40-bot five-minute performance test and saved JSON/log evidence.
+- T+01:50:00 [agent] Captured dashboard monitor HTML, participant screenshots, and participant-flow video from a live debug deployment.
+- T+01:55:00 [agent] Wrote the executed analysis notebook and final report.
+- T+01:56:00 [agent-stop] Implementation and first-pass evidence collection complete.

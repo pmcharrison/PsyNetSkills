@@ -6,7 +6,7 @@ score:
 
 ## Summary
 
-Human evaluation pending. Implementation has not started because experiment implementation attempts require a reviewed `PLAN.md` first.
+Human evaluation pending. Implementation and first-pass evidence collection are complete.
 
 ## Strengths
 
@@ -18,10 +18,8 @@ Human evaluation pending. Implementation has not started because experiment impl
 
 ## Criteria
 
-If `CRITERIA.md` is present, copy the criteria here only after implementation and first-pass evidence collection are complete.
-
-- [ ]
+No `CRITERIA.md` file exists for this challenge. Evaluate against the public instructions in the attempt snapshot.
 
 ## Notes
 
-- This attempt is paused at the planning gate required by the `psynet-experiment-implementation` skill.
+- Score and feedback should come from a human evaluator, captured conversationally when working with Cursor Cloud Agents.
