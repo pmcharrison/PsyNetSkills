@@ -119,7 +119,8 @@ def make_lobby_nodes() -> List[StaticNode]:
                     "task_type": "personality",
                     "lobby_index": index,
                     **item,
-                }
+                },
+                block=f"{index:02d}",
             )
         )
 
@@ -132,7 +133,8 @@ def make_lobby_nodes() -> List[StaticNode]:
                     "lobby_index": lobby_index,
                     "round_id": round_id,
                     "target": guessing_target(round_id),
-                }
+                },
+                block=f"{lobby_index:02d}",
             )
         )
 
@@ -243,6 +245,9 @@ class LobbyTrial(StaticTrial):
 
 
 class LobbyTrialMaker(StaticTrialMaker):
+    def choose_block_order(self, experiment, participant, blocks):
+        return sorted(blocks)
+
     def finalize_trial(self, answer, trial, experiment, participant):
         super().finalize_trial(answer, trial, experiment, participant)
         enriched_answer = dict(answer)
@@ -260,7 +265,9 @@ lobby_trial_maker = LobbyTrialMaker(
     nodes=LOBBY_NODES,
     expected_trials_per_participant=40,
     max_trials_per_participant=40,
+    max_trials_per_block=1,
     allow_repeated_nodes=False,
+    balance_across_nodes=False,
     target_trials_per_node=None,
 )
 

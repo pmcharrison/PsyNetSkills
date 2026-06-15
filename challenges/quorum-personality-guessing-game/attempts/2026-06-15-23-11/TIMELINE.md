@@ -13,3 +13,5 @@
 - T+00:45:00 [agent] Implemented the self-contained PsyNet experiment and generated pinned constraints before testing.
 - T+00:55:00 [agent] First `psynet test local` run launched successfully but exposed an unstable runtime node-count assertion.
 - T+00:57:00 [agent] Reworked the structural test to use the static lobby node manifest.
+- T+01:05:00 [agent] Second `psynet test local` run showed lobby nodes were selected by static-trial balancing rather than visible order.
+- T+01:07:00 [agent] Added explicit ordered lobby blocks so personality trials precede guessing trials.
