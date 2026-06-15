@@ -20,3 +20,17 @@ workflow when audio playback itself must be heard in the video.
 *Actions:*
 
 - **PsyNetSkills:** Clarify in the participant recording guidance that Playwright `recordVideo` is acceptable visual evidence only, and audio-sensitive challenge evidence should explicitly pair it with ffmpeg audio capture or documented audio-stimulus/export checks. Confidence: high. Impact: medium. Status: considering.
+
+## Realistic LLM bot simulation for multimodal experiments
+
+The attempt's deterministic bot fallback exercised the PsyNet bot pathway, but
+the evaluator wanted more realistic LLM-style simulated data, especially for a
+task that compares text and audio judgments. Future attempts need a cleaner
+pattern for optional text/audio model calls, mockable local stubs, and export
+metadata that distinguishes model-generated responses from deterministic
+fallbacks.
+
+*Actions:*
+
+- **PsyNetSkills:** Add guidance for challenge attempts that ask for LLM-style bot data, including how to define optional model-provider hooks, deterministic test stubs, exported `decision_source` metadata, and limitations when no audio-capable model is available. Confidence: high. Impact: high. Status: considering.
+- **PsyNet:** Consider a documented helper pattern for PsyNet bots that can call configurable text or audio model adapters while remaining testable without service credentials. Confidence: medium. Impact: medium. Status: considering.
