@@ -12,3 +12,4 @@
 - T+00:06:30 [agent] Copied the original PsyNet Gibbs demo into the attempt code directory.
 - T+00:12:00 [agent] Implemented profile-aware bot responses, balanced profile assignment, and automated profile assertions.
 - T+00:15:00 [agent] First `psynet test local` run showed the original network capacity depleted before 10 bots completed all trials; increased Gibbs chain capacity while keeping the across-chain structure.
+- T+00:21:00 [agent] `psynet test local` passed with 10 completed bots and observed 5/5 profile distribution; widened chain capacity for the required 40-bot performance check.
