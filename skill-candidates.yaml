@@ -1,0 +1,338 @@
+generated_at: "2026-06-15T04:27:13Z"
+model: "GPT-5.5"
+mining_scope: deep
+source_snapshot:
+  dashboard_data: "dashboard/data/psynetsk.json"
+  dashboard_refreshed_by: "uv run psynetsk-export-dashboard-data"
+  actions_review_file: "actions-review.yaml"
+  actions_review_generated_at: "2026-06-11T16:38:17Z"
+  dashboard_counts:
+    challenges: 40
+    attempts: 57
+    open_actions: 153
+    grouped_actions_in_actions_review: 110
+    existing_skills: 39
+candidates:
+  - id: pre-handoff-reproducibility-gate
+    title: "Mandatory pre-handoff validation gate"
+    status: unreviewed
+    urgency: high
+    necessity: >-
+      Attempt evaluations and newer action items show that agents can collect
+      plausible evidence but hand off branches whose final committed state has
+      not rerun the required PsyNet, challenge, and repository validation
+      commands. A skill-level gate would materially reduce incomplete or
+      non-reproducible attempts.
+    trigger: >-
+      Use immediately before closing a challenge attempt, updating final
+      metadata, or handing off a branch that contains runnable PsyNet experiment
+      code.
+    proposed_disposition: extension
+    triage: candidate
+    overlap_notes: >-
+      Extend attempt-challenge, with pointers to
+      psynet-experiment-implementation/references/validation.md for
+      experiment-specific checks. Do not create a separate skill unless the gate
+      grows beyond final-branch validation.
+    evidence_sources:
+      - "challenges/video-recording-static-trials/attempts/2026-06-14-13-52/LEARNINGS.md"
+      - "challenges/apply-participant-quality-telemetry-skill/attempts/2026-06-11-19-08/LEARNINGS.md"
+      - "challenges/similarity-discrimination-identification/attempts/2026-06-10-00-38/EVALUATION.md"
+    source_ids:
+      - "video-recording-static-trials/2026-06-14-13-52/action-003"
+      - "apply-participant-quality-telemetry-skill/2026-06-11-19-08/action-001"
+      - "similarity-discrimination-identification/2026-06-10-00-38/action-001"
+      - "rolling-inventory-melody-market/2026-06-10-17-06/action-001"
+      - "ultimatum-game/2026-06-10-17-15/action-001"
+    trace_status: unreviewed
+    summary: >-
+      This candidate turns repeated support-file and final-validation failures
+      into a pre-handoff checklist: rerun final commands on the committed branch,
+      verify the standard PsyNet support files are present, and block handoff
+      when the evidence no longer matches the final code.
+
+  - id: hybrid-ai-scheduler-safeguards
+    title: "Hybrid AI scheduler safety and configuration"
+    status: unreviewed
+    urgency: high
+    necessity: >-
+      Hybrid and AI-participant attempts repeatedly surface the same risks:
+      active schedulers launching too many bots, incomplete bot-state accounting,
+      missing custom config registration, and prompt drift between human and AI
+      participants. These are high-impact workflow failures for mixed
+      human-AI experiments.
+    trigger: >-
+      Use when converting a pure-human PsyNet experiment into a mixed human-AI
+      experiment, adding active bot scheduling, or testing AI participant
+      recruitment settings.
+    proposed_disposition: extension
+    triage: candidate
+    overlap_notes: >-
+      Extend turn-pure-experiment-to-ai-hybrid, which already owns active
+      scheduling and prompt parity. Point to verify-ai-model-usability for
+      provider access checks rather than duplicating model-verification
+      guidance.
+    evidence_sources:
+      - "challenges/ai-human-hybrid-participants/attempts/2026-06-10-05-30/LEARNINGS.md"
+      - "challenges/ai-human-hybrid-participants/attempts/2026-06-10-10-05/LEARNINGS.md"
+      - "challenges/portfolio-website-chain/attempts/2026-06-10-11-24/LEARNINGS.md"
+    source_ids:
+      - "ai-human-hybrid-participants/2026-06-10-05-30/action-005"
+      - "ai-human-hybrid-participants/2026-06-10-10-05/action-001"
+      - "ai-human-hybrid-participants/2026-06-10-10-05/action-003"
+      - "ai-human-hybrid-participants/2026-06-10-10-05/action-005"
+      - "audio-memory-sequence/2026-06-08-09-29/action-017"
+      - "portfolio-website-chain/2026-06-10-11-24/action-002"
+      - "end-to-end-simulated-psynet-discovery/2026-06-11-05-23/action-001"
+    trace_status: unreviewed
+    summary: >-
+      This candidate asks reviewers to approve a focused update to hybrid
+      conversion guidance covering scheduler caps, trial-capacity checks,
+      successful and running bot counts, custom Dallinger config keys, and
+      instruction-page prompt parity.
+
+  - id: translation-locale-verification
+    title: "Post-marking translation and locale verification"
+    status: unreviewed
+    urgency: high
+    necessity: >-
+      Translation-related attempts show that marking strings is not enough:
+      node definitions can freeze translated text, framework-owned pages can
+      remain English-only, gettext prerequisites can be absent, and right-to-left
+      or non-English completion flows can go untested.
+    trigger: >-
+      Use after preparing a PsyNet experiment for translation, before declaring
+      a cross-cultural or multilingual attempt ready, or when collecting
+      participant evidence for a non-English locale.
+    proposed_disposition: extension
+    triage: candidate
+    overlap_notes: >-
+      Extend prepare-for-translation, which already owns translation readiness.
+      Point to record-participant-video for locale-independent completion
+      detection and multilingual evidence rather than creating a duplicate
+      translation skill.
+    evidence_sources:
+      - "challenges/cross-cultural-decision-making/attempts/2026-06-11-00-32/LEARNINGS.md"
+      - "challenges/translate-static-experiment/attempts/2026-06-10-00-45/LEARNINGS.md"
+      - "challenges/cross-cultural-animal-choice/attempts/2026-06-12-11-29/LEARNINGS.md"
+    source_ids:
+      - "cross-cultural-decision-making/2026-06-11-00-32/action-003"
+      - "cross-cultural-decision-making/2026-06-11-00-32/action-005"
+      - "cross-cultural-decision-making/2026-06-11-00-32/action-006"
+      - "translate-static-experiment/2026-06-10-00-45/action-003"
+      - "translate-static-experiment/2026-06-10-00-45/action-004"
+      - "open-ended-step-tagging/2026-06-09-20-34/action-003"
+      - "cross-cultural-animal-choice/2026-06-12-11-29/action-001"
+    trace_status: unreviewed
+    summary: >-
+      This candidate would add a verification phase for translated experiments:
+      run gettext prerequisite checks, audit framework-owned participant text,
+      avoid serialized translated node payloads, and verify completion in at
+      least one target-locale flow when localization is in scope.
+
+  - id: psynet-audio-experiments
+    title: "PsyNet audio and sequence-reproduction experiments"
+    status: unreviewed
+    urgency: medium
+    necessity: >-
+      Audio and music challenges form the largest stimulus-related action
+      cluster. The repeated issues are procedural: deterministic audio asset
+      generation, manifest-driven static trials, practice trials, playback
+      gating, ordered responses, calibration, and evidence that actually proves
+      audible behavior.
+    trigger: >-
+      Use when implementing listening, music-emotion, audio-memory,
+      sequence-reproduction, or other audio-first PsyNet experiments.
+    proposed_disposition: new
+    triage: candidate
+    overlap_notes: >-
+      New skill candidate with pointers to develop-experiment-back-end,
+      psychophysics, and record-participant-video. Existing skills cover general
+      experiment structure and media evidence but not an audio-first procedure.
+    evidence_sources:
+      - "challenges/audio-memory-sequence/attempts/2026-06-07-22-41/LEARNINGS.md"
+      - "challenges/audio-memory-sequence/attempts/2026-06-08-09-29/LEARNINGS.md"
+      - "challenges/rolling-inventory-melody-market/attempts/2026-06-10-20-01/LEARNINGS.md"
+      - "challenges/single-chord-emotion-replication/attempts/2026-06-10-12-44/LEARNINGS.md"
+    source_ids:
+      - "audio-memory-sequence/2026-06-07-22-41/action-008"
+      - "audio-memory-sequence/2026-06-07-22-41/action-011"
+      - "audio-memory-sequence/2026-06-07-22-41/action-012"
+      - "audio-memory-sequence/2026-06-07-22-41/action-014"
+      - "audio-memory-sequence/2026-06-08-09-29/action-001"
+      - "audio-memory-sequence/2026-06-08-09-29/action-002"
+      - "rolling-inventory-melody-market/2026-06-10-20-01/action-001"
+      - "single-chord-emotion-replication/2026-06-10-12-44/action-004"
+    trace_status: unreviewed
+    summary: >-
+      This candidate proposes an audio-experiment workflow that makes assets
+      reproducible, trials packageable, responses PsyNet-native where possible,
+      and participant recordings calibrated enough for reviewers to judge audio
+      playback.
+
+  - id: challenge-evidence-quality-review
+    title: "Challenge evidence quality review checklist"
+    status: unreviewed
+    urgency: medium
+    necessity: >-
+      Many attempts contain screenshots or videos, but evaluations still flag
+      missing proof of the required behavior: invisible controls, truncated
+      videos, missing completion states, weak payoff validation, or recordings
+      that are not reviewed critically before handoff.
+    trigger: >-
+      Use after collecting participant-flow videos, screenshots, performance
+      evidence, or analysis artifacts, before describing evidence as successful
+      in an attempt handoff.
+    proposed_disposition: combination
+    triage: candidate
+    overlap_notes: >-
+      Combination candidate that choreographs record-participant-video,
+      attempt-challenge/references/experiment-evidence.md, and domain skills
+      such as psychophysics or psynet-realtime-synchronous-experiments. It should
+      not duplicate recording mechanics owned by record-participant-video.
+    evidence_sources:
+      - "challenges/similarity-discrimination-identification/attempts/2026-06-10-00-38/LEARNINGS.md"
+      - "challenges/real-time-synchronous-game/attempts/2026-06-09-15-51/LEARNINGS.md"
+      - "challenges/ultimatum-game/attempts/2026-06-10-17-15/LEARNINGS.md"
+      - "challenges/simple-multi-item-identification/attempts/2026-06-14-16-02/LEARNINGS.md"
+      - "challenges/apply-participant-quality-telemetry-skill/attempts/2026-06-11-19-08/LEARNINGS.md"
+    source_ids:
+      - "similarity-discrimination-identification/2026-06-10-00-38/action-003"
+      - "similarity-discrimination-identification/2026-06-10-00-38/action-004"
+      - "real-time-synchronous-game/2026-06-09-15-51/action-001"
+      - "real-time-synchronous-game/2026-06-09-15-51/action-003"
+      - "ultimatum-game/2026-06-10-17-15/action-002"
+      - "ultimatum-game/2026-06-10-17-15/action-004"
+      - "ultimatum-game/2026-06-10-17-15/action-006"
+      - "apply-participant-quality-telemetry-skill/2026-06-11-19-08/action-004"
+      - "simple-multi-item-identification/2026-06-14-16-02/action-001"
+    trace_status: unreviewed
+    summary: >-
+      This candidate would give reviewers and future agents a final evidence
+      audit: watch or inspect the artifact, confirm it exercises every behavior
+      the challenge asks reviewers to judge, and distinguish implementation
+      mechanics from validation evidence.
+
+  - id: psynet-experiment-replication
+    title: "Reference and replication experiment fidelity"
+    status: unreviewed
+    urgency: medium
+    necessity: >-
+      Replication-style challenges recur across audio, visual, questionnaire,
+      economic-game, and interface-sketch tasks. Evaluations repeatedly ask for
+      local reference files, exact participant-facing phrasing, justified asset
+      substitutions, visual-fidelity review, and analysis output that matches the
+      replication target.
+    trigger: >-
+      Use when a challenge asks to replicate a paper, preserve a reference
+      instrument, match a provided UI sketch, or reproduce an analytical figure
+      or scoring workflow.
+    proposed_disposition: new
+    triage: candidate
+    overlap_notes: >-
+      New skill candidate with pointers to psynet-experiment-implementation,
+      psychophysics, and tweak-interface. Folding it into psychophysics would be
+      too narrow because the evidence spans audio, questionnaires, visual UI,
+      simulation, and analysis.
+    evidence_sources:
+      - "challenges/single-chord-emotion-replication/attempts/2026-06-10-12-44/LEARNINGS.md"
+      - "challenges/rolling-inventory-melody-market/attempts/2026-06-10-20-01/LEARNINGS.md"
+      - "challenges/visual-priors-serial-reproduction/attempts/2026-06-10-12-35/LEARNINGS.md"
+      - "challenges/ultimatum-game/attempts/2026-06-10-17-15/LEARNINGS.md"
+    source_ids:
+      - "single-chord-emotion-replication/2026-06-10-12-44/action-003"
+      - "single-chord-emotion-replication/2026-06-10-12-44/action-004"
+      - "single-chord-emotion-replication/2026-06-10-12-44/action-005"
+      - "single-chord-emotion-replication/2026-06-10-12-44/action-006"
+      - "rolling-inventory-melody-market/2026-06-10-20-01/action-002"
+      - "visual-priors-serial-reproduction/2026-06-10-12-35/action-001"
+      - "ultimatum-game/2026-06-10-17-15/action-005"
+    trace_status: unreviewed
+    summary: >-
+      This candidate would make replication attempts preserve source fidelity by
+      default, document acceptable fallbacks when materials are unavailable, and
+      raise the analysis bar when a challenge asks for close analytical
+      replication.
+
+  - id: deployment-operations-planning
+    title: "Deployment operations planning and reconstruction"
+    status: unreviewed
+    urgency: medium
+    necessity: >-
+      Deployment, export, and teardown tasks recur as planning or reconstruction
+      work where live operations may be prohibited. Existing deployment guidance
+      is strong for real readiness audits, but attempts need a planning mode
+      that records safety boundaries, mock export manifests, uncertainty, and
+      human-review commands without accidentally performing destructive actions.
+    trigger: >-
+      Use for deployment-readiness audits, deployment-log reconstruction,
+      export-before-teardown planning, or operations-plan challenges where
+      command generation and evidence dossiers are required.
+    proposed_disposition: extension
+    triage: candidate
+    overlap_notes: >-
+      Extend psynet-deployment-ops with a planning/reconstruction mode. Do not
+      create a parallel deployment skill because psynet-deployment-ops already
+      owns deployment safety, export paths, and teardown boundaries.
+    evidence_sources:
+      - "challenges/deployment-lifecycle-monitoring-and-export/attempts/2026-06-11-05-19/LEARNINGS.md"
+      - "challenges/deployment-log-reconstruction/attempts/2026-06-10-00-29/LEARNINGS.md"
+      - "challenges/deployment-readiness-audit/attempts/2026-06-10-00-29/LEARNINGS.md"
+      - "challenges/export-before-teardown-safety/attempts/2026-06-10-00-29/LEARNINGS.md"
+    source_ids:
+      - "deployment-lifecycle-monitoring-and-export/2026-06-11-05-19/action-001"
+      - "deployment-lifecycle-monitoring-and-export/2026-06-11-05-19/action-002"
+      - "deployment-log-reconstruction/2026-06-10-00-29/action-001"
+      - "deployment-log-reconstruction/2026-06-10-00-29/action-002"
+      - "deployment-readiness-audit/2026-06-10-00-29/action-001"
+      - "deployment-readiness-audit/2026-06-10-00-29/action-002"
+      - "export-before-teardown-safety/2026-06-10-00-29/action-001"
+      - "export-before-teardown-safety/2026-06-10-00-29/action-002"
+    trace_status: unreviewed
+    summary: >-
+      This candidate asks reviewers to approve a deployment-ops extension for
+      planning-only work: state prohibited live actions, preserve uncertainty,
+      produce safe candidate commands, and include mock export summaries or
+      archive manifests when no real deployment is available.
+
+  - id: realtime-sync-evidence-and-bot-fallback
+    title: "Realtime synchronous evidence and bot-fallback patterns"
+    status: unreviewed
+    urgency: medium
+    necessity: >-
+      Realtime and synchronous attempts show repeated gaps at the boundary
+      between websocket implementation, multi-participant evidence, and local bot
+      fallback. These failures are risky because a single happy-path browser view
+      can miss pairing, state authority, private-payload, and timeout problems.
+    trigger: >-
+      Use for websocket or multi-participant PsyNet challenges that require
+      participant-flow evidence, local bot coverage, waiting-room behavior, or
+      fallback scoring when pairing is incomplete.
+    proposed_disposition: combination
+    triage: candidate
+    overlap_notes: >-
+      Combination candidate across psynet-realtime-synchronous-experiments,
+      psynet-synchronous-experiments, and record-participant-video. If reviewers
+      prefer fewer skills, this should become a section in the realtime
+      synchronous skill with pointers to recording guidance.
+    evidence_sources:
+      - "challenges/real-time-synchronous-game/attempts/2026-06-09-15-51/LEARNINGS.md"
+      - "challenges/real-time-synchronous-game/attempts/2026-06-09-19-01/LEARNINGS.md"
+      - "challenges/real-time-synchronous-game/attempts/2026-06-09-21-35/LEARNINGS.md"
+      - "challenges/ultimatum-game/attempts/2026-06-09-21-32/LEARNINGS.md"
+    source_ids:
+      - "real-time-synchronous-game/2026-06-09-15-51/action-001"
+      - "real-time-synchronous-game/2026-06-09-15-51/action-003"
+      - "real-time-synchronous-game/2026-06-09-19-01/action-001"
+      - "real-time-synchronous-game/2026-06-09-19-01/action-003"
+      - "real-time-synchronous-game/2026-06-09-19-01/action-004"
+      - "real-time-synchronous-game/2026-06-09-20-30/action-001"
+      - "real-time-synchronous-game/2026-06-09-21-35/action-001"
+      - "real-time-synchronous-game/2026-06-09-21-35/action-002"
+      - "ultimatum-game/2026-06-09-21-32/action-001"
+    trace_status: unreviewed
+    summary: >-
+      This candidate would guide agents through synchronous evidence design:
+      use separate participant identities, prove pairing or fallback behavior,
+      keep server-authoritative state transitions, and review videos as
+      validation rather than mere artifacts.
