@@ -23,7 +23,7 @@ Implement the following five task categories and `t_past` values:
 | Poem lengths | Predict the total number of lines in a poem, given the line number of a quoted favorite line. | 2, 5, 12, 32, 67 lines |
 | Waiting times | Predict the total time on hold, given how long someone has already been waiting. | 1, 3, 7, 11, 23 minutes |
 
-For each trial, present a short vignette adapted from the paper's Materials section, one observed `t_past` value, and a numeric response field for the participant's predicted `t_total`. The response validation should reject non-numeric answers and predictions smaller than the presented `t_past`. Marriage trials may also offer an explicit "forever / does not end" option, but the implementation must document how this response is represented in the exported data and handled in the analysis.
+For each trial, present a short vignette adapted from the paper's Materials section, one observed `t_past` value, and a numeric response field for the participant's predicted `t_total`. The response validation should reject non-numeric answers and predictions smaller than the presented `t_past`. 
 
 ## Design and procedure
 
