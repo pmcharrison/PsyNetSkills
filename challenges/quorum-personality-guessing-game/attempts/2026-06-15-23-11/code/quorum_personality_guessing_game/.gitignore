@@ -10,3 +10,4 @@ __pycache__
 develop/
 deploy/
 deploy_logs/
+data/

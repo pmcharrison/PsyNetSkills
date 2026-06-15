@@ -15,3 +15,6 @@
 - T+00:57:00 [agent] Reworked the structural test to use the static lobby node manifest.
 - T+01:05:00 [agent] Second `psynet test local` run showed lobby nodes were selected by static-trial balancing rather than visible order.
 - T+01:07:00 [agent] Added explicit ordered lobby blocks so personality trials precede guessing trials.
+- T+01:12:00 [agent] `psynet test local` passed with the serial quorum, recovery, lobby-control, and feedback assertions.
+- T+01:22:00 [agent] `psynet simulate` produced an export, then review of participant statuses showed an unused fifth test bot remained in progress.
+- T+01:24:00 [agent] Reduced the regression-test bot count to the four bots actually used by the recovery scenario.
