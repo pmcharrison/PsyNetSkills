@@ -1,0 +1,281 @@
+Cluster is already running.
+ * Starting PostgreSQL 16 database server
+   ...done.
+PONG
+============================= test session starts ==============================
+platform linux -- Python 3.13.13, pytest-9.0.3, pluggy-1.6.0
+rootdir: /workspace
+configfile: pyproject.toml
+plugins: anyio-4.13.0, dallinger-12.2.0, Faker-40.15.0, psynet-13.3.0a0, dependency-0.6.0, mock-3.14.1, test-groups-1.2.1, timeout-2.4.0
+collected 1 item
+
+test.py F                                                                [100%]
+
+=================================== FAILURES ===================================
+_ test_experiment[/workspace/challenges/video-recording-static-trials/attempts/2026-06-10-00-48/code/video_recording_static_real_s3] _
+
+launched_experiment = <dallinger_experiment.experiment.Exp object at 0x7f65fb3c9be0>
+
+    @pytest.mark.parametrize("experiment_directory", [experiment_dir], indirect=True)
+    def test_experiment(launched_experiment):
+        # NOTE:
+        # If pytest reports a failure and prints these lines in your traceback
+        # without printing the actual lines within `test_experiment` that raised the error,
+        # you may be suffering from a bug in PyCharm's test reporting. To fix this,
+        # we recommend either running the test externally (`psynet test local`)
+        # or editing your PyCharm run configuration to add `--tb=short` to your additional
+        # arguments. This should ensure that the full traceback is printed.
+>       launched_experiment.test_experiment()
+
+test.py:31: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/psynet/experiment.py:1343: in test_experiment
+    self._test_experiment_serial()
+/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/psynet/experiment.py:1396: in _test_experiment_serial
+    self.test_serial_run_bots(bots)
+/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/psynet/experiment.py:1423: in test_serial_run_bots
+    self.run_bot(bot, time_factor=self.test_time_factor)
+/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/psynet/experiment.py:1435: in run_bot
+    bot.take_experiment(render_pages, time_factor)
+/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/psynet/participant.py:929: in take_experiment
+    self.run_to_completion(render_pages, time_factor)
+/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/psynet/participant.py:922: in run_to_completion
+    self.run_until(lambda bot: not bot.is_working, render_pages, time_factor)
+/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/psynet/participant.py:916: in run_until
+    self.take_page(render_pages, time_factor)
+/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/psynet/participant.py:963: in take_page
+    self._submit_response(self.status, self.response_files, response)
+/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/psynet/participant.py:1089: in _submit_response
+    response.raise_for_status()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <Response [400]>
+
+    def raise_for_status(self):
+        """Raises :class:`HTTPError`, if one occurred."""
+    
+        http_error_msg = ""
+        if isinstance(self.reason, bytes):
+            # We attempt to decode utf-8 first because some servers
+            # choose to localize their reason strings. If the string
+            # isn't utf-8, we fall back to iso-8859-1 for all other
+            # encodings. (See PR #3538)
+            try:
+                reason = self.reason.decode("utf-8")
+            except UnicodeDecodeError:
+                reason = self.reason.decode("iso-8859-1")
+        else:
+            reason = self.reason
+    
+        if 400 <= self.status_code < 500:
+            http_error_msg = (
+                f"{self.status_code} Client Error: {reason} for url: {self.url}"
+            )
+    
+        elif 500 <= self.status_code < 600:
+            http_error_msg = (
+                f"{self.status_code} Server Error: {reason} for url: {self.url}"
+            )
+    
+        if http_error_msg:
+>           raise HTTPError(http_error_msg, response=self)
+E           requests.exceptions.HTTPError: 400 Client Error: BAD REQUEST for url: http://localhost:5000/response
+
+/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/requests/models.py:1028: HTTPError
+---------------------------- Captured stdout setup -----------------------------
+Launching experiment in directory '/workspace/challenges/video-recording-static-trials/attempts/2026-06-10-00-48/code/video_recording_static_real_s3'...
+
+❯❯ Experiment directory size: 0.033 MB.
+Creating networks:   0%|                                 | 0/12 [00:00<?, ?it/s]Creating networks: 100%|██████████████████████| 12/12 [00:00<00:00, 7483.15it/s]
+Staging assets:   0%|                                    | 0/12 [00:00<?, ?it/s]Staging assets: 100%|███████████████████████| 12/12 [00:00<00:00, 508400.48it/s]
+✓ config.txt is PRESENT
+✓ experiment.py is PRESENT
+✓ Size OK at 0MB (max is 256MB)
+✓ experiment.py defines 1 experiment
+✓ no file conflicts
+
+
+❯❯ Experiment UID: 621d7f82-c137-c708-79f3-ad463c762f8a
+Deployment temp directory: /tmp/tmpvzv_z6qb/621d7f82-c137-c708-79f3-ad463c762f8a
+
+❯❯ Starting up the Heroku Local server...
+12:51:09 AM web.1   |  [2026-06-10 00:51:09 +0000] [56603] [INFO] Starting gunicorn 25.3.0
+
+❯❯ Server is running on http://localhost:5000. Press Ctrl+C to exit.
+
+❯❯ Launching the experiment...
+
+❯❯ Initial recruitment list:
+http://localhost:5000/ad?recruiter=hotair&assignmentId=3WM6EH&hitId=3LXDEI&workerId=FROIMQ&mode=debug
+Additional details:
+
+Single recruitment link: http://localhost:5000/ad?recruiter=hotair&generate_tokens=1&mode=debug
+
+Recruitment requests will open browser windows automatically.
+
+❯❯ Experiment dashboard: http://localhost:5000/dashboard/
+
+❯❯ Dashboard user: test_admin password: test_password
+
+❯❯ Monitoring the Heroku Local server for recruitment or completion...
+12:51:09 AM web.1   |  [2026-06-10 00:51:09 +0000] [56603] [INFO] Listening at: http://0.0.0.0:5000 (56603)
+12:51:09 AM web.1   |  [2026-06-10 00:51:09 +0000] [56603] [INFO] Using worker: gevent
+12:51:09 AM web.1   |  2026-06-10 00:51:09,218 Ready.
+12:51:09 AM web.1   |  [2026-06-10 00:51:09 +0000] [56621] [INFO] Booting worker with pid: 56621
+12:51:09 AM web.1   |  [2026-06-10 00:51:09 +0000] [56603] [INFO] Control socket listening at /home/ubuntu/.gunicorn/gunicorn.ctl
+12:51:09 AM web.1   |  2026-06-10 00:51:09,269 A worker restarted (new pid: 56621). Please check the logs to find out why ⚠️
+12:51:10 AM web.1   |  2026-06-10 00:51:10,396 Launched experiment "Static experiment demo with real S3 video recording" (`291c1130-c96c-4d01-b8d5-9cf28ed58d3a`) locally
+12:51:10 AM web.1   |  2026-06-10 00:51:10,397 [1mExperiment dashboard[0m: http://localhost:5000/dashboard
+12:51:10 AM web.1   |  Username: `test_admin`
+12:51:10 AM web.1   |  Password: `test_password`
+12:51:10 AM web.1   |  2026-06-10 00:51:10,397 Experiment launch complete!
+12:51:10 AM web.1   |  2026-06-10 00:51:10,398 New participant requested: http://localhost:5000/ad?recruiter=hotair&assignmentId=3WM6EH&hitId=3LXDEI&workerId=FROIMQ&mode=debug
+
+❯❯ new recruitment request!
+
+❯❯ New participant requested:: http://localhost:5000/ad?recruiter=hotair&assignmentId=3WM6EH&hitId=3LXDEI&workerId=FROIMQ&mode=debug
+12:51:10 AM web.1   |  127.0.0.1 - - [10/Jun/2026:00:51:10 +0000] "POST /launch HTTP/1.1" 200 357 "-" "python-requests/2.33.1"
+--------------------------- Captured stdout teardown ---------------------------
+12:51:10 AM web.1   |  127.0.0.1 - - [10/Jun/2026:00:51:10 +0000] "GET /timeline?unique_id=302aaa45-6486-4871-bb73-3bf040b595fe%3A34bf1947-ba10-4d9e-8dfa-d16cc380931a HTTP/1.1" 200 74052 "-" "python-requests/2.33.1"
+12:51:10 AM web.1   |  127.0.0.1 - - [10/Jun/2026:00:51:10 +0000] "GET /dashboard/login HTTP/1.1" 200 5469 "-" "python-requests/2.33.1"
+12:51:10 AM web.1   |  /home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/flask_login/login_manager.py:488: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+12:51:10 AM web.1   |    expires = datetime.utcnow() + duration
+12:51:10 AM web.1   |  127.0.0.1 - - [10/Jun/2026:00:51:10 +0000] "POST /dashboard/login HTTP/1.1" 302 219 "-" "python-requests/2.33.1"
+12:51:10 AM web.1   |  127.0.0.1 - - [10/Jun/2026:00:51:10 +0000] "GET /dashboard/index HTTP/1.1" 200 12517 "-" "python-requests/2.33.1"
+12:51:10 AM web.1   |  127.0.0.1 - - [10/Jun/2026:00:51:10 +0000] "GET /dashboard/index HTTP/1.1" 200 12387 "-" "python-requests/2.33.1"
+12:51:10 AM web.1   |  127.0.0.1 - - [10/Jun/2026:00:51:10 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+12:51:10 AM web.1   |  127.0.0.1 - - [10/Jun/2026:00:51:10 +0000] "GET /timeline?unique_id=a94d47e8-717c-4173-b41c-fc1016a5c690%3A7d360468-6053-4843-a8c9-d0cf55c6f923 HTTP/1.1" 200 74052 "-" "python-requests/2.33.1"
+12:51:10 AM web.1   |  127.0.0.1 - - [10/Jun/2026:00:51:10 +0000] "GET /participant_status/2 HTTP/1.1" 200 0 "-" "python-requests/2.33.1"
+12:51:10 AM web.1   |  2026-06-10 00:51:10,852 Received a response from participant 1 on page bff4ea10-7214-8202-8829-010bda881af9.
+12:51:10 AM web.1   |  2026-06-10 00:51:10,881 Preparing trial for participant 1.
+12:51:10 AM web.1   |  2026-06-10 00:51:10,881 Looking for networks for participant 1.
+12:51:10 AM web.1   |  2026-06-10 00:51:10,996 12 remain after applying custom network filters.
+12:51:10 AM web.1   |  2026-06-10 00:51:10,996 0 out of 12 networks are awaiting async processes (or have nodes awaiting async processes).
+12:51:10 AM web.1   |  2026-06-10 00:51:10,996 Task 'find_networks' took 0.116 s
+12:51:10 AM web.1   |  2026-06-10 00:51:10,997 Outcome: found 1 candidate network(s) for participant 1.
+12:51:10 AM web.1   |  2026-06-10 00:51:10,997 Selected node 8 from network 8 to give to participant 1.
+12:51:11 AM web.1   |  2026-06-10 00:51:11,004 Task 'prepare_trial' took 0.123 s
+12:51:11 AM web.1   |  2026-06-10 00:51:11,004 Task '_prepare_trial' took 0.123 s
+12:51:11 AM web.1   |  2026-06-10 00:51:11,009 Evaluating while_loop (Waiting for trial) condition: result = False
+12:51:11 AM web.1   |  2026-06-10 00:51:11,010 Evaluating while_loop (animals__trial_loop) condition: result = True
+12:51:11 AM web.1   |  2026-06-10 00:51:11,016 EXPERIMENT ERROR - err-6008734f:{'participant_id': 1, 'trial_id': 1, 'node_id': 8, 'network_id': 8}
+12:51:11 AM web.1   |  Traceback (most recent call last):
+12:51:11 AM web.1   |    File "/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/psynet/experiment.py", line 2466, in process_response
+12:51:11 AM web.1   |      self.timeline.advance_page(self, participant)
+12:51:11 AM web.1   |      ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+12:51:11 AM web.1   |    File "/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/psynet/utils.py", line 233, in wrapper
+12:51:11 AM web.1   |      res = fun(*args, **kwargs)
+12:51:11 AM web.1   |    File "/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/psynet/timeline.py", line 1846, in advance_page
+12:51:11 AM web.1   |      new_elt = self.get_current_elt(experiment, participant)
+12:51:11 AM web.1   |    File "/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/psynet/utils.py", line 233, in wrapper
+12:51:11 AM web.1   |      res = fun(*args, **kwargs)
+12:51:11 AM web.1   |    File "/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/psynet/timeline.py", line 1821, in get_current_elt
+12:51:11 AM web.1   |      selected = selected.resolve(experiment, participant, position)
+12:51:11 AM web.1   |    File "/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/psynet/timeline.py", line 1569, in resolve
+12:51:11 AM web.1   |      res = call_function_with_context(
+12:51:11 AM web.1   |          self.function,
+12:51:11 AM web.1   |      ...<2 lines>...
+12:51:11 AM web.1   |          participant=participant,
+12:51:11 AM web.1   |      )
+12:51:11 AM web.1   |    File "/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/psynet/utils.py", line 179, in call_function_with_context
+12:51:11 AM web.1   |      return call_function(function, *args, **new_kwargs)
+12:51:11 AM web.1   |    File "/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/psynet/utils.py", line 87, in call_function
+12:51:11 AM web.1   |      return function(*args, **kwargs)
+12:51:11 AM web.1   |    File "/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/psynet/trial/main.py", line 893, in <lambda>
+12:51:11 AM web.1   |      lambda experiment, participant: participant.current_trial._show_trial(
+12:51:11 AM web.1   |                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+12:51:11 AM web.1   |          experiment, participant
+12:51:11 AM web.1   |          ^^^^^^^^^^^^^^^^^^^^^^^
+12:51:11 AM web.1   |      ),
+12:51:11 AM web.1   |      ^
+12:51:11 AM web.1   |    File "/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/psynet/trial/main.py", line 918, in _show_trial
+12:51:11 AM web.1   |      return call_function_with_context(
+12:51:11 AM web.1   |          self.show_trial,
+12:51:11 AM web.1   |      ...<2 lines>...
+12:51:11 AM web.1   |          trial_maker=self.trial_maker,
+12:51:11 AM web.1   |      )
+12:51:11 AM web.1   |    File "/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/psynet/utils.py", line 179, in call_function_with_context
+12:51:11 AM web.1   |      return call_function(function, *args, **new_kwargs)
+12:51:11 AM web.1   |    File "/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/psynet/utils.py", line 87, in call_function
+12:51:11 AM web.1   |      return function(*args, **kwargs)
+12:51:11 AM web.1   |    File "/tmp/tmpvzv_z6qb/621d7f82-c137-c708-79f3-ad463c762f8a/experiment.py", line 97, in show_trial
+12:51:11 AM web.1   |      upload_config=build_upload_config(recording_id),
+12:51:11 AM web.1   |                    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+12:51:11 AM web.1   |    File "/tmp/tmpvzv_z6qb/621d7f82-c137-c708-79f3-ad463c762f8a/video_recording/s3_upload.py", line 31, in build_upload_config
+12:51:11 AM web.1   |      raise MissingS3Configuration(
+12:51:11 AM web.1   |          "VIDEO_RECORDING_S3_BUCKET is not set; real S3 upload evidence cannot be collected."
+12:51:11 AM web.1   |      )
+12:51:11 AM web.1   |  video_recording.s3_upload.MissingS3Configuration: VIDEO_RECORDING_S3_BUCKET is not set; real S3 upload evidence cannot be collected.
+12:51:11 AM web.1   |  2026-06-10 00:51:11,024 An error (`6008734f`): http://localhost:5000/dashboard/logger occurred:
+12:51:11 AM web.1   |  ```Traceback (most recent call last):
+12:51:11 AM web.1   |    File "/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/psynet/experiment.py", line 2466, in process_response
+12:51:11 AM web.1   |      self.timeline.advance_page(self, participant)
+12:51:11 AM web.1   |      ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+12:51:11 AM web.1   |    File "/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/psynet/utils.py", line 233, in wrapper
+12:51:11 AM web.1   |      res = fun(*args, **kwargs)
+12:51:11 AM web.1   |    File "/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/psynet/timeline.py", line 1846, in advance_page
+12:51:11 AM web.1   |      new_elt = self.get_current_elt(experiment, participant)
+12:51:11 AM web.1   |    File "/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/psynet/utils.py", line 233, in wrapper
+12:51:11 AM web.1   |      res = fun(*args, **kwargs)
+12:51:11 AM web.1   |    File "/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/psynet/timeline.py", line 1821, in get_current_elt
+12:51:11 AM web.1   |      selected = selected.resolve(experiment, participant, position)
+12:51:11 AM web.1   |    File "/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/psynet/timeline.py", line 1569, in resolve
+12:51:11 AM web.1   |      res = call_function_with_context(
+12:51:11 AM web.1   |          self.function,
+12:51:11 AM web.1   |      ...<2 lines>...
+12:51:11 AM web.1   |          participant=participant,
+12:51:11 AM web.1   |      )
+12:51:11 AM web.1   |    File "/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/psynet/utils.py", line 179, in call_function_with_context
+12:51:11 AM web.1   |      return call_function(function, *args, **new_kwargs)
+12:51:11 AM web.1   |    File "/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/psynet/utils.py", line 87, in call_function
+12:51:11 AM web.1   |      return function(*args, **kwargs)
+12:51:11 AM web.1   |    File "/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/psynet/trial/main.py", line 893, in <lambda>
+12:51:11 AM web.1   |      lambda experiment, participant: participant.current_trial._show_trial(
+12:51:11 AM web.1   |                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+12:51:11 AM web.1   |          experiment, participant
+12:51:11 AM web.1   |          ^^^^^^^^^^^^^^^^^^^^^^^
+12:51:11 AM web.1   |      ),
+12:51:11 AM web.1   |      ^
+12:51:11 AM web.1   |    File "/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/psynet/trial/main.py", line 918, in _show_trial
+12:51:11 AM web.1   |      return call_function_with_context(
+12:51:11 AM web.1   |          self.show_trial,
+12:51:11 AM web.1   |      ...<2 lines>...
+12:51:11 AM web.1   |          trial_maker=self.trial_maker,
+12:51:11 AM web.1   |      )
+12:51:11 AM web.1   |    File "/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/psynet/utils.py", line 179, in call_function_with_context
+12:51:11 AM web.1   |      return call_function(function, *args, **new_kwargs)
+12:51:11 AM web.1   |    File "/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/psynet/utils.py", line 87, in call_function
+12:51:11 AM web.1   |      return function(*args, **kwargs)
+12:51:11 AM web.1   |    File "/tmp/tmpvzv_z6qb/621d7f82-c137-c708-79f3-ad463c762f8a/experiment.py", line 97, in show_trial
+12:51:11 AM web.1   |      upload_config=build_upload_config(recording_id),
+12:51:11 AM web.1   |                    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+12:51:11 AM web.1   |    File "/tmp/tmpvzv_z6qb/621d7f82-c137-c708-79f3-ad463c762f8a/video_recording/s3_upload.py", line 31, in build_upload_config
+12:51:11 AM web.1   |      raise MissingS3Configuration(
+12:51:11 AM web.1   |          "VIDEO_RECORDING_S3_BUCKET is not set; real S3 upload evidence cannot be collected."
+12:51:11 AM web.1   |      )
+12:51:11 AM web.1   |  video_recording.s3_upload.MissingS3Configuration: VIDEO_RECORDING_S3_BUCKET is not set; real S3 upload evidence cannot be collected.
+12:51:11 AM web.1   |  ```
+12:51:11 AM web.1   |  127.0.0.1 - - [10/Jun/2026:00:51:11 +0000] "POST /response HTTP/1.1" 400 3550 "-" "python-requests/2.33.1"
+^C
+❯❯ Completed debugging of experiment with id 621d7f82-c137-c708-79f3-ad463c762f8a
+
+❯❯ Cleaning up local Heroku process...
+
+❯❯ Local Heroku process terminated.
+=============================== warnings summary ===============================
+../../../../../../../home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/_pytest/config/__init__.py:1309
+  /home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/_pytest/config/__init__.py:1309: PytestAssertRewriteWarning: Module already imported so cannot be rewritten; dallinger
+    self._mark_plugins_for_rewrite(hook, disable_autoload)
+
+../../../../../../../home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/_pytest/config/__init__.py:1309
+  /home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/_pytest/config/__init__.py:1309: PytestAssertRewriteWarning: Module already imported so cannot be rewritten; faker
+    self._mark_plugins_for_rewrite(hook, disable_autoload)
+
+../../../../../../../home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/_pytest/config/__init__.py:1309
+  /home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/_pytest/config/__init__.py:1309: PytestAssertRewriteWarning: Module already imported so cannot be rewritten; psynet
+    self._mark_plugins_for_rewrite(hook, disable_autoload)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED test.py::test_experiment[/workspace/challenges/video-recording-static-trials/attempts/2026-06-10-00-48/code/video_recording_static_real_s3]
+======================== 1 failed, 3 warnings in 9.39s =========================

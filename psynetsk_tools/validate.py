@@ -12,17 +12,32 @@ from typing import Any
 
 import yaml
 
+from psynetsk_tools.actions import (
+    ACTION_REVIEW_FILE,
+    ACTION_REVIEW_SCOPE,
+    action_review_referenced_ids,
+    open_learning_actions_from_markdown,
+    read_actions_review,
+)
 from psynetsk_tools.authors import (
     Author,
     validate_author_references,
     validate_authors,
     validate_yaml_mapping,
 )
-from psynetsk_tools.learnings import LEARNING_ACTION_RE, learning_action_bullets
+from psynetsk_tools.learnings import (
+    LEARNING_ACTION_RE,
+    is_learning_actions_heading,
+    iter_learning_sections,
+    learning_action_bullets,
+)
 from psynetsk_tools.timeline import TIMELINE_ENTRY_RE
 
 SKILLS_ROOT = Path(".cursor") / "skills"
 SKILL_NAME_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
+SKILL_REFERENCE_RE = re.compile(
+    r"(?<![\w./-])((?:(?P<skill>[a-z0-9-]+)/)?references/[A-Za-z0-9_.-]+\.md)"
+)
 PSYNET_AGENT_REQUIRED_FIELDS = {
     "checkout_path": str,
     "branch": str,
@@ -105,32 +120,6 @@ def parse_evaluation_score(evaluation_file: Path) -> int | float | None:
     return int(parsed) if parsed.is_integer() else parsed
 
 
-def iter_learning_sections(text: str) -> list[tuple[str, list[str]]]:
-    """Split LEARNINGS.md into second-level learning sections."""
-    sections: list[tuple[str, list[str]]] = []
-    current_title: str | None = None
-    current_lines: list[str] = []
-
-    for line in text.splitlines():
-        if line.startswith("## "):
-            if current_title is not None:
-                sections.append((current_title, current_lines))
-            current_title = line[3:].strip()
-            current_lines = []
-        elif current_title is not None:
-            current_lines.append(line)
-
-    if current_title is not None:
-        sections.append((current_title, current_lines))
-
-    return sections
-
-
-def is_learning_actions_heading(line: str) -> bool:
-    """Return whether a line is the Actions heading for a learning card."""
-    return line.strip() == "*Actions:*"
-
-
 def validate_learnings_file(learnings_file: Path) -> list[str]:
     """Validate the structured Markdown format for attempt learnings."""
     problems: list[str] = []
@@ -211,9 +200,14 @@ def validate_agent_metadata(
         return [f"{agent_file}: metadata must be a JSON object"]
 
     problems: list[str] = []
-    problems.extend(
-        validate_author_references(agent_file, agent.get("authors"), registry)
-    )
+    if not is_in_progress_agent(agent):
+        problems.extend(
+            validate_author_references(agent_file, agent.get("authors"), registry)
+        )
+    elif agent.get("authors") not in (None, []):
+        problems.extend(
+            validate_author_references(agent_file, agent.get("authors"), registry)
+        )
     psynet = agent.get("psynet")
     if psynet is None:
         problems.append(f"{agent_file}: missing psynet metadata")
@@ -235,6 +229,25 @@ def validate_agent_metadata(
         problems.extend(validate_run_cost_metadata(agent_file, run_cost))
 
     return problems
+
+
+def is_in_progress_agent(agent: dict[str, object]) -> bool:
+    """Return whether attempt metadata explicitly marks unfinished work."""
+
+    return "ended_at" in agent and agent.get("ended_at") is None
+
+
+def attempt_is_in_progress(attempt_dir: Path) -> bool:
+    """Return whether an attempt is explicitly marked as unfinished."""
+
+    agent_file = attempt_dir / "agent.json"
+    if not agent_file.exists():
+        return False
+    try:
+        agent = json.loads(agent_file.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return False
+    return isinstance(agent, dict) and is_in_progress_agent(agent)
 
 
 def validate_run_cost_metadata(agent_file: Path, run_cost: Any) -> list[str]:
@@ -393,6 +406,62 @@ def require_string_field(
     return []
 
 
+def referenced_skill_reference_paths(
+    text: str,
+    *,
+    current_skill_dir: Path,
+    skills_dir: Path,
+) -> set[Path]:
+    """Return skill reference paths mentioned in Markdown text."""
+
+    paths: set[Path] = set()
+    for match in SKILL_REFERENCE_RE.finditer(text):
+        reference = Path(match.group(1))
+        skill_name = match.group("skill")
+        if skill_name:
+            paths.add(skills_dir / reference)
+        else:
+            paths.add(current_skill_dir / reference)
+    return paths
+
+
+def validate_skill_references(skill_dir: Path, skills_dir: Path) -> list[str]:
+    """Validate that skill reference files are cited and citation paths exist."""
+
+    references_dir = skill_dir / "references"
+    problems: list[str] = []
+    skill_file = skill_dir / "SKILL.md"
+    reference_files = sorted(references_dir.glob("*.md")) if references_dir.exists() else []
+    known_references = set(reference_files)
+    reachable = {skill_file}
+    queue = [skill_file]
+
+    while queue:
+        current_file = queue.pop(0)
+        text = current_file.read_text(encoding="utf-8")
+        cited_paths = referenced_skill_reference_paths(
+            text,
+            current_skill_dir=skill_dir,
+            skills_dir=skills_dir,
+        )
+        for cited_path in sorted(cited_paths):
+            if not cited_path.exists():
+                problems.append(f"{current_file}: cited reference does not exist: {cited_path}")
+            elif cited_path.parent == references_dir and cited_path in known_references:
+                if cited_path not in reachable:
+                    reachable.add(cited_path)
+                    queue.append(cited_path)
+
+    for reference_file in reference_files:
+        if reference_file not in reachable:
+            problems.append(
+                f"{reference_file}: reference file is not cited from {skill_file} "
+                "or another cited reference"
+            )
+
+    return problems
+
+
 def validate_skills(
     root: Path,
     registry: dict[str, Author] | None = None,
@@ -430,6 +499,7 @@ def validate_skills(
         problems.extend(
             validate_author_references(skill_file, frontmatter.get("authors"), registry)
         )
+        problems.extend(validate_skill_references(skill_dir, skills_dir))
 
     return problems
 
@@ -441,7 +511,10 @@ def validate_attempt(
 ) -> list[str]:
     """Validate one challenge attempt folder."""
     problems: list[str] = []
-    required = ["challenge", "agent.json", "code", "evidence", "EVALUATION.md"]
+    in_progress = attempt_is_in_progress(attempt_dir)
+    required = ["challenge", "agent.json", "EVALUATION.md"]
+    if not in_progress:
+        required.extend(["code", "evidence"])
     for name in required:
         if not (attempt_dir / name).exists():
             problems.append(f"{attempt_dir}: missing {name}")
@@ -456,7 +529,8 @@ def validate_attempt(
         if score is not None and not 1 <= score <= 10:
             problems.append(f"{evaluation_file}: score must be between 1 and 10")
         if (
-            not attempt_dir.name.startswith("example-")
+            not in_progress
+            and not attempt_dir.name.startswith("example-")
             and (challenge_dir / "CRITERIA.md").exists()
             and not has_evaluation_checklist(evaluation_file)
         ):
@@ -550,6 +624,110 @@ def validate_docs(root: Path) -> list[str]:
     return []
 
 
+def collect_reviewable_learning_action_ids(root: Path) -> set[str]:
+    """Return IDs for currently open learning actions."""
+
+    action_ids: set[str] = set()
+    challenges_dir = root / "challenges"
+    if not challenges_dir.exists():
+        return action_ids
+
+    for challenge_dir in sorted(path for path in challenges_dir.iterdir() if path.is_dir()):
+        instructions_file = challenge_dir / "INSTRUCTIONS.md"
+        challenge_title = challenge_dir.name
+        if instructions_file.exists():
+            frontmatter, _ = read_markdown_frontmatter(instructions_file)
+            challenge_title = str(frontmatter.get("title") or challenge_title)
+        attempts_dir = challenge_dir / "attempts"
+        if not attempts_dir.exists():
+            continue
+        for attempt_dir in sorted(path for path in attempts_dir.iterdir() if path.is_dir()):
+            learnings_file = attempt_dir / "LEARNINGS.md"
+            if not learnings_file.exists():
+                continue
+            action_ids.update(
+                action.id
+                for action in open_learning_actions_from_markdown(
+                    learnings_file.read_text(encoding="utf-8"),
+                    challenge_slug=challenge_dir.name,
+                    challenge_title=challenge_title,
+                    attempt_name=attempt_dir.name,
+                    attempt_url=f"challenges/{challenge_dir.name}/{attempt_dir.name}/",
+                    source_path=(
+                        f"challenges/{challenge_dir.name}/attempts/"
+                        f"{attempt_dir.name}/LEARNINGS.md"
+                    ),
+                )
+            )
+
+    return action_ids
+
+
+def validate_actions_review(root: Path) -> list[str]:
+    """Validate the optional generated action review artifact."""
+
+    review_file = root / ACTION_REVIEW_FILE
+    if not review_file.exists():
+        return []
+
+    problems: list[str] = []
+    try:
+        review = read_actions_review(root)
+    except yaml.YAMLError as exc:
+        return [f"{review_file}: invalid YAML: {exc}"]
+
+    if not isinstance(review, dict):
+        return [f"{review_file}: review must be a YAML mapping"]
+
+    for field in ("generated_at", "model", "scope"):
+        value = review.get(field)
+        if not isinstance(value, str) or not value.strip():
+            problems.append(f"{review_file}: {field} must be a non-empty string")
+
+    if review.get("scope") != ACTION_REVIEW_SCOPE:
+        problems.append(f"{review_file}: scope must be {ACTION_REVIEW_SCOPE!r}")
+
+    sections = review.get("sections")
+    if not isinstance(sections, list):
+        problems.append(f"{review_file}: sections must be a list")
+        return problems
+
+    for index, section in enumerate(sections, start=1):
+        if not isinstance(section, dict):
+            problems.append(f"{review_file}: section {index} must be a mapping")
+            continue
+        for field in ("title", "summary"):
+            value = section.get(field)
+            if not isinstance(value, str) or not value.strip():
+                problems.append(
+                    f"{review_file}: section {index} {field} must be a non-empty string"
+                )
+        actions = section.get("actions")
+        if not isinstance(actions, list) or not actions:
+            problems.append(f"{review_file}: section {index} actions must be a non-empty list")
+        elif any(not isinstance(action_id, str) or not action_id for action_id in actions):
+            problems.append(
+                f"{review_file}: section {index} actions must contain non-empty strings"
+            )
+
+    referenced_ids = action_review_referenced_ids(review)
+    duplicate_ids = sorted(
+        action_id
+        for action_id in set(referenced_ids)
+        if referenced_ids.count(action_id) > 1
+    )
+    for action_id in duplicate_ids:
+        problems.append(f"{review_file}: action {action_id!r} is referenced more than once")
+
+    valid_ids = collect_reviewable_learning_action_ids(root)
+    for action_id in sorted(set(referenced_ids) - valid_ids):
+        problems.append(
+            f"{review_file}: action {action_id!r} does not match a currently open action"
+        )
+
+    return problems
+
+
 def validate_repository(root: Path) -> list[str]:
     """Validate the repository structure."""
     problems: list[str] = []
@@ -558,6 +736,7 @@ def validate_repository(root: Path) -> list[str]:
     problems.extend(validate_docs(root))
     problems.extend(validate_skills(root, registry))
     problems.extend(validate_challenges(root, registry))
+    problems.extend(validate_actions_review(root))
     return problems
 
 

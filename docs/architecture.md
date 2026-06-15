@@ -21,9 +21,10 @@ public/          Generated Hugo output, ignored by default.
 The dashboard is built from ordinary repository files:
 
 1. `uv run psynetsk-export-dashboard-data` reads skills, challenges, attempts,
-   evaluations, timelines, and learnings.
+   evaluations, timelines, learnings, and the optional `actions-review.yaml`.
 2. The exporter writes structured data to `dashboard/data/psynetsk.json`.
-3. The exporter writes generated Hugo content stubs for skills and challenges.
+3. The exporter writes generated Hugo content stubs for skills, actions, and
+   challenges.
 4. The exporter writes `README.md` to `dashboard/content/_index.md`, making the
    README the source for the public dashboard index page.
 5. Hugo renders the final static site into `public/`.
@@ -31,6 +32,10 @@ The dashboard is built from ordinary repository files:
 Generated dashboard inputs are ignored by Git. Source files such as `README.md`,
 `.cursor/skills/*/SKILL.md`, `challenges/*/INSTRUCTIONS.md`, and attempt
 artifacts are the maintained state.
+
+The Actions tab is deterministic at build time. The maintained
+`actions-review.yaml` file may contain LLM-generated grouping prose, but Hugo and
+the exporter only render that committed artifact and never call an external model.
 
 ## Review flow
 

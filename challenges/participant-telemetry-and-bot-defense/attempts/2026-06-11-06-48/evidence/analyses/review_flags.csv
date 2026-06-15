@@ -1,0 +1,6 @@
+participant_id,local_profile_label,n_trials,median_latency_ms,signals,review_decision,interpretation
+P001,mock_human_like,6,4350,,no_review_flag,No rule-based review flag in this local demonstration.
+P002,mock_fast_uniform,6,217,fast_median_latency:217ms;attention_check_failed;low_response_variance,manual_review,"Review flag only; telemetry does not prove bot, AI, or LLM assistance."
+P003,mock_attention_fail,6,3500,attention_check_failed,manual_review,"Review flag only; telemetry does not prove bot, AI, or LLM assistance."
+P004,mock_inconsistent_pair,6,3050,response_consistency_mismatch:focus_environment;response_consistency_mismatch:planning,manual_review,"Review flag only; telemetry does not prove bot, AI, or LLM assistance."
+P005,mock_missing_telemetry,6,,missing_timing_telemetry,manual_review,"Review flag only; telemetry does not prove bot, AI, or LLM assistance."

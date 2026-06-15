@@ -1,0 +1,117 @@
+[
+  {
+    "participant_id": "P001",
+    "profile_label": "attentive_human_like",
+    "n_responses": 8,
+    "failed_check_count": 0,
+    "paste_total": 0,
+    "focus_event_total": 0,
+    "visibility_event_total": 0,
+    "median_latency_ms": 28000,
+    "very_short_latency_count": 0,
+    "sparse_text_production_count": 0,
+    "generic_probe_count": 0,
+    "missing_telemetry_count": 0,
+    "flag_for_manual_review": false,
+    "review_language": "No review-worthy signal in this local fixture.",
+    "reasons": []
+  },
+  {
+    "participant_id": "P002",
+    "profile_label": "inattentive",
+    "n_responses": 8,
+    "failed_check_count": 1,
+    "paste_total": 0,
+    "focus_event_total": 32,
+    "visibility_event_total": 24,
+    "median_latency_ms": 65000,
+    "very_short_latency_count": 0,
+    "sparse_text_production_count": 0,
+    "generic_probe_count": 0,
+    "missing_telemetry_count": 0,
+    "flag_for_manual_review": true,
+    "review_language": "Review-worthy in-study signal; do not automatically reject or claim AI use.",
+    "reasons": [
+      "failed checks: attention_color"
+    ]
+  },
+  {
+    "participant_id": "P003",
+    "profile_label": "paste_heavy",
+    "n_responses": 8,
+    "failed_check_count": 0,
+    "paste_total": 24,
+    "focus_event_total": 8,
+    "visibility_event_total": 8,
+    "median_latency_ms": 12000,
+    "very_short_latency_count": 0,
+    "sparse_text_production_count": 0,
+    "generic_probe_count": 0,
+    "missing_telemetry_count": 0,
+    "flag_for_manual_review": true,
+    "review_language": "Review-worthy in-study signal; do not automatically reject or claim AI use.",
+    "reasons": [
+      "high paste count: 24"
+    ]
+  },
+  {
+    "participant_id": "P004",
+    "profile_label": "fast_low_effort",
+    "n_responses": 8,
+    "failed_check_count": 2,
+    "paste_total": 0,
+    "focus_event_total": 0,
+    "visibility_event_total": 0,
+    "median_latency_ms": 2800,
+    "very_short_latency_count": 8,
+    "sparse_text_production_count": 0,
+    "generic_probe_count": 0,
+    "missing_telemetry_count": 0,
+    "flag_for_manual_review": true,
+    "review_language": "Review-worthy in-study signal; do not automatically reject or claim AI use.",
+    "reasons": [
+      "failed checks: attention_color, comprehension_source",
+      "very short response latencies on 8 pages"
+    ]
+  },
+  {
+    "participant_id": "P005",
+    "profile_label": "mock_llm_assisted",
+    "n_responses": 8,
+    "failed_check_count": 0,
+    "paste_total": 8,
+    "focus_event_total": 16,
+    "visibility_event_total": 16,
+    "median_latency_ms": 7000,
+    "very_short_latency_count": 0,
+    "sparse_text_production_count": 0,
+    "generic_probe_count": 3,
+    "missing_telemetry_count": 0,
+    "flag_for_manual_review": true,
+    "review_language": "Review-worthy in-study signal; do not automatically reject or claim AI use.",
+    "reasons": [
+      "high paste count: 8",
+      "probe response needs inspection: probe_strategy, probe_assistance, probe_confidence"
+    ]
+  },
+  {
+    "participant_id": "P006",
+    "profile_label": "browser_agent_like",
+    "n_responses": 8,
+    "failed_check_count": 0,
+    "paste_total": 0,
+    "focus_event_total": 0,
+    "visibility_event_total": 0,
+    "median_latency_ms": 1500,
+    "very_short_latency_count": 8,
+    "sparse_text_production_count": 7,
+    "generic_probe_count": 0,
+    "missing_telemetry_count": 0,
+    "flag_for_manual_review": true,
+    "review_language": "Review-worthy in-study signal; do not automatically reject or claim AI use.",
+    "reasons": [
+      "very short response latencies on 8 pages",
+      "sparse text-production telemetry: task_river_garden, task_library_hours, task_bike_racks, comprehension_source, probe_strategy, probe_assistance, probe_confidence"
+    ]
+  }
+]

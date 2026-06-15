@@ -244,27 +244,66 @@
     return { kind: "success", symbol: "✓", text: "Pages published" };
   }
 
-  function freshnessText(run, isStale) {
+  function hasNewerRun(run) {
+    return Boolean(
+      renderedSha && run.head_sha && renderedSha !== run.head_sha,
+    );
+  }
+
+  function hasCompletedNewerRun(run) {
+    return Boolean(
+      hasNewerRun(run) &&
+        run.status === "completed" &&
+        run.conclusion === "success",
+    );
+  }
+
+  function hasRefreshablePagesContent(sourceRun, pagesRun) {
+    return Boolean(
+      hasCompletedNewerRun(sourceRun) &&
+        pagesRun &&
+        pagesRun.status === "completed" &&
+        pagesRun.conclusion === "success",
+    );
+  }
+
+  function freshnessText(run, hasNewerContent, isRefreshable) {
     if (!renderedSha) {
       return "Page freshness unknown.";
     }
     if (!run.head_sha) {
       return "Page freshness unknown.";
     }
-    if (!isStale) {
+    if (!hasNewerContent) {
       return `Page is current at ${shortSha(renderedSha)}.`;
     }
-    return `Page is stale: viewing ${shortSha(
+    if (isRefreshable) {
+      return `Refresh page to see new content: viewing ${shortSha(
+        renderedSha,
+      )}, latest branch run is ${shortSha(run.head_sha)}.`;
+    }
+    if (run.status !== "completed") {
+      return `A newer branch run is ${run.status.replace(/_/g, " ")}.`;
+    }
+    return `Page remains at ${shortSha(
       renderedSha,
-    )}, latest branch run is ${shortSha(run.head_sha)}.`;
+    )}; latest branch run did not publish new content.`;
   }
 
-  function pagesFreshnessText(sourceRun, pagesRun, isStale) {
+  function pagesFreshnessText(
+    sourceRun,
+    pagesRun,
+    hasNewerContent,
+    isRefreshable,
+  ) {
     if (!renderedSha || !sourceRun.head_sha) {
       return "Page freshness unknown.";
     }
-    if (!isStale) {
+    if (!hasNewerContent) {
       return `Published page includes ${shortSha(renderedSha)}.`;
+    }
+    if (isRefreshable) {
+      return `Refresh page to see new content: viewing ${shortSha(renderedSha)}, latest dashboard source is ${shortSha(sourceRun.head_sha)}.`;
     }
     if (pagesRun && pagesRun.status !== "completed") {
       return `Viewing ${shortSha(renderedSha)} while GitHub Pages finishes publishing ${shortSha(sourceRun.head_sha)}.`;
@@ -367,22 +406,25 @@
         }
       }
 
-      const isStale = Boolean(
-        renderedSha && run.head_sha && renderedSha !== run.head_sha,
-      );
+      const hasNewerContent = hasNewerRun(run);
+      const isRefreshable = isPagesMode()
+        ? hasRefreshablePagesContent(run, pagesRun)
+        : hasCompletedNewerRun(run);
       const state = isPagesMode()
-        ? pagesStatusForRuns(run, pagesRun, isStale)
+        ? pagesStatusForRuns(run, pagesRun, hasNewerContent)
         : statusForRun(run);
       const branch =
         !isPagesMode() && config.branch ? ` on ${config.branch}` : "";
       const label = [
         `${state.text}${branch}.`,
         isPagesMode()
-          ? pagesFreshnessText(run, pagesRun, isStale)
-          : freshnessText(run, isStale),
-        isPagesMode() ? pagesTimingText(pagesRun, isStale, now) : checkedAt(now),
+          ? pagesFreshnessText(run, pagesRun, hasNewerContent, isRefreshable)
+          : freshnessText(run, hasNewerContent, isRefreshable),
+        isPagesMode()
+          ? pagesTimingText(pagesRun, hasNewerContent, now)
+          : checkedAt(now),
       ];
-      setState(state.kind, state.symbol, label, isStale);
+      setState(state.kind, state.symbol, label, isRefreshable);
       statusLink.href =
         (isPagesMode() && pagesRun && pagesRun.html_url) ||
         run.html_url ||

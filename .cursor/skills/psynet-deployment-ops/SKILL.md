@@ -1,7 +1,7 @@
 ---
 name: psynet-deployment-ops
 description: Audit PsyNet experiment folders for deployment readiness, deployment records, export safety, app/server naming, EC2 teardown, and common local or SSH deployment blockers. Use when preparing PsyNet deployments, reconstructing deployment state, generating safe commands, or diagnosing deployment failures.
-authors: [ww577]
+authors: [williambotticelli-wells]
 ---
 
 # PsyNet Deployment Ops
@@ -32,6 +32,9 @@ Check that the experiment folder has:
 - `.gitignore` excluding `.venv/`, `.deploy/`, `.pytest_cache/`, `exports/`,
   `deploy_logs/`, source archives, and generated logs
 - recruiter/qualification JSON files when a recruiter requires them
+- qualification files and recruiter settings that match any in-experiment
+  prescreeners; use `participant-filtering-and-prescreening/SKILL.md` when the
+  mapping is unclear
 - local assets or manifests present and deployable
 - no broken symlinks to local user paths
 - no stale app/server/study names copied from another template

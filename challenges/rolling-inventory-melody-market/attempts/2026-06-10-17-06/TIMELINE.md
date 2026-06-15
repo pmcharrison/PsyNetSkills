@@ -19,16 +19,16 @@
 - T+01:12:00 [agent] Recorded seeded adoption flow with audio, verified participant.mp4 streams, exported data.zip, and saved monitor.html.
 - T+01:14:00 [agent] Captured popularity-visible condition screenshot.
 - T+01:15:00 [agent-stop] Implementation and first-pass evidence collection complete.
-- T+01:15:05 [manual] User reported updated experiment instructions and requested attempt update.
+- T+01:15:05 [manual] [intervention] User reported updated experiment instructions and requested attempt update.
 - T+01:15:10 [agent-start] Resumed autonomous implementation work for updated requirements.
 - T+01:25:00 [agent] Added audio pre-screening gate and removed drawing-style mouse/event tracking.
-- T+01:30:00 [manual] User requested GitLab/PsyNet prescreen failure handling and evidentiary repeat-back audio check.
+- T+01:30:00 [manual] [intervention] User requested GitLab/PsyNet prescreen failure handling and evidentiary repeat-back audio check.
 - T+01:36:00 [agent] Matched PsyNet prescreen pattern using UnsuccessfulEndPage with performance_check/audio_pre_screening failure tags.
 - T+01:40:00 [agent] Replaced yes/no audio check with spoken five repeat-back response and reran psynet test local successfully.
 - T+01:48:00 [agent] Recorded repeat-back audio pre-screening evidence and verified advancement into instructions.
 - T+01:54:00 [agent] Replaced browser speech synthesis with committed audio-check-five.wav after capture showed speech synthesis was silent in evidence.
 - T+01:58:00 [agent] Reran psynet test local successfully with static audio pre-screen asset.
 - T+02:06:00 [agent] Replaced pre-screen evidence with static WAV repeat-back recording, verified non-silent audio, seeded updated debug run with bots, and refreshed data.zip/monitor.html.
-- T+02:07:00 [manual] User reported another challenge update requiring overlapping notes in a time slot.
+- T+02:07:00 [manual] [intervention] User reported another challenge update requiring overlapping notes in a time slot.
 - T+02:14:00 [agent] Converted melody representation and sequencer playback to support multiple active pitches per slot.
 - T+02:16:00 [agent] Synced latest challenge wording and documented CAL pre-screen lookup/baseline choice before testing.

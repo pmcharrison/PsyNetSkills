@@ -1,0 +1,5 @@
+{{ with . }}
+  <script type="application/json" id="action-copy-data">
+    {{- . | jsonify | safeJS -}}
+  </script>
+{{ end }}

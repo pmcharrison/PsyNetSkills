@@ -1,5 +1,5 @@
 ---
-score:
+score: 7
 ---
 
 # Evaluation
@@ -10,11 +10,11 @@ Summarize the human evaluator's overall judgment.
 
 ## Strengths
 
--
+- Much improved management of sessions/events
 
 ## Weaknesses
 
--
+- UI worse for some reason.
 
 ## Criteria
 

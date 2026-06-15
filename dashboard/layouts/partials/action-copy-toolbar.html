@@ -1,0 +1,30 @@
+<div class="action-copy-toolbar" data-action-copy-toolbar hidden>
+  <span class="action-copy-count" data-action-copy-count>0 selected</span>
+  <button type="button" class="action-preview-button" data-action-preview-button disabled>
+    Preview
+  </button>
+  <button
+    type="button"
+    class="action-copy-button"
+    data-action-copy-button
+    disabled
+    aria-describedby="action-copy-tooltip"
+  >
+    Copy
+  </button>
+  <span class="action-copy-tooltip" id="action-copy-tooltip" role="tooltip">
+    Copies the selected action points with challenge, attempt, learning context,
+    notes, and source links for a new agent.
+  </span>
+  <button type="button" class="action-deselect-button" data-action-deselect-button disabled>
+    Deselect
+  </button>
+  <span class="action-copy-status" data-action-copy-status role="status" aria-live="polite"></span>
+  <div class="action-preview-popover" data-action-preview-popover hidden>
+    <div class="action-preview-header">
+      <h2>Agent instructions preview</h2>
+      <button type="button" class="action-preview-close" data-action-preview-close aria-label="Close preview">Close</button>
+    </div>
+    <pre class="action-preview-text" data-action-preview-text></pre>
+  </div>
+</div>
