@@ -1,0 +1,58 @@
+{{ if .hasAnalysisNotebook }}
+  {{ $analysisNotebookFile := .analysisNotebookFile }}
+  {{ $analysisNotebook := .analysisNotebook }}
+  <section id="analysis-notebook" class="analysis-notebook-panel evidence-subsection">
+    <div class="section-heading">
+      <h3>Analysis notebook</h3>
+      <a href="{{ $analysisNotebookFile.url | relURL }}">Open raw notebook</a>
+    </div>
+    <p class="artifact-note">
+      Rendered from <code>{{ $analysisNotebookFile.path }}</code>.
+    </p>
+    <div class="notebook-preview">
+      {{ range $index, $cell := $analysisNotebook.cells }}
+        <section class="notebook-cell notebook-cell-{{ $cell.cell_type }}">
+          {{ $source := delimit $cell.source "" }}
+          {{ if eq $cell.cell_type "markdown" }}
+            <div class="attempt-markdown">
+              {{ $source | markdownify }}
+            </div>
+          {{ else if eq $cell.cell_type "code" }}
+            <div class="notebook-code">
+              {{ highlight $source "python" "" }}
+            </div>
+            {{ with $cell.outputs }}
+              <div class="notebook-outputs">
+                {{ range . }}
+                  {{ with .text }}
+                    <pre><code>{{ delimit . "" }}</code></pre>
+                  {{ else }}
+                    {{ with .data }}
+                      {{ with index . "image/svg+xml" }}
+                        <div class="notebook-svg">
+                          {{ delimit . "" | safeHTML }}
+                        </div>
+                      {{ else }}
+                        {{ with index . "text/html" }}
+                          <div class="notebook-html">
+                            {{ delimit . "" | safeHTML }}
+                          </div>
+                        {{ else }}
+                          {{ with index . "text/plain" }}
+                            <pre><code>{{ delimit . "" }}</code></pre>
+                          {{ end }}
+                        {{ end }}
+                      {{ end }}
+                    {{ end }}
+                  {{ end }}
+                {{ end }}
+              </div>
+            {{ end }}
+          {{ else }}
+            <pre><code>{{ $source }}</code></pre>
+          {{ end }}
+        </section>
+      {{ end }}
+    </div>
+  </section>
+{{ end }}

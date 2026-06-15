@@ -1,0 +1,32 @@
+<ul class="evidence-actions">
+  <li>
+    {{ if .hasMonitor }}
+      <a href="{{ .monitorFile.url | relURL }}">Open monitor snapshot</a>
+    {{ else }}
+      <span class="missing-artifact">Monitor snapshot missing</span>
+    {{ end }}
+  </li>
+  <li>
+    {{ if .hasPerformance }}
+      <a href="{{ .performanceFile.url | relURL }}">View performance test result</a>
+    {{ else }}
+      <span class="missing-artifact">Performance result missing</span>
+    {{ end }}
+  </li>
+  <li>
+    {{ if .hasData }}
+      <a href="{{ .dataFile.url | relURL }}">Download data export</a>
+    {{ else }}
+      <span class="missing-artifact">Data export missing</span>
+    {{ end }}
+  </li>
+  <li>
+    {{ if .hasAnalysisNotebook }}
+      <a href="#analysis-notebook">View analysis notebook</a>
+    {{ else if .hasAnalyses }}
+      <a href="{{ .analysisFile.url | relURL }}">View analysis artifact</a>
+    {{ else }}
+      <span class="missing-artifact">Analysis summary missing</span>
+    {{ end }}
+  </li>
+</ul>

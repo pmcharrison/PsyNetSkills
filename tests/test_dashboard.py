@@ -1132,6 +1132,39 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
         / "challenges/example/attempts/2026-06-01-10-10/evidence/README.md",
         "# Evidence notes\n",
     )
+    write_bytes(
+        tmp_path
+        / "challenges/example/attempts/2026-06-01-10-10/evidence/screenshots/01-intro.png",
+        b"example screenshot",
+    )
+    write(
+        tmp_path
+        / "challenges/example/attempts/2026-06-01-10-10/evidence/screenshots/manifest.json",
+        json.dumps(
+            {
+                "captions": {
+                    "screenshots/01-intro.png": "Intro screen",
+                },
+            },
+        )
+        + "\n",
+    )
+    write(
+        tmp_path
+        / "challenges/example/attempts/2026-06-01-10-10/evidence/performance.json",
+        json.dumps(
+            {
+                "results": [
+                    {
+                        "n_bots": 4,
+                        "total_bots_started": 5,
+                        "bots_succeeded": 4,
+                    },
+                ],
+            },
+        )
+        + "\n",
+    )
     write(
         tmp_path
         / "challenges/example/attempts/2026-06-01-10-10/evidence/analyses/analysis.ipynb",
@@ -1177,6 +1210,11 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
         tmp_path
         / "challenges/example/attempts/2026-06-01-10-10/evidence/data.zip",
         b"exported experiment data",
+    )
+    write_bytes(
+        tmp_path
+        / "challenges/example/attempts/2026-06-01-10-10/evidence/simulated_data.zip",
+        b"simulated experiment data",
     )
     write_bytes(
         tmp_path
@@ -1314,6 +1352,7 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
     code_by_path = {
         file["path"]: file for file in exported_attempt["code_files"]
     }
+    evidence_view = exported_attempt["evidence_view"]
 
     assert evidence_by_path["participant.mp4"]["url"].startswith(
         "artifacts/blobs/sha256/",
@@ -1341,6 +1380,58 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
     assert evidence_by_path["data.zip"]["url"].startswith(
         "artifacts/blobs/sha256/",
     )
+    assert evidence_by_path["simulated_data.zip"]["published"] is False
+    assert evidence_by_path["performance.json"]["kind"] == "json"
+    assert evidence_view["participant_video"]["path"] == "participant.mp4"
+    assert evidence_view["screenshots"] == [
+        {
+            "path": "screenshots/01-intro.png",
+            "url": evidence_by_path["screenshots/01-intro.png"]["url"],
+            "kind": "png",
+            "size_bytes": len(b"example screenshot"),
+            "published": True,
+            "publication_note": "",
+            "truncated": False,
+            "caption": "Intro screen",
+        },
+    ]
+    assert evidence_view["screenshot_captions"] == {
+        "screenshots/01-intro.png": "Intro screen",
+    }
+    assert evidence_view["performance_file"]["path"] == "performance.json"
+    assert evidence_view["performance_results"] == [
+        {
+            "n_bots": 4,
+            "total_bots_started": 5,
+            "bots_succeeded": 4,
+        },
+    ]
+    assert evidence_view["monitor_file"]["path"] == "monitor.html"
+    assert evidence_view["data_file"]["path"] == "data.zip"
+    assert evidence_view["simulated_data_file"]["path"] == "simulated_data.zip"
+    assert evidence_view["analysis_notebook_file"]["path"] == "analyses/analysis.ipynb"
+    assert [file["path"] for file in evidence_view["visible_files"]] == [
+        "README.md",
+        "archive.zip",
+        "dashboard_data.html",
+        "data.zip",
+        "monitor.html",
+        "performance.json",
+        "psynet_debug.log",
+        "simulated_data.zip",
+    ]
+    assert {
+        item["key"]: item["present"]
+        for item in evidence_view["completeness"]
+    } == {
+        "participant_video": True,
+        "screenshots": True,
+        "performance": True,
+        "monitor": True,
+        "data": True,
+        "simulated_data": True,
+        "analyses": True,
+    }
     assert evidence_by_path["analyses/analysis.ipynb"]["kind"] == "ipynb"
     assert "This notebook is rendered." in evidence_by_path["analyses/analysis.ipynb"][
         "content"

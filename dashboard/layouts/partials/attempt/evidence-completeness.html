@@ -1,0 +1,13 @@
+<section class="evidence-subsection">
+  <h3>Artifact completeness</h3>
+  <ul class="artifact-checklist">
+    <li class="present">challenge/ <span>{{ len .challengeFiles }} file{{ if ne (len .challengeFiles) 1 }}s{{ end }}</span></li>
+    <li class="present">agent.json <span>metadata captured</span></li>
+    <li class="{{ if .hasPlan }}present{{ else }}missing{{ end }}">PLAN.md <span>{{ if .hasPlan }}present{{ else }}missing{{ end }}</span></li>
+    <li class="{{ if .hasTimeline }}present{{ else }}missing{{ end }}">TIMELINE.md <span>{{ if .hasTimeline }}present{{ else }}missing{{ end }}</span></li>
+    <li class="{{ if .hasExperiment }}present{{ else }}missing{{ end }}">code/experiment.py <span>{{ if .hasExperiment }}present{{ else }}missing{{ end }}</span></li>
+    {{ range .evidenceCompleteness }}
+      <li class="{{ if .present }}present{{ else }}missing{{ end }}">evidence/{{ .label }} <span>{{ .detail }}</span></li>
+    {{ end }}
+  </ul>
+</section>
