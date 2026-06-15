@@ -17,7 +17,43 @@
     "update_command": "git pull --ff-only origin master",
     "dirty": false
   },
-  "run_cost": null,
+  "run_cost": {
+    "currency": "USD",
+    "amount": 31.55,
+    "source": "cursor_usage_csv_batch_import",
+    "recorded_at": "2026-06-15T16:10:35.356510Z",
+    "attribution_status": "matched_cloud_agent_id",
+    "window_started_at": "2026-06-13T14:06:53Z",
+    "window_ended_at": "2026-06-13T15:52:53Z",
+    "matched_started_at": "2026-06-13T14:18:53.252000Z",
+    "matched_ended_at": "2026-06-13T14:18:53.252000Z",
+    "matched_cloud_agent_ids": [
+      "bc-5ed35a50-250f-46e1-858e-bea5d073c1e2"
+    ],
+    "usage": {
+      "rows": 1,
+      "input_with_cache_write": 65550,
+      "input_without_cache_write": 601779,
+      "cache_read": 36433846,
+      "output_tokens": 158179,
+      "total_tokens": 37259354,
+      "models": {
+        "gpt-5.5-high": {
+          "rows": 1,
+          "input_with_cache_write": 65550,
+          "input_without_cache_write": 601779,
+          "cache_read": 36433846,
+          "output_tokens": 158179,
+          "total_tokens": 37259354,
+          "cost": 31.55
+        }
+      }
+    },
+    "notes": [
+      "Matched Cursor CSV rows by cursor_conversation_id.",
+      "Applied attempt time window plus padding."
+    ]
+  },
   "notes": [
     "Authorship was not provided in the retry request, so authors is left empty until the human author selects an existing authors.yaml key.",
     "The plan was approved conversationally and implementation evidence is complete.",

@@ -1,5 +1,7 @@
 {
-  "authors": ["williambotticelli-wells"],
+  "authors": [
+    "williambotticelli-wells"
+  ],
   "agent": "Cursor Cloud Agent",
   "client": "cursor",
   "model": "GPT-5.5",
@@ -17,5 +19,41 @@
     "update_command": "git pull --ff-only origin master",
     "dirty": false
   },
-  "run_cost": null
+  "run_cost": {
+    "currency": "USD",
+    "amount": 23.82,
+    "source": "cursor_usage_csv_batch_import",
+    "recorded_at": "2026-06-15T16:10:35.356510Z",
+    "attribution_status": "matched_cloud_agent_id",
+    "window_started_at": "2026-06-11T14:29:42Z",
+    "window_ended_at": "2026-06-11T15:29:10Z",
+    "matched_started_at": "2026-06-11T14:28:33.702000Z",
+    "matched_ended_at": "2026-06-11T14:28:33.702000Z",
+    "matched_cloud_agent_ids": [
+      "bc-a2c539c7-1090-4d07-9e99-c61bd1f1810e"
+    ],
+    "usage": {
+      "rows": 1,
+      "input_with_cache_write": 359799,
+      "input_without_cache_write": 626830,
+      "cache_read": 22075629,
+      "output_tokens": 93676,
+      "total_tokens": 23155934,
+      "models": {
+        "gpt-5.5-high": {
+          "rows": 1,
+          "input_with_cache_write": 359799,
+          "input_without_cache_write": 626830,
+          "cache_read": 22075629,
+          "output_tokens": 93676,
+          "total_tokens": 23155934,
+          "cost": 23.82
+        }
+      }
+    },
+    "notes": [
+      "Matched Cursor CSV rows by cursor_conversation_id.",
+      "Applied attempt time window plus padding."
+    ]
+  }
 }
