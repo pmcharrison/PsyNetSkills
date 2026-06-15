@@ -47,3 +47,16 @@ attempt and implementation skills did not make that trigger hard to miss.
   multilingual, and international experiments invoke translation readiness while
   the experiment is being implemented, before final evidence collection.
   Confidence: high. Status: completed.
+
+## Placeholder face stimuli need visual polarity checks
+
+The first target placeholders were labelled ambiguous but still used visibly
+happy- or angry-leaning mouth shapes. For affective priming tasks, generated
+stimulus metadata is not enough; the rendered target assets need a visual check
+against the intended affective ambiguity or neutrality.
+
+*Actions:*
+- **PsyNetSkills:** When attempts generate placeholder affective stimuli,
+  inspect the rendered assets or participant video for unintended emotional
+  polarity before treating evidence as final. Confidence: high. Status:
+  considering.

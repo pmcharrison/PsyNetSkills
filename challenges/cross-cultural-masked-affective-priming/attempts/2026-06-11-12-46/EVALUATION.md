@@ -23,10 +23,11 @@ No private criteria were supplied for this challenge.
 ## Evidence notes
 
 - `code/` contains the runnable PsyNet experiment and generated placeholder
-  stimulus set.
+  stimulus set. Target placeholders are neutral/50-50 faces; happy/angry target
+  codes are retained only for counterbalancing and congruency analysis.
 - `evidence/participant.mp4` records the participant flow from the landing page
-  through final completion using a scripted browser runner. The experiment is
-  visual, so the recording has no audio stream.
+  through final completion using a scripted browser runner at 30 fps. The
+  experiment is visual, so the recording has no audio stream.
 - `evidence/performance.json` records a 40-bot, five-minute local performance
   test with zero bot failures.
 - `evidence/monitor.html` contains a local PsyNet dashboard snapshot.

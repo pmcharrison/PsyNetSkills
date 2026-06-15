@@ -18,3 +18,9 @@
 - T+00:45:00 [agent] Re-exported anonymized PsyNet data with `--no-source` and regenerated analysis summaries.
 - T+00:49:00 [agent] Re-recorded the participant-facing browser flow for the balanced manifest.
 - T+00:54:09 [agent-stop] Implementation and first-pass evidence collection complete.
+- T+90:59:00 [manual] User noted that the target faces still looked emotionally happy or sad rather than neutral.
+- T+91:00:00 [agent-start] Resumed implementation to repair target stimulus appearance.
+- T+91:03:00 [agent] Replaced happy/angry-leaning target placeholders with neutral 50-50 target SVGs while preserving counterbalancing metadata.
+- T+91:06:00 [agent] Passed `psynet test local` after updating `.python-version` and regenerating constraints for the current PsyNet environment.
+- T+91:11:00 [agent] Re-ran performance, export, analysis, and participant-video evidence for the neutral-target version.
+- T+91:12:33 [agent-stop] Neutral-target repair and evidence refresh complete.
