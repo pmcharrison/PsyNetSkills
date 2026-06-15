@@ -127,11 +127,15 @@ import * as THREE from "/static/three.module.min.js";
         payload.round_index = ROUND.round_index;
         payload.group_id = ROUND.group_id;
         payload.sender = MY_ID;
-        if (!socket || socket.readyState !== WebSocket.OPEN) {
+        if (!socket) {
             if (retries > 0) setTimeout(function () { send(payload, retries - 1); }, 100);
             return;
         }
-        socket.send(CHANNEL + ":" + JSON.stringify(payload));
+        try {
+            socket.send(CHANNEL + ":" + JSON.stringify(payload));
+        } catch (e) {
+            if (retries > 0) setTimeout(function () { send(payload, retries - 1); }, 100);
+        }
     }
 
     function render() {
