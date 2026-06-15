@@ -17,7 +17,7 @@ test.py .                                                                [100%]
     self._mark_plugins_for_rewrite(hook, disable_autoload)
 
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
-======================== 1 passed, 2 warnings in 20.60s ========================
+======================== 1 passed, 2 warnings in 25.71s ========================
 {
     "psynet_version": "13.3.0a0",
     "dallinger_version": "12.2.0",
@@ -27,7 +27,7 @@ test.py .                                                                [100%]
     "hard_max_experiment_payment": 1100.0,
     "soft_max_experiment_payment": 1000.0,
     "max_participant_payment": 25.0,
-    "deployment_id": "quorum-personality-and-guessing-game__mode=debug__launch=2026-06-15--23-37-05",
+    "deployment_id": "quorum-personality-and-guessing-game__mode=debug__launch=2026-06-15--23-39-02",
     "label": "Quorum personality and guessing game",
     "deployment_config": {
         "aws_region": "us-east-1",
@@ -111,8 +111,8 @@ test.py .                                                                [100%]
         "description": "Participants complete productive waiting-room tasks until a quorum forms, then enter a synchronized main loop.",
         "organization_name": "PsyNetSkills",
         "recruiter": "generic",
-        "id": "f3a3d278-cf14-cc0d-b324-65517ca04a80",
-        "heroku_app_id_root": "f3a3d278-cf14-cc0d-b324-65517ca04a80",
+        "id": "07604f72-4a78-4059-c1ff-438dd8a09d41",
+        "heroku_app_id_root": "07604f72-4a78-4059-c1ff-438dd8a09d41",
         "port": 5000
     }
 }
@@ -126,18 +126,18 @@ Done. Local export available in data/local-data.zip
   self._color = self._set_color(color) if color else color
 
 ⠋ Completed.             ✔ Completed.
-Bot:   0%|          | 0/4 [00:00<?, ?it/s]Bot: 100%|██████████| 4/4 [00:00<00:00, 3862.16it/s]
-StaticNetwork:   0%|          | 0/40 [00:00<?, ?it/s]StaticNetwork: 100%|██████████| 40/40 [00:00<00:00, 23343.84it/s]
-StaticNode:   0%|          | 0/40 [00:00<?, ?it/s]StaticNode: 100%|██████████| 40/40 [00:00<00:00, 19382.18it/s]
-LobbyTrial:   0%|          | 0/8 [00:00<?, ?it/s]LobbyTrial: 100%|██████████| 8/8 [00:00<00:00, 12237.21it/s]
-Response:   0%|          | 0/25 [00:00<?, ?it/s]Response: 100%|██████████| 25/25 [00:00<00:00, 22919.69it/s]
-ChainTrialMakerState:   0%|          | 0/4 [00:00<?, ?it/s]ChainTrialMakerState: 100%|██████████| 4/4 [00:00<00:00, 14463.12it/s]
-SimpleSyncGroup:   0%|          | 0/1 [00:00<?, ?it/s]SimpleSyncGroup: 100%|██████████| 1/1 [00:00<00:00, 13934.56it/s]
-BarrierRecord:   0%|          | 0/1 [00:00<?, ?it/s]BarrierRecord: 100%|██████████| 1/1 [00:00<00:00, 6710.89it/s]
-ParticipantLinkSyncGroup:   0%|          | 0/4 [00:00<?, ?it/s]ParticipantLinkSyncGroup: 100%|██████████| 4/4 [00:00<00:00, 29589.45it/s]
-ParticipantLinkBarrier:   0%|          | 0/3 [00:00<?, ?it/s]ParticipantLinkBarrier: 100%|██████████| 3/3 [00:00<00:00, 24966.10it/s]
-Request:   0%|          | 0/54 [00:00<?, ?it/s]Request: 100%|██████████| 54/54 [00:00<00:00, 182655.17it/s]
-ExperimentConfig:   0%|          | 0/1 [00:00<?, ?it/s]ExperimentConfig: 100%|██████████| 1/1 [00:00<00:00, 4888.47it/s]
+Bot:   0%|          | 0/4 [00:00<?, ?it/s]Bot: 100%|██████████| 4/4 [00:00<00:00, 3728.27it/s]
+StaticNetwork:   0%|          | 0/40 [00:00<?, ?it/s]StaticNetwork: 100%|██████████| 40/40 [00:00<00:00, 21831.12it/s]
+StaticNode:   0%|          | 0/40 [00:00<?, ?it/s]StaticNode: 100%|██████████| 40/40 [00:00<00:00, 18479.15it/s]
+LobbyTrial:   0%|          | 0/21 [00:00<?, ?it/s]LobbyTrial: 100%|██████████| 21/21 [00:00<00:00, 12013.15it/s]
+Response:   0%|          | 0/42 [00:00<?, ?it/s]Response: 100%|██████████| 42/42 [00:00<00:00, 20827.71it/s]
+ChainTrialMakerState:   0%|          | 0/4 [00:00<?, ?it/s]ChainTrialMakerState: 100%|██████████| 4/4 [00:00<00:00, 12797.27it/s]
+SimpleSyncGroup:   0%|          | 0/1 [00:00<?, ?it/s]SimpleSyncGroup: 100%|██████████| 1/1 [00:00<00:00, 10512.04it/s]
+BarrierRecord:   0%|          | 0/1 [00:00<?, ?it/s]BarrierRecord: 100%|██████████| 1/1 [00:00<00:00, 4860.14it/s]
+ParticipantLinkSyncGroup:   0%|          | 0/4 [00:00<?, ?it/s]ParticipantLinkSyncGroup: 100%|██████████| 4/4 [00:00<00:00, 23696.63it/s]
+ParticipantLinkBarrier:   0%|          | 0/3 [00:00<?, ?it/s]ParticipantLinkBarrier: 100%|██████████| 3/3 [00:00<00:00, 24059.11it/s]
+Request:   0%|          | 0/88 [00:00<?, ?it/s]Request: 100%|██████████| 88/88 [00:00<00:00, 160407.98it/s]
+ExperimentConfig:   0%|          | 0/1 [00:00<?, ?it/s]ExperimentConfig: 100%|██████████| 1/1 [00:00<00:00, 4378.19it/s]
 ⠋ Completed.             ✔ Completed.
 
 ❯❯ Exporting assets to data/simulated_data
@@ -151,18 +151,18 @@ Preparing to export the data...
 Zipping up the package...
 Done. Local export available in data/local-data.zip
 ⠋ Completed.             ✔ Completed.
-Bot:   0%|          | 0/4 [00:00<?, ?it/s]Bot: 100%|██████████| 4/4 [00:00<00:00, 4470.35it/s]
-StaticNetwork:   0%|          | 0/40 [00:00<?, ?it/s]StaticNetwork: 100%|██████████| 40/40 [00:00<00:00, 23487.63it/s]
-StaticNode:   0%|          | 0/40 [00:00<?, ?it/s]StaticNode: 100%|██████████| 40/40 [00:00<00:00, 19803.14it/s]
-LobbyTrial:   0%|          | 0/8 [00:00<?, ?it/s]LobbyTrial: 100%|██████████| 8/8 [00:00<00:00, 12418.37it/s]
-Response:   0%|          | 0/25 [00:00<?, ?it/s]Response: 100%|██████████| 25/25 [00:00<00:00, 23369.20it/s]
-ChainTrialMakerState:   0%|          | 0/4 [00:00<?, ?it/s]ChainTrialMakerState: 100%|██████████| 4/4 [00:00<00:00, 15307.68it/s]
-SimpleSyncGroup:   0%|          | 0/1 [00:00<?, ?it/s]SimpleSyncGroup: 100%|██████████| 1/1 [00:00<00:00, 19065.02it/s]
-BarrierRecord:   0%|          | 0/1 [00:00<?, ?it/s]BarrierRecord: 100%|██████████| 1/1 [00:00<00:00, 8081.51it/s]
-ParticipantLinkSyncGroup:   0%|          | 0/4 [00:00<?, ?it/s]ParticipantLinkSyncGroup: 100%|██████████| 4/4 [00:00<00:00, 28008.71it/s]
-ParticipantLinkBarrier:   0%|          | 0/3 [00:00<?, ?it/s]ParticipantLinkBarrier: 100%|██████████| 3/3 [00:00<00:00, 26051.58it/s]
-Request:   0%|          | 0/54 [00:00<?, ?it/s]Request: 100%|██████████| 54/54 [00:00<00:00, 216118.72it/s]
-ExperimentConfig:   0%|          | 0/1 [00:00<?, ?it/s]ExperimentConfig: 100%|██████████| 1/1 [00:00<00:00, 5322.72it/s]
+Bot:   0%|          | 0/4 [00:00<?, ?it/s]Bot: 100%|██████████| 4/4 [00:00<00:00, 4419.71it/s]
+StaticNetwork:   0%|          | 0/40 [00:00<?, ?it/s]StaticNetwork: 100%|██████████| 40/40 [00:00<00:00, 22724.12it/s]
+StaticNode:   0%|          | 0/40 [00:00<?, ?it/s]StaticNode: 100%|██████████| 40/40 [00:00<00:00, 19130.23it/s]
+LobbyTrial:   0%|          | 0/21 [00:00<?, ?it/s]LobbyTrial: 100%|██████████| 21/21 [00:00<00:00, 12356.96it/s]
+Response:   0%|          | 0/42 [00:00<?, ?it/s]Response: 100%|██████████| 42/42 [00:00<00:00, 20914.25it/s]
+ChainTrialMakerState:   0%|          | 0/4 [00:00<?, ?it/s]ChainTrialMakerState: 100%|██████████| 4/4 [00:00<00:00, 13854.02it/s]
+SimpleSyncGroup:   0%|          | 0/1 [00:00<?, ?it/s]SimpleSyncGroup: 100%|██████████| 1/1 [00:00<00:00, 15534.46it/s]
+BarrierRecord:   0%|          | 0/1 [00:00<?, ?it/s]BarrierRecord: 100%|██████████| 1/1 [00:00<00:00, 5165.40it/s]
+ParticipantLinkSyncGroup:   0%|          | 0/4 [00:00<?, ?it/s]ParticipantLinkSyncGroup: 100%|██████████| 4/4 [00:00<00:00, 22550.02it/s]
+ParticipantLinkBarrier:   0%|          | 0/3 [00:00<?, ?it/s]ParticipantLinkBarrier: 100%|██████████| 3/3 [00:00<00:00, 17073.15it/s]
+Request:   0%|          | 0/88 [00:00<?, ?it/s]Request: 100%|██████████| 88/88 [00:00<00:00, 205970.29it/s]
+ExperimentConfig:   0%|          | 0/1 [00:00<?, ?it/s]ExperimentConfig: 100%|██████████| 1/1 [00:00<00:00, 4951.95it/s]
 ⠋ Completed.             ✔ Completed.
 
 ❯❯ Exporting assets to data/simulated_data

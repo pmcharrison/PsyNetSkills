@@ -12,3 +12,7 @@ deploy/
 deploy_logs/
 data/
 dump.rdb
+node_modules/
+test-results/
+playwright-report/
+playwright-video/
