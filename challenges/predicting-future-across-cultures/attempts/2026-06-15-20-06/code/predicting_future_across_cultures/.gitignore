@@ -21,6 +21,9 @@ source_code.zip
 
 # Python cache files
 __pycache__
+node_modules/
+test-results/
+playwright-report/
 
 # MacOS Finder config files
 *.DS_Store
