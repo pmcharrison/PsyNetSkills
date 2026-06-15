@@ -36,4 +36,4 @@ The simulated patterns are workflow evidence only. They show that the experiment
 
 ## Limitations
 
-The Italian and Hebrew translations were written manually for challenge evidence and should receive native-speaker review before real deployment. Bot-generated differences are intentionally artificial and should not be interpreted as human cultural effects.
+The Italian and Hebrew translations were written manually for challenge evidence and should receive native-speaker review before real deployment. Bot-generated differences are intentionally artificial and should not be interpreted as human cultural effects. Hebrew experiment-owned content is right-aligned and right-to-left, but PsyNet-owned navigation elements such as the global progress bar still use the framework's default left-to-right layout.

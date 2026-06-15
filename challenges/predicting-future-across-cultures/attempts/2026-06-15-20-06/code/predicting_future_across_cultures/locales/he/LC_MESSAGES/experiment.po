@@ -111,7 +111,7 @@ msgstr "נא להזין מספר סופי."
 #: experiment.py
 #, python-brace-format
 msgid "Your prediction must be at least {T_PAST} {UNIT}."
-msgstr "התחזית שלך חייבת להיות לפחות {T_PAST} {UNIT}."
+msgstr "התחזית שלך חייבת להיות לפחות {T_PAST} {UNIT}"
 
 #: experiment.py
 #, python-brace-format

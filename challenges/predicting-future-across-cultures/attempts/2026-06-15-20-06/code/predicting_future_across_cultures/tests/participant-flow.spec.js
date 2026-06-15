@@ -8,11 +8,21 @@ const evidenceDir = process.env.EVIDENCE_DIR || path.resolve(__dirname, "../../.
 const screenshotDir = path.join(evidenceDir, "screenshots");
 const videoDir = path.join(evidenceDir, "raw-video");
 const recordVideo = process.env.RECORD_VIDEO === "1";
+const slowEvidence = process.env.SLOW_EVIDENCE === "1";
+const stopAtDebrief = process.env.STOP_AT_DEBRIEF === "1";
+
+async function pauseForEvidence(page, ms = 700) {
+  if (slowEvidence) {
+    await page.waitForTimeout(ms);
+  }
+}
 
 async function dismissValidation(page) {
   const modalButton = page.getByRole("button", { name: /OK|אישור|Va bene|בסדר/i });
   if (await modalButton.isVisible({ timeout: 2000 }).catch(() => false)) {
+    await pauseForEvidence(page, 1000);
     await modalButton.click();
+    await pauseForEvidence(page);
   }
 }
 
@@ -24,12 +34,14 @@ async function clickNext(page) {
     await page.getByRole("button").first().click();
   }
   await page.waitForLoadState("networkidle").catch(() => {});
+  await pauseForEvidence(page);
 }
 
 async function answerPredictionPage(page, value) {
   const input = page.locator("#number-input-container input");
   await input.waitFor({ state: "visible", timeout: 20000 });
   await input.fill(String(value));
+  await pauseForEvidence(page);
   await clickNext(page);
 }
 
@@ -95,6 +107,12 @@ test("participant flow screenshots and video evidence", async () => {
     locale === "it" ? "Grazie" : locale === "he" ? "תודה" : "Thank you"
   );
   await page.screenshot({ path: path.join(screenshotDir, `04_${locale}_debrief.png`), fullPage: true });
+  if (stopAtDebrief) {
+    await pauseForEvidence(page, 1500);
+    await context.close();
+    await browser.close();
+    return;
+  }
   await clickNext(page);
 
   await page.waitForURL(/recruiter-exit|worker_complete|complete|questionnaire/, { timeout: 30000 }).catch(() => {});
