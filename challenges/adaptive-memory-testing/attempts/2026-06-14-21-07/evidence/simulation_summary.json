@@ -1,0 +1,46 @@
+{
+  "adaptive_ability_0.45": {
+    "mean_selected_length": 18.2,
+    "mean_correct": 0.1,
+    "mean_fit_elapsed_ms": 41.883549200429115,
+    "mean_selection_elapsed_ms": 105.38751310232328
+  },
+  "adaptive_ability_1.0": {
+    "mean_selected_length": 19.1,
+    "mean_correct": 0.1,
+    "mean_fit_elapsed_ms": 44.472762002260424,
+    "mean_selection_elapsed_ms": 50.960974901681766
+  },
+  "adaptive_ability_2.5": {
+    "mean_selected_length": 13.3,
+    "mean_correct": 0.5,
+    "mean_fit_elapsed_ms": 46.32018049596809,
+    "mean_selection_elapsed_ms": 52.8884063984151
+  },
+  "random_ability_0.45": {
+    "mean_selected_length": 11.5,
+    "mean_correct": 0.4,
+    "mean_fit_elapsed_ms": 40.19378209777642,
+    "mean_selection_elapsed_ms": 40.759326398256235
+  },
+  "random_ability_1.0": {
+    "mean_selected_length": 11.5,
+    "mean_correct": 0.3,
+    "mean_fit_elapsed_ms": 45.11703460011631,
+    "mean_selection_elapsed_ms": 45.7247602957068
+  },
+  "random_ability_2.5": {
+    "mean_selected_length": 9.7,
+    "mean_correct": 0.8,
+    "mean_fit_elapsed_ms": 44.69473250210285,
+    "mean_selection_elapsed_ms": 45.33255400019698
+  },
+  "n_rows": 60,
+  "participants_per_ability": 1,
+  "abilities": [
+    0.45,
+    1.0,
+    2.5
+  ],
+  "csv_path": "/workspace/challenges/adaptive-memory-testing/attempts/2026-06-14-21-07/evidence/simulation_trials.csv"
+}
