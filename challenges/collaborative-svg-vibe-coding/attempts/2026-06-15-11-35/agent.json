@@ -17,7 +17,43 @@
     "update_command": "git pull --ff-only origin master",
     "dirty": false
   },
-  "run_cost": null,
+  "run_cost": {
+    "currency": "USD",
+    "amount": 30.32,
+    "source": "cursor_usage_csv_batch_import",
+    "recorded_at": "2026-06-15T16:10:35.356510Z",
+    "attribution_status": "matched_cloud_agent_id",
+    "window_started_at": "2026-06-15T11:35:52Z",
+    "window_ended_at": "2026-06-15T13:50:52Z",
+    "matched_started_at": "2026-06-15T11:34:23.364000Z",
+    "matched_ended_at": "2026-06-15T13:35:22.138000Z",
+    "matched_cloud_agent_ids": [
+      "bc-5ea6b129-878e-44b0-ac3f-50b538b0528f"
+    ],
+    "usage": {
+      "rows": 5,
+      "input_with_cache_write": 123577,
+      "input_without_cache_write": 1072670,
+      "cache_read": 30832735,
+      "output_tokens": 115211,
+      "total_tokens": 32144193,
+      "models": {
+        "gpt-5.5-high": {
+          "rows": 5,
+          "input_with_cache_write": 123577,
+          "input_without_cache_write": 1072670,
+          "cache_read": 30832735,
+          "output_tokens": 115211,
+          "total_tokens": 32144193,
+          "cost": 30.32
+        }
+      }
+    },
+    "notes": [
+      "Matched Cursor CSV rows by cursor_conversation_id.",
+      "Applied attempt time window plus padding."
+    ]
+  },
   "notes": [
     "Human author metadata is pending; fill authors before marking the attempt complete.",
     "Implementation and first-pass evidence are complete, but ended_at remains null until the human GitHub author key is provided."

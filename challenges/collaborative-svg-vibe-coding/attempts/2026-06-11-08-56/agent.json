@@ -19,7 +19,43 @@
     "update_command": "git pull --ff-only origin master",
     "dirty": false
   },
-  "run_cost": null,
+  "run_cost": {
+    "currency": "USD",
+    "amount": 13.69,
+    "source": "cursor_usage_csv_batch_import",
+    "recorded_at": "2026-06-15T16:10:35.356510Z",
+    "attribution_status": "matched_cloud_agent_id",
+    "window_started_at": "2026-06-11T08:56:29Z",
+    "window_ended_at": "2026-06-11T09:22:15Z",
+    "matched_started_at": "2026-06-11T08:52:44.647000Z",
+    "matched_ended_at": "2026-06-11T08:52:44.647000Z",
+    "matched_cloud_agent_ids": [
+      "bc-c9fc9b14-500d-4c0e-b715-bf127ad75f0c"
+    ],
+    "usage": {
+      "rows": 1,
+      "input_with_cache_write": 99641,
+      "input_without_cache_write": 583836,
+      "cache_read": 12604011,
+      "output_tokens": 59036,
+      "total_tokens": 13346524,
+      "models": {
+        "gpt-5.5-high": {
+          "rows": 1,
+          "input_with_cache_write": 99641,
+          "input_without_cache_write": 583836,
+          "cache_read": 12604011,
+          "output_tokens": 59036,
+          "total_tokens": 13346524,
+          "cost": 13.69
+        }
+      }
+    },
+    "notes": [
+      "Matched Cursor CSV rows by cursor_conversation_id.",
+      "Applied attempt time window plus padding."
+    ]
+  },
   "notes": [
     "Author key uses the challenge's registered author because no separate human attempt author was supplied at attempt start."
   ]

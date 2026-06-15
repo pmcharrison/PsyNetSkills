@@ -17,7 +17,43 @@
     "update_command": "git pull --ff-only origin master",
     "dirty": false
   },
-  "run_cost": null,
+  "run_cost": {
+    "currency": "USD",
+    "amount": 57.53,
+    "source": "cursor_usage_csv_batch_import",
+    "recorded_at": "2026-06-15T16:10:35.356510Z",
+    "attribution_status": "matched_cloud_agent_id",
+    "window_started_at": "2026-06-13T18:52:46Z",
+    "window_ended_at": "2026-06-13T22:57:46Z",
+    "matched_started_at": "2026-06-13T19:00:41.949000Z",
+    "matched_ended_at": "2026-06-13T21:38:03.695000Z",
+    "matched_cloud_agent_ids": [
+      "bc-fc93c601-2cb3-436b-93e4-8cc91feacdf0"
+    ],
+    "usage": {
+      "rows": 2,
+      "input_with_cache_write": 91456,
+      "input_without_cache_write": 830717,
+      "cache_read": 51666892,
+      "output_tokens": 113371,
+      "total_tokens": 52702436,
+      "models": {
+        "gpt-5.5-high": {
+          "rows": 2,
+          "input_with_cache_write": 91456,
+          "input_without_cache_write": 830717,
+          "cache_read": 51666892,
+          "output_tokens": 113371,
+          "total_tokens": 52702436,
+          "cost": 57.53
+        }
+      }
+    },
+    "notes": [
+      "Matched Cursor CSV rows by cursor_conversation_id.",
+      "Applied attempt time window plus padding."
+    ]
+  },
   "notes": [
     "Human author GitHub username must be supplied before this attempt is marked complete.",
     "Implementation and first-pass evidence collection completed before human author metadata was supplied.",

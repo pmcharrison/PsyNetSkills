@@ -1,5 +1,7 @@
 {
-  "authors": ["raja-marjieh"],
+  "authors": [
+    "raja-marjieh"
+  ],
   "agent": "Cursor Cloud Agent",
   "client": "cursor",
   "model": "GPT-5.5",
@@ -17,7 +19,43 @@
     "update_command": "git pull --ff-only origin master",
     "dirty": false
   },
-  "run_cost": null,
+  "run_cost": {
+    "currency": "USD",
+    "amount": 17.94,
+    "source": "cursor_usage_csv_batch_import",
+    "recorded_at": "2026-06-15T16:10:35.356510Z",
+    "attribution_status": "matched_cloud_agent_id",
+    "window_started_at": "2026-06-14T20:40:12Z",
+    "window_ended_at": "2026-06-14T21:40:10Z",
+    "matched_started_at": "2026-06-14T20:38:03.946000Z",
+    "matched_ended_at": "2026-06-14T20:49:52.310000Z",
+    "matched_cloud_agent_ids": [
+      "bc-912e18ce-d4ec-4c4a-be10-67a4decf054d"
+    ],
+    "usage": {
+      "rows": 2,
+      "input_with_cache_write": 107360,
+      "input_without_cache_write": 451587,
+      "cache_read": 18744763,
+      "output_tokens": 73401,
+      "total_tokens": 19377111,
+      "models": {
+        "gpt-5.5-high": {
+          "rows": 2,
+          "input_with_cache_write": 107360,
+          "input_without_cache_write": 451587,
+          "cache_read": 18744763,
+          "output_tokens": 73401,
+          "total_tokens": 19377111,
+          "cost": 17.94
+        }
+      }
+    },
+    "notes": [
+      "Matched Cursor CSV rows by cursor_conversation_id.",
+      "Applied attempt time window plus padding."
+    ]
+  },
   "notes": [
     "Plan reviewed by the user on 2026-06-14; implementation should use a 3-sentence subset and any suitable deterministic local TTS tool."
   ]
