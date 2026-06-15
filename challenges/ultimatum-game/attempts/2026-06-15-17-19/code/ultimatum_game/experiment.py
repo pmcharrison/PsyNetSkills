@@ -4,7 +4,9 @@ import re
 from typing import Dict, List
 
 from dallinger import db
+from dallinger.experiment import experiment_route
 from dominate import tags
+from flask import jsonify, request
 from markupsafe import Markup
 
 import psynet.experiment
@@ -642,9 +644,9 @@ class Exp(psynet.experiment.Experiment):
     def handle_ultimatum_message(self, data, participant: Participant):
         current = participant.var.get("current_ultimatum_round", None)
         if not current:
-            return
+            return None
         if int(data.get("round_index", -999)) != int(current["round_index"]):
-            return
+            return None
 
         participants = self.get_group_participants(participant)
         group_id = current["group_id"]
@@ -653,28 +655,46 @@ class Exp(psynet.experiment.Experiment):
             result = build_result_payload(participants, round_index)
             if result:
                 self.publish_round_state(result)
+                return result
+            proposer = next(
+                p
+                for p in participants
+                if p.var.current_ultimatum_round["role"] == "proposer"
+            )
+            proposer_answer = get_round_answer(proposer, round_index)
+            if proposer_answer.get("offer") is not None:
+                payload = {
+                    "type": "state",
+                    "group_id": group_id,
+                    "round_index": round_index,
+                    "phase": "proposal_submitted",
+                    "offer": proposer_answer["offer"],
+                    "proposer_id": proposer.id,
+                }
+                self.publish_round_state(payload)
+                return payload
             else:
-                self.publish_round_state(
-                    {
-                        "type": "state",
-                        "group_id": group_id,
-                        "round_index": round_index,
-                        "phase": "joined",
-                    }
-                )
+                payload = {
+                    "type": "state",
+                    "group_id": group_id,
+                    "round_index": round_index,
+                    "phase": "joined",
+                }
+                self.publish_round_state(payload)
+                return payload
             return
 
         if all(participant_history_contains(p, round_index) for p in participants):
             result = build_result_payload(participants, round_index)
             if result:
                 self.publish_round_state(result)
-            return
+            return result
 
         role = current["role"]
         if data.get("type") == "proposal" and role == "proposer":
             offer = int(data.get("offer"))
             if offer < 0 or offer > ENDOWMENT:
-                return
+                return None
             answers = dict(participant.var.get("ultimatum_round_answers", {}))
             answers[str(round_index)] = {
                 "round_index": round_index,
@@ -683,17 +703,16 @@ class Exp(psynet.experiment.Experiment):
             }
             participant.var.ultimatum_round_answers = answers
             db.session.commit()
-            self.publish_round_state(
-                {
-                    "type": "state",
-                    "group_id": group_id,
-                    "round_index": round_index,
-                    "phase": "proposal_submitted",
-                    "offer": offer,
-                    "proposer_id": participant.id,
-                }
-            )
-            return
+            payload = {
+                "type": "state",
+                "group_id": group_id,
+                "round_index": round_index,
+                "phase": "proposal_submitted",
+                "offer": offer,
+                "proposer_id": participant.id,
+            }
+            self.publish_round_state(payload)
+            return payload
 
         if data.get("type") == "decision" and role == "responder":
             proposer = next(
@@ -705,7 +724,7 @@ class Exp(psynet.experiment.Experiment):
             offer = proposer_answer.get("offer")
             decision = data.get("decision")
             if offer is None or decision not in ["accept", "reject"]:
-                return
+                return None
             answers = dict(participant.var.get("ultimatum_round_answers", {}))
             answers[str(round_index)] = {
                 "round_index": round_index,
@@ -723,7 +742,7 @@ class Exp(psynet.experiment.Experiment):
                 source="websocket",
             )
             self.publish_round_state(result)
-            return
+            return result
 
         if data.get("type") == "timeout":
             answers = dict(participant.var.get("ultimatum_round_answers", {}))
@@ -743,6 +762,21 @@ class Exp(psynet.experiment.Experiment):
                 source="websocket",
             )
             self.publish_round_state(result)
+            return result
+
+        return None
+
+    @experiment_route("/ultimatum_action", methods=["POST"])
+    @classmethod
+    def ultimatum_action(cls):
+        from psynet.experiment import get_experiment
+
+        data = request.get_json(silent=True) or {}
+        participant = Participant.query.filter_by(id=data.get("participant_id")).first()
+        if participant is None or participant.unique_id != data.get("unique_id"):
+            return jsonify({"ok": False, "payload": None})
+        payload = get_experiment().handle_ultimatum_message(data, participant)
+        return jsonify({"ok": True, "payload": payload})
 
     def test_serial_run_bots(self, bots: List[BotDriver]):
         for bot in bots:

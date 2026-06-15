@@ -98,6 +98,9 @@ import * as THREE from "/static/three.module.min.js";
     openSocket();
     render();
     if (ROUND.role === "proposer") startDecisionTimer("proposer");
+    setInterval(function () {
+        if (!resolved) postAction({type: "join_round"});
+    }, 1000);
 
     function openSocket() {
         var wsScheme = location.protocol === "https:" ? "wss://" : "ws://";
@@ -106,35 +109,61 @@ import * as THREE from "/static/three.module.min.js";
             + "&worker_id=" + dallinger.identity.workerId
             + "&participant_id=" + MY_ID
         );
-        socket.onopen = function () { send({type: "join_round"}); };
+        socket.onopen = function () { sendWebSocket({type: "join_round"}); };
         socket.onmessage = function (event) {
             if (event.data.indexOf(CHANNEL + ":") !== 0) return;
             var msg;
             try { msg = JSON.parse(event.data.slice(CHANNEL.length + 1)); }
             catch (e) { return; }
-            if (String(msg.group_id) !== String(ROUND.group_id)) return;
-            if (Number(msg.round_index) !== Number(ROUND.round_index)) return;
-            if (msg.type === "state" && msg.phase === "proposal_submitted") {
-                handleProposalSubmitted(Number(msg.offer));
-            } else if (msg.type === "result") {
-                handleResult(msg);
-            }
+            processIncoming(msg);
         };
     }
 
-    function send(payload, retries) {
+    function send(payload) {
+        postAction(payload);
+    }
+
+    function sendWebSocket(payload, retries) {
         retries = retries === undefined ? 20 : retries;
         payload.round_index = ROUND.round_index;
         payload.group_id = ROUND.group_id;
         payload.sender = MY_ID;
         if (!socket) {
-            if (retries > 0) setTimeout(function () { send(payload, retries - 1); }, 100);
+            if (retries > 0) setTimeout(function () { sendWebSocket(payload, retries - 1); }, 100);
             return;
         }
         try {
             socket.send(CHANNEL + ":" + JSON.stringify(payload));
         } catch (e) {
-            if (retries > 0) setTimeout(function () { send(payload, retries - 1); }, 100);
+            if (retries > 0) setTimeout(function () { sendWebSocket(payload, retries - 1); }, 100);
+        }
+    }
+
+    function postAction(payload) {
+        payload.round_index = ROUND.round_index;
+        payload.group_id = ROUND.group_id;
+        payload.sender = MY_ID;
+        payload.participant_id = Number(MY_ID);
+        payload.unique_id = psynet.uniqueId;
+        fetch("/ultimatum_action", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(payload)
+        })
+            .then(function (response) { return response.json(); })
+            .then(function (response) {
+                if (response && response.payload) processIncoming(response.payload);
+            })
+            .catch(function () {});
+    }
+
+    function processIncoming(msg) {
+        if (String(msg.group_id) !== String(ROUND.group_id)) return;
+        if (Number(msg.round_index) !== Number(ROUND.round_index)) return;
+        if (msg.type === "state" && msg.phase === "proposal_submitted") {
+            handleProposalSubmitted(Number(msg.offer));
+        } else if (msg.type === "result") {
+            handleResult(msg);
         }
     }
 
@@ -222,6 +251,10 @@ import * as THREE from "/static/three.module.min.js";
 
     function handleProposalSubmitted(offer) {
         if (resolved) return;
+        if (
+            Number(state.offer) === Number(offer)
+            && (state.status === "response" || state.status === "waiting_decision")
+        ) return;
         state.offer = offer;
         if (state.role === "responder") {
             state.status = "response";
