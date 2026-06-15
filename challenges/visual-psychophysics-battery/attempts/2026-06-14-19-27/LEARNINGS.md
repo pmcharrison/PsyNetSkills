@@ -29,4 +29,20 @@ not embedded as a standalone PNG in the attempt summary.
 - **PsyNetSkills:** Add concise psychophysics guidance requiring final visual
   verification of PsyNet progress-bar selectors and standalone PNG embedding for
   requested analysis figures. Confidence: high. Impact: medium. Status:
-  completed. Notes: Added to `.cursor/skills/psychophysics/SKILL.md`.
+  superseded. Notes: Progress-bar guidance remains in
+  `.cursor/skills/psychophysics/SKILL.md`; standalone PNG guidance was removed
+  after evaluator feedback that the PNG visualization did not work well.
+
+## Standalone analysis PNG did not satisfy review needs
+
+The evaluator was not satisfied with the standalone PNG matrix visualization.
+The artifact remains in the attempt record, but this attempt should not be used
+as a positive example for generalized psychophysics-skill guidance about
+analysis figure embedding.
+
+*Actions:*
+- **PsyNetSkills:** Remove the psychophysics skill instruction that recommends
+  standalone PNG embedding for requested analysis figures, because this attempt's
+  PNG did not satisfy the reviewer. Confidence: high. Impact: medium. Status:
+  completed. Notes: Removed from `.cursor/skills/psychophysics/SKILL.md` while
+  keeping the artifact in the attempt record.
