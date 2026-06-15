@@ -1,0 +1,15 @@
+{
+  "name": "speech_to_song_vs_prose_to_lyrics",
+  "version": "1.0.0",
+  "description": "This PsyNet experiment implements a reviewed 3-sentence subset of the speech-to-song vs. prose-to-lyrics challenge. Each participant completes 15 text trials and 15 matched audio trials: 3 sentence identities at repetition levels 0-4 in both phases.",
+  "main": "index.js",
+  "scripts": {
+    "participant-flow": "node tests/participant-flow.spec.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@playwright/test": "^1.60.0"
+  }
+}
