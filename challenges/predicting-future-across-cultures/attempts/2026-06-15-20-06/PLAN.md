@@ -4,7 +4,7 @@
 
 This experiment reimplements the everyday prediction task from Griffiths and Tenenbaum (2006) as a concise PsyNet survey. Participants observe a partial duration or extent, `t_past`, and predict the total value, `t_total`. The main design goal is not to estimate real cultural differences, but to produce a multilingual experiment and simulated dataset that can show condition-by-language patterns when such patterns are injected by bots.
 
-The visible challenge reference folder currently contains only `references/README.md`, not the attached PDF described in the public instructions. Unless the PDF becomes available before implementation, the participant vignettes will be adapted conservatively from the public prompt bases and the limitation will be documented in `REPORT.md` and `EVALUATION.md`.
+The attached Griffiths and Tenenbaum (2006) PDF is present in the challenge snapshot and will be used for the participant instructions and sample vignette style.
 
 ## Methods
 
@@ -17,6 +17,8 @@ Participants complete five prediction trials, one from each category:
 - waiting times: `t_past` in 1, 3, 7, 11, or 23 minutes.
 
 For each participant, the category order will be randomized and one `t_past` value will be sampled uniformly within each category. Each trial will show a short vignette, the observed value so far, and a numeric input for the predicted total value. Participants will be told to answer intuitively rather than by calculation. Validation will reject non-numeric values and finite predictions smaller than the displayed `t_past`; retry information will be saved for quality control.
+
+The vignettes will adapt the paper's survey introduction and sample questions for the five required categories: assessing an insurance case for a man's life span, hearing about an acquaintance's marriage length, making a surprise visit while a friend is watching a movie, hearing a favorite line of poetry, and calling a telephone box office while on hold.
 
 The exported data will include category, vignette identifier, `t_past`, unit, displayed locale, numeric prediction, whether the prediction is finite, reaction time, validation failure count or messages, and bot profile metadata for simulated runs. The end page will debrief participants that the study concerns everyday prediction under uncertainty.
 
@@ -64,6 +66,6 @@ After human approval of this plan, implementation will be validated with:
 
 Before implementation starts, please review:
 
-1. Whether the public prompt bases are sufficient if the referenced Griffiths and Tenenbaum PDF remains unavailable in `references/`.
+1. Whether the planned adaptations of the paper's sample vignettes are faithful enough for this challenge.
 2. Whether the proposed locale-specific bot variations are acceptable as modest simulated differences.
 3. Which GitHub username should be credited in `agent.json` as the human author for this attempt.
