@@ -1,27 +1,29 @@
 ---
-score:
+score: 8
 ---
 
 # Evaluation
 
 ## Summary
 
-Summarize the human evaluator's overall judgment.
+The human evaluator assigned this attempt a score of 8/10.
 
 ## Strengths
 
-- 
+- No additional prose feedback was provided.
 
 ## Weaknesses
 
-- 
+- No additional prose feedback was provided.
 
 ## Criteria
 
-If `CRITERIA.md` is present, ask the evaluator about each criterion and record the result here.
+No private criteria were supplied for this challenge.
 
-- [ ]
+## Feedback
+
+No additional prose feedback was provided.
 
 ## Notes
 
-- Score and feedback should come from a human evaluator, captured conversationally when working with Cursor Cloud Agents.
+- Score provided by the human evaluator in conversation.
