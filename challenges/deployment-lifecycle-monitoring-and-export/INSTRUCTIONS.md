@@ -2,7 +2,7 @@
 title: Deployment Lifecycle Monitoring and Export
 type: operations
 difficulty: 6
-authors: [ww577]
+authors: [williambotticelli-wells]
 ---
 
 # Deployment Lifecycle Monitoring and Export

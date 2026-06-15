@@ -2,7 +2,7 @@
 title: LLM-assisted participation defense kit
 type: experiment implementation
 difficulty: 8
-authors: [ww577]
+authors: [williambotticelli-wells]
 ---
 
 Implement a PsyNet-native participant quality and AI-assistance review kit for

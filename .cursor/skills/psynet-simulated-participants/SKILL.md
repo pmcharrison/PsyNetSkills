@@ -1,7 +1,7 @@
 ---
 name: psynet-simulated-participants
 description: Design, implement, and validate simulated participants for PsyNet experiments.
-authors: [ww577]
+authors: [williambotticelli-wells]
 ---
 
 # PsyNet simulated participants

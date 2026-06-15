@@ -1,7 +1,7 @@
 ---
 name: psynet-experiment-monitoring
 description: Monitor active or recently deployed PsyNet experiments for participant flow, data integrity, deployment health, export readiness, and safe handoff decisions.
-authors: [ww577]
+authors: [williambotticelli-wells]
 ---
 
 # PsyNet experiment monitoring

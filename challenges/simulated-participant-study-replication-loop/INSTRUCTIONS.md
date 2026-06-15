@@ -2,7 +2,7 @@
 title: Simulated participant study replication loop
 type: experiment implementation
 difficulty: 9
-authors: [ww577]
+authors: [williambotticelli-wells]
 ---
 
 Create a local PsyNet study-replication workflow that uses simulated participants
