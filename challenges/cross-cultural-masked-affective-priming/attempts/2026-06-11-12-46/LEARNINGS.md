@@ -8,7 +8,8 @@ until that file was listed in the experiment `.gitignore`.
 *Actions:*
 - **PsyNetSkills:** Update the attempt challenge guidance to mention
   `source_code.zip` alongside the standard experiment support files when
-  creating PsyNet challenge attempts. Confidence: high. Status: considering.
+  creating PsyNet challenge attempts. Confidence: high. Impact: medium. Status:
+  considering.
 
 ## Export outside the experiment directory can hit local permissions
 
@@ -20,7 +21,7 @@ Exporting into an in-experiment path and then packaging the CSVs into
 *Actions:*
 - **PsyNetSkills:** Add a note to experiment evidence guidance recommending an
   in-experiment export path followed by copying or zipping evidence into the
-  attempt folder. Confidence: medium. Status: considering.
+  attempt folder. Confidence: medium. Impact: medium. Status: considering.
 
 ## Review condition summaries before treating evidence as final
 
@@ -32,7 +33,7 @@ angry targets.
 *Actions:*
 - **PsyNetSkills:** Encourage challenge attempts to inspect analysis summaries
   for condition coverage, not only whether scripts run successfully. Confidence:
-  high. Status: considering.
+  high. Impact: high. Status: considering.
 
 ## Cross-cultural experiments should trigger translation readiness during implementation
 
@@ -46,7 +47,7 @@ attempt and implementation skills did not make that trigger hard to miss.
   `psynet-experiment-implementation` so cross-cultural, cross-national,
   multilingual, and international experiments invoke translation readiness while
   the experiment is being implemented, before final evidence collection.
-  Confidence: high. Status: completed.
+  Confidence: high. Impact: high. Status: completed.
 
 ## Placeholder face stimuli need visual polarity checks
 
@@ -58,5 +59,5 @@ against the intended affective ambiguity or neutrality.
 *Actions:*
 - **PsyNetSkills:** When attempts generate placeholder affective stimuli,
   inspect the rendered assets or participant video for unintended emotional
-  polarity before treating evidence as final. Confidence: high. Status:
-  considering.
+  polarity before treating evidence as final. Confidence: high. Impact: high.
+  Status: considering.
