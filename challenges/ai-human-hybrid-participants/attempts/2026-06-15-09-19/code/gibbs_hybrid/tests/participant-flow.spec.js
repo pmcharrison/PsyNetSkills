@@ -10,6 +10,8 @@ const attemptDir = path.resolve(__dirname, "../../..");
 const evidenceDir = path.join(attemptDir, "evidence");
 const screenshotsDir = path.join(evidenceDir, "screenshots");
 const rawVideoDir = path.join(evidenceDir, "playwright-video");
+const sliderValues = [64, 128, 192, 32, 96, 160, 224, 80];
+let sliderStep = 0;
 
 fs.mkdirSync(screenshotsDir, { recursive: true });
 fs.mkdirSync(rawVideoDir, { recursive: true });
@@ -50,12 +52,14 @@ async function answerSlider(page) {
   if (count === 0) {
     return false;
   }
+  const value = String(sliderValues[sliderStep % sliderValues.length]);
+  sliderStep += 1;
   for (let index = 0; index < count; index += 1) {
-    await sliders.nth(index).evaluate((element) => {
-      element.value = "128";
+    await sliders.nth(index).evaluate((element, nextValue) => {
+      element.value = nextValue;
       element.dispatchEvent(new Event("input", { bubbles: true }));
       element.dispatchEvent(new Event("change", { bubbles: true }));
-    });
+    }, value);
   }
   await page.waitForTimeout(150);
   return true;
