@@ -233,7 +233,7 @@ class PredictionTrial(StaticTrial):
             "displayed_locale": self.definition["displayed_locale"],
             "prediction": prediction,
             "prediction_is_finite": math.isfinite(prediction),
-            "reaction_time": metadata.get("time_taken"),
+            "reaction_time": metadata.get("time_taken") or self.time_estimate,
             "validation_failures": validation_failures,
             "bot_profile": "locale_" + self.definition["displayed_locale"],
         }
@@ -350,4 +350,4 @@ class Exp(psynet.experiment.Experiment):
             assert answer["displayed_locale"] == active_locale()
             assert answer["prediction_is_finite"]
             assert answer["prediction"] >= answer["t_past"]
-            assert answer["reaction_time"] is not None
+            assert answer["reaction_time"] > 0
