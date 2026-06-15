@@ -1,10 +1,12 @@
 {
-  "authors": [],
+  "authors": [
+    "williambotticelli-wells"
+  ],
   "agent": "Cursor Cloud Agent",
   "client": "cursor",
   "model": "GPT-5.5",
   "started_at": "2026-06-15T06:39:46Z",
-  "ended_at": null,
+  "ended_at": "2026-06-15T07:27:52Z",
   "cursor_conversation_id": "bc-f02d6be5-28c9-4615-85fe-b3a7bb45fe29",
   "skills_commit": "cd3b27b9c34cae6921e5a225ff50026375c12a1f",
   "psynet": {
