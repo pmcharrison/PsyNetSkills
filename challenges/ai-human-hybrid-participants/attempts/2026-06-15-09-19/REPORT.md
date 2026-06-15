@@ -43,6 +43,15 @@ consistency feedback path, and custom export table.
   `evidence/participant.mp4` from a local debug server.
 - `evidence/monitor.html` contains a dashboard/develop snapshot from the local
   debug run.
+- A live scheduling run with `50%` AI, `target_n_participants = 2`, and
+  `ai_scheduler_enabled = true` is documented in `evidence/live_scheduling/`.
+  A Playwright-driven browser human completed the normal participant UI, the
+  scheduler launched one mock-OpenRouter AI bot, and the export shows both
+  participants approved with `7/7` finalized trials.
+- `evidence/live_scheduling/live_scheduler_monitor.html` renders the
+  monitor-style dashboard requested by the simulated-participant scheduling
+  workflow, with graph nodes, node details, statistics, filters, sidebar
+  summaries, and expandable distribution summaries.
 
 ## Limitations
 

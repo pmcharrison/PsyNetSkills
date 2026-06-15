@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Live hybrid Gibbs scheduler monitor</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/vis-network/styles/vis-network.min.css">
+  <style>
+    #monitor-wrapper { gap: 1rem; }
+    #mynetwork { height: 720px; border: 1px solid #dee2e6; border-radius: .25rem; background: #f8f9fa; margin-bottom: 1rem; }
+    #details-pane { border: 1px solid #dee2e6; border-radius: .25rem; padding: 1rem; margin-bottom: 1rem; background: #fff; }
+    aside#sidebar { width: 320px; min-width: 280px; }
+    .sidebar-pane { border: 1px solid #dee2e6; border-radius: .25rem; margin-bottom: 1rem; padding: .75rem; background: #f8f9fa; }
+    .profile-pill { border-radius: 999px; color: white; display: inline-block; font-size: .78rem; font-weight: 700; padding: .12rem .5rem; }
+    .curated-table th { width: 12rem; color: #495057; }
+    .curated-card { border-left: 5px solid #dee2e6; padding: .75rem 1rem; margin: .75rem 0; background: #f8f9fa; }
+    .network-expander { border: 1px solid #dee2e6; border-radius: .25rem; margin: .5rem 0; padding: .5rem .75rem; background: #fff; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <nav id="dashboard-navigation"><p><a href="live_scheduler_distribution.md">Distribution report</a></p></nav>
+    <h1>Live hybrid Gibbs scheduler monitor</h1>
+    <p>This monitor summarizes a live local run where a Playwright-driven browser human entered through the normal participant UI and triggered the experiment scheduler to launch one mock-OpenRouter AI bot.</p>
+    <div id="monitor-wrapper" class="d-flex justify-content-between align-items-stretch">
+      <main class="flex-fill">
+        <section id="monitor-controls"><p><strong>Run:</strong> live scheduling, 50% AI target, 2 participant target.</p></section>
+        <section id="statistics" class="collapse show p-3 bg-light"><h2>Live scheduling statistics</h2><table class="table table-sm"><tr><th>Target AI proportion</th><td>50%</td></tr><tr><th>Actual AI proportion</th><td>50%</td></tr><tr><th>Human participants</th><td>1</td></tr><tr><th>AI participants</th><td>1</td></tr><tr><th>Total participants</th><td>2</td></tr></table></section>
+        <section id="advanced-filter" class="collapse show p-3 bg-light"><h2>Filters</h2><p>Color encodes controller: <span class="profile-pill" style="background:#4c78a8">human</span> <span class="profile-pill" style="background:#f58518">ai</span> <span class="profile-pill" style="background:#54a24b">scheduler</span>.</p></section>
+        <section id="mynetwork"></section>
+        <section id="details-pane">
+          <h2>Details</h2>
+          <div id="element-details"><h4>Hybrid scheduler</h4><table class="table table-sm curated-table"><tr><th>Target AI proportion</th><td>50%</td></tr><tr><th>Target participants</th><td>2</td></tr><tr><th>Max running AI bots</th><td>1</td></tr><tr><th>Mock OpenRouter</th><td>true</td></tr><tr><th>Observed final distribution</th><td>1 human / 1 AI</td></tr></table></div>
+        </section>
+        <section id="summary-accordion"><div class="network-expander"><h3>ai participants</h3><p>Count: 1</p></div><div class="network-expander"><h3>human participants</h3><p>Count: 1</p></div></section>
+      </main>
+      <aside id="sidebar"><div class="sidebar-pane"><h3>Target distribution</h3><p>Configured for one browser human and one scheduled AI bot.</p></div><div class="sidebar-pane"><h3>Actual distribution</h3><p>1 human, 1 AI, 2 total.</p></div><div class="sidebar-pane"><h3>Evidence</h3><p>Human flow screenshots and exported CSV rows were produced from the same live debug run.</p></div></aside>
+    </div>
+  </div>
+  <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+  <script>
+    const graphNodes = [{"id": "scheduler", "label": "Hybrid scheduler", "detailId": "scheduler", "color": {"background": "#54a24b", "border": "#2f6f2f"}, "shape": "box"}, {"id": "participant-1", "label": "P1 human", "detailId": "participant-1", "color": {"background": "#4c78a8", "border": "#333333"}}, {"id": "participant-2", "label": "P2 ai", "detailId": "participant-2", "color": {"background": "#f58518", "border": "#333333"}}];
+    const graphEdges = [{"from": "scheduler", "to": "participant-1", "label": "browser human", "arrows": "to"}, {"from": "scheduler", "to": "participant-2", "label": "scheduled AI", "arrows": "to"}];
+    const detailHtmlById = {"scheduler": "<h4>Hybrid scheduler</h4><table class=\"table table-sm curated-table\"><tr><th>Target AI proportion</th><td>50%</td></tr><tr><th>Target participants</th><td>2</td></tr><tr><th>Max running AI bots</th><td>1</td></tr><tr><th>Mock OpenRouter</th><td>true</td></tr><tr><th>Observed final distribution</th><td>1 human / 1 AI</td></tr></table>", "participant-1": "<h4>P1 human</h4><table class=\"table table-sm curated-table\"><tr><th>Controller</th><td>human</td></tr><tr><th>AI profile</th><td>none</td></tr><tr><th>Participant group</th><td>A</td></tr><tr><th>Status</th><td>approved</td></tr><tr><th>Failed</th><td>False</td></tr><tr><th>Complete</th><td>True</td></tr><tr><th>Finalized trials</th><td>7 / 7</td></tr><tr><th>Responses</th><td>13</td></tr></table>", "participant-2": "<h4>P2 ai</h4><table class=\"table table-sm curated-table\"><tr><th>Controller</th><td>ai</td></tr><tr><th>AI profile</th><td>mock_openrouter</td></tr><tr><th>Participant group</th><td>A</td></tr><tr><th>Status</th><td>approved</td></tr><tr><th>Failed</th><td>False</td></tr><tr><th>Complete</th><td>True</td></tr><tr><th>Finalized trials</th><td>7 / 7</td></tr><tr><th>Responses</th><td>13</td></tr></table>"};
+
+    function renderMonitor() {
+      const data = {
+        nodes: new vis.DataSet(graphNodes),
+        edges: new vis.DataSet(graphEdges)
+      };
+      const options = {"layout": {"hierarchical": {"enabled": true, "direction": "LR"}}, "physics": false};
+      const network = new vis.Network(document.getElementById("mynetwork"), data, options);
+      network.on("select", (params) => {
+        if (!params.nodes.length) return;
+        const node = data.nodes.get(params.nodes[0]);
+        document.getElementById("element-details").innerHTML =
+          detailHtmlById[node.detailId] || "Select a graph node to inspect details.";
+      });
+    }
+
+    window.addEventListener("load", renderMonitor);
+  </script>
+</body>
+</html>

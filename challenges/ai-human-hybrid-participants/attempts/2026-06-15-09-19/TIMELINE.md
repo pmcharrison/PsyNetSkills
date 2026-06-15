@@ -17,3 +17,7 @@
 - T+01:09:00 [agent] Generated 50% mock-AI simulation export, executed the analysis notebook, and saved performance evidence.
 - T+01:17:00 [agent] Captured Playwright participant-flow video, screenshots, and dashboard monitor snapshot.
 - T+01:20:00 [agent-stop] Implementation and first-pass evidence collection complete.
+- T+01:44:00 [agent-start] Resumed at user request to run live human-AI scheduling evidence and generate a monitor dashboard.
+- T+01:49:00 [agent] Ran a scheduler-enabled local experiment with one browser human participant and one scheduled mock-AI bot.
+- T+01:52:00 [agent] Exported live run data and generated `evidence/live_scheduling/live_scheduler_monitor.html` plus distribution/state reports.
+- T+01:55:00 [agent-stop] Live scheduling evidence collection complete.
