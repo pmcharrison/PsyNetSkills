@@ -71,9 +71,9 @@ If participants exchange live actions or messages within a trial, also read
   otherwise exit while async network growth is still pending.
 - Use `ChatRoom(room_id=f"group_{participant.sync_group.id}")` only for
   participant communication; keep phase advancement and scoring in barriers.
-- Use engaging waiting trials instead of passive wait screens when waits may be
+- Prefer engaging waiting trials over passive wait screens when waits may be
   long. Participants may be distracted or running multiple experiments at once;
-  useful filler tasks can improve retention and reduce idle no-shows.
+  useful filler tasks can improve retention and reduce idle no-shows. 
 - Add participant-facing alerts for important transitions, such as an audible
   cue when a group is matched or when the participant is expected to act. Make
   sure alerts are compatible with browser autoplay rules and the study's audio
@@ -114,7 +114,7 @@ If participants exchange live actions or messages within a trial, also read
 
 ## Common failures
 
-- Close groups with `GroupCloser`.
+- Make sure to close groups with `GroupCloser`.
 - Do not leave default wait limits in place for real recruitment sessions
   without checking whether they are appropriate.
 - Do not assume top-ups are safe; define exactly which groups may accept late
