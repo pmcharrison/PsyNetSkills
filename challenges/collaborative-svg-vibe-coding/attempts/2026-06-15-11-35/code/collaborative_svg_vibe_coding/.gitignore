@@ -1,0 +1,22 @@
+# Standard places to put a virtual environment
+env/
+.venv/
+
+# Automatically generated PsyNet/Dallinger deployment resources
+.deploy/
+server.log
+static/assets
+source_code.zip
+dump.rdb
+Dockertag
+data/
+test-results/
+node_modules/
+playwright-report/
+
+# Python and editor artifacts
+__pycache__/
+*.pyc
+.pytest_cache/
+.idea/
+*.DS_Store

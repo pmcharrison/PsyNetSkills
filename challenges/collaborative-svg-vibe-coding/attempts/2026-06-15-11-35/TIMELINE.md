@@ -1,0 +1,26 @@
+# Timeline
+
+- T+00:00:00 [agent-start] Started autonomous second-attempt setup.
+- T+00:00:30 [agent] Read public challenge instructions and verified the Hu et al. reference file.
+- T+00:02:10 [agent] Read the first attempt learning note requested by the user, focusing on independent evaluator flow and full-browser evidence.
+- T+00:04:20 [agent] Refreshed the local PsyNet checkout and recorded its revision.
+- T+00:05:40 [agent] Created the timestamped attempt folder and challenge snapshot.
+- T+00:07:30 [agent] Used two real subagents for planning: one participant-flow reviewer and one code-generator designer.
+- T+00:10:00 [agent] Wrote `PLAN.md` with the required second-attempt corrections and validation strategy.
+- T+00:10:30 [agent-stop] Paused for required human planning review before implementation.
+- T+00:18:00 [manual] [intervention] User clarified that the code generator should only see its code-generator system prompt and the high-level instruction.
+- T+00:19:00 [agent-start] Resumed plan revision.
+- T+00:20:00 [agent] Updated `PLAN.md` to keep reference identifiers, iteration numbers, and previous SVG state out of the code-generator prompt.
+- T+00:20:30 [agent-stop] Paused again for required human planning review before implementation.
+- T+00:31:00 [manual] User approved the plan and asked implementation to proceed.
+- T+00:32:00 [agent-start] Started experiment implementation.
+- T+00:53:00 [agent] Implemented the PsyNet chain task, independent evaluator task, local cat stimulus manifest, SVG sanitizer, and deterministic mock generator.
+- T+01:04:00 [agent] Fixed bot answer formatting so bot and browser responses share the same stored chain metadata.
+- T+01:09:00 [agent] `psynet test local` passed.
+- T+01:17:00 [agent] `psynet simulate` passed and exported simulated data.
+- T+01:25:00 [agent] Executed the canonical analysis notebook against the simulated export.
+- T+01:36:00 [agent] Used the participant subagent for browser evidence; video review rejected the first recording because it was cropped and incomplete.
+- T+01:54:00 [agent] Added a repeatable Playwright participant-flow script and recorded a clean 1280x720 walkthrough.
+- T+02:02:00 [agent] Updated the mock generator and evaluator fixture after video review flagged ambiguous candidate reuse.
+- T+02:14:00 [agent] Final `psynet test local`, `psynet simulate`, notebook execution, Playwright walkthrough, and video review passed.
+- T+02:15:00 [agent-stop] Implementation and first-pass evidence collection complete; attempt remains metadata-open pending human author key.
