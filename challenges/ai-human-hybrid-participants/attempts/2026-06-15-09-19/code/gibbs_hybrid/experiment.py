@@ -1,4 +1,5 @@
 import json
+import math
 import os
 import random
 import tempfile
@@ -284,6 +285,16 @@ def choose_ai_launch_count(state: HybridSchedulerState, target_proportion: float
     return launch_count
 
 
+def should_assign_ai_for_sequence(index: int, total: int, target_proportion: float) -> bool:
+    if total <= 0 or target_proportion <= 0:
+        return False
+    if target_proportion >= 100:
+        return index < total
+    previous_target = math.floor(index * target_proportion / 100 + 0.5)
+    current_target = math.floor((index + 1) * target_proportion / 100 + 0.5)
+    return index < total and current_target > previous_target
+
+
 class ColorSliderPage(ModularPage):
     def __init__(
         self,
@@ -541,18 +552,6 @@ def schedule_ai_checkpoint(participant):
 
 class Exp(psynet.experiment.Experiment):
     label = "Hybrid Gibbs demo"
-    config = {
-        "ai_participant_proportion": 0.0,
-        "target_n_participants": 6,
-        "ai_scheduler_enabled": False,
-        "ai_scheduler_max_running_bots": 4,
-        "openrouter_api_key_env": "OPENROUTER_API_KEY",
-        "openrouter_model": "openai/gpt-4o-mini",
-        "openrouter_base_url": "https://openrouter.ai/api/v1",
-        "openrouter_timeout_seconds": 30.0,
-        "openrouter_max_retries": 2,
-        "openrouter_mock_mode": True,
-    }
 
     @classmethod
     def extra_parameters(cls):
@@ -598,10 +597,11 @@ class Exp(psynet.experiment.Experiment):
         config = read_hybrid_config()
         validate_hybrid_config(config)
 
-        state = self.get_hybrid_scheduler_state(include_unmarked=False)
-        should_be_ai = choose_ai_launch_count(
-            state, config.ai_participant_proportion
-        ) > 0
+        target = config.target_n_participants or self.test_n_bots
+        bot_index = max(0, Bot.query.count() - 1)
+        should_be_ai = should_assign_ai_for_sequence(
+            bot_index, target, config.ai_participant_proportion
+        )
         bot.var.controller = "ai" if should_be_ai else "human"
         bot.var.ai_profile = (
             "mock_openrouter" if config.openrouter_mock_mode and should_be_ai else None
@@ -685,6 +685,15 @@ class Exp(psynet.experiment.Experiment):
         assert len([b for b in bots if b.var.participant_group == "A"]) == 4
         assert len([b for b in bots if b.var.participant_group == "B"]) == 4
         assert all(b.var.controller in {"human", "ai"} for b in bots)
+        config = read_hybrid_config()
+        target = min(len(bots), config.target_n_participants or len(bots))
+        expected_ai = round(target * config.ai_participant_proportion / 100)
+        controllers = [b.var.controller for b in bots]
+        actual_ai = len([controller for controller in controllers if controller == "ai"])
+        assert abs(actual_ai - expected_ai) <= 1, (
+            f"Expected approximately {expected_ai} AI bots, saw {actual_ai}: "
+            f"{controllers}"
+        )
 
         for b in bots:
             assert len(b.alive_trials) == 7  # 4 normal trials + 3 repeat trials

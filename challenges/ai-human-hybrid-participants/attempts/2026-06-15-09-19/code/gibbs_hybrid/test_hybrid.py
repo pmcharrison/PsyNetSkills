@@ -1,4 +1,9 @@
+import sys
+from pathlib import Path
+
 import pytest
+
+sys.path.insert(0, str(Path(__file__).parent))
 
 from experiment import (
     HybridConfig,
@@ -9,6 +14,7 @@ from experiment import (
     parse_ai_slider_response,
     render_ai_prompt,
     render_human_prompt,
+    should_assign_ai_for_sequence,
     validate_hybrid_config,
 )
 
@@ -114,6 +120,39 @@ def test_incremental_scheduler_launch_count():
         )
         == 0
     )
+
+
+def test_deterministic_bot_assignment_sequence():
+    assert [should_assign_ai_for_sequence(i, 8, 0) for i in range(8)] == [
+        False,
+        False,
+        False,
+        False,
+        False,
+        False,
+        False,
+        False,
+    ]
+    assert [should_assign_ai_for_sequence(i, 8, 50) for i in range(8)] == [
+        True,
+        False,
+        True,
+        False,
+        True,
+        False,
+        True,
+        False,
+    ]
+    assert [should_assign_ai_for_sequence(i, 8, 100) for i in range(8)] == [
+        True,
+        True,
+        True,
+        True,
+        True,
+        True,
+        True,
+        True,
+    ]
     assert (
         choose_ai_launch_count(
             HybridSchedulerState(
