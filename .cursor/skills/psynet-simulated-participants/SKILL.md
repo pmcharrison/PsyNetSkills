@@ -18,8 +18,9 @@ performance checks, or pre-recruitment sanity checks.
   details, `run_bot` pitfalls, and performance-test expectations.
 - Read `psynet-participant-quality-telemetry/SKILL.md` when profiles exercise
   attention, paste, disclosure, or AI-assistance review signals.
-- Read `run-attempt/SKILL.md` for live manual or human review of an existing
-  attempt. Do not replace live review with simulated data.
+- Read `review-attempt/SKILL.md` and `prepare-experiment-tunnel/SKILL.md` for
+  live manual or human review of an existing attempt. Do not replace live review
+  with simulated data.
 - Read `attempt-challenge/SKILL.md` only when creating a timestamped challenge
   attempt and evidence package.
 - Read `verify-ai-model-usability/SKILL.md` before any real LLM-in-the-loop
