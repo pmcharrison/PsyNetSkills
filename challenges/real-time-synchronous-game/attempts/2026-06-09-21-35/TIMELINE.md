@@ -11,7 +11,8 @@
 - T+01:35:00 [agent] Exported dashboard monitor HTML, data zip, and five-minute 40-bot performance JSON.
 - T+01:45:00 [agent] Ran repository validation, tests, dashboard export, and Hugo build successfully.
 - T+01:46:00 [agent-stop] Implementation and first-pass evidence collection complete.
-- T+02:00:00 [agent-start] Resumed after challenge instructions were updated to require private binary rewards with $0.01 bonuses and green/red cell feedback.
+- T+01:59:30 [manual] [intervention] Challenge instructions were updated to require private binary rewards with $0.01 bonuses and green/red cell feedback.
+- T+02:00:00 [agent-start] Resumed autonomous implementation work.
 - T+02:25:00 [agent] Updated reward UI, private payloads, performance reward accounting, attempt snapshot, and participant evidence.
 - T+02:40:00 [agent-stop] Follow-up reward UI adjustment and validation complete.
 

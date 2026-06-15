@@ -1,0 +1,33 @@
+{{ define "main" }}
+  {{ $actions := hugo.Data.psynetsk.actions }}
+  {{ $review := hugo.Data.psynetsk.action_review }}
+
+  <article class="prose actions-page">
+    <div class="actions-main">
+      <h1>{{ .Title }}</h1>
+      {{ .Content }}
+
+      <p class="action-review-meta">
+        <strong>{{ len $actions }}</strong> open action{{ if ne (len $actions) 1 }}s{{ end }}
+        {{ with $review.generated_at }}
+          · Review generated {{ . }}
+        {{ end }}
+        {{ with $review.model }}
+          · {{ . }}
+        {{ end }}
+        · Regenerate with <code>/compile-actions-review</code>
+      </p>
+      {{ partial "action-copy-toolbar.html" . }}
+      {{ partial "action-copy-data.html" $actions }}
+
+      <section class="action-review-section" aria-labelledby="open-actions-heading">
+        <h2 id="open-actions-heading" class="visually-hidden">Open actions</h2>
+        <div class="action-card-grid" data-action-list>
+          {{ range $actions }}
+            {{ partial "action-card.html" . }}
+          {{ end }}
+        </div>
+      </section>
+    </div>
+  </article>
+{{ end }}

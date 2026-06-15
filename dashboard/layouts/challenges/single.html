@@ -1,7 +1,7 @@
 {{ define "main" }}
   {{ $challengeSlug := .Params.challenge }}
   {{ $matches := where hugo.Data.psynetsk.challenges "slug" $challengeSlug }}
-  {{ $challenge := dict "attempts" (slice) "difficulty" "" "instructions" "" "title" $challengeSlug "type" "" }}
+  {{ $challenge := dict "attempts" (slice) "difficulty" "" "instructions" "" "past_editors" (slice) "title" $challengeSlug "type" "" }}
   {{ if gt (len $matches) 0 }}
     {{ $challenge = index $matches 0 }}
   {{ end }}
@@ -17,16 +17,29 @@
       <h1>{{ $challenge.title }}</h1>
       {{ partial "edit-in-github.html" (printf "%s/INSTRUCTIONS.md" $challenge.path) }}
     </div>
-    <p><strong>Type:</strong> {{ $challenge.type }}</p>
-    <p><strong>Difficulty:</strong> {{ $challenge.difficulty }}</p>
-    {{ with $challenge.authors }}
-      <p>
-        <strong>Author{{ if ne (len .) 1 }}s{{ end }}:</strong>
-        {{ partial "authors.html" . }}
-      </p>
-    {{ end }}
+    <dl class="metadata-grid challenge-frontmatter">
+      <div>
+        <dt>Type</dt>
+        <dd>{{ $challenge.type }}</dd>
+      </div>
+      <div>
+        <dt>Difficulty</dt>
+        <dd>{{ $challenge.difficulty }}</dd>
+      </div>
+      {{ with $challenge.authors }}
+        <div>
+          <dt>Author{{ if ne (len .) 1 }}s{{ end }}</dt>
+          <dd>{{ partial "authors.html" . }}</dd>
+        </div>
+      {{ end }}
+      {{ with $challenge.past_editors }}
+        <div>
+          <dt>Past editor{{ if ne (len .) 1 }}s{{ end }}</dt>
+          <dd>{{ partial "authors.html" . }}</dd>
+        </div>
+      {{ end }}
+    </dl>
 
-    <h2>Instructions</h2>
     {{ $challenge.instructions | markdownify }}
 
     <h2>Attempts</h2>
@@ -38,6 +51,7 @@
             <th>Model</th>
             <th>Score</th>
             <th>Implementation time</th>
+            <th>Interventions</th>
             <th>Cost</th>
             <th>Open actions</th>
           </tr>
@@ -56,6 +70,7 @@
               <td>{{ .model }}</td>
               <td>{{ with .score }}{{ . }}{{ else }}Not scored{{ end }}</td>
               <td>{{ .implementation_time_display }}</td>
+              <td>{{ .human_intervention_display }}</td>
               <td>{{ .run_cost_display }}</td>
               <td><span class="open-actions-count {{ $openActionsClass }}">{{ $openActions }}</span></td>
             </tr>

@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Evidence workflow demo</title>
+  <style>
+    :root { color-scheme: light; font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    body { background: #f6f8fa; color: #1f2328; margin: 0; }
+    main { background: #fff; border: 1px solid #d0d7de; border-radius: 16px; box-shadow: 0 20px 60px rgb(27 31 36 / 0.12); margin: 48px auto; max-width: 780px; padding: 32px; }
+    h1 { margin-top: 0; }
+    .card { border: 1px solid #d0d7de; border-radius: 12px; margin-top: 20px; padding: 20px; }
+    .stimulus { align-items: center; background: linear-gradient(135deg, #dbeafe, #dcfce7); border-radius: 14px; display: flex; font-size: 56px; height: 160px; justify-content: center; margin: 18px 0; }
+    button { border: 0; border-radius: 999px; cursor: pointer; font: inherit; font-weight: 700; margin: 6px 8px 6px 0; padding: 10px 18px; }
+    button.primary { background: #0969da; color: #fff; }
+    button.choice { background: #f6f8fa; border: 1px solid #d0d7de; }
+    button:disabled { cursor: not-allowed; opacity: 0.45; }
+    .feedback { font-weight: 700; min-height: 1.6em; }
+    .hidden { display: none; }
+    .muted { color: #57606a; }
+    code { background: #f6f8fa; border-radius: 6px; padding: 2px 5px; }
+  </style>
+</head>
+<body>
+  <main>
+    <section id="instructions" data-page="instructions">
+      <p class="muted">Participant flow</p>
+      <h1>Melody matching micro-study</h1>
+      <p>You will complete two short trials. Listen to each symbolic melody, choose its contour, and review the feedback.</p>
+      <label><input id="consent" type="checkbox"> I understand this demonstration task.</label>
+      <div><button id="start" class="primary" disabled>Start task</button></div>
+    </section>
+
+    <section id="trial" class="hidden" data-page="trial">
+      <p id="progress" class="muted"></p>
+      <h1 id="trial-title"></h1>
+      <div id="stimulus" class="stimulus" aria-live="polite"></div>
+      <button id="play" class="primary">Play melody</button>
+      <div class="card" aria-label="Choices">
+        <button class="choice" data-answer="rising" disabled>Rising</button>
+        <button class="choice" data-answer="falling" disabled>Falling</button>
+        <button class="choice" data-answer="flat" disabled>Flat</button>
+      </div>
+      <p id="feedback" class="feedback" aria-live="polite"></p>
+      <button id="next" class="primary" disabled>Next</button>
+    </section>
+
+    <section id="complete" class="hidden" data-page="complete">
+      <p class="muted">Complete</p>
+      <h1>Thank you</h1>
+      <p id="score"></p>
+      <p>Your responses were saved in the browser state for review.</p>
+      <pre><code id="saved-data"></code></pre>
+    </section>
+  </main>
+  <script>
+    const trials = [
+      { title: 'Trial 1: rising contour', notes: 'C D E', answer: 'rising' },
+      { title: 'Trial 2: falling contour', notes: 'G F E', answer: 'falling' },
+    ];
+    const state = { index: 0, responses: [] };
+    const $ = (id) => document.getElementById(id);
+    const show = (id) => {
+      for (const section of document.querySelectorAll('main > section')) section.classList.add('hidden');
+      $(id).classList.remove('hidden');
+    };
+    const renderTrial = () => {
+      const trial = trials[state.index];
+      $('progress').textContent = `Trial ${state.index + 1} of ${trials.length}`;
+      $('trial-title').textContent = trial.title;
+      $('stimulus').textContent = trial.notes;
+      $('feedback').textContent = '';
+      $('next').disabled = true;
+      document.querySelectorAll('.choice').forEach((button) => { button.disabled = true; button.dataset.selected = 'false'; });
+      show('trial');
+    };
+    $('consent').addEventListener('change', (event) => { $('start').disabled = !event.target.checked; });
+    $('start').addEventListener('click', renderTrial);
+    $('play').addEventListener('click', () => {
+      $('play').disabled = true;
+      $('feedback').textContent = 'Playing...';
+      setTimeout(() => {
+        $('feedback').textContent = 'Choose the contour now.';
+        document.querySelectorAll('.choice').forEach((button) => { button.disabled = false; });
+        $('play').disabled = false;
+      }, 450);
+    });
+    document.querySelectorAll('.choice').forEach((button) => {
+      button.addEventListener('click', () => {
+        const trial = trials[state.index];
+        const correct = button.dataset.answer === trial.answer;
+        document.querySelectorAll('.choice').forEach((choice) => { choice.disabled = true; choice.dataset.selected = String(choice === button); });
+        state.responses.push({ trial: state.index + 1, answer: button.dataset.answer, correct });
+        $('feedback').textContent = correct ? 'Correct - the contour matches.' : `Not quite - this one was ${trial.answer}.`;
+        $('next').disabled = false;
+      });
+    });
+    $('next').addEventListener('click', () => {
+      state.index += 1;
+      if (state.index < trials.length) {
+        renderTrial();
+      } else {
+        const correct = state.responses.filter((response) => response.correct).length;
+        $('score').textContent = `Score: ${correct} / ${trials.length}`;
+        $('saved-data').textContent = JSON.stringify(state.responses, null, 2);
+        window.participantResponses = state.responses;
+        show('complete');
+      }
+    });
+  </script>
+</body>
+</html>

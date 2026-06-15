@@ -1,0 +1,6 @@
+prompt_key,locale,selected_animal,n,proportion
+community_respect,en,bird,1,0.3333333333333333
+community_respect,en,cat,1,0.3333333333333333
+community_respect,en,dog,1,0.3333333333333333
+companion,en,cat,2,0.6666666666666666
+companion,en,dog,1,0.3333333333333333

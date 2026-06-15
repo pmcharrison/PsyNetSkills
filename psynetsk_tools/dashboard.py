@@ -8,11 +8,21 @@ import json
 import os
 import re
 import shutil
+import subprocess
 import tempfile
 from collections.abc import Mapping
 from dataclasses import asdict, dataclass
 from pathlib import Path
 
+from psynetsk_tools.actions import (
+    ACTION_REVIEW_SCOPE,
+    LearningAction,
+    action_review_referenced_ids,
+    mark_open_learning_actions_in_markdown,
+    open_learning_actions_from_markdown,
+    read_actions_review,
+    sorted_learning_actions_for_dashboard,
+)
 from psynetsk_tools.authors import (
     Author,
     author_ids_from_value,
@@ -33,6 +43,8 @@ from psynetsk_tools.validate import (
 from psynetsk_tools.timeline import (
     TimelineEntry,
     format_duration,
+    format_human_intervention_count,
+    human_intervention_count,
     implementation_time_seconds,
     parse_timeline_entries,
 )
@@ -42,6 +54,7 @@ TEXT_FILE_EXTENSIONS = {
     ".css",
     ".csv",
     ".html",
+    ".ipynb",
     ".json",
     ".md",
     ".py",
@@ -71,12 +84,25 @@ CREDENTIAL_REDACTIONS = (
     (re.compile(r"(?i)(PROLIFIC_API_TOKEN\s*=\s*)[^\s\"']+"), r"\1[REDACTED]"),
     (re.compile(r"(?i)(PROLIFIC_API_KEY\s*=\s*)[^\s\"']+"), r"\1[REDACTED]"),
 )
-TEXT_ARTIFACT_EXTENSIONS = {".html", ".log", ".md", ".txt", ".json", ".csv", ".yaml", ".yml"}
+TEXT_ARTIFACT_EXTENSIONS = {
+    ".html",
+    ".ipynb",
+    ".log",
+    ".md",
+    ".txt",
+    ".json",
+    ".csv",
+    ".yaml",
+    ".yml",
+}
 WORKFLOW_CONTEXT_REPOSITORY = "pmcharrison/PsyNetSkills"
 WORKFLOW_CONTEXT_FILES_BY_NAME = {
     "Deploy dashboard PR preview": "dashboard-preview.yml",
     "Deploy dashboard to GitHub Pages": "pages.yml",
 }
+GITHUB_NOREPLY_RE = re.compile(
+    r"(?:\d+\+)?(?P<github_id>[a-z0-9][a-z0-9-]{0,37}[a-z0-9])@users\.noreply\.github\.com$",
+)
 
 
 def read_github_event(env: Mapping[str, str]) -> dict[str, object]:
@@ -194,14 +220,18 @@ class Attempt:
     path: str
     url: str
     date_time: str
+    sort_key: str
     model: str
     authors: list[Author]
     agent_json: str
     evaluation: str
+    plan: str
     timeline: str
     timeline_entries: list[TimelineEntry]
     implementation_time_seconds: int | None
     implementation_time_display: str
+    human_intervention_count: int | None
+    human_intervention_display: str
     run_cost_amount: int | float | None
     run_cost_currency: str
     run_cost_attribution_status: str
@@ -225,6 +255,7 @@ class Challenge:
     type: str
     difficulty: int | None
     authors: list[Author]
+    past_editors: list[Author]
     instructions: str
     path: str
     url: str
@@ -242,6 +273,17 @@ class Challenge:
     def open_actions(self) -> int:
         """Return the number of unresolved learning actions."""
         return sum(attempt.open_actions for attempt in self.attempts)
+
+
+@dataclass(frozen=True)
+class ActionReviewSection:
+    """A generated review section grouping related action points."""
+
+    title: str
+    summary: str
+    action_ids: list[str]
+    actions: list[LearningAction]
+    missing_action_ids: list[str]
 
 
 def title_from_markdown(markdown: str, fallback: str) -> str:
@@ -375,6 +417,21 @@ def attempt_date_time(name: str, agent: dict[str, object]) -> str:
         if timestamp_match is not None:
             _, month, day, hour, minute = timestamp_match.groups()
             return f"{month}/{day} {hour}:{minute}"
+
+    return name
+
+
+def attempt_sort_key(name: str, agent: dict[str, object]) -> str:
+    """Return a sortable timestamp key for an attempt."""
+    match = re.search(r"(\d{4})-(\d{2})-(\d{2})(?:-(\d{2})-(\d{2}))?", name)
+    if match is not None:
+        year, month, day, hour, minute = match.groups()
+        return f"{year}-{month}-{day}T{hour or '00'}:{minute or '00'}"
+
+    for key in ("started_at", "ended_at"):
+        value = agent.get(key)
+        if isinstance(value, str):
+            return value
 
     return name
 
@@ -616,6 +673,7 @@ def collect_attempts(
         evaluation_file = attempt_dir / "EVALUATION.md"
         learnings_file = attempt_dir / "LEARNINGS.md"
         timeline_file = attempt_dir / "TIMELINE.md"
+        plan_file = attempt_dir / "PLAN.md"
         score = (
             parse_evaluation_score(evaluation_file)
             if evaluation_file.exists()
@@ -645,18 +703,22 @@ def collect_attempts(
         )
         timeline_entries = parse_timeline_entries(timeline)
         implementation_seconds = implementation_time_seconds(timeline_entries)
-        learnings = (
-            demote_markdown_headings(
-                strip_first_heading(
-                    learnings_file.read_text(encoding="utf-8")
-                )
+        intervention_count = human_intervention_count(timeline_entries)
+        learnings_source = ""
+        learnings = ""
+        if learnings_file.exists():
+            learnings_source = strip_first_heading(
+                learnings_file.read_text(encoding="utf-8"),
             )
-            if learnings_file.exists()
-            else ""
-        )
+            learnings = mark_open_learning_actions_in_markdown(
+                learnings_source,
+                challenge_slug=challenge_dir.name,
+                attempt_name=attempt_dir.name,
+            )
+            learnings = demote_markdown_headings(learnings)
         open_actions = sum(
             1
-            for _, _, _, status in parse_learning_actions(learnings)
+            for _, _, _, _, status in parse_learning_actions(learnings_source)
             if status not in COMPLETED_LEARNING_STATUSES
         )
         artifact_prefix = attempt_artifact_url_prefix(
@@ -673,6 +735,7 @@ def collect_attempts(
                 ),
                 url=f"challenges/{challenge_dir.name}/{attempt_dir.name}/",
                 date_time=attempt_date_time(attempt_dir.name, agent),
+                sort_key=attempt_sort_key(attempt_dir.name, agent),
                 model=str(agent.get("model") or "Unknown model"),
                 authors=resolve_authors(
                     author_ids_from_value(agent.get("authors")),
@@ -688,10 +751,19 @@ def collect_attempts(
                     if evaluation_file.exists()
                     else ""
                 ),
+                plan=(
+                    strip_first_heading(plan_file.read_text(encoding="utf-8"))
+                    if plan_file.exists()
+                    else ""
+                ),
                 timeline=timeline,
                 timeline_entries=timeline_entries,
                 implementation_time_seconds=implementation_seconds,
                 implementation_time_display=format_duration(implementation_seconds),
+                human_intervention_count=intervention_count,
+                human_intervention_display=format_human_intervention_count(
+                    intervention_count,
+                ),
                 run_cost_amount=run_cost_amount,
                 run_cost_currency=run_cost_currency,
                 run_cost_attribution_status=run_cost_attribution_status,
@@ -768,6 +840,80 @@ def attempt_section_urls(
     }
 
 
+def resolve_commit_author_id(
+    name: str,
+    email: str,
+    author_registry: Mapping[str, Author],
+) -> str | None:
+    """Resolve one git commit author identity to an author registry id."""
+
+    normalized_name = name.strip().casefold()
+    if normalized_name:
+        for author_id, author in author_registry.items():
+            if author.name.casefold() == normalized_name:
+                return author_id
+
+    normalized_email = email.strip().lower()
+    match = GITHUB_NOREPLY_RE.search(normalized_email)
+    if match is not None:
+        github_id = match.group("github_id")
+        if github_id in author_registry:
+            return github_id
+
+    local_part = normalized_email.split("@", 1)[0]
+    if local_part in author_registry:
+        return local_part
+    return None
+
+
+def collect_past_editors(
+    root: Path,
+    relative_path: Path,
+    current_authors: list[Author],
+    author_registry: Mapping[str, Author],
+) -> list[Author]:
+    """Collect past editors from git history for a repository path."""
+
+    if not author_registry:
+        return []
+
+    result = subprocess.run(
+        [
+            "git",
+            "log",
+            "--follow",
+            "--format=%aN%x00%aE",
+            "--",
+            relative_path.as_posix(),
+        ],
+        cwd=root,
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    if result.returncode != 0:
+        return []
+
+    current_author_ids = {author.id for author in current_authors}
+    editor_ids: list[str] = []
+    seen_editor_ids: set[str] = set()
+    for line in result.stdout.splitlines():
+        name, separator, email = line.partition("\x00")
+        if not separator:
+            continue
+        author_id = resolve_commit_author_id(name, email, author_registry)
+        if (
+            author_id is None
+            or author_id in current_author_ids
+            or author_id in seen_editor_ids
+        ):
+            continue
+        seen_editor_ids.add(author_id)
+        editor_ids.append(author_id)
+
+    return resolve_authors(editor_ids, dict(author_registry))
+
+
 def collect_challenges(
     root: Path,
     author_registry: dict[str, Author] | None = None,
@@ -788,6 +934,10 @@ def collect_challenges(
         frontmatter, _ = read_markdown_frontmatter(instructions_file)
         instructions = strip_challenge_frontmatter(instructions_markdown)
         slug = challenge_dir.name
+        challenge_authors = resolve_authors(
+            author_ids_from_value(frontmatter.get("authors")),
+            author_registry,
+        )
         challenges.append(
             Challenge(
                 slug=slug,
@@ -797,8 +947,11 @@ def collect_challenges(
                 ),
                 type=frontmatter.get("type", ""),
                 difficulty=parse_difficulty(instructions_file),
-                authors=resolve_authors(
-                    author_ids_from_value(frontmatter.get("authors")),
+                authors=challenge_authors,
+                past_editors=collect_past_editors(
+                    root,
+                    instructions_file.relative_to(root),
+                    challenge_authors,
                     author_registry,
                 ),
                 instructions=instructions,
@@ -814,6 +967,105 @@ def collect_challenges(
     return challenges
 
 
+def collect_open_learning_actions(
+    root: Path,
+    challenges: list[Challenge],
+) -> list[LearningAction]:
+    """Collect open learning actions across all challenge attempts."""
+
+    actions: list[LearningAction] = []
+    for challenge in challenges:
+        for attempt in challenge.attempts:
+            learnings_file = root / attempt.path / "LEARNINGS.md"
+            if not learnings_file.exists():
+                continue
+            actions.extend(
+                open_learning_actions_from_markdown(
+                    learnings_file.read_text(encoding="utf-8"),
+                    challenge_slug=challenge.slug,
+                    challenge_title=challenge.title,
+                    attempt_name=attempt.name,
+                    attempt_url=attempt.url,
+                    source_path=f"{attempt.path}/LEARNINGS.md",
+                ),
+            )
+    return actions
+
+
+def latest_attempts_data(
+    challenges: list[Challenge],
+    limit: int = 20,
+) -> list[dict[str, object]]:
+    """Return dashboard-ready attempt summaries ordered most recent first."""
+
+    attempts = [
+        {
+            **asdict(attempt),
+            "challenge_slug": challenge.slug,
+            "challenge_title": challenge.title,
+            "challenge_url": challenge.url,
+        }
+        for challenge in challenges
+        for attempt in challenge.attempts
+    ]
+    return sorted(
+        attempts,
+        key=lambda attempt: str(attempt["sort_key"]),
+        reverse=True,
+    )[:limit]
+
+
+def action_review_data(
+    root: Path,
+    actions: list[LearningAction],
+) -> dict[str, object]:
+    """Return dashboard-ready generated action review data."""
+
+    review = read_actions_review(root)
+    actions_by_id = {action.id: action for action in actions}
+    referenced_ids = set(action_review_referenced_ids(review))
+    sections: list[ActionReviewSection] = []
+
+    raw_sections = review.get("sections", [])
+    if isinstance(raw_sections, list):
+        for raw_section in raw_sections:
+            if not isinstance(raw_section, dict):
+                continue
+            raw_action_ids = raw_section.get("actions", [])
+            if not isinstance(raw_action_ids, list):
+                raw_action_ids = []
+            action_ids = [str(action_id) for action_id in raw_action_ids]
+            sections.append(
+                ActionReviewSection(
+                    title=str(raw_section.get("title") or "Untitled section"),
+                    summary=str(raw_section.get("summary") or ""),
+                    action_ids=action_ids,
+                    actions=[
+                        actions_by_id[action_id]
+                        for action_id in action_ids
+                        if action_id in actions_by_id
+                    ],
+                    missing_action_ids=[
+                        action_id
+                        for action_id in action_ids
+                        if action_id not in actions_by_id
+                    ],
+                ),
+            )
+
+    return {
+        "generated_at": str(review.get("generated_at") or ""),
+        "model": str(review.get("model") or ""),
+        "scope": str(review.get("scope") or ACTION_REVIEW_SCOPE),
+        "sections": [asdict(section) for section in sections],
+        "unreviewed_actions": [
+            asdict(action)
+            for action in actions
+            if action.id not in referenced_ids
+        ],
+    }
+
+
 def dashboard_data(
     root: Path,
     artifact_publications: Mapping[
@@ -825,6 +1077,9 @@ def dashboard_data(
     author_registry, _ = read_author_registry(root)
     skills = collect_skills(root, author_registry)
     challenges = collect_challenges(root, author_registry, artifact_publications)
+    actions = sorted_learning_actions_for_dashboard(
+        collect_open_learning_actions(root, challenges),
+    )
     return {
         "authors": [asdict(author) for author in author_registry.values()],
         "skills": [asdict(skill) for skill in skills],
@@ -836,9 +1091,13 @@ def dashboard_data(
             }
             for challenge in challenges
         ],
+        "attempts": latest_attempts_data(challenges),
+        "actions": [asdict(action) for action in actions],
+        "action_review": action_review_data(root, actions),
         "counts": {
             "skills": len(skills),
             "challenges": len(challenges),
+            "actions": len(actions),
         },
     }
 
@@ -901,6 +1160,39 @@ def write_skill_content(
             page,
             encoding="utf-8",
         )
+
+
+def write_actions_content(dashboard_dir: Path) -> None:
+    """Write the generated Hugo content page for action reviews."""
+
+    actions_dir = dashboard_dir / "content" / "actions"
+    shutil.rmtree(actions_dir, ignore_errors=True)
+    actions_dir.mkdir(parents=True, exist_ok=True)
+    (actions_dir / "_index.md").write_text(
+        write_frontmatter(
+            "Actions",
+            "This page compiles unresolved action points from previous attempts. "
+            "You can select multiple action points at a time and copy them as "
+            "instructions for a new agent to resolve.\n",
+        ),
+        encoding="utf-8",
+    )
+
+
+def write_attempts_content(dashboard_dir: Path) -> None:
+    """Write the generated Hugo content page for latest attempts."""
+
+    attempts_dir = dashboard_dir / "content" / "attempts"
+    shutil.rmtree(attempts_dir, ignore_errors=True)
+    attempts_dir.mkdir(parents=True, exist_ok=True)
+    (attempts_dir / "_index.md").write_text(
+        write_frontmatter(
+            "Attempts",
+            "This page lists the latest 20 challenge attempts, with the most "
+            "recent attempt first.\n",
+        ),
+        encoding="utf-8",
+    )
 
 
 def write_challenge_content(
@@ -1137,6 +1429,8 @@ def export_dashboard(root: Path, dashboard_dir: Path) -> None:
         dashboard_dir,
         [Skill(**skill) for skill in data["skills"]],  # type: ignore[arg-type]
     )
+    write_actions_content(dashboard_dir)
+    write_attempts_content(dashboard_dir)
     write_challenge_content(
         dashboard_dir,
         [
@@ -1146,6 +1440,7 @@ def export_dashboard(root: Path, dashboard_dir: Path) -> None:
                 type=challenge["type"],
                 difficulty=challenge["difficulty"],
                 authors=challenge["authors"],
+                past_editors=challenge["past_editors"],
                 instructions=challenge["instructions"],
                 path=challenge["path"],
                 url=challenge["url"],

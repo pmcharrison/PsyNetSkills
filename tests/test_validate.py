@@ -66,6 +66,34 @@ def minimal_repo(root: Path) -> None:
     write(root / "challenges/example/attempts/.gitkeep", "")
 
 
+def write_valid_attempt(
+    root: Path,
+    *,
+    action_status: str = "considering",
+) -> None:
+    """Write a minimal real attempt with one learning action."""
+
+    attempt_dir = root / "challenges/example/attempts/2026-06-01-10-10"
+    write(attempt_dir / "challenge/INSTRUCTIONS.md", "# Snapshot\n")
+    write(attempt_dir / "agent.json", agent_json())
+    write(attempt_dir / "code/README.md", "# Code\n")
+    write(attempt_dir / "evidence/README.md", "# Evidence\n")
+    write(attempt_dir / "EVALUATION.md", "---\nscore:\n---\n")
+    write(
+        attempt_dir / "LEARNINGS.md",
+        "# Learnings\n\n"
+        "## Useful finding\n\n"
+        "*Actions:*\n\n"
+        "- **PsyNetSkills:** Document it. Confidence: high. "
+        f"Impact: medium. Status: {action_status}.\n",
+    )
+    write(
+        attempt_dir / "TIMELINE.md",
+        "# Timeline\n\n"
+        "- T+00:00:00 [agent-start] Started.\n",
+    )
+
+
 def test_validate_repository_accepts_minimal_structure(tmp_path: Path) -> None:
     minimal_repo(tmp_path)
 
@@ -88,6 +116,64 @@ def test_validate_repository_rejects_skill_name_mismatch(
     problems = validate_repository(tmp_path)
 
     assert any("name must match folder" in problem for problem in problems)
+
+
+def test_validate_repository_rejects_uncited_skill_reference(
+    tmp_path: Path,
+) -> None:
+    minimal_repo(tmp_path)
+    write(
+        tmp_path / ".cursor/skills/example-skill/references/details.md",
+        "# Details\n",
+    )
+
+    problems = validate_repository(tmp_path)
+
+    assert any("reference file is not cited" in problem for problem in problems)
+
+
+def test_validate_repository_accepts_cited_skill_reference_chain(
+    tmp_path: Path,
+) -> None:
+    minimal_repo(tmp_path)
+    write(
+        tmp_path / ".cursor/skills/example-skill/SKILL.md",
+        "---\n"
+        "name: example-skill\n"
+        "description: Use when testing repository validation.\n"
+        "authors: [pmcharrison]\n"
+        "---\n\n"
+        "Read `references/primary.md`.\n",
+    )
+    write(
+        tmp_path / ".cursor/skills/example-skill/references/primary.md",
+        "# Primary\n\nRead `references/secondary.md`.\n",
+    )
+    write(
+        tmp_path / ".cursor/skills/example-skill/references/secondary.md",
+        "# Secondary\n",
+    )
+
+    assert validate_repository(tmp_path) == []
+
+
+def test_validate_repository_rejects_missing_skill_reference_path(
+    tmp_path: Path,
+) -> None:
+    minimal_repo(tmp_path)
+    write(
+        tmp_path / ".cursor/skills/example-skill/SKILL.md",
+        "---\n"
+        "name: example-skill\n"
+        "description: Use when testing repository validation.\n"
+        "authors: [pmcharrison]\n"
+        "---\n\n"
+        "Read `references/missing.md`.\n",
+    )
+
+    problems = validate_repository(tmp_path)
+
+    assert any("cited reference does not exist" in problem for problem in problems)
 
 
 def test_parse_evaluation_score_handles_frontmatter(tmp_path: Path) -> None:
@@ -119,9 +205,9 @@ def test_validate_learnings_accepts_expected_format(tmp_path: Path) -> None:
         "This explains what happened.\n\n"
         "*Actions:*\n\n"
         "- **PsyNetSkills:** Document the workflow. Confidence: high. "
-        "Status: considering. Notes: Waiting for maintainer review.\n"
+        "Impact: high. Status: considering. Notes: Waiting for maintainer review.\n"
         "- **PsyNet:** Improve the error message. Confidence: medium. "
-        "Status: in_progress.\n",
+        "Impact: low. Status: in_progress.\n",
     )
 
     assert validate_learnings_file(learnings_file) == []
@@ -165,7 +251,7 @@ def test_validate_learnings_rejects_legacy_status(tmp_path: Path) -> None:
         "# Learnings\n\n"
         "## Useful finding\n\n"
         "*Actions:*\n\n"
-        "- **PsyNetSkills:** Document it. Confidence: high. Status: implemented.\n",
+        "- **PsyNetSkills:** Document it. Confidence: high. Impact: medium. Status: implemented.\n",
     )
 
     problems = validate_learnings_file(learnings_file)
@@ -187,6 +273,97 @@ def test_validate_repository_requires_learnings_for_real_attempt(
     problems = validate_repository(tmp_path)
 
     assert any("missing LEARNINGS.md" in problem for problem in problems)
+
+
+def test_validate_repository_accepts_actions_review_for_open_action(
+    tmp_path: Path,
+) -> None:
+    minimal_repo(tmp_path)
+    write_valid_attempt(tmp_path)
+    write(
+        tmp_path / "actions-review.yaml",
+        "generated_at: '2026-06-11T10:00:00Z'\n"
+        "model: test-model\n"
+        "scope: open_actions\n"
+        "sections:\n"
+        "  - title: Documentation follow-ups\n"
+        "    summary: Keep documentation aligned with attempt learnings.\n"
+        "    actions:\n"
+        "      - example/2026-06-01-10-10/action-001\n",
+    )
+
+    assert validate_repository(tmp_path) == []
+
+
+def test_validate_repository_accepts_plan_paused_attempt(tmp_path: Path) -> None:
+    minimal_repo(tmp_path)
+    write(tmp_path / "challenges/example/CRITERIA.md", "# Criteria\n\n- Criterion.\n")
+    attempt_dir = tmp_path / "challenges/example/attempts/2026-06-01-10-10"
+    metadata = json.loads(agent_json())
+    metadata["authors"] = []
+    metadata["ended_at"] = None
+    write(attempt_dir / "agent.json", json.dumps(metadata) + "\n")
+    write(attempt_dir / "challenge/INSTRUCTIONS.md", "# Snapshot\n")
+    write(attempt_dir / "challenge/CRITERIA.md", "# Criteria\n\n- Criterion.\n")
+    write(attempt_dir / "PLAN.md", "# Plan\n\nImplementation plan.\n")
+    write(attempt_dir / "EVALUATION.md", "---\nscore:\n---\n\n# Evaluation\n")
+    write(attempt_dir / "LEARNINGS.md", EMPTY_LEARNINGS_PLACEHOLDER + "\n")
+    write(
+        attempt_dir / "TIMELINE.md",
+        "# Timeline\n\n"
+        "- T+00:00:00 [agent-start] Started.\n"
+        "- T+00:05:00 [agent-stop] Paused for plan review.\n",
+    )
+
+    assert validate_repository(tmp_path) == []
+
+
+def test_validate_repository_rejects_stale_actions_review_reference(
+    tmp_path: Path,
+) -> None:
+    minimal_repo(tmp_path)
+    write_valid_attempt(tmp_path, action_status="completed")
+    write(
+        tmp_path / "actions-review.yaml",
+        "generated_at: '2026-06-11T10:00:00Z'\n"
+        "model: test-model\n"
+        "scope: open_actions\n"
+        "sections:\n"
+        "  - title: Documentation follow-ups\n"
+        "    summary: Keep documentation aligned with attempt learnings.\n"
+        "    actions:\n"
+        "      - example/2026-06-01-10-10/action-001\n",
+    )
+
+    problems = validate_repository(tmp_path)
+
+    assert any("does not match a currently open action" in problem for problem in problems)
+
+
+def test_validate_repository_rejects_duplicate_actions_review_reference(
+    tmp_path: Path,
+) -> None:
+    minimal_repo(tmp_path)
+    write_valid_attempt(tmp_path)
+    write(
+        tmp_path / "actions-review.yaml",
+        "generated_at: '2026-06-11T10:00:00Z'\n"
+        "model: test-model\n"
+        "scope: open_actions\n"
+        "sections:\n"
+        "  - title: Documentation follow-ups\n"
+        "    summary: Keep documentation aligned with attempt learnings.\n"
+        "    actions:\n"
+        "      - example/2026-06-01-10-10/action-001\n"
+        "  - title: Repeated follow-ups\n"
+        "    summary: This repeats the same action reference.\n"
+        "    actions:\n"
+        "      - example/2026-06-01-10-10/action-001\n",
+    )
+
+    problems = validate_repository(tmp_path)
+
+    assert any("referenced more than once" in problem for problem in problems)
 
 
 def test_validate_timeline_accepts_expected_format(tmp_path: Path) -> None:
@@ -232,7 +409,7 @@ def test_validate_repository_requires_timeline_for_real_attempt(
         "# Learnings\n\n"
         "## Useful finding\n\n"
         "*Actions:*\n\n"
-        "- **PsyNetSkills:** Document it. Confidence: high. Status: considering.\n",
+        "- **PsyNetSkills:** Document it. Confidence: high. Impact: medium. Status: considering.\n",
     )
 
     problems = validate_repository(tmp_path)
@@ -470,7 +647,7 @@ def test_validate_repository_requires_criteria_snapshot_and_checklist(
         "# Learnings\n\n"
         "## Useful finding\n\n"
         "*Actions:*\n\n"
-        "- **PsyNetSkills:** Document it. Confidence: high. Status: considering.\n",
+        "- **PsyNetSkills:** Document it. Confidence: high. Impact: medium. Status: considering.\n",
     )
     write(
         attempt_dir / "TIMELINE.md",
@@ -505,7 +682,7 @@ def test_validate_repository_accepts_uppercase_criteria_checklist(
         "# Learnings\n\n"
         "## Useful finding\n\n"
         "*Actions:*\n\n"
-        "- **PsyNetSkills:** Document it. Confidence: high. Status: considering.\n",
+        "- **PsyNetSkills:** Document it. Confidence: high. Impact: medium. Status: considering.\n",
     )
     write(
         attempt_dir / "TIMELINE.md",

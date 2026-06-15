@@ -1,0 +1,124 @@
+---
+name: mine-skill-candidates
+description: Mine challenge actions, learning notes, evaluations, and selected attempt evidence for reusable Agent Skill candidates without creating skills automatically.
+authors: [haoyu-hu]
+review_status: reviewed
+---
+
+# Mine skill candidates
+
+Use this skill when the user asks to discover, mine, synthesize, or prioritize
+possible new PsyNetSkills Agent Skills from past challenge attempts, the Actions
+dashboard, evaluations, learning notes, or solved/unsolved attempt history.
+
+## Goal
+
+Produce a conservative list of reviewable skill candidates. Do not create or
+edit operational skills from this mining pass unless the user separately asks
+for implementation after review.
+
+## Source tiers
+
+1. Start with open Actions data. Use `compile-actions-review/SKILL.md` when the
+   Actions dashboard or `actions-review.yaml` needs refreshing first.
+2. Read `LEARNINGS.md` and `EVALUATION.md` from attempts that appear in the
+   strongest action clusters or repeated failure themes.
+3. Sample finished or high-scoring attempts only when the user wants successful
+   patterns, not only unresolved problems.
+4. Read attempt code, evidence videos, or large artifacts only when summaries and
+   notes are insufficient to judge whether a candidate is necessary.
+
+## Workflow
+
+1. Define the mining scope and cost profile:
+   - `open-actions-only` for a cheap first pass;
+   - `open-actions-plus-evaluations` for stronger failure analysis;
+   - `balanced` for open actions plus a small solved-attempt sample.
+2. Export dashboard data with `uv run psynetsk-export-dashboard-data` when the
+   current `dashboard/data/psynetsk.json` is missing or stale.
+3. Build a structured corpus from stable source paths and IDs. Use
+   `scripts/collect_sources.py` for the first pass instead of hand-copying
+   snippets.
+4. Mark already-traced information before reading deeply. Treat an action ID,
+   attempt path, `LEARNINGS.md`, or `EVALUATION.md` path as traced when it is
+   already cited in a candidate's `evidence_sources`, `source_ids`, or
+   `traced_sources`.
+5. Separate likely one-line fixes from skill candidates. If the source can be
+   resolved with a small wording or checklist edit, record it as `small_edit`
+   or route it to the owner skill; do not spend skill-mining attention on it
+   unless it repeats across attempts.
+6. Cluster remaining evidence by recurring task, failure mode, missing procedure, or
+   successful pattern. Track both frequency and severity.
+7. Apply the necessity filter before proposing a candidate:
+   - it recurs across attempts or affects a high-risk workflow;
+   - it would materially improve future agent speed, quality, or safety;
+   - it has a clear trigger condition;
+   - it can be expressed as a concise procedure;
+   - it is not merely challenge-specific advice.
+8. Run `skill-overlap-review/SKILL.md` at candidate level. Classify likely
+   disposition as `new`, `extension`, `combination`, `pointer`, or
+   `replacement`.
+9. Write or update repository-root `skill-candidates.yaml` with each proposed
+   candidate marked `status: unreviewed`.
+10. Report candidates in priority order, placing urgent safety or repeated
+   blocker candidates before convenience improvements, and hand off review to
+   `review-skill-candidates/SKILL.md`.
+
+## Helper script
+
+Run from the repository root after dashboard export:
+
+`uv run python .cursor/skills/mine-skill-candidates/scripts/collect_sources.py --scope open-actions-only`
+
+Useful options:
+
+- `--scope open-actions-plus-evaluations` also lists attempt evaluations for
+  attempts with open actions.
+- `--scope balanced` includes solved attempts as success-pattern sources.
+- `--json` emits machine-readable records for downstream clustering.
+
+The helper groups sources into `candidate`, `small_edit`, and
+`already_traced`. Start with `candidate`; review `small_edit` only when
+many similar items point to the same reusable gap.
+
+## Candidate schema
+
+Use this shape for each candidate in `skill-candidates.yaml`:
+
+- `id`: stable lowercase slug.
+- `title`: short human-readable title.
+- `status`: `unreviewed`, `approved`, `rejected`, `deferred`, or `implemented`.
+- `urgency`: `high`, `medium`, or `low`.
+- `necessity`: why this deserves a skill-level intervention.
+- `trigger`: when future agents should use the skill.
+- `proposed_disposition`: `new`, `extension`, `combination`, `pointer`, or
+  `replacement`.
+- `triage`: `candidate`, `small_edit`, `already_traced`, or `deferred`.
+- `overlap_notes`: concise result from overlap review.
+- `evidence_sources`: action IDs, attempt paths, evaluation paths, or dashboard
+  links.
+- `source_ids`: stable IDs already traced for this candidate.
+- `traced_sources`: optional extra source paths or IDs already considered.
+- `trace_status`: `unreviewed`, `traced`, or `sorted`.
+- `summary`: one paragraph of distilled rationale.
+- `review_notes`: optional reviewer comments.
+
+## Rules
+
+- Necessity first, urgency first. Prefer no candidate over a weak candidate.
+- Avoid over-processing one-sentence fixes. They can become ordinary action
+  resolutions or owner-skill edits without becoming separate candidates.
+- Keep hidden criteria, private evaluation material, secrets, and participant
+  data out of candidate prose. Cite paths instead of copying sensitive text.
+- Prefer updating an existing skill over creating a near duplicate.
+- Treat solved attempts as pattern evidence, not as proof that every successful
+  tactic should become a skill.
+- Do not let `status: unreviewed` block skill execution. It is review metadata
+  only.
+
+## Validation
+
+After writing or changing `skill-candidates.yaml`, run the repository validator.
+It checks repository structure, not the full candidate schema:
+
+`uv run psynetsk-validate`

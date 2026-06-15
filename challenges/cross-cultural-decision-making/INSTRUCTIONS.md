@@ -12,6 +12,8 @@ The experiment should:
 
 - Present two options side by side on each trial.
 - Give each option a variable number of features.
+- Features of the option are numerical values ranging from 0 to 100
+- Each feature also comes with validitieis, which must be between 0 to 1. 
 - Ask the participant which option they would choose.
 - Save one choice per trial.
 - Include a short welcome page and a short thank-you page.

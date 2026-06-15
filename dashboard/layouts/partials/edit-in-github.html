@@ -1,8 +1,15 @@
 {{ $path := . }}
-{{ $baseURL := site.Params.github_edit_base_url }}
-{{ if and $path $baseURL }}
+{{ $context := hugo.Data.workflow_context | default dict }}
+{{ $owner := default site.Params.github_owner $context.owner }}
+{{ $repo := default site.Params.github_repo_name $context.repo }}
+{{ $defaultBranch := default "main" site.Params.github_default_branch }}
+{{ $branch := $defaultBranch }}
+{{ if and (default false $context.enabled) $context.branch }}
+  {{ $branch = $context.branch }}
+{{ end }}
+{{ if and $path $owner $repo $branch }}
   <p class="page-actions">
-    <a class="edit-source-link" href="{{ printf "%s%s" $baseURL $path | safeURL }}">
+    <a class="edit-source-link" href="{{ printf "https://github.com/%s/%s/edit/%s/%s" $owner $repo ($branch | urlquery) $path | safeURL }}">
       Edit in GitHub
     </a>
   </p>

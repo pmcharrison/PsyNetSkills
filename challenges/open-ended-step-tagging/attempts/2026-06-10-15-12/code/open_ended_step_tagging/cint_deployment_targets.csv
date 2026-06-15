@@ -1,0 +1,2 @@
+locale,language,country,language_tag,country_tag,wage_per_hour,qualification_file
+en,English,United Kingdom,ENG,GB,,qualifications/lucid/lucid-ENG-GB.json
