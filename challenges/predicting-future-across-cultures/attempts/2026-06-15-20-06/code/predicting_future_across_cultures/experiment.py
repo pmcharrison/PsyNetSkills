@@ -64,7 +64,7 @@ LOCALE_ADJUSTMENTS = {
 
 
 def active_locale():
-    return get_locale() or os.environ.get("PSYNET_LOCALE", "en")
+    return os.environ.get("PSYNET_LOCALE") or get_locale() or "en"
 
 
 def is_rtl_locale(locale):
