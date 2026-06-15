@@ -39,27 +39,16 @@ Follow the `prepare-for-translation` skill. All participant-facing text must be 
 - Italian (`it`);
 - Hebrew (`he`), with appropriate right-to-left presentation where needed.
 
-Use stable, language-neutral identifiers in trial definitions, and resolve translated vignettes and labels at render time so that exported data are comparable across languages. Configure PsyNet locale settings for the three requested languages, generate or provide the locale files needed for local testing without production translation credentials, and verify that `locales/experiment.pot` contains the expected participant-facing strings.
-
 ## Implementation workflow
 
-Follow the `psynet-experiment-implementation` skill when preparing the attempt. The attempt should include:
-
-1. `PLAN.md`, with scientific motivation, methods, and implementation details.
-2. A runnable PsyNet experiment implementing the five task categories.
-3. Translation-ready source text and locale configuration for English, Italian, and Hebrew.
-4. Evidence that the task can be previewed or tested in all three languages.
-5. Simulated participants that exercise the same data paths as real participants.
-6. `evidence/simulated_data.zip`, produced from a PsyNet simulation.
-7. `evidence/analyses/analysis.ipynb`, executed with outputs embedded.
-8. `REPORT.md`, summarizing the implementation, simulation, translation readiness, and any limitations.
+Follow the `psynet-experiment-implementation` skill when preparing the attempt.
 
 ## Simulated participants and analysis
 
 Design bot responses to produce plausible numerical predictions while intentionally simulating cross-cultural variation across the three languages. The variation should be modest and documented: for example, bots in different locales may use different offsets or slopes for some categories while preserving the constraint that finite `t_total` is at least `t_past`. The goal is not to claim real cultural differences, but to demonstrate that the experiment and analysis can detect condition-by-language patterns if they are present.
 
-The analysis notebook should load the simulated export and produce a condition-by-language grid figure similar in spirit to Figure 2 of Griffiths and Tenenbaum (2006). Each panel should plot `t_past` on the x-axis and finite predicted `t_total` on the y-axis as a scatter plot, faceted by task category and language. Include enough summary code to make clear how invalid responses and "forever" marriage responses are filtered, encoded, or visualized.
+The analysis notebook should load the simulated export and produce a condition-by-language grid figure similar in spirit to Figure 2 of Griffiths and Tenenbaum (2006). Each panel should plot `t_past` on the x-axis and finite predicted `t_total` on the y-axis as a scatter plot, faceted by task category and language.
 
 ## Reference material
 
-Use the attached Griffiths and Tenenbaum (2006) paper in `references/` as the primary source for the Materials section and for the target style of the analysis figure. Do not invent additional citations, external datasets, or bibliographic details.
+Use the attached Griffiths and Tenenbaum (2006) paper in `references/` as the primary source for the Materials section and for the target style of the analysis figure. Do not invent additional citations, external datasets, or bibliographic details. Stay faithful to the original experiment design.
