@@ -89,6 +89,60 @@ def round_initializer(round_index: int):
     return _initialize_round
 
 
+def initialize_scored_round_1(group: SyncGroup, participants: List[Participant]):
+    initialize_round(group, participants, round_index=1, scored=True)
+
+
+def initialize_scored_round_2(group: SyncGroup, participants: List[Participant]):
+    initialize_round(group, participants, round_index=2, scored=True)
+
+
+def initialize_scored_round_3(group: SyncGroup, participants: List[Participant]):
+    initialize_round(group, participants, round_index=3, scored=True)
+
+
+def initialize_scored_round_4(group: SyncGroup, participants: List[Participant]):
+    initialize_round(group, participants, round_index=4, scored=True)
+
+
+def initialize_scored_round_5(group: SyncGroup, participants: List[Participant]):
+    initialize_round(group, participants, round_index=5, scored=True)
+
+
+def initialize_scored_round_6(group: SyncGroup, participants: List[Participant]):
+    initialize_round(group, participants, round_index=6, scored=True)
+
+
+def initialize_scored_round_7(group: SyncGroup, participants: List[Participant]):
+    initialize_round(group, participants, round_index=7, scored=True)
+
+
+def initialize_scored_round_8(group: SyncGroup, participants: List[Participant]):
+    initialize_round(group, participants, round_index=8, scored=True)
+
+
+def initialize_scored_round_9(group: SyncGroup, participants: List[Participant]):
+    initialize_round(group, participants, round_index=9, scored=True)
+
+
+def initialize_scored_round_10(group: SyncGroup, participants: List[Participant]):
+    initialize_round(group, participants, round_index=10, scored=True)
+
+
+SCORED_ROUND_INITIALIZERS = {
+    1: initialize_scored_round_1,
+    2: initialize_scored_round_2,
+    3: initialize_scored_round_3,
+    4: initialize_scored_round_4,
+    5: initialize_scored_round_5,
+    6: initialize_scored_round_6,
+    7: initialize_scored_round_7,
+    8: initialize_scored_round_8,
+    9: initialize_scored_round_9,
+    10: initialize_scored_round_10,
+}
+
+
 def get_role_map(participants: List[Participant]) -> Dict[int, str]:
     role_map = {}
     for participant in participants:
@@ -270,6 +324,60 @@ def scored_round_scorer(round_index: int):
         )
 
     return _score_round
+
+
+def score_scored_round_1(group: SyncGroup, participants: List[Participant]):
+    score_round_from_saved_answers(group, participants, round_index=1, scored=True)
+
+
+def score_scored_round_2(group: SyncGroup, participants: List[Participant]):
+    score_round_from_saved_answers(group, participants, round_index=2, scored=True)
+
+
+def score_scored_round_3(group: SyncGroup, participants: List[Participant]):
+    score_round_from_saved_answers(group, participants, round_index=3, scored=True)
+
+
+def score_scored_round_4(group: SyncGroup, participants: List[Participant]):
+    score_round_from_saved_answers(group, participants, round_index=4, scored=True)
+
+
+def score_scored_round_5(group: SyncGroup, participants: List[Participant]):
+    score_round_from_saved_answers(group, participants, round_index=5, scored=True)
+
+
+def score_scored_round_6(group: SyncGroup, participants: List[Participant]):
+    score_round_from_saved_answers(group, participants, round_index=6, scored=True)
+
+
+def score_scored_round_7(group: SyncGroup, participants: List[Participant]):
+    score_round_from_saved_answers(group, participants, round_index=7, scored=True)
+
+
+def score_scored_round_8(group: SyncGroup, participants: List[Participant]):
+    score_round_from_saved_answers(group, participants, round_index=8, scored=True)
+
+
+def score_scored_round_9(group: SyncGroup, participants: List[Participant]):
+    score_round_from_saved_answers(group, participants, round_index=9, scored=True)
+
+
+def score_scored_round_10(group: SyncGroup, participants: List[Participant]):
+    score_round_from_saved_answers(group, participants, round_index=10, scored=True)
+
+
+SCORED_ROUND_SCORERS = {
+    1: score_scored_round_1,
+    2: score_scored_round_2,
+    3: score_scored_round_3,
+    4: score_scored_round_4,
+    5: score_scored_round_5,
+    6: score_scored_round_6,
+    7: score_scored_round_7,
+    8: score_scored_round_8,
+    9: score_scored_round_9,
+    10: score_scored_round_10,
+}
 
 
 class TimedInfoPage(Page):
@@ -457,7 +565,7 @@ class Exp(psynet.experiment.Experiment):
 
     timeline = Timeline(
         UltimatumWebSocket(),
-        PageMaker(lambda: instructions_page(), time_estimate=20),
+        PageMaker(instructions_page, time_estimate=20),
         SimpleGrouper(
             group_type=GROUP_TYPE,
             initial_group_size=2,
@@ -487,7 +595,7 @@ class Exp(psynet.experiment.Experiment):
                 GroupBarrier(
                     id_=f"setup_scored_round_{round_index}",
                     group_type=GROUP_TYPE,
-                    on_release=round_initializer(round_index),
+                    on_release=SCORED_ROUND_INITIALIZERS[round_index],
                     max_wait_time=30,
                 ),
                 PageMaker(
@@ -497,7 +605,7 @@ class Exp(psynet.experiment.Experiment):
                 GroupBarrier(
                     id_=f"score_scored_round_{round_index}",
                     group_type=GROUP_TYPE,
-                    on_release=scored_round_scorer(round_index),
+                    on_release=SCORED_ROUND_SCORERS[round_index],
                     max_wait_time=30,
                 ),
                 PageMaker(feedback_page, time_estimate=5),
