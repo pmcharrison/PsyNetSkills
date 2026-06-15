@@ -1,0 +1,8 @@
+{
+  "scripts": {
+    "participant-flow": "playwright test tests/participant-flow.spec.js"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.61.0"
+  }
+}

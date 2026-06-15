@@ -1,0 +1,523 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>Experiment Monitoring -  Dashboard</title>
+        
+          <link rel="stylesheet" href="/static/css/bootstrap.min.css" type="text/css">
+          <link rel="stylesheet" href="/static/css/dashboard.css" type="text/css">
+          
+    <script src="https://use.fontawesome.com/ffb1fe552d.js"></script>
+    <link href="/static/vis@4.17.0/dist/vis-network.min.css" rel="stylesheet"
+          type="text/css"/>
+
+        
+        
+        
+    </head>
+    <body>
+      <div class="container">
+        
+          <nav id="dashboard-navigation">
+            <ul class="nav nav-tabs">
+              
+                
+                  <li class="nav-item">
+                    <a class="nav-link" href="/dashboard/index">Config</a>
+                  </li>
+                
+              
+                
+                  <li class="nav-item">
+                    <a class="nav-link" href="/dashboard/deployments">Deployments</a>
+                  </li>
+                
+              
+                
+                <li class="nav-item">
+                  <a class="nav-link dropdown-toggle active" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Monitor</a>
+                  <div class="dropdown-menu">
+                    
+                      <a class="dropdown-item" href="/dashboard/monitoring">Monitoring</a>
+                    
+                      <a class="dropdown-item" href="/dashboard/timeline">Timeline</a>
+                    
+                      <a class="dropdown-item" href="/dashboard/resources">Resources</a>
+                    
+                      <a class="dropdown-item" href="/dashboard/participants">Participants</a>
+                    
+                      <a class="dropdown-item" href="/dashboard/logger">Logger</a>
+                    
+                      <a class="dropdown-item" href="/dashboard/errors">Errors</a>
+                    
+                  </div>
+                </li>
+                
+              
+                
+                  <li class="nav-item">
+                    <a class="nav-link" href="/dashboard/data">Basic data</a>
+                  </li>
+                
+              
+                
+                  <li class="nav-item">
+                    <a class="nav-link" href="/dashboard/export">Export</a>
+                  </li>
+                
+              
+                
+                <li class="nav-item">
+                  <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Database</a>
+                  <div class="dropdown-menu">
+                    
+                      <a class="dropdown-item" href="/dashboard/database?table=experiment&amp;polymorphic_identity=psynet.experiment.ExperimentConfig">ExperimentConfig</a>
+                    
+                      <a class="dropdown-item" href="/dashboard/database?table=experiment_status&amp;polymorphic_identity=psynet.experiment.ExperimentStatus">ExperimentStatus</a>
+                    
+                      <a class="dropdown-item" href="/dashboard/database?table=request&amp;polymorphic_identity=psynet.experiment.Request">Request</a>
+                    
+                      <a class="dropdown-item" href="/dashboard/database?table=network&amp;polymorphic_identity=psynet.trial.static.StaticNetwork">StaticNetwork</a>
+                    
+                      <a class="dropdown-item" href="/dashboard/database?table=node&amp;polymorphic_identity=psynet.trial.static.StaticNode">StaticNode</a>
+                    
+                  </div>
+                </li>
+                
+              
+                
+                  <li class="nav-item">
+                    <a class="nav-link" href="/dashboard/develop">Development</a>
+                  </li>
+                
+              
+            </ul>
+          </nav>
+          
+        
+        
+          
+          
+        
+        
+        
+    <h1>Experiment Monitoring</h1>
+    <div id="monitor-wrapper" class="d-flex justify-content-between align-items-stretch">
+        <main class="flex-fill">
+            <div style="display: -ms-flexbox; display: flex; -ms-flex-wrap: wrap; flex-wrap: wrap;">
+                    <div class="form-group">
+                        <label for="sortBy">Sort networks by</label>
+                        <div class="input-group mb-3">
+                            <select class="form-control" id="sortBy">
+                                <option value="network_id">Network ID</option>
+                                <option value="n_pending_infos">Number of pending infos</option>
+                                <option value="n_completed_infos">Number of completed infos</option>
+                                <option value="n_failed_infos">Number of failed infos</option>
+                                <option value="n_alive_nodes">Number of completed nodes</option>
+                                <option value="n_failed_nodes">Number of failed nodes</option>
+                            </select>
+                            <div class="input-group-append">
+                                <div class="btn-group btn-group-toggle" id="order" data-toggle="buttons">
+
+                                    <label class="btn btn-secondary active">
+                                        <input type="radio" name="options" checked>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                             fill="currentColor"
+                                             class="bi bi-arrow-down" viewBox="0 0 16 16">
+                                            <path fill-rule="evenodd"
+                                                  d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1z"/>
+                                        </svg>
+                                    </label>
+                                    <label class="btn btn-secondary">
+                                        <input type="radio" name="options">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                             fill="currentColor"
+                                             class="bi bi-arrow-up" viewBox="0 0 16 16">
+                                            <path fill-rule="evenodd"
+                                                  d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z"/>
+                                        </svg>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                <div id="search-container" class="mx-auto row">
+                    <div class="form-group pr-3">
+                        <label for="max-networks">Number of networks</label>
+                        <input type="number" min="1" class="form-control" id="max-networks"
+                               placeholder="Networks to print">
+                    </div>
+                    <div class="form-group">
+                        <label for="search">Freetext search</label>
+                        <input type="text" class="form-control" id="search" placeholder="Search networks">
+                    </div>
+                </div>
+                <div>
+                    <div class="form-group">
+
+                        <label></label>
+                        <div>
+                            <a class="text-primary" data-toggle="collapse" href="#statistics" role="button"
+                               aria-expanded="false" aria-controls="statistics">
+                                Experiment Statistics
+                            </a>
+                            <a class="text-secondary" data-toggle="collapse" href="#advanced-filter"
+                               role="button" aria-expanded="false" aria-controls="advanced-filter">
+                                Advanced Filter
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="collapse p-3 bg-light" id="statistics">
+                <h4>Statistics</h4>
+                <div class="row">
+                    
+                        <div class="col">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Participants</h5>
+                                    <p class="card-text"></p>
+                                </div>
+                            </div>
+                        </div>
+                    
+                        <div class="col">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Networks</h5>
+                                    <p class="card-text"><span class="nowrap"><span class="statistics-key">default</span>: <span class="statistics-value"><span class="statistics-value no-failures">40 total, 0 failed (0.0%)</span></span></span></p>
+                                </div>
+                            </div>
+                        </div>
+                    
+                        <div class="col">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Nodes</h5>
+                                    <p class="card-text"><span class="statistics-value no-failures">40 total, 0 failed (0.0%)</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    
+                        <div class="col">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Trials</h5>
+                                    <p class="card-text">0 total, 0 failed (0.0%)</p>
+                                </div>
+                            </div>
+                        </div>
+                    
+                </div>
+
+            </div>
+            <div class="collapse p-3  bg-light" id="advanced-filter">
+            <h4>Advanced Filter</h4>
+                <form>
+                    
+                        <fieldset id="network-ids">
+                            <h5>Network IDs</h5>
+                            
+                                <div class="field p-1">
+                                    <input class="network-input" id="val-1" type="checkbox" name="network_ids"
+                                           value="1" checked />
+                                    <label for="val-1">1</label>
+                                </div>
+                            
+                                <div class="field p-1">
+                                    <input class="network-input" id="val-2" type="checkbox" name="network_ids"
+                                           value="2" checked />
+                                    <label for="val-2">2</label>
+                                </div>
+                            
+                                <div class="field p-1">
+                                    <input class="network-input" id="val-3" type="checkbox" name="network_ids"
+                                           value="3" checked />
+                                    <label for="val-3">3</label>
+                                </div>
+                            
+                                <div class="field p-1">
+                                    <input class="network-input" id="val-4" type="checkbox" name="network_ids"
+                                           value="4" checked />
+                                    <label for="val-4">4</label>
+                                </div>
+                            
+                                <div class="field p-1">
+                                    <input class="network-input" id="val-5" type="checkbox" name="network_ids"
+                                           value="5" checked />
+                                    <label for="val-5">5</label>
+                                </div>
+                            
+                                <div class="field p-1">
+                                    <input class="network-input" id="val-6" type="checkbox" name="network_ids"
+                                           value="6" checked />
+                                    <label for="val-6">6</label>
+                                </div>
+                            
+                                <div class="field p-1">
+                                    <input class="network-input" id="val-7" type="checkbox" name="network_ids"
+                                           value="7" checked />
+                                    <label for="val-7">7</label>
+                                </div>
+                            
+                                <div class="field p-1">
+                                    <input class="network-input" id="val-8" type="checkbox" name="network_ids"
+                                           value="8" checked />
+                                    <label for="val-8">8</label>
+                                </div>
+                            
+                                <div class="field p-1">
+                                    <input class="network-input" id="val-9" type="checkbox" name="network_ids"
+                                           value="9" checked />
+                                    <label for="val-9">9</label>
+                                </div>
+                            
+                                <div class="field p-1">
+                                    <input class="network-input" id="val-10" type="checkbox" name="network_ids"
+                                           value="10" checked />
+                                    <label for="val-10">10</label>
+                                </div>
+                            
+                                <div class="field p-1">
+                                    <input class="network-input" id="val-11" type="checkbox" name="network_ids"
+                                           value="11" checked />
+                                    <label for="val-11">11</label>
+                                </div>
+                            
+                                <div class="field p-1">
+                                    <input class="network-input" id="val-12" type="checkbox" name="network_ids"
+                                           value="12" checked />
+                                    <label for="val-12">12</label>
+                                </div>
+                            
+                                <div class="field p-1">
+                                    <input class="network-input" id="val-13" type="checkbox" name="network_ids"
+                                           value="13" checked />
+                                    <label for="val-13">13</label>
+                                </div>
+                            
+                                <div class="field p-1">
+                                    <input class="network-input" id="val-14" type="checkbox" name="network_ids"
+                                           value="14" checked />
+                                    <label for="val-14">14</label>
+                                </div>
+                            
+                                <div class="field p-1">
+                                    <input class="network-input" id="val-15" type="checkbox" name="network_ids"
+                                           value="15" checked />
+                                    <label for="val-15">15</label>
+                                </div>
+                            
+                                <div class="field p-1">
+                                    <input class="network-input" id="val-16" type="checkbox" name="network_ids"
+                                           value="16" checked />
+                                    <label for="val-16">16</label>
+                                </div>
+                            
+                                <div class="field p-1">
+                                    <input class="network-input" id="val-17" type="checkbox" name="network_ids"
+                                           value="17" checked />
+                                    <label for="val-17">17</label>
+                                </div>
+                            
+                                <div class="field p-1">
+                                    <input class="network-input" id="val-18" type="checkbox" name="network_ids"
+                                           value="18" checked />
+                                    <label for="val-18">18</label>
+                                </div>
+                            
+                                <div class="field p-1">
+                                    <input class="network-input" id="val-19" type="checkbox" name="network_ids"
+                                           value="19" checked />
+                                    <label for="val-19">19</label>
+                                </div>
+                            
+                                <div class="field p-1">
+                                    <input class="network-input" id="val-20" type="checkbox" name="network_ids"
+                                           value="20" checked />
+                                    <label for="val-20">20</label>
+                                </div>
+                            
+                                <div class="field p-1">
+                                    <input class="network-input" id="val-21" type="checkbox" name="network_ids"
+                                           value="21" checked />
+                                    <label for="val-21">21</label>
+                                </div>
+                            
+                                <div class="field p-1">
+                                    <input class="network-input" id="val-22" type="checkbox" name="network_ids"
+                                           value="22" checked />
+                                    <label for="val-22">22</label>
+                                </div>
+                            
+                                <div class="field p-1">
+                                    <input class="network-input" id="val-23" type="checkbox" name="network_ids"
+                                           value="23" checked />
+                                    <label for="val-23">23</label>
+                                </div>
+                            
+                                <div class="field p-1">
+                                    <input class="network-input" id="val-24" type="checkbox" name="network_ids"
+                                           value="24" checked />
+                                    <label for="val-24">24</label>
+                                </div>
+                            
+                                <div class="field p-1">
+                                    <input class="network-input" id="val-25" type="checkbox" name="network_ids"
+                                           value="25" checked />
+                                    <label for="val-25">25</label>
+                                </div>
+                            
+                                <div class="field p-1">
+                                    <input class="network-input" id="val-26" type="checkbox" name="network_ids"
+                                           value="26" checked />
+                                    <label for="val-26">26</label>
+                                </div>
+                            
+                                <div class="field p-1">
+                                    <input class="network-input" id="val-27" type="checkbox" name="network_ids"
+                                           value="27" checked />
+                                    <label for="val-27">27</label>
+                                </div>
+                            
+                                <div class="field p-1">
+                                    <input class="network-input" id="val-28" type="checkbox" name="network_ids"
+                                           value="28" checked />
+                                    <label for="val-28">28</label>
+                                </div>
+                            
+                                <div class="field p-1">
+                                    <input class="network-input" id="val-29" type="checkbox" name="network_ids"
+                                           value="29" checked />
+                                    <label for="val-29">29</label>
+                                </div>
+                            
+                                <div class="field p-1">
+                                    <input class="network-input" id="val-30" type="checkbox" name="network_ids"
+                                           value="30" checked />
+                                    <label for="val-30">30</label>
+                                </div>
+                            
+                                <div class="field p-1">
+                                    <input class="network-input" id="val-31" type="checkbox" name="network_ids"
+                                           value="31" checked />
+                                    <label for="val-31">31</label>
+                                </div>
+                            
+                                <div class="field p-1">
+                                    <input class="network-input" id="val-32" type="checkbox" name="network_ids"
+                                           value="32" checked />
+                                    <label for="val-32">32</label>
+                                </div>
+                            
+                                <div class="field p-1">
+                                    <input class="network-input" id="val-33" type="checkbox" name="network_ids"
+                                           value="33" checked />
+                                    <label for="val-33">33</label>
+                                </div>
+                            
+                                <div class="field p-1">
+                                    <input class="network-input" id="val-34" type="checkbox" name="network_ids"
+                                           value="34" checked />
+                                    <label for="val-34">34</label>
+                                </div>
+                            
+                                <div class="field p-1">
+                                    <input class="network-input" id="val-35" type="checkbox" name="network_ids"
+                                           value="35" checked />
+                                    <label for="val-35">35</label>
+                                </div>
+                            
+                                <div class="field p-1">
+                                    <input class="network-input" id="val-36" type="checkbox" name="network_ids"
+                                           value="36" checked />
+                                    <label for="val-36">36</label>
+                                </div>
+                            
+                                <div class="field p-1">
+                                    <input class="network-input" id="val-37" type="checkbox" name="network_ids"
+                                           value="37" checked />
+                                    <label for="val-37">37</label>
+                                </div>
+                            
+                                <div class="field p-1">
+                                    <input class="network-input" id="val-38" type="checkbox" name="network_ids"
+                                           value="38" checked />
+                                    <label for="val-38">38</label>
+                                </div>
+                            
+                                <div class="field p-1">
+                                    <input class="network-input" id="val-39" type="checkbox" name="network_ids"
+                                           value="39" checked />
+                                    <label for="val-39">39</label>
+                                </div>
+                            
+                                <div class="field p-1">
+                                    <input class="network-input" id="val-40" type="checkbox" name="network_ids"
+                                           value="40" checked />
+                                    <label for="val-40">40</label>
+                                </div>
+                            
+                        </fieldset>
+                </form>
+                <form method="GET">
+
+                    <div class="reload-onclick">
+                        <input name="collapsed"
+                               type="checkbox" />
+                        <label for="transformations">Collapse (networks and sources only)</label>
+                    </div>
+                    <div class="reload-onclick">
+                        <input name="transformations"
+                               type="checkbox" />
+                        <label for="transformations">Show transformations</label>
+                    </div>
+                </form>
+            </div>
+
+            <section id="mynetwork">
+            </section>
+            <section id="details-pane">
+                <div id="element-details">
+                </div>
+            </section>
+        </main>
+    </div>
+
+        <footer>
+          
+          
+        </footer>
+      </div>
+      
+    
+      <script src="/static/scripts/jquery-3.7.1.min.js"></script>
+      <script src="/static/scripts/popper.min.js"></script>
+      <script src="/static/scripts/bootstrap.min.js"></script>
+      <script src="/static/scripts/clipboard.min.js"></script>
+      
+    <script>
+        $('.reload-onclick').on('change', function () {
+            $(this).parents('form').submit();
+        });
+        window.templateGlobals = function () {
+            // Values inscribed by Jinja2 when this template is rendered.
+            const network_structure = {"networks": [{"vars": "{}", "id": 1, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "StaticNetwork", "max_size": 1, "full": false, "role": "default", "n_pending_infos": 0, "n_completed_infos": 0, "n_failed_infos": 0, "n_alive_nodes": 1, "n_failed_nodes": 0, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "target_n_trials": 1000000, "participant_group": "default", "sync_group_type": null, "sync_group_id": null, "participant_id": null, "async_post_grow_network_required": false, "async_post_grow_network_requested": false, "async_post_grow_network_complete": false, "async_post_grow_network_failed": false, "id_within_participant": null, "n_all_trials": 0, "n_alive_trials": 0, "n_failed_trials": 0, "n_completed_trials": 0, "n_all_nodes": 1, "chain_type": "across", "head_id": 1, "trials_per_node": 1000000, "definition": "{}", "context": null, "block": "01", "class": "StaticNetwork", "object_type": "Network"}, {"vars": "{}", "id": 2, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "StaticNetwork", "max_size": 1, "full": false, "role": "default", "n_pending_infos": 0, "n_completed_infos": 0, "n_failed_infos": 0, "n_alive_nodes": 1, "n_failed_nodes": 0, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "target_n_trials": 1000000, "participant_group": "default", "sync_group_type": null, "sync_group_id": null, "participant_id": null, "async_post_grow_network_required": false, "async_post_grow_network_requested": false, "async_post_grow_network_complete": false, "async_post_grow_network_failed": false, "id_within_participant": null, "n_all_trials": 0, "n_alive_trials": 0, "n_failed_trials": 0, "n_completed_trials": 0, "n_all_nodes": 1, "chain_type": "across", "head_id": 2, "trials_per_node": 1000000, "definition": "{}", "context": null, "block": "02", "class": "StaticNetwork", "object_type": "Network"}, {"vars": "{}", "id": 3, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "StaticNetwork", "max_size": 1, "full": false, "role": "default", "n_pending_infos": 0, "n_completed_infos": 0, "n_failed_infos": 0, "n_alive_nodes": 1, "n_failed_nodes": 0, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "target_n_trials": 1000000, "participant_group": "default", "sync_group_type": null, "sync_group_id": null, "participant_id": null, "async_post_grow_network_required": false, "async_post_grow_network_requested": false, "async_post_grow_network_complete": false, "async_post_grow_network_failed": false, "id_within_participant": null, "n_all_trials": 0, "n_alive_trials": 0, "n_failed_trials": 0, "n_completed_trials": 0, "n_all_nodes": 1, "chain_type": "across", "head_id": 3, "trials_per_node": 1000000, "definition": "{}", "context": null, "block": "03", "class": "StaticNetwork", "object_type": "Network"}, {"vars": "{}", "id": 4, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "StaticNetwork", "max_size": 1, "full": false, "role": "default", "n_pending_infos": 0, "n_completed_infos": 0, "n_failed_infos": 0, "n_alive_nodes": 1, "n_failed_nodes": 0, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "target_n_trials": 1000000, "participant_group": "default", "sync_group_type": null, "sync_group_id": null, "participant_id": null, "async_post_grow_network_required": false, "async_post_grow_network_requested": false, "async_post_grow_network_complete": false, "async_post_grow_network_failed": false, "id_within_participant": null, "n_all_trials": 0, "n_alive_trials": 0, "n_failed_trials": 0, "n_completed_trials": 0, "n_all_nodes": 1, "chain_type": "across", "head_id": 4, "trials_per_node": 1000000, "definition": "{}", "context": null, "block": "04", "class": "StaticNetwork", "object_type": "Network"}, {"vars": "{}", "id": 5, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "StaticNetwork", "max_size": 1, "full": false, "role": "default", "n_pending_infos": 0, "n_completed_infos": 0, "n_failed_infos": 0, "n_alive_nodes": 1, "n_failed_nodes": 0, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "target_n_trials": 1000000, "participant_group": "default", "sync_group_type": null, "sync_group_id": null, "participant_id": null, "async_post_grow_network_required": false, "async_post_grow_network_requested": false, "async_post_grow_network_complete": false, "async_post_grow_network_failed": false, "id_within_participant": null, "n_all_trials": 0, "n_alive_trials": 0, "n_failed_trials": 0, "n_completed_trials": 0, "n_all_nodes": 1, "chain_type": "across", "head_id": 5, "trials_per_node": 1000000, "definition": "{}", "context": null, "block": "05", "class": "StaticNetwork", "object_type": "Network"}, {"vars": "{}", "id": 6, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "StaticNetwork", "max_size": 1, "full": false, "role": "default", "n_pending_infos": 0, "n_completed_infos": 0, "n_failed_infos": 0, "n_alive_nodes": 1, "n_failed_nodes": 0, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "target_n_trials": 1000000, "participant_group": "default", "sync_group_type": null, "sync_group_id": null, "participant_id": null, "async_post_grow_network_required": false, "async_post_grow_network_requested": false, "async_post_grow_network_complete": false, "async_post_grow_network_failed": false, "id_within_participant": null, "n_all_trials": 0, "n_alive_trials": 0, "n_failed_trials": 0, "n_completed_trials": 0, "n_all_nodes": 1, "chain_type": "across", "head_id": 6, "trials_per_node": 1000000, "definition": "{}", "context": null, "block": "06", "class": "StaticNetwork", "object_type": "Network"}, {"vars": "{}", "id": 7, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "StaticNetwork", "max_size": 1, "full": false, "role": "default", "n_pending_infos": 0, "n_completed_infos": 0, "n_failed_infos": 0, "n_alive_nodes": 1, "n_failed_nodes": 0, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "target_n_trials": 1000000, "participant_group": "default", "sync_group_type": null, "sync_group_id": null, "participant_id": null, "async_post_grow_network_required": false, "async_post_grow_network_requested": false, "async_post_grow_network_complete": false, "async_post_grow_network_failed": false, "id_within_participant": null, "n_all_trials": 0, "n_alive_trials": 0, "n_failed_trials": 0, "n_completed_trials": 0, "n_all_nodes": 1, "chain_type": "across", "head_id": 7, "trials_per_node": 1000000, "definition": "{}", "context": null, "block": "07", "class": "StaticNetwork", "object_type": "Network"}, {"vars": "{}", "id": 8, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "StaticNetwork", "max_size": 1, "full": false, "role": "default", "n_pending_infos": 0, "n_completed_infos": 0, "n_failed_infos": 0, "n_alive_nodes": 1, "n_failed_nodes": 0, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "target_n_trials": 1000000, "participant_group": "default", "sync_group_type": null, "sync_group_id": null, "participant_id": null, "async_post_grow_network_required": false, "async_post_grow_network_requested": false, "async_post_grow_network_complete": false, "async_post_grow_network_failed": false, "id_within_participant": null, "n_all_trials": 0, "n_alive_trials": 0, "n_failed_trials": 0, "n_completed_trials": 0, "n_all_nodes": 1, "chain_type": "across", "head_id": 8, "trials_per_node": 1000000, "definition": "{}", "context": null, "block": "08", "class": "StaticNetwork", "object_type": "Network"}, {"vars": "{}", "id": 9, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "StaticNetwork", "max_size": 1, "full": false, "role": "default", "n_pending_infos": 0, "n_completed_infos": 0, "n_failed_infos": 0, "n_alive_nodes": 1, "n_failed_nodes": 0, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "target_n_trials": 1000000, "participant_group": "default", "sync_group_type": null, "sync_group_id": null, "participant_id": null, "async_post_grow_network_required": false, "async_post_grow_network_requested": false, "async_post_grow_network_complete": false, "async_post_grow_network_failed": false, "id_within_participant": null, "n_all_trials": 0, "n_alive_trials": 0, "n_failed_trials": 0, "n_completed_trials": 0, "n_all_nodes": 1, "chain_type": "across", "head_id": 9, "trials_per_node": 1000000, "definition": "{}", "context": null, "block": "09", "class": "StaticNetwork", "object_type": "Network"}, {"vars": "{}", "id": 10, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "StaticNetwork", "max_size": 1, "full": false, "role": "default", "n_pending_infos": 0, "n_completed_infos": 0, "n_failed_infos": 0, "n_alive_nodes": 1, "n_failed_nodes": 0, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "target_n_trials": 1000000, "participant_group": "default", "sync_group_type": null, "sync_group_id": null, "participant_id": null, "async_post_grow_network_required": false, "async_post_grow_network_requested": false, "async_post_grow_network_complete": false, "async_post_grow_network_failed": false, "id_within_participant": null, "n_all_trials": 0, "n_alive_trials": 0, "n_failed_trials": 0, "n_completed_trials": 0, "n_all_nodes": 1, "chain_type": "across", "head_id": 10, "trials_per_node": 1000000, "definition": "{}", "context": null, "block": "10", "class": "StaticNetwork", "object_type": "Network"}, {"vars": "{}", "id": 11, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "StaticNetwork", "max_size": 1, "full": false, "role": "default", "n_pending_infos": 0, "n_completed_infos": 0, "n_failed_infos": 0, "n_alive_nodes": 1, "n_failed_nodes": 0, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "target_n_trials": 1000000, "participant_group": "default", "sync_group_type": null, "sync_group_id": null, "participant_id": null, "async_post_grow_network_required": false, "async_post_grow_network_requested": false, "async_post_grow_network_complete": false, "async_post_grow_network_failed": false, "id_within_participant": null, "n_all_trials": 0, "n_alive_trials": 0, "n_failed_trials": 0, "n_completed_trials": 0, "n_all_nodes": 1, "chain_type": "across", "head_id": 11, "trials_per_node": 1000000, "definition": "{}", "context": null, "block": "11", "class": "StaticNetwork", "object_type": "Network"}, {"vars": "{}", "id": 12, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "StaticNetwork", "max_size": 1, "full": false, "role": "default", "n_pending_infos": 0, "n_completed_infos": 0, "n_failed_infos": 0, "n_alive_nodes": 1, "n_failed_nodes": 0, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "target_n_trials": 1000000, "participant_group": "default", "sync_group_type": null, "sync_group_id": null, "participant_id": null, "async_post_grow_network_required": false, "async_post_grow_network_requested": false, "async_post_grow_network_complete": false, "async_post_grow_network_failed": false, "id_within_participant": null, "n_all_trials": 0, "n_alive_trials": 0, "n_failed_trials": 0, "n_completed_trials": 0, "n_all_nodes": 1, "chain_type": "across", "head_id": 12, "trials_per_node": 1000000, "definition": "{}", "context": null, "block": "12", "class": "StaticNetwork", "object_type": "Network"}, {"vars": "{}", "id": 13, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "StaticNetwork", "max_size": 1, "full": false, "role": "default", "n_pending_infos": 0, "n_completed_infos": 0, "n_failed_infos": 0, "n_alive_nodes": 1, "n_failed_nodes": 0, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "target_n_trials": 1000000, "participant_group": "default", "sync_group_type": null, "sync_group_id": null, "participant_id": null, "async_post_grow_network_required": false, "async_post_grow_network_requested": false, "async_post_grow_network_complete": false, "async_post_grow_network_failed": false, "id_within_participant": null, "n_all_trials": 0, "n_alive_trials": 0, "n_failed_trials": 0, "n_completed_trials": 0, "n_all_nodes": 1, "chain_type": "across", "head_id": 13, "trials_per_node": 1000000, "definition": "{}", "context": null, "block": "13", "class": "StaticNetwork", "object_type": "Network"}, {"vars": "{}", "id": 14, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "StaticNetwork", "max_size": 1, "full": false, "role": "default", "n_pending_infos": 0, "n_completed_infos": 0, "n_failed_infos": 0, "n_alive_nodes": 1, "n_failed_nodes": 0, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "target_n_trials": 1000000, "participant_group": "default", "sync_group_type": null, "sync_group_id": null, "participant_id": null, "async_post_grow_network_required": false, "async_post_grow_network_requested": false, "async_post_grow_network_complete": false, "async_post_grow_network_failed": false, "id_within_participant": null, "n_all_trials": 0, "n_alive_trials": 0, "n_failed_trials": 0, "n_completed_trials": 0, "n_all_nodes": 1, "chain_type": "across", "head_id": 14, "trials_per_node": 1000000, "definition": "{}", "context": null, "block": "14", "class": "StaticNetwork", "object_type": "Network"}, {"vars": "{}", "id": 15, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "StaticNetwork", "max_size": 1, "full": false, "role": "default", "n_pending_infos": 0, "n_completed_infos": 0, "n_failed_infos": 0, "n_alive_nodes": 1, "n_failed_nodes": 0, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "target_n_trials": 1000000, "participant_group": "default", "sync_group_type": null, "sync_group_id": null, "participant_id": null, "async_post_grow_network_required": false, "async_post_grow_network_requested": false, "async_post_grow_network_complete": false, "async_post_grow_network_failed": false, "id_within_participant": null, "n_all_trials": 0, "n_alive_trials": 0, "n_failed_trials": 0, "n_completed_trials": 0, "n_all_nodes": 1, "chain_type": "across", "head_id": 15, "trials_per_node": 1000000, "definition": "{}", "context": null, "block": "15", "class": "StaticNetwork", "object_type": "Network"}, {"vars": "{}", "id": 16, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "StaticNetwork", "max_size": 1, "full": false, "role": "default", "n_pending_infos": 0, "n_completed_infos": 0, "n_failed_infos": 0, "n_alive_nodes": 1, "n_failed_nodes": 0, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "target_n_trials": 1000000, "participant_group": "default", "sync_group_type": null, "sync_group_id": null, "participant_id": null, "async_post_grow_network_required": false, "async_post_grow_network_requested": false, "async_post_grow_network_complete": false, "async_post_grow_network_failed": false, "id_within_participant": null, "n_all_trials": 0, "n_alive_trials": 0, "n_failed_trials": 0, "n_completed_trials": 0, "n_all_nodes": 1, "chain_type": "across", "head_id": 16, "trials_per_node": 1000000, "definition": "{}", "context": null, "block": "16", "class": "StaticNetwork", "object_type": "Network"}, {"vars": "{}", "id": 17, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "StaticNetwork", "max_size": 1, "full": false, "role": "default", "n_pending_infos": 0, "n_completed_infos": 0, "n_failed_infos": 0, "n_alive_nodes": 1, "n_failed_nodes": 0, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "target_n_trials": 1000000, "participant_group": "default", "sync_group_type": null, "sync_group_id": null, "participant_id": null, "async_post_grow_network_required": false, "async_post_grow_network_requested": false, "async_post_grow_network_complete": false, "async_post_grow_network_failed": false, "id_within_participant": null, "n_all_trials": 0, "n_alive_trials": 0, "n_failed_trials": 0, "n_completed_trials": 0, "n_all_nodes": 1, "chain_type": "across", "head_id": 17, "trials_per_node": 1000000, "definition": "{}", "context": null, "block": "17", "class": "StaticNetwork", "object_type": "Network"}, {"vars": "{}", "id": 18, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "StaticNetwork", "max_size": 1, "full": false, "role": "default", "n_pending_infos": 0, "n_completed_infos": 0, "n_failed_infos": 0, "n_alive_nodes": 1, "n_failed_nodes": 0, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "target_n_trials": 1000000, "participant_group": "default", "sync_group_type": null, "sync_group_id": null, "participant_id": null, "async_post_grow_network_required": false, "async_post_grow_network_requested": false, "async_post_grow_network_complete": false, "async_post_grow_network_failed": false, "id_within_participant": null, "n_all_trials": 0, "n_alive_trials": 0, "n_failed_trials": 0, "n_completed_trials": 0, "n_all_nodes": 1, "chain_type": "across", "head_id": 18, "trials_per_node": 1000000, "definition": "{}", "context": null, "block": "18", "class": "StaticNetwork", "object_type": "Network"}, {"vars": "{}", "id": 19, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "StaticNetwork", "max_size": 1, "full": false, "role": "default", "n_pending_infos": 0, "n_completed_infos": 0, "n_failed_infos": 0, "n_alive_nodes": 1, "n_failed_nodes": 0, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "target_n_trials": 1000000, "participant_group": "default", "sync_group_type": null, "sync_group_id": null, "participant_id": null, "async_post_grow_network_required": false, "async_post_grow_network_requested": false, "async_post_grow_network_complete": false, "async_post_grow_network_failed": false, "id_within_participant": null, "n_all_trials": 0, "n_alive_trials": 0, "n_failed_trials": 0, "n_completed_trials": 0, "n_all_nodes": 1, "chain_type": "across", "head_id": 19, "trials_per_node": 1000000, "definition": "{}", "context": null, "block": "19", "class": "StaticNetwork", "object_type": "Network"}, {"vars": "{}", "id": 20, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "StaticNetwork", "max_size": 1, "full": false, "role": "default", "n_pending_infos": 0, "n_completed_infos": 0, "n_failed_infos": 0, "n_alive_nodes": 1, "n_failed_nodes": 0, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "target_n_trials": 1000000, "participant_group": "default", "sync_group_type": null, "sync_group_id": null, "participant_id": null, "async_post_grow_network_required": false, "async_post_grow_network_requested": false, "async_post_grow_network_complete": false, "async_post_grow_network_failed": false, "id_within_participant": null, "n_all_trials": 0, "n_alive_trials": 0, "n_failed_trials": 0, "n_completed_trials": 0, "n_all_nodes": 1, "chain_type": "across", "head_id": 20, "trials_per_node": 1000000, "definition": "{}", "context": null, "block": "20", "class": "StaticNetwork", "object_type": "Network"}, {"vars": "{}", "id": 21, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "StaticNetwork", "max_size": 1, "full": false, "role": "default", "n_pending_infos": 0, "n_completed_infos": 0, "n_failed_infos": 0, "n_alive_nodes": 1, "n_failed_nodes": 0, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "target_n_trials": 1000000, "participant_group": "default", "sync_group_type": null, "sync_group_id": null, "participant_id": null, "async_post_grow_network_required": false, "async_post_grow_network_requested": false, "async_post_grow_network_complete": false, "async_post_grow_network_failed": false, "id_within_participant": null, "n_all_trials": 0, "n_alive_trials": 0, "n_failed_trials": 0, "n_completed_trials": 0, "n_all_nodes": 1, "chain_type": "across", "head_id": 21, "trials_per_node": 1000000, "definition": "{}", "context": null, "block": "21", "class": "StaticNetwork", "object_type": "Network"}, {"vars": "{}", "id": 22, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "StaticNetwork", "max_size": 1, "full": false, "role": "default", "n_pending_infos": 0, "n_completed_infos": 0, "n_failed_infos": 0, "n_alive_nodes": 1, "n_failed_nodes": 0, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "target_n_trials": 1000000, "participant_group": "default", "sync_group_type": null, "sync_group_id": null, "participant_id": null, "async_post_grow_network_required": false, "async_post_grow_network_requested": false, "async_post_grow_network_complete": false, "async_post_grow_network_failed": false, "id_within_participant": null, "n_all_trials": 0, "n_alive_trials": 0, "n_failed_trials": 0, "n_completed_trials": 0, "n_all_nodes": 1, "chain_type": "across", "head_id": 22, "trials_per_node": 1000000, "definition": "{}", "context": null, "block": "22", "class": "StaticNetwork", "object_type": "Network"}, {"vars": "{}", "id": 23, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "StaticNetwork", "max_size": 1, "full": false, "role": "default", "n_pending_infos": 0, "n_completed_infos": 0, "n_failed_infos": 0, "n_alive_nodes": 1, "n_failed_nodes": 0, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "target_n_trials": 1000000, "participant_group": "default", "sync_group_type": null, "sync_group_id": null, "participant_id": null, "async_post_grow_network_required": false, "async_post_grow_network_requested": false, "async_post_grow_network_complete": false, "async_post_grow_network_failed": false, "id_within_participant": null, "n_all_trials": 0, "n_alive_trials": 0, "n_failed_trials": 0, "n_completed_trials": 0, "n_all_nodes": 1, "chain_type": "across", "head_id": 23, "trials_per_node": 1000000, "definition": "{}", "context": null, "block": "23", "class": "StaticNetwork", "object_type": "Network"}, {"vars": "{}", "id": 24, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "StaticNetwork", "max_size": 1, "full": false, "role": "default", "n_pending_infos": 0, "n_completed_infos": 0, "n_failed_infos": 0, "n_alive_nodes": 1, "n_failed_nodes": 0, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "target_n_trials": 1000000, "participant_group": "default", "sync_group_type": null, "sync_group_id": null, "participant_id": null, "async_post_grow_network_required": false, "async_post_grow_network_requested": false, "async_post_grow_network_complete": false, "async_post_grow_network_failed": false, "id_within_participant": null, "n_all_trials": 0, "n_alive_trials": 0, "n_failed_trials": 0, "n_completed_trials": 0, "n_all_nodes": 1, "chain_type": "across", "head_id": 24, "trials_per_node": 1000000, "definition": "{}", "context": null, "block": "24", "class": "StaticNetwork", "object_type": "Network"}, {"vars": "{}", "id": 25, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "StaticNetwork", "max_size": 1, "full": false, "role": "default", "n_pending_infos": 0, "n_completed_infos": 0, "n_failed_infos": 0, "n_alive_nodes": 1, "n_failed_nodes": 0, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "target_n_trials": 1000000, "participant_group": "default", "sync_group_type": null, "sync_group_id": null, "participant_id": null, "async_post_grow_network_required": false, "async_post_grow_network_requested": false, "async_post_grow_network_complete": false, "async_post_grow_network_failed": false, "id_within_participant": null, "n_all_trials": 0, "n_alive_trials": 0, "n_failed_trials": 0, "n_completed_trials": 0, "n_all_nodes": 1, "chain_type": "across", "head_id": 25, "trials_per_node": 1000000, "definition": "{}", "context": null, "block": "25", "class": "StaticNetwork", "object_type": "Network"}, {"vars": "{}", "id": 26, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "StaticNetwork", "max_size": 1, "full": false, "role": "default", "n_pending_infos": 0, "n_completed_infos": 0, "n_failed_infos": 0, "n_alive_nodes": 1, "n_failed_nodes": 0, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "target_n_trials": 1000000, "participant_group": "default", "sync_group_type": null, "sync_group_id": null, "participant_id": null, "async_post_grow_network_required": false, "async_post_grow_network_requested": false, "async_post_grow_network_complete": false, "async_post_grow_network_failed": false, "id_within_participant": null, "n_all_trials": 0, "n_alive_trials": 0, "n_failed_trials": 0, "n_completed_trials": 0, "n_all_nodes": 1, "chain_type": "across", "head_id": 26, "trials_per_node": 1000000, "definition": "{}", "context": null, "block": "26", "class": "StaticNetwork", "object_type": "Network"}, {"vars": "{}", "id": 27, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "StaticNetwork", "max_size": 1, "full": false, "role": "default", "n_pending_infos": 0, "n_completed_infos": 0, "n_failed_infos": 0, "n_alive_nodes": 1, "n_failed_nodes": 0, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "target_n_trials": 1000000, "participant_group": "default", "sync_group_type": null, "sync_group_id": null, "participant_id": null, "async_post_grow_network_required": false, "async_post_grow_network_requested": false, "async_post_grow_network_complete": false, "async_post_grow_network_failed": false, "id_within_participant": null, "n_all_trials": 0, "n_alive_trials": 0, "n_failed_trials": 0, "n_completed_trials": 0, "n_all_nodes": 1, "chain_type": "across", "head_id": 27, "trials_per_node": 1000000, "definition": "{}", "context": null, "block": "27", "class": "StaticNetwork", "object_type": "Network"}, {"vars": "{}", "id": 28, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "StaticNetwork", "max_size": 1, "full": false, "role": "default", "n_pending_infos": 0, "n_completed_infos": 0, "n_failed_infos": 0, "n_alive_nodes": 1, "n_failed_nodes": 0, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "target_n_trials": 1000000, "participant_group": "default", "sync_group_type": null, "sync_group_id": null, "participant_id": null, "async_post_grow_network_required": false, "async_post_grow_network_requested": false, "async_post_grow_network_complete": false, "async_post_grow_network_failed": false, "id_within_participant": null, "n_all_trials": 0, "n_alive_trials": 0, "n_failed_trials": 0, "n_completed_trials": 0, "n_all_nodes": 1, "chain_type": "across", "head_id": 28, "trials_per_node": 1000000, "definition": "{}", "context": null, "block": "28", "class": "StaticNetwork", "object_type": "Network"}, {"vars": "{}", "id": 29, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "StaticNetwork", "max_size": 1, "full": false, "role": "default", "n_pending_infos": 0, "n_completed_infos": 0, "n_failed_infos": 0, "n_alive_nodes": 1, "n_failed_nodes": 0, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "target_n_trials": 1000000, "participant_group": "default", "sync_group_type": null, "sync_group_id": null, "participant_id": null, "async_post_grow_network_required": false, "async_post_grow_network_requested": false, "async_post_grow_network_complete": false, "async_post_grow_network_failed": false, "id_within_participant": null, "n_all_trials": 0, "n_alive_trials": 0, "n_failed_trials": 0, "n_completed_trials": 0, "n_all_nodes": 1, "chain_type": "across", "head_id": 29, "trials_per_node": 1000000, "definition": "{}", "context": null, "block": "29", "class": "StaticNetwork", "object_type": "Network"}, {"vars": "{}", "id": 30, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "StaticNetwork", "max_size": 1, "full": false, "role": "default", "n_pending_infos": 0, "n_completed_infos": 0, "n_failed_infos": 0, "n_alive_nodes": 1, "n_failed_nodes": 0, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "target_n_trials": 1000000, "participant_group": "default", "sync_group_type": null, "sync_group_id": null, "participant_id": null, "async_post_grow_network_required": false, "async_post_grow_network_requested": false, "async_post_grow_network_complete": false, "async_post_grow_network_failed": false, "id_within_participant": null, "n_all_trials": 0, "n_alive_trials": 0, "n_failed_trials": 0, "n_completed_trials": 0, "n_all_nodes": 1, "chain_type": "across", "head_id": 30, "trials_per_node": 1000000, "definition": "{}", "context": null, "block": "30", "class": "StaticNetwork", "object_type": "Network"}, {"vars": "{}", "id": 31, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "StaticNetwork", "max_size": 1, "full": false, "role": "default", "n_pending_infos": 0, "n_completed_infos": 0, "n_failed_infos": 0, "n_alive_nodes": 1, "n_failed_nodes": 0, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "target_n_trials": 1000000, "participant_group": "default", "sync_group_type": null, "sync_group_id": null, "participant_id": null, "async_post_grow_network_required": false, "async_post_grow_network_requested": false, "async_post_grow_network_complete": false, "async_post_grow_network_failed": false, "id_within_participant": null, "n_all_trials": 0, "n_alive_trials": 0, "n_failed_trials": 0, "n_completed_trials": 0, "n_all_nodes": 1, "chain_type": "across", "head_id": 31, "trials_per_node": 1000000, "definition": "{}", "context": null, "block": "31", "class": "StaticNetwork", "object_type": "Network"}, {"vars": "{}", "id": 32, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "StaticNetwork", "max_size": 1, "full": false, "role": "default", "n_pending_infos": 0, "n_completed_infos": 0, "n_failed_infos": 0, "n_alive_nodes": 1, "n_failed_nodes": 0, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "target_n_trials": 1000000, "participant_group": "default", "sync_group_type": null, "sync_group_id": null, "participant_id": null, "async_post_grow_network_required": false, "async_post_grow_network_requested": false, "async_post_grow_network_complete": false, "async_post_grow_network_failed": false, "id_within_participant": null, "n_all_trials": 0, "n_alive_trials": 0, "n_failed_trials": 0, "n_completed_trials": 0, "n_all_nodes": 1, "chain_type": "across", "head_id": 32, "trials_per_node": 1000000, "definition": "{}", "context": null, "block": "32", "class": "StaticNetwork", "object_type": "Network"}, {"vars": "{}", "id": 33, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "StaticNetwork", "max_size": 1, "full": false, "role": "default", "n_pending_infos": 0, "n_completed_infos": 0, "n_failed_infos": 0, "n_alive_nodes": 1, "n_failed_nodes": 0, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "target_n_trials": 1000000, "participant_group": "default", "sync_group_type": null, "sync_group_id": null, "participant_id": null, "async_post_grow_network_required": false, "async_post_grow_network_requested": false, "async_post_grow_network_complete": false, "async_post_grow_network_failed": false, "id_within_participant": null, "n_all_trials": 0, "n_alive_trials": 0, "n_failed_trials": 0, "n_completed_trials": 0, "n_all_nodes": 1, "chain_type": "across", "head_id": 33, "trials_per_node": 1000000, "definition": "{}", "context": null, "block": "33", "class": "StaticNetwork", "object_type": "Network"}, {"vars": "{}", "id": 34, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "StaticNetwork", "max_size": 1, "full": false, "role": "default", "n_pending_infos": 0, "n_completed_infos": 0, "n_failed_infos": 0, "n_alive_nodes": 1, "n_failed_nodes": 0, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "target_n_trials": 1000000, "participant_group": "default", "sync_group_type": null, "sync_group_id": null, "participant_id": null, "async_post_grow_network_required": false, "async_post_grow_network_requested": false, "async_post_grow_network_complete": false, "async_post_grow_network_failed": false, "id_within_participant": null, "n_all_trials": 0, "n_alive_trials": 0, "n_failed_trials": 0, "n_completed_trials": 0, "n_all_nodes": 1, "chain_type": "across", "head_id": 34, "trials_per_node": 1000000, "definition": "{}", "context": null, "block": "34", "class": "StaticNetwork", "object_type": "Network"}, {"vars": "{}", "id": 35, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "StaticNetwork", "max_size": 1, "full": false, "role": "default", "n_pending_infos": 0, "n_completed_infos": 0, "n_failed_infos": 0, "n_alive_nodes": 1, "n_failed_nodes": 0, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "target_n_trials": 1000000, "participant_group": "default", "sync_group_type": null, "sync_group_id": null, "participant_id": null, "async_post_grow_network_required": false, "async_post_grow_network_requested": false, "async_post_grow_network_complete": false, "async_post_grow_network_failed": false, "id_within_participant": null, "n_all_trials": 0, "n_alive_trials": 0, "n_failed_trials": 0, "n_completed_trials": 0, "n_all_nodes": 1, "chain_type": "across", "head_id": 35, "trials_per_node": 1000000, "definition": "{}", "context": null, "block": "35", "class": "StaticNetwork", "object_type": "Network"}, {"vars": "{}", "id": 36, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "StaticNetwork", "max_size": 1, "full": false, "role": "default", "n_pending_infos": 0, "n_completed_infos": 0, "n_failed_infos": 0, "n_alive_nodes": 1, "n_failed_nodes": 0, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "target_n_trials": 1000000, "participant_group": "default", "sync_group_type": null, "sync_group_id": null, "participant_id": null, "async_post_grow_network_required": false, "async_post_grow_network_requested": false, "async_post_grow_network_complete": false, "async_post_grow_network_failed": false, "id_within_participant": null, "n_all_trials": 0, "n_alive_trials": 0, "n_failed_trials": 0, "n_completed_trials": 0, "n_all_nodes": 1, "chain_type": "across", "head_id": 36, "trials_per_node": 1000000, "definition": "{}", "context": null, "block": "36", "class": "StaticNetwork", "object_type": "Network"}, {"vars": "{}", "id": 37, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "StaticNetwork", "max_size": 1, "full": false, "role": "default", "n_pending_infos": 0, "n_completed_infos": 0, "n_failed_infos": 0, "n_alive_nodes": 1, "n_failed_nodes": 0, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "target_n_trials": 1000000, "participant_group": "default", "sync_group_type": null, "sync_group_id": null, "participant_id": null, "async_post_grow_network_required": false, "async_post_grow_network_requested": false, "async_post_grow_network_complete": false, "async_post_grow_network_failed": false, "id_within_participant": null, "n_all_trials": 0, "n_alive_trials": 0, "n_failed_trials": 0, "n_completed_trials": 0, "n_all_nodes": 1, "chain_type": "across", "head_id": 37, "trials_per_node": 1000000, "definition": "{}", "context": null, "block": "37", "class": "StaticNetwork", "object_type": "Network"}, {"vars": "{}", "id": 38, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "StaticNetwork", "max_size": 1, "full": false, "role": "default", "n_pending_infos": 0, "n_completed_infos": 0, "n_failed_infos": 0, "n_alive_nodes": 1, "n_failed_nodes": 0, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "target_n_trials": 1000000, "participant_group": "default", "sync_group_type": null, "sync_group_id": null, "participant_id": null, "async_post_grow_network_required": false, "async_post_grow_network_requested": false, "async_post_grow_network_complete": false, "async_post_grow_network_failed": false, "id_within_participant": null, "n_all_trials": 0, "n_alive_trials": 0, "n_failed_trials": 0, "n_completed_trials": 0, "n_all_nodes": 1, "chain_type": "across", "head_id": 38, "trials_per_node": 1000000, "definition": "{}", "context": null, "block": "38", "class": "StaticNetwork", "object_type": "Network"}, {"vars": "{}", "id": 39, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "StaticNetwork", "max_size": 1, "full": false, "role": "default", "n_pending_infos": 0, "n_completed_infos": 0, "n_failed_infos": 0, "n_alive_nodes": 1, "n_failed_nodes": 0, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "target_n_trials": 1000000, "participant_group": "default", "sync_group_type": null, "sync_group_id": null, "participant_id": null, "async_post_grow_network_required": false, "async_post_grow_network_requested": false, "async_post_grow_network_complete": false, "async_post_grow_network_failed": false, "id_within_participant": null, "n_all_trials": 0, "n_alive_trials": 0, "n_failed_trials": 0, "n_completed_trials": 0, "n_all_nodes": 1, "chain_type": "across", "head_id": 39, "trials_per_node": 1000000, "definition": "{}", "context": null, "block": "39", "class": "StaticNetwork", "object_type": "Network"}, {"vars": "{}", "id": 40, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "StaticNetwork", "max_size": 1, "full": false, "role": "default", "n_pending_infos": 0, "n_completed_infos": 0, "n_failed_infos": 0, "n_alive_nodes": 1, "n_failed_nodes": 0, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "target_n_trials": 1000000, "participant_group": "default", "sync_group_type": null, "sync_group_id": null, "participant_id": null, "async_post_grow_network_required": false, "async_post_grow_network_requested": false, "async_post_grow_network_complete": false, "async_post_grow_network_failed": false, "id_within_participant": null, "n_all_trials": 0, "n_alive_trials": 0, "n_failed_trials": 0, "n_completed_trials": 0, "n_all_nodes": 1, "chain_type": "across", "head_id": 40, "trials_per_node": 1000000, "definition": "{}", "context": null, "block": "40", "class": "StaticNetwork", "object_type": "Network"}], "nodes": [{"vars": "{}", "id": 1, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "TrialSource", "network_id": 1, "participant_id": null, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "module_state_id": null, "is_global": null, "on_deploy_complete": true, "async_on_deploy_required": false, "async_on_deploy_requested": false, "async_on_deploy_complete": false, "async_on_deploy_failed": false, "key": null, "degree": 0, "target_n_trials": 1000000, "can_spawn": false, "child_id": null, "parent_id": null, "seed": "{}", "definition": "{'task_type': 'personality', 'lobby_index': 1, 'item_id': 1, 'item_key': 'E1', 'facet': 'Friendliness', 'item_text': 'Is reserved.'}", "context": null, "participant_group": "default", "block": "01", "propagate_failure": false, "n_viable_trials": 0, "class": "StaticNode", "object_type": "Node"}, {"vars": "{}", "id": 2, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "TrialSource", "network_id": 2, "participant_id": null, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "module_state_id": null, "is_global": null, "on_deploy_complete": true, "async_on_deploy_required": false, "async_on_deploy_requested": false, "async_on_deploy_complete": false, "async_on_deploy_failed": false, "key": null, "degree": 0, "target_n_trials": 1000000, "can_spawn": false, "child_id": null, "parent_id": null, "seed": "{}", "definition": "{'task_type': 'personality', 'lobby_index': 2, 'item_id': 2, 'item_key': 'A1', 'facet': 'Trust', 'item_text': 'Is generally trusting.'}", "context": null, "participant_group": "default", "block": "02", "propagate_failure": false, "n_viable_trials": 0, "class": "StaticNode", "object_type": "Node"}, {"vars": "{}", "id": 3, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "TrialSource", "network_id": 3, "participant_id": null, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "module_state_id": null, "is_global": null, "on_deploy_complete": true, "async_on_deploy_required": false, "async_on_deploy_requested": false, "async_on_deploy_complete": false, "async_on_deploy_failed": false, "key": null, "degree": 0, "target_n_trials": 1000000, "can_spawn": false, "child_id": null, "parent_id": null, "seed": "{}", "definition": "{'task_type': 'personality', 'lobby_index': 3, 'item_id': 3, 'item_key': 'C1', 'facet': 'Self-Efficacy', 'item_text': 'Tends to be lazy.'}", "context": null, "participant_group": "default", "block": "03", "propagate_failure": false, "n_viable_trials": 0, "class": "StaticNode", "object_type": "Node"}, {"vars": "{}", "id": 4, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "TrialSource", "network_id": 4, "participant_id": null, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "module_state_id": null, "is_global": null, "on_deploy_complete": true, "async_on_deploy_required": false, "async_on_deploy_requested": false, "async_on_deploy_complete": false, "async_on_deploy_failed": false, "key": null, "degree": 0, "target_n_trials": 1000000, "can_spawn": false, "child_id": null, "parent_id": null, "seed": "{}", "definition": "{'task_type': 'personality', 'lobby_index': 4, 'item_id': 4, 'item_key': 'N1', 'facet': 'Anxiety', 'item_text': 'Is relaxed, handles stress well.'}", "context": null, "participant_group": "default", "block": "04", "propagate_failure": false, "n_viable_trials": 0, "class": "StaticNode", "object_type": "Node"}, {"vars": "{}", "id": 5, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "TrialSource", "network_id": 5, "participant_id": null, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "module_state_id": null, "is_global": null, "on_deploy_complete": true, "async_on_deploy_required": false, "async_on_deploy_requested": false, "async_on_deploy_complete": false, "async_on_deploy_failed": false, "key": null, "degree": 0, "target_n_trials": 1000000, "can_spawn": false, "child_id": null, "parent_id": null, "seed": "{}", "definition": "{'task_type': 'personality', 'lobby_index': 5, 'item_id': 5, 'item_key': 'O1', 'facet': 'Imagination', 'item_text': 'Has few artistic interests.'}", "context": null, "participant_group": "default", "block": "05", "propagate_failure": false, "n_viable_trials": 0, "class": "StaticNode", "object_type": "Node"}, {"vars": "{}", "id": 6, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "TrialSource", "network_id": 6, "participant_id": null, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "module_state_id": null, "is_global": null, "on_deploy_complete": true, "async_on_deploy_required": false, "async_on_deploy_requested": false, "async_on_deploy_complete": false, "async_on_deploy_failed": false, "key": null, "degree": 0, "target_n_trials": 1000000, "can_spawn": false, "child_id": null, "parent_id": null, "seed": "{}", "definition": "{'task_type': 'personality', 'lobby_index': 6, 'item_id': 6, 'item_key': 'E2', 'facet': 'Gregariousness', 'item_text': 'Is outgoing, sociable.'}", "context": null, "participant_group": "default", "block": "06", "propagate_failure": false, "n_viable_trials": 0, "class": "StaticNode", "object_type": "Node"}, {"vars": "{}", "id": 7, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "TrialSource", "network_id": 7, "participant_id": null, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "module_state_id": null, "is_global": null, "on_deploy_complete": true, "async_on_deploy_required": false, "async_on_deploy_requested": false, "async_on_deploy_complete": false, "async_on_deploy_failed": false, "key": null, "degree": 0, "target_n_trials": 1000000, "can_spawn": false, "child_id": null, "parent_id": null, "seed": "{}", "definition": "{'task_type': 'personality', 'lobby_index': 7, 'item_id': 7, 'item_key': 'A2', 'facet': 'Morality', 'item_text': 'Tends to find fault with others.'}", "context": null, "participant_group": "default", "block": "07", "propagate_failure": false, "n_viable_trials": 0, "class": "StaticNode", "object_type": "Node"}, {"vars": "{}", "id": 8, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "TrialSource", "network_id": 8, "participant_id": null, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "module_state_id": null, "is_global": null, "on_deploy_complete": true, "async_on_deploy_required": false, "async_on_deploy_requested": false, "async_on_deploy_complete": false, "async_on_deploy_failed": false, "key": null, "degree": 0, "target_n_trials": 1000000, "can_spawn": false, "child_id": null, "parent_id": null, "seed": "{}", "definition": "{'task_type': 'personality', 'lobby_index': 8, 'item_id': 8, 'item_key': 'C2', 'facet': 'Orderliness', 'item_text': 'Does a thorough job.'}", "context": null, "participant_group": "default", "block": "08", "propagate_failure": false, "n_viable_trials": 0, "class": "StaticNode", "object_type": "Node"}, {"vars": "{}", "id": 9, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "TrialSource", "network_id": 9, "participant_id": null, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "module_state_id": null, "is_global": null, "on_deploy_complete": true, "async_on_deploy_required": false, "async_on_deploy_requested": false, "async_on_deploy_complete": false, "async_on_deploy_failed": false, "key": null, "degree": 0, "target_n_trials": 1000000, "can_spawn": false, "child_id": null, "parent_id": null, "seed": "{}", "definition": "{'task_type': 'personality', 'lobby_index': 9, 'item_id': 9, 'item_key': 'N2', 'facet': 'Anger', 'item_text': 'Gets nervous easily.'}", "context": null, "participant_group": "default", "block": "09", "propagate_failure": false, "n_viable_trials": 0, "class": "StaticNode", "object_type": "Node"}, {"vars": "{}", "id": 10, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "TrialSource", "network_id": 10, "participant_id": null, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "module_state_id": null, "is_global": null, "on_deploy_complete": true, "async_on_deploy_required": false, "async_on_deploy_requested": false, "async_on_deploy_complete": false, "async_on_deploy_failed": false, "key": null, "degree": 0, "target_n_trials": 1000000, "can_spawn": false, "child_id": null, "parent_id": null, "seed": "{}", "definition": "{'task_type': 'personality', 'lobby_index': 10, 'item_id': 10, 'item_key': 'O2', 'facet': 'Artistic Interests', 'item_text': 'Has an active imagination.'}", "context": null, "participant_group": "default", "block": "10", "propagate_failure": false, "n_viable_trials": 0, "class": "StaticNode", "object_type": "Node"}, {"vars": "{}", "id": 11, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "TrialSource", "network_id": 11, "participant_id": null, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "module_state_id": null, "is_global": null, "on_deploy_complete": true, "async_on_deploy_required": false, "async_on_deploy_requested": false, "async_on_deploy_complete": false, "async_on_deploy_failed": false, "key": null, "degree": 0, "target_n_trials": 1000000, "can_spawn": false, "child_id": null, "parent_id": null, "seed": "{}", "definition": "{'task_type': 'guessing', 'lobby_index': 11, 'round_id': 1, 'target': 10}", "context": null, "participant_group": "default", "block": "11", "propagate_failure": false, "n_viable_trials": 0, "class": "StaticNode", "object_type": "Node"}, {"vars": "{}", "id": 12, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "TrialSource", "network_id": 12, "participant_id": null, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "module_state_id": null, "is_global": null, "on_deploy_complete": true, "async_on_deploy_required": false, "async_on_deploy_requested": false, "async_on_deploy_complete": false, "async_on_deploy_failed": false, "key": null, "degree": 0, "target_n_trials": 1000000, "can_spawn": false, "child_id": null, "parent_id": null, "seed": "{}", "definition": "{'task_type': 'guessing', 'lobby_index': 12, 'round_id': 2, 'target': 6}", "context": null, "participant_group": "default", "block": "12", "propagate_failure": false, "n_viable_trials": 0, "class": "StaticNode", "object_type": "Node"}, {"vars": "{}", "id": 13, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "TrialSource", "network_id": 13, "participant_id": null, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "module_state_id": null, "is_global": null, "on_deploy_complete": true, "async_on_deploy_required": false, "async_on_deploy_requested": false, "async_on_deploy_complete": false, "async_on_deploy_failed": false, "key": null, "degree": 0, "target_n_trials": 1000000, "can_spawn": false, "child_id": null, "parent_id": null, "seed": "{}", "definition": "{'task_type': 'guessing', 'lobby_index': 13, 'round_id': 3, 'target': 2}", "context": null, "participant_group": "default", "block": "13", "propagate_failure": false, "n_viable_trials": 0, "class": "StaticNode", "object_type": "Node"}, {"vars": "{}", "id": 14, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "TrialSource", "network_id": 14, "participant_id": null, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "module_state_id": null, "is_global": null, "on_deploy_complete": true, "async_on_deploy_required": false, "async_on_deploy_requested": false, "async_on_deploy_complete": false, "async_on_deploy_failed": false, "key": null, "degree": 0, "target_n_trials": 1000000, "can_spawn": false, "child_id": null, "parent_id": null, "seed": "{}", "definition": "{'task_type': 'guessing', 'lobby_index': 14, 'round_id': 4, 'target': 9}", "context": null, "participant_group": "default", "block": "14", "propagate_failure": false, "n_viable_trials": 0, "class": "StaticNode", "object_type": "Node"}, {"vars": "{}", "id": 15, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "TrialSource", "network_id": 15, "participant_id": null, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "module_state_id": null, "is_global": null, "on_deploy_complete": true, "async_on_deploy_required": false, "async_on_deploy_requested": false, "async_on_deploy_complete": false, "async_on_deploy_failed": false, "key": null, "degree": 0, "target_n_trials": 1000000, "can_spawn": false, "child_id": null, "parent_id": null, "seed": "{}", "definition": "{'task_type': 'guessing', 'lobby_index': 15, 'round_id': 5, 'target': 5}", "context": null, "participant_group": "default", "block": "15", "propagate_failure": false, "n_viable_trials": 0, "class": "StaticNode", "object_type": "Node"}, {"vars": "{}", "id": 16, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "TrialSource", "network_id": 16, "participant_id": null, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "module_state_id": null, "is_global": null, "on_deploy_complete": true, "async_on_deploy_required": false, "async_on_deploy_requested": false, "async_on_deploy_complete": false, "async_on_deploy_failed": false, "key": null, "degree": 0, "target_n_trials": 1000000, "can_spawn": false, "child_id": null, "parent_id": null, "seed": "{}", "definition": "{'task_type': 'guessing', 'lobby_index': 16, 'round_id': 6, 'target': 1}", "context": null, "participant_group": "default", "block": "16", "propagate_failure": false, "n_viable_trials": 0, "class": "StaticNode", "object_type": "Node"}, {"vars": "{}", "id": 17, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "TrialSource", "network_id": 17, "participant_id": null, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "module_state_id": null, "is_global": null, "on_deploy_complete": true, "async_on_deploy_required": false, "async_on_deploy_requested": false, "async_on_deploy_complete": false, "async_on_deploy_failed": false, "key": null, "degree": 0, "target_n_trials": 1000000, "can_spawn": false, "child_id": null, "parent_id": null, "seed": "{}", "definition": "{'task_type': 'guessing', 'lobby_index': 17, 'round_id': 7, 'target': 8}", "context": null, "participant_group": "default", "block": "17", "propagate_failure": false, "n_viable_trials": 0, "class": "StaticNode", "object_type": "Node"}, {"vars": "{}", "id": 18, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "TrialSource", "network_id": 18, "participant_id": null, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "module_state_id": null, "is_global": null, "on_deploy_complete": true, "async_on_deploy_required": false, "async_on_deploy_requested": false, "async_on_deploy_complete": false, "async_on_deploy_failed": false, "key": null, "degree": 0, "target_n_trials": 1000000, "can_spawn": false, "child_id": null, "parent_id": null, "seed": "{}", "definition": "{'task_type': 'guessing', 'lobby_index': 18, 'round_id': 8, 'target': 4}", "context": null, "participant_group": "default", "block": "18", "propagate_failure": false, "n_viable_trials": 0, "class": "StaticNode", "object_type": "Node"}, {"vars": "{}", "id": 19, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "TrialSource", "network_id": 19, "participant_id": null, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "module_state_id": null, "is_global": null, "on_deploy_complete": true, "async_on_deploy_required": false, "async_on_deploy_requested": false, "async_on_deploy_complete": false, "async_on_deploy_failed": false, "key": null, "degree": 0, "target_n_trials": 1000000, "can_spawn": false, "child_id": null, "parent_id": null, "seed": "{}", "definition": "{'task_type': 'guessing', 'lobby_index': 19, 'round_id': 9, 'target': 0}", "context": null, "participant_group": "default", "block": "19", "propagate_failure": false, "n_viable_trials": 0, "class": "StaticNode", "object_type": "Node"}, {"vars": "{}", "id": 20, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "TrialSource", "network_id": 20, "participant_id": null, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "module_state_id": null, "is_global": null, "on_deploy_complete": true, "async_on_deploy_required": false, "async_on_deploy_requested": false, "async_on_deploy_complete": false, "async_on_deploy_failed": false, "key": null, "degree": 0, "target_n_trials": 1000000, "can_spawn": false, "child_id": null, "parent_id": null, "seed": "{}", "definition": "{'task_type': 'guessing', 'lobby_index': 20, 'round_id': 10, 'target': 7}", "context": null, "participant_group": "default", "block": "20", "propagate_failure": false, "n_viable_trials": 0, "class": "StaticNode", "object_type": "Node"}, {"vars": "{}", "id": 21, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "TrialSource", "network_id": 21, "participant_id": null, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "module_state_id": null, "is_global": null, "on_deploy_complete": true, "async_on_deploy_required": false, "async_on_deploy_requested": false, "async_on_deploy_complete": false, "async_on_deploy_failed": false, "key": null, "degree": 0, "target_n_trials": 1000000, "can_spawn": false, "child_id": null, "parent_id": null, "seed": "{}", "definition": "{'task_type': 'guessing', 'lobby_index': 21, 'round_id': 11, 'target': 3}", "context": null, "participant_group": "default", "block": "21", "propagate_failure": false, "n_viable_trials": 0, "class": "StaticNode", "object_type": "Node"}, {"vars": "{}", "id": 22, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "TrialSource", "network_id": 22, "participant_id": null, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "module_state_id": null, "is_global": null, "on_deploy_complete": true, "async_on_deploy_required": false, "async_on_deploy_requested": false, "async_on_deploy_complete": false, "async_on_deploy_failed": false, "key": null, "degree": 0, "target_n_trials": 1000000, "can_spawn": false, "child_id": null, "parent_id": null, "seed": "{}", "definition": "{'task_type': 'guessing', 'lobby_index': 22, 'round_id': 12, 'target': 10}", "context": null, "participant_group": "default", "block": "22", "propagate_failure": false, "n_viable_trials": 0, "class": "StaticNode", "object_type": "Node"}, {"vars": "{}", "id": 23, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "TrialSource", "network_id": 23, "participant_id": null, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "module_state_id": null, "is_global": null, "on_deploy_complete": true, "async_on_deploy_required": false, "async_on_deploy_requested": false, "async_on_deploy_complete": false, "async_on_deploy_failed": false, "key": null, "degree": 0, "target_n_trials": 1000000, "can_spawn": false, "child_id": null, "parent_id": null, "seed": "{}", "definition": "{'task_type': 'guessing', 'lobby_index': 23, 'round_id': 13, 'target': 6}", "context": null, "participant_group": "default", "block": "23", "propagate_failure": false, "n_viable_trials": 0, "class": "StaticNode", "object_type": "Node"}, {"vars": "{}", "id": 24, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "TrialSource", "network_id": 24, "participant_id": null, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "module_state_id": null, "is_global": null, "on_deploy_complete": true, "async_on_deploy_required": false, "async_on_deploy_requested": false, "async_on_deploy_complete": false, "async_on_deploy_failed": false, "key": null, "degree": 0, "target_n_trials": 1000000, "can_spawn": false, "child_id": null, "parent_id": null, "seed": "{}", "definition": "{'task_type': 'guessing', 'lobby_index': 24, 'round_id': 14, 'target': 2}", "context": null, "participant_group": "default", "block": "24", "propagate_failure": false, "n_viable_trials": 0, "class": "StaticNode", "object_type": "Node"}, {"vars": "{}", "id": 25, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "TrialSource", "network_id": 25, "participant_id": null, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "module_state_id": null, "is_global": null, "on_deploy_complete": true, "async_on_deploy_required": false, "async_on_deploy_requested": false, "async_on_deploy_complete": false, "async_on_deploy_failed": false, "key": null, "degree": 0, "target_n_trials": 1000000, "can_spawn": false, "child_id": null, "parent_id": null, "seed": "{}", "definition": "{'task_type': 'guessing', 'lobby_index': 25, 'round_id': 15, 'target': 9}", "context": null, "participant_group": "default", "block": "25", "propagate_failure": false, "n_viable_trials": 0, "class": "StaticNode", "object_type": "Node"}, {"vars": "{}", "id": 26, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "TrialSource", "network_id": 26, "participant_id": null, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "module_state_id": null, "is_global": null, "on_deploy_complete": true, "async_on_deploy_required": false, "async_on_deploy_requested": false, "async_on_deploy_complete": false, "async_on_deploy_failed": false, "key": null, "degree": 0, "target_n_trials": 1000000, "can_spawn": false, "child_id": null, "parent_id": null, "seed": "{}", "definition": "{'task_type': 'guessing', 'lobby_index': 26, 'round_id': 16, 'target': 5}", "context": null, "participant_group": "default", "block": "26", "propagate_failure": false, "n_viable_trials": 0, "class": "StaticNode", "object_type": "Node"}, {"vars": "{}", "id": 27, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "TrialSource", "network_id": 27, "participant_id": null, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "module_state_id": null, "is_global": null, "on_deploy_complete": true, "async_on_deploy_required": false, "async_on_deploy_requested": false, "async_on_deploy_complete": false, "async_on_deploy_failed": false, "key": null, "degree": 0, "target_n_trials": 1000000, "can_spawn": false, "child_id": null, "parent_id": null, "seed": "{}", "definition": "{'task_type': 'guessing', 'lobby_index': 27, 'round_id': 17, 'target': 1}", "context": null, "participant_group": "default", "block": "27", "propagate_failure": false, "n_viable_trials": 0, "class": "StaticNode", "object_type": "Node"}, {"vars": "{}", "id": 28, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "TrialSource", "network_id": 28, "participant_id": null, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "module_state_id": null, "is_global": null, "on_deploy_complete": true, "async_on_deploy_required": false, "async_on_deploy_requested": false, "async_on_deploy_complete": false, "async_on_deploy_failed": false, "key": null, "degree": 0, "target_n_trials": 1000000, "can_spawn": false, "child_id": null, "parent_id": null, "seed": "{}", "definition": "{'task_type': 'guessing', 'lobby_index': 28, 'round_id': 18, 'target': 8}", "context": null, "participant_group": "default", "block": "28", "propagate_failure": false, "n_viable_trials": 0, "class": "StaticNode", "object_type": "Node"}, {"vars": "{}", "id": 29, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "TrialSource", "network_id": 29, "participant_id": null, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "module_state_id": null, "is_global": null, "on_deploy_complete": true, "async_on_deploy_required": false, "async_on_deploy_requested": false, "async_on_deploy_complete": false, "async_on_deploy_failed": false, "key": null, "degree": 0, "target_n_trials": 1000000, "can_spawn": false, "child_id": null, "parent_id": null, "seed": "{}", "definition": "{'task_type': 'guessing', 'lobby_index': 29, 'round_id': 19, 'target': 4}", "context": null, "participant_group": "default", "block": "29", "propagate_failure": false, "n_viable_trials": 0, "class": "StaticNode", "object_type": "Node"}, {"vars": "{}", "id": 30, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "TrialSource", "network_id": 30, "participant_id": null, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "module_state_id": null, "is_global": null, "on_deploy_complete": true, "async_on_deploy_required": false, "async_on_deploy_requested": false, "async_on_deploy_complete": false, "async_on_deploy_failed": false, "key": null, "degree": 0, "target_n_trials": 1000000, "can_spawn": false, "child_id": null, "parent_id": null, "seed": "{}", "definition": "{'task_type': 'guessing', 'lobby_index': 30, 'round_id': 20, 'target': 0}", "context": null, "participant_group": "default", "block": "30", "propagate_failure": false, "n_viable_trials": 0, "class": "StaticNode", "object_type": "Node"}, {"vars": "{}", "id": 31, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "TrialSource", "network_id": 31, "participant_id": null, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "module_state_id": null, "is_global": null, "on_deploy_complete": true, "async_on_deploy_required": false, "async_on_deploy_requested": false, "async_on_deploy_complete": false, "async_on_deploy_failed": false, "key": null, "degree": 0, "target_n_trials": 1000000, "can_spawn": false, "child_id": null, "parent_id": null, "seed": "{}", "definition": "{'task_type': 'guessing', 'lobby_index': 31, 'round_id': 21, 'target': 7}", "context": null, "participant_group": "default", "block": "31", "propagate_failure": false, "n_viable_trials": 0, "class": "StaticNode", "object_type": "Node"}, {"vars": "{}", "id": 32, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "TrialSource", "network_id": 32, "participant_id": null, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "module_state_id": null, "is_global": null, "on_deploy_complete": true, "async_on_deploy_required": false, "async_on_deploy_requested": false, "async_on_deploy_complete": false, "async_on_deploy_failed": false, "key": null, "degree": 0, "target_n_trials": 1000000, "can_spawn": false, "child_id": null, "parent_id": null, "seed": "{}", "definition": "{'task_type': 'guessing', 'lobby_index': 32, 'round_id': 22, 'target': 3}", "context": null, "participant_group": "default", "block": "32", "propagate_failure": false, "n_viable_trials": 0, "class": "StaticNode", "object_type": "Node"}, {"vars": "{}", "id": 33, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "TrialSource", "network_id": 33, "participant_id": null, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "module_state_id": null, "is_global": null, "on_deploy_complete": true, "async_on_deploy_required": false, "async_on_deploy_requested": false, "async_on_deploy_complete": false, "async_on_deploy_failed": false, "key": null, "degree": 0, "target_n_trials": 1000000, "can_spawn": false, "child_id": null, "parent_id": null, "seed": "{}", "definition": "{'task_type': 'guessing', 'lobby_index': 33, 'round_id': 23, 'target': 10}", "context": null, "participant_group": "default", "block": "33", "propagate_failure": false, "n_viable_trials": 0, "class": "StaticNode", "object_type": "Node"}, {"vars": "{}", "id": 34, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "TrialSource", "network_id": 34, "participant_id": null, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "module_state_id": null, "is_global": null, "on_deploy_complete": true, "async_on_deploy_required": false, "async_on_deploy_requested": false, "async_on_deploy_complete": false, "async_on_deploy_failed": false, "key": null, "degree": 0, "target_n_trials": 1000000, "can_spawn": false, "child_id": null, "parent_id": null, "seed": "{}", "definition": "{'task_type': 'guessing', 'lobby_index': 34, 'round_id': 24, 'target': 6}", "context": null, "participant_group": "default", "block": "34", "propagate_failure": false, "n_viable_trials": 0, "class": "StaticNode", "object_type": "Node"}, {"vars": "{}", "id": 35, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "TrialSource", "network_id": 35, "participant_id": null, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "module_state_id": null, "is_global": null, "on_deploy_complete": true, "async_on_deploy_required": false, "async_on_deploy_requested": false, "async_on_deploy_complete": false, "async_on_deploy_failed": false, "key": null, "degree": 0, "target_n_trials": 1000000, "can_spawn": false, "child_id": null, "parent_id": null, "seed": "{}", "definition": "{'task_type': 'guessing', 'lobby_index': 35, 'round_id': 25, 'target': 2}", "context": null, "participant_group": "default", "block": "35", "propagate_failure": false, "n_viable_trials": 0, "class": "StaticNode", "object_type": "Node"}, {"vars": "{}", "id": 36, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "TrialSource", "network_id": 36, "participant_id": null, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "module_state_id": null, "is_global": null, "on_deploy_complete": true, "async_on_deploy_required": false, "async_on_deploy_requested": false, "async_on_deploy_complete": false, "async_on_deploy_failed": false, "key": null, "degree": 0, "target_n_trials": 1000000, "can_spawn": false, "child_id": null, "parent_id": null, "seed": "{}", "definition": "{'task_type': 'guessing', 'lobby_index': 36, 'round_id': 26, 'target': 9}", "context": null, "participant_group": "default", "block": "36", "propagate_failure": false, "n_viable_trials": 0, "class": "StaticNode", "object_type": "Node"}, {"vars": "{}", "id": 37, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "TrialSource", "network_id": 37, "participant_id": null, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "module_state_id": null, "is_global": null, "on_deploy_complete": true, "async_on_deploy_required": false, "async_on_deploy_requested": false, "async_on_deploy_complete": false, "async_on_deploy_failed": false, "key": null, "degree": 0, "target_n_trials": 1000000, "can_spawn": false, "child_id": null, "parent_id": null, "seed": "{}", "definition": "{'task_type': 'guessing', 'lobby_index': 37, 'round_id': 27, 'target': 5}", "context": null, "participant_group": "default", "block": "37", "propagate_failure": false, "n_viable_trials": 0, "class": "StaticNode", "object_type": "Node"}, {"vars": "{}", "id": 38, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "TrialSource", "network_id": 38, "participant_id": null, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "module_state_id": null, "is_global": null, "on_deploy_complete": true, "async_on_deploy_required": false, "async_on_deploy_requested": false, "async_on_deploy_complete": false, "async_on_deploy_failed": false, "key": null, "degree": 0, "target_n_trials": 1000000, "can_spawn": false, "child_id": null, "parent_id": null, "seed": "{}", "definition": "{'task_type': 'guessing', 'lobby_index': 38, 'round_id': 28, 'target': 1}", "context": null, "participant_group": "default", "block": "38", "propagate_failure": false, "n_viable_trials": 0, "class": "StaticNode", "object_type": "Node"}, {"vars": "{}", "id": 39, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "TrialSource", "network_id": 39, "participant_id": null, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "module_state_id": null, "is_global": null, "on_deploy_complete": true, "async_on_deploy_required": false, "async_on_deploy_requested": false, "async_on_deploy_complete": false, "async_on_deploy_failed": false, "key": null, "degree": 0, "target_n_trials": 1000000, "can_spawn": false, "child_id": null, "parent_id": null, "seed": "{}", "definition": "{'task_type': 'guessing', 'lobby_index': 39, 'round_id': 29, 'target': 8}", "context": null, "participant_group": "default", "block": "39", "propagate_failure": false, "n_viable_trials": 0, "class": "StaticNode", "object_type": "Node"}, {"vars": "{}", "id": 40, "creation_time": "2026-06-15 23:40:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "TrialSource", "network_id": 40, "participant_id": null, "trial_maker_id": "productive_lobby", "module_id": "productive_lobby", "module_state_id": null, "is_global": null, "on_deploy_complete": true, "async_on_deploy_required": false, "async_on_deploy_requested": false, "async_on_deploy_complete": false, "async_on_deploy_failed": false, "key": null, "degree": 0, "target_n_trials": 1000000, "can_spawn": false, "child_id": null, "parent_id": null, "seed": "{}", "definition": "{'task_type': 'guessing', 'lobby_index': 40, 'round_id': 30, 'target': 4}", "context": null, "participant_group": "default", "block": "40", "propagate_failure": false, "n_viable_trials": 0, "class": "StaticNode", "object_type": "Node"}], "vectors": [], "infos": [], "participants": [], "trans": []};
+            const vis_options = {};
+            return {
+                network_structure: network_structure,
+                vis_options: vis_options
+            };
+        };
+    </script>
+    <script src="/static/vis@4.17.0/dist/vis.min.js"></script>
+    <script src="/static/scripts/network-monitor.js"></script>
+
+
+      
+      
+    </body>
+</html>

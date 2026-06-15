@@ -1,0 +1,26 @@
+# Timeline
+
+- T+00:00:00 [agent-start] Started autonomous implementation work.
+- T+00:00:30 [agent] Read public challenge instructions and attempt guidance.
+- T+00:01:30 [agent] Created feature branch for the challenge attempt.
+- T+00:02:30 [agent] Refreshed local PsyNet checkout and recorded metadata.
+- T+00:03:00 [agent] Created attempt scaffold and challenge snapshot.
+- T+00:10:00 [agent] Reviewed current PsyNet quorum, synchronization, control, and validation references.
+- T+00:15:00 [agent] Wrote `PLAN.md` for human review before implementation.
+- T+00:15:30 [agent-stop] Paused at the required experiment implementation planning gate.
+- T+00:26:00 [manual] User approved the plan and identified `eandrade-lotero` as the attempt author.
+- T+00:26:10 [agent-start] Resumed autonomous implementation work.
+- T+00:45:00 [agent] Implemented the self-contained PsyNet experiment and generated pinned constraints before testing.
+- T+00:55:00 [agent] First `psynet test local` run launched successfully but exposed an unstable runtime node-count assertion.
+- T+00:57:00 [agent] Reworked the structural test to use the static lobby node manifest.
+- T+01:05:00 [agent] Second `psynet test local` run showed lobby nodes were selected by static-trial balancing rather than visible order.
+- T+01:07:00 [agent] Added explicit ordered lobby blocks so personality trials precede guessing trials.
+- T+01:12:00 [agent] `psynet test local` passed with the serial quorum, recovery, lobby-control, and feedback assertions.
+- T+01:22:00 [agent] `psynet simulate` produced an export, then review of participant statuses showed an unused fifth test bot remained in progress.
+- T+01:24:00 [agent] Reduced the regression-test bot count to the four bots actually used by the recovery scenario.
+- T+01:32:00 [agent] Strengthened the serial bot scenario so one participant reaches guessing trials before quorum, covering all feedback tiers in the export.
+- T+01:37:00 [agent] Regenerated simulation evidence and confirmed the export contains personality rows, guessing rows, and all required feedback labels.
+- T+01:43:00 [agent] Ran the 40-bot five-minute performance test and saved JSON/log evidence.
+- T+01:50:00 [agent] Captured dashboard monitor HTML, participant screenshots, and participant-flow video from a live debug deployment.
+- T+01:55:00 [agent] Wrote the executed analysis notebook and final report.
+- T+01:56:00 [agent-stop] Implementation and first-pass evidence collection complete.

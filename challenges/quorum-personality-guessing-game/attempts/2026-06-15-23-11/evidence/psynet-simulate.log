@@ -1,0 +1,171 @@
+============================= test session starts ==============================
+platform linux -- Python 3.13.14, pytest-9.1.0, pluggy-1.6.0
+rootdir: /workspace/challenges/quorum-personality-guessing-game/attempts/2026-06-15-23-11/code/quorum_personality_guessing_game
+configfile: pytest.ini
+plugins: anyio-4.13.0, dallinger-12.2.0, Faker-40.23.0, psynet-13.3.0a0, dependency-0.6.1, mock-3.15.1, test-groups-1.2.1, timeout-2.4.0
+collected 1 item
+
+test.py .                                                                [100%]
+
+=============================== warnings summary ===============================
+../../../../../../../home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/_pytest/config/__init__.py:1345
+  /home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/_pytest/config/__init__.py:1345: PytestAssertRewriteWarning: Module already imported so cannot be rewritten; dallinger
+    self._mark_plugins_for_rewrite(hook, disable_autoload)
+
+../../../../../../../home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/_pytest/config/__init__.py:1345
+  /home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/_pytest/config/__init__.py:1345: PytestAssertRewriteWarning: Module already imported so cannot be rewritten; faker
+    self._mark_plugins_for_rewrite(hook, disable_autoload)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+======================== 1 passed, 2 warnings in 25.71s ========================
+{
+    "psynet_version": "13.3.0a0",
+    "dallinger_version": "12.2.0",
+    "python_version": "3.13.14",
+    "hard_max_experiment_payment_email_sent": false,
+    "soft_max_experiment_payment_email_sent": false,
+    "hard_max_experiment_payment": 1100.0,
+    "soft_max_experiment_payment": 1000.0,
+    "max_participant_payment": 25.0,
+    "deployment_id": "quorum-personality-and-guessing-game__mode=debug__launch=2026-06-15--23-39-02",
+    "label": "Quorum personality and guessing game",
+    "deployment_config": {
+        "aws_region": "us-east-1",
+        "ec2_default_pem": "dallinger",
+        "ec2_default_security_group": "dallinger",
+        "dallinger_develop_directory": "/tmp/dallinger_develop",
+        "smtp_host": "smtp.gmail.com:587",
+        "smtp_username": "???",
+        "contact_email_on_error": "researcher@example.com",
+        "dallinger_email_address": "dallinger@mailinator.com",
+        "docker_worker_cpu_shares": 1024,
+        "enable_global_experiment_registry": false,
+        "language": "en",
+        "lock_table_when_creating_participant": false,
+        "mode": "debug",
+        "replay": false,
+        "auto_recruit": false,
+        "assign_qualifications": true,
+        "allow_repeat_worker_ids": false,
+        "us_only": false,
+        "disable_when_duration_exceeded": false,
+        "webdriver_type": "chrome_headless",
+        "chrome-path": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+        "clock_on": true,
+        "sentry": false,
+        "redis_size": "premium-0",
+        "worker_multiplier": 1.5,
+        "num_dynos_web": 1,
+        "num_dynos_worker": 1,
+        "prolific_api_version": "v1",
+        "prolific_estimated_completion_minutes": 0,
+        "prolific_is_custom_screening": false,
+        "prolific_completion_config": "{}",
+        "prolific_recruitment_config": "{}",
+        "disable_browser_autotranslate": true,
+        "protected_routes": "[\"/network/<network_id>\", \"/question/<participant_id>\", \"/node/<int:node_id>/neighbors\", \"/node/<participant_id>\", \"/node/<int:node_id>/vectors\", \"/node/<int:node_id>/connect/<int:other_node_id>\", \"/info/<int:node_id>/<int:info_id>\", \"/node/<int:node_id>/infos\", \"/node/<int:node_id>/received_infos\", \"/tracking_event/<int:node_id>\", \"/info/<int:node_id>\", \"/node/<int:node_id>/transmissions\", \"/node/<int:node_id>/transmit\", \"/node/<int:node_id>/transformations\", \"/transformation/<int:node_id>/<int:info_in_id>/<int:info_out_id>\"]",
+        "host": "0.0.0.0",
+        "base_port": 5000,
+        "logfile": "/workspace/challenges/quorum-personality-guessing-game/attempts/2026-06-15-23-11/code/quorum_personality_guessing_game/server.log",
+        "loglevel": 1,
+        "loglevel_worker": 1,
+        "threads": "1",
+        "whimsical": true,
+        "allow_mobile_devices": false,
+        "base_payment": 0.1,
+        "big_base_payment": false,
+        "check_dallinger_version": false,
+        "color_mode": "light",
+        "currency": "$",
+        "default_translator": "chat_gpt",
+        "docker_volumes": "${HOME}/psynet-data/assets:/psynet-data/assets",
+        "duration": 100000000.0,
+        "experimenter_name": "unknown",
+        "force_google_chrome": true,
+        "notifier": "logger",
+        "leave_comments_on_every_page": false,
+        "force_incognito_mode": false,
+        "openai_default_model": "gpt-4o",
+        "openai_default_temperature": "0",
+        "initial_recruitment_size": 1,
+        "label": "quorum_personality_guessing_game",
+        "min_accumulated_reward_for_abort": 0.2,
+        "min_browser_version": "80.0",
+        "prolific_enable_return_for_bonus": true,
+        "show_abort_button": false,
+        "show_footer": true,
+        "show_progress_bar": true,
+        "show_reward": true,
+        "needs_internet_access": true,
+        "check_participant_opened_devtools": false,
+        "supported_locales": "[]",
+        "wage_per_hour": 12.0,
+        "window_height": 768,
+        "window_width": 1024,
+        "mute_same_warning_for_n_hours": 1.0,
+        "resource_warning_pct": 0.9,
+        "resource_danger_pct": 0.95,
+        "minimal_disk_space_warning_gb": 5.0,
+        "minimal_disk_space_danger_gb": 2.0,
+        "title": "Quorum personality and guessing game",
+        "description": "Participants complete productive waiting-room tasks until a quorum forms, then enter a synchronized main loop.",
+        "organization_name": "PsyNetSkills",
+        "recruiter": "generic",
+        "id": "07604f72-4a78-4059-c1ff-438dd8a09d41",
+        "heroku_app_id_root": "07604f72-4a78-4059-c1ff-438dd8a09d41",
+        "port": 5000
+    }
+}
+
+❯❯ Exporting raw database content to data/simulated_data/anonymous/database.zip
+
+Preparing to export the data...
+Zipping up the package...
+Done. Local export available in data/local-data.zip
+/home/ubuntu/PsyNet/.venv/lib/python3.13/site-packages/yaspin/core.py:172: UserWarning: color, on_color and attrs are not supported when output stream is not a TTY
+  self._color = self._set_color(color) if color else color
+
+⠋ Completed.             ✔ Completed.
+Bot:   0%|          | 0/4 [00:00<?, ?it/s]Bot: 100%|██████████| 4/4 [00:00<00:00, 3728.27it/s]
+StaticNetwork:   0%|          | 0/40 [00:00<?, ?it/s]StaticNetwork: 100%|██████████| 40/40 [00:00<00:00, 21831.12it/s]
+StaticNode:   0%|          | 0/40 [00:00<?, ?it/s]StaticNode: 100%|██████████| 40/40 [00:00<00:00, 18479.15it/s]
+LobbyTrial:   0%|          | 0/21 [00:00<?, ?it/s]LobbyTrial: 100%|██████████| 21/21 [00:00<00:00, 12013.15it/s]
+Response:   0%|          | 0/42 [00:00<?, ?it/s]Response: 100%|██████████| 42/42 [00:00<00:00, 20827.71it/s]
+ChainTrialMakerState:   0%|          | 0/4 [00:00<?, ?it/s]ChainTrialMakerState: 100%|██████████| 4/4 [00:00<00:00, 12797.27it/s]
+SimpleSyncGroup:   0%|          | 0/1 [00:00<?, ?it/s]SimpleSyncGroup: 100%|██████████| 1/1 [00:00<00:00, 10512.04it/s]
+BarrierRecord:   0%|          | 0/1 [00:00<?, ?it/s]BarrierRecord: 100%|██████████| 1/1 [00:00<00:00, 4860.14it/s]
+ParticipantLinkSyncGroup:   0%|          | 0/4 [00:00<?, ?it/s]ParticipantLinkSyncGroup: 100%|██████████| 4/4 [00:00<00:00, 23696.63it/s]
+ParticipantLinkBarrier:   0%|          | 0/3 [00:00<?, ?it/s]ParticipantLinkBarrier: 100%|██████████| 3/3 [00:00<00:00, 24059.11it/s]
+Request:   0%|          | 0/88 [00:00<?, ?it/s]Request: 100%|██████████| 88/88 [00:00<00:00, 160407.98it/s]
+ExperimentConfig:   0%|          | 0/1 [00:00<?, ?it/s]ExperimentConfig: 100%|██████████| 1/1 [00:00<00:00, 4378.19it/s]
+⠋ Completed.             ✔ Completed.
+
+❯❯ Exporting assets to data/simulated_data
+[Parallel(n_jobs=1)]: Done   0 out of   0 | elapsed:    0.0s finished
+
+❯❯ Export complete. You can find your results at: data/simulated_data
+
+❯❯ Exporting raw database content to data/simulated_data/regular/database.zip
+
+Preparing to export the data...
+Zipping up the package...
+Done. Local export available in data/local-data.zip
+⠋ Completed.             ✔ Completed.
+Bot:   0%|          | 0/4 [00:00<?, ?it/s]Bot: 100%|██████████| 4/4 [00:00<00:00, 4419.71it/s]
+StaticNetwork:   0%|          | 0/40 [00:00<?, ?it/s]StaticNetwork: 100%|██████████| 40/40 [00:00<00:00, 22724.12it/s]
+StaticNode:   0%|          | 0/40 [00:00<?, ?it/s]StaticNode: 100%|██████████| 40/40 [00:00<00:00, 19130.23it/s]
+LobbyTrial:   0%|          | 0/21 [00:00<?, ?it/s]LobbyTrial: 100%|██████████| 21/21 [00:00<00:00, 12356.96it/s]
+Response:   0%|          | 0/42 [00:00<?, ?it/s]Response: 100%|██████████| 42/42 [00:00<00:00, 20914.25it/s]
+ChainTrialMakerState:   0%|          | 0/4 [00:00<?, ?it/s]ChainTrialMakerState: 100%|██████████| 4/4 [00:00<00:00, 13854.02it/s]
+SimpleSyncGroup:   0%|          | 0/1 [00:00<?, ?it/s]SimpleSyncGroup: 100%|██████████| 1/1 [00:00<00:00, 15534.46it/s]
+BarrierRecord:   0%|          | 0/1 [00:00<?, ?it/s]BarrierRecord: 100%|██████████| 1/1 [00:00<00:00, 5165.40it/s]
+ParticipantLinkSyncGroup:   0%|          | 0/4 [00:00<?, ?it/s]ParticipantLinkSyncGroup: 100%|██████████| 4/4 [00:00<00:00, 22550.02it/s]
+ParticipantLinkBarrier:   0%|          | 0/3 [00:00<?, ?it/s]ParticipantLinkBarrier: 100%|██████████| 3/3 [00:00<00:00, 17073.15it/s]
+Request:   0%|          | 0/88 [00:00<?, ?it/s]Request: 100%|██████████| 88/88 [00:00<00:00, 205970.29it/s]
+ExperimentConfig:   0%|          | 0/1 [00:00<?, ?it/s]ExperimentConfig: 100%|██████████| 1/1 [00:00<00:00, 4951.95it/s]
+⠋ Completed.             ✔ Completed.
+
+❯❯ Exporting assets to data/simulated_data
+[Parallel(n_jobs=1)]: Done   0 out of   0 | elapsed:    0.0s finished
+
+❯❯ Export complete. You can find your results at: data/simulated_data
