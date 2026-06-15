@@ -18,3 +18,4 @@
 - T+01:12:00 [agent] `psynet test local` passed with the serial quorum, recovery, lobby-control, and feedback assertions.
 - T+01:22:00 [agent] `psynet simulate` produced an export, then review of participant statuses showed an unused fifth test bot remained in progress.
 - T+01:24:00 [agent] Reduced the regression-test bot count to the four bots actually used by the recovery scenario.
+- T+01:32:00 [agent] Strengthened the serial bot scenario so one participant reaches guessing trials before quorum, covering all feedback tiers in the export.

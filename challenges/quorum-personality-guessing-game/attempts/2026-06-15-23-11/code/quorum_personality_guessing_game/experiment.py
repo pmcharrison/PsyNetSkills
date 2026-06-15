@@ -342,11 +342,21 @@ class Exp(psynet.experiment.Experiment):
         assert guessing_feedback(3) == "Cold"
 
         self.start_bot(bots[0])
-        self.assert_lobby_personality_page(bots[0], expected_item_id=1)
-        bots[0].take_page(response="5")
+        for item_id in range(1, 11):
+            self.assert_lobby_personality_page(bots[0], expected_item_id=item_id)
+            bots[0].take_page(response="5")
 
-        self.assert_lobby_personality_page(bots[0], expected_item_id=2)
-        bots[0].take_page(response="4")
+        for round_id in range(1, 5):
+            self.assert_lobby_guessing_page(bots[0], expected_round_id=round_id)
+            target = guessing_target(round_id)
+            guess = guessing_bot_response({"target": target, "round_id": round_id})
+            expected_feedback = guessing_feedback(abs(guess - target))
+            bots[0].take_page(response=guess)
+            page = bots[0].get_current_page()
+            assert isinstance(page, InfoPage)
+            assert f"Hidden target: {target}" in bots[0].current_page_text
+            assert f"Feedback: {expected_feedback}" in bots[0].current_page_text
+            bots[0].take_page()
 
         self.start_bot(bots[1])
         self.assert_lobby_personality_page(bots[1], expected_item_id=1)
@@ -382,6 +392,14 @@ class Exp(psynet.experiment.Experiment):
         assert isinstance(page.control, PushButtonControl)
         assert page.control.labels == ACCURACY_LABELS
         assert f"Item {expected_item_id}" in bot.current_page_text
+
+    def assert_lobby_guessing_page(self, bot: BotDriver, expected_round_id: int):
+        page = bot.get_current_page()
+        assert isinstance(page, ModularPage)
+        assert page.label == "lobby_guessing"
+        assert isinstance(page.control, SliderControl)
+        assert f"Guessing round {expected_round_id} of 30" in bot.current_page_text
+        assert "Hidden target" not in bot.current_page_text
 
     def assert_lobby_page(self, bot: BotDriver):
         page = bot.get_current_page()
