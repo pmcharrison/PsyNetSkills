@@ -49,9 +49,11 @@ consistency feedback path, and custom export table.
   scheduler launched one mock-OpenRouter AI bot, and the export shows both
   participants approved with `7/7` finalized trials.
 - `evidence/live_scheduling/live_scheduler_monitor.html` renders the
-  monitor-style dashboard requested by the simulated-participant scheduling
-  workflow, with graph nodes, node details, statistics, filters, sidebar
-  summaries, and expandable distribution summaries.
+  monitor dashboard requested by the simulated-participant scheduling workflow.
+  It is generated directly from the live export and preserves experiment graph
+  entities, including networks/chains, trial nodes, trials, and participants,
+  with controller-colored graph elements, click-through details, statistics,
+  filters, sidebar summaries, and expandable distribution summaries.
 
 ## Limitations
 

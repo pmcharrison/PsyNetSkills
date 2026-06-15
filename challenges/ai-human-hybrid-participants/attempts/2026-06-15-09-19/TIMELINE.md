@@ -21,3 +21,6 @@
 - T+01:49:00 [agent] Ran a scheduler-enabled local experiment with one browser human participant and one scheduled mock-AI bot.
 - T+01:52:00 [agent] Exported live run data and generated `evidence/live_scheduling/live_scheduler_monitor.html` plus distribution/state reports.
 - T+01:55:00 [agent-stop] Live scheduling evidence collection complete.
+- T+02:09:00 [agent-start] Resumed to polish simulated-participant scheduling guidance and regenerate the live monitor dashboard without the static template.
+- T+02:13:00 [agent] Regenerated `evidence/live_scheduling/live_scheduler_monitor.html` directly from live export data with participants, networks, trial nodes, and trials.
+- T+02:14:00 [agent-stop] Skill polish and monitor regeneration complete.

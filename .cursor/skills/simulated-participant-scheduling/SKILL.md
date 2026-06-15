@@ -94,45 +94,20 @@ the actual participant distribution in the experiment. If the experiment has
 substructures, such as chains or trials, summarize the distribution over the
 substructures as well.
 
-Also generate a dashboard similar to the experiment monitor dashboard. Use
-`assets/monitor_dashboard_template.html` as a string template: load it, replace
-the `{{ ... }}` placeholders, and write the output HTML.
+Also generate an HTML monitor dashboard from the run data. Match the running
+experiment monitor as closely as practical: preserve the experiment's relevant
+graph entities, such as participants, trial nodes, chains, and trials, rather
+than replacing them with a generic profile summary. Color graph elements by the
+participant profile, user model, or controller identity (`human`, `AI`, `bot`,
+or another profile label), and include a visible legend.
 
-Build at least:
-
-- `graph_nodes_json`
-- `graph_edges_json`
-- `detail_html_by_id_json`
-- `statistics_html`
-- `filters_html`
-- `sidebar_html`
-- `expandable_summaries_html`
-
-The important contract is:
-
-- Each graph node should have a `detailId`.
-- `detail_html_by_id_json` maps that `detailId` to HTML.
-- When a node is selected, the template puts that mapped HTML into
-  `#element-details`.
-
-Example graph node:
-
-```json
-{
-  "id": "node-1",
-  "label": "Node 1",
-  "detailId": "node-1",
-  "color": {"background": "#4c78a8"}
-}
-```
-
-Example detail map:
-
-```json
-{
-  "node-1": "<h4>Node 1</h4><p>Profile: normal_rgb</p>"
-}
-```
+Make the dashboard useful for review. Include formatted summary statistics,
+filters or grouping notes, a sidebar, graph details, and expandable summaries.
+When a reviewer clicks a participant, node, chain, or trial, show the important
+exported information for that element, such as participant ID, controller or
+profile, trial/node IDs, target/stimulus, response, status, failure state, and
+finalization state. Build the HTML directly from the exported data for the run;
+do not depend on a static monitor-dashboard template file.
 
 Do not claim simulated participant behavior is real human behavior. Label bot,
 AI, mock, and fixture behavior clearly.
