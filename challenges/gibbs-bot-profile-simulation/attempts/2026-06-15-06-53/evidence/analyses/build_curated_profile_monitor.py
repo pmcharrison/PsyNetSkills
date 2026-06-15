@@ -173,7 +173,7 @@ def details_accordion(networks: pd.DataFrame, nodes: pd.DataFrame, trials: pd.Da
             node_sections.append(
                 f"""
                 <details>
-                  <summary>Node {int(node['id'])}: curated node/trial summary</summary>
+                  <summary>Node {int(node['id'])}: node/trial summary</summary>
                   {node_detail_html(node, node_trials)}
                 </details>
                 """
@@ -181,7 +181,7 @@ def details_accordion(networks: pd.DataFrame, nodes: pd.DataFrame, trials: pd.Da
         sections.append(
             f"""
             <details class="network-expander">
-              <summary>Network {int(network['id'])}: curated node tree and trials</summary>
+              <summary>Network {int(network['id'])}: node tree and trials</summary>
               {network_detail_html(network, network_trials)}
               {''.join(node_sections)}
             </details>
@@ -463,7 +463,7 @@ def main() -> None:
           <div id="element-details"><p>Select a network, node, or trial in the graph to see curated information.</p></div>
         </section>
         <section id="curated-accordion">
-          <h2>Expandable curated node and trial summaries</h2>
+          <h2>Expandable node and trial summaries</h2>
           {accordion}
         </section>
       </main>

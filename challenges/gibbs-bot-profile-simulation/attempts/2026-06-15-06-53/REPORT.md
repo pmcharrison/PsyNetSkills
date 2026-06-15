@@ -25,6 +25,7 @@ The original participant-group behavior remains separate from response profile a
 - `evidence/performance.json` contains the 5-minute local performance-test output.
 - `evidence/monitor.html` contains a local PsyNet dashboard monitor snapshot.
 - `evidence/curated_profile_monitor.html` contains a profile-colored node/trial tree with curated participant id, response, and profile behavior summaries.
+- `evidence/analyses/monitor_dashboard_template.html` provides a simple reusable template for future monitor-style evidence generation.
 
 Observed completed-participant profile distribution:
 
