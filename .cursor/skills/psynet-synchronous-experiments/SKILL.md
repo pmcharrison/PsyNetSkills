@@ -34,7 +34,6 @@ If participants exchange live actions or messages within a trial, also read
    - cohort/quorum: participants must enter a phase together;
    - grouped trials: group members should receive the same node or trial order;
    - phase barriers: participants work independently, then wait for partners;
-   - delayed/session launch: recruitment or access opens at a specific time;
    - live interaction: use the realtime websocket skill as well.
 2. Prefer PsyNet server-side grouping and barriers over browser-side polling or
    custom JavaScript for shared state.
@@ -92,19 +91,7 @@ If participants exchange live actions or messages within a trial, also read
   review workflows.
 - Put session time, time zone, expected waiting window, device/audio
   requirements, no-show policy, and partial-payment policy in the study
-  description and participant instructions.
-- Store platform IDs with PsyNet participant and group metadata so no-shows,
-  partial completions, bonuses, and follow-up waves can be audited.
-- For Prolific, plan around no built-in appointment scheduling for focus groups:
-  use participant groups, allowlists, messages, waves, and manual/bonus payment
-  review when participants spend time but cannot be grouped.
-- For Connect, record Connect IDs, use included participants/groups for waves,
-  and use completion or partial-complete redirects that match the PsyNet exit
-  path.
-- Use MTurk only when the researcher accepts custom operational work for timing,
-  qualifications, reminders, and partial compensation.
-- Avoid Cint/Lucid for tightly synchronized small groups unless the study has
-  panel/API support and explicit redirect/status accounting.
+  description and participant instructions
 
 ## Validation
 
@@ -127,11 +114,9 @@ If participants exchange live actions or messages within a trial, also read
 
 ## Common failures
 
-- Do not call a websocket/chatroom experiment "synchronized" unless barriers or
-  another server-side mechanism actually coordinate phase advancement.
-- Do not reuse an active `group_type` without `GroupCloser`.
+- Close groups with `GroupCloser`.
 - Do not leave default wait limits in place for real recruitment sessions
-  without checking whether they are humane and scientifically appropriate.
+  without checking whether they are appropriate.
 - Do not assume top-ups are safe; define exactly which groups may accept late
   participants.
 - Do not set recruitment targets that leave stranded participants unable to form
