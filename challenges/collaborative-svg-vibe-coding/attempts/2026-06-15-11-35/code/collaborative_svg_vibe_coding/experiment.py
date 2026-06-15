@@ -22,6 +22,8 @@ from psynet.trial.imitation_chain import (
 from psynet.trial.static import StaticNode, StaticTrial, StaticTrialMaker
 
 
+ElementTree.register_namespace("", "http://www.w3.org/2000/svg")
+
 ROOT = Path(__file__).parent
 REFERENCE_MANIFEST = ROOT / "static" / "references" / "manifest.json"
 GENERATOR_SYSTEM_PROMPT = (
@@ -113,6 +115,9 @@ def generate_svg_from_instruction(high_level_instruction):
     instruction = high_level_instruction.strip() or "Make a simple animal SVG."
     body = color_from_instruction(instruction, 1)
     accent = color_from_instruction(instruction, 2)
+    if any(word in instruction.lower() for word in ["refine", "sharper", "clearer"]):
+        body = "#b9e6ff"
+        accent = "#6f5bd8"
     eye = "#222222"
     whisker = "#4a3428"
     ear_shift = int(hashlib.sha256(instruction.encode("utf8")).hexdigest()[:2], 16) % 12
@@ -381,9 +386,7 @@ def get_start_nodes(participant=None):
 
 
 def evaluator_candidate_svg():
-    return generate_svg_from_instruction(
-        "Draw a front-facing cat with triangular ears, round head, dark eyes, whiskers, and a warm background."
-    )
+    return generate_svg_from_instruction(ai_instruction(3))
 
 
 class EvaluatorPrompt(Prompt):

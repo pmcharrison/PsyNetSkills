@@ -9,6 +9,10 @@ static/assets
 source_code.zip
 dump.rdb
 Dockertag
+data/
+test-results/
+node_modules/
+playwright-report/
 
 # Python and editor artifacts
 __pycache__/

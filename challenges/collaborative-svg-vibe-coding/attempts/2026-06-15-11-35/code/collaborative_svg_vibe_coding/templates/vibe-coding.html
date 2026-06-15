@@ -163,8 +163,10 @@
     }
 
     function mockCodeGenerator(highLevelInstruction) {
-      const body = color(highLevelInstruction, "body");
-      const accent = color(highLevelInstruction, "accent");
+      const lowerInstruction = highLevelInstruction.toLowerCase();
+      const isRefinement = lowerInstruction.includes("refine") || lowerInstruction.includes("sharper") || lowerInstruction.includes("clearer");
+      const body = isRefinement ? "#b9e6ff" : color(highLevelInstruction, "body");
+      const accent = isRefinement ? "#6f5bd8" : color(highLevelInstruction, "accent");
       const shift = hashString(highLevelInstruction) % 12;
       return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 220" width="220" height="220">
   <rect width="220" height="220" rx="24" fill="#f8f3e8"/>
