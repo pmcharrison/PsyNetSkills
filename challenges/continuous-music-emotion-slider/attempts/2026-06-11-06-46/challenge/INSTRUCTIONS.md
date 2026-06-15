@@ -2,7 +2,7 @@
 title: Continuous music emotion slider
 type: experiment implementation
 difficulty: 6
-authors: [ww577]
+authors: [williambotticelli-wells]
 ---
 
 Implement a PsyNet experiment inspired by the PsyNet

@@ -1,0 +1,26 @@
+{
+  "authors": [],
+  "agent": "Cursor Cloud Agent",
+  "client": "cursor",
+  "model": "GPT-5.5",
+  "started_at": "2026-06-13T14:06:53Z",
+  "ended_at": null,
+  "cursor_conversation_id": "bc-5ed35a50-250f-46e1-858e-bea5d073c1e2",
+  "skills_commit": "5b36755e8d29373bdb55415bedd0010d02d0f190",
+  "psynet": {
+    "checkout_path": "~/PsyNet",
+    "branch": "master",
+    "commit": "bd50a55faed0bd3679df9de00997f951e1e3b467",
+    "version": "13.3.0a0",
+    "updated_from": "origin/master",
+    "updated_at": "2026-06-13T14:06:53Z",
+    "update_command": "git pull --ff-only origin master",
+    "dirty": false
+  },
+  "run_cost": null,
+  "notes": [
+    "Authorship was not provided in the retry request, so authors is left empty until the human author selects an existing authors.yaml key.",
+    "The plan was approved conversationally and implementation evidence is complete.",
+    "ended_at remains null because validation requires a human GitHub author key before the attempt can be marked complete."
+  ]
+}

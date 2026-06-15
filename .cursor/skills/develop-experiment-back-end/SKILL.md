@@ -64,6 +64,7 @@ It is very important that the back-end logic is faithful to the experiment desig
   `markupsafe.Markup` only for trusted, static HTML snippets passed directly as
   page content; do not nest raw markup strings inside `dominate` containers.
   Avoid interpolating participant- or user-provided data into `Markup`.
-- For repeated tasks where order matters, do not rely on `StaticTrialMaker`'s
-  default block order. Use explicit blocks plus `choose_block_order`, or use a
-  timeline loop, so visible round numbers match the actual presentation order.
+- For repeated tasks where order or cross-round state matters, read the relevant
+  round-structure skill before coding: `simple-round-structure/SKILL.md` for
+  static repeated rounds, or `state-dependent-round-structure/SKILL.md` when
+  later rounds depend on completed earlier rounds.

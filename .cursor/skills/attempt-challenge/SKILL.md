@@ -30,6 +30,10 @@ challenge before starting a fresh attempt.
   `prepare-for-translation/SKILL.md` before implementing participant-facing
   text. That skill owns translation-readiness requirements.
 
+## Preview links
+
+Note the `cloud-agent-links` skill for sharing user review links.
+
 ## Workflow
 
 1. Read `INSTRUCTIONS.md` from the target challenge, including its YAML
@@ -96,12 +100,9 @@ challenge before starting a fresh attempt.
 9. Implement the challenge in `code/`.
    - For experiment implementation challenges, first follow
      `psynet-experiment-implementation/SKILL.md`, including its requirement to
-     stop for human review of `PLAN.md` before coding. After opening or updating
-     the PR, follow the `dashboard-preview-links` skill and give the user the
-     dashboard attempt URL with the `#plan` anchor, noting that it may 404 or show
-     stale content until publishing finishes. Also point the user to the PR diff
-     or code viewer for the full `PLAN.md` and include only a brief chat summary
-     to avoid making the reviewer wonder where the full plan went.
+     stop for human review of `PLAN.md` before coding.
+     For cloud agents, use `cloud-agent-links` skill for the handoff,
+     pointing the user to the Plan section of the challenge attempt page.
    - Do not make challenge code depend on files outside its attempt directory
      unless absolutely necessary.
    - For runnable PsyNet experiments, prefer a non-conflicting nested directory

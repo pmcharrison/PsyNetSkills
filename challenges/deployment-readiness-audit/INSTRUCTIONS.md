@@ -2,7 +2,7 @@
 title: Deployment readiness audit
 type: experiment operations
 difficulty: 5
-authors: [ww577]
+authors: [williambotticelli-wells]
 ---
 
 Audit the mock PsyNet experiment dossier in `references/mock-experiment/` for

@@ -66,11 +66,11 @@ workflow rather than committing or publishing them.
 
 ### Skill registration
 
-Repository skills live in `.cursor/skills/`. Before starting challenge or
-PsyNet experiment work, verify that the runtime has registered these skills and
-that they were attached to your session. If they are not registered, symlink or
-copy `.cursor/skills/` into the skills directory required by your agent runtime
-before proceeding. Do not maintain a second editable copy of the skills.
+Repository skills live in `.cursor/skills/`. At the start of each session,
+review the skills present in the checked-out repository and treat that directory
+as the authoritative source for the current skill set. If the session's attached
+skill metadata appears stale or incomplete, prefer the repository skills on disk
+and note the mismatch briefly before proceeding.
 
 ### System dependencies (not managed by `uv sync`)
 
@@ -175,36 +175,18 @@ PsyNet commands need sandboxing disabled in Cursor (`required_permissions: ["all
 - `dashboard/data/` and related Hugo inputs are written by `psynetsk-export-dashboard-data`.
 - `public/` is the Hugo build output; do not commit unless policy changes.
 
-### Dashboard preview links
+### Generating links
 
-When a Cursor Cloud Agent opens or updates a pull request from a branch in this
-repository, use the `dashboard-preview-links` skill for sharing dashboard
-preview links.
-
-Include these links when first creating/updating the PR, after changes that
-affect dashboard rendering or challenge attempt pages, and in the final response.
-Write generated URLs as ordinary Markdown text so they are clickable; do not put
-them in fenced code blocks or inline code. When the work is a general dashboard
-or docs change, provide only the preview index URL. When the work completes a
-challenge attempt, provide the direct challenge attempt page URL instead.
-
-https://pmcharrison.github.io/PsyNetSkills/pr-preview/pr-<number>/
-
-https://pmcharrison.github.io/PsyNetSkills/pr-preview/pr-<number>/challenges/<challenge-slug>/<attempt-name>/
-
-https://github.com/pmcharrison/PsyNetSkills/actions/workflows/dashboard-preview.yml?query=branch%3A<branch-name>
-
-The preview workflow also posts this URL to the pull request. Forked pull
-requests do not publish previews because the workflow needs write access to the
-`gh-pages` branch.
+When handing off to the user, provide links to help them review generated content,
+using the `cloud-agent-links` skill.
 
 ### Dashboard and documentation review artifacts
 
 For README, documentation, and general dashboard-content changes, do not record
 screen walkthroughs unless the user explicitly asks for one. These changes are
-best reviewed through the PR diff and dashboard preview links. Validate the site
-with the standard export/build commands, then provide the specific preview page
-or GitHub file links that are worth reviewing.
+best reviewed through the PR diff and a live dashboard preview. Validate the
+site with the standard export/build commands, then provide the specific preview
+page or GitHub file links that are worth reviewing.
 
 Use screenshots or recordings only when they add information that a reviewer
 cannot easily get from the live preview, such as participant-facing challenge

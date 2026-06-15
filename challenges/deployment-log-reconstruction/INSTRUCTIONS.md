@@ -2,7 +2,7 @@
 title: Deployment record reconstruction
 type: experiment operations
 difficulty: 6
-authors: [ww577]
+authors: [williambotticelli-wells]
 ---
 
 Reconstruct a PsyNet deployment record from the messy deployment dossier in

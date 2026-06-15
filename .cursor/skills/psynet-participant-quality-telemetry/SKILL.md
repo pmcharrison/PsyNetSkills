@@ -1,7 +1,7 @@
 ---
 name: psynet-participant-quality-telemetry
 description: Implement PsyNet-native participant quality and AI-assistance telemetry for text-heavy or response-quality-sensitive experiments.
-authors: [ww577]
+authors: [williambotticelli-wells]
 ---
 
 # PsyNet participant quality telemetry
@@ -20,6 +20,8 @@ agents could complete the participant flow.
   modality-specific prescreeners are central to the study.
 - Read `turn-pure-experiment-to-ai-hybrid/SKILL.md` only when the experiment is
   intentionally mixing human and AI participants.
+- Read `psynet-simulated-participants/SKILL.md` when simulated profiles are
+  broader than telemetry QA or need export/analysis validation.
 
 ## Threat model
 

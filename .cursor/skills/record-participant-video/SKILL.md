@@ -64,6 +64,12 @@ For Playwright evidence scripts:
 
 - Use JavaScript Playwright when practical, because it is easy to install and
   run locally in attempt folders.
+- When recording video with Playwright's built-in `recordVideo`, install
+  Playwright's own ffmpeg binary first with `npx playwright install ffmpeg`. It is
+  separate from the system `ffmpeg`; without it the first recorded run fails with
+  "Video rendering requires ffmpeg binary". Playwright records `.webm`, so
+  re-encode to the canonical `evidence/participant.mp4` (H.264, ≤1280x720,
+  `+faststart`) afterwards.
 - Store the Playwright participant-flow test with the experiment code, typically
   `code/<experiment_slug>/tests/participant-flow.spec.js`, and commit the
   corresponding `package.json`/lockfile when the test depends on npm packages.
@@ -115,7 +121,7 @@ document why calibration was not possible.
 When sharing a recorded video inline in a Cursor final response, warn the user
 if the evidence depends on audio: the Cursor agent video player may not play the
 audio track. Tell them to download the MP4 directly or view it through the
-dashboard/PR preview to hear the audio.
+dashboard live preview to hear the audio.
 
 ## Linux
 

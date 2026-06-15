@@ -4,6 +4,7 @@ import subprocess
 from pathlib import Path
 
 import pytest
+import psynetsk_tools.dashboard as dashboard_module
 
 from psynetsk_tools.dashboard import (
     collect_challenges,
@@ -88,6 +89,53 @@ def render_example_skill_page(tmp_path: Path, workflow_context_data: dict) -> st
         text=True,
     )
     return (public / "skills/example-skill/index.html").read_text(encoding="utf-8")
+
+
+def render_challenges_list_page(tmp_path: Path, challenges_data: list[dict[str, object]]) -> str:
+    hugo = shutil.which("hugo")
+    if hugo is None:
+        pytest.skip("hugo is required to test dashboard templates")
+
+    repo_root = Path(__file__).resolve().parents[1]
+    dashboard = tmp_path / "dashboard"
+    shutil.copytree(repo_root / "dashboard/layouts", dashboard / "layouts")
+    shutil.copy2(repo_root / "dashboard/hugo.toml", dashboard / "hugo.toml")
+    write(
+        dashboard / "content/challenges/_index.md",
+        "---\n"
+        'title: "Challenges"\n'
+        "---\n\n"
+        "Challenge list.\n",
+    )
+    write(dashboard / "data/workflow_context.json", "{}")
+    write(
+        dashboard / "data/psynetsk.json",
+        json.dumps(
+            {
+                "actions": [],
+                "attempts": [],
+                "challenges": challenges_data,
+                "skills": [],
+            },
+        ),
+    )
+
+    public = tmp_path / "public"
+    subprocess.run(
+        [
+            hugo,
+            "--source",
+            str(dashboard),
+            "--destination",
+            str(public),
+            "--cleanDestinationDir",
+            "--quiet",
+        ],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    return (public / "challenges/index.html").read_text(encoding="utf-8")
 
 
 def authors_yaml() -> str:
@@ -235,6 +283,40 @@ def test_edit_in_github_uses_pr_preview_branch(tmp_path: Path) -> None:
     ) in html
 
 
+def test_challenges_table_shows_author_only(tmp_path: Path) -> None:
+    html = render_challenges_list_page(
+        tmp_path,
+        [
+            {
+                "title": "Example challenge",
+                "url": "challenges/example/",
+                "difficulty": 4,
+                "latest_score": 8,
+                "open_actions": 0,
+                "authors": [
+                    {
+                        "id": "pmcharrison",
+                        "name": "Peter Harrison",
+                        "url": "https://github.com/pmcharrison",
+                    },
+                ],
+                "past_editors": [
+                    {
+                        "id": "harin-git",
+                        "name": "Harin Lee",
+                        "url": "https://github.com/harin-git",
+                    },
+                ],
+            },
+        ],
+    )
+
+    assert "<th>Author</th>" in html
+    assert "<th>Past editors</th>" not in html
+    assert "Peter Harrison" in html
+    assert "Harin Lee" not in html
+
+
 def test_collect_challenges_reports_latest_score(tmp_path: Path) -> None:
     challenge_dir = tmp_path / "challenges/example"
     write(challenge_dir / "INSTRUCTIONS.md", challenge_instructions())
@@ -267,6 +349,38 @@ def test_collect_challenges_reports_decimal_score(tmp_path: Path) -> None:
 
     assert challenges[0].attempts[0].score == 9.5
     assert challenges[0].latest_score == 9.5
+
+
+def test_collect_challenges_reports_past_editors(
+    tmp_path: Path,
+    monkeypatch,
+) -> None:
+    write(
+        tmp_path / "authors.yaml",
+        "pmcharrison: Peter Harrison\n"
+        "harin-git: Harin Lee\n",
+    )
+    challenge_dir = tmp_path / "challenges/example"
+    write(challenge_dir / "INSTRUCTIONS.md", challenge_instructions())
+
+    def fake_run(*args, **kwargs):
+        return subprocess.CompletedProcess(
+            args=["git"],
+            returncode=0,
+            stdout=(
+                "Harin Lee\x00harin-git@users.noreply.github.com\n"
+                "Peter Harrison\x00pmcharrison@users.noreply.github.com\n"
+                "Someone Else\x00someone@example.com\n"
+            ),
+            stderr="",
+        )
+
+    monkeypatch.setattr(dashboard_module.subprocess, "run", fake_run)
+
+    challenges = collect_challenges(tmp_path)
+
+    assert challenges[0].authors[0].id == "pmcharrison"
+    assert [editor.id for editor in challenges[0].past_editors] == ["harin-git"]
 
 
 def test_collect_challenges_reports_attempt_metadata(tmp_path: Path) -> None:
@@ -763,6 +877,7 @@ def test_dashboard_data_reports_counts(tmp_path: Path) -> None:
     assert data["challenges"][0]["authors"][0]["url"] == (
         "https://github.com/pmcharrison"
     )
+    assert data["challenges"][0]["past_editors"] == []
     assert "docs" not in data
 
 

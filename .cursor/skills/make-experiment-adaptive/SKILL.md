@@ -14,8 +14,10 @@ another policy that selects future trials from data already collected.
 
 - Read `psynet-experiment-implementation/SKILL.md` for the general experiment
   workflow and validation expectations.
-- Read `simple-round-structure/SKILL.md` before changing the trial, node, or
-  network architecture.
+- Read `simple-round-structure/SKILL.md` before changing static repeated-round
+  architecture.
+- Read `state-dependent-round-structure/SKILL.md` when adaptive selection changes
+  later rounds based on data from completed earlier rounds.
 - Read `psynet-deployment-ops/SKILL.md` when persistence, deployment,
   recruitment, or exported data safety matters.
 - Inspect the closest existing experiment and the current PsyNet trial-maker
@@ -28,12 +30,12 @@ Do not implement an adaptive experiment until the user supplies the specificatio
 below, unless they explicitly ask you to propose a design. If anything is
 missing, list the decisions they must make and wait for their answer.
 
-- `y`: the mapping from raw trial answers to model observations.
-- `z`: the mapping from participant or context data to model covariates.
+- `y`: the mapping from raw trial answers to model observations. You can use human-readable names in your implementation.
+- `z`: the mapping from participant or context data to model covariates. You can use human-readable names in your implementation.
 - Adaptive unit: what the policy selects, such as a network, node, condition,
   stimulus, item, block, or trial family.
 - Generative model: likelihood, latent parameters, priors, and how `y`, `z`,
-  and the adaptive unit enter the model.
+  and the adaptive unit enter the model. You can use human-readable names in your implementation.
 - Posterior strategy: how posterior beliefs are fit or sampled.
 - Optimization policy: objective and decision rule, such as EIG, expected free
   energy, Thompson sampling, greedy utility, or an early-stopping rule.
@@ -48,12 +50,9 @@ which choices are assumptions.
 
 - Use `y` for trial-level observations and `z` for participant or context
   covariates throughout adaptive code, logs, and exports.
-- Ask for or implement explicit mapping logic from raw answers to `y`, and from
-  participant/context data to `z`.
-- Prefer custom persisted attributes for core adaptive variables (`y`, `z`,
-  objective values, posterior snapshot IDs) over ad hoc JSON var storage. Use
-  PsyNet field patterns such as `claim_field` when the value deserves a real
-  queryable/exported column. Use vars only for small, incidental metadata.
+- Ask for or implement explicit mapping logic from raw answers to observations `y`, and covariates `z`.
+- Prefer custom persisted attributes for core adaptive variables (e.g. `y`, `z`) over ad hoc JSON varstores, unless they have complex formats. Use PsyNet field patterns such as `claim_field` when the value deserves a real
+  queryable/exported column. Use vars only for metadata that has complex types or that does not need to be retrieved in large batches.
 - Keep raw answer data available for audit; do not replace it with only `y`.
 - Log each adaptive decision: candidate IDs, chosen ID, objective components,
   posterior version or snapshot, data cutoff, and optimizer version.
@@ -63,33 +62,31 @@ which choices are assumptions.
   function as a list; for continuous `y`, store only the predictive mean and
   standard deviation. Do not add extra integrals, sampling, or approximation work
   just to produce this record.
-- Make the adaptive path deterministic under a fixed seed where possible, or
-  explicitly record random seeds for stochastic policies.
 - Keep selection code fast enough for the participant response path. Adaptive
   computation should normally take less than 1 second per selection; treat
-  roughly 2 seconds halfway through an actual deployment as a warning threshold
+  computations longer than 2 seconds halfway through an actual deployment as a critical threshold
   that requires simplification, caching, or a different posterior strategy.
 - Add timing logs around data loading, posterior fitting/sampling, and objective
   scoring.
 - If bot_response logic is not already supplied, override the default with answers
 drawn from the generative model itself
 - Lower-level computational logic (such as Bayesian computations) should be located in
-a separate file (`adaptive.py`) imported from `experiment.py` and any other script
+a separate file (`adaptive_logic.py`) imported from `experiment.py` and any other script
 that needs these procedures. Avoid duplicating the core model specification.
 - Implementations should include a concise standalone simulation script (`simulate_procedure.py`) that:
    - Simulates the adaptive setup against a static baseline outside psynet,
    on a reasonable number of participants. 
    - If an approximate inference scheme is used, check the accuracy of posterior estimates
-   in these simulations, using less approximate inference strategies such as HMC.
-   - Perform performance checks (average posterior reconstruction time and average design selection time),
+   in these simulations, using less approximate inference strategies such as HMC as gold-standard. 
+   - Runs performance checks (average posterior reconstruction time and average design selection time),
    to detect and isolate performance issues owing to the computations themslves.
    - Produces accuracy diagnostic plots, in particular posterior predictive checks,
    to confirm that Bayesian computations are reliable.
 - If performance is insufficient, consider using more approximate sampling methods,
-or lowering the number of samples, but always make sure the accuracy does not degrade too much.
+or lowering the number of learning-steps, but always make sure the accuracy does not degrade too much.
 - If simulations within psynet are sufficiently slower than simulations outside of psynet, make sure that
 performance is not degraded by using inefficient data retrieval techniques when updating the posteriors.
-For instance, avoid relying on the varstore. Optimize the SQL queries retrieving the data.
+For instance, avoid relying on the VarStore. Optimize the SQL queries retrieving the data.
   
 ## Posterior update strategy
 
@@ -104,8 +101,7 @@ Choose one of these strategies explicitly:
    - Initialize fitting from the last persisted posterior, but include all data
      needed to avoid missing observations.
    - Persist posterior snapshots in the database using an appropriate custom
-     table, including model version, optimizer version, data cutoff, fit status,
-     diagnostics, and timestamp.
+     table.
    - Treat stale snapshots as hints, not proof that data has been incorporated.
 
 3. `online_learning`
@@ -150,6 +146,9 @@ Choose one of these strategies explicitly:
   policy, and persistence needs.
 - Recomputing from every trial with expensive probabilistic programming code
   without timing or scalability checks.
+- Do NOT deviate from the modelling or optimization strategy decided by the user.
+If there is a performance issue under these choices, the user will make an informed decision
+about what to improve.
 - Storing core adaptive state only in JSON vars when it should be queryable,
   versioned, or exported as a first-class field.
 - Using online learning without concurrency protection.

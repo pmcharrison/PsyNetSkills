@@ -15,6 +15,12 @@ specification.
   framework APIs to copy.
 - Read `references/validation.md` before finalizing functional, interactive, or
   performance checks.
+- Read `psynet-simulated-participants/SKILL.md` before designing multi-profile,
+  stochastic, mock-LLM, or export-validation simulations.
+
+## Preview links
+
+For cloud agents, hand off using the `cloud-agent-links` skill.
 
 ## Steps
 
@@ -63,6 +69,8 @@ Use the develop-experiment-code skill to implement the experiment.
 Use `psynet simulate` to simulate participants and produce an example dataset.
 This dataset should contain a decent number of participants representative of a real study;
 adjust `Exp.test_n_bots` to ensure this. Save the simulated export at `evidence/simulated_data.zip`.
+For profile design, data-path parity, mock-LLM patterns, and simulation
+limitations, follow `psynet-simulated-participants/SKILL.md`.
 
 ### Develop analysis scripts
 
@@ -71,6 +79,19 @@ with the canonical filename `evidence/analyses/analysis.ipynb` when working in a
 challenge attempt. The notebook should be self-contained for review,
 including all code, tables, and plots.
 If the implementation is inspired by a published paper, replicate the analyses reported in the paper as closely as possible.
+
+The analysis-notebook tooling is not part of the PsyNet editable install. Install
+it into the PsyNet virtualenv before executing the notebook, and execute it
+headlessly so its outputs are embedded for review:
+
+```bash
+uv pip install matplotlib jupyter nbconvert nbformat ipykernel
+jupyter nbconvert --to notebook --execute --inplace evidence/analyses/analysis.ipynb
+```
+
+Keep the executed notebook small (the dashboard truncates inline file content
+above ~100KB, which breaks notebook rendering): prefer low-DPI inline figures
+(e.g. `plt.rcParams["figure.dpi"] = 50`) or link out large figures.
 
 ### Review
 
@@ -81,6 +102,7 @@ Return to previous steps if necessary to address these.
 
 Compile a final report of the experiment (REPORT.md), summarizing the process taken
 and any findings that arose.
+Cloud agents should hand off using the `cloud-agent-links` skill.
 
 ### Completion gate
 
