@@ -1,5 +1,7 @@
 {
-  "authors": [],
+  "authors": [
+    "eandrade-lotero"
+  ],
   "agent": "Cursor Cloud Agent",
   "client": "cursor",
   "model": "GPT-5.5",
