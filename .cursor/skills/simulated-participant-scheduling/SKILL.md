@@ -4,7 +4,9 @@ description: Schedules PsyNet test participants across simulated profiles or hum
 authors: [zeroada]
 ---
 
-# Overview
+# Simulated Participant Scheduling
+
+## Overview
 
 This skill is used to schedule participants with different profiles, or to
 schedule human and AI participants with desired proportions in a test.
@@ -12,7 +14,7 @@ schedule human and AI participants with desired proportions in a test.
 This skill can be used by `turn-pure-experiment-to-ai-hybrid` when live
 human-AI scheduling needs implementation, testing, monitoring, or reporting.
 
-# Workflow
+## Workflow
 
 The user will specify the total number of participants and the desired
 participant distribution.
@@ -36,12 +38,12 @@ participant distribution and the desired distribution in a markdown document.
 The document should contain the participant profile description, the target
 participant distribution, and the actual participant distribution.
 
-## Scheduling algorithm and its corresponding testing
+### Scheduling algorithm and its corresponding testing
 
 There are two scheduling situations. Think about which one applies before
 implementing the scheduling algorithm and testing.
 
-### 1. Bot test scheduling
+#### 1. Bot test scheduling
 
 Use case: assign 10 bots to 5/5 profiles.
 
@@ -54,7 +56,7 @@ experiment's simulation setup, to assign bot profiles for test fixtures.
 Testing: tests assert realized distribution using simulation or exported
 experiment data.
 
-### 2. Live scheduling
+#### 2. Live scheduling
 
 Use case: live scheduling with desired participant distribution, especially to
 match a human-AI ratio in real time.
