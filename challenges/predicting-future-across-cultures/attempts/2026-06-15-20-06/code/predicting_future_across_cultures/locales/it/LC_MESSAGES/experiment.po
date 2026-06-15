@@ -1,3 +1,5 @@
+#
+#, fuzzy
 msgid ""
 msgstr ""
 "Language: it\n"
@@ -57,10 +59,10 @@ msgid ""
 "case for an {T_PAST}-year-old man, what would you predict for his total life"
 " span?"
 msgstr ""
-"Le compagnie assicurative impiegano attuari per fare previsioni sulla durata "
-"della vita delle persone, cioe l'eta alla quale moriranno. Se dovessi valutare "
-"un caso assicurativo per un uomo di {T_PAST} anni, quale durata totale della "
-"vita prevederesti?"
+"Le compagnie assicurative impiegano attuari per fare previsioni sulla durata"
+" della vita delle persone, cioe l'eta alla quale moriranno. Se dovessi "
+"valutare un caso assicurativo per un uomo di {T_PAST} anni, quale durata "
+"totale della vita prevederesti?"
 
 #: experiment.py
 #, python-brace-format
@@ -81,8 +83,8 @@ msgid ""
 "watching a movie for {T_PAST} {UNIT}, what would you predict for the total "
 "length of the movie?"
 msgstr ""
-"Se facessi una visita a sorpresa a un amico e scoprissi che sta guardando un "
-"film da {T_PAST} {UNIT}, quale durata totale prevederesti per il film?"
+"Se facessi una visita a sorpresa a un amico e scoprissi che sta guardando un"
+" film da {T_PAST} {UNIT}, quale durata totale prevederesti per il film?"
 
 #: experiment.py
 #, python-brace-format
@@ -91,8 +93,9 @@ msgid ""
 " {T_PAST} of a poem, what would you predict for the total length of the "
 "poem?"
 msgstr ""
-"Se una tua amica ti leggesse il suo verso preferito di una poesia e ti dicesse "
-"che era il verso {T_PAST}, quale lunghezza totale prevederesti per la poesia?"
+"Se una tua amica ti leggesse il suo verso preferito di una poesia e ti "
+"dicesse che era il verso {T_PAST}, quale lunghezza totale prevederesti per "
+"la poesia?"
 
 #: experiment.py
 #, python-brace-format
@@ -102,7 +105,8 @@ msgid ""
 "would be on hold?"
 msgstr ""
 "Se stessi chiamando una biglietteria telefonica per prenotare biglietti e "
-"fossi in attesa da {T_PAST} {UNIT}, quale tempo totale di attesa prevederesti?"
+"fossi in attesa da {T_PAST} {UNIT}, quale tempo totale di attesa "
+"prevederesti?"
 
 #: experiment.py
 msgid "Please enter a finite number."
@@ -136,8 +140,8 @@ msgid ""
 "Each question asks you to predict a duration or quantity from a single piece"
 " of information."
 msgstr ""
-"Ogni domanda ti chiede di prevedere una durata o una quantita da una singola "
-"informazione."
+"Ogni domanda ti chiede di prevedere una durata o una quantita da una singola"
+" informazione."
 
 #: experiment.py
 msgid ""
@@ -150,7 +154,8 @@ msgstr ""
 
 #: experiment.py
 msgid "You will answer one question from each of five everyday categories."
-msgstr "Risponderai a una domanda per ciascuna di cinque categorie quotidiane."
+msgstr ""
+"Risponderai a una domanda per ciascuna di cinque categorie quotidiane."
 
 #: experiment.py
 msgid "Thank you"
@@ -161,8 +166,8 @@ msgid ""
 "This study concerns how people make everyday predictions under uncertainty "
 "from limited information."
 msgstr ""
-"Questo studio riguarda il modo in cui le persone fanno previsioni quotidiane "
-"in condizioni di incertezza a partire da informazioni limitate."
+"Questo studio riguarda il modo in cui le persone fanno previsioni quotidiane"
+" in condizioni di incertezza a partire da informazioni limitate."
 
 #: experiment.py
 msgid "Your responses have been recorded."

@@ -1,3 +1,5 @@
+#
+#, fuzzy
 msgid ""
 msgstr ""
 "Language: he\n"
@@ -79,8 +81,8 @@ msgid ""
 "watching a movie for {T_PAST} {UNIT}, what would you predict for the total "
 "length of the movie?"
 msgstr ""
-"אם היית מגיע לביקור פתע אצל חבר ומגלה שהוא צופה בסרט כבר {T_PAST} {UNIT}, "
-"מה היית חוזה כאורך הכולל של הסרט?"
+"אם היית מגיע לביקור פתע אצל חבר ומגלה שהוא צופה בסרט כבר {T_PAST} {UNIT}, מה"
+" היית חוזה כאורך הכולל של הסרט?"
 
 #: experiment.py
 #, python-brace-format
@@ -156,7 +158,9 @@ msgstr "תודה"
 msgid ""
 "This study concerns how people make everyday predictions under uncertainty "
 "from limited information."
-msgstr "מחקר זה עוסק באופן שבו אנשים עושים תחזיות יומיומיות בתנאי אי-ודאות ממידע מוגבל."
+msgstr ""
+"מחקר זה עוסק באופן שבו אנשים עושים תחזיות יומיומיות בתנאי אי-ודאות ממידע "
+"מוגבל."
 
 #: experiment.py
 msgid "Your responses have been recorded."
