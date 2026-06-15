@@ -8,3 +8,7 @@
 - T+00:05:00 [agent] Drafted `PLAN.md` for the required human planning review before implementation.
 - T+00:05:15 [agent] Corrected the plan after confirming the attached Griffiths and Tenenbaum PDF is present in the challenge snapshot.
 - T+00:05:45 [agent-stop] Paused for human review of `PLAN.md`; implementation has not started.
+- T+00:15:00 [manual] User approved the plan, clarified that the real experiment should estimate cross-cultural differences while bots inject differences for testing, and provided author username `raja-marjieh`.
+- T+00:15:30 [agent-start] Resumed autonomous implementation work.
+- T+00:16:00 [agent] Updated `PLAN.md` science wording and `agent.json` author metadata before coding.
+- T+00:33:00 [agent] Implemented the first multilingual static-trial PsyNet experiment, generated constraints, and added manual Italian and Hebrew locale files.

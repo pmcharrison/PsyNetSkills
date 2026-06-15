@@ -2,7 +2,7 @@
 
 ## Science
 
-This experiment reimplements the everyday prediction task from Griffiths and Tenenbaum (2006) as a concise PsyNet survey. Participants observe a partial duration or extent, `t_past`, and predict the total value, `t_total`. The main design goal is not to estimate real cultural differences, but to produce a multilingual experiment and simulated dataset that can show condition-by-language patterns when such patterns are injected by bots.
+This experiment reimplements the everyday prediction task from Griffiths and Tenenbaum (2006) as a concise PsyNet survey. Participants observe a partial duration or extent, `t_past`, and predict the total value, `t_total`. The finished experiment should be able to estimate real cross-cultural differences; for testing, the simulated participants introduce modest condition-by-language patterns by design.
 
 The attached Griffiths and Tenenbaum (2006) PDF is present in the challenge snapshot and will be used for the participant instructions and sample vignette style.
 
