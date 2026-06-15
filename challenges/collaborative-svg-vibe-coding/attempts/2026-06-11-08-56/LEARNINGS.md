@@ -9,7 +9,7 @@ starting ffmpeg made the second recording concise enough to cover three trials,
 selection, rating, and completion.
 
 *Actions:*
-- **PsyNetSkills:** In challenge evidence guidance, emphasize starting participant recordings after setup pages when the setup is not itself part of the evidence. Confidence: medium. Status: considering.
+- **PsyNetSkills:** In challenge evidence guidance, emphasize starting participant recordings after setup pages when the setup is not itself part of the evidence. Confidence: medium. Impact: medium. Status: considering.
 
 ## Keep PsyNet launch-generated files ignored
 
@@ -18,7 +18,7 @@ selection, rating, and completion.
 `static/assets/`, which should not be committed as attempt source.
 
 *Actions:*
-- **PsyNetSkills:** Extend the attempt challenge scaffold reminder to include these local PsyNet generated paths when copying a minimal experiment rather than the full demo template. Confidence: high. Status: considering.
+- **PsyNetSkills:** Extend the attempt challenge scaffold reminder to include these local PsyNet generated paths when copying a minimal experiment rather than the full demo template. Confidence: high. Impact: medium. Status: considering.
 
 ## Separate evaluator experiments and full-browser recordings
 
@@ -28,5 +28,5 @@ participant flow, and screen recordings must show the full browser viewport and
 all generated SVG candidates clearly enough for review.
 
 *Actions:*
-- **PsyNetSkills:** Add challenge guidance for independent evaluator tasks to be implemented as a separate runnable experiment when the instructions ask for an independent rating task. Confidence: high. Status: considering.
-- **PsyNetSkills:** Update participant-recording guidance to require a quick playback check that all compared stimuli are visible in the saved recording, not just in screenshots. Confidence: high. Status: considering.
+- **PsyNetSkills:** Add challenge guidance for independent evaluator tasks to be implemented as a separate runnable experiment when the instructions ask for an independent rating task. Confidence: high. Impact: high. Status: considering.
+- **PsyNetSkills:** Update participant-recording guidance to require a quick playback check that all compared stimuli are visible in the saved recording, not just in screenshots. Confidence: high. Impact: high. Status: considering.
