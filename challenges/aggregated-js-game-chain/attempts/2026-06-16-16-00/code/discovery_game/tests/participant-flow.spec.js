@@ -47,13 +47,23 @@ async function performScriptedGame(page) {
   await expect(page.locator('#task-composer')).toBeVisible({ timeout: 5000 });
 }
 
-async function completeSeedParticipant(browser) {
+async function completeSeedParticipant(browser, { exhaustBoard = false } = {}) {
   const context = await browser.newContext({ viewport: { width: 1280, height: 720 } });
   const page = await context.newPage();
   await reachDiscoveryInstruction(page);
   await page.locator('#instruction-btn-1').click();
   await expect(page.locator('#task-grid')).toBeVisible({ timeout: 10000 });
-  await performScriptedGame(page);
+  if (exhaustBoard) {
+    await page.evaluate(() => {
+      document.querySelectorAll('#task-grid .item-image').forEach((item) => item.remove());
+      items.forEach((item) => { item.x = -1; item.y = -1; });
+      currentlyCarrying = null;
+      handleSpacePress();
+    });
+    await expect(page.locator('#task-composer')).toBeVisible({ timeout: 5000 });
+  } else {
+    await performScriptedGame(page);
+  }
   await page.locator('#composer-text-how').fill('Seed participant found same-shape fusions and harvested the upgraded crystals.');
   await page.locator('#composer-text-rules').fill('Same-shape crystals fused in this easy condition. Harvest after each successful fusion.');
   await page.locator('#composer-submit').click();
@@ -76,7 +86,7 @@ test('participant sees aggregated messages and plays upstream discovery game', a
   fs.mkdirSync(screenshotDir, { recursive: true });
   fs.mkdirSync(videoDir, { recursive: true });
 
-  await completeSeedParticipant(browser);
+  await completeSeedParticipant(browser, { exhaustBoard: true });
   await completeSeedParticipant(browser);
   await new Promise((resolve) => setTimeout(resolve, 1500));
 

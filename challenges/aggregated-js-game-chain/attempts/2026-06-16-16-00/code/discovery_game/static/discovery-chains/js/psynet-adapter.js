@@ -138,6 +138,59 @@
     };
   }
 
+  function taskComposerIsVisible() {
+    const composer = document.getElementById('task-composer');
+    return composer && composer.style.display !== 'none';
+  }
+
+  function visibleGridItemCount() {
+    return document.querySelectorAll('#task-grid .item-image').length;
+  }
+
+  function finishIfBoardIsExhausted() {
+    if (taskComposerIsVisible()) return;
+    if (typeof currentlyCarrying !== 'undefined' && currentlyCarrying) return;
+    if (visibleGridItemCount() === 0 && typeof grid_done === 'function') {
+      grid_done();
+    }
+  }
+
+  if (typeof handleSpacePress === 'function') {
+    const upstreamHandleSpacePress = handleSpacePress;
+    handleSpacePress = function () {
+      upstreamHandleSpacePress();
+      finishIfBoardIsExhausted();
+    };
+  }
+
+  if (typeof handleDropPress === 'function') {
+    const upstreamHandleDropPress = handleDropPress;
+    handleDropPress = function () {
+      upstreamHandleDropPress();
+      finishIfBoardIsExhausted();
+    };
+  }
+
+  function addBoardExhaustionFinishButton() {
+    const taskInfo = document.getElementById('task-info');
+    if (!taskInfo || document.getElementById('psynet-finish-exhausted-board')) return;
+    const button = document.createElement('button');
+    button.id = 'psynet-finish-exhausted-board';
+    button.className = 'big-button';
+    button.textContent = 'Finish game';
+    button.style.display = 'none';
+    button.onclick = () => grid_done();
+    taskInfo.appendChild(button);
+
+    setInterval(() => {
+      const canFinish =
+        !taskComposerIsVisible() &&
+        visibleGridItemCount() === 0 &&
+        !(typeof currentlyCarrying !== 'undefined' && currentlyCarrying);
+      button.style.display = canFinish ? 'inline-block' : 'none';
+    }, 500);
+  }
+
   function startAtPsyNetEntryPoint() {
     const welcome = document.getElementById('welcome');
     const prolific = document.getElementById('prolific_id');
@@ -154,6 +207,7 @@
     if (typeof allowRegeneration !== 'undefined') {
       allowRegeneration = Boolean(discoveryGameConfig.allow_regeneration);
     }
+    addBoardExhaustionFinishButton();
   }
 
   startAtPsyNetEntryPoint();
