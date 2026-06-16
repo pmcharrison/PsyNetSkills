@@ -47,7 +47,7 @@ async function performScriptedGame(page) {
   const keys = ['Space', 'ArrowRight', 'Space', 'ArrowLeft', 'Space', 'ArrowDown', 'Space', 'ArrowUp', 'd', 'Space', 'ArrowDown', 'ArrowRight', 'Space', 'ArrowLeft', 'Space'];
   for (const key of keys) {
     await page.keyboard.press(key);
-    await page.waitForTimeout(90);
+    await page.waitForTimeout(220);
   }
   await expect(page.locator('#points')).toHaveText('20');
   await page.locator('#finish-review').click();
@@ -84,11 +84,13 @@ test('participant sees aggregated messages and plays discovery game', async ({ b
   const page = await context.newPage();
   await reachDiscoveryInstruction(page);
   await page.screenshot({ path: path.join(screenshotDir, '01-instructions.png'), fullPage: true });
+  await page.waitForTimeout(1200);
 
   await page.locator('#instruction-next').click();
   await expect(page.locator('text=messages from previous players')).toBeVisible({ timeout: 10000 });
   await expect(page.locator('.message-card')).toHaveCount(2);
   await page.screenshot({ path: path.join(screenshotDir, '02-aggregated-messages.png'), fullPage: true });
+  await page.waitForTimeout(2200);
 
   await page.locator('.open-message').first().click();
   await page.evaluate(() => {
@@ -102,19 +104,24 @@ test('participant sees aggregated messages and plays discovery game', async ({ b
   await page.locator('.save-note').first().click();
   await expect(page.locator('#messages-next')).toBeEnabled();
   await page.screenshot({ path: path.join(screenshotDir, '03-notebook-note.png'), fullPage: true });
+  await page.waitForTimeout(1800);
 
   await page.locator('#messages-next').click();
   await page.locator('#strategy-summary').fill('Fuse same-shape crystals, then harvest upgraded crystals.');
   await expect(page.locator('#start-game')).toBeEnabled();
+  await page.waitForTimeout(1200);
   await page.locator('#start-game').click();
   await expect(page.locator('#game-grid')).toBeVisible({ timeout: 10000 });
   await page.screenshot({ path: path.join(screenshotDir, '04-game-grid.png'), fullPage: true });
+  await page.waitForTimeout(1600);
 
   await performScriptedGame(page);
   await expect(page.locator('#submit-answer')).toBeVisible();
   await page.screenshot({ path: path.join(screenshotDir, '05-outgoing-messages.png'), fullPage: true });
+  await page.waitForTimeout(2200);
   await page.locator('#message-how').fill('I used the previous messages and fused same-shape crystals for points.');
   await page.locator('#message-rules').fill('Same-shape crystals fuse in the easy condition; harvest the upgraded crystal.');
+  await page.waitForTimeout(1200);
   await page.locator('#submit-answer').click();
   await page.waitForTimeout(1000);
 
