@@ -41,3 +41,9 @@ Validation after implementation will include `python experiment.py`, `psynet tes
 - Is it acceptable for the compact local evidence run to use the `easy` rule family as its single condition, while keeping `medium` and `hard` available through the shared configuration object?
 - Should aggregation select all messages in the compact two-participant generation, or should it still sample/rank down to a smaller fixed message set to mirror the full-run behavior?
 - Should aggregation audit records be stored only in PsyNet node/trial variables, or should the implementation also add a dedicated SQL table with one row per aggregation event for easier export review?
+
+## Human review decisions
+
+- The compact local evidence run may use the `easy` rule family as its single condition, while preserving `medium` and `hard` in the shared configuration object.
+- Aggregation should keep the same sample/rank shape as the full run. In the compact two-participant generation, this will normally select both available messages but still compute ranks and weights.
+- Aggregation audit records should be stored only in core PsyNet object variables, not in a dedicated custom SQL table.

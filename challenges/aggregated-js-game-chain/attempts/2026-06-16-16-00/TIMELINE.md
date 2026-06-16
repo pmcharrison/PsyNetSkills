@@ -9,3 +9,7 @@
 - T+00:06:00 [agent] Created attempt scaffold, challenge snapshot, in-progress metadata, and `PLAN.md`.
 - T+00:06:15 [agent] Authorship is pending; `agent.json` keeps `authors` empty until the human author GitHub username is provided.
 - T+00:06:30 [agent-stop] Paused before implementation for required human review of `PLAN.md`.
+- T+01:47:00 [manual] User approved `PLAN.md` and answered review questions: compact evidence uses `easy`, aggregation keeps full-run rank/sample behavior, and audit records stay in PsyNet object variables.
+- T+01:47:30 [agent-start] Resumed autonomous implementation work after plan approval.
+- T+02:03:00 [agent] Implemented first runnable PsyNet experiment scaffold under `code/discovery_game/`, including compact/full configuration, chain aggregation, bot responses, and participant-facing JavaScript.
+- T+02:04:00 [agent] Generated `constraints.txt` from the experiment requirements.
