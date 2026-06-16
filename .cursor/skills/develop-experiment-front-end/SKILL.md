@@ -79,3 +79,7 @@ handler installation.
 ## Examples
 
 Refer to the explore-psynet-repository skill for examples to work from.
+
+## Misc. guidance
+- Implement keyboard-button responses with KeyboardPushButtonControl rather than dedicated JavaScript.
+- Do not show technical details that are not participant-facing, such as labeling display items “stimuli”.
