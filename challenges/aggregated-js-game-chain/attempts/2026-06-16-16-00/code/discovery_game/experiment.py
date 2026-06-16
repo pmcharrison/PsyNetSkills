@@ -500,12 +500,16 @@ def scripted_game_answer(definition: Dict[str, Any], participant_id: int | None 
 class DiscoveryGamePage(Page):
     def __init__(self, definition: Dict[str, Any], label: str, time_estimate: float):
         self.definition = definition
+        template = (
+            "templates/discovery-base.html"
+            if definition["generation_index"] == 0
+            else "templates/discovery-after.html"
+        )
         super().__init__(
             label=label,
             time_estimate=time_estimate,
-            template_path="templates/discovery-game.html",
+            template_path=template,
             js_vars={"trial_definition": definition},
-            css_links=["static/discovery-game.css"],
             session_id=f"discovery-{definition['chain_id']}-{definition['generation_index']}-{definition.get('trial_index_within_generation', 0)}",
         )
 
