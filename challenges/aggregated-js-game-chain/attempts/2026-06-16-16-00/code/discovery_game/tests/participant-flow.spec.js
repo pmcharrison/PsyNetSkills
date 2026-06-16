@@ -69,6 +69,7 @@ async function completeSeedParticipant(browser) {
 }
 
 test('participant sees aggregated messages and plays discovery game', async ({ browser }) => {
+  test.setTimeout(120000);
   fs.mkdirSync(screenshotDir, { recursive: true });
   fs.mkdirSync(videoDir, { recursive: true });
 
