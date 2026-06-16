@@ -116,6 +116,28 @@
     },
   };
 
+  function resolveDiscoveryIcon(src) {
+    return String(src || '').replace(/^\.\.\/img\//, '/static/discovery-chains/img/');
+  }
+
+  if (typeof drawItem === 'function') {
+    const upstreamDrawItem = drawItem;
+    drawItem = function (itemId, itemIcon, type = 'grid') {
+      return upstreamDrawItem(itemId, resolveDiscoveryIcon(itemIcon), type);
+    };
+  }
+
+  if (typeof nameToIcon === 'function') {
+    nameToIcon = function (itemName, size = '24px') {
+      let item = items.find((item) => item.item_name === itemName);
+      if (item) {
+        return `<img src="${resolveDiscoveryIcon(item.item_icon)}" style="width:${size}; height:${size};">`;
+      } else {
+        return itemName;
+      }
+    };
+  }
+
   function startAtPsyNetEntryPoint() {
     const welcome = document.getElementById('welcome');
     const prolific = document.getElementById('prolific_id');
