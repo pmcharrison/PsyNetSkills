@@ -13,3 +13,10 @@ A custom PsyNet page can render a blank participant page if page-specific JavaSc
 
 *Actions:*
 - **PsyNetSkills:** Add a `develop-experiment-front-end` note that custom templates should load page-specific static scripts after defining globals derived from `psynet.var`, or otherwise read `psynet.var` lazily after page load. Confidence: high. Impact: medium. Status: considering.
+
+## Vendor requested JavaScript before adapting it
+
+When a challenge asks to integrate an existing browser game, preserving the original JavaScript files should be treated as a core requirement unless the instructions explicitly permit a rewrite.
+
+*Actions:*
+- **PsyNetSkills:** Update `attempt-challenge` or `develop-experiment-front-end` guidance to require agents to vendor referenced JavaScript source files first, then document any adapter-layer changes separately from the upstream files. Confidence: high. Impact: high. Status: considering.

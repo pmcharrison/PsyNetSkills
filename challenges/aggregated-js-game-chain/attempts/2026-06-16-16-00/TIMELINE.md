@@ -26,3 +26,11 @@
 - T+02:50:00 [agent] Re-ran `python experiment.py`, `psynet test local`, `psynet simulate`, and notebook execution against the final code revision.
 - T+02:51:00 [agent] Wrote `REPORT.md`, updated `LEARNINGS.md`, and left `EVALUATION.md` ready for human scoring.
 - T+02:51:30 [agent-stop] Implementation and first-pass evidence collection complete; attempt remains metadata-open pending human author GitHub username.
+- T+02:58:00 [manual] User noticed the participant front end had reimplemented the JavaScript game rather than injecting the actual upstream JavaScript files.
+- T+02:58:20 [agent-start] Resumed implementation to vendor the upstream `discovery-chains` HTML, JavaScript, CSS, and image assets.
+- T+03:08:00 [agent] Replaced the custom browser game with upstream-derived base/after templates plus thin PsyNet config and submission adapters.
+- T+03:14:00 [agent] Re-ran `python experiment.py`, `psynet test local`, `psynet simulate`, notebook execution, and performance testing against the upstream-adapter revision.
+- T+03:21:00 [agent] Regenerated participant screenshots and video with the upstream UI; video review found broken fused-crystal image paths.
+- T+03:23:00 [agent] Fixed relative upstream image paths for dynamically created fused crystals in the PsyNet adapter.
+- T+03:26:00 [agent] Regenerated participant video and video review confirmed the upstream UI stages and fixed crystal icons.
+- T+03:29:00 [agent] Re-ran final `python experiment.py` and `psynet test local` against the corrected upstream-adapter revision.

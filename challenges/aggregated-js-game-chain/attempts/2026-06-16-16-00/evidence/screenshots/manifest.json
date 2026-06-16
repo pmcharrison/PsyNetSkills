@@ -1,9 +1,9 @@
 {
   "captions": {
-    "screenshots/01-instructions.png": "Generation 1 participant instructions before reading aggregated messages.",
+    "screenshots/01-instructions.png": "Generation 1 upstream instruction screen before reading aggregated messages.",
     "screenshots/02-aggregated-messages.png": "Generation 1 receives two ranked messages aggregated from generation 0.",
-    "screenshots/03-notebook-note.png": "Participant marks a message read and saves highlighted text to the notebook.",
-    "screenshots/04-game-grid.png": "Crystal grid with rover, points, actions remaining, carrying/current-tile status, hints, and logs.",
-    "screenshots/05-outgoing-messages.png": "Outgoing strategy and rule message composition after game play."
+    "screenshots/03-notebook-note.png": "Participant reads an upstream message modal and saves highlighted text to the notebook.",
+    "screenshots/04-game-grid.png": "Upstream crystal grid with rover, points, actions remaining, carrying/current-tile status, hints, and logs.",
+    "screenshots/05-outgoing-messages.png": "Upstream outgoing strategy and rule message composition after game play."
   }
 }
