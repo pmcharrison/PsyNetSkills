@@ -505,7 +505,6 @@ class DiscoveryGamePage(Page):
             time_estimate=time_estimate,
             template_path="templates/discovery-game.html",
             js_vars={"trial_definition": definition},
-            js_links=["static/discovery-game.js"],
             css_links=["static/discovery-game.css"],
             session_id=f"discovery-{definition['chain_id']}-{definition['generation_index']}-{definition.get('trial_index_within_generation', 0)}",
         )
