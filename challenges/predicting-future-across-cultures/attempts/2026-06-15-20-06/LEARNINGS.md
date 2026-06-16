@@ -15,3 +15,11 @@ PsyNet validation failures can appear as modal dialogs with locale-specific ackn
 *Actions:*
 
 - **PsyNetSkills:** Add a validation-modal reminder to `record-participant-video` so Playwright evidence scripts include locale-aware dismissal after expected validation failures. Confidence: high. Impact: low. Status: considering.
+
+## Analysis notebook plots need enough dashboard resolution
+
+The evaluator found the analysis plots somewhat blurry in the dashboard. Future executed notebooks should use slightly higher figure DPI or dimensions while still keeping the notebook below the dashboard rendering size limit.
+
+*Actions:*
+
+- **PsyNetSkills:** Update experiment-analysis guidance to recommend choosing plot DPI and dimensions that remain legible in dashboard-rendered notebooks, rather than using overly low DPI to satisfy the notebook size limit. Confidence: high. Impact: low. Status: considering.
