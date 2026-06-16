@@ -13,3 +13,4 @@
 - T+01:47:30 [agent-start] Resumed autonomous implementation work after plan approval.
 - T+02:03:00 [agent] Implemented first runnable PsyNet experiment scaffold under `code/discovery_game/`, including compact/full configuration, chain aggregation, bot responses, and participant-facing JavaScript.
 - T+02:04:00 [agent] Generated `constraints.txt` from the experiment requirements.
+- T+02:08:00 [agent] Initial `psynet test local` found the standard PsyNet `test.py` entrypoint was missing; added it before rerunning validation.
