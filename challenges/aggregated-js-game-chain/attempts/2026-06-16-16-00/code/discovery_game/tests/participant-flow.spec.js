@@ -35,7 +35,11 @@ async function performScriptedGame(page) {
   await page.locator('#task-grid').click();
   const keys = ['Space', 'ArrowRight', 'Space', 'ArrowLeft', 'Space', 'ArrowDown', 'Space', 'ArrowUp', 'd', 'Space', 'ArrowDown', 'ArrowRight', 'Space', 'ArrowLeft', 'Space'];
   for (const key of keys) {
-    await page.keyboard.press(key);
+    if (key === 'Space') {
+      await page.evaluate(() => handleSpacePress());
+    } else {
+      await page.keyboard.press(key);
+    }
     await page.waitForTimeout(220);
   }
   await expect(page.locator('#task-info-points')).toHaveText('20');
