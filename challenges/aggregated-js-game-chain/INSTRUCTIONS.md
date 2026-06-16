@@ -2,7 +2,7 @@
 title: Integrate a JavaScript discovery game into an aggregated transmission chain
 type: experiment implementation
 difficulty: 9
-authors: [pmcharrison]
+authors: [raja-marjieh]
 ---
 
 Implement a PsyNet experiment that turns the JavaScript crystal-discovery game
@@ -67,6 +67,16 @@ the full specification from `desc.md`: 20 chains, three conditions (`easy`,
 generation. The full parameters should live in a single clear configuration
 object or equivalent PsyNet settings layer; the local demonstration should be a
 small parameter choice, not a separate experiment.
+
+Keep the JavaScript game code as self-contained as possible. Do not rewrite or
+alter the basic game logic merely to make it fit PsyNet. Instead, let the PsyNet
+chain and aggregation logic construct the required trial definition: condition,
+generation, chain id, item layout, action budget, incoming message set, and any
+other specification data needed by the browser task. The trial's `show_trial`
+path should then render the appropriate base-game or after-message game view and
+pass that trial definition into the JavaScript layer. This separation should make
+the transmission-chain state live in PsyNet while the game remains a reusable
+front-end component.
 
 The implementation should save robust structured data. At minimum, save:
 
