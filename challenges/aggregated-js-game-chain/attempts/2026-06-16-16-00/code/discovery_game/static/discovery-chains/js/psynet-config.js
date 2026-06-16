@@ -34,3 +34,43 @@ let textures = discoveryGameConfig.textures;
 window.discoveryMessagesByCondition = {
   [COND]: discoveryDefinition.incoming_message_set.messages || []
 };
+
+function getShape(item) { return item.split("_")[0] }
+
+function getTexture(item) { return item.split("_")[1] }
+
+function getLevel(item) { return item.split("_")[2] }
+
+function newObj(item1, item2) {
+  const newLevel = Math.max(getLevel(item1), getLevel(item2)) + 1;
+  if(newLevel >= MAXLEVEL) {
+     return ''
+
+  } else {
+    return `${getShape(item1)}_${getTexture(item2)}_${newLevel}`;
+  }
+}
+
+function isSameShape(item_list) {
+  return getShape(item_list[0]) === getShape(item_list[1]);
+}
+function diffObjs1(item_list) {
+  const shapeMatch = shapes.indexOf(getShape(item_list[0])) + shapes.indexOf(getShape(item_list[1])) === 3;
+  const textureMatch = getTexture(item_list[0]) != getTexture(item_list[1]);
+  return shapeMatch && textureMatch;
+}
+function modRule(item_list) {
+  const shapeMatch = shapes.indexOf(getShape(item_list[0])) + shapes.indexOf(getShape(item_list[1])) === 3;
+  const textureMatch = (textures.indexOf(getTexture(item_list[0])) % 2 === 0) || (textures.indexOf(getTexture(item_list[1])) % 2 === 0);
+  return shapeMatch && textureMatch;
+}
+function modRule2(item_list) {
+  const textureMatch = textures.indexOf(getTexture(item_list[0])) + textures.indexOf(getTexture(item_list[1])) === 3;
+  const shapeMatch = (shapes.indexOf(getShape(item_list[0])) % 2 === 0) || (shapes.indexOf(getShape(item_list[1])) % 2 === 0);
+  return shapeMatch && textureMatch;
+}
+function modRule3(item_list) {
+  const shapeMatch = shapes.indexOf(getShape(item_list[0])) + shapes.indexOf(getShape(item_list[1])) === 3;
+  const textureMatch = (textures.indexOf(getTexture(item_list[0])) % 2 === 0) || (textures.indexOf(getTexture(item_list[1])) % 2 === 1);
+  return shapeMatch && textureMatch;
+}
