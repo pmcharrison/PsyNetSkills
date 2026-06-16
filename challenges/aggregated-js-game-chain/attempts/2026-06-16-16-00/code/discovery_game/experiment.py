@@ -526,8 +526,13 @@ class DiscoveryGamePage(Page):
         answer["game_config"] = deepcopy(self.definition["game_config"])
         return answer
 
-    def validate(self, response, **kwargs):
-        outgoing = response.get("messages", {}).get("outgoing", {}) if isinstance(response, dict) else {}
+    def validate(self, response, answer=None, **kwargs):
+        answer = answer if isinstance(answer, dict) else getattr(response, "answer", {})
+        outgoing = (
+            answer.get("messages", {}).get("outgoing", {})
+            if isinstance(answer, dict)
+            else {}
+        )
         if not sanitize_text(outgoing.get("messageHow")):
             return "Please write a strategy message before continuing."
         if not sanitize_text(outgoing.get("messageRules")):

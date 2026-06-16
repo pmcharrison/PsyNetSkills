@@ -15,3 +15,4 @@
 - T+02:04:00 [agent] Generated `constraints.txt` from the experiment requirements.
 - T+02:08:00 [agent] Initial `psynet test local` found the standard PsyNet `test.py` entrypoint was missing; added it before rerunning validation.
 - T+02:12:00 [agent] `psynet test local` then exposed a custom page template lookup issue; changed the page to load `templates/discovery-game.html`.
+- T+02:16:00 [agent] `psynet test local` then exposed a custom page validation bug; changed validation to inspect the formatted PsyNet response answer.
