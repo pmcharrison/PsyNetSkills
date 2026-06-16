@@ -23,6 +23,7 @@ The compact and full parameter sets live in `RUN_CONFIGS` in `experiment.py`. To
 - `evidence/analyses/analysis.ipynb` reads the simulated export directly, asserts the generation/message flow, summarizes aggregation audit records, and plots deterministic bot rewards.
 - `evidence/performance.json` records a 40-bot, five-minute local performance test with zero bot errors and zero request errors.
 - `evidence/participant.mp4` and `evidence/screenshots/` document the participant-facing flow, including aggregated messages, notebook saving, strategy summary, game interaction, and outgoing message composition.
+- The Playwright participant-flow test also exercises the early board-exhaustion case and verifies that participants can proceed to outgoing message composition even when crystals run out before the action budget reaches zero.
 - `evidence/monitor.html` stores a local dashboard snapshot.
 
 ## Limitations

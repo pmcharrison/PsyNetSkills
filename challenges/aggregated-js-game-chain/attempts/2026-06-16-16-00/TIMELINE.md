@@ -34,3 +34,7 @@
 - T+03:23:00 [agent] Fixed relative upstream image paths for dynamically created fused crystals in the PsyNet adapter.
 - T+03:26:00 [agent] Regenerated participant video and video review confirmed the upstream UI stages and fixed crystal icons.
 - T+03:29:00 [agent] Re-ran final `python experiment.py` and `psynet test local` against the corrected upstream-adapter revision.
+- T+03:38:00 [manual] User reported being stuck after harvesting all visible crystals with actions remaining.
+- T+03:38:30 [agent-start] Resumed implementation to fix the exhausted-board end condition.
+- T+03:41:00 [agent] Added an adapter-level board-exhaustion finish check and a finish button that appears when no crystals remain and the participant is not carrying an item.
+- T+03:45:00 [agent] Re-ran `python experiment.py`, `psynet test local`, and Playwright participant flow including an explicit exhausted-board regression.
