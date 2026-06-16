@@ -503,7 +503,7 @@ class DiscoveryGamePage(Page):
         super().__init__(
             label=label,
             time_estimate=time_estimate,
-            template_path="discovery-game.html",
+            template_path="templates/discovery-game.html",
             js_vars={"trial_definition": definition},
             js_links=["static/discovery-game.js"],
             css_links=["static/discovery-game.css"],
