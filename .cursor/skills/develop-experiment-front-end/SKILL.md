@@ -83,3 +83,7 @@ Refer to the explore-psynet-repository skill for examples to work from.
 ## Misc. guidance
 - Implement keyboard-button responses with KeyboardPushButtonControl rather than dedicated JavaScript.
 - Do not show technical details that are not participant-facing, such as labeling display items “stimuli”.
+- You should not measure reaction time, unless explicityly instructed to do so. 
+- In case you explicitly asked to provide reaction times, use the following strategy. Reaction time can usually be recorded without any bespoke timing JavaScript. Drive
+the stimulus with a `GraphicPrompt` whose response is locked until the stimulus
+frame, and read the timing back from the page's event log in `format_answer`.
