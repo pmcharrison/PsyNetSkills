@@ -1,0 +1,174 @@
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Language: it\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: experiment.py
+msgid "year"
+msgstr "anno"
+
+#: experiment.py
+msgid "years"
+msgstr "anni"
+
+#: experiment.py
+msgid "minute"
+msgstr "minuto"
+
+#: experiment.py
+msgid "minutes"
+msgstr "minuti"
+
+#: experiment.py
+msgid "line"
+msgstr "verso"
+
+#: experiment.py
+msgid "lines"
+msgstr "versi"
+
+#: experiment.py
+msgid "Life spans"
+msgstr "Durate della vita"
+
+#: experiment.py
+msgid "Lengths of marriages"
+msgstr "Durate dei matrimoni"
+
+#: experiment.py
+msgid "Movie run times"
+msgstr "Durate dei film"
+
+#: experiment.py
+msgid "Poem lengths"
+msgstr "Lunghezze delle poesie"
+
+#: experiment.py
+msgid "Waiting times"
+msgstr "Tempi di attesa"
+
+#: experiment.py
+#, python-brace-format
+msgid ""
+"Insurance agencies employ actuaries to make predictions about people's life "
+"spans, the age at which they will die. If you were assessing an insurance "
+"case for an {T_PAST}-year-old man, what would you predict for his total life"
+" span?"
+msgstr ""
+"Le compagnie assicurative impiegano attuari per fare previsioni sulla durata"
+" della vita delle persone, cioe l'eta alla quale moriranno. Se dovessi "
+"valutare un caso assicurativo per un uomo di {T_PAST} anni, quale durata "
+"totale della vita prevederesti?"
+
+#: experiment.py
+#, python-brace-format
+msgid ""
+"A friend is telling you about an acquaintance whom you do not know. In "
+"passing, he happens to mention that this person has been married for "
+"{T_PAST} {UNIT}. How long do you think this person's marriage will last in "
+"total?"
+msgstr ""
+"Un amico ti sta parlando di una conoscenza che non conosci. Di passaggio, "
+"menziona che questa persona e sposata da {T_PAST} {UNIT}. Quanto pensi che "
+"durera in totale il matrimonio di questa persona?"
+
+#: experiment.py
+#, python-brace-format
+msgid ""
+"If you made a surprise visit to a friend and found that they had been "
+"watching a movie for {T_PAST} {UNIT}, what would you predict for the total "
+"length of the movie?"
+msgstr ""
+"Se facessi una visita a sorpresa a un amico e scoprissi che sta guardando un"
+" film da {T_PAST} {UNIT}, quale durata totale prevederesti per il film?"
+
+#: experiment.py
+#, python-brace-format
+msgid ""
+"If your friend read you her favorite line of poetry and told you it was line"
+" {T_PAST} of a poem, what would you predict for the total length of the "
+"poem?"
+msgstr ""
+"Se una tua amica ti leggesse il suo verso preferito di una poesia e ti "
+"dicesse che era il verso {T_PAST}, quale lunghezza totale prevederesti per "
+"la poesia?"
+
+#: experiment.py
+#, python-brace-format
+msgid ""
+"If you were calling a telephone box office to book tickets and had been on "
+"hold for {T_PAST} {UNIT}, what would you predict for the total time you "
+"would be on hold?"
+msgstr ""
+"Se stessi chiamando una biglietteria telefonica per prenotare biglietti e "
+"fossi in attesa da {T_PAST} {UNIT}, quale tempo totale di attesa "
+"prevederesti?"
+
+#: experiment.py
+msgid "Please enter a finite number."
+msgstr "Inserisci un numero finito."
+
+#: experiment.py
+#, python-brace-format
+msgid "Your prediction must be at least {T_PAST} {UNIT}."
+msgstr "La tua previsione deve essere almeno {T_PAST} {UNIT}."
+
+#: experiment.py
+#, python-brace-format
+msgid "Question {POSITION} of 5"
+msgstr "Domanda {POSITION} di 5"
+
+#: experiment.py
+#, python-brace-format
+msgid "Observed so far: {T_PAST} {UNIT}."
+msgstr "Osservato finora: {T_PAST} {UNIT}."
+
+#: experiment.py
+msgid "Please enter your intuitive prediction for the total value."
+msgstr "Inserisci la tua previsione intuitiva per il valore totale."
+
+#: experiment.py
+msgid "Predicting everyday futures"
+msgstr "Prevedere futuri quotidiani"
+
+#: experiment.py
+msgid ""
+"Each question asks you to predict a duration or quantity from a single piece"
+" of information."
+msgstr ""
+"Ogni domanda ti chiede di prevedere una durata o una quantita da una singola"
+" informazione."
+
+#: experiment.py
+msgid ""
+"Please read each question and enter your prediction in the box below it. We "
+"are interested in your intuitions, so please do not make complicated "
+"calculations."
+msgstr ""
+"Leggi ogni domanda e inserisci la tua previsione nella casella sottostante. "
+"Ci interessano le tue intuizioni, quindi evita calcoli complicati."
+
+#: experiment.py
+msgid "You will answer one question from each of five everyday categories."
+msgstr ""
+"Risponderai a una domanda per ciascuna di cinque categorie quotidiane."
+
+#: experiment.py
+msgid "Thank you"
+msgstr "Grazie"
+
+#: experiment.py
+msgid ""
+"This study concerns how people make everyday predictions under uncertainty "
+"from limited information."
+msgstr ""
+"Questo studio riguarda il modo in cui le persone fanno previsioni quotidiane"
+" in condizioni di incertezza a partire da informazioni limitate."
+
+#: experiment.py
+msgid "Your responses have been recorded."
+msgstr "Le tue risposte sono state registrate."
