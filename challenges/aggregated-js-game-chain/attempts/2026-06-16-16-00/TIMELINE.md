@@ -16,3 +16,13 @@
 - T+02:08:00 [agent] Initial `psynet test local` found the standard PsyNet `test.py` entrypoint was missing; added it before rerunning validation.
 - T+02:12:00 [agent] `psynet test local` then exposed a custom page template lookup issue; changed the page to load `templates/discovery-game.html`.
 - T+02:16:00 [agent] `psynet test local` then exposed a custom page validation bug; changed validation to inspect the formatted PsyNet response answer.
+- T+02:20:00 [agent] `psynet test local` passed for the compact three-generation bot run.
+- T+02:24:00 [agent] Ran `psynet simulate`, exported `evidence/simulated_data.zip`, and wrote aggregation inspection evidence.
+- T+02:29:00 [agent] Ran `psynet performance-test local` with 40 bots for five minutes and saved `evidence/performance.json`.
+- T+02:32:00 [agent] Created and executed `evidence/analyses/analysis.ipynb`.
+- T+02:43:00 [agent] Collected participant screenshots and regenerated `evidence/participant.mp4` after video review found the first recording too fast.
+- T+02:46:00 [agent] Computer-use manual verification confirmed the later-generation message-reading, notebook, strategy-summary, movement, and pickup flow.
+- T+02:48:00 [agent] Saved `evidence/monitor.html` from the local PsyNet dashboard.
+- T+02:50:00 [agent] Re-ran `python experiment.py`, `psynet test local`, `psynet simulate`, and notebook execution against the final code revision.
+- T+02:51:00 [agent] Wrote `REPORT.md`, updated `LEARNINGS.md`, and left `EVALUATION.md` ready for human scoring.
+- T+02:51:30 [agent-stop] Implementation and first-pass evidence collection complete; attempt remains metadata-open pending human author GitHub username.

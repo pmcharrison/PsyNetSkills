@@ -24,3 +24,8 @@ __pycache__
 data/
 *.sqlite
 *.log
+dump.rdb
+
+# JavaScript test dependencies and transient Playwright output
+node_modules/
+test-results/
