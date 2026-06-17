@@ -5,6 +5,7 @@ __pycache__/
 static/
 data/export/
 data/*.zip
+dump.rdb
 server.log
 source_code.zip
 *.pyc

@@ -16,7 +16,7 @@ TIMINGS_MS = {
 }
 
 
-def face_svg(label: str, affect: str, group: str, ambiguity: float = 0.0) -> str:
+def face_svg(label: str, affect: str, group: str) -> str:
     if affect == "happy":
         mouth = "M 70 122 Q 100 150 130 122"
         brow = "M 65 75 Q 78 67 91 75 M 109 75 Q 122 67 135 75"
@@ -26,8 +26,10 @@ def face_svg(label: str, affect: str, group: str, ambiguity: float = 0.0) -> str
         brow = "M 62 69 L 91 82 M 109 82 L 138 69"
         accent = "#e05243"
     else:
-        mouth = f"M 70 {132 - ambiguity:.1f} Q 100 {130 + ambiguity:.1f} 130 {132 - ambiguity:.1f}"
-        brow = "M 65 75 Q 78 70 91 75 M 109 75 Q 122 70 135 75"
+        # The target is intentionally neutral/50-50; the response code is for
+        # counterbalancing and congruency analysis, not a visible expression.
+        mouth = "M 72 132 Q 100 134 128 132"
+        brow = "M 65 75 Q 78 72 91 75 M 109 75 Q 122 72 135 75"
         accent = "#7aa6c2"
 
     skin = "#f2c6a0" if group == "demo_a" else "#b9855f"
@@ -66,10 +68,10 @@ def write_assets() -> None:
             path = STIMULUS_DIR / f"prime_{affect}_{group}.svg"
             path.write_text(face_svg(path.stem, affect, group), encoding="utf-8")
 
-        for response, ambiguity in [("happy", 8.0), ("angry", -8.0)]:
-            path = STIMULUS_DIR / f"target_ambiguous_{response}_{group}.svg"
+        for response in ["happy", "angry"]:
+            path = STIMULUS_DIR / f"target_neutral_{response}_coded_{group}.svg"
             path.write_text(
-                face_svg(path.stem, "ambiguous", group, ambiguity=ambiguity),
+                face_svg(path.stem, "ambiguous", group),
                 encoding="utf-8",
             )
 
@@ -89,14 +91,14 @@ def make_trial(
         "prime_id": f"prime_{prime_affect}_{prime_group}",
         "prime_affect": prime_affect,
         "prime_cultural_group": prime_group,
-        "target_id": f"target_ambiguous_{target_response}_{target_group}",
-        "target_ambiguity": "60-40 demonstration morph",
+        "target_id": f"target_neutral_{target_response}_coded_{target_group}",
+        "target_ambiguity": "50-50 neutral demonstration target",
         "target_cultural_group": target_group,
         "coded_target_response": target_response,
         "mask_id": "mask_checker",
         "congruency": congruency,
         "timings_ms": TIMINGS_MS,
-        "stimulus_note": "Generated placeholder; replace with validated face stimuli for real research.",
+        "stimulus_note": "Generated neutral placeholder; replace with validated ambiguous/neutral face stimuli for real research.",
     }
 
 
