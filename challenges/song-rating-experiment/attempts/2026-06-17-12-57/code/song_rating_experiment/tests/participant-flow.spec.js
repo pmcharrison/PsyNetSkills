@@ -60,7 +60,7 @@ async function answerRating(page, index) {
   } else {
     await page.getByText("5", { exact: true }).first().click();
   }
-  await page.evaluate(() => window.psynet.submitResponse());
+  await page.evaluate(() => window.psynet.submitResponse(() => {}));
   await page.waitForTimeout(350);
 }
 
