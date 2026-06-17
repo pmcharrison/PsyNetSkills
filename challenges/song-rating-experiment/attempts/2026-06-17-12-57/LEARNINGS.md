@@ -15,3 +15,7 @@ functional checks validate the real audio-gated path.
   deterministic evidence-runner strategy plus an explicit note that simulated or
   scripted answers are not human hearing evidence. Confidence: high. Impact:
   medium. Status: considering.
+- **PsyNetSkills:** Update `prepare-experiment-tunnel` guidance for audio
+  experiments to require a human-facing tunnel smoke test that verifies audible
+  playback and usable Replay/Next controls through the public URL before handing
+  off links. Confidence: high. Impact: high. Status: considering.
