@@ -61,7 +61,7 @@ async function answerRating(page, index) {
   } else {
     await page.getByText("5", { exact: true }).first().click();
   }
-  await page.locator("button.submit").first().click({ force: true });
+  await page.evaluate(() => window.onNextButton());
   await page.waitForTimeout(350);
 }
 
