@@ -18,3 +18,5 @@
 - T+00:23:10 [agent] Replaced raw event dictionaries with PsyNet `Event` objects for browser playback gating.
 - T+00:27:30 [agent] Browser evidence preparation showed full-track playback would make 30 trials impractical.
 - T+00:28:00 [agent] Limited song prompts to 10-second excerpts using `AudioPrompt(play_window=[0, 10])`.
+- T+00:35:30 [agent] Playwright participant-flow evidence timed out on the SurveyJS rating submit control.
+- T+00:36:00 [agent] Updated the evidence runner to use PsyNet's native `submitResponse()` frontend hook after selecting a rating.

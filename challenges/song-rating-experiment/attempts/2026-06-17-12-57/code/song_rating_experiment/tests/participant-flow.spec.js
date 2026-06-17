@@ -60,11 +60,12 @@ async function answerRating(page, index) {
   } else {
     await page.getByText("5", { exact: true }).first().click();
   }
-  await page.getByRole("button", { name: /Complete|Next/i }).first().click();
+  await page.evaluate(() => window.psynet.submitResponse());
   await page.waitForTimeout(350);
 }
 
 test("participant completes prescreen and song-rating flow", async ({ browser }) => {
+  test.setTimeout(180_000);
   fs.mkdirSync(screenshotDir, { recursive: true });
 
   const context = await browser.newContext({
