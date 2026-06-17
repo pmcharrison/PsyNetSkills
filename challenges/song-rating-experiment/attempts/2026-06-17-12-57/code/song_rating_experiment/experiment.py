@@ -16,6 +16,7 @@ from psynet.trial.static import StaticNode, StaticTrial, StaticTrialMaker
 
 
 N_RATING_TRIALS = 30
+SONG_EXCERPT_SECONDS = 10
 SONGS_CSV = Path("static/songs.csv")
 PRESCREEN_DIR = Path("static/prescreen")
 PRESCREEN_VOLUME = 0.22
@@ -166,9 +167,13 @@ class SongRatingTrial(StaticTrial):
                 self.assets["song"],
                 tags.div(
                     tags.p(f"Song {self.position + 1} of {N_RATING_TRIALS}"),
-                    tags.p("Listen to the excerpt, then rate how much you like it."),
+                    tags.p(
+                        f"Listen to the {SONG_EXCERPT_SECONDS}-second excerpt, "
+                        "then rate how much you like it."
+                    ),
                     tags.small(f"Track ID: {track_id}"),
                 ),
+                play_window=[0, SONG_EXCERPT_SECONDS],
                 controls={"Play from start": "Replay"},
             ),
             RatingControl(

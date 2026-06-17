@@ -16,3 +16,5 @@
 - T+00:18:20 [agent] Added PsyNet deployment artifacts to `.gitignore` and kept `.python-version` for reproducibility.
 - T+00:22:30 [agent] `psynet test local` passed, then browser exploration found audio-response buttons stayed disabled.
 - T+00:23:10 [agent] Replaced raw event dictionaries with PsyNet `Event` objects for browser playback gating.
+- T+00:27:30 [agent] Browser evidence preparation showed full-track playback would make 30 trials impractical.
+- T+00:28:00 [agent] Limited song prompts to 10-second excerpts using `AudioPrompt(play_window=[0, 10])`.
