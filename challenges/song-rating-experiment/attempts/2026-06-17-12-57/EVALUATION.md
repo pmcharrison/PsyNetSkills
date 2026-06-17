@@ -1,5 +1,5 @@
 ---
-score:
+score: 1
 ---
 
 # Evaluation
@@ -8,7 +8,7 @@ score:
 
 The human evaluator reported that the live experiment tunnel was not usable for
 participant review: they could not hear the songs, could not play Replay, and
-could not click Next. No numeric score was provided.
+could not click Next. The human evaluator assigned a score of 1/10.
 
 ## Strengths
 
