@@ -30,3 +30,19 @@
 #psynet-finish-exhausted-board {
   margin-left: 8px;
 }
+
+#task {
+  height: auto !important;
+  min-height: 640px;
+}
+
+#task-content {
+  height: auto !important;
+  min-height: 500px;
+}
+
+#task-strategy {
+  line-height: 1.35;
+  margin-bottom: 24px;
+  overflow: visible;
+}
