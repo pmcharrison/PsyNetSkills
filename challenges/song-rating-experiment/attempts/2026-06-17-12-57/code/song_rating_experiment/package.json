@@ -1,0 +1,15 @@
+{
+  "name": "song_rating_experiment",
+  "version": "1.0.0",
+  "description": "This PsyNet experiment reads `static/songs.csv`, runs a short audio-hearing prescreen, and then asks each participant to complete 30 song liking ratings on a 1-9 scale.",
+  "main": "index.js",
+  "scripts": {
+    "participant-flow": "playwright test tests/participant-flow.spec.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@playwright/test": "^1.61.0"
+  }
+}
