@@ -12,3 +12,5 @@
 - T+00:12:30 [agent] Implemented initial PsyNet experiment with audio prescreen, 30 S3 song rating trials, and bot checks.
 - T+00:15:00 [agent] `psynet test local` failed before launch because `constraints.txt` was missing.
 - T+00:15:30 [agent] Generated `constraints.txt` with `dallinger constraints generate`.
+- T+00:18:00 [agent] `psynet test local` failed before launch because generated deployment artifacts were not ignored.
+- T+00:18:20 [agent] Added PsyNet deployment artifacts to `.gitignore` and kept `.python-version` for reproducibility.

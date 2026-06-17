@@ -2,7 +2,9 @@ __pycache__/
 *.py[cod]
 .dallinger
 .pytest_cache/
+.deploy/
 data/
 local/
 logs/
 *.sqlite
+source_code.zip
