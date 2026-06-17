@@ -20,3 +20,5 @@
 - T+00:28:00 [agent] Limited song prompts to 10-second excerpts using `AudioPrompt(play_window=[0, 10])`.
 - T+00:35:30 [agent] Playwright participant-flow evidence timed out on the SurveyJS rating submit control.
 - T+00:36:00 [agent] Updated the evidence runner to use PsyNet's native `submitResponse()` frontend hook after selecting a rating.
+- T+00:45:00 [agent] Final bot test, simulation, analysis notebook, performance test, Playwright evidence, and monitor snapshot completed.
+- T+01:04:04 [agent-stop] Implementation and first-pass evidence collection complete.

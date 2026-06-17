@@ -1,0 +1,8 @@
+{
+  "captions": {
+    "01-welcome.png": "Welcome page describing the audio check and 1-9 song-rating task.",
+    "02-audio-prescreen.png": "Audio-hearing prescreen after playback has enabled the answer buttons.",
+    "03-song-rating.png": "First S3-backed 10-second song excerpt ready for a 1-9 liking rating.",
+    "04-completion.png": "Participant completion page after the scripted 30-trial flow."
+  }
+}

@@ -18,9 +18,10 @@ Summarize the human evaluator's overall judgment.
 
 ## Criteria
 
-If `CRITERIA.md` is present, ask the evaluator about each criterion and record the result here after implementation and evidence collection.
+Copied criteria for evaluator review:
 
-- [ ]
+- [ ] The completed attempt includes an audio-hearing prescreen whose audio level
+      is comparable to the level of the songs, if possible.
 
 ## Notes
 

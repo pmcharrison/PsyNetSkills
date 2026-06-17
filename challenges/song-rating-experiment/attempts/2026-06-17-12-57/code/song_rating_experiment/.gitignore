@@ -1,10 +1,14 @@
 __pycache__/
 *.py[cod]
+node_modules/
 .dallinger
 .pytest_cache/
+test-results/
+playwright-report/
 .deploy/
 data/
 local/
 logs/
 *.sqlite
 source_code.zip
+static/assets/
