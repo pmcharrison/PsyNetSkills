@@ -122,22 +122,20 @@ def item_points(name: str) -> int:
     return 10 ** parse_item(name)["level"]
 
 
-def make_layout(config: Dict[str, Any], chain_id: int, condition: str) -> List[Dict[str, Any]]:
-    """Generate a reproducible layout with a few scripted easy fusions nearby."""
-    seed = f"{config['random_seed']}:{chain_id}:{condition}"
+def make_layout(
+    config: Dict[str, Any],
+    chain_id: int,
+    condition: str,
+    participant_key: str | int | None = None,
+) -> List[Dict[str, Any]]:
+    """Generate a reproducible per-participant random layout."""
+    seed = f"{config['random_seed']}:{chain_id}:{condition}:{participant_key or 'node'}"
     rng = random.Random(seed)
-    positions = {
-        "triangle_plain_0": (7, 7),
-        "triangle_checkered_0": (8, 7),
-        "square_plain_0": (7, 8),
-        "square_checkered_0": (8, 8),
-    }
-    used = set(positions.values())
+    positions = {}
+    used = set()
     for shape in SHAPES:
         for texture in TEXTURES:
             name = item_name(shape, texture, 0)
-            if name in positions:
-                continue
             while True:
                 pos = (rng.randrange(config["grid_size"]), rng.randrange(config["grid_size"]))
                 if pos not in used and pos != (PLAYER_START["x"], PLAYER_START["y"]):
@@ -157,7 +155,13 @@ def make_layout(config: Dict[str, Any], chain_id: int, condition: str) -> List[D
     ]
 
 
-def make_game_config(config: Dict[str, Any], chain_id: int, condition: str) -> Dict[str, Any]:
+def make_game_config(
+    config: Dict[str, Any],
+    chain_id: int,
+    condition: str,
+    participant_key: str | int | None = None,
+) -> Dict[str, Any]:
+    layout_seed = f"{config['random_seed']}:{chain_id}:{condition}:{participant_key or 'node'}"
     return {
         "grid_size": config["grid_size"],
         "action_budget": config["action_budget"],
@@ -168,8 +172,9 @@ def make_game_config(config: Dict[str, Any], chain_id: int, condition: str) -> D
         "textures": TEXTURES,
         "max_level": MAX_LEVEL,
         "condition_rule": condition,
-        "items": make_layout(config, chain_id, condition),
-        "layout_seed": f"{config['random_seed']}:{chain_id}:{condition}",
+        "items": make_layout(config, chain_id, condition, participant_key),
+        "layout_seed": layout_seed,
+        "layout_scope": "participant" if participant_key is not None else "node",
     }
 
 
@@ -409,22 +414,37 @@ def scripted_game_answer(definition: Dict[str, Any], participant_id: int | None 
             carrying = None
             log_event("drop")
 
-    # Script: fuse/harvest triangles, drop/re-pick square, fuse/harvest squares.
-    space()
-    move(1, 0, "moveRight")
-    space()
-    move(-1, 0, "moveLeft")
-    space()
-    move(0, 1, "moveDown")
-    space()
-    move(0, -1, "moveUp")
-    drop()
-    space()
-    move(0, 1, "moveDown")
-    move(1, 0, "moveRight")
-    space()
-    move(-1, 0, "moveLeft")
-    space()
+    def move_to(x: int, y: int):
+        while position["x"] < x:
+            move(1, 0, "moveRight")
+        while position["x"] > x:
+            move(-1, 0, "moveLeft")
+        while position["y"] < y:
+            move(0, 1, "moveDown")
+        while position["y"] > y:
+            move(0, -1, "moveUp")
+
+    def successful_pair_names():
+        base_names = [
+            name for name, item in items.items()
+            if item.get("on_grid", True) and item["item_level"] == 0
+        ]
+        for held in base_names:
+            for target in base_names:
+                if held != target and transition_succeeds(condition, held, target):
+                    return held, target
+        return base_names[:2]
+
+    for _ in range(2):
+        held_name, target_name = successful_pair_names()
+        held_item = items[held_name]
+        target_item = items[target_name]
+        move_to(held_item["x"], held_item["y"])
+        space()
+        move_to(target_item["x"], target_item["y"])
+        space()
+        if carrying:
+            space()
 
     generation = definition["generation_index"]
     incoming = definition["incoming_message_set"]
@@ -550,6 +570,12 @@ class DiscoveryTrial(ChainTrial):
         definition = super().make_definition(experiment, participant)
         definition["trial_index_within_generation"] = int(self.node.n_viable_trials)
         definition["participant_id"] = participant.id
+        definition["game_config"] = make_game_config(
+            definition["run_parameters"],
+            definition["chain_id"],
+            definition["condition"],
+            participant_key=f"p{participant.id}-g{definition['generation_index']}",
+        )
         return definition
 
     def show_trial(self, experiment, participant):

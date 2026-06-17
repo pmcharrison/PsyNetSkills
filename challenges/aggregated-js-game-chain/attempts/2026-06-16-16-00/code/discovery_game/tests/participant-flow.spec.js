@@ -33,16 +33,41 @@ async function reachDiscoveryInstruction(page) {
 
 async function performScriptedGame(page) {
   await page.locator('#task-grid').click();
-  const keys = ['Space', 'ArrowRight', 'Space', 'ArrowLeft', 'Space', 'ArrowDown', 'Space', 'ArrowUp', 'd', 'Space', 'ArrowDown', 'ArrowRight', 'Space', 'ArrowLeft', 'Space'];
-  for (const key of keys) {
-    if (key === 'Space') {
-      await page.evaluate(() => handleSpacePress());
-    } else {
-      await page.keyboard.press(key);
-    }
+  async function moveTo(x, y) {
+    let position = await page.evaluate(() => ({ ...playerPosition }));
+    while (position.x < x) { await page.keyboard.press('ArrowRight'); await page.waitForTimeout(120); position = await page.evaluate(() => ({ ...playerPosition })); }
+    while (position.x > x) { await page.keyboard.press('ArrowLeft'); await page.waitForTimeout(120); position = await page.evaluate(() => ({ ...playerPosition })); }
+    while (position.y < y) { await page.keyboard.press('ArrowDown'); await page.waitForTimeout(120); position = await page.evaluate(() => ({ ...playerPosition })); }
+    while (position.y > y) { await page.keyboard.press('ArrowUp'); await page.waitForTimeout(120); position = await page.evaluate(() => ({ ...playerPosition })); }
+  }
+  async function nextPair() {
+    return page.evaluate(() => {
+      const visible = items.filter((item) => {
+        const cell = document.querySelector(`.grid-cell[data-x="${item.x}"][data-y="${item.y}"]`);
+        return cell && cell.querySelector(`#${item.item_name}`);
+      });
+      for (const held of visible) {
+        for (const target of visible) {
+          if (held.item_name !== target.item_name && isSameShape([held.item_name, target.item_name])) {
+            return { held, target };
+          }
+        }
+      }
+      return { held: visible[0], target: visible[1] };
+    });
+  }
+  for (let i = 0; i < 2; i += 1) {
+    const pair = await nextPair();
+    await moveTo(pair.held.x, pair.held.y);
+    await page.evaluate(() => handleSpacePress());
+    await page.waitForTimeout(220);
+    await moveTo(pair.target.x, pair.target.y);
+    await page.evaluate(() => handleSpacePress());
+    await page.waitForTimeout(220);
+    await page.evaluate(() => handleSpacePress());
     await page.waitForTimeout(220);
   }
-  await expect(page.locator('#task-info-points')).toHaveText('20');
+  await expect(page.locator('#task-info-points')).not.toHaveText('0');
   await page.evaluate(() => window.discoveryPsyNetAdapter.finishGameForReview());
   await expect(page.locator('#task-composer')).toBeVisible({ timeout: 5000 });
 }

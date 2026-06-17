@@ -138,6 +138,41 @@
     };
   }
 
+  function updateActionProgressBar() {
+    const bar = document.getElementById('action-progress-bar');
+    if (!bar || typeof ACTIONS === 'undefined' || typeof MAX_ACTIONS === 'undefined') return;
+    const pct = Math.max(0, Math.min(100, (ACTIONS / MAX_ACTIONS) * 100));
+    bar.style.width = `${pct}%`;
+    if (pct <= 20) {
+      bar.style.background = '#c0392b';
+    } else if (pct <= 50) {
+      bar.style.background = '#f6c445';
+    } else {
+      bar.style.background = 'linear-gradient(90deg, #4caf50, #f6c445)';
+    }
+  }
+
+  function addActionProgressBar() {
+    const taskInfo = document.getElementById('task-info');
+    if (!taskInfo || document.getElementById('action-progress-wrapper')) return;
+    const wrapper = document.createElement('div');
+    wrapper.id = 'action-progress-wrapper';
+    wrapper.setAttribute('aria-label', 'Actions remaining');
+    const bar = document.createElement('div');
+    bar.id = 'action-progress-bar';
+    wrapper.appendChild(bar);
+    taskInfo.insertBefore(wrapper, taskInfo.children[1] || null);
+    updateActionProgressBar();
+  }
+
+  if (typeof updateAction === 'function') {
+    const upstreamUpdateAction = updateAction;
+    updateAction = function (data) {
+      upstreamUpdateAction(data);
+      updateActionProgressBar();
+    };
+  }
+
   function taskComposerIsVisible() {
     const composer = document.getElementById('task-composer');
     return composer && composer.style.display !== 'none';
@@ -207,6 +242,7 @@
     if (typeof allowRegeneration !== 'undefined') {
       allowRegeneration = Boolean(discoveryGameConfig.allow_regeneration);
     }
+    addActionProgressBar();
     addBoardExhaustionFinishButton();
   }
 
