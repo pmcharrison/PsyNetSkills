@@ -38,3 +38,8 @@
 - T+03:38:30 [agent-start] Resumed implementation to fix the exhausted-board end condition.
 - T+03:41:00 [agent] Added an adapter-level board-exhaustion finish check and a finish button that appears when no crystals remain and the participant is not carrying an item.
 - T+03:45:00 [agent] Re-ran `python experiment.py`, `psynet test local`, and Playwright participant flow including an explicit exhausted-board regression.
+- T+21:37:00 [manual] User requested participant-randomized item locations, darker grid lines, removal of source-note text, action-progress bar, export-analysis CSV script, and notebook demonstration.
+- T+21:37:30 [agent-start] Resumed implementation to apply the requested feedback.
+- T+21:47:00 [agent] Added participant-specific layout seeds, CSS grid/progress changes, and export/analysis tooling.
+- T+22:02:00 [agent] Re-ran `python experiment.py`, `psynet test local`, `psynet simulate`, derived CSV generation, analysis notebooks, performance test, and Playwright participant evidence.
+- T+22:12:00 [agent] Video review confirmed upstream UI, removed attribution text, dark grid lines, changing action progress bar, and unclipped strategy summary.

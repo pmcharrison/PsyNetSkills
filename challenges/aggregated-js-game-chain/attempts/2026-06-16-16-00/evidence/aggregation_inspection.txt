@@ -1,11 +1,11 @@
 Simulated export inspection
 Trials: 6
-trial_id=1 participant_id=1 generation=0 chain=0 condition=easy points=20 incoming_source=None incoming_messages=0 outgoing_how=Player 1 scored 20 points by fusing same-shape crystals and harvesting the fused result.
-trial_id=2 participant_id=2 generation=0 chain=0 condition=easy points=20 incoming_source=None incoming_messages=0 outgoing_how=Player 2 scored 20 points by fusing same-shape crystals and harvesting the fused result.
-trial_id=3 participant_id=3 generation=1 chain=0 condition=easy points=20 incoming_source=0 incoming_messages=2 outgoing_how=Player 3 scored 20 points by fusing same-shape crystals and harvesting the fused result.
-trial_id=4 participant_id=4 generation=1 chain=0 condition=easy points=20 incoming_source=0 incoming_messages=2 outgoing_how=Player 4 scored 20 points by fusing same-shape crystals and harvesting the fused result.
-trial_id=5 participant_id=5 generation=2 chain=0 condition=easy points=20 incoming_source=1 incoming_messages=2 outgoing_how=Player 5 scored 20 points by fusing same-shape crystals and harvesting the fused result.
-trial_id=6 participant_id=6 generation=2 chain=0 condition=easy points=20 incoming_source=1 incoming_messages=2 outgoing_how=Player 6 scored 20 points by fusing same-shape crystals and harvesting the fused result.
+trial_id=1 participant_id=1 generation=0 chain=0 condition=easy points=20 incoming_source=None incoming_messages=0 layout_seed=4242:0:easy:p1-g0 outgoing_how=Player 1 scored 20 points by fusing same-shape crystals and harvesting the fused result.
+trial_id=2 participant_id=2 generation=0 chain=0 condition=easy points=20 incoming_source=None incoming_messages=0 layout_seed=4242:0:easy:p2-g0 outgoing_how=Player 2 scored 20 points by fusing same-shape crystals and harvesting the fused result.
+trial_id=3 participant_id=3 generation=1 chain=0 condition=easy points=20 incoming_source=0 incoming_messages=2 layout_seed=4242:0:easy:p3-g1 outgoing_how=Player 3 scored 20 points by fusing same-shape crystals and harvesting the fused result.
+trial_id=4 participant_id=4 generation=1 chain=0 condition=easy points=20 incoming_source=0 incoming_messages=2 layout_seed=4242:0:easy:p4-g1 outgoing_how=Player 4 scored 20 points by fusing same-shape crystals and harvesting the fused result.
+trial_id=5 participant_id=5 generation=2 chain=0 condition=easy points=20 incoming_source=1 incoming_messages=2 layout_seed=4242:0:easy:p5-g2 outgoing_how=Player 5 scored 20 points by fusing same-shape crystals and harvesting the fused result.
+trial_id=6 participant_id=6 generation=2 chain=0 condition=easy points=20 incoming_source=1 incoming_messages=2 layout_seed=4242:0:easy:p6-g2 outgoing_how=Player 6 scored 20 points by fusing same-shape crystals and harvesting the fused result.
 
 generation 0: 2 trial(s)
 generation 1: 2 trial(s)

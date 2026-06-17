@@ -14,6 +14,8 @@ The browser game is implemented as a custom PsyNet page that vendors the upstrea
 
 The compact and full parameter sets live in `RUN_CONFIGS` in `experiment.py`. To switch from the compact evidence run to the full `desc.md` design, change `ACTIVE_CONFIG_NAME` from `"compact"` to `"full"`. No architecture changes are needed; the start nodes, chain count, conditions, participants per generation, and aggregation settings are all derived from that object.
 
+Initial item locations are generated separately for each participant using a reproducible seed that includes the participant id and generation. This preserves randomized participant-specific boards while keeping the exported `layout_seed` sufficient for reconstruction.
+
 ## Validation and evidence
 
 - `python experiment.py` imports successfully.
@@ -24,6 +26,7 @@ The compact and full parameter sets live in `RUN_CONFIGS` in `experiment.py`. To
 - `evidence/performance.json` records a 40-bot, five-minute local performance test with zero bot errors and zero request errors.
 - `evidence/participant.mp4` and `evidence/screenshots/` document the participant-facing flow, including aggregated messages, notebook saving, strategy summary, game interaction, and outgoing message composition.
 - The Playwright participant-flow test also exercises the early board-exhaustion case and verifies that participants can proceed to outgoing message composition even when crystals run out before the action budget reaches zero.
+- `scripts/export_and_analyze.py` can run `psynet export local` or analyze an existing export, then writes `subject_data.csv`, `action_data.csv`, `event_data.csv`, and `notebook_data.csv` with sanitized free-text fields. `evidence/analyses/export_analysis_demo.ipynb` demonstrates using the script and reading the four CSV outputs.
 - `evidence/monitor.html` stores a local dashboard snapshot.
 
 ## Limitations
