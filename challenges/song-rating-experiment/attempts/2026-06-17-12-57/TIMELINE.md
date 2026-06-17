@@ -14,3 +14,5 @@
 - T+00:15:30 [agent] Generated `constraints.txt` with `dallinger constraints generate`.
 - T+00:18:00 [agent] `psynet test local` failed before launch because generated deployment artifacts were not ignored.
 - T+00:18:20 [agent] Added PsyNet deployment artifacts to `.gitignore` and kept `.python-version` for reproducibility.
+- T+00:22:30 [agent] `psynet test local` passed, then browser exploration found audio-response buttons stayed disabled.
+- T+00:23:10 [agent] Replaced raw event dictionaries with PsyNet `Event` objects for browser playback gating.

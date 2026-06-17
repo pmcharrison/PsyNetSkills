@@ -11,7 +11,7 @@ from psynet.asset import ExternalAsset, asset
 from psynet.modular_page import AudioPrompt, ModularPage, PushButtonControl, RatingControl
 from psynet.page import InfoPage
 from psynet.participant import Participant
-from psynet.timeline import CodeBlock, Timeline
+from psynet.timeline import CodeBlock, Event, Timeline
 from psynet.trial.static import StaticNode, StaticTrial, StaticTrialMaker
 
 
@@ -133,7 +133,7 @@ class AudioPrescreenTrial(StaticTrial):
                 arrange_vertically=False,
                 bot_response=self.definition["answer"],
             ),
-            events={"submitEnable": {"is_triggered_by": "promptEnd"}},
+            events={"submitEnable": Event(is_triggered_by="promptEnd")},
             time_estimate=self.time_estimate,
         )
 
@@ -177,7 +177,7 @@ class SongRatingTrial(StaticTrial):
                 max_description="9 = Like it very much",
                 bot_response=lambda: 5,
             ),
-            events={"submitEnable": {"is_triggered_by": "promptEnd"}},
+            events={"submitEnable": Event(is_triggered_by="promptEnd")},
             time_estimate=self.time_estimate,
         )
 
