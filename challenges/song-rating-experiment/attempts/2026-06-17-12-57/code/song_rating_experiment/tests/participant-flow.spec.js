@@ -46,6 +46,7 @@ async function answerRating(page, index) {
   await expect(page.getByText(/Listen to the 10-second excerpt/)).toBeVisible();
   if (index === 0) {
     await page.waitForTimeout(11_000);
+    await advancePromptIfNeeded(page);
     await page.screenshot({
       path: path.join(screenshotDir, "03-song-rating.png"),
       fullPage: true,
@@ -60,7 +61,7 @@ async function answerRating(page, index) {
   } else {
     await page.getByText("5", { exact: true }).first().click();
   }
-  await page.evaluate(() => window.psynet.submitResponse(() => {}));
+  await page.locator("button.submit").first().click({ force: true });
   await page.waitForTimeout(350);
 }
 
