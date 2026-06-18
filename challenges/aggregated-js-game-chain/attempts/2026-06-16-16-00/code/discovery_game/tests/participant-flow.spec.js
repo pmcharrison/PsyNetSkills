@@ -68,6 +68,8 @@ async function performScriptedGame(page) {
     await page.waitForTimeout(220);
   }
   await expect(page.locator('#task-info-points')).not.toHaveText('0');
+  await expect(page.locator('#task-info-actions')).not.toHaveText('40');
+  await expect(page.locator('#action-progress-bar')).not.toHaveCSS('width', '0px');
   await page.evaluate(() => window.discoveryPsyNetAdapter.finishGameForReview());
   await expect(page.locator('#task-composer')).toBeVisible({ timeout: 5000 });
 }
@@ -152,6 +154,7 @@ test('participant sees aggregated messages and plays upstream discovery game', a
   await page.waitForTimeout(1200);
   await page.locator('#reflect-btn').click();
   await expect(page.locator('#task-grid')).toBeVisible({ timeout: 10000 });
+  await expect(page.locator('#task-strategy-text')).toContainText('upgraded crystals');
   await page.screenshot({ path: path.join(screenshotDir, '04-game-grid.png'), fullPage: true });
   await page.waitForTimeout(1600);
 

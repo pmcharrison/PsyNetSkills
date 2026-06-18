@@ -6,6 +6,7 @@
 (function () {
   const definition = window.discoveryTrialDefinition;
   const originalHideAndShowNext = window.hideAndShowNext;
+  let adapterSpentActions = 0;
 
   function sanitizeForPsyNet(text) {
     return String(text || '').replace(/["'`\\@#$%^*]/g, '').replace(/\s+/g, ' ').trim();
@@ -141,8 +142,13 @@
   function updateActionProgressBar() {
     const bar = document.getElementById('action-progress-bar');
     if (!bar || typeof ACTIONS === 'undefined' || typeof MAX_ACTIONS === 'undefined') return;
-    const spentActions = Object.keys(currentActionData()).length;
+    const spentActions = Math.max(
+      Object.keys(currentActionData()).length,
+      adapterSpentActions,
+      MAX_ACTIONS - ACTIONS
+    );
     const remainingActions = Math.max(0, MAX_ACTIONS - spentActions);
+    adapterSpentActions = spentActions;
     ACTIONS = remainingActions;
     const actionsText = document.getElementById('task-info-actions');
     if (actionsText) actionsText.innerHTML = remainingActions;
@@ -199,7 +205,18 @@
   if (typeof handleSpacePress === 'function') {
     const upstreamHandleSpacePress = handleSpacePress;
     handleSpacePress = function () {
+      const beforePoints = typeof POINTS === 'undefined' ? 0 : POINTS;
+      const beforeTransitions = typeof transitions === 'undefined' ? 0 : transitions.length;
       upstreamHandleSpacePress();
+      const afterPoints = typeof POINTS === 'undefined' ? beforePoints : POINTS;
+      const afterTransitions = typeof transitions === 'undefined' ? beforeTransitions : transitions.length;
+      if (
+        Object.keys(currentActionData()).length <= adapterSpentActions &&
+        (afterPoints !== beforePoints || afterTransitions !== beforeTransitions)
+      ) {
+        adapterSpentActions += 1;
+      }
+      updateActionProgressBar();
       finishIfBoardIsExhausted();
     };
   }
@@ -209,6 +226,26 @@
     handleDropPress = function () {
       upstreamHandleDropPress();
       finishIfBoardIsExhausted();
+    };
+  }
+
+  function normalizeStrategySummaryLayout() {
+    const strategy = document.getElementById('task-strategy');
+    const strategyText = document.getElementById('task-strategy-text');
+    if (!strategy || !strategyText) return;
+    strategy.style.height = 'auto';
+    strategy.style.minHeight = '46px';
+    strategy.style.overflow = 'visible';
+    strategyText.style.display = 'inline';
+    strategyText.style.whiteSpace = 'normal';
+  }
+
+  if (typeof handleReflectDone === 'function') {
+    const upstreamHandleReflectDone = handleReflectDone;
+    handleReflectDone = function () {
+      upstreamHandleReflectDone();
+      setTimeout(normalizeStrategySummaryLayout, 0);
+      setTimeout(normalizeStrategySummaryLayout, 100);
     };
   }
 
@@ -248,6 +285,7 @@
     if (typeof allowRegeneration !== 'undefined') {
       allowRegeneration = Boolean(discoveryGameConfig.allow_regeneration);
     }
+    normalizeStrategySummaryLayout();
     addActionProgressBar();
     addBoardExhaustionFinishButton();
   }
