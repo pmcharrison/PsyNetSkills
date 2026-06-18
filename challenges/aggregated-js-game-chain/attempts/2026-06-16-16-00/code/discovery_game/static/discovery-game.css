@@ -2,12 +2,21 @@
   background-color: transparent;
   gap: 0;
   width: max-content;
+  grid-template-columns: repeat(15, 28px) !important;
+  grid-template-rows: repeat(15, 28px) !important;
 }
 
 .grid-cell {
+  width: 28px;
+  height: 28px;
   background-color: #5A5A5A;
   border: 1px solid #4A4A4A;
   box-sizing: border-box;
+}
+
+.item-image {
+  width: 26px !important;
+  height: 26px !important;
 }
 
 #timeline-progress-bar,
@@ -42,16 +51,28 @@
 
 #task {
   height: auto !important;
-  min-height: 640px;
+  min-height: 0;
+}
+
+#task-info {
+  height: auto !important;
+  margin-top: 4px !important;
+  margin-bottom: 8px !important;
+}
+
+#task-info p {
+  line-height: 1.05;
 }
 
 #task-content {
   height: auto !important;
-  min-height: 500px;
+  min-height: 0;
 }
 
 #task-strategy {
   line-height: 1.35;
-  margin-bottom: 24px;
+  margin-top: 8px !important;
+  margin-bottom: 12px;
+  max-width: 430px;
   overflow: visible;
 }
