@@ -1,0 +1,17 @@
+============================= test session starts ==============================
+platform linux -- Python 3.13.13, pytest-9.0.3, pluggy-1.6.0
+rootdir: /workspace/challenges/primary-color-rating/attempts/2026-06-09-19-49/code/primary_color_rating
+configfile: pytest.ini
+plugins: anyio-4.13.0, dallinger-12.2.0, Faker-40.15.0, psynet-13.3.0a0, dependency-0.6.0, mock-3.14.1, test-groups-1.2.1, timeout-2.4.0
+collected 1 item
+
+test.py::test_experiment[/workspace/challenges/primary-color-rating/attempts/2026-06-09-19-49/code/primary_color_rating] 
+-------------------------------- live log call ---------------------------------
+INFO     psynet:experiment.py:1393 Testing experiment with 1 serial bot(s)...
+INFO     psynet:bot.py:74 Waiting for experiment launch to complete....
+INFO     psynet:bot.py:37 Initializing bot with worker ID c5bc79cd-2163-40ce-9386-6362e5f318cb.
+INFO     psynet:participant.py:1125 ParticipantDriver 1 has finished the experiment (took 7 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 1.158 seconds).
+INFO     psynet:experiment.py:1369 Mean HTTP request duration: 0.076 seconds
+PASSED                                                                   [100%]
+
+============================== 1 passed in 11.99s ==============================
