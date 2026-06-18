@@ -141,7 +141,12 @@
   function updateActionProgressBar() {
     const bar = document.getElementById('action-progress-bar');
     if (!bar || typeof ACTIONS === 'undefined' || typeof MAX_ACTIONS === 'undefined') return;
-    const pct = Math.max(0, Math.min(100, (ACTIONS / MAX_ACTIONS) * 100));
+    const spentActions = Object.keys(currentActionData()).length;
+    const remainingActions = Math.max(0, MAX_ACTIONS - spentActions);
+    ACTIONS = remainingActions;
+    const actionsText = document.getElementById('task-info-actions');
+    if (actionsText) actionsText.innerHTML = remainingActions;
+    const pct = Math.max(0, Math.min(100, (remainingActions / MAX_ACTIONS) * 100));
     bar.style.width = `${pct}%`;
     if (pct <= 20) {
       bar.style.background = '#c0392b';
@@ -163,6 +168,7 @@
     wrapper.appendChild(bar);
     taskInfo.insertBefore(wrapper, taskInfo.children[1] || null);
     updateActionProgressBar();
+    setInterval(updateActionProgressBar, 250);
   }
 
   if (typeof updateAction === 'function') {

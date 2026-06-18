@@ -2,21 +2,21 @@
   background-color: transparent;
   gap: 0;
   width: max-content;
-  grid-template-columns: repeat(15, 28px) !important;
-  grid-template-rows: repeat(15, 28px) !important;
+  grid-template-columns: repeat(15, 24px) !important;
+  grid-template-rows: repeat(15, 24px) !important;
 }
 
 .grid-cell {
-  width: 28px;
-  height: 28px;
+  width: 24px;
+  height: 24px;
   background-color: #5A5A5A;
   border: 1px solid #4A4A4A;
   box-sizing: border-box;
 }
 
 .item-image {
-  width: 26px !important;
-  height: 26px !important;
+  width: 22px !important;
+  height: 22px !important;
 }
 
 #timeline-progress-bar,
@@ -56,8 +56,9 @@
 
 #task-info {
   height: auto !important;
-  margin-top: 4px !important;
-  margin-bottom: 8px !important;
+  margin-top: 0 !important;
+  margin-bottom: 4px !important;
+  font-size: 15px;
 }
 
 #task-info p {
@@ -73,6 +74,6 @@
   line-height: 1.35;
   margin-top: 8px !important;
   margin-bottom: 12px;
-  max-width: 430px;
+  max-width: 380px;
   overflow: visible;
 }
