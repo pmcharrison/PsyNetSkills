@@ -73,7 +73,7 @@
 
     .pool-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
         gap: 15px;
         width: 100%;
         padding: 10px;
@@ -91,6 +91,8 @@
         cursor: pointer;
         transition: all 0.2s ease;
         position: relative;
+        box-sizing: border-box;
+        min-width: 0;
     }
 
     .grid-item:hover {
@@ -188,12 +190,13 @@
     }
 
     .waveform {
-        width: 140px;
+        width: min(140px, 100%);
         height: 60px;
         background: #fff;
         border: 1px solid #dee2e6;
         border-radius: 6px;
         padding: 2px;
+        box-sizing: border-box;
     }
 
     .waveform-bar {
