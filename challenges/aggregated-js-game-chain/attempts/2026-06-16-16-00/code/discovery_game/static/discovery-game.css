@@ -71,9 +71,18 @@
 }
 
 #task-strategy {
+  height: auto !important;
+  min-height: 46px;
   line-height: 1.35;
   margin-top: 8px !important;
   margin-bottom: 12px;
   max-width: 380px;
   overflow: visible;
+  white-space: normal;
+}
+
+#task-strategy-text {
+  display: inline;
+  overflow-wrap: anywhere;
+  white-space: normal;
 }
