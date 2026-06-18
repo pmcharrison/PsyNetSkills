@@ -152,6 +152,10 @@
     ACTIONS = remainingActions;
     const actionsText = document.getElementById('task-info-actions');
     if (actionsText) actionsText.innerHTML = remainingActions;
+    const progressLabel = document.getElementById('action-progress-label');
+    if (progressLabel) {
+      progressLabel.textContent = `Actions remaining: ${remainingActions} / ${MAX_ACTIONS}`;
+    }
     const pct = Math.max(0, Math.min(100, (remainingActions / MAX_ACTIONS) * 100));
     bar.style.width = `${pct}%`;
     if (pct <= 20) {
@@ -166,6 +170,9 @@
   function addActionProgressBar() {
     const taskInfo = document.getElementById('task-info');
     if (!taskInfo || document.getElementById('action-progress-wrapper')) return;
+    const label = document.createElement('div');
+    label.id = 'action-progress-label';
+    taskInfo.insertBefore(label, taskInfo.children[1] || null);
     const wrapper = document.createElement('div');
     wrapper.id = 'action-progress-wrapper';
     wrapper.setAttribute('aria-label', 'Actions remaining');
@@ -233,6 +240,10 @@
     const strategy = document.getElementById('task-strategy');
     const strategyText = document.getElementById('task-strategy-text');
     if (!strategy || !strategyText) return;
+    const content = document.getElementById('task-content');
+    if (content && strategy.parentElement !== content.parentElement) {
+      content.parentElement.insertBefore(strategy, content);
+    }
     strategy.style.height = 'auto';
     strategy.style.minHeight = '46px';
     strategy.style.overflow = 'visible';

@@ -69,6 +69,7 @@ async function performScriptedGame(page) {
   }
   await expect(page.locator('#task-info-points')).not.toHaveText('0');
   await expect(page.locator('#task-info-actions')).not.toHaveText('40');
+  await expect(page.locator('#action-progress-label')).not.toHaveText('Actions remaining: 40 / 40');
   await expect(page.locator('#action-progress-bar')).not.toHaveCSS('width', '0px');
   await page.evaluate(() => window.discoveryPsyNetAdapter.finishGameForReview());
   await expect(page.locator('#task-composer')).toBeVisible({ timeout: 5000 });
