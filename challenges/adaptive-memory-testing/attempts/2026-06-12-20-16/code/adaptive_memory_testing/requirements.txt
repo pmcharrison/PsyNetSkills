@@ -1,0 +1,5 @@
+psynet@git+https://gitlab.com/PsyNetDev/PsyNet@d39dab1133b41d8414cf74b91ca153ab796db5e8#egg=psynet
+numpy
+scipy
+pandas
+matplotlib
