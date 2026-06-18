@@ -43,3 +43,7 @@
 - T+21:47:00 [agent] Added participant-specific layout seeds, CSS grid/progress changes, and export/analysis tooling.
 - T+22:02:00 [agent] Re-ran `python experiment.py`, `psynet test local`, `psynet simulate`, derived CSV generation, analysis notebooks, performance test, and Playwright participant evidence.
 - T+22:12:00 [agent] Video review confirmed upstream UI, removed attribution text, dark grid lines, changing action progress bar, and unclipped strategy summary.
+- T+24:02:00 [manual] User requested removal of excess grid bars, original-style grid borders, hidden PsyNet progress bar, and a fresh three-generation simulation plus analysis outputs.
+- T+24:03:00 [agent-start] Resumed implementation for final UI/export feedback.
+- T+24:25:00 [agent] Simulated three complete compact generations and reran export-derived CSV analysis plus both notebooks.
+- T+24:36:00 [agent] Iterated on the gameplay layout after video review, ending with a stable single action-progress label/bar, no PsyNet progress during gameplay, no grid overflow bars, and an immediately visible strategy summary.

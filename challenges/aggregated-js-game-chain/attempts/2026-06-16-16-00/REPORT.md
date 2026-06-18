@@ -14,7 +14,7 @@ The browser game is implemented as a custom PsyNet page that vendors the upstrea
 
 The compact and full parameter sets live in `RUN_CONFIGS` in `experiment.py`. To switch from the compact evidence run to the full `desc.md` design, change `ACTIVE_CONFIG_NAME` from `"compact"` to `"full"`. No architecture changes are needed; the start nodes, chain count, conditions, participants per generation, and aggregation settings are all derived from that object.
 
-Initial item locations are generated separately for each participant using a reproducible seed that includes the participant id and generation. This preserves randomized participant-specific boards while keeping the exported `layout_seed` sufficient for reconstruction.
+Initial item locations are generated separately for each participant using a reproducible seed that includes the participant id and generation. This preserves randomized participant-specific boards while keeping the exported `layout_seed` sufficient for reconstruction. The gameplay screen hides PsyNet's top progress bar, shows a task-specific actions-left progress bar with score, uses compact bordered grid cells, and keeps the strategy summary visible above the grid.
 
 ## Validation and evidence
 
