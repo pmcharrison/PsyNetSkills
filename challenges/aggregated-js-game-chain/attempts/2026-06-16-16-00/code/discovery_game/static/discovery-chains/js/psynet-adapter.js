@@ -8,6 +8,22 @@
   const originalHideAndShowNext = window.hideAndShowNext;
   let adapterSpentActions = 0;
 
+  const originalScrollIntoView = Element.prototype.scrollIntoView;
+  Element.prototype.scrollIntoView = function (...args) {
+    if (
+      this.closest &&
+      (
+        this.closest('#task-recipe-table') ||
+        this.closest('#task-reward-table') ||
+        this.id === 'task' ||
+        this.id === 'task-grid'
+      )
+    ) {
+      return;
+    }
+    return originalScrollIntoView.apply(this, args);
+  };
+
   function sanitizeForPsyNet(text) {
     return String(text || '').replace(/["'`\\@#$%^*]/g, '').replace(/\s+/g, ' ').trim();
   }
