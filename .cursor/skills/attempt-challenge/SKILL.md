@@ -29,6 +29,8 @@ challenge before starting a fresh attempt.
   international, or compares cultures/regions/language groups, read and apply
   `prepare-for-translation/SKILL.md` before implementing participant-facing
   text. That skill owns translation-readiness requirements.
+- For deployment, export, teardown, or operations-plan challenges, also read
+  `psynet-deployment-ops/SKILL.md` before planning evidence.
 
 ## Preview links
 
@@ -164,6 +166,10 @@ checks, follow `psynet-experiment-implementation/references/validation.md`.
 
 For external-service requirements and blocked checks, follow the evidence policy
 in `references/attempt-artifacts.md`. Do not imply a skipped check passed.
+
+For deployment, export, teardown, or operations-plan challenges, follow
+`psynet-deployment-ops/SKILL.md` for evidence that separates validation commands
+from prohibited live operations.
 
 ## Credential policy
 

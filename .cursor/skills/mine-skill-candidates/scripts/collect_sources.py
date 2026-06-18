@@ -102,11 +102,11 @@ def action_items(data: dict[str, Any], traced_sources: set[str]) -> list[SourceI
                 title=proposal,
                 priority=action_priority(action),
                 traced=traced,
-                triage="already-traced"
+                triage="already_traced"
                 if traced
-                else "small-edit"
+                else "small_edit"
                 if small_edit
-                else "candidate-evidence",
+                else "candidate",
                 source_path=source_path,
                 summary=(
                     f"{action.get('challenge_title', '')} / "
@@ -152,7 +152,7 @@ def attempt_items(
                     title=f"{challenge.get('title', '')} / {attempt.get('name', '')}",
                     priority=priority,
                     traced=traced,
-                    triage="already-traced" if traced else "candidate-evidence",
+                    triage="already_traced" if traced else "candidate",
                     source_path=path,
                     summary=(
                         f"score={score if score is not None else 'unscored'}; "
@@ -166,9 +166,9 @@ def attempt_items(
 
 def render_markdown(items: list[SourceItem]) -> str:
     groups = {
-        "candidate-evidence": "Candidate evidence",
-        "small-edit": "Likely one-line fixes",
-        "already-traced": "Already traced",
+        "candidate": "Candidate evidence",
+        "small_edit": "Likely one-line fixes",
+        "already_traced": "Already traced",
     }
     lines = ["# Skill candidate source scan", ""]
     for triage, heading in groups.items():
@@ -220,7 +220,7 @@ def main() -> None:
                 include_solved=args.scope == "balanced",
             ),
         )
-    items.sort(key=lambda item: (item.triage != "candidate-evidence", -item.priority, item.source_id))
+    items.sort(key=lambda item: (item.triage != "candidate", -item.priority, item.source_id))
 
     if args.json:
         print(json.dumps([item.__dict__ for item in items], indent=2, sort_keys=True))

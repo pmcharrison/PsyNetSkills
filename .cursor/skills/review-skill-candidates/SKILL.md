@@ -2,7 +2,7 @@
 name: review-skill-candidates
 description: Review unreviewed skill candidates, check overlap, approve or reject them, and route approved work through existing skill-creation procedures.
 authors: [haoyu-hu]
-review_status: unreviewed
+review_status: reviewed
 ---
 
 # Review skill candidates
@@ -51,6 +51,8 @@ reject the candidate, or implement an approved change through `create-skill`.
    - `pointer`: approve only if the candidate has distinct ownership;
    - `combination`: approve a choreography skill that points to owner skills;
    - `new`: approve a new skill only if the necessity filter passes.
+   If a candidate already has `overlap_notes` or a proposed disposition, verify
+   and revise that review instead of starting from scratch.
 6. Update the candidate status:
    - `approved` when the reviewer wants the change but not immediate editing;
    - `implemented` after the corresponding skill change is committed;
@@ -61,11 +63,12 @@ reject the candidate, or implement an approved change through `create-skill`.
      `EVALUATION.md` paths to `source_ids` or `traced_sources`;
    - set `trace_status: sorted` when the source has been handled;
    - keep review status separate from functional skill execution.
-8. If implementing, invoke `create-skill/SKILL.md`. Do not bypass author
-   identification, overlap reporting, or validation.
+8. If implementing, invoke `create-skill/SKILL.md` and pass along this review's
+   approved disposition and overlap notes. Do not bypass author identification,
+   overlap reporting, or validation.
 9. For draft skills with `review_status: unreviewed`, either remove the field or
-   change it to `reviewed` after reviewer approval. This metadata must not
-   affect whether the skill can be used.
+   change it to `reviewed` after reviewer approval. Use only `unreviewed` or
+   `reviewed`; this metadata must not affect whether the skill can be used.
 
 ## Review output
 

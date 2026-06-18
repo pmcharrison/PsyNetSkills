@@ -26,8 +26,6 @@ sections:
     actions:
       - ai-human-hybrid-participants/2026-06-10-05-30/action-006
       - audio-memory-sequence/2026-06-08-09-29/action-008
-      - deployment-lifecycle-monitoring-and-export/2026-06-11-05-19/action-001
-      - deployment-lifecycle-monitoring-and-export/2026-06-11-05-19/action-002
       - deployment-log-reconstruction/2026-06-10-00-29/action-001
       - deployment-log-reconstruction/2026-06-10-00-29/action-002
       - deployment-readiness-audit/2026-06-10-00-29/action-001
