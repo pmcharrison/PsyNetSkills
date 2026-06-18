@@ -1,0 +1,23 @@
+{
+  "high": {
+    "true_ability": 3.0,
+    "mean_selected_length_first_3": 14.0,
+    "mean_selected_length_last_3": 20.0,
+    "final_posterior_ability_mean": 3.144654,
+    "n_correct": 6
+  },
+  "low": {
+    "true_ability": 0.35,
+    "mean_selected_length_first_3": 4.333,
+    "mean_selected_length_last_3": 3.0,
+    "final_posterior_ability_mean": 0.486157,
+    "n_correct": 4
+  },
+  "medium": {
+    "true_ability": 1.0,
+    "mean_selected_length_first_3": 7.0,
+    "mean_selected_length_last_3": 15.333,
+    "final_posterior_ability_mean": 1.553913,
+    "n_correct": 4
+  }
+}
