@@ -170,7 +170,8 @@
     if (actionsText) actionsText.innerHTML = remainingActions;
     const progressLabel = document.getElementById('action-progress-label');
     if (progressLabel) {
-      progressLabel.textContent = `Actions remaining: ${remainingActions} / ${MAX_ACTIONS}`;
+      const points = typeof POINTS === 'undefined' ? 0 : POINTS;
+      progressLabel.textContent = `Points: ${points} | Actions remaining: ${remainingActions} / ${MAX_ACTIONS}`;
     }
     const pct = Math.max(0, Math.min(100, (remainingActions / MAX_ACTIONS) * 100));
     bar.style.width = `${pct}%`;

@@ -70,6 +70,10 @@
   line-height: 1.05;
 }
 
+#task-info > p:first-child {
+  display: none !important;
+}
+
 #task-content {
   height: auto !important;
   min-height: 0;
