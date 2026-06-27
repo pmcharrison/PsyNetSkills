@@ -10,7 +10,7 @@ Use this skill when asked to analyze participant writing, exported text
 responses, mock LLM-style writing, or writing-study outputs for possible
 AI-like prose patterns.
 
-## Required Reads
+## Required reads
 
 - Read `psynet-participant-quality-telemetry/SKILL.md` when the writing comes
   from a PsyNet experiment or should be interpreted with telemetry.
@@ -60,6 +60,7 @@ typing pattern came from accessibility tools, fast typing, or ordinary variation
 
 ## Validation
 
+- Run `uv run psynetsk-validate` after changing this skill.
 - Test on at least three mock texts: obviously AI-styled, ordinary human-like,
   and mixed/ambiguous.
 - Confirm the review returns both evidence and counter-evidence.
