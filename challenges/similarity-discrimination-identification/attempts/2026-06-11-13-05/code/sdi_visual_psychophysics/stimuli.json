@@ -1,0 +1,70 @@
+{
+  "stimuli": [
+    {
+      "id": "red",
+      "label": "Red",
+      "dimensions": {
+        "color": "#d73027",
+        "hue_degrees": 5,
+        "lightness": 50,
+        "saturation": 70,
+        "size_px": 34
+      }
+    },
+    {
+      "id": "orange",
+      "label": "Orange",
+      "dimensions": {
+        "color": "#fc8d59",
+        "hue_degrees": 24,
+        "lightness": 67,
+        "saturation": 93,
+        "size_px": 34
+      }
+    },
+    {
+      "id": "yellow",
+      "label": "Yellow",
+      "dimensions": {
+        "color": "#fee08b",
+        "hue_degrees": 48,
+        "lightness": 77,
+        "saturation": 98,
+        "size_px": 34
+      }
+    },
+    {
+      "id": "green",
+      "label": "Green",
+      "dimensions": {
+        "color": "#91cf60",
+        "hue_degrees": 96,
+        "lightness": 59,
+        "saturation": 50,
+        "size_px": 34
+      }
+    },
+    {
+      "id": "blue",
+      "label": "Blue",
+      "dimensions": {
+        "color": "#4575b4",
+        "hue_degrees": 214,
+        "lightness": 49,
+        "saturation": 44,
+        "size_px": 34
+      }
+    },
+    {
+      "id": "purple",
+      "label": "Purple",
+      "dimensions": {
+        "color": "#7b3294",
+        "hue_degrees": 286,
+        "lightness": 39,
+        "saturation": 49,
+        "size_px": 34
+      }
+    }
+  ]
+}
