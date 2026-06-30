@@ -55,13 +55,20 @@ and player.
    and participant. Prefer explicit columns for commonly analyzed state and
    action variables. Keep nested `state_json`, `action_json`, or raw event IDs
    only when they remain useful for auditing.
-7. Show a partial reconstructed dataset before finalizing. Present a small
+7. Show a partial reconstructed dataset in chat before finalizing. This is a
+   blocking human-feedback gate: do not write final repository outputs, commit
+   processed datasets, or open/update a PR until the user has seen the preview
+   and either approved it or requested schema changes. Present a small
    representative preview across multiple dyads and rounds, plus the proposed
-   data dictionary. Ask the user whether they want schema tweaks, such as adding
-   variables, excluding irrelevant columns, renaming fields, changing player and
-   partner representations, splitting nested state into explicit columns, or
-   adding derived analysis variables.
-8. Write final outputs after review:
+   data dictionary and missingness policy. Ask the user whether they want schema
+   tweaks, such as adding variables, excluding irrelevant columns, renaming
+   fields, changing player and partner representations, splitting nested state
+   into explicit columns, or adding derived analysis variables.
+8. While waiting for feedback, keep any reconstructed data in temporary scratch
+   files only when needed to compute the preview. Do not treat scratch outputs as
+   final artifacts, and remove or overwrite them before writing the reviewed
+   outputs.
+9. Write final outputs only after the user has responded to the preview:
    - `clean_round_player.csv` or `.parquet`;
    - a data dictionary describing every column;
    - optionally `round_level.csv` with one row per dyad-round for aggregate
