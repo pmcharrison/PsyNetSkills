@@ -1,3 +1,0 @@
-vars,id,creation_time,failed,failed_reason,time_of_death,arrival_time,participant_id,sync_group_id,type,class,object_type
-{},1,2026-06-30 15:20:11,False,,,,1,1,ParticipantLinkSyncGroup,ParticipantLinkSyncGroup,ParticipantLinkSyncGroup
-{},2,2026-06-30 15:20:11,False,,,,2,1,ParticipantLinkSyncGroup,ParticipantLinkSyncGroup,ParticipantLinkSyncGroup

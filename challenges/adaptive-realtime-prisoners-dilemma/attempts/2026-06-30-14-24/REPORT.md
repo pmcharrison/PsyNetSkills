@@ -31,6 +31,7 @@ Passed:
 - `python simulate_procedure.py`
 - `psynet test local`
 - `psynet simulate`
+- `psynet performance-test local --n-bots 40 --duration-minutes 5 --time-factor 1.0 --json-output .../evidence/performance.json`
 
 The local PsyNet bot test verifies that a dyad reaches the single live game page,
 submits a 10-round sequence answer, finalizes a `trial.answer` with all 10 rounds,
@@ -56,11 +57,11 @@ treatment assignment and final-round cooperation.
   installation failed repeatedly due PyPI connection resets, so `adaptive_logic.py`
   includes an exact positive-integer digamma fallback for this Beta-Bernoulli
   model. The intended production path remains `scipy.special.digamma`.
-- `psynet debug local` could not be used for GUI recording because the same
-  missing SciPy dependency is enforced by debug prechecks.
-- `psynet performance-test local ...` failed to spawn in this VM, so
-  `evidence/performance.json` is not available. The blocker is recorded in
-  `evidence/performance-test.log`.
+- `psynet debug local` could not be used for GUI recording because the missing
+  SciPy dependency is enforced by debug prechecks.
+- The performance test completed and wrote `evidence/performance.json`, but
+  SciPy remains unavailable in the local venv. The implementation therefore uses
+  the exact positive-integer digamma fallback during local tests.
 
 ## Review notes
 

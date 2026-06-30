@@ -8,6 +8,10 @@ source_code.zip
 __pycache__
 *.pyc
 *.DS_Store
+data/
+dump.rdb
+offline_adaptive_simulation.json
+simulated_dyads.csv
 develop/
 deploy/
 deploy_logs/
