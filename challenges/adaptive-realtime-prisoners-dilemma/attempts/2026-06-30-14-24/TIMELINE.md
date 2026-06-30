@@ -39,4 +39,6 @@
 - T+01:05:00 [agent] Moved live game HTML and JavaScript into `templates/live_pd_sequence.html` and kept `RealTimeGamePage` focused on template arguments.
 - T+01:08:00 [manual] User requested robustness to client-side page refresh.
 - T+01:09:30 [agent] Added websocket state snapshot rehydration for page refresh and increased manual dyad waiting robustness.
-- T+01:10:00 [agent-stop] Implementation and first-pass evidence collection complete.
+- T+01:12:00 [manual] User requested interface cleanups: no duplicate instruction payoff table, no visible treatment/player IDs/points, 20-second rounds, footer reward updates, and more reliable chat display.
+- T+01:14:00 [agent] Updated the participant-facing interface to show one payoff table, dollars-only rewards, no treatment labels or participant IDs, 20-second rounds, footer reward updates, and optimistic chat echoes.
+- T+01:15:00 [agent-stop] Implementation and first-pass evidence collection complete.

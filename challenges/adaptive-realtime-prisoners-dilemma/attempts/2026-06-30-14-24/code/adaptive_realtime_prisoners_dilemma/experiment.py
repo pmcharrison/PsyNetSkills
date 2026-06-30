@@ -28,7 +28,7 @@ ACTION_COOPERATE = "Cooperate"
 ACTION_DEFECT = "Defect"
 ACTION_CHOICES = [ACTION_COOPERATE, ACTION_DEFECT]
 SEQUENCE_LENGTH = 10
-DECISION_SECONDS = 8
+DECISION_SECONDS = 20
 BONUS_PER_POINT = 0.02
 GAMMA = 0.35
 RANDOM_SEED = 20260630
@@ -122,12 +122,9 @@ def instruction_page():
             "In each round you both choose at the same time."
         )
         tags.p(
-            "Your choices affect a real bonus. The table shows your own bonus "
-            "for one round from your point of view:"
-        )
-        content.add_raw_string(payoff_table_html())
-        tags.p(
-            "Your partner sees the same table from their own point of view. "
+            "Your choices affect a real bonus. The game page will show a simple "
+            "table with the bonus you receive for each possible combination of "
+            "your choice and your partner's choice. "
             "Some pairs can chat while playing; other pairs cannot."
         )
     return InfoPage(content, time_estimate=20)
@@ -475,7 +472,6 @@ class PrisonersDilemmaTrial(StaticTrial):
         content = tags.div()
         with content:
             tags.h2("Game complete")
-            tags.p(f"You earned {answer.get('total_points_self', 0)} points.")
             tags.p(f"Your game bonus is ${answer.get('final_bonus_self', 0):.2f}.")
             tags.p("Thank you for playing.")
         return InfoPage(content, time_estimate=5)

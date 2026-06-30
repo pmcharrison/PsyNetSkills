@@ -16,8 +16,7 @@
   <p class="pd-status" id="pd-status">Connecting to the live game...</p>
   <div class="pd-grid">
     <main class="pd-card">
-      <p>You are <strong>{{ role }}</strong>. Your partner is Participant {{ partner_id }}.</p>
-      <p>Treatment: <strong>{{ treatment_label }}</strong></p>
+      <p>You and your partner will choose at the same time.</p>
       <p>Round <strong id="pd-round">1</strong> of {{ sequence_length }}. Time remaining:
         <strong id="pd-countdown">{{ decision_seconds }} seconds</strong>
       </p>
@@ -26,8 +25,6 @@
         <button id="pd-cooperate" class="btn btn-primary">Play "{{ cooperate }}"</button>
         <button id="pd-defect" class="btn btn-secondary">Play "{{ defect }}"</button>
       </div>
-      <p>Your points: <strong id="pd-points">0</strong>; estimated bonus:
-        <strong id="pd-bonus">$0.00</strong></p>
       <h3>Round feedback</h3>
       <div class="pd-history" id="pd-history">No rounds completed yet.</div>
     </main>
@@ -59,6 +56,19 @@ document.addEventListener("DOMContentLoaded", function () {
   function setButtons(enabled) {
     document.getElementById("pd-cooperate").disabled = !enabled;
     document.getElementById("pd-defect").disabled = !enabled;
+  }
+  function updateFooterReward(bonus) {
+    var performanceReward = document.getElementById("performance-reward");
+    var totalReward = document.getElementById("total-reward");
+    var rewardDetails = document.getElementById("reward-details");
+    var value = Number(bonus || 0);
+    if (performanceReward) performanceReward.textContent = value.toFixed(2);
+    if (totalReward) {
+      var timeRewardEl = document.getElementById("time-reward");
+      var timeReward = timeRewardEl ? Number(timeRewardEl.textContent || 0) : 0;
+      totalReward.textContent = (timeReward + value).toFixed(2);
+    }
+    if (rewardDetails) rewardDetails.style.display = "";
   }
   function playCue() {
     try {
@@ -108,8 +118,7 @@ document.addEventListener("DOMContentLoaded", function () {
     sequence[entry.round - 1] = entry;
     var me = entry.players.find(function (p) { return String(p.participant_id) === String(cfg.participant_id); });
     var partner = entry.players.find(function (p) { return String(p.participant_id) !== String(cfg.participant_id); });
-    document.getElementById("pd-points").textContent = me.cumulative_points;
-    document.getElementById("pd-bonus").textContent = "$" + me.bonus.toFixed(2);
+    updateFooterReward(me.bonus);
     appendHistoryEntry(entry);
   }
   function appendHistoryEntry(entry) {
@@ -128,16 +137,14 @@ document.addEventListener("DOMContentLoaded", function () {
     history.innerHTML = "";
     if (!sequence.length) {
       history.textContent = "No rounds completed yet.";
-      document.getElementById("pd-points").textContent = "0";
-      document.getElementById("pd-bonus").textContent = "$0.00";
+      updateFooterReward(0);
       return;
     }
     sequence.forEach(appendHistoryEntry);
     var last = sequence[sequence.length - 1];
     var me = last.players.find(function (p) { return String(p.participant_id) === String(cfg.participant_id); });
     if (me) {
-      document.getElementById("pd-points").textContent = me.cumulative_points;
-      document.getElementById("pd-bonus").textContent = "$" + me.bonus.toFixed(2);
+      updateFooterReward(me.bonus);
     }
   }
   function restoreFromSnapshot(msg) {
@@ -193,6 +200,7 @@ document.addEventListener("DOMContentLoaded", function () {
       var content = input.value.trim();
       if (!content) return;
       wsSend({type: "chat_message", content: content});
+      appendChat(cfg.participant_id, content);
       input.value = "";
     };
   }
@@ -221,7 +229,7 @@ document.addEventListener("DOMContentLoaded", function () {
                String(msg.target_participant_id) === String(cfg.participant_id)) {
       restoreFromSnapshot(msg);
     } else if (msg.type === "chat_message" && cfg.chat_enabled) {
-      appendChat(msg.sender, msg.content);
+      if (String(msg.sender) !== String(cfg.participant_id)) appendChat(msg.sender, msg.content);
     }
   };
 });
