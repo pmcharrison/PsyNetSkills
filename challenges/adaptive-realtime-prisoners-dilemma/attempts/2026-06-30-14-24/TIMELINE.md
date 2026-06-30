@@ -61,4 +61,6 @@
 - T+01:45:00 [agent] Moved instructions into the allocated trial and made communication wording treatment-specific.
 - T+01:47:00 [manual] User suggested making session-state construction event-based and renaming `build_sequence_from_actions` to `summarize_events`.
 - T+01:48:00 [agent] Refactored sequence construction into `summarize_events`, with live and bot paths reducing choice events into sequence/cumulative state.
-- T+01:49:00 [agent-stop] Implementation and first-pass evidence collection complete.
+- T+01:50:00 [manual] User clarified that runtime should use the same low-level reducer interface for all event types.
+- T+01:51:00 [agent] Replaced `summarize_events` with incremental `reduce_event(state, event, ...)` for choice, chat, and no-op event reduction.
+- T+01:52:00 [agent-stop] Implementation and first-pass evidence collection complete.
