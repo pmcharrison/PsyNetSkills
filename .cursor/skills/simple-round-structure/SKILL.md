@@ -75,6 +75,10 @@ Do not use this skill as the owner when:
 - For performance evidence, check trial-count metrics. A round-based experiment
   that should use PsyNet trials but reports zero completed trials is a structural
   warning even if participants reached the completion page.
+- If an implementation uses chain classes even though rounds are static, read
+  `state-dependent-round-structure/references/chain-structure-integrity.md` to
+  confirm whether the generated chain graph matches the stated design before
+  deciding to keep or remove the chain.
 
 ## Common failures
 
