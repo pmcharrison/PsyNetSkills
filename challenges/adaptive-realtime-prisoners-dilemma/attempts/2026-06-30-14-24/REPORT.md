@@ -51,7 +51,9 @@ Passed:
 
 The local PsyNet bot test verifies that a dyad reaches the single live game page,
 submits a 10-round sequence answer, finalizes a `trial.answer` with all 10 rounds,
-and records adaptive assignment metadata.
+and records adaptive assignment metadata. The bot test now runs four bots as two
+dyads and verifies that each finalized sequence contains only the two
+participants belonging to that dyad.
 
 ## Simulation and analysis
 

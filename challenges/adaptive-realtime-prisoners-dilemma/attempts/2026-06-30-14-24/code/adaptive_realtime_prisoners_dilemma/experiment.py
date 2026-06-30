@@ -595,7 +595,7 @@ class Exp(psynet.experiment.Experiment):
         ),
     )
 
-    test_n_bots = 2
+    test_n_bots = 4
     test_mode = "serial"
 
     def test_serial_run_bots(self, bots: List[BotDriver]):
@@ -611,9 +611,11 @@ class Exp(psynet.experiment.Experiment):
 
         advance_past_wait_pages(bots)
 
+        answers = []
         for bot in bots:
             assert "Game complete" in bot.current_page_text
             answer = bot.current_trial.answer
+            answers.append(answer)
             assert answer["sequence_length"] == SEQUENCE_LENGTH
             assert len(answer["sequence"]) == SEQUENCE_LENGTH, answer
             assert answer["final_round_trials"] == 2
@@ -621,3 +623,15 @@ class Exp(psynet.experiment.Experiment):
             assert answer["final_round_cooperative_choices"] in [0, 1, 2]
             assert answer["assignment_decision"]["selected_treatment"] in TREATMENTS
             assert answer["treatment"] in TREATMENTS
+
+        answers_by_dyad = {}
+        for answer in answers:
+            answers_by_dyad.setdefault(answer["dyad_id"], []).append(answer)
+        assert len(answers_by_dyad) == 2
+        for dyad_answers in answers_by_dyad.values():
+            assert len(dyad_answers) == 2
+            participant_ids = {answer["participant_id"] for answer in dyad_answers}
+            for answer in dyad_answers:
+                for round_index, entry in enumerate(answer["sequence"], start=1):
+                    assert entry["round"] == round_index
+                    assert {p["participant_id"] for p in entry["players"]} == participant_ids
