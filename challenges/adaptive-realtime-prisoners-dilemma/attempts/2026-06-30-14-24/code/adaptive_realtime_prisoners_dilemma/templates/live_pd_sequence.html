@@ -49,7 +49,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function wsSend(payload) {
     if (socket && socket.readyState === WebSocket.OPEN) {
-      socket.send(cfg.channel + ":" + JSON.stringify(payload));
+      var message = Object.assign({participant_id: cfg.participant_id}, payload);
+      socket.send(cfg.channel + ":" + JSON.stringify(message));
     }
   }
   function setStatus(text) { document.getElementById("pd-status").textContent = text; }
@@ -218,7 +219,10 @@ document.addEventListener("DOMContentLoaded", function () {
   };
   socket.onmessage = function (event) {
     if (event.data.indexOf(cfg.channel + ":") !== 0) return;
-    var msg = JSON.parse(event.data.slice(cfg.channel.length + 1));
+    var msg;
+    try {
+      msg = JSON.parse(event.data.slice(cfg.channel.length + 1));
+    } catch (e) { return; }
     var targetIds = Array.isArray(msg.target_participant_ids)
       ? msg.target_participant_ids.map(String)
       : null;
@@ -235,7 +239,7 @@ document.addEventListener("DOMContentLoaded", function () {
                String(msg.target_participant_id) === String(cfg.participant_id)) {
       restoreFromSnapshot(msg);
     } else if (msg.type === "chat_message" && cfg.chat_enabled) {
-      appendChat(msg.sender, msg.content);
+      appendChat(msg.sender_participant_id, msg.content);
     }
   };
 });

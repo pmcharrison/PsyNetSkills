@@ -272,7 +272,13 @@ class PrisonersDilemmaGameWebSocket(NullElt, WebSocketElt):
             return
 
         trial = participant.current_trial
-        network = type(trial.network).query.filter_by(id=trial.network.id).with_for_update().one()
+        network_cls = type(trial.network)
+        network = (
+            network_cls.query.filter_by(id=trial.network.id)
+            .with_for_update(of=network_cls)
+            .populate_existing()
+            .one()
+        )
         treatment = trial.definition["treatment"]
         group = participant.active_sync_groups[GROUP_TYPE]
         participants = sorted(group.participants, key=lambda p: p.id)
@@ -321,7 +327,7 @@ class PrisonersDilemmaGameWebSocket(NullElt, WebSocketElt):
                     "type": "chat_message",
                     "dyad_id": dyad_id,
                     "target_participant_ids": recipient_ids,
-                    "sender": participant.id,
+                    "sender_participant_id": participant.id,
                     "content": data.get("content", ""),
                 },
             )
