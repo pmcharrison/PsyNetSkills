@@ -35,4 +35,6 @@
 - T+00:56:00 [agent] Passed compile/import checks, offline adaptive simulation, and `psynet test local`.
 - T+00:58:00 [agent] Ran `psynet simulate` and packaged simulation evidence.
 - T+00:59:30 [agent] Recorded blockers for SciPy installation, browser recording, constraints generation, and performance JSON.
-- T+01:00:00 [agent-stop] Implementation and first-pass evidence collection complete.
+- T+01:04:00 [manual] User requested moving the live game page HTML into a dedicated template.
+- T+01:05:00 [agent] Moved live game HTML and JavaScript into `templates/live_pd_sequence.html` and kept `RealTimeGamePage` focused on template arguments.
+- T+01:06:00 [agent-stop] Implementation and first-pass evidence collection complete.

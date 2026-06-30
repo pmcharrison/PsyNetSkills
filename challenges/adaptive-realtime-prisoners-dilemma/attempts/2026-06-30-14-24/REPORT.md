@@ -13,6 +13,9 @@ Key features:
   balancing or adaptive scoring.
 - Each dyad plays the 10-iteration game within one custom PsyNet `Page`, so the
   participant-facing sequence proceeds without page reloads.
+- The live game HTML and JavaScript live in
+  `templates/live_pd_sequence.html`, keeping `experiment.py` focused on PsyNet
+  state, treatment allocation, and template arguments.
 - The live game page uses a dedicated websocket channel for choices, results,
   state snapshots, and chat messages.
 - The finalized `trial.answer` contains the full ordered action sequence for
