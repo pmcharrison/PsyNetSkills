@@ -23,3 +23,7 @@
 - T+00:11:40 [agent-start] Resumed plan revision work.
 - T+00:11:55 [agent] Updated PLAN.md so each dyad contributes final-round cooperative choices out of two choices to the adaptive model.
 - T+00:12:00 [agent-stop] Paused again for required human review of PLAN.md before coding.
+- T+00:12:15 [manual] User clarified that `trial.answer` after the sequence should contain the sequence of actions.
+- T+00:12:30 [agent-start] Resumed plan revision work.
+- T+00:12:45 [agent] Updated PLAN.md to require full ordered per-iteration action sequences in finalized `trial.answer`.
+- T+00:12:50 [agent-stop] Paused again for required human review of PLAN.md before coding.

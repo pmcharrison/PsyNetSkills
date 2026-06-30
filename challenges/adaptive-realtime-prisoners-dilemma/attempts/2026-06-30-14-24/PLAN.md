@@ -4,10 +4,10 @@
 
 This experiment estimates whether real-time communication increases cooperation
 in a 10-iteration Prisoner's Dilemma. The adaptive policy treats each dyad as one
-assignment unit. The primary outcome `y` will be the probability of cooperation
-in the final round, operationalized as the number of cooperative choices in round
-10 out of the two choices made by the dyad in that round. The adaptive objective
-is to assign future dyads to the treatment with the highest predicted last-round
+assignment unit and each participant-round choice as a cooperation observation.
+The primary outcome `y` will be the number of cooperative choices out of the 20
+choices made by a dyad during its 10-iteration sequence. The adaptive objective
+is to assign future dyads to the treatment with the highest predicted
 cooperation probability while retaining enough stochastic exploration to learn
 from both treatments.
 
@@ -34,8 +34,8 @@ id, the experiment mode, and the dyad treatment.
 Each dyad will play one 10-iteration game. In each iteration both participants
 will receive an audible cue and a visible countdown, then choose between two
 globally configurable actions rendered as **Play "Cooperate"** and
-**Play "Defect"** by default. The payoff explanation will use an explicit,
-participant-centered table that is straightforward to read. Rows will be labelled
+**Play "Defect"** by default. The payoff explanation will use an explicit,  
+participant-centered table that is straightforward to read. Rows will be labelled  
 with the participant's possible choices, for example **If I play Cooperate** and
 **If I play Defect**. Columns will be labelled with the partner's possible
 choices, for example **If my partner plays Cooperate** and **If my partner plays
@@ -71,29 +71,29 @@ serial bot tests. It will also inspect `simple_sync_group`, `create_rate_sync`,
 The planned PsyNet structure is:
 
 - `EXPERIMENT_MODE = "adaptive"` or `"static"` as the central global mode switch
-  in `experiment.py`.
+in `experiment.py`.
 - Global constants for action labels, payoff matrix, sequence length, response
-  deadline, cue settings, treatment names, static assignment rule, and
-  point-to-bonus exchange rate.
+deadline, cue settings, treatment names, static assignment rule, and
+point-to-bonus exchange rate.
 - `EnableChatrooms()` at the start of the timeline for the communication
-  treatment.
+treatment.
 - `SimpleGrouper(group_type="pd_dyad", initial_group_size=2, max_wait_time=...)`
-  to form dyads.
+to form dyads.
 - A `GroupBarrier(on_release=...)` after grouping to sort participants by id,
-  assign roles, assign treatment, and persist a dyad-assignment record.
+assign roles, assign treatment, and persist a dyad-assignment record.
 - One synchronized static trial allocated with `sync_group_type="pd_dyad"` whose
-  node parameters define the treatment, payoff matrix, action labels, deadlines,
-  and sequence length.
+node parameters define the treatment, payoff matrix, action labels, deadlines,
+and sequence length.
 - A custom live game page backed by a custom `WebSocketElt` channel for
-  real-time choices, timers, state snapshots, feedback, page reload recovery, and
-  participant-specific visibility.
+real-time choices, timers, state snapshots, feedback, page reload recovery, and
+participant-specific visibility.
 - PsyNet `ChatRoom` for communication dyads only, with the room id derived from
-  the trial maker's sync-group namespace, e.g.
-  `sync_group = participant.active_sync_groups[self.trial_maker.sync_group_type]`
-  followed by a room id based on `sync_group.id`, rather than relying directly on
-  `participant.sync_group`.
+the trial maker's sync-group namespace, e.g.
+`sync_group = participant.active_sync_groups[self.trial_maker.sync_group_type]`
+followed by a room id based on `sync_group.id`, rather than relying directly on
+`participant.sync_group`.
 - `GroupCloser(group_type="pd_dyad")` after the sequence to prevent accidental
-  reuse of completed groups.
+reuse of completed groups.
 
 The server will own the live game session state. Browser JavaScript will render
 state, play the audible cue after a user gesture has enabled audio, display
@@ -104,18 +104,15 @@ snapshots separately enough to audit websocket synchronization.
 
 Adaptive logic will be isolated in `adaptive_logic.py`. The first implementation
 will use a Beta-Bernoulli two-arm model with one arm per treatment. For each
-completed dyad, the model observes `successes = number_of_cooperative_choices_in_round_10`
-and `trials = 2`. Posterior state will be recomputed from all finalized dyad
-last-round outcomes before each assignment (`from_scratch` strategy) to avoid
-stale online updates under concurrent recruitment. The adaptive choice rule will
-use active inference, not a fallback bandit policy: each candidate treatment will
-be scored by expected information gain plus an expected-utility term. The utility
-will be the posterior predictive expectation of the log probability of
-last-round cooperation, and the utility contribution will be scaled by a global
-`GAMMA` parameter. The exact expected information gain formula should follow the
-active-inference reference paper/code before implementation, and the
-implementation should keep the EIG term, expected utility term, `GAMMA`, and
-combined score inspectable in exported assignment records.
+completed dyad, the model observes `successes = number_of_cooperative_choices`
+and `trials = 20`. Posterior state will be recomputed from all finalized dyad
+outcomes before each assignment (`from_scratch` strategy) to avoid stale online
+updates under concurrent recruitment. The adaptive choice rule will be matched
+against the active-inference multi-armed bandit reference before coding; if the
+reference supports an expected-free-energy decision rule that remains lightweight
+for two arms, that rule will be used. Otherwise, the fallback will be a documented
+Thompson-sampling-compatible Beta-Bernoulli policy with the active-inference
+reference retained as the methodological comparison point.
 
 Adaptive assignment records will include experiment mode, dyad id, candidate
 treatments, selected treatment, posterior parameters, predictive cooperation
@@ -146,25 +143,28 @@ websocket routing and concurrent arrival behavior.
 The evidence package will include:
 
 - `evidence/participant.mp4` showing two participants grouped, released, playing
-  10 iterations, hearing/seeing timer cues, receiving feedback, and completing
-  with bonuses.
+10 iterations, hearing/seeing timer cues, receiving feedback, and completing
+with bonuses.
 - `evidence/screenshots/` for no-communication layout, communication layout,
-  feedback state, final bonus page, and adaptive metadata if visible in local
-  review tooling.
-- `evidence/performance.json` from `psynet performance-test local --n-bots 40
-  --duration-minutes 5 --time-factor 1.0`.
+feedback state, final bonus page, and adaptive metadata if visible in local
+review tooling.
+- `evidence/performance.json` from `psynet performance-test local --n-bots 40 --duration-minutes 5 --time-factor 1.0`.
 - `evidence/monitor.html` with a dashboard monitor snapshot.
 - `evidence/simulated_data.zip` from `psynet simulate`.
 - `evidence/analyses/analysis.ipynb`, executed in place, reading exported CSVs
-  directly and summarizing treatment assignment, cooperation rates, chat
-  availability, payoffs, and adaptive posterior history.
+directly and summarizing treatment assignment, cooperation rates, chat
+availability, payoffs, and adaptive posterior history.
 - `REPORT.md` summarizing implementation, validation, simulation, analysis, and
-  limitations.
+limitations.
 
 ## Review questions before coding
 
 - Confirm the human author GitHub key for `agent.json`.
 - Confirm that the default action labels should be **Cooperate** and **Defect**,
-  while remaining globally configurable.
-- Confirm the active-inference scoring formula after inspecting the reference
-  paper/code, including the exact EIG expression and the default `GAMMA` value.
+while remaining globally configurable.
+- Confirm the fallback policy is acceptable if the referenced active-inference
+implementation cannot be adapted cleanly to a lightweight two-arm dyad-level
+assignment rule.
+- Confirm whether the primary adaptive outcome should remain all 20 choices per
+dyad or instead emphasize late-round cooperation.
+
