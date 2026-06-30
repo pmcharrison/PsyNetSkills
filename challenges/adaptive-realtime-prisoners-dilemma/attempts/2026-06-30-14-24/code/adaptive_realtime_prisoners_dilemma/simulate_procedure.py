@@ -16,7 +16,7 @@ TRUE_LAST_ROUND_P_BOTH_COOP = {
 }
 
 
-def run_simulation(n_dyads: int = 80, gamma: float = 0.35, seed: int = 20260630):
+def run_simulation(n_dyads: int = 80, gamma: float = 0.2, seed: int = 20260630):
     rng = random.Random(seed)
     observations: list[TreatmentObservation] = []
     records = []

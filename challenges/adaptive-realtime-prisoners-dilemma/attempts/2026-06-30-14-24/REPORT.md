@@ -37,6 +37,7 @@ Key features:
 - Adaptive scoring uses the analytical Beta-Bernoulli active-inference EIG
   expression with a gamma-scaled expected utility term over posterior probability of
   final-round `(Cooperate, Cooperate)`.
+- The adaptive utility scale is `GAMMA = 0.2`.
 
 ## Validation
 

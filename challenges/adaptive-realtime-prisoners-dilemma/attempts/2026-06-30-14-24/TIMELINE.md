@@ -47,4 +47,6 @@
 - T+01:23:00 [agent] Updated adaptive observations, simulation, notebook, and documentation to model one binary `(Cooperate, Cooperate)` event per dyad.
 - T+01:26:00 [manual] User clarified that expected utility should use `E[u]`, not `E[log u]`.
 - T+01:27:00 [agent] Updated adaptive scoring and exports to use posterior predictive probability of final-round `(Cooperate, Cooperate)` as the utility term.
-- T+01:28:00 [agent-stop] Implementation and first-pass evidence collection complete.
+- T+01:29:00 [manual] User requested setting `GAMMA = 0.2`.
+- T+01:30:00 [agent] Updated experiment and simulation gamma defaults to 0.2.
+- T+01:31:00 [agent-stop] Implementation and first-pass evidence collection complete.
