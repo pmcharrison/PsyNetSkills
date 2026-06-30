@@ -87,8 +87,11 @@ The planned PsyNet structure is:
 - A custom live game page backed by a custom `WebSocketElt` channel for
   real-time choices, timers, state snapshots, feedback, page reload recovery, and
   participant-specific visibility.
-- PsyNet `ChatRoom(room_id=f"pd_dyad_{participant.sync_group.id}")` for
-  communication dyads only.
+- PsyNet `ChatRoom` for communication dyads only, with the room id derived from
+  the trial maker's sync-group namespace, e.g.
+  `sync_group = participant.active_sync_groups[self.trial_maker.sync_group_type]`
+  followed by a room id based on `sync_group.id`, rather than relying directly on
+  `participant.sync_group`.
 - `GroupCloser(group_type="pd_dyad")` after the sequence to prevent accidental
   reuse of completed groups.
 

@@ -11,3 +11,7 @@
 - T+00:09:00 [agent-start] Resumed plan revision work.
 - T+00:09:20 [agent] Updated PLAN.md to specify row labels for "If I play...", column labels for "If my partner plays...", and cells such as "I get $0.12".
 - T+00:09:30 [agent-stop] Paused again for required human review of PLAN.md before coding.
+- T+00:09:45 [manual] User clarified that chat room ids should be derived from `participant.active_sync_groups[self.trial_maker.sync_group_type].id` rather than direct `participant.sync_group`.
+- T+00:10:00 [agent-start] Resumed plan revision work.
+- T+00:10:15 [agent] Updated PLAN.md to derive communication dyad chat room ids from the trial maker's sync-group namespace.
+- T+00:10:20 [agent-stop] Paused again for required human review of PLAN.md before coding.
