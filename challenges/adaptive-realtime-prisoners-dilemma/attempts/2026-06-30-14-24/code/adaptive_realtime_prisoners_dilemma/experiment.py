@@ -218,16 +218,23 @@ def deterministic_bot_action(participant_id: int, round_index: int) -> str:
     return ACTION_COOPERATE if round_index >= 8 else ACTION_DEFECT
 
 
-def build_sequence_from_actions(
+def summarize_events(
     participants: list[Participant],
-    actions_by_round: dict[int, dict[int, str]],
+    choice_events: list[dict],
     treatment: str,
-) -> list[dict]:
+) -> dict:
     participants = sorted(participants, key=lambda p: p.id)
     cumulative = {participant.id: 0 for participant in participants}
     sequence = []
     for round_index in range(1, SEQUENCE_LENGTH + 1):
-        actions = [actions_by_round[round_index][p.id] for p in participants]
+        round_events = {
+            event["participant_id"]: event
+            for event in choice_events
+            if event["round"] == round_index
+        }
+        if any(p.id not in round_events for p in participants):
+            break
+        actions = [round_events[p.id]["action"] for p in participants]
         payoff_0, payoff_1 = PAYOFF_POINTS[actions[0]][actions[1]]
         payoffs = [payoff_0, payoff_1]
         players = []
@@ -242,6 +249,7 @@ def build_sequence_from_actions(
                     "payoff_points": payoff,
                     "cumulative_points": cumulative[participant.id],
                     "bonus": cumulative[participant.id] * BONUS_PER_POINT,
+                    "submitted_at": round_events[participant.id].get("submitted_at"),
                 }
             )
         sequence.append(
@@ -251,7 +259,10 @@ def build_sequence_from_actions(
                 "players": players,
             }
         )
-    return sequence
+    return {
+        "sequence": sequence,
+        "cumulative": {str(k): v for k, v in cumulative.items()},
+    }
 
 
 def build_bot_answer(bot):
@@ -260,13 +271,18 @@ def build_bot_answer(bot):
     participants = sorted(group.participants, key=lambda p: p.id)
     trial = participant.current_trial
     treatment = trial.definition["treatment"]
-    actions = {
-        round_index: {
-            p.id: deterministic_bot_action(p.id, round_index) for p in participants
+    choice_events = [
+        {
+            "round": round_index,
+            "participant_id": p.id,
+            "action": deterministic_bot_action(p.id, round_index),
+            "submitted_at": None,
         }
         for round_index in range(1, SEQUENCE_LENGTH + 1)
-    }
-    sequence = build_sequence_from_actions(participants, actions, treatment)
+        for p in participants
+    ]
+    summary = summarize_events(participants, choice_events, treatment)
+    sequence = summary["sequence"]
     final_round = sequence[-1]
     final_successes = sum(1 for p in final_round["players"] if p["cooperated"])
     final_both_cooperated = int(final_successes == 2)
@@ -303,7 +319,7 @@ def initialize_live_session(participants: List[Participant]):
                 dyad_id=dyad_id,
                 network_id=trial.network.id,
                 treatment=trial.definition["treatment"],
-                choices={},
+                choices=[],
                 sequence=[],
                 cumulative={str(p.id): 0 for p in participants},
                 chat_messages=[],
@@ -358,7 +374,7 @@ class PrisonersDilemmaGameWebSocket(NullElt, WebSocketElt):
                 dyad_id=dyad_id,
                 network_id=trial.network.id,
                 treatment=treatment,
-                choices={},
+                choices=[],
                 sequence=[],
                 cumulative={str(p.id): 0 for p in participants},
                 chat_messages=[],
@@ -367,7 +383,7 @@ class PrisonersDilemmaGameWebSocket(NullElt, WebSocketElt):
             db.session.flush()
 
         session = {
-            "choices": dict(live_session.choices or {}),
+            "choice_events": list(live_session.choices or []),
             "sequence": list(live_session.sequence or []),
             "cumulative": dict(live_session.cumulative or {}),
             "chat_messages": list(live_session.chat_messages or []),
@@ -413,15 +429,17 @@ class PrisonersDilemmaGameWebSocket(NullElt, WebSocketElt):
                     "dyad_id": dyad_id,
                     "sequence": session["sequence"],
                     "round": current_round,
-                    "current_round_choices": session["choices"].get(
-                        str(current_round), {}
-                    ),
+                    "current_round_choices": {
+                        str(event["participant_id"]): event
+                        for event in session["choice_events"]
+                        if event["round"] == current_round
+                    },
                     "cumulative": session["cumulative"],
                     "chat_messages": session["chat_messages"],
                 },
             )
 
-        live_session.choices = session["choices"]
+        live_session.choices = session["choice_events"]
         live_session.sequence = session["sequence"]
         live_session.cumulative = session["cumulative"]
         live_session.chat_messages = session["chat_messages"]
@@ -459,57 +477,43 @@ class PrisonersDilemmaGameWebSocket(NullElt, WebSocketElt):
                     "dyad_id": int(group.id),
                     "sequence": session["sequence"],
                     "round": current_round,
-                    "current_round_choices": session["choices"].get(
-                        str(current_round), {}
-                    ),
+                    "current_round_choices": {
+                        str(event["participant_id"]): event
+                        for event in session["choice_events"]
+                        if event["round"] == current_round
+                    },
                     "cumulative": session["cumulative"],
                 },
             )
             return
-        choices = session["choices"].setdefault(str(round_index), {})
-        if str(participant.id) in choices:
+        current_events = [
+            event for event in session["choice_events"] if event["round"] == round_index
+        ]
+        if any(event["participant_id"] == participant.id for event in current_events):
             return
-        choices[str(participant.id)] = {
-            "action": action,
-            "submitted_at": (
-                receive_time.astimezone(timezone.utc).isoformat()
-                if receive_time
-                else None
-            ),
-        }
+        session["choice_events"].append(
+            {
+                "round": round_index,
+                "participant_id": participant.id,
+                "action": action,
+                "submitted_at": (
+                    receive_time.astimezone(timezone.utc).isoformat()
+                    if receive_time
+                    else None
+                ),
+            }
+        )
+        current_events = [
+            event for event in session["choice_events"] if event["round"] == round_index
+        ]
 
-        if len(choices) < len(participants):
+        if len(current_events) < len(participants):
             return
 
-        actions = [choices[str(p.id)]["action"] for p in participants]
-        payoff_0, payoff_1 = PAYOFF_POINTS[actions[0]][actions[1]]
-        payoffs = [payoff_0, payoff_1]
-        players = []
-        for p, action, payoff in zip(participants, actions, payoffs):
-            cumulative = session["cumulative"].get(str(p.id), 0) + payoff
-            session["cumulative"][str(p.id)] = cumulative
-            players.append(
-                {
-                    "participant_id": p.id,
-                    "role": f"Player {participants.index(p) + 1}",
-                    "action": action,
-                    "cooperated": action == ACTION_COOPERATE,
-                    "payoff_points": payoff,
-                    "cumulative_points": cumulative,
-                    "bonus": cumulative * BONUS_PER_POINT,
-                    "submitted_at": choices[str(p.id)]["submitted_at"],
-                }
-            )
-        entry = {
-            "round": round_index,
-            "dyad_id": int(group.id),
-            "treatment": treatment,
-            "players": players,
-        }
-        if len(session["sequence"]) < round_index:
-            session["sequence"].append(entry)
-        else:
-            session["sequence"][round_index - 1] = entry
+        summary = summarize_events(participants, session["choice_events"], treatment)
+        session["sequence"] = summary["sequence"]
+        session["cumulative"] = summary["cumulative"]
+        entry = session["sequence"][round_index - 1]
         self.broadcast(
             experiment,
             {
@@ -521,6 +525,7 @@ class PrisonersDilemmaGameWebSocket(NullElt, WebSocketElt):
                 "complete": round_index == SEQUENCE_LENGTH,
             },
         )
+        return
 
     def broadcast(self, experiment, payload):
         experiment.publish_to_subscribers(json.dumps(payload), channel_name=self.channel)

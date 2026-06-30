@@ -59,4 +59,6 @@
 - T+01:42:00 [agent] Added persistent chat messages to `PDLiveSession` and rehydrated the chat feed from state snapshots.
 - T+01:44:00 [manual] User requested showing instructions after dyad formation and treatment assignment.
 - T+01:45:00 [agent] Moved instructions into the allocated trial and made communication wording treatment-specific.
-- T+01:46:00 [agent-stop] Implementation and first-pass evidence collection complete.
+- T+01:47:00 [manual] User suggested making session-state construction event-based and renaming `build_sequence_from_actions` to `summarize_events`.
+- T+01:48:00 [agent] Refactored sequence construction into `summarize_events`, with live and bot paths reducing choice events into sequence/cumulative state.
+- T+01:49:00 [agent-stop] Implementation and first-pass evidence collection complete.

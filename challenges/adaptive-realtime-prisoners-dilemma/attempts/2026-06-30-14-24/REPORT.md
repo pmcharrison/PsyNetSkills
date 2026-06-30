@@ -28,6 +28,8 @@ Key features:
   stale or duplicate choices, and broadcasts results/chat messages to explicit
   dyad recipient ids. Chat messages are persisted in the same session row and
   restored from state snapshots after browser refresh.
+- Round-level session state is derived by `summarize_events`, which reduces the
+  accumulated choice-event log into the current sequence and cumulative bonuses.
 - The participant-facing game interface avoids exposing treatment labels,
   participant IDs, and internal points; it presents bonuses in dollars and
   updates PsyNet's footer reward display as the game progresses.
