@@ -216,9 +216,12 @@ def deterministic_bot_action(participant_id: int, round_index: int) -> str:
     return ACTION_COOPERATE if round_index >= 8 else ACTION_DEFECT
 
 
-def initial_session_state(participants: list[Participant]) -> dict:
+def initial_session_state(participants: list[Participant], treatment: str) -> dict:
     participants = sorted(participants, key=lambda p: p.id)
     return {
+        "params": {
+            "treatment": treatment,
+        },
         "choice_events": [],
         "sequence": [],
         "cumulative": {str(participant.id): 0 for participant in participants},
@@ -249,10 +252,10 @@ def reduce_event(
     state: dict,
     event: dict,
     participants: list[Participant],
-    treatment: str,
 ) -> dict:
     state = deepcopy(state)
     participants = sorted(participants, key=lambda p: p.id)
+    treatment = state.get("params", {}).get("treatment")
     event_type = event.get("event_type")
     payload = event.get("payload", {})
 
@@ -344,7 +347,7 @@ def build_bot_answer(bot):
     participants = sorted(group.participants, key=lambda p: p.id)
     trial = participant.current_trial
     treatment = trial.definition["treatment"]
-    state = initial_session_state(participants)
+    state = initial_session_state(participants, treatment)
     for round_index in range(1, SEQUENCE_LENGTH + 1):
         for p in participants:
             state = reduce_event(
@@ -359,7 +362,6 @@ def build_bot_answer(bot):
                     "receive_time": None,
                 },
                 participants,
-                treatment,
             )
     sequence = state["sequence"]
     final_round = sequence[-1]
@@ -399,7 +401,7 @@ def initialize_live_session(participants: List[Participant]):
                 network_id=trial.network.id,
                 treatment=trial.definition["treatment"],
                 events=[],
-                state=initial_session_state(participants),
+                state=initial_session_state(participants, trial.definition["treatment"]),
             )
         )
         db.session.commit()
@@ -450,15 +452,17 @@ class PrisonersDilemmaGameWebSocket(NullElt, WebSocketElt):
                 network_id=trial.network.id,
                 treatment=treatment,
                 events=[],
-                state=initial_session_state(participants),
+                state=initial_session_state(participants, treatment),
             )
             db.session.add(live_session)
             db.session.flush()
 
-        previous_state = deepcopy(live_session.state or initial_session_state(participants))
+        previous_state = deepcopy(
+            live_session.state or initial_session_state(participants, treatment)
+        )
         events = list(live_session.events or [])
         events.append(event)
-        state = reduce_event(previous_state, event, participants, treatment)
+        state = reduce_event(previous_state, event, participants)
 
         if event["event_type"] == "chat_message" and (
             len(state.get("chat_messages", []))

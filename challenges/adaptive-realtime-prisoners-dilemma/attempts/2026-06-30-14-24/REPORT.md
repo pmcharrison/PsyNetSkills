@@ -28,9 +28,10 @@ Key features:
   stale or duplicate choices, and broadcasts results/chat messages to explicit
   dyad recipient ids. Chat messages are persisted in the same session row and
   restored from state snapshots after browser refresh.
-- Session state is updated by the generic `reduce_event(state, event, ...)`
-  reducer. Choice and chat events share the same reducer interface; event-type
-  branching is kept inside the experiment-specific reducer implementation.
+- Session state is updated by the generic `reduce_event(state, event, participants)`
+  reducer. Treatment is stored with the other session parameters in `state`, and
+  choice/chat events share the same reducer interface; event-type branching is
+  kept inside the experiment-specific reducer implementation.
 - The participant-facing game interface avoids exposing treatment labels,
   participant IDs, and internal points; it presents bonuses in dollars and
   updates PsyNet's footer reward display as the game progresses.
