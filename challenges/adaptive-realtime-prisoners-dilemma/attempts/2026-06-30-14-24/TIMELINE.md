@@ -49,4 +49,6 @@
 - T+01:27:00 [agent] Updated adaptive scoring and exports to use posterior predictive probability of final-round `(Cooperate, Cooperate)` as the utility term.
 - T+01:29:00 [manual] User requested setting `GAMMA = 0.2`.
 - T+01:30:00 [agent] Updated experiment and simulation gamma defaults to 0.2.
-- T+01:31:00 [agent-stop] Implementation and first-pass evidence collection complete.
+- T+01:32:00 [manual] User requested setting `GAMMA = 0.1` and adding notebook plots for EIG, utility, and `-G` by treatment.
+- T+01:33:00 [agent] Updated gamma to 0.1 and expanded the analysis notebook with an inline SVG plot of EIG, expected utility, and `-G` trajectories.
+- T+01:34:00 [agent-stop] Implementation and first-pass evidence collection complete.

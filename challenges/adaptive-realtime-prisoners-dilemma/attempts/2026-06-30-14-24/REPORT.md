@@ -37,7 +37,7 @@ Key features:
 - Adaptive scoring uses the analytical Beta-Bernoulli active-inference EIG
   expression with a gamma-scaled expected utility term over posterior probability of
   final-round `(Cooperate, Cooperate)`.
-- The adaptive utility scale is `GAMMA = 0.2`.
+- The adaptive utility scale is `GAMMA = 0.1`.
 
 ## Validation
 
@@ -64,7 +64,10 @@ participants belonging to that dyad.
 - An offline dyad-level active-inference simulation under `offline/`.
 
 `evidence/analyses/analysis.ipynb` reads the simulated export ZIP and summarizes
-treatment assignment and final-round mutual cooperation.
+treatment assignment, final-round mutual cooperation, and the evolution of EIG,
+expected utility, and negative expected free energy (`-G`) for each treatment.
+The notebook uses `matplotlib`; the analysis dependency is recorded in
+`evidence/analyses/requirements.txt`.
 
 ## Blockers and limitations
 

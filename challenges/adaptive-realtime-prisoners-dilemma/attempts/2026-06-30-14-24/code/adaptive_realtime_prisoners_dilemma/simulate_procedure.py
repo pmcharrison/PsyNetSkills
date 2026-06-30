@@ -16,7 +16,7 @@ TRUE_LAST_ROUND_P_BOTH_COOP = {
 }
 
 
-def run_simulation(n_dyads: int = 80, gamma: float = 0.2, seed: int = 20260630):
+def run_simulation(n_dyads: int = 80, gamma: float = 0.1, seed: int = 20260630):
     rng = random.Random(seed)
     observations: list[TreatmentObservation] = []
     records = []
@@ -111,8 +111,8 @@ if __name__ == "__main__":
     evidence_dir = Path("../../evidence")
     evidence_dir.mkdir(parents=True, exist_ok=True)
     with zipfile.ZipFile(evidence_dir / "simulated_data.zip", "w") as zf:
-        zf.write(csv_path)
-        zf.write(out_path)
+        zf.write(csv_path, "offline/simulated_dyads.csv")
+        zf.write(out_path, "offline/offline_adaptive_simulation.json")
     print(json.dumps(output["summary"], indent=2))
     print(f"Wrote {out_path}")
     print(f"Wrote {evidence_dir / 'simulated_data.zip'}")
