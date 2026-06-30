@@ -117,8 +117,8 @@ before each assignment (`from_scratch` strategy) to avoid stale online updates
 under concurrent recruitment. The adaptive choice rule will use active
 inference, not a fallback bandit policy: each candidate treatment will be scored
 by expected information gain plus an expected-utility term. The utility will be
-the posterior predictive expectation of the log probability of final-round
-mutual cooperation, and the utility contribution will be scaled by a global
+the posterior predictive probability of final-round mutual cooperation, and the
+utility contribution will be scaled by a global
 `GAMMA` parameter. The exact expected information gain formula should follow the
 active-inference reference paper/code before implementation, and the
 implementation should keep the EIG term, expected utility term, `GAMMA`, and

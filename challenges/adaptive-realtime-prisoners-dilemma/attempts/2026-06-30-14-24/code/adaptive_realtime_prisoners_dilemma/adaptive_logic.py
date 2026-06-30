@@ -62,8 +62,8 @@ def analytical_eig(alpha: float, beta: float) -> float:
     )
 
 
-def expected_log_both_cooperate(alpha: float, beta: float) -> float:
-    return float(digamma(alpha) - digamma(alpha + beta))
+def expected_both_cooperate(alpha: float, beta: float) -> float:
+    return float(alpha / (alpha + beta))
 
 
 def score_treatment(
@@ -75,16 +75,16 @@ def score_treatment(
 ) -> dict:
     alpha, beta = posterior_for_treatment(observations, treatment)
     eig = analytical_eig(alpha, beta)
-    expected_utility = expected_log_both_cooperate(alpha, beta)
+    expected_utility = expected_both_cooperate(alpha, beta)
     combined = eig + gamma * expected_utility
     predictive_mean = alpha / (alpha + beta)
     return {
         "treatment": treatment,
         "posterior_alpha": alpha,
         "posterior_beta": beta,
-        "predictive_probability_cooperation": predictive_mean,
+        "predictive_probability_both_cooperate": predictive_mean,
         "expected_information_gain": eig,
-        "expected_utility_log_probability_both_cooperate": expected_utility,
+        "expected_utility_probability_both_cooperate": expected_utility,
         "gamma": gamma,
         "combined_score": combined,
         "algorithm_version": ALGORITHM_VERSION,

@@ -35,7 +35,7 @@ Key features:
   both players, final-round mutual-cooperation event, treatment, bonus, and
   assignment metadata.
 - Adaptive scoring uses the analytical Beta-Bernoulli active-inference EIG
-  expression with a gamma-scaled expected utility term over log probability of
+  expression with a gamma-scaled expected utility term over posterior probability of
   final-round `(Cooperate, Cooperate)`.
 
 ## Validation

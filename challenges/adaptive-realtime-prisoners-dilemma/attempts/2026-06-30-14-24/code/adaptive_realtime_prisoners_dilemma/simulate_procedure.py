@@ -77,7 +77,7 @@ if __name__ == "__main__":
                 "last_round_both_cooperate_rate",
                 "selected_treatment",
                 "expected_information_gain",
-                "expected_utility_log_probability_both_cooperate",
+                "expected_utility_probability_both_cooperate",
                 "combined_score",
                 "gamma",
             ],
@@ -101,8 +101,8 @@ if __name__ == "__main__":
                     "expected_information_gain": chosen_score[
                         "expected_information_gain"
                     ],
-                    "expected_utility_log_probability_both_cooperate": chosen_score[
-                        "expected_utility_log_probability_both_cooperate"
+                    "expected_utility_probability_both_cooperate": chosen_score[
+                        "expected_utility_probability_both_cooperate"
                     ],
                     "combined_score": chosen_score["combined_score"],
                     "gamma": chosen_score["gamma"],

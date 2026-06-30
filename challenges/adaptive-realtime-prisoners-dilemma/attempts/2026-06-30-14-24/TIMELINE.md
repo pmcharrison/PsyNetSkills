@@ -45,4 +45,6 @@
 - T+01:19:00 [agent] Added network row locking for websocket session mutation, current-round duplicate/stale choice guards, and explicit dyad recipient routing for chat and round results.
 - T+01:22:00 [manual] User clarified that the adaptive target is the probability that both players cooperate in the last round, i.e. `(Cooperate, Cooperate)` as a single event.
 - T+01:23:00 [agent] Updated adaptive observations, simulation, notebook, and documentation to model one binary `(Cooperate, Cooperate)` event per dyad.
-- T+01:24:00 [agent-stop] Implementation and first-pass evidence collection complete.
+- T+01:26:00 [manual] User clarified that expected utility should use `E[u]`, not `E[log u]`.
+- T+01:27:00 [agent] Updated adaptive scoring and exports to use posterior predictive probability of final-round `(Cooperate, Cooperate)` as the utility term.
+- T+01:28:00 [agent-stop] Implementation and first-pass evidence collection complete.
