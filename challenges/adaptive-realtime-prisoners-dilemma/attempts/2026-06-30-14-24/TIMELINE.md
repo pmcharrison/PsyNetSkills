@@ -1,0 +1,29 @@
+# Timeline
+
+- T+00:00:00 [agent-start] Started autonomous implementation work.
+- T+00:00:15 [agent] Read attempt workflow and experiment implementation evidence requirements.
+- T+00:00:45 [agent] Created attempt branch from the challenge-definition branch for a separate PR.
+- T+00:01:30 [agent] Read public challenge instructions and relevant PsyNet synchronous, real-time, adaptive, frontend, backend, and simulation skills.
+- T+00:02:30 [agent] Refreshed local PsyNet checkout to origin/master at c661ae4e3e483a0b270268e4727e70c25475c9aa.
+- T+00:04:30 [agent] Inspected current PsyNet synchronization, chatroom, websocket, and bot-testing patterns for planning.
+- T+00:08:30 [agent-stop] Paused for required human review of PLAN.md before coding.
+- T+00:08:45 [manual] User clarified that payoff explanations should be an explicit participant-centered table with readable dollar rewards in each cell.
+- T+00:09:00 [agent-start] Resumed plan revision work.
+- T+00:09:20 [agent] Updated PLAN.md to specify row labels for "If I play...", column labels for "If my partner plays...", and cells such as "I get $0.12".
+- T+00:09:30 [agent-stop] Paused again for required human review of PLAN.md before coding.
+- T+00:09:45 [manual] User clarified that chat room ids should be derived from `participant.active_sync_groups[self.trial_maker.sync_group_type].id` rather than direct `participant.sync_group`.
+- T+00:10:00 [agent-start] Resumed plan revision work.
+- T+00:10:15 [agent] Updated PLAN.md to derive communication dyad chat room ids from the trial maker's sync-group namespace.
+- T+00:10:20 [agent-stop] Paused again for required human review of PLAN.md before coding.
+- T+00:10:35 [manual] User clarified that adaptive treatment assignment must use active inference with EIG plus gamma-scaled expected utility over log probability of cooperation, with no fallback policy.
+- T+00:10:50 [agent-start] Resumed plan revision work.
+- T+00:11:05 [agent] Updated PLAN.md to require active-inference scoring, exported EIG and utility terms, and review of the exact EIG formula before implementation.
+- T+00:11:10 [agent-stop] Paused again for required human review of PLAN.md before coding.
+- T+00:11:25 [manual] User clarified that success should be measured as probability of cooperation in the last round.
+- T+00:11:40 [agent-start] Resumed plan revision work.
+- T+00:11:55 [agent] Updated PLAN.md so each dyad contributes final-round cooperative choices out of two choices to the adaptive model.
+- T+00:12:00 [agent-stop] Paused again for required human review of PLAN.md before coding.
+- T+00:12:15 [manual] User clarified that `trial.answer` after the sequence should contain the sequence of actions.
+- T+00:12:30 [agent-start] Resumed plan revision work.
+- T+00:12:45 [agent] Updated PLAN.md to require full ordered per-iteration action sequences in finalized `trial.answer`.
+- T+00:12:50 [agent-stop] Paused again for required human review of PLAN.md before coding.
