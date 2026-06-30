@@ -26,7 +26,8 @@ Key features:
 - Websocket choice handling stores live operational state in a dedicated
   `PDLiveSession` table, locks the dyad's session row before mutation, rejects
   stale or duplicate choices, and broadcasts results/chat messages to explicit
-  dyad recipient ids.
+  dyad recipient ids. Chat messages are persisted in the same session row and
+  restored from state snapshots after browser refresh.
 - The participant-facing game interface avoids exposing treatment labels,
   participant IDs, and internal points; it presents bonuses in dollars and
   updates PsyNet's footer reward display as the game progresses.

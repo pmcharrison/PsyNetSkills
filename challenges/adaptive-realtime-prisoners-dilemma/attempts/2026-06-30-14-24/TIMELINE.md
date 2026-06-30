@@ -55,4 +55,6 @@
 - T+01:36:00 [agent] Refactored active-inference treatment selection into `ActiveInferenceTreatmentOptimizer` and updated experiment/simulation callers.
 - T+01:38:00 [manual] User requested moving live session state out of network var storage and into a dedicated table.
 - T+01:39:00 [agent] Added `PDLiveSession` and moved websocket choices, sequence, and cumulative live state into a row locked per dyad/session.
-- T+01:40:00 [agent-stop] Implementation and first-pass evidence collection complete.
+- T+01:41:00 [manual] User requested restoring chat history after refresh.
+- T+01:42:00 [agent] Added persistent chat messages to `PDLiveSession` and rehydrated the chat feed from state snapshots.
+- T+01:43:00 [agent-stop] Implementation and first-pass evidence collection complete.

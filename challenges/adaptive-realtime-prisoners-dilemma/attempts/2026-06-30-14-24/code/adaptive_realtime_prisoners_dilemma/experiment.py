@@ -75,6 +75,7 @@ class PDLiveSession(SQLBase, SQLMixin):
     choices = Column(JSON)
     sequence = Column(JSON)
     cumulative = Column(JSON)
+    chat_messages = Column(JSON)
 
 
 def money(points: int | float) -> str:
@@ -299,6 +300,7 @@ def initialize_live_session(participants: List[Participant]):
                 choices={},
                 sequence=[],
                 cumulative={str(p.id): 0 for p in participants},
+                chat_messages=[],
             )
         )
         db.session.commit()
@@ -353,6 +355,7 @@ class PrisonersDilemmaGameWebSocket(NullElt, WebSocketElt):
                 choices={},
                 sequence=[],
                 cumulative={str(p.id): 0 for p in participants},
+                chat_messages=[],
             )
             db.session.add(live_session)
             db.session.flush()
@@ -361,6 +364,7 @@ class PrisonersDilemmaGameWebSocket(NullElt, WebSocketElt):
             "choices": dict(live_session.choices or {}),
             "sequence": list(live_session.sequence or []),
             "cumulative": dict(live_session.cumulative or {}),
+            "chat_messages": list(live_session.chat_messages or []),
         }
 
         if event_type == "choice":
@@ -374,14 +378,23 @@ class PrisonersDilemmaGameWebSocket(NullElt, WebSocketElt):
                 receive_time=receive_time,
             )
         elif event_type == "chat_message" and treatment == "communication":
+            chat_entry = {
+                "sender_participant_id": participant.id,
+                "content": data.get("content", ""),
+                "receive_time": (
+                    receive_time.astimezone(timezone.utc).isoformat()
+                    if receive_time
+                    else None
+                ),
+            }
+            session["chat_messages"].append(chat_entry)
             self.broadcast(
                 experiment,
                 {
                     "type": "chat_message",
                     "dyad_id": dyad_id,
                     "target_participant_ids": recipient_ids,
-                    "sender_participant_id": participant.id,
-                    "content": data.get("content", ""),
+                    **chat_entry,
                 },
             )
         elif event_type == "state_request":
@@ -398,12 +411,14 @@ class PrisonersDilemmaGameWebSocket(NullElt, WebSocketElt):
                         str(current_round), {}
                     ),
                     "cumulative": session["cumulative"],
+                    "chat_messages": session["chat_messages"],
                 },
             )
 
         live_session.choices = session["choices"]
         live_session.sequence = session["sequence"]
         live_session.cumulative = session["cumulative"]
+        live_session.chat_messages = session["chat_messages"]
         db.session.commit()
 
     def handle_choice(

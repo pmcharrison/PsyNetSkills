@@ -195,6 +195,14 @@ document.addEventListener("DOMContentLoaded", function () {
     feed.appendChild(p);
     feed.scrollTop = feed.scrollHeight;
   }
+  function renderChatHistory(messages) {
+    var feed = document.getElementById("pd-chat-feed");
+    if (!feed) return;
+    feed.innerHTML = "";
+    (messages || []).forEach(function (msg) {
+      appendChat(msg.sender_participant_id, msg.content);
+    });
+  }
   document.getElementById("pd-cooperate").onclick = function () { choose(cfg.cooperate); };
   document.getElementById("pd-defect").onclick = function () { choose(cfg.defect); };
   if (cfg.chat_enabled) {
@@ -239,6 +247,7 @@ document.addEventListener("DOMContentLoaded", function () {
       window.setTimeout(startRound, 800);
     } else if (msg.type === "state_snapshot" &&
                String(msg.target_participant_id) === String(cfg.participant_id)) {
+      renderChatHistory(msg.chat_messages || []);
       restoreFromSnapshot(msg);
     } else if (msg.type === "chat_message" && cfg.chat_enabled) {
       appendChat(msg.sender_participant_id, msg.content);
