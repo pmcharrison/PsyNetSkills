@@ -107,12 +107,15 @@ will use a Beta-Bernoulli two-arm model with one arm per treatment. For each
 completed dyad, the model observes `successes = number_of_cooperative_choices`
 and `trials = 20`. Posterior state will be recomputed from all finalized dyad
 outcomes before each assignment (`from_scratch` strategy) to avoid stale online
-updates under concurrent recruitment. The adaptive choice rule will be matched
-against the active-inference multi-armed bandit reference before coding; if the
-reference supports an expected-free-energy decision rule that remains lightweight
-for two arms, that rule will be used. Otherwise, the fallback will be a documented
-Thompson-sampling-compatible Beta-Bernoulli policy with the active-inference
-reference retained as the methodological comparison point.
+updates under concurrent recruitment. The adaptive choice rule will use active
+inference, not a fallback bandit policy: each candidate treatment will be scored
+by expected information gain plus an expected-utility term. The utility will be
+the posterior predictive expectation of the log probability of cooperation, and
+the utility contribution will be scaled by a global `GAMMA` parameter. The exact
+expected information gain formula should follow the active-inference reference
+paper/code before implementation, and the implementation should keep the EIG
+term, expected utility term, `GAMMA`, and combined score inspectable in exported
+assignment records.
 
 Adaptive assignment records will include experiment mode, dyad id, candidate
 treatments, selected treatment, posterior parameters, predictive cooperation
@@ -164,7 +167,7 @@ The evidence package will include:
 - Confirm that the default action labels should be **Cooperate** and **Defect**,
   while remaining globally configurable.
 - Confirm the fallback policy is acceptable if the referenced active-inference
-  implementation cannot be adapted cleanly to a lightweight two-arm dyad-level
-  assignment rule.
+- Confirm the active-inference scoring formula after inspecting the reference
+  paper/code, including the exact EIG expression and the default `GAMMA` value.
 - Confirm whether the primary adaptive outcome should remain all 20 choices per
   dyad or instead emphasize late-round cooperation.

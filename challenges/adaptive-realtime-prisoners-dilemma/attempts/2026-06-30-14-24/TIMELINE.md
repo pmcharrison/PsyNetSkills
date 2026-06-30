@@ -15,3 +15,7 @@
 - T+00:10:00 [agent-start] Resumed plan revision work.
 - T+00:10:15 [agent] Updated PLAN.md to derive communication dyad chat room ids from the trial maker's sync-group namespace.
 - T+00:10:20 [agent-stop] Paused again for required human review of PLAN.md before coding.
+- T+00:10:35 [manual] User clarified that adaptive treatment assignment must use active inference with EIG plus gamma-scaled expected utility over log probability of cooperation, with no fallback policy.
+- T+00:10:50 [agent-start] Resumed plan revision work.
+- T+00:11:05 [agent] Updated PLAN.md to require active-inference scoring, exported EIG and utility terms, and review of the exact EIG formula before implementation.
+- T+00:11:10 [agent-stop] Paused again for required human review of PLAN.md before coding.
