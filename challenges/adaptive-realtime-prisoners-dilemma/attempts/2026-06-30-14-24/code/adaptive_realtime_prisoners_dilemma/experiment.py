@@ -75,6 +75,145 @@ class PDLiveSession(SQLBase, SQLMixin):
     events = Column(JSON)
     state = Column(JSON)
 
+    @staticmethod
+    def initial_state(participants: list[Participant], treatment: str) -> dict:
+        participants = sorted(participants, key=lambda p: p.id)
+        return {
+            "params": {
+                "treatment": treatment,
+            },
+            "choice_events": [],
+            "sequence": [],
+            "cumulative": {str(participant.id): 0 for participant in participants},
+            "chat_messages": [],
+            "current_round": 1,
+            "is_complete": False,
+        }
+
+    @staticmethod
+    def normalize_event(data, participant, receive_time) -> dict:
+        event_type = data.get("type", "unknown")
+        payload = {
+            key: value
+            for key, value in data.items()
+            if key not in {"type", "participant_id"}
+        }
+        return {
+            "event_type": event_type,
+            "participant_id": participant.id,
+            "payload": payload,
+            "receive_time": (
+                receive_time.astimezone(timezone.utc).isoformat()
+                if receive_time
+                else None
+            ),
+        }
+
+    def reduce_event(self, event: dict, participants: list[Participant]) -> tuple[dict, dict]:
+        previous_state = deepcopy(
+            self.state or self.initial_state(participants, self.treatment)
+        )
+        state = deepcopy(previous_state)
+        participants = sorted(participants, key=lambda p: p.id)
+        treatment = state.get("params", {}).get("treatment")
+        event_type = event.get("event_type")
+        payload = event.get("payload", {})
+
+        if event_type == "chat_message" and treatment == "communication":
+            state.setdefault("chat_messages", []).append(
+                {
+                    "sender_participant_id": event["participant_id"],
+                    "content": payload.get("content", ""),
+                    "receive_time": event.get("receive_time"),
+                }
+            )
+        elif event_type == "choice":
+            self._reduce_choice_event(state, event, participants, treatment)
+
+        events = list(self.events or [])
+        events.append(event)
+        self.events = events
+        self.state = state
+        return previous_state, state
+
+    def _reduce_choice_event(
+        self,
+        state: dict,
+        event: dict,
+        participants: list[Participant],
+        treatment: str,
+    ):
+        payload = event.get("payload", {})
+        try:
+            round_index = int(payload["round"])
+        except (KeyError, TypeError, ValueError):
+            return
+
+        action = payload.get("action")
+        current_round = len(state.get("sequence", [])) + 1
+        if (
+            round_index != current_round
+            or action not in ACTION_CHOICES
+            or round_index > SEQUENCE_LENGTH
+        ):
+            return
+
+        choice_events = state.setdefault("choice_events", [])
+        current_events = [
+            choice_event
+            for choice_event in choice_events
+            if choice_event["payload"]["round"] == round_index
+        ]
+        if any(
+            choice_event["participant_id"] == event["participant_id"]
+            for choice_event in current_events
+        ):
+            return
+
+        choice_events.append(event)
+        current_events.append(event)
+
+        if len(current_events) != len(participants):
+            return
+
+        round_events = {
+            choice_event["participant_id"]: choice_event
+            for choice_event in current_events
+        }
+        cumulative = {
+            int(participant_id): value
+            for participant_id, value in state.get("cumulative", {}).items()
+        }
+        actions = [round_events[p.id]["payload"]["action"] for p in participants]
+        payoff_0, payoff_1 = PAYOFF_POINTS[actions[0]][actions[1]]
+        payoffs = [payoff_0, payoff_1]
+        players = []
+        for participant, action, payoff in zip(participants, actions, payoffs):
+            cumulative[participant.id] += payoff
+            players.append(
+                {
+                    "participant_id": participant.id,
+                    "role": f"Player {participants.index(participant) + 1}",
+                    "action": action,
+                    "cooperated": action == ACTION_COOPERATE,
+                    "payoff_points": payoff,
+                    "cumulative_points": cumulative[participant.id],
+                    "bonus": cumulative[participant.id] * BONUS_PER_POINT,
+                    "submitted_at": round_events[participant.id].get("receive_time"),
+                }
+            )
+        state.setdefault("sequence", []).append(
+            {
+                "round": round_index,
+                "treatment": treatment,
+                "players": players,
+            }
+        )
+        state["cumulative"] = {str(k): v for k, v in cumulative.items()}
+        state["current_round"] = len(state["sequence"]) + 1
+        state["is_complete"] = len(state["sequence"]) >= SEQUENCE_LENGTH
+
+
 
 def money(points: int | float) -> str:
     return f"${points * BONUS_PER_POINT:.2f}"
@@ -216,142 +355,20 @@ def deterministic_bot_action(participant_id: int, round_index: int) -> str:
     return ACTION_COOPERATE if round_index >= 8 else ACTION_DEFECT
 
 
-def initial_session_state(participants: list[Participant], treatment: str) -> dict:
-    participants = sorted(participants, key=lambda p: p.id)
-    return {
-        "params": {
-            "treatment": treatment,
-        },
-        "choice_events": [],
-        "sequence": [],
-        "cumulative": {str(participant.id): 0 for participant in participants},
-        "chat_messages": [],
-        "current_round": 1,
-        "is_complete": False,
-    }
-
-
-def normalize_session_event(data, participant, receive_time) -> dict:
-    event_type = data.get("type", "unknown")
-    payload = {
-        key: value
-        for key, value in data.items()
-        if key not in {"type", "participant_id"}
-    }
-    return {
-        "event_type": event_type,
-        "participant_id": participant.id,
-        "payload": payload,
-        "receive_time": (
-            receive_time.astimezone(timezone.utc).isoformat() if receive_time else None
-        ),
-    }
-
-
-def reduce_event(
-    state: dict,
-    event: dict,
-    participants: list[Participant],
-) -> dict:
-    state = deepcopy(state)
-    participants = sorted(participants, key=lambda p: p.id)
-    treatment = state.get("params", {}).get("treatment")
-    event_type = event.get("event_type")
-    payload = event.get("payload", {})
-
-    if event_type == "chat_message" and treatment == "communication":
-        state.setdefault("chat_messages", []).append(
-            {
-                "sender_participant_id": event["participant_id"],
-                "content": payload.get("content", ""),
-                "receive_time": event.get("receive_time"),
-            }
-        )
-        return state
-
-    if event_type != "choice":
-        return state
-
-    try:
-        round_index = int(payload["round"])
-    except (KeyError, TypeError, ValueError):
-        return state
-
-    action = payload.get("action")
-    current_round = len(state.get("sequence", [])) + 1
-    if (
-        round_index != current_round
-        or action not in ACTION_CHOICES
-        or round_index > SEQUENCE_LENGTH
-    ):
-        return state
-
-    choice_events = state.setdefault("choice_events", [])
-    current_events = [
-        choice_event
-        for choice_event in choice_events
-        if choice_event["payload"]["round"] == round_index
-    ]
-    if any(
-        choice_event["participant_id"] == event["participant_id"]
-        for choice_event in current_events
-    ):
-        return state
-
-    choice_events.append(event)
-    current_events.append(event)
-
-    if len(current_events) == len(participants):
-        round_events = {
-            choice_event["participant_id"]: choice_event for choice_event in current_events
-        }
-        cumulative = {
-            int(participant_id): value
-            for participant_id, value in state.get("cumulative", {}).items()
-        }
-        actions = [round_events[p.id]["payload"]["action"] for p in participants]
-        payoff_0, payoff_1 = PAYOFF_POINTS[actions[0]][actions[1]]
-        payoffs = [payoff_0, payoff_1]
-        players = []
-        for participant, action, payoff in zip(participants, actions, payoffs):
-            cumulative[participant.id] += payoff
-            players.append(
-                {
-                    "participant_id": participant.id,
-                    "role": f"Player {participants.index(participant) + 1}",
-                    "action": action,
-                    "cooperated": action == ACTION_COOPERATE,
-                    "payoff_points": payoff,
-                    "cumulative_points": cumulative[participant.id],
-                    "bonus": cumulative[participant.id] * BONUS_PER_POINT,
-                    "submitted_at": round_events[participant.id].get("receive_time"),
-                }
-            )
-        state.setdefault("sequence", []).append(
-            {
-                "round": round_index,
-                "treatment": treatment,
-                "players": players,
-            }
-        )
-        state["cumulative"] = {str(k): v for k, v in cumulative.items()}
-        state["current_round"] = len(state["sequence"]) + 1
-        state["is_complete"] = len(state["sequence"]) >= SEQUENCE_LENGTH
-
-    return state
-
-
 def build_bot_answer(bot):
     participant = Participant.query.get(bot.id)
     group = participant.active_sync_groups[GROUP_TYPE]
     participants = sorted(group.participants, key=lambda p: p.id)
     trial = participant.current_trial
     treatment = trial.definition["treatment"]
-    state = initial_session_state(participants, treatment)
+    live_session = PDLiveSession(
+        treatment=treatment,
+        events=[],
+        state=PDLiveSession.initial_state(participants, treatment),
+    )
     for round_index in range(1, SEQUENCE_LENGTH + 1):
         for p in participants:
-            state = reduce_event(
-                state,
+            _previous_state, state = live_session.reduce_event(
                 {
                     "event_type": "choice",
                     "participant_id": p.id,
@@ -363,7 +380,7 @@ def build_bot_answer(bot):
                 },
                 participants,
             )
-    sequence = state["sequence"]
+    sequence = live_session.state["sequence"]
     final_round = sequence[-1]
     final_successes = sum(1 for p in final_round["players"] if p["cooperated"])
     final_both_cooperated = int(final_successes == 2)
@@ -401,7 +418,9 @@ def initialize_live_session(participants: List[Participant]):
                 network_id=trial.network.id,
                 treatment=trial.definition["treatment"],
                 events=[],
-                state=initial_session_state(participants, trial.definition["treatment"]),
+                state=PDLiveSession.initial_state(
+                    participants, trial.definition["treatment"]
+                ),
             )
         )
         db.session.commit()
@@ -426,7 +445,7 @@ class PrisonersDilemmaGameWebSocket(NullElt, WebSocketElt):
         participants = sorted(group.participants, key=lambda p: p.id)
         recipient_ids = [str(p.id) for p in participants]
         dyad_id = int(group.id)
-        event = normalize_session_event(data, participant, receive_time)
+        event = PDLiveSession.normalize_event(data, participant, receive_time)
 
         db.session.add(
             PDLiveEvent(
@@ -452,17 +471,12 @@ class PrisonersDilemmaGameWebSocket(NullElt, WebSocketElt):
                 network_id=trial.network.id,
                 treatment=treatment,
                 events=[],
-                state=initial_session_state(participants, treatment),
+                state=PDLiveSession.initial_state(participants, treatment),
             )
             db.session.add(live_session)
             db.session.flush()
 
-        previous_state = deepcopy(
-            live_session.state or initial_session_state(participants, treatment)
-        )
-        events = list(live_session.events or [])
-        events.append(event)
-        state = reduce_event(previous_state, event, participants)
+        previous_state, state = live_session.reduce_event(event, participants)
 
         if event["event_type"] == "chat_message" and (
             len(state.get("chat_messages", []))
@@ -513,8 +527,6 @@ class PrisonersDilemmaGameWebSocket(NullElt, WebSocketElt):
                 },
             )
 
-        live_session.events = events
-        live_session.state = state
         db.session.commit()
 
     def broadcast(self, experiment, payload):

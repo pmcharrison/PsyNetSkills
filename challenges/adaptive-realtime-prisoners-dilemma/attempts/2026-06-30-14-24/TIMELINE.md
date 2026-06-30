@@ -65,4 +65,6 @@
 - T+01:51:00 [agent] Replaced `summarize_events` with incremental `reduce_event(state, event, ...)` for choice, chat, and no-op event reduction.
 - T+01:53:00 [manual] User clarified that treatment should be a session parameter, not a `reduce_event` argument.
 - T+01:54:00 [agent] Moved treatment into session `state.params` and simplified the reducer signature to `reduce_event(state, event, participants)`.
-- T+01:55:00 [agent-stop] Implementation and first-pass evidence collection complete.
+- T+01:56:00 [manual] User clarified that `reduce_event` should be a method on the retrieved `PDLiveSession` object and should update that session.
+- T+01:57:00 [agent] Refactored `reduce_event` into a `PDLiveSession` instance method that appends events and mutates the session projection.
+- T+01:58:00 [agent-stop] Implementation and first-pass evidence collection complete.
