@@ -57,4 +57,6 @@
 - T+01:39:00 [agent] Added `PDLiveSession` and moved websocket choices, sequence, and cumulative live state into a row locked per dyad/session.
 - T+01:41:00 [manual] User requested restoring chat history after refresh.
 - T+01:42:00 [agent] Added persistent chat messages to `PDLiveSession` and rehydrated the chat feed from state snapshots.
-- T+01:43:00 [agent-stop] Implementation and first-pass evidence collection complete.
+- T+01:44:00 [manual] User requested showing instructions after dyad formation and treatment assignment.
+- T+01:45:00 [agent] Moved instructions into the allocated trial and made communication wording treatment-specific.
+- T+01:46:00 [agent-stop] Implementation and first-pass evidence collection complete.

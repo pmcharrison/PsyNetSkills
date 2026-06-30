@@ -31,6 +31,9 @@ Key features:
 - The participant-facing game interface avoids exposing treatment labels,
   participant IDs, and internal points; it presents bonuses in dollars and
   updates PsyNet's footer reward display as the game progresses.
+- Instructions are shown inside the allocated trial after dyad formation and
+  treatment assignment, so communication is mentioned only for dyads in the
+  communication treatment.
 - The dyad grouper uses explicit dyad batching and a 180-second wait window for
   manual review sessions.
 - The finalized `trial.answer` contains the full ordered action sequence for

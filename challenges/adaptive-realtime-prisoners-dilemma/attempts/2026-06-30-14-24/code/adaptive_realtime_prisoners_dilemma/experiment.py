@@ -131,20 +131,26 @@ def waiting_page(participant: Participant):
     return WaitPage(content=content, wait_time=2.5)
 
 
-def instruction_page():
+def instruction_page(treatment: str):
     content = tags.div()
     with content:
         tags.h2("Real-time decision game")
         tags.p(
-            "You will be paired with one other participant for a 10-round game. "
-            "In each round you both choose at the same time."
+            "You have been paired with a partner for a 10-round game. "
+            "In each round you and your partner choose at the same time."
         )
         tags.p(
             "Your choices affect a real bonus. The game page will show a simple "
             "table with the bonus you receive for each possible combination of "
-            "your choice and your partner's choice. "
-            "Some pairs can chat while playing; other pairs cannot."
+            "your choice and your partner's choice."
         )
+        if treatment == "communication":
+            tags.p(
+                "In this game, you and your partner can use the chat panel while "
+                "you play."
+            )
+        else:
+            tags.p("In this game, you will make choices without a chat panel.")
     return InfoPage(content, time_estimate=20)
 
 
@@ -583,6 +589,7 @@ class PrisonersDilemmaTrial(StaticTrial):
 
     def show_trial(self, experiment, participant):
         return join(
+            instruction_page(self.definition["treatment"]),
             GroupBarrier(
                 id_="sequence_start",
                 group_type=GROUP_TYPE,
@@ -641,7 +648,6 @@ class Exp(psynet.experiment.Experiment):
 
     timeline = Timeline(
         PrisonersDilemmaGameWebSocket(),
-        PageMaker(lambda: instruction_page(), time_estimate=20, label="instructions"),
         SimpleGrouper(
             group_type=GROUP_TYPE,
             initial_group_size=2,
@@ -667,8 +673,15 @@ class Exp(psynet.experiment.Experiment):
     test_mode = "serial"
 
     def test_serial_run_bots(self, bots: List[BotDriver]):
+        advance_past_wait_pages(bots)
+
         for bot in bots:
             assert "Real-time decision game" in bot.current_page_text
+            treatment = bot.current_trial.definition["treatment"]
+            if treatment == "communication":
+                assert "chat panel" in bot.current_page_text
+            else:
+                assert "without a chat panel" in bot.current_page_text
             bot.take_page()
 
         advance_past_wait_pages(bots)
