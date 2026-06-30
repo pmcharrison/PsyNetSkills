@@ -18,6 +18,11 @@ Key features:
   state, treatment allocation, and template arguments.
 - The live game page uses a dedicated websocket channel for choices, results,
   state snapshots, and chat messages.
+- The live game page requests a server-owned state snapshot on load, so a browser
+  refresh can restore completed rounds, current round, points, and whether the
+  participant already submitted the current choice.
+- The dyad grouper uses explicit dyad batching and a 180-second wait window for
+  manual review sessions.
 - The finalized `trial.answer` contains the full ordered action sequence for
   both players, final-round cooperation count, treatment, bonus, and assignment
   metadata.

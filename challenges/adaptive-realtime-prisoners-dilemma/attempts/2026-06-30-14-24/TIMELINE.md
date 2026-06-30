@@ -37,4 +37,6 @@
 - T+00:59:30 [agent] Recorded blockers for SciPy installation, browser recording, constraints generation, and performance JSON.
 - T+01:04:00 [manual] User requested moving the live game page HTML into a dedicated template.
 - T+01:05:00 [agent] Moved live game HTML and JavaScript into `templates/live_pd_sequence.html` and kept `RealTimeGamePage` focused on template arguments.
-- T+01:06:00 [agent-stop] Implementation and first-pass evidence collection complete.
+- T+01:08:00 [manual] User requested robustness to client-side page refresh.
+- T+01:09:30 [agent] Added websocket state snapshot rehydration for page refresh and increased manual dyad waiting robustness.
+- T+01:10:00 [agent-stop] Implementation and first-pass evidence collection complete.

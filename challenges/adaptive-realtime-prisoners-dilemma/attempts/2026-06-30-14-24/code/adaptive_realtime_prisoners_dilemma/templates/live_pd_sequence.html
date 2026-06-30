@@ -48,6 +48,7 @@ document.addEventListener("DOMContentLoaded", function () {
   var timer = null;
   var remaining = cfg.decision_seconds;
   var socket = null;
+  var restoredFromServer = false;
 
   function wsSend(payload) {
     if (socket && socket.readyState === WebSocket.OPEN) {
@@ -72,18 +73,27 @@ document.addEventListener("DOMContentLoaded", function () {
       window.setTimeout(function () { osc.stop(); }, 180);
     } catch (e) {}
   }
-  function startRound() {
+  function updateRoundDisplay() {
+    document.getElementById("pd-round").textContent = Math.min(round, cfg.sequence_length);
+    document.getElementById("pd-countdown").textContent = remaining + " seconds";
+  }
+  function startRound(options) {
+    options = options || {};
     if (round > cfg.sequence_length) return finishGame();
-    selectedThisRound = false;
+    selectedThisRound = !!options.alreadySubmitted;
     remaining = cfg.decision_seconds;
-    document.getElementById("pd-round").textContent = round;
-    setButtons(true);
-    setStatus("Choose your action for round " + round + ".");
-    playCue();
+    updateRoundDisplay();
+    setButtons(!selectedThisRound);
+    setStatus(
+      selectedThisRound
+        ? "Choice already submitted for round " + round + ". Waiting for your partner..."
+        : "Choose your action for round " + round + "."
+    );
+    if (!selectedThisRound && options.playCue !== false) playCue();
     if (timer) clearInterval(timer);
     timer = setInterval(function () {
       remaining -= 1;
-      document.getElementById("pd-countdown").textContent = remaining + " seconds";
+      updateRoundDisplay();
       if (remaining <= 0 && !selectedThisRound) choose(cfg.defect);
     }, 1000);
   }
@@ -100,6 +110,11 @@ document.addEventListener("DOMContentLoaded", function () {
     var partner = entry.players.find(function (p) { return String(p.participant_id) !== String(cfg.participant_id); });
     document.getElementById("pd-points").textContent = me.cumulative_points;
     document.getElementById("pd-bonus").textContent = "$" + me.bonus.toFixed(2);
+    appendHistoryEntry(entry);
+  }
+  function appendHistoryEntry(entry) {
+    var me = entry.players.find(function (p) { return String(p.participant_id) === String(cfg.participant_id); });
+    var partner = entry.players.find(function (p) { return String(p.participant_id) !== String(cfg.participant_id); });
     var history = document.getElementById("pd-history");
     if (entry.round === 1) history.innerHTML = "";
     var p = document.createElement("p");
@@ -107,6 +122,36 @@ document.addEventListener("DOMContentLoaded", function () {
       ", your partner played " + partner.action + ". You got $" +
       me.bonus.toFixed(2) + " cumulative bonus.";
     history.appendChild(p);
+  }
+  function renderRestoredHistory() {
+    var history = document.getElementById("pd-history");
+    history.innerHTML = "";
+    if (!sequence.length) {
+      history.textContent = "No rounds completed yet.";
+      document.getElementById("pd-points").textContent = "0";
+      document.getElementById("pd-bonus").textContent = "$0.00";
+      return;
+    }
+    sequence.forEach(appendHistoryEntry);
+    var last = sequence[sequence.length - 1];
+    var me = last.players.find(function (p) { return String(p.participant_id) === String(cfg.participant_id); });
+    if (me) {
+      document.getElementById("pd-points").textContent = me.cumulative_points;
+      document.getElementById("pd-bonus").textContent = "$" + me.bonus.toFixed(2);
+    }
+  }
+  function restoreFromSnapshot(msg) {
+    restoredFromServer = true;
+    sequence = msg.sequence || [];
+    renderRestoredHistory();
+    round = msg.round || (sequence.length + 1);
+    if (round > cfg.sequence_length) return finishGame();
+    var currentChoices = msg.current_round_choices || {};
+    var alreadySubmitted = Object.prototype.hasOwnProperty.call(
+      currentChoices,
+      String(cfg.participant_id)
+    );
+    startRound({alreadySubmitted: alreadySubmitted, playCue: false});
   }
   function finishGame() {
     clearInterval(timer);
@@ -160,7 +205,9 @@ document.addEventListener("DOMContentLoaded", function () {
   socket.onopen = function () {
     setStatus("Live connection ready.");
     wsSend({type: "state_request"});
-    startRound();
+    window.setTimeout(function () {
+      if (!restoredFromServer) startRound({playCue: false});
+    }, 1000);
   };
   socket.onmessage = function (event) {
     if (event.data.indexOf(cfg.channel + ":") !== 0) return;
@@ -170,6 +217,9 @@ document.addEventListener("DOMContentLoaded", function () {
       renderResult(msg.entry);
       round += 1;
       window.setTimeout(startRound, 800);
+    } else if (msg.type === "state_snapshot" &&
+               String(msg.target_participant_id) === String(cfg.participant_id)) {
+      restoreFromSnapshot(msg);
     } else if (msg.type === "chat_message" && cfg.chat_enabled) {
       appendChat(msg.sender, msg.content);
     }

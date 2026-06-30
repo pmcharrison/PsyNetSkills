@@ -306,6 +306,7 @@ class PrisonersDilemmaGameWebSocket(NullElt, WebSocketElt):
                 },
             )
         elif event_type == "state_request":
+            current_round = len(session["sequence"]) + 1
             self.broadcast(
                 experiment,
                 {
@@ -313,7 +314,11 @@ class PrisonersDilemmaGameWebSocket(NullElt, WebSocketElt):
                     "target_participant_id": str(participant.id),
                     "dyad_id": dyad_id,
                     "sequence": session["sequence"],
-                    "round": len(session["sequence"]) + 1,
+                    "round": current_round,
+                    "current_round_choices": session["choices"].get(
+                        str(current_round), {}
+                    ),
+                    "cumulative": session["cumulative"],
                 },
             )
 
@@ -527,8 +532,9 @@ class Exp(psynet.experiment.Experiment):
         SimpleGrouper(
             group_type=GROUP_TYPE,
             initial_group_size=2,
+            batch_size=2,
             waiting_logic=PageMaker(waiting_page, time_estimate=5),
-            max_wait_time=60,
+            max_wait_time=180,
         ),
         PrisonersDilemmaTrialMaker(
             id_="pd_sequence",
