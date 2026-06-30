@@ -23,9 +23,10 @@ Key features:
 - The live game page requests a server-owned state snapshot on load, so a browser
   refresh can restore completed rounds, current round, bonus total, and whether the
   participant already submitted the current choice.
-- Websocket choice handling locks the dyad's allocated network state before
-  mutating the live session, rejects stale or duplicate choices, and broadcasts
-  results/chat messages to explicit dyad recipient ids.
+- Websocket choice handling stores live operational state in a dedicated
+  `PDLiveSession` table, locks the dyad's session row before mutation, rejects
+  stale or duplicate choices, and broadcasts results/chat messages to explicit
+  dyad recipient ids.
 - The participant-facing game interface avoids exposing treatment labels,
   participant IDs, and internal points; it presents bonuses in dollars and
   updates PsyNet's footer reward display as the game progresses.

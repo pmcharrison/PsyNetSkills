@@ -65,6 +65,18 @@ class PDLiveEvent(SQLBase, SQLMixin):
     payload = Column(JSON)
 
 
+@register_table
+class PDLiveSession(SQLBase, SQLMixin):
+    __tablename__ = "pd_live_session"
+
+    dyad_id = Column(Integer, index=True)
+    network_id = Column(Integer, index=True)
+    treatment = Column(String(64), index=True)
+    choices = Column(JSON)
+    sequence = Column(JSON)
+    cumulative = Column(JSON)
+
+
 def money(points: int | float) -> str:
     return f"${points * BONUS_PER_POINT:.2f}"
 
@@ -269,6 +281,29 @@ def build_bot_answer(bot):
     }
 
 
+def initialize_live_session(participants: List[Participant]):
+    participants = sorted(participants, key=lambda p: p.id)
+    trial = participants[0].current_trial
+    group = participants[0].active_sync_groups[GROUP_TYPE]
+    dyad_id = int(group.id)
+    existing = PDLiveSession.query.filter_by(
+        dyad_id=dyad_id,
+        network_id=trial.network.id,
+    ).first()
+    if existing is None:
+        db.session.add(
+            PDLiveSession(
+                dyad_id=dyad_id,
+                network_id=trial.network.id,
+                treatment=trial.definition["treatment"],
+                choices={},
+                sequence=[],
+                cumulative={str(p.id): 0 for p in participants},
+            )
+        )
+        db.session.commit()
+
+
 class PrisonersDilemmaGameWebSocket(NullElt, WebSocketElt):
     channel = GAME_WS_CHANNEL
 
@@ -283,13 +318,6 @@ class PrisonersDilemmaGameWebSocket(NullElt, WebSocketElt):
             return
 
         trial = participant.current_trial
-        network_cls = type(trial.network)
-        network = (
-            network_cls.query.filter_by(id=trial.network.id)
-            .with_for_update(of=network_cls)
-            .populate_existing()
-            .one()
-        )
         treatment = trial.definition["treatment"]
         group = participant.active_sync_groups[GROUP_TYPE]
         participants = sorted(group.participants, key=lambda p: p.id)
@@ -309,17 +337,31 @@ class PrisonersDilemmaGameWebSocket(NullElt, WebSocketElt):
             )
         )
 
-        sessions = network.var.get("live_sessions", {})
-        session = sessions.setdefault(
-            str(dyad_id),
-            {
-                "choices": {},
-                "sequence": [],
-                "cumulative": {
-                    str(p.id): 0 for p in sorted(group.participants, key=lambda p: p.id)
-                },
-            },
+        live_session = (
+            PDLiveSession.query.filter_by(
+                dyad_id=dyad_id,
+                network_id=trial.network.id,
+            )
+            .with_for_update(of=PDLiveSession)
+            .one_or_none()
         )
+        if live_session is None:
+            live_session = PDLiveSession(
+                dyad_id=dyad_id,
+                network_id=trial.network.id,
+                treatment=treatment,
+                choices={},
+                sequence=[],
+                cumulative={str(p.id): 0 for p in participants},
+            )
+            db.session.add(live_session)
+            db.session.flush()
+
+        session = {
+            "choices": dict(live_session.choices or {}),
+            "sequence": list(live_session.sequence or []),
+            "cumulative": dict(live_session.cumulative or {}),
+        }
 
         if event_type == "choice":
             self.handle_choice(
@@ -359,8 +401,9 @@ class PrisonersDilemmaGameWebSocket(NullElt, WebSocketElt):
                 },
             )
 
-        sessions[str(dyad_id)] = session
-        network.var.set("live_sessions", sessions)
+        live_session.choices = session["choices"]
+        live_session.sequence = session["sequence"]
+        live_session.cumulative = session["cumulative"]
         db.session.commit()
 
     def handle_choice(
@@ -529,6 +572,7 @@ class PrisonersDilemmaTrial(StaticTrial):
                 id_="sequence_start",
                 group_type=GROUP_TYPE,
                 max_wait_time=60,
+                on_release=initialize_live_session,
             ),
             RealTimeGamePage(trial=self, participant=participant),
         )

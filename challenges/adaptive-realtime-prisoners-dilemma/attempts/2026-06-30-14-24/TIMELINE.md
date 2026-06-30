@@ -53,4 +53,6 @@
 - T+01:33:00 [agent] Updated gamma to 0.1 and expanded the analysis notebook with an inline SVG plot of EIG, expected utility, and `-G` trajectories.
 - T+01:35:00 [manual] User requested moving treatment-choice logic into its own class for future optimizer swaps.
 - T+01:36:00 [agent] Refactored active-inference treatment selection into `ActiveInferenceTreatmentOptimizer` and updated experiment/simulation callers.
-- T+01:37:00 [agent-stop] Implementation and first-pass evidence collection complete.
+- T+01:38:00 [manual] User requested moving live session state out of network var storage and into a dedicated table.
+- T+01:39:00 [agent] Added `PDLiveSession` and moved websocket choices, sequence, and cumulative live state into a row locked per dyad/session.
+- T+01:40:00 [agent-stop] Implementation and first-pass evidence collection complete.
