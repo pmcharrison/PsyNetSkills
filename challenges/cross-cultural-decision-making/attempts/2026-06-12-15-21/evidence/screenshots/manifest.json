@@ -1,0 +1,13 @@
+{
+  "captions": {
+    "en-welcome.png": "English welcome page.",
+    "en-instructions.png": "English full instructions.",
+    "en-choice.png": "English side-by-side option choice page.",
+    "hi-welcome.png": "Hindi welcome page.",
+    "hi-instructions.png": "Hindi full instructions.",
+    "hi-choice.png": "Hindi side-by-side option choice page.",
+    "fr-welcome.png": "French welcome page.",
+    "fr-instructions.png": "French full instructions.",
+    "fr-choice.png": "French side-by-side option choice page."
+  }
+}

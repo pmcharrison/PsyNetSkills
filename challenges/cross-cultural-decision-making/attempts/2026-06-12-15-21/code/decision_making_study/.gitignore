@@ -1,0 +1,23 @@
+# Standard places to put a virtual environment
+env/
+.venv/
+
+# Automatically generated deployment resources
+.deploy/
+server.log
+static/assets
+source_code.zip
+
+# Editor and Python cache files
+.idea
+__pycache__
+*.pyc
+*.DS_Store
+
+# Local evidence/test scratch output
+data/
+dump.rdb
+node_modules/
+test-results/
+playwright-report/
+locales/*/LC_MESSAGES/*.mo
