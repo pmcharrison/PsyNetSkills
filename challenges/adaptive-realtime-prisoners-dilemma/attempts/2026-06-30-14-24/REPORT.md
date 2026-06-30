@@ -69,6 +69,7 @@ participants belonging to that dyad.
 `evidence/analyses/analysis.ipynb` reads the simulated export ZIP and summarizes
 treatment assignment, final-round mutual cooperation, and the evolution of EIG,
 expected utility, and negative expected free energy (`-G`) for each treatment.
+It also plots the cumulative number of times each treatment was delivered.
 The notebook uses `matplotlib`; the analysis dependency is recorded in
 `evidence/analyses/requirements.txt`.
 
