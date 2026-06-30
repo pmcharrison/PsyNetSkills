@@ -38,6 +38,9 @@ Key features:
   expression with a gamma-scaled expected utility term over posterior probability of
   final-round `(Cooperate, Cooperate)`.
 - The adaptive utility scale is `GAMMA = 0.1`.
+- Treatment optimization is encapsulated in
+  `ActiveInferenceTreatmentOptimizer`, so future attempts can swap in another
+  optimizer without changing the trial-maker allocation interface.
 
 ## Validation
 

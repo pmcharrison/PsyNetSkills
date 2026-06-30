@@ -14,7 +14,11 @@ import psynet.experiment
 
 sys.path.append(os.path.dirname(__file__))
 
-from adaptive_logic import TREATMENTS, TreatmentObservation, choose_treatment
+from adaptive_logic import (
+    TREATMENTS,
+    ActiveInferenceTreatmentOptimizer,
+    TreatmentObservation,
+)
 from psynet.bot import BotDriver, advance_past_wait_pages
 from psynet.data import SQLBase, SQLMixin, register_table
 from psynet.page import InfoPage, WaitPage
@@ -35,6 +39,7 @@ RANDOM_SEED = 20260630
 EXPERIMENT_MODE = os.environ.get("PD_EXPERIMENT_MODE", "adaptive")
 STATIC_TREATMENT_RULE = "balanced_by_sync_group_id"
 GAME_WS_CHANNEL = "pd_live_game"
+TREATMENT_OPTIMIZER = ActiveInferenceTreatmentOptimizer(treatments=TREATMENTS)
 
 PAYOFF_POINTS = {
     ACTION_COOPERATE: {
@@ -169,7 +174,11 @@ def choose_assignment_for_group(group_id: int, observations: list[TreatmentObser
             "static_rule": STATIC_TREATMENT_RULE,
         }
     elif EXPERIMENT_MODE == "adaptive":
-        decision = choose_treatment(observations, gamma=GAMMA, seed=seed)
+        decision = TREATMENT_OPTIMIZER.choose_treatment(
+            observations,
+            gamma=GAMMA,
+            seed=seed,
+        )
         selected = decision["selected_treatment"]
     else:
         raise ValueError(f"Unknown EXPERIMENT_MODE: {EXPERIMENT_MODE}")

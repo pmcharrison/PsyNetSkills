@@ -24,6 +24,85 @@ class TreatmentObservation:
     trials: int = 1
 
 
+class ActiveInferenceTreatmentOptimizer:
+    """Selects treatments using EIG plus gamma-scaled expected utility."""
+
+    algorithm_version = ALGORITHM_VERSION
+
+    def __init__(
+        self,
+        *,
+        treatments: tuple[str, ...] = TREATMENTS,
+        prior_alpha: float = 1.0,
+        prior_beta: float = 1.0,
+    ):
+        self.treatments = treatments
+        self.prior_alpha = prior_alpha
+        self.prior_beta = prior_beta
+
+    def posterior_for_treatment(
+        self,
+        observations: Iterable[TreatmentObservation],
+        treatment: str,
+    ) -> tuple[float, float]:
+        return posterior_for_treatment(
+            observations,
+            treatment,
+            prior_alpha=self.prior_alpha,
+            prior_beta=self.prior_beta,
+        )
+
+    def score_treatment(
+        self,
+        observations: Iterable[TreatmentObservation],
+        treatment: str,
+        *,
+        gamma: float,
+    ) -> dict:
+        alpha, beta = self.posterior_for_treatment(observations, treatment)
+        eig = analytical_eig(alpha, beta)
+        expected_utility = expected_both_cooperate(alpha, beta)
+        combined = eig + gamma * expected_utility
+        predictive_mean = alpha / (alpha + beta)
+        return {
+            "treatment": treatment,
+            "posterior_alpha": alpha,
+            "posterior_beta": beta,
+            "predictive_probability_both_cooperate": predictive_mean,
+            "expected_information_gain": eig,
+            "expected_utility_probability_both_cooperate": expected_utility,
+            "gamma": gamma,
+            "combined_score": combined,
+            "algorithm_version": self.algorithm_version,
+        }
+
+    def choose_treatment(
+        self,
+        observations: Iterable[TreatmentObservation],
+        *,
+        gamma: float,
+        seed: int,
+    ) -> dict:
+        observations = list(observations)
+        scores = [
+            self.score_treatment(observations, treatment, gamma=gamma)
+            for treatment in self.treatments
+        ]
+        best = max(score["combined_score"] for score in scores)
+        tied = [
+            score for score in scores if abs(score["combined_score"] - best) < 1e-12
+        ]
+        rng = random.Random(seed)
+        chosen = rng.choice(tied)
+        return {
+            "candidate_scores": scores,
+            "selected_treatment": chosen["treatment"],
+            "seed": seed,
+            "data_cutoff_n_observations": len(observations),
+            "algorithm_version": self.algorithm_version,
+        }
+
+
 def posterior_for_treatment(
     observations: Iterable[TreatmentObservation],
     treatment: str,
@@ -73,22 +152,12 @@ def score_treatment(
     gamma: float,
     n_future_choices: int = 2,
 ) -> dict:
-    alpha, beta = posterior_for_treatment(observations, treatment)
-    eig = analytical_eig(alpha, beta)
-    expected_utility = expected_both_cooperate(alpha, beta)
-    combined = eig + gamma * expected_utility
-    predictive_mean = alpha / (alpha + beta)
-    return {
-        "treatment": treatment,
-        "posterior_alpha": alpha,
-        "posterior_beta": beta,
-        "predictive_probability_both_cooperate": predictive_mean,
-        "expected_information_gain": eig,
-        "expected_utility_probability_both_cooperate": expected_utility,
-        "gamma": gamma,
-        "combined_score": combined,
-        "algorithm_version": ALGORITHM_VERSION,
-    }
+    # `n_future_choices` is retained for compatibility with older evidence code.
+    return ActiveInferenceTreatmentOptimizer().score_treatment(
+        observations,
+        treatment,
+        gamma=gamma,
+    )
 
 
 def choose_treatment(
@@ -98,19 +167,8 @@ def choose_treatment(
     seed: int,
     treatments: tuple[str, ...] = TREATMENTS,
 ) -> dict:
-    observations = list(observations)
-    scores = [
-        score_treatment(observations, treatment, gamma=gamma)
-        for treatment in treatments
-    ]
-    best = max(score["combined_score"] for score in scores)
-    tied = [score for score in scores if abs(score["combined_score"] - best) < 1e-12]
-    rng = random.Random(seed)
-    chosen = rng.choice(tied)
-    return {
-        "candidate_scores": scores,
-        "selected_treatment": chosen["treatment"],
-        "seed": seed,
-        "data_cutoff_n_observations": len(observations),
-        "algorithm_version": ALGORITHM_VERSION,
-    }
+    return ActiveInferenceTreatmentOptimizer(treatments=treatments).choose_treatment(
+        observations,
+        gamma=gamma,
+        seed=seed,
+    )

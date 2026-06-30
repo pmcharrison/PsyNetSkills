@@ -51,4 +51,6 @@
 - T+01:30:00 [agent] Updated experiment and simulation gamma defaults to 0.2.
 - T+01:32:00 [manual] User requested setting `GAMMA = 0.1` and adding notebook plots for EIG, utility, and `-G` by treatment.
 - T+01:33:00 [agent] Updated gamma to 0.1 and expanded the analysis notebook with an inline SVG plot of EIG, expected utility, and `-G` trajectories.
-- T+01:34:00 [agent-stop] Implementation and first-pass evidence collection complete.
+- T+01:35:00 [manual] User requested moving treatment-choice logic into its own class for future optimizer swaps.
+- T+01:36:00 [agent] Refactored active-inference treatment selection into `ActiveInferenceTreatmentOptimizer` and updated experiment/simulation callers.
+- T+01:37:00 [agent-stop] Implementation and first-pass evidence collection complete.

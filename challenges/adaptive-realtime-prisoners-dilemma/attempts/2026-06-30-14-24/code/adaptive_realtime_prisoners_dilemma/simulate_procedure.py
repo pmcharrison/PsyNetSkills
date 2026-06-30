@@ -8,7 +8,7 @@ import csv
 import zipfile
 from pathlib import Path
 
-from adaptive_logic import TREATMENTS, TreatmentObservation, choose_treatment
+from adaptive_logic import TREATMENTS, ActiveInferenceTreatmentOptimizer, TreatmentObservation
 
 TRUE_LAST_ROUND_P_BOTH_COOP = {
     "no_communication": 0.12,
@@ -18,14 +18,14 @@ TRUE_LAST_ROUND_P_BOTH_COOP = {
 
 def run_simulation(n_dyads: int = 80, gamma: float = 0.1, seed: int = 20260630):
     rng = random.Random(seed)
+    optimizer = ActiveInferenceTreatmentOptimizer(treatments=TREATMENTS)
     observations: list[TreatmentObservation] = []
     records = []
     for dyad_index in range(n_dyads):
-        decision = choose_treatment(
+        decision = optimizer.choose_treatment(
             observations,
             gamma=gamma,
             seed=seed + dyad_index,
-            treatments=TREATMENTS,
         )
         treatment = decision["selected_treatment"]
         successes = int(rng.random() < TRUE_LAST_ROUND_P_BOTH_COOP[treatment])
