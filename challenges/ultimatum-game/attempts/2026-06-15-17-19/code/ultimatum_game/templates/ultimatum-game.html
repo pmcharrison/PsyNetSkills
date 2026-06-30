@@ -1,0 +1,567 @@
+{% extends "timeline-page.html" %}
+
+{% block stylesheets %}
+{{ super() }}
+<style>
+    #ultimatum-shell { display: grid; grid-template-columns: minmax(320px, 0.82fr) minmax(520px, 1.45fr); gap: 1.1rem; min-height: 660px; }
+    #state-panel { background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%); border: 2px solid #0b5cff; border-radius: 28px; padding: 1.25rem; box-shadow: 0 8px 24px rgba(11, 92, 255, 0.18); }
+    #state-panel h2, #state-panel h3 { margin-top: 0; }
+    #round-heading { margin-bottom: 0.25rem; }
+    #role-summary { font-size: 1.05rem; margin-bottom: 0.75rem; }
+    #status-line { font-weight: 700; color: #1d4ed8; margin-bottom: 0.75rem; }
+    #timer { display: inline-block; min-width: 4rem; padding: 0.2rem 0.45rem; border-radius: 8px; background: #0f172a; color: white; text-align: center; font-variant-numeric: tabular-nums; }
+    .score-card { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin: 0.75rem 0; }
+    .score-card div { background: white; border: 1px solid #d9e2ec; border-radius: 8px; padding: 0.55rem; }
+    #action-area button { margin: 0.35rem 0.35rem 0.35rem 0; }
+    #offer-slider { width: 100%; accent-color: #0b5cff; }
+    #tabletop-wrap { position: relative; border-radius: 18px; overflow: hidden; min-height: 660px; background: radial-gradient(circle at 50% 16%, #f8fbff 0%, #dbeafe 38%, #9fb3d9 100%); box-shadow: 0 16px 34px rgba(15, 23, 42, 0.22); border: 1px solid #c7d2fe; }
+    #tabletop-canvas { width: 100%; height: 660px; display: block; }
+    #scene-hud { position: absolute; inset: 0; pointer-events: none; font-weight: 700; color: #52525b; text-shadow: 0 1px 2px rgba(255, 255, 255, 0.9); }
+    #partner-label, #me-label, #partner-coins-label, #me-coins-label, #table-caption { position: absolute; transform: translate(-50%, -50%); white-space: nowrap; }
+    #partner-label { left: 64%; top: 16%; font-size: 1.15rem; }
+    #partner-coins-label { left: 48%; top: 22%; font-size: 0.9rem; }
+    #me-label { left: 65%; top: 87%; font-size: 1.2rem; }
+    #me-coins-label { left: 48%; top: 74%; font-size: 0.95rem; }
+    #table-caption { left: 50%; top: 50%; padding: 0.35rem 0.55rem; border-radius: 999px; background: rgba(255, 255, 255, 0.86); color: #334155; font-size: 0.85rem; }
+    .pill { display: inline-block; padding: 0.15rem 0.5rem; border-radius: 999px; background: #dbeafe; color: #1e40af; font-size: 0.85rem; font-weight: 700; }
+    .action-button { padding: 0.6rem 0.9rem; border: 0; border-radius: 8px; color: white; font-weight: 700; background: #0b5cff; cursor: pointer; }
+    .action-button:disabled { opacity: 0.65; cursor: not-allowed; }
+    .accept { background: #16a34a; }
+    .reject { background: #dc2626; }
+    @media (max-width: 900px) { #ultimatum-shell { grid-template-columns: 1fr; } #tabletop-wrap, #tabletop-canvas { min-height: 460px; height: 460px; } }
+</style>
+{% endblock %}
+
+{% block main_body %}
+<div id="ultimatum-shell">
+    <section id="state-panel" aria-live="polite">
+        <span class="pill">Live WebSocket trial</span>
+        <h2>Ultimatum game</h2>
+        <h3 id="round-heading">Connecting...</h3>
+        <p id="role-summary">Opening the live connection.</p>
+        <div id="status-line">Connecting...</div>
+        <p>Round <strong id="round-number">-</strong> / <span id="round-target">-</span> counted rounds</p>
+        <p>Decision time remaining: <span id="timer">--</span></p>
+        <div class="score-card">
+            <div><small>Your role</small><br><strong id="role-label">-</strong></div>
+            <div><small>Your score</small><br><strong id="score-label">0 coins</strong></div>
+            <div><small>Round status</small><br><strong id="round-status-label">Waiting</strong></div>
+            <div><small>Offer</small><br><strong id="offer-label">-</strong></div>
+        </div>
+        <div id="action-area"></div>
+        <hr>
+        <div id="feedback-area">Waiting for the pair state...</div>
+    </section>
+    <section id="tabletop-wrap" aria-label="3D tabletop view of the Ultimatum game">
+        <canvas id="tabletop-canvas"></canvas>
+        <div id="scene-hud">
+            <div id="partner-coins-label">0 coins</div>
+            <div id="partner-label">Partner</div>
+            <div id="table-caption">Waiting for offer</div>
+            <div id="me-coins-label">0 coins</div>
+            <div id="me-label">Me</div>
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script type="module">
+import * as THREE from "/static/three.module.min.js";
+(function () {
+    var ROUND = psynet.var["ultimatum_round"];
+    var CHANNEL = psynet.var["ultimatum_channel"];
+    var ENDOWMENT = psynet.var["endowment"];
+    var FEEDBACK_SECONDS = psynet.var["feedback_seconds"];
+    var MY_ID = String(dallinger.identity.participantId);
+    var socket = null;
+    var decisionTimer = null;
+    var countdownTimer = null;
+    var secondsLeft = ROUND.decision_timeout_seconds;
+    var resolved = false;
+    var submitted = false;
+    var sceneHandles = null;
+    var previewOffer = 5;
+
+    var state = {
+        status: ROUND.role === "proposer" ? "proposal" : "waiting_proposal",
+        role: ROUND.role,
+        offer: null,
+        result: null,
+        totalScore: Number(psynet.var["ultimatum_total_score"] || 0),
+        countedRounds: Number(psynet.var["ultimatum_counted_rounds"] || 0),
+        roundsRequired: Number(psynet.var["ultimatum_rounds_required"] || 10)
+    };
+
+    initScene();
+    openSocket();
+    render();
+    if (ROUND.role === "proposer") startDecisionTimer("proposer");
+    setInterval(function () {
+        if (!resolved) postAction({type: "join_round"});
+    }, 1000);
+
+    function openSocket() {
+        var wsScheme = location.protocol === "https:" ? "wss://" : "ws://";
+        socket = new ReconnectingWebSocket(
+            wsScheme + location.host + "/chat?channel=" + CHANNEL
+            + "&worker_id=" + dallinger.identity.workerId
+            + "&participant_id=" + MY_ID
+        );
+        socket.onopen = function () { sendWebSocket({type: "join_round"}); };
+        socket.onmessage = function (event) {
+            if (event.data.indexOf(CHANNEL + ":") !== 0) return;
+            var msg;
+            try { msg = JSON.parse(event.data.slice(CHANNEL.length + 1)); }
+            catch (e) { return; }
+            processIncoming(msg);
+        };
+    }
+
+    function send(payload) {
+        postAction(payload);
+    }
+
+    function sendWebSocket(payload, retries) {
+        retries = retries === undefined ? 20 : retries;
+        payload.round_index = ROUND.round_index;
+        payload.group_id = ROUND.group_id;
+        payload.sender = MY_ID;
+        if (!socket) {
+            if (retries > 0) setTimeout(function () { sendWebSocket(payload, retries - 1); }, 100);
+            return;
+        }
+        try {
+            socket.send(CHANNEL + ":" + JSON.stringify(payload));
+        } catch (e) {
+            if (retries > 0) setTimeout(function () { sendWebSocket(payload, retries - 1); }, 100);
+        }
+    }
+
+    function postAction(payload) {
+        payload.round_index = ROUND.round_index;
+        payload.group_id = ROUND.group_id;
+        payload.sender = MY_ID;
+        payload.participant_id = Number(MY_ID);
+        payload.unique_id = psynet.uniqueId;
+        fetch("/ultimatum_action", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(payload)
+        })
+            .then(function (response) { return response.json(); })
+            .then(function (response) {
+                if (response && response.payload) processIncoming(response.payload);
+            })
+            .catch(function () {});
+    }
+
+    function processIncoming(msg) {
+        if (String(msg.group_id) !== String(ROUND.group_id)) return;
+        if (Number(msg.round_index) !== Number(ROUND.round_index)) return;
+        if (msg.type === "state" && msg.phase === "proposal_submitted") {
+            handleProposalSubmitted(Number(msg.offer));
+        } else if (msg.type === "result") {
+            handleResult(msg);
+        }
+    }
+
+    function render() {
+        document.getElementById("round-heading").textContent = ROUND.scored ? "Scored round " + ROUND.display_round : "Timeout demonstration round";
+        document.getElementById("role-summary").textContent = "Your role this round: " + state.role + ".";
+        document.getElementById("round-number").textContent = ROUND.scored ? ROUND.display_round : "demo";
+        document.getElementById("round-target").textContent = state.roundsRequired;
+        document.getElementById("role-label").textContent = titleCase(state.role);
+        document.getElementById("score-label").textContent = state.totalScore + " coins";
+        document.getElementById("round-status-label").textContent = titleCase(state.status.replace(/_/g, " "));
+        document.getElementById("offer-label").textContent = state.offer === null || state.offer === undefined ? "-" : state.offer + " coins";
+        renderAction();
+        renderFeedback();
+        updateScene();
+    }
+
+    function renderAction() {
+        var area = document.getElementById("action-area");
+        area.innerHTML = "";
+        if (state.status === "proposal" && state.role === "proposer") {
+            document.getElementById("status-line").textContent = "You are the proposer. Choose an offer.";
+            var label = document.createElement("label");
+            label.htmlFor = "offer-slider";
+            label.innerHTML = "Offer to responder: <strong id='slider-value'>" + previewOffer + "</strong> coins";
+            var slider = document.createElement("input");
+            slider.type = "range";
+            slider.min = "0";
+            slider.max = String(ENDOWMENT);
+            slider.value = String(previewOffer);
+            slider.id = "offer-slider";
+            slider.oninput = function () {
+                previewOffer = clampOffer(slider.value);
+                document.getElementById("slider-value").textContent = String(previewOffer);
+                state.offer = previewOffer;
+                updateScene();
+                document.getElementById("offer-label").textContent = previewOffer + " coins";
+            };
+            var button = document.createElement("button");
+            button.id = "offer-button";
+            button.className = "action-button";
+            button.textContent = "Make the offer";
+            button.onclick = function () {
+                if (resolved || submitted) return;
+                submitted = true;
+                clearDecisionTimer();
+                previewOffer = clampOffer(slider.value);
+                state.offer = previewOffer;
+                state.status = "waiting_decision";
+                send({type: "proposal", offer: previewOffer});
+                button.disabled = true;
+                render();
+            };
+            area.appendChild(label);
+            area.appendChild(slider);
+            area.appendChild(button);
+        } else if (state.status === "waiting_proposal") {
+            document.getElementById("status-line").textContent = "Waiting for the proposer to submit an offer.";
+            area.textContent = "Responder controls appear as soon as the offer arrives.";
+        } else if (state.status === "response" && state.role === "responder") {
+            document.getElementById("status-line").textContent = "You are the responder. Accept or reject the offer.";
+            var accept = document.createElement("button");
+            accept.id = "accept-button";
+            accept.className = "action-button accept";
+            accept.textContent = "Accept " + state.offer + " coins";
+            var reject = document.createElement("button");
+            reject.id = "reject-button";
+            reject.className = "action-button reject";
+            reject.textContent = "Reject offer";
+            accept.onclick = function () { submitDecision("accept", accept, reject); };
+            reject.onclick = function () { submitDecision("reject", accept, reject); };
+            area.appendChild(accept);
+            area.appendChild(reject);
+        } else if (state.status === "waiting_decision") {
+            document.getElementById("status-line").textContent = "Offer submitted. Waiting for the responder decision.";
+            area.textContent = "You offered " + state.offer + " coins.";
+        } else if (state.status === "feedback") {
+            document.getElementById("status-line").textContent = state.result.skipped ? "Round skipped." : "Round complete.";
+            area.textContent = "The synchronized result is shown below.";
+        } else if (state.status === "timed_out") {
+            document.getElementById("status-line").textContent = "Timed out.";
+            area.textContent = "The round is being skipped because a timed decision was not submitted.";
+        }
+    }
+
+    function handleProposalSubmitted(offer) {
+        if (resolved) return;
+        if (
+            Number(state.offer) === Number(offer)
+            && (state.status === "response" || state.status === "waiting_decision")
+        ) return;
+        state.offer = offer;
+        if (state.role === "responder") {
+            state.status = "response";
+            startDecisionTimer("responder");
+        } else {
+            state.status = "waiting_decision";
+        }
+        render();
+    }
+
+    function submitDecision(decision, accept, reject) {
+        if (resolved || submitted) return;
+        submitted = true;
+        clearDecisionTimer();
+        accept.disabled = true;
+        reject.disabled = true;
+        state.status = "waiting_decision";
+        send({type: "decision", decision: decision});
+        render();
+    }
+
+    function startDecisionTimer(stage) {
+        clearDecisionTimer();
+        secondsLeft = ROUND.decision_timeout_seconds;
+        updateTimerText();
+        countdownTimer = setInterval(function () {
+            secondsLeft -= 1;
+            updateTimerText();
+        }, 1000);
+        decisionTimer = setTimeout(function () {
+            if (resolved || submitted) return;
+            submitted = true;
+            clearDecisionTimer();
+            state.status = "timed_out";
+            send({type: "timeout", stage: stage});
+            render();
+        }, ROUND.decision_timeout_seconds * 1000);
+    }
+
+    function updateTimerText() {
+        document.getElementById("timer").textContent = Math.max(0, secondsLeft) + "s";
+    }
+
+    function clearDecisionTimer() {
+        if (decisionTimer) clearTimeout(decisionTimer);
+        if (countdownTimer) clearInterval(countdownTimer);
+        decisionTimer = null;
+        countdownTimer = null;
+        document.getElementById("timer").textContent = "--";
+    }
+
+    function handleResult(msg) {
+        if (resolved) return;
+        resolved = true;
+        clearDecisionTimer();
+        state.status = "feedback";
+        state.result = msg;
+        state.offer = msg.offer;
+        var personal = msg.participants[MY_ID];
+        if (personal) {
+            state.totalScore = Number(personal.own_total || 0);
+            state.countedRounds = Number(personal.counted_rounds || state.countedRounds);
+        }
+        render();
+        setTimeout(function () { finish(msg); }, FEEDBACK_SECONDS * 1000);
+    }
+
+    function renderFeedback() {
+        var feedback = document.getElementById("feedback-area");
+        if (!state.result) {
+            if (state.status === "response") {
+                feedback.textContent = "The proposer offered " + state.offer + " coins. Accept to split the endowment or reject so both players receive 0.";
+            } else if (state.status === "waiting_decision") {
+                feedback.textContent = "Waiting for the other browser to finish this round.";
+            } else {
+                feedback.textContent = "No completed round yet.";
+            }
+            return;
+        }
+        var msg = state.result;
+        var personal = msg.participants[MY_ID] || {own_payoff: 0, own_total: state.totalScore, counted_rounds: state.countedRounds};
+        var lines = [];
+        if (msg.skipped) {
+            lines.push("Skipped due to " + msg.timeout_stage + " timeout. No coins were awarded.");
+        } else {
+            lines.push("Proposal: responder receives " + msg.offer + " coin(s).");
+            lines.push("Responder decision: " + msg.decision + ".");
+            lines.push("Proposer payoff: " + msg.proposer_payoff + "; responder payoff: " + msg.responder_payoff + ".");
+        }
+        lines.push("Your payoff this round: " + personal.own_payoff + " coin(s).");
+        lines.push("Your cumulative score: " + personal.own_total + " coin(s) after " + personal.counted_rounds + " counted scored round(s)." );
+        feedback.innerHTML = lines.map(function (line) { return "<p class='mb-1'>" + line + "</p>"; }).join("");
+    }
+
+    function finish(msg) {
+        psynet.nextPage({
+            round_index: ROUND.round_index,
+            role: ROUND.role,
+            result: msg
+        });
+    }
+
+    function titleCase(text) { return text ? text.charAt(0).toUpperCase() + text.slice(1) : ""; }
+
+    function initScene() {
+        var canvas = document.getElementById("tabletop-canvas");
+        var renderer = new THREE.WebGLRenderer({canvas: canvas, antialias: true, alpha: true});
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+        renderer.shadowMap.enabled = true;
+        var scene = new THREE.Scene();
+        scene.background = new THREE.Color(0xf5f8ff);
+        var camera = new THREE.PerspectiveCamera(38, 1, 0.1, 100);
+        camera.position.set(0, 6.4, 8.8); camera.lookAt(0, 0.25, 0.05);
+        scene.add(new THREE.HemisphereLight(0xffffff, 0x6b7280, 1.4));
+        var key = new THREE.DirectionalLight(0xffffff, 1.0); key.position.set(-3, 8, 5); scene.add(key);
+        var floor = new THREE.Mesh(new THREE.PlaneGeometry(14, 12), new THREE.MeshStandardMaterial({color: 0xdbeafe, roughness: 0.85}));
+        floor.rotation.x = -Math.PI / 2; floor.position.y = -0.8; scene.add(floor);
+        scene.add(createTable());
+        var partner = createAvatar(0x2563eb, 0.72); partner.position.set(1.05, 0.2, -2.55); partner.rotation.y = Math.PI; scene.add(partner);
+        var me = createAvatar(0x0f766e, 1.02); me.position.set(1.15, 0.15, 2.65); scene.add(me);
+        var centerCoins = createCoinSet(10, 0.23); centerCoins.position.set(0.05, 0.34, 0.0); scene.add(centerCoins);
+        var meCoins = createCoinSet(10, 0.21); meCoins.position.set(-0.85, 0.58, 1.62); scene.add(meCoins);
+        var partnerCoins = createCoinSet(10, 0.19); partnerCoins.position.set(-0.85, 0.54, -1.62); scene.add(partnerCoins);
+        var offerTrail = createCoinSet(10, 0.2); offerTrail.position.set(0.0, 0.70, 0.0); scene.add(offerTrail);
+        sceneHandles = {renderer: renderer, scene: scene, camera: camera, centerCoins: centerCoins, meCoins: meCoins, partnerCoins: partnerCoins, offerTrail: offerTrail};
+        resizeScene(); window.addEventListener("resize", resizeScene);
+        (function animate() {
+            requestAnimationFrame(animate);
+            if (sceneHandles) {
+                var t = performance.now() * 0.001;
+                animateCoins(sceneHandles.centerCoins, t, 0.55);
+                animateCoins(sceneHandles.meCoins, t, 0.9);
+                animateCoins(sceneHandles.partnerCoins, t, 0.8);
+                animateCoins(sceneHandles.offerTrail, t, 1.1);
+                renderer.render(scene, camera);
+            }
+        })();
+    }
+
+    function createTable() {
+        var group = new THREE.Group();
+        var top = new THREE.Mesh(new THREE.BoxGeometry(6.3, 0.28, 4.4), new THREE.MeshStandardMaterial({color: 0x8f8975, roughness: 0.72}));
+        group.add(top);
+        var rim = new THREE.Mesh(new THREE.BoxGeometry(6.55, 0.1, 4.65), new THREE.MeshStandardMaterial({color: 0x6f6a5d, roughness: 0.7}));
+        rim.position.y = -0.2; group.add(rim);
+        return group;
+    }
+
+    function createAvatar(shirtColor, scale) {
+        var group = new THREE.Group();
+        var skin = new THREE.MeshStandardMaterial({color: 0xf2c7a5, roughness: 0.48});
+        var shirt = new THREE.MeshStandardMaterial({color: shirtColor, roughness: 0.62});
+        var dark = new THREE.MeshStandardMaterial({color: 0x1f2937, roughness: 0.68});
+        var torso = new THREE.Mesh(new THREE.CylinderGeometry(0.42, 0.56, 0.95, 28), shirt);
+        torso.position.y = 0.55;
+        var chest = new THREE.Mesh(new THREE.SphereGeometry(0.5, 28, 16), shirt);
+        chest.scale.set(1.05, 0.45, 0.55); chest.position.y = 0.92;
+        var shoulders = new THREE.Mesh(new THREE.CapsuleGeometry(0.17, 0.92, 8, 18), shirt);
+        shoulders.rotation.z = Math.PI / 2; shoulders.position.y = 1.03;
+        var neck = new THREE.Mesh(new THREE.CylinderGeometry(0.13, 0.15, 0.22, 18), skin);
+        neck.position.y = 1.28;
+        var head = new THREE.Mesh(new THREE.SphereGeometry(0.29, 32, 24), skin);
+        head.scale.set(0.9, 1.08, 0.86); head.position.y = 1.57;
+        var hair = new THREE.Mesh(new THREE.SphereGeometry(0.3, 24, 12, 0, Math.PI * 2, 0, Math.PI / 2.2), dark);
+        hair.position.y = 1.74;
+        var leftArm = createArm(shirt, skin, -0.62);
+        var rightArm = createArm(shirt, skin, 0.62);
+        var hips = new THREE.Mesh(new THREE.CylinderGeometry(0.45, 0.5, 0.22, 24), dark);
+        hips.position.y = 0.02;
+        group.add(torso, chest, shoulders, neck, head, hair, leftArm, rightArm, hips);
+        group.scale.setScalar(scale);
+        return group;
+    }
+
+    function createArm(shirt, skin, x) {
+        var arm = new THREE.Group();
+        var sleeve = new THREE.Mesh(new THREE.CapsuleGeometry(0.11, 0.52, 8, 16), shirt);
+        sleeve.position.set(x, 0.78, 0); sleeve.rotation.z = x < 0 ? -0.24 : 0.24;
+        var forearm = new THREE.Mesh(new THREE.CapsuleGeometry(0.085, 0.36, 8, 16), skin);
+        forearm.position.set(x * 1.08, 0.38, 0); forearm.rotation.z = x < 0 ? -0.1 : 0.1;
+        var hand = new THREE.Mesh(new THREE.SphereGeometry(0.095, 16, 12), skin);
+        hand.position.set(x * 1.12, 0.14, 0);
+        arm.add(sleeve, forearm, hand);
+        return arm;
+    }
+
+    function createCoinSet(count, radius) {
+        var group = new THREE.Group();
+        for (var i = 0; i < count; i++) {
+            var coin = createCoin(radius);
+            coin.position.set((i % 5) * radius * 1.45 - radius * 2.9, Math.floor(i / 5) * 0.09, (i % 2) * radius * 1.45 - radius * 0.72);
+            coin.userData.spinOffset = i * 0.37;
+            group.add(coin);
+        }
+        return group;
+    }
+
+    function createCoin(radius) {
+        var group = new THREE.Group();
+        var gold = new THREE.MeshStandardMaterial({color: 0xf6c343, metalness: 0.78, roughness: 0.18});
+        var edgeGold = new THREE.MeshStandardMaterial({color: 0xb7791f, metalness: 0.84, roughness: 0.2});
+        var coin = new THREE.Mesh(new THREE.CylinderGeometry(radius, radius, 0.085, 64), gold);
+        var topRim = new THREE.Mesh(new THREE.TorusGeometry(radius * 0.78, radius * 0.045, 10, 64), edgeGold);
+        topRim.rotation.x = Math.PI / 2; topRim.position.y = 0.048;
+        var bottomRim = topRim.clone(); bottomRim.position.y = -0.048;
+        var center = new THREE.Mesh(new THREE.CylinderGeometry(radius * 0.34, radius * 0.34, 0.095, 32), edgeGold);
+        center.position.y = 0.055;
+        var stripe = new THREE.Mesh(new THREE.BoxGeometry(radius * 0.13, 0.108, radius * 0.62), edgeGold);
+        stripe.position.y = 0.065;
+        group.add(coin, topRim, bottomRim, center, stripe);
+        addCoinRidges(group, radius, edgeGold);
+        return group;
+    }
+
+    function addCoinRidges(group, radius, material) {
+        for (var i = 0; i < 28; i++) {
+            var angle = (i / 28) * Math.PI * 2;
+            var ridge = new THREE.Mesh(new THREE.BoxGeometry(radius * 0.045, 0.105, radius * 0.105), material);
+            ridge.position.set(Math.cos(angle) * radius, 0, Math.sin(angle) * radius);
+            ridge.rotation.y = -angle;
+            group.add(ridge);
+        }
+    }
+
+    function animateCoins(group, time, speed) {
+        group.children.forEach(function (coin, i) {
+            if (!coin.visible) return;
+            coin.rotation.y = time * speed + coin.userData.spinOffset;
+            coin.rotation.z = Math.sin(time * 1.8 + i) * 0.045;
+        });
+    }
+
+    function resizeScene() {
+        if (!sceneHandles) return;
+        var canvas = document.getElementById("tabletop-canvas");
+        var rect = canvas.getBoundingClientRect();
+        sceneHandles.renderer.setSize(rect.width, rect.height, false);
+        sceneHandles.camera.aspect = rect.width / rect.height;
+        sceneHandles.camera.updateProjectionMatrix();
+    }
+
+    function updateScene() {
+        if (!sceneHandles) return;
+        var meCoins = 0, partnerCoins = 0, centerCoins = ENDOWMENT, offerTrail = 0, caption = "10-coin endowment";
+        if (state.result) {
+            if (state.result.skipped) {
+                caption = "Timeout: round skipped";
+                centerCoins = 0;
+            } else {
+                meCoins = Number((state.result.participants[MY_ID] || {}).own_payoff || 0);
+                partnerCoins = Number(state.result.proposer_payoff || 0) + Number(state.result.responder_payoff || 0) - meCoins;
+                centerCoins = 0;
+                offerTrail = Number(state.result.offer || 0);
+                caption = "Decision: " + state.result.decision;
+            }
+        } else if (state.status === "proposal" && state.role === "proposer") {
+            var proposalSplit = splitOfferCoins(currentProposalOffer());
+            meCoins = proposalSplit.me;
+            partnerCoins = proposalSplit.partner;
+            centerCoins = 0;
+            caption = splitCaption(currentProposalOffer());
+        } else if (state.status === "response" || state.status === "waiting_decision") {
+            var split = splitOfferCoins(state.offer || 0);
+            meCoins = split.me;
+            partnerCoins = split.partner;
+            centerCoins = 0;
+            offerTrail = Number(state.offer || 0);
+            caption = splitCaption(state.offer || 0);
+        } else if (state.status === "waiting_proposal") {
+            caption = "Waiting for proposer";
+        }
+        setVisibleCount(sceneHandles.centerCoins, Math.min(ENDOWMENT, centerCoins));
+        setVisibleCount(sceneHandles.offerTrail, Math.min(ENDOWMENT, offerTrail));
+        setVisibleCount(sceneHandles.meCoins, Math.min(ENDOWMENT, meCoins));
+        setVisibleCount(sceneHandles.partnerCoins, Math.min(ENDOWMENT, partnerCoins));
+        document.getElementById("me-coins-label").textContent = meCoins + " coins";
+        document.getElementById("partner-coins-label").textContent = partnerCoins + " coins";
+        document.getElementById("table-caption").textContent = caption;
+    }
+
+    function currentProposalOffer() {
+        var slider = document.getElementById("offer-slider");
+        if (slider) return clampOffer(slider.value);
+        return clampOffer(previewOffer);
+    }
+
+    function splitOfferCoins(offer) {
+        var responderCoins = clampOffer(offer);
+        var proposerCoins = ENDOWMENT - responderCoins;
+        if (state.role === "proposer") return {me: proposerCoins, partner: responderCoins};
+        if (state.role === "responder") return {me: responderCoins, partner: proposerCoins};
+        return {me: 0, partner: 0};
+    }
+
+    function splitCaption(offer) {
+        var responderCoins = clampOffer(offer);
+        return "Proposer keeps " + (ENDOWMENT - responderCoins) + "; responder gets " + responderCoins;
+    }
+
+    function clampOffer(offer) {
+        var value = Math.round(Number(offer || 0));
+        return Math.max(0, Math.min(ENDOWMENT, value));
+    }
+
+    function setVisibleCount(group, count) {
+        group.children.forEach(function (coin, i) { coin.visible = i < Math.max(0, Math.round(count)); });
+    }
+})();
+</script>
+{% endblock %}
