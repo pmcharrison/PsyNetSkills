@@ -1,0 +1,2 @@
+vars,id,creation_time,failed,failed_reason,time_of_death,group_type,active,end_time,leader_id,n_active_participants,type,initial_group_size,max_group_size,min_group_size,accepts_top_ups,class,object_type
+{},1,2026-06-30 15:20:11,False,,,pd_dyad,True,,2,2,SimpleSyncGroup,2,2,2,False,SimpleSyncGroup,SyncGroup

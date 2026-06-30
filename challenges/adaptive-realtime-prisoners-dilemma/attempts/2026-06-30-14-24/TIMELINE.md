@@ -27,3 +27,12 @@
 - T+00:12:30 [agent-start] Resumed plan revision work.
 - T+00:12:45 [agent] Updated PLAN.md to require full ordered per-iteration action sequences in finalized `trial.answer`.
 - T+00:12:50 [agent-stop] Paused again for required human review of PLAN.md before coding.
+- T+00:18:00 [manual] User approved the plan and instructed the agent to attempt according to it.
+- T+00:18:10 [agent-start] Resumed implementation work.
+- T+00:33:00 [agent] Added initial self-contained PsyNet experiment code, active-inference logic, standard support files, and offline adaptive simulation helper.
+- T+00:43:00 [manual] User identified that real-time play must happen within one trial without page reloads, treatment should live in network assignment, and EIG should use the analytical digamma formula.
+- T+00:48:00 [agent] Rewrote experiment around one custom real-time trial page, websocket choice/result/chat messages, network/node treatment assignment, and analytical active-inference scoring.
+- T+00:56:00 [agent] Passed compile/import checks, offline adaptive simulation, and `psynet test local`.
+- T+00:58:00 [agent] Ran `psynet simulate` and packaged simulation evidence.
+- T+00:59:30 [agent] Recorded blockers for SciPy installation, browser recording, constraints generation, and performance JSON.
+- T+01:00:00 [agent-stop] Implementation and first-pass evidence collection complete.

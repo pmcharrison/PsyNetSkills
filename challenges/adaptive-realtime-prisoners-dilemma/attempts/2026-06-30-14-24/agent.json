@@ -19,7 +19,8 @@
   },
   "run_cost": null,
   "notes": [
-    "Attempt is paused at PLAN.md for required human planning review.",
-    "Human author key must be filled before the attempt is marked complete."
+    "Implementation and first-pass evidence collection ended at 2026-06-30T15:22:38Z, but ended_at remains null until the human author key is supplied.",
+    "Human author key must be filled before the attempt is marked complete.",
+    "Browser recording and performance JSON evidence are blocked by local SciPy installation / VM issues documented in REPORT.md and EVALUATION.md."
   ]
 }
