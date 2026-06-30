@@ -7,3 +7,7 @@
 - T+00:02:30 [agent] Refreshed local PsyNet checkout to origin/master at c661ae4e3e483a0b270268e4727e70c25475c9aa.
 - T+00:04:30 [agent] Inspected current PsyNet synchronization, chatroom, websocket, and bot-testing patterns for planning.
 - T+00:08:30 [agent-stop] Paused for required human review of PLAN.md before coding.
+- T+00:08:45 [manual] User clarified that payoff explanations should be an explicit participant-centered table with readable dollar rewards in each cell.
+- T+00:09:00 [agent-start] Resumed plan revision work.
+- T+00:09:20 [agent] Updated PLAN.md to specify row labels for "If I play...", column labels for "If my partner plays...", and cells such as "I get $0.12".
+- T+00:09:30 [agent-stop] Paused again for required human review of PLAN.md before coding.

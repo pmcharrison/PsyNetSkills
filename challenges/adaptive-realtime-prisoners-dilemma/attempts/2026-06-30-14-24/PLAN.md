@@ -34,12 +34,16 @@ id, the experiment mode, and the dyad treatment.
 Each dyad will play one 10-iteration game. In each iteration both participants
 will receive an audible cue and a visible countdown, then choose between two
 globally configurable actions rendered as **Play "Cooperate"** and
-**Play "Defect"** by default. The payoff explanation will use natural language:
-mutual cooperation gives both players a moderate reward, mutual defection gives
-both players a low reward, unilateral defection gives the defector the largest
-reward and the cooperator the smallest reward. The exact payoff matrix and
-point-to-bonus exchange rate will be defined as global constants and shown in the
-instructions and during play.
+**Play "Defect"** by default. The payoff explanation will use an explicit,
+participant-centered table that is straightforward to read. Rows will be labelled
+with the participant's possible choices, for example **If I play Cooperate** and
+**If I play Defect**. Columns will be labelled with the partner's possible
+choices, for example **If my partner plays Cooperate** and **If my partner plays
+Defect**. Each cell will state the participant's own reward in direct language,
+for example **I get $0.12**, rather than using abstract payoff notation. A short
+caption will explain that the partner sees the same table from their own
+perspective. The exact payoff values and point-to-bonus exchange rate will be
+defined as global constants and shown in the instructions and during play.
 
 Participants will submit choices simultaneously. The server will reject duplicate
 or stale submissions, enforce deadlines, compute payoffs after both choices or
