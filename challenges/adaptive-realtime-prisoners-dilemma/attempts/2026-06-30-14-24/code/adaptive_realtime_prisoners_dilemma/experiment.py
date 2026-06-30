@@ -141,13 +141,13 @@ def active_observations() -> list[TreatmentObservation]:
             continue
         dyad_id = answer.get("dyad_id")
         treatment = answer.get("treatment")
-        successes = answer.get("final_round_cooperative_choices")
+        successes = answer.get("final_round_both_cooperated")
         if dyad_id is None or treatment not in TREATMENTS or successes is None:
             continue
         observations_by_dyad[dyad_id] = TreatmentObservation(
             treatment=treatment,
             successes=int(successes),
-            trials=2,
+            trials=1,
         )
     return list(observations_by_dyad.values())
 
@@ -241,6 +241,7 @@ def build_bot_answer(bot):
     sequence = build_sequence_from_actions(participants, actions, treatment)
     final_round = sequence[-1]
     final_successes = sum(1 for p in final_round["players"] if p["cooperated"])
+    final_both_cooperated = int(final_successes == 2)
     me = next(p for p in final_round["players"] if p["participant_id"] == bot.id)
     return {
         "dyad_id": int(group.id),
@@ -250,6 +251,7 @@ def build_bot_answer(bot):
         "experiment_mode": EXPERIMENT_MODE,
         "sequence_length": SEQUENCE_LENGTH,
         "sequence": sequence,
+        "final_round_both_cooperated": final_both_cooperated,
         "final_round_cooperative_choices": final_successes,
         "final_round_trials": 2,
         "total_points_self": me["cumulative_points"],
@@ -615,6 +617,7 @@ class Exp(psynet.experiment.Experiment):
             assert answer["sequence_length"] == SEQUENCE_LENGTH
             assert len(answer["sequence"]) == SEQUENCE_LENGTH, answer
             assert answer["final_round_trials"] == 2
+            assert answer["final_round_both_cooperated"] in [0, 1]
             assert answer["final_round_cooperative_choices"] in [0, 1, 2]
             assert answer["assignment_decision"]["selected_treatment"] in TREATMENTS
             assert answer["treatment"] in TREATMENTS

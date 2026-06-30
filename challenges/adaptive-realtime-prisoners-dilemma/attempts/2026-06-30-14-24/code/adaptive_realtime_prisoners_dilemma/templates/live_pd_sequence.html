@@ -167,6 +167,7 @@ document.addEventListener("DOMContentLoaded", function () {
     setStatus("Game complete. Submitting your results...");
     var finalRound = sequence[cfg.sequence_length - 1] || {players: []};
     var finalCoop = finalRound.players.filter(function (p) { return p.cooperated; }).length;
+    var finalBothCooperated = finalCoop === 2 ? 1 : 0;
     var me = finalRound.players.find(function (p) { return String(p.participant_id) === String(cfg.participant_id); }) || {};
     psynet.response.staged.rawAnswer = {
       dyad_id: cfg.dyad_id,
@@ -176,6 +177,7 @@ document.addEventListener("DOMContentLoaded", function () {
       experiment_mode: cfg.experiment_mode,
       sequence_length: cfg.sequence_length,
       sequence: sequence,
+      final_round_both_cooperated: finalBothCooperated,
       final_round_cooperative_choices: finalCoop,
       final_round_trials: 2,
       total_points_self: me.cumulative_points || 0,

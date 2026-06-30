@@ -2,14 +2,13 @@
 
 ## Science
 
-This experiment estimates whether real-time communication increases cooperation
-in a 10-iteration Prisoner's Dilemma. The adaptive policy treats each dyad as one
-assignment unit. The primary outcome `y` will be the probability of cooperation
-in the final round, operationalized as the number of cooperative choices in round
-10 out of the two choices made by the dyad in that round. The adaptive objective
-is to assign future dyads to the treatment with the highest predicted last-round
-cooperation probability while retaining enough stochastic exploration to learn
-from both treatments.
+This experiment estimates whether real-time communication increases mutual
+cooperation in a 10-iteration Prisoner's Dilemma. The adaptive policy treats each
+dyad as one assignment unit. The primary outcome `y` will be whether both players
+cooperate in the final round: `1` for `(Cooperate, Cooperate)` in round 10, and
+`0` otherwise. The adaptive objective is to assign future dyads to the treatment
+with the highest predicted probability of final-round mutual cooperation while
+retaining enough stochastic exploration to learn from both treatments.
 
 The two treatments are:
 
@@ -111,14 +110,15 @@ for analysis, but they will not replace the sequence-level `trial.answer`.
 
 Adaptive logic will be isolated in `adaptive_logic.py`. The first implementation
 will use a Beta-Bernoulli two-arm model with one arm per treatment. For each
-completed dyad, the model observes `successes = number_of_cooperative_choices_in_round_10`
-and `trials = 2`. Posterior state will be recomputed from all finalized dyad
-last-round outcomes before each assignment (`from_scratch` strategy) to avoid
-stale online updates under concurrent recruitment. The adaptive choice rule will
-use active inference, not a fallback bandit policy: each candidate treatment will
-be scored by expected information gain plus an expected-utility term. The utility
-will be the posterior predictive expectation of the log probability of
-last-round cooperation, and the utility contribution will be scaled by a global
+completed dyad, the model observes `successes = 1` if both players cooperated in
+round 10 and `successes = 0` otherwise, with `trials = 1`. Posterior state will
+be recomputed from all finalized dyad last-round mutual-cooperation outcomes
+before each assignment (`from_scratch` strategy) to avoid stale online updates
+under concurrent recruitment. The adaptive choice rule will use active
+inference, not a fallback bandit policy: each candidate treatment will be scored
+by expected information gain plus an expected-utility term. The utility will be
+the posterior predictive expectation of the log probability of final-round
+mutual cooperation, and the utility contribution will be scaled by a global
 `GAMMA` parameter. The exact expected information gain formula should follow the
 active-inference reference paper/code before implementation, and the
 implementation should keep the EIG term, expected utility term, `GAMMA`, and

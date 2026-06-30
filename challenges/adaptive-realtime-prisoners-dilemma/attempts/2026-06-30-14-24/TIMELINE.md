@@ -21,7 +21,7 @@
 - T+00:11:10 [agent-stop] Paused again for required human review of PLAN.md before coding.
 - T+00:11:25 [manual] User clarified that success should be measured as probability of cooperation in the last round.
 - T+00:11:40 [agent-start] Resumed plan revision work.
-- T+00:11:55 [agent] Updated PLAN.md so each dyad contributes final-round cooperative choices out of two choices to the adaptive model.
+- T+00:11:55 [agent] Updated PLAN.md so each dyad contributes one final-round mutual-cooperation observation to the adaptive model.
 - T+00:12:00 [agent-stop] Paused again for required human review of PLAN.md before coding.
 - T+00:12:15 [manual] User clarified that `trial.answer` after the sequence should contain the sequence of actions.
 - T+00:12:30 [agent-start] Resumed plan revision work.
@@ -43,4 +43,6 @@
 - T+01:14:00 [agent] Updated the participant-facing interface to show one payoff table, dollars-only rewards, no treatment labels or participant IDs, 20-second rounds, footer reward updates, and optimistic chat echoes.
 - T+01:17:00 [manual] User reported that chat messages were not received by the partner and simultaneous play did not seem to work.
 - T+01:19:00 [agent] Added network row locking for websocket session mutation, current-round duplicate/stale choice guards, and explicit dyad recipient routing for chat and round results.
-- T+01:20:00 [agent-stop] Implementation and first-pass evidence collection complete.
+- T+01:22:00 [manual] User clarified that the adaptive target is the probability that both players cooperate in the last round, i.e. `(Cooperate, Cooperate)` as a single event.
+- T+01:23:00 [agent] Updated adaptive observations, simulation, notebook, and documentation to model one binary `(Cooperate, Cooperate)` event per dyad.
+- T+01:24:00 [agent-stop] Implementation and first-pass evidence collection complete.

@@ -32,11 +32,11 @@ Key features:
 - The dyad grouper uses explicit dyad batching and a 180-second wait window for
   manual review sessions.
 - The finalized `trial.answer` contains the full ordered action sequence for
-  both players, final-round cooperation count, treatment, bonus, and assignment
-  metadata.
+  both players, final-round mutual-cooperation event, treatment, bonus, and
+  assignment metadata.
 - Adaptive scoring uses the analytical Beta-Bernoulli active-inference EIG
   expression with a gamma-scaled expected utility term over log probability of
-  final-round cooperation.
+  final-round `(Cooperate, Cooperate)`.
 
 ## Validation
 
@@ -61,7 +61,7 @@ and records adaptive assignment metadata.
 - An offline dyad-level active-inference simulation under `offline/`.
 
 `evidence/analyses/analysis.ipynb` reads the simulated export ZIP and summarizes
-treatment assignment and final-round cooperation.
+treatment assignment and final-round mutual cooperation.
 
 ## Blockers and limitations
 

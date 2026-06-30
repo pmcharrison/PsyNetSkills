@@ -21,7 +21,7 @@ EULER_GAMMA = 0.5772156649015329
 class TreatmentObservation:
     treatment: str
     successes: int
-    trials: int = 2
+    trials: int = 1
 
 
 def posterior_for_treatment(
@@ -62,7 +62,7 @@ def analytical_eig(alpha: float, beta: float) -> float:
     )
 
 
-def expected_log_cooperation(alpha: float, beta: float) -> float:
+def expected_log_both_cooperate(alpha: float, beta: float) -> float:
     return float(digamma(alpha) - digamma(alpha + beta))
 
 
@@ -75,7 +75,7 @@ def score_treatment(
 ) -> dict:
     alpha, beta = posterior_for_treatment(observations, treatment)
     eig = analytical_eig(alpha, beta)
-    expected_utility = expected_log_cooperation(alpha, beta)
+    expected_utility = expected_log_both_cooperate(alpha, beta)
     combined = eig + gamma * expected_utility
     predictive_mean = alpha / (alpha + beta)
     return {
@@ -84,7 +84,7 @@ def score_treatment(
         "posterior_beta": beta,
         "predictive_probability_cooperation": predictive_mean,
         "expected_information_gain": eig,
-        "expected_utility_log_probability_cooperation": expected_utility,
+        "expected_utility_log_probability_both_cooperate": expected_utility,
         "gamma": gamma,
         "combined_score": combined,
         "algorithm_version": ALGORITHM_VERSION,
