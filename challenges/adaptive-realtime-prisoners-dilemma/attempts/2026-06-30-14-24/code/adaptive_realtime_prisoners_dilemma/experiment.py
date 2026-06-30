@@ -129,6 +129,34 @@ class PDLiveSession(SQLBase, SQLMixin):
         self.state = state
         return previous_state, state
 
+    @property
+    def current_round(self) -> int:
+        state = self.state or {}
+        return state.get("current_round", len(state.get("sequence", [])) + 1)
+
+    @property
+    def current_round_choices(self) -> dict:
+        state = self.state or {}
+        current_round = self.current_round
+        return {
+            str(event["participant_id"]): event
+            for event in state.get("choice_events", [])
+            if event["payload"]["round"] == current_round
+        }
+
+    def state_snapshot(self, participant_id: int) -> dict:
+        state = self.state or {}
+        return {
+            "type": "state_snapshot",
+            "target_participant_id": str(participant_id),
+            "dyad_id": self.dyad_id,
+            "sequence": state.get("sequence", []),
+            "round": self.current_round,
+            "current_round_choices": self.current_round_choices,
+            "cumulative": state.get("cumulative", {}),
+            "chat_messages": state.get("chat_messages", []),
+        }
+
     def _reduce_choice_event(
         self,
         state: dict,
@@ -481,56 +509,70 @@ class PrisonersDilemmaGameWebSocket(NullElt, WebSocketElt):
 
         previous_state, state = live_session.reduce_event(event, participants)
 
+        self.broadcast_event(
+            experiment=experiment,
+            session=live_session,
+            event=event,
+            participants=participants,
+            previous_state=previous_state,
+        )
+
+        db.session.commit()
+
+    def broadcast_event(
+        self,
+        *,
+        experiment,
+        session: PDLiveSession,
+        event: PDLiveEvent,
+        participants: list[Participant],
+        previous_state: dict,
+    ):
+        for payload in self.event_payloads(session, event, participants, previous_state):
+            self.broadcast(experiment, payload)
+
+    def event_payloads(
+        self,
+        session: PDLiveSession,
+        event: PDLiveEvent,
+        participants: list[Participant],
+        previous_state: dict,
+    ) -> list[dict]:
+        state = session.state or {}
+        recipient_ids = [str(p.id) for p in sorted(participants, key=lambda p: p.id)]
+
         if event.event_type == "chat_message" and (
             len(state.get("chat_messages", []))
             > len(previous_state.get("chat_messages", []))
         ):
-            chat_entry = state["chat_messages"][-1]
-            self.broadcast(
-                experiment,
+            return [
                 {
                     "type": "chat_message",
-                    "dyad_id": dyad_id,
+                    "dyad_id": session.dyad_id,
                     "target_participant_ids": recipient_ids,
-                    **chat_entry,
-                },
-            )
-        elif event.event_type == "choice" and (
+                    **state["chat_messages"][-1],
+                }
+            ]
+
+        if event.event_type == "choice" and (
             len(state.get("sequence", [])) > len(previous_state.get("sequence", []))
         ):
             entry = state["sequence"][-1]
-            self.broadcast(
-                experiment,
+            return [
                 {
                     "type": "round_result",
-                    "dyad_id": int(group.id),
+                    "dyad_id": session.dyad_id,
                     "target_participant_ids": recipient_ids,
                     "round": entry["round"],
                     "entry": entry,
                     "complete": state.get("is_complete", False),
-                },
-            )
-        elif event.event_type in {"state_request", "choice"}:
-            current_round = state.get("current_round", len(state.get("sequence", [])) + 1)
-            self.broadcast(
-                experiment,
-                {
-                    "type": "state_snapshot",
-                    "target_participant_id": str(participant.id),
-                    "dyad_id": dyad_id,
-                    "sequence": state["sequence"],
-                    "round": current_round,
-                    "current_round_choices": {
-                        str(event["participant_id"]): event
-                        for event in state["choice_events"]
-                        if event["payload"]["round"] == current_round
-                    },
-                    "cumulative": state["cumulative"],
-                    "chat_messages": state["chat_messages"],
-                },
-            )
+                }
+            ]
 
-        db.session.commit()
+        if event.event_type in {"state_request", "choice"}:
+            return [session.state_snapshot(event.participant_id)]
+
+        return []
 
     def broadcast(self, experiment, payload):
         experiment.publish_to_subscribers(json.dumps(payload), channel_name=self.channel)

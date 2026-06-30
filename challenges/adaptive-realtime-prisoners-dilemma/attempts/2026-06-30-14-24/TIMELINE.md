@@ -69,4 +69,6 @@
 - T+01:57:00 [agent] Refactored `reduce_event` into a `PDLiveSession` instance method that appends events and mutates the session projection.
 - T+01:59:00 [manual] User clarified that `PDLiveSession` should accept `PDLiveEvent` objects rather than normalizing raw events itself.
 - T+02:00:00 [agent] Moved raw websocket normalization to the boundary and made `PDLiveSession.reduce_event` consume `PDLiveEvent` objects.
-- T+02:01:00 [agent-stop] Implementation and first-pass evidence collection complete.
+- T+02:02:00 [manual] User requested refocusing `PrisonersDilemmaGameWebSocket` on broadcast responsibilities.
+- T+02:03:00 [agent] Added `broadcast_event(session, event, ...)` and moved outbound payload selection behind that websocket hook.
+- T+02:04:00 [agent-stop] Implementation and first-pass evidence collection complete.

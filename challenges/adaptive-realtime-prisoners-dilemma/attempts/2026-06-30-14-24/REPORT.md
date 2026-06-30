@@ -34,6 +34,9 @@ Key features:
   `PDLiveSession.state`, and choice/chat events share the same reducer interface;
   event-type branching is kept inside the experiment-specific session reducer
   implementation.
+- `PrisonersDilemmaGameWebSocket` now focuses on event I/O and broadcasting:
+  `broadcast_event(session, event, ...)` maps reduced session state into outbound
+  websocket payloads and can be overridden for alternate privacy/filtering rules.
 - The participant-facing game interface avoids exposing treatment labels,
   participant IDs, and internal points; it presents bonuses in dollars and
   updates PsyNet's footer reward display as the game progresses.
