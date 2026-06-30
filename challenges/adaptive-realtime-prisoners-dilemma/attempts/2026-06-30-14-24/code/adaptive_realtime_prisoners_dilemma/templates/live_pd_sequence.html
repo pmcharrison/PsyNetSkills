@@ -200,7 +200,6 @@ document.addEventListener("DOMContentLoaded", function () {
       var content = input.value.trim();
       if (!content) return;
       wsSend({type: "chat_message", content: content});
-      appendChat(cfg.participant_id, content);
       input.value = "";
     };
   }
@@ -220,7 +219,14 @@ document.addEventListener("DOMContentLoaded", function () {
   socket.onmessage = function (event) {
     if (event.data.indexOf(cfg.channel + ":") !== 0) return;
     var msg = JSON.parse(event.data.slice(cfg.channel.length + 1));
-    if (Number(msg.dyad_id) !== Number(cfg.dyad_id) && !msg.target_participant_id) return;
+    var targetIds = Array.isArray(msg.target_participant_ids)
+      ? msg.target_participant_ids.map(String)
+      : null;
+    if (targetIds && targetIds.indexOf(String(cfg.participant_id)) === -1) return;
+    if (msg.target_participant_id &&
+        String(msg.target_participant_id) !== String(cfg.participant_id)) return;
+    if (!targetIds && !msg.target_participant_id &&
+        Number(msg.dyad_id) !== Number(cfg.dyad_id)) return;
     if (msg.type === "round_result") {
       renderResult(msg.entry);
       round += 1;
@@ -229,7 +235,7 @@ document.addEventListener("DOMContentLoaded", function () {
                String(msg.target_participant_id) === String(cfg.participant_id)) {
       restoreFromSnapshot(msg);
     } else if (msg.type === "chat_message" && cfg.chat_enabled) {
-      if (String(msg.sender) !== String(cfg.participant_id)) appendChat(msg.sender, msg.content);
+      appendChat(msg.sender, msg.content);
     }
   };
 });

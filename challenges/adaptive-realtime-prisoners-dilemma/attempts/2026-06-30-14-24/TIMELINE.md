@@ -41,4 +41,6 @@
 - T+01:09:30 [agent] Added websocket state snapshot rehydration for page refresh and increased manual dyad waiting robustness.
 - T+01:12:00 [manual] User requested interface cleanups: no duplicate instruction payoff table, no visible treatment/player IDs/points, 20-second rounds, footer reward updates, and more reliable chat display.
 - T+01:14:00 [agent] Updated the participant-facing interface to show one payoff table, dollars-only rewards, no treatment labels or participant IDs, 20-second rounds, footer reward updates, and optimistic chat echoes.
-- T+01:15:00 [agent-stop] Implementation and first-pass evidence collection complete.
+- T+01:17:00 [manual] User reported that chat messages were not received by the partner and simultaneous play did not seem to work.
+- T+01:19:00 [agent] Added network row locking for websocket session mutation, current-round duplicate/stale choice guards, and explicit dyad recipient routing for chat and round results.
+- T+01:20:00 [agent-stop] Implementation and first-pass evidence collection complete.

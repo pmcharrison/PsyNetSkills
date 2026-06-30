@@ -252,9 +252,11 @@ class PrisonersDilemmaGameWebSocket(NullElt, WebSocketElt):
             return
 
         trial = participant.current_trial
-        network = trial.network
+        network = type(trial.network).query.filter_by(id=trial.network.id).with_for_update().one()
         treatment = trial.definition["treatment"]
         group = participant.active_sync_groups[GROUP_TYPE]
+        participants = sorted(group.participants, key=lambda p: p.id)
+        recipient_ids = [str(p.id) for p in participants]
         dyad_id = int(group.id)
         event_type = data.get("type")
         round_index = data.get("round")
@@ -298,6 +300,7 @@ class PrisonersDilemmaGameWebSocket(NullElt, WebSocketElt):
                 {
                     "type": "chat_message",
                     "dyad_id": dyad_id,
+                    "target_participant_ids": recipient_ids,
                     "sender": participant.id,
                     "content": data.get("content", ""),
                 },
@@ -334,10 +337,39 @@ class PrisonersDilemmaGameWebSocket(NullElt, WebSocketElt):
         treatment,
         receive_time,
     ):
-        round_index = int(data["round"])
+        participants = sorted(group.participants, key=lambda p: p.id)
+        recipient_ids = [str(p.id) for p in participants]
+        current_round = len(session["sequence"]) + 1
+        try:
+            round_index = int(data["round"])
+        except (TypeError, ValueError):
+            return
+        action = data.get("action")
+        if (
+            round_index != current_round
+            or action not in ACTION_CHOICES
+            or round_index > SEQUENCE_LENGTH
+        ):
+            self.broadcast(
+                experiment,
+                {
+                    "type": "state_snapshot",
+                    "target_participant_id": str(participant.id),
+                    "dyad_id": int(group.id),
+                    "sequence": session["sequence"],
+                    "round": current_round,
+                    "current_round_choices": session["choices"].get(
+                        str(current_round), {}
+                    ),
+                    "cumulative": session["cumulative"],
+                },
+            )
+            return
         choices = session["choices"].setdefault(str(round_index), {})
+        if str(participant.id) in choices:
+            return
         choices[str(participant.id)] = {
-            "action": data["action"],
+            "action": action,
             "submitted_at": (
                 receive_time.astimezone(timezone.utc).isoformat()
                 if receive_time
@@ -345,7 +377,6 @@ class PrisonersDilemmaGameWebSocket(NullElt, WebSocketElt):
             ),
         }
 
-        participants = sorted(group.participants, key=lambda p: p.id)
         if len(choices) < len(participants):
             return
 
@@ -383,6 +414,7 @@ class PrisonersDilemmaGameWebSocket(NullElt, WebSocketElt):
             {
                 "type": "round_result",
                 "dyad_id": int(group.id),
+                "target_participant_ids": recipient_ids,
                 "round": round_index,
                 "entry": entry,
                 "complete": round_index == SEQUENCE_LENGTH,
