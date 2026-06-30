@@ -67,4 +67,6 @@
 - T+01:54:00 [agent] Moved treatment into session `state.params` and simplified the reducer signature to `reduce_event(state, event, participants)`.
 - T+01:56:00 [manual] User clarified that `reduce_event` should be a method on the retrieved `PDLiveSession` object and should update that session.
 - T+01:57:00 [agent] Refactored `reduce_event` into a `PDLiveSession` instance method that appends events and mutates the session projection.
-- T+01:58:00 [agent-stop] Implementation and first-pass evidence collection complete.
+- T+01:59:00 [manual] User clarified that `PDLiveSession` should accept `PDLiveEvent` objects rather than normalizing raw events itself.
+- T+02:00:00 [agent] Moved raw websocket normalization to the boundary and made `PDLiveSession.reduce_event` consume `PDLiveEvent` objects.
+- T+02:01:00 [agent-stop] Implementation and first-pass evidence collection complete.
