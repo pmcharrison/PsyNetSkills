@@ -19,3 +19,7 @@
 - T+00:10:50 [agent-start] Resumed plan revision work.
 - T+00:11:05 [agent] Updated PLAN.md to require active-inference scoring, exported EIG and utility terms, and review of the exact EIG formula before implementation.
 - T+00:11:10 [agent-stop] Paused again for required human review of PLAN.md before coding.
+- T+00:11:25 [manual] User clarified that success should be measured as probability of cooperation in the last round.
+- T+00:11:40 [agent-start] Resumed plan revision work.
+- T+00:11:55 [agent] Updated PLAN.md so each dyad contributes final-round cooperative choices out of two choices to the adaptive model.
+- T+00:12:00 [agent-stop] Paused again for required human review of PLAN.md before coding.
