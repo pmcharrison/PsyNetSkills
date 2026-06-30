@@ -9,8 +9,10 @@ Key features:
 
 - Dyads are formed with `SimpleGrouper(group_type="pd_dyad")`.
 - Treatment assignment is owned by the trial maker's network allocation:
-  `prioritize_networks` orders candidate treatment networks using either static
-  balancing or adaptive scoring.
+  treatment is a fixed node/network definition, and `prioritize_networks` orders
+  candidate treatment networks using either static balancing or adaptive scoring.
+  The adaptive decision audit record is copied into the selected trial
+  definition/answer, not written into all candidate network vars.
 - Each dyad plays the 10-iteration game within one custom PsyNet `Page`, so the
   participant-facing sequence proceeds without page reloads.
 - The live game HTML and JavaScript live in

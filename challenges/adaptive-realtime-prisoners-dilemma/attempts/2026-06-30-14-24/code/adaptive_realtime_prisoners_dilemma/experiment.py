@@ -156,6 +156,26 @@ def treatment_from_network(network):
     return network.head.definition["treatment"]
 
 
+def choose_assignment_for_group(group_id: int, observations: list[TreatmentObservation]):
+    seed = RANDOM_SEED + int(group_id or 0)
+    if EXPERIMENT_MODE == "static":
+        selected = TREATMENTS[int(group_id or 0) % len(TREATMENTS)]
+        decision = {
+            "candidate_scores": [],
+            "selected_treatment": selected,
+            "seed": seed,
+            "data_cutoff_n_observations": len(observations),
+            "algorithm_version": "static-balanced",
+            "static_rule": STATIC_TREATMENT_RULE,
+        }
+    elif EXPERIMENT_MODE == "adaptive":
+        decision = choose_treatment(observations, gamma=GAMMA, seed=seed)
+        selected = decision["selected_treatment"]
+    else:
+        raise ValueError(f"Unknown EXPERIMENT_MODE: {EXPERIMENT_MODE}")
+    return decision, selected
+
+
 def player_role(participant: Participant) -> str:
     group = participant.active_sync_groups[GROUP_TYPE]
     ordered = sorted(group.participants, key=lambda p: p.id)
@@ -234,7 +254,7 @@ def build_bot_answer(bot):
         "final_round_trials": 2,
         "total_points_self": me["cumulative_points"],
         "final_bonus_self": me["bonus"],
-        "assignment_decision": trial.network.var.get("assignment_decision", None),
+        "assignment_decision": trial.definition.get("assignment_decision"),
     }
 
 
@@ -448,7 +468,7 @@ class RealTimeGamePage(Page):
             "cooperate": ACTION_COOPERATE,
             "defect": ACTION_DEFECT,
             "chat_enabled": treatment == "communication",
-            "assignment_decision": trial.network.var.get("assignment_decision", None),
+            "assignment_decision": trial.definition.get("assignment_decision"),
         }
         super().__init__(
             label="live_pd_sequence",
@@ -476,6 +496,16 @@ class RealTimeGamePage(Page):
 class PrisonersDilemmaTrial(StaticTrial):
     time_estimate = SEQUENCE_LENGTH * DECISION_SECONDS + 10
 
+    def finalize_definition(self, definition, experiment, participant):
+        definition = {**definition}
+        group = participant.active_sync_groups[GROUP_TYPE]
+        decision, _selected = choose_assignment_for_group(
+            group.id,
+            active_observations(),
+        )
+        definition["assignment_decision"] = decision
+        return definition
+
     def show_trial(self, experiment, participant):
         return join(
             GroupBarrier(
@@ -488,9 +518,7 @@ class PrisonersDilemmaTrial(StaticTrial):
 
     def format_answer(self, raw_answer, **kwargs):
         if isinstance(raw_answer, dict) and raw_answer.get("assignment_decision") is None:
-            raw_answer["assignment_decision"] = self.network.var.get(
-                "assignment_decision", None
-            )
+            raw_answer["assignment_decision"] = self.definition.get("assignment_decision")
         return raw_answer
 
     def score_answer(self, answer, definition):
@@ -516,26 +544,7 @@ class PrisonersDilemmaTrialMaker(StaticTrialMaker):
 
         observations = active_observations()
         group = participant.active_sync_groups[GROUP_TYPE]
-        seed = RANDOM_SEED + int(group.id or 0)
-
-        if EXPERIMENT_MODE == "static":
-            selected = TREATMENTS[int(group.id or 0) % len(TREATMENTS)]
-            decision = {
-                "candidate_scores": [],
-                "selected_treatment": selected,
-                "seed": seed,
-                "data_cutoff_n_observations": len(observations),
-                "algorithm_version": "static-balanced",
-                "static_rule": STATIC_TREATMENT_RULE,
-            }
-        elif EXPERIMENT_MODE == "adaptive":
-            decision = choose_treatment(observations, gamma=GAMMA, seed=seed)
-            selected = decision["selected_treatment"]
-        else:
-            raise ValueError(f"Unknown EXPERIMENT_MODE: {EXPERIMENT_MODE}")
-
-        for network in networks:
-            network.var.set("assignment_decision", decision)
+        _decision, selected = choose_assignment_for_group(group.id, observations)
 
         networks.sort(key=lambda n: 0 if treatment_from_network(n) == selected else 1)
         return networks
