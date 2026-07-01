@@ -54,8 +54,33 @@ PAYOFF_POINTS = {
 }
 
 
+class LiveEventBase:
+    """Generic websocket event normalization for live sessions."""
+
+    @staticmethod
+    def message_payload(data, receive_time) -> dict:
+        payload = {
+            key: value
+            for key, value in data.items()
+            if key not in {"type", "participant_id"}
+        }
+        payload["receive_time"] = (
+            receive_time.astimezone(timezone.utc).isoformat() if receive_time else None
+        )
+        return payload
+
+    @classmethod
+    def from_message(cls, *, data, participant, receive_time, context):
+        return cls(
+            participant_id=participant.id,
+            event_type=data.get("type", "unknown"),
+            payload=cls.message_payload(data, receive_time),
+            **context.get("event_create", {}),
+        )
+
+
 @register_table
-class PDLiveEvent(SQLBase, SQLMixin):
+class PDLiveEvent(LiveEventBase, SQLBase, SQLMixin):
     __tablename__ = "pd_live_event"
 
     dyad_id = Column(Integer, index=True)
@@ -515,20 +540,11 @@ class LiveSessionWebSocket(NullElt, WebSocketElt):
         raise NotImplementedError
 
     def create_event(self, data, participant, receive_time, context):
-        payload = {
-            key: value
-            for key, value in data.items()
-            if key not in {"type", "participant_id"}
-        }
-        payload["receive_time"] = (
-            receive_time.astimezone(timezone.utc).isoformat() if receive_time else None
-        )
-        return self.event_class(
-            dyad_id=context["dyad_id"],
-            participant_id=participant.id,
-            treatment=context["treatment"],
-            event_type=data.get("type", "unknown"),
-            payload=payload,
+        return self.event_class.from_message(
+            data=data,
+            participant=participant,
+            receive_time=receive_time,
+            context=context,
         )
 
     def get_or_create_session(self, context):
@@ -571,6 +587,10 @@ class PrisonersDilemmaGameWebSocket(LiveSessionWebSocket):
             "group": group,
             "participants": participants,
             "dyad_id": dyad_id,
+            "event_create": {
+                "dyad_id": dyad_id,
+                "treatment": treatment,
+            },
             "session_filter": {
                 "dyad_id": dyad_id,
                 "network_id": trial.network.id,

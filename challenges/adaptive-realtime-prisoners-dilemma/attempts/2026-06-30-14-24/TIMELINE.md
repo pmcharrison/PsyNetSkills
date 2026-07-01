@@ -73,4 +73,6 @@
 - T+02:03:00 [agent] Added `broadcast_event(session, event, ...)` and moved outbound payload selection behind that websocket hook.
 - T+02:05:00 [manual] User asked whether `PDLiveSession` and the websocket class subclass generic base classes.
 - T+02:06:00 [agent] Added `LiveSessionBase` and `LiveSessionWebSocket` parents, with `PDLiveSession` and `PrisonersDilemmaGameWebSocket` as concrete subclasses.
-- T+02:07:00 [agent-stop] Implementation and first-pass evidence collection complete.
+- T+02:08:00 [manual] User requested the same generic/concrete split for live events.
+- T+02:09:00 [agent] Added `LiveEventBase` and made `PDLiveEvent` the concrete mapped event subclass.
+- T+02:10:00 [agent-stop] Implementation and first-pass evidence collection complete.

@@ -28,6 +28,9 @@ Key features:
   stale or duplicate choices, and broadcasts results/chat messages to explicit
   dyad recipient ids. Chat messages are persisted in the same session row and
   restored from state snapshots after browser refresh.
+- `PDLiveEvent` subclasses the generic `LiveEventBase`, which normalizes raw
+  websocket messages into persisted event objects. PD-specific event columns
+  such as dyad and treatment are supplied by the websocket session context.
 - `PDLiveSession` subclasses the generic `LiveSessionBase`; its
   `reduce_event(event, participants)` method accepts a persisted `PDLiveEvent`
   object and mutates the locked session row. Treatment is stored with the other
