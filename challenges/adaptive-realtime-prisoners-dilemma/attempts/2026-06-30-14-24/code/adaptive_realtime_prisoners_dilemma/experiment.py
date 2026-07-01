@@ -71,18 +71,12 @@ class LiveEventBase:
 
     @classmethod
     def from_message(cls, *, data, participant, receive_time, session):
-        kwargs = {}
-        for attr in ("dyad_id", "network_id", "treatment"):
-            # Only copy fields that exist on the concrete event table.
-            if hasattr(cls, attr) and hasattr(session, attr):
-                kwargs[attr] = getattr(session, attr)
         return cls(
             session_id=session.session_id,
             participant_id=participant.id,
             event_type=data.get("type", "unknown"),
             skip_reduce=bool(data.get("skip_reduce", False)),
             payload=cls.message_payload(data, receive_time),
-            **kwargs,
         )
 
 
@@ -97,20 +91,6 @@ class LiveEvent(LiveEventBase, SQLBase, SQLMixin):
     event_type = Column(String(64), index=True)
     skip_reduce = Column(Boolean, default=False, index=True)
     payload = Column(JSON)
-
-
-@register_table
-class PDLiveEvent(LiveEventBase, SQLBase, SQLMixin):
-    __tablename__ = "pd_live_event"
-
-    session_id = Column(String(128), index=True)
-    dyad_id = Column(Integer, index=True)
-    participant_id = Column(Integer, index=True, nullable=True)
-    treatment = Column(String(64), index=True)
-    event_type = Column(String(64), index=True)
-    skip_reduce = Column(Boolean, default=False, index=True)
-    payload = Column(JSON)
-
 
 class LiveSessionBase:
     """Generic event-sourced live session projection."""
@@ -139,7 +119,7 @@ class LiveSessionBase:
         return session
 
     @staticmethod
-    def cached_event(event: PDLiveEvent) -> dict:
+    def cached_event(event: LiveEvent) -> dict:
         return {
             "id": event.id,
             "event_type": event.event_type,
@@ -161,7 +141,7 @@ class LiveSessionBase:
             .all()
         )
 
-    def reduce_event(self, event: PDLiveEvent):
+    def reduce_event(self, event: LiveEvent):
         state = deepcopy(self.state or self.initial_state())
         cached_event = self.cached_event(event)
         self.state = state
@@ -190,7 +170,7 @@ class LiveSession(LiveSessionBase, SQLBase, SQLMixin):
 class PDLiveSession(LiveSessionBase, SQLBase, SQLMixin):
     __tablename__ = "pd_live_session"
 
-    event_class = PDLiveEvent
+    event_class = LiveEvent
 
     session_id = Column(String(128), index=True)
     dyad_id = Column(Integer, index=True)
@@ -229,7 +209,7 @@ class PDLiveSession(LiveSessionBase, SQLBase, SQLMixin):
             if event["payload"]["round"] == current_round
         }
 
-    def reduce_event(self, event: PDLiveEvent):
+    def reduce_event(self, event: LiveEvent):
         state = deepcopy(self.state or self.initial_state(self.participant_ids, self.treatment))
         treatment = state.get("params", {}).get("treatment")
         event_type = event.event_type
@@ -268,7 +248,7 @@ class PDLiveSession(LiveSessionBase, SQLBase, SQLMixin):
             "chat_messages": state.get("chat_messages", []),
         }
 
-    def _reduce_choice_event(self, state: dict, event: PDLiveEvent, treatment: str):
+    def _reduce_choice_event(self, state: dict, event: LiveEvent, treatment: str):
         payload = event.payload or {}
         try:
             round_index = int(payload["round"])
@@ -496,10 +476,9 @@ def build_bot_answer(bot):
     )
     for round_index in range(1, SEQUENCE_LENGTH + 1):
         for p in participants:
-            event = PDLiveEvent(
-                dyad_id=int(group.id),
+            event = LiveEvent(
+                session_id=f"pd_sequence:{trial.network_id}:dyad:{int(group.id)}",
                 participant_id=p.id,
-                treatment=treatment,
                 event_type="choice",
                 payload={
                     "round": round_index,
@@ -597,7 +576,7 @@ class LiveSessionWebSocket(NullElt, WebSocketElt):
 class PrisonersDilemmaGameWebSocket(LiveSessionWebSocket):
     channel = GAME_WS_CHANNEL
     session_class = PDLiveSession
-    event_class = PDLiveEvent
+    event_class = LiveEvent
 
     def event_payloads(self, session, event) -> list[dict]:
         state = session.state or {}
