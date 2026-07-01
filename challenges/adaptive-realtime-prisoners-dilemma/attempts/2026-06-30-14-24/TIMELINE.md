@@ -75,4 +75,6 @@
 - T+02:06:00 [agent] Added `LiveSessionBase` and `LiveSessionWebSocket` parents, with `PDLiveSession` and `PrisonersDilemmaGameWebSocket` as concrete subclasses.
 - T+02:08:00 [manual] User requested the same generic/concrete split for live events.
 - T+02:09:00 [agent] Added `LiveEventBase` and made `PDLiveEvent` the concrete mapped event subclass.
-- T+02:10:00 [agent-stop] Implementation and first-pass evidence collection complete.
+- T+02:11:00 [manual] User clarified that generic event/session classes should also be mapped tables and usable directly.
+- T+02:12:00 [agent] Added generic mapped `LiveEvent` and `LiveSession` tables and introduced stable `session_id` routing for generic/PD live sessions.
+- T+02:13:00 [agent-stop] Implementation and first-pass evidence collection complete.

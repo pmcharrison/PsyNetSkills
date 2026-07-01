@@ -28,9 +28,13 @@ Key features:
   stale or duplicate choices, and broadcasts results/chat messages to explicit
   dyad recipient ids. Chat messages are persisted in the same session row and
   restored from state snapshots after browser refresh.
+- `LiveEvent` and `LiveSession` are generic mapped tables that can be used
+  directly for simple live sessions; `PDLiveEvent` and `PDLiveSession` subclass
+  the same generic bases for the Prisoner's Dilemma implementation.
 - `PDLiveEvent` subclasses the generic `LiveEventBase`, which normalizes raw
   websocket messages into persisted event objects. PD-specific event columns
-  such as dyad and treatment are supplied by the websocket session context.
+  such as dyad and treatment are supplied by the websocket session context, and
+  every event/session carries a stable `session_id`.
 - `PDLiveSession` subclasses the generic `LiveSessionBase`; its
   `reduce_event(event, participants)` method accepts a persisted `PDLiveEvent`
   object and mutates the locked session row. Treatment is stored with the other

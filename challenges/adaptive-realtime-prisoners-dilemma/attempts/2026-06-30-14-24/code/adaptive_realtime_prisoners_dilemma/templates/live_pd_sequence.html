@@ -49,7 +49,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function wsSend(payload) {
     if (socket && socket.readyState === WebSocket.OPEN) {
-      var message = Object.assign({participant_id: cfg.participant_id}, payload);
+      var message = Object.assign({
+        participant_id: cfg.participant_id,
+        session_id: cfg.session_id
+      }, payload);
       socket.send(cfg.channel + ":" + JSON.stringify(message));
     }
   }
@@ -233,6 +236,7 @@ document.addEventListener("DOMContentLoaded", function () {
     try {
       msg = JSON.parse(event.data.slice(cfg.channel.length + 1));
     } catch (e) { return; }
+    if (msg.session_id && String(msg.session_id) !== String(cfg.session_id)) return;
     var targetIds = Array.isArray(msg.target_participant_ids)
       ? msg.target_participant_ids.map(String)
       : null;

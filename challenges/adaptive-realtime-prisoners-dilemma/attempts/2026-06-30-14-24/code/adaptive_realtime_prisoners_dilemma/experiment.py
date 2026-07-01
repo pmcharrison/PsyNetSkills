@@ -80,9 +80,22 @@ class LiveEventBase:
 
 
 @register_table
+class LiveEvent(LiveEventBase, SQLBase, SQLMixin):
+    """Generic persisted live-session event, usable without subclassing."""
+
+    __tablename__ = "live_event"
+
+    session_id = Column(String(128), index=True)
+    participant_id = Column(Integer, index=True, nullable=True)
+    event_type = Column(String(64), index=True)
+    payload = Column(JSON)
+
+
+@register_table
 class PDLiveEvent(LiveEventBase, SQLBase, SQLMixin):
     __tablename__ = "pd_live_event"
 
+    session_id = Column(String(128), index=True)
     dyad_id = Column(Integer, index=True)
     participant_id = Column(Integer, index=True, nullable=True)
     treatment = Column(String(64), index=True)
@@ -94,8 +107,26 @@ class LiveSessionBase:
     """Generic event-sourced live session projection."""
 
     @staticmethod
-    def initial_state(participants: list[Participant], treatment: str = None) -> dict:
-        return {"params": {}, "events": []}
+    def initial_state(participant_ids=None, **params) -> dict:
+        return {
+            "params": {
+                "participant_ids": [str(p) for p in (participant_ids or [])],
+                **params,
+            },
+            "events": [],
+        }
+
+    @classmethod
+    def get_or_create(cls, session_id: str, *, defaults=None, for_update=False):
+        query = cls.query.filter_by(session_id=session_id)
+        if for_update:
+            query = query.with_for_update(of=cls)
+        session = query.one_or_none()
+        if session is None:
+            session = cls(session_id=session_id, **(defaults or {}))
+            db.session.add(session)
+            db.session.flush()
+        return session
 
     @staticmethod
     def cached_event(event: PDLiveEvent) -> dict:
@@ -106,30 +137,47 @@ class LiveSessionBase:
             "payload": event.payload or {},
         }
 
-    def reduce_event(self, event: PDLiveEvent, participants: list[Participant]):
-        state = deepcopy(self.state or self.initial_state(participants, self.treatment))
+    @property
+    def participant_ids(self) -> list[int]:
+        state = self.state or {}
+        return [int(p) for p in state.get("params", {}).get("participant_ids", [])]
+
+    def reduce_event(self, event: PDLiveEvent):
+        state = deepcopy(self.state or self.initial_state())
         cached_event = self.cached_event(event)
         state.setdefault("events", []).append(cached_event)
         events = list(self.events or [])
         events.append(event.id)
         self.events = events
         self.state = state
-        self.last_reduction = {"accepted": True, "cached_event": cached_event}
+        self.last_reduction = {"kind": "generic_event", "event": cached_event}
 
     def state_snapshot(self, participant_id: int) -> dict:
         return {
             "type": "state_snapshot",
             "target_participant_id": str(participant_id),
-            "session_id": self.id,
+            "session_id": self.session_id,
             "state": self.state or {},
             "event_ids": self.events or [],
         }
 
 
 @register_table
+class LiveSession(LiveSessionBase, SQLBase, SQLMixin):
+    """Generic persisted live-session projection, usable without subclassing."""
+
+    __tablename__ = "live_session"
+
+    session_id = Column(String(128), index=True)
+    events = Column(JSON)
+    state = Column(JSON)
+
+
+@register_table
 class PDLiveSession(LiveSessionBase, SQLBase, SQLMixin):
     __tablename__ = "pd_live_session"
 
+    session_id = Column(String(128), index=True)
     dyad_id = Column(Integer, index=True)
     network_id = Column(Integer, index=True)
     treatment = Column(String(64), index=True)
@@ -137,15 +185,16 @@ class PDLiveSession(LiveSessionBase, SQLBase, SQLMixin):
     state = Column(JSON)
 
     @staticmethod
-    def initial_state(participants: list[Participant], treatment: str) -> dict:
-        participants = sorted(participants, key=lambda p: p.id)
+    def initial_state(participant_ids: list[int], treatment: str) -> dict:
+        participant_ids = [str(p) for p in participant_ids]
         return {
             "params": {
                 "treatment": treatment,
+                "participant_ids": participant_ids,
             },
             "choice_events": [],
             "sequence": [],
-            "cumulative": {str(participant.id): 0 for participant in participants},
+            "cumulative": {participant_id: 0 for participant_id in participant_ids},
             "chat_messages": [],
             "current_round": 1,
             "is_complete": False,
@@ -166,16 +215,12 @@ class PDLiveSession(LiveSessionBase, SQLBase, SQLMixin):
             if event["payload"]["round"] == current_round
         }
 
-    def reduce_event(self, event: PDLiveEvent, participants: list[Participant]):
-        previous_state = deepcopy(
-            self.state or self.initial_state(participants, self.treatment)
-        )
-        state = deepcopy(previous_state)
-        participants = sorted(participants, key=lambda p: p.id)
+    def reduce_event(self, event: PDLiveEvent):
+        state = deepcopy(self.state or self.initial_state(self.participant_ids, self.treatment))
         treatment = state.get("params", {}).get("treatment")
         event_type = event.event_type
         payload = event.payload or {}
-        self.last_reduction = {"accepted": False}
+        self.last_reduction = {"kind": "none"}
 
         if event_type == "chat_message" and treatment == "communication":
             chat_entry = {
@@ -185,13 +230,13 @@ class PDLiveSession(LiveSessionBase, SQLBase, SQLMixin):
                 "receive_time": payload.get("receive_time"),
             }
             state.setdefault("chat_messages", []).append(chat_entry)
-            self.last_reduction = {"accepted": True, "chat_entry": chat_entry}
+            self.last_reduction = {"kind": "chat_message", "chat_entry": chat_entry}
         elif event_type == "choice":
-            entry = self._reduce_choice_event(state, event, participants, treatment)
+            entry = self._reduce_choice_event(state, event, treatment)
             if entry is not None:
-                self.last_reduction = {"accepted": True, "round_result": entry}
+                self.last_reduction = {"kind": "round_result", "entry": entry}
         elif event_type == "state_request":
-            self.last_reduction = {"accepted": True, "state_snapshot": True}
+            self.last_reduction = {"kind": "state_snapshot"}
 
         events = list(self.events or [])
         events.append(event.id)
@@ -203,6 +248,7 @@ class PDLiveSession(LiveSessionBase, SQLBase, SQLMixin):
         return {
             "type": "state_snapshot",
             "target_participant_id": str(participant_id),
+            "session_id": self.session_id,
             "dyad_id": self.dyad_id,
             "sequence": state.get("sequence", []),
             "round": self.current_round,
@@ -211,13 +257,7 @@ class PDLiveSession(LiveSessionBase, SQLBase, SQLMixin):
             "chat_messages": state.get("chat_messages", []),
         }
 
-    def _reduce_choice_event(
-        self,
-        state: dict,
-        event: PDLiveEvent,
-        participants: list[Participant],
-        treatment: str,
-    ):
+    def _reduce_choice_event(self, state: dict, event: PDLiveEvent, treatment: str):
         payload = event.payload or {}
         try:
             round_index = int(payload["round"])
@@ -231,7 +271,7 @@ class PDLiveSession(LiveSessionBase, SQLBase, SQLMixin):
             or action not in ACTION_CHOICES
             or round_index > SEQUENCE_LENGTH
         ):
-            self.last_reduction = {"accepted": False, "state_snapshot": True}
+            self.last_reduction = {"kind": "state_snapshot"}
             return None
 
         choice_events = state.setdefault("choice_events", [])
@@ -250,8 +290,9 @@ class PDLiveSession(LiveSessionBase, SQLBase, SQLMixin):
         choice_events.append(cached_event)
         current_events.append(cached_event)
 
-        if len(current_events) != len(participants):
-            self.last_reduction = {"accepted": True, "state_snapshot": True}
+        participant_ids = self.participant_ids
+        if len(current_events) != len(participant_ids):
+            self.last_reduction = {"kind": "state_snapshot"}
             return None
 
         round_events = {
@@ -262,22 +303,22 @@ class PDLiveSession(LiveSessionBase, SQLBase, SQLMixin):
             int(participant_id): value
             for participant_id, value in state.get("cumulative", {}).items()
         }
-        actions = [round_events[p.id]["payload"]["action"] for p in participants]
+        actions = [round_events[p]["payload"]["action"] for p in participant_ids]
         payoff_0, payoff_1 = PAYOFF_POINTS[actions[0]][actions[1]]
         payoffs = [payoff_0, payoff_1]
         players = []
-        for participant, action, payoff in zip(participants, actions, payoffs):
-            cumulative[participant.id] += payoff
+        for index, (participant_id, action, payoff) in enumerate(zip(participant_ids, actions, payoffs)):
+            cumulative[participant_id] += payoff
             players.append(
                 {
-                    "participant_id": participant.id,
-                    "role": f"Player {participants.index(participant) + 1}",
+                    "participant_id": participant_id,
+                    "role": f"Player {index + 1}",
                     "action": action,
                     "cooperated": action == ACTION_COOPERATE,
                     "payoff_points": payoff,
-                    "cumulative_points": cumulative[participant.id],
-                    "bonus": cumulative[participant.id] * BONUS_PER_POINT,
-                    "submitted_at": round_events[participant.id].get("receive_time"),
+                    "cumulative_points": cumulative[participant_id],
+                    "bonus": cumulative[participant_id] * BONUS_PER_POINT,
+                    "submitted_at": round_events[participant_id].get("receive_time"),
                 }
             )
         entry = {
@@ -441,7 +482,7 @@ def build_bot_answer(bot):
     live_session = PDLiveSession(
         treatment=treatment,
         events=[],
-        state=PDLiveSession.initial_state(participants, treatment),
+        state=PDLiveSession.initial_state([p.id for p in participants], treatment),
     )
     for round_index in range(1, SEQUENCE_LENGTH + 1):
         for p in participants:
@@ -456,10 +497,7 @@ def build_bot_answer(bot):
                     "receive_time": None,
                 },
             )
-            live_session.reduce_event(
-                event,
-                participants,
-            )
+            live_session.reduce_event(event)
     sequence = live_session.state["sequence"]
     final_round = sequence[-1]
     final_successes = sum(1 for p in final_round["players"] if p["cooperated"])
@@ -482,33 +520,10 @@ def build_bot_answer(bot):
     }
 
 
-def initialize_live_session(participants: List[Participant]):
-    participants = sorted(participants, key=lambda p: p.id)
-    trial = participants[0].current_trial
-    group = participants[0].active_sync_groups[GROUP_TYPE]
-    dyad_id = int(group.id)
-    existing = PDLiveSession.query.filter_by(
-        dyad_id=dyad_id,
-        network_id=trial.network.id,
-    ).first()
-    if existing is None:
-        db.session.add(
-            PDLiveSession(
-                dyad_id=dyad_id,
-                network_id=trial.network.id,
-                treatment=trial.definition["treatment"],
-                events=[],
-                state=PDLiveSession.initial_state(
-                    participants, trial.definition["treatment"]
-                ),
-            )
-        )
-        db.session.commit()
-
 
 class LiveSessionWebSocket(NullElt, WebSocketElt):
-    session_class = None
-    event_class = None
+    session_class = LiveSession
+    event_class = LiveEvent
 
     def handle_message(
         self, message, channel_name, participant, node, receive_time, experiment
@@ -521,13 +536,17 @@ class LiveSessionWebSocket(NullElt, WebSocketElt):
             return
 
         context = self.session_context(participant)
+        session_id = data.get("session_id") or context.get("session_id")
+        if session_id is None:
+            return
+        context["session_id"] = str(session_id)
         event = self.create_event(data, participant, receive_time, context)
         db.session.add(event)
         db.session.flush()
 
         session = self.get_or_create_session(context)
         participants = context["participants"]
-        session.reduce_event(event, participants)
+        session.reduce_event(event)
         self.broadcast_event(
             experiment=experiment,
             session=session,
@@ -537,9 +556,29 @@ class LiveSessionWebSocket(NullElt, WebSocketElt):
         db.session.commit()
 
     def session_context(self, participant):
-        raise NotImplementedError
+        return {
+            "participants": [participant],
+            "event_create": {
+                "session_id": None,
+            },
+            "session_filter": {
+                "session_id": None,
+            },
+            "session_create": {
+                "session_id": None,
+                "events": [],
+                "state": self.session_class.initial_state([participant]),
+            },
+        }
 
     def create_event(self, data, participant, receive_time, context):
+        context = {
+            **context,
+            "event_create": {
+                **context.get("event_create", {}),
+                "session_id": context["session_id"],
+            },
+        }
         return self.event_class.from_message(
             data=data,
             participant=participant,
@@ -548,6 +587,17 @@ class LiveSessionWebSocket(NullElt, WebSocketElt):
         )
 
     def get_or_create_session(self, context):
+        context = {
+            **context,
+            "session_filter": {
+                **context.get("session_filter", {}),
+                "session_id": context["session_id"],
+            },
+            "session_create": {
+                **context.get("session_create", {}),
+                "session_id": context["session_id"],
+            },
+        }
         session = (
             self.session_class.query.filter_by(**context["session_filter"])
             .with_for_update(of=self.session_class)
@@ -581,13 +631,16 @@ class PrisonersDilemmaGameWebSocket(LiveSessionWebSocket):
         group = participant.active_sync_groups[GROUP_TYPE]
         participants = sorted(group.participants, key=lambda p: p.id)
         dyad_id = int(group.id)
+        session_id = f"pd_sequence:{trial.network_id}:dyad:{dyad_id}"
         return {
+            "session_id": session_id,
             "trial": trial,
             "treatment": treatment,
             "group": group,
             "participants": participants,
             "dyad_id": dyad_id,
             "event_create": {
+                "session_id": session_id,
                 "dyad_id": dyad_id,
                 "treatment": treatment,
             },
@@ -596,11 +649,14 @@ class PrisonersDilemmaGameWebSocket(LiveSessionWebSocket):
                 "network_id": trial.network.id,
             },
             "session_create": {
+                "session_id": session_id,
                 "dyad_id": dyad_id,
                 "network_id": trial.network.id,
                 "treatment": treatment,
                 "events": [],
-                "state": self.session_class.initial_state(participants, treatment),
+                "state": self.session_class.initial_state(
+                    [p.id for p in participants], treatment
+                ),
             },
         }
 
@@ -614,6 +670,7 @@ class PrisonersDilemmaGameWebSocket(LiveSessionWebSocket):
             return [
                 {
                     "type": "chat_message",
+                    "session_id": session.session_id,
                     "dyad_id": session.dyad_id,
                     "target_participant_ids": recipient_ids,
                     **last_reduction["chat_entry"],
@@ -625,6 +682,7 @@ class PrisonersDilemmaGameWebSocket(LiveSessionWebSocket):
             return [
                 {
                     "type": "round_result",
+                    "session_id": session.session_id,
                     "dyad_id": session.dyad_id,
                     "target_participant_ids": recipient_ids,
                     "round": entry["round"],
@@ -646,11 +704,23 @@ class RealTimeGamePage(Page):
         treatment = trial.definition["treatment"]
         role = f"Player {ordered.index(participant) + 1}"
         partner_id = [p.id for p in ordered if p.id != participant.id][0]
+        session_id = f"pd_sequence:{trial.network_id}:dyad:{int(group.id)}"
+        PDLiveSession.get_or_create(
+            session_id,
+            defaults={
+                "dyad_id": int(group.id),
+                "network_id": trial.network.id,
+                "treatment": treatment,
+                "events": [],
+                "state": PDLiveSession.initial_state([p.id for p in ordered], treatment),
+            },
+        )
         template_path = os.path.join(
             os.path.dirname(__file__), "templates", "live_pd_sequence.html"
         )
         game_config = {
             "channel": GAME_WS_CHANNEL,
+            "session_id": session_id,
             "participant_id": participant.id,
             "dyad_id": int(group.id),
             "role": role,
@@ -707,7 +777,6 @@ class PrisonersDilemmaTrial(StaticTrial):
                 id_="sequence_start",
                 group_type=GROUP_TYPE,
                 max_wait_time=60,
-                on_release=initialize_live_session,
             ),
             RealTimeGamePage(trial=self, participant=participant),
         )
