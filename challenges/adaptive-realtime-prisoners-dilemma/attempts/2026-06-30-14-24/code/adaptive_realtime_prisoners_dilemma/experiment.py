@@ -65,8 +65,44 @@ class PDLiveEvent(SQLBase, SQLMixin):
     payload = Column(JSON)
 
 
+class LiveSessionBase:
+    """Generic event-sourced live session projection."""
+
+    @staticmethod
+    def initial_state(participants: list[Participant], treatment: str = None) -> dict:
+        return {"params": {}, "events": []}
+
+    @staticmethod
+    def cached_event(event: PDLiveEvent) -> dict:
+        return {
+            "id": event.id,
+            "event_type": event.event_type,
+            "participant_id": event.participant_id,
+            "payload": event.payload or {},
+        }
+
+    def reduce_event(self, event: PDLiveEvent, participants: list[Participant]):
+        state = deepcopy(self.state or self.initial_state(participants, self.treatment))
+        cached_event = self.cached_event(event)
+        state.setdefault("events", []).append(cached_event)
+        events = list(self.events or [])
+        events.append(event.id)
+        self.events = events
+        self.state = state
+        self.last_reduction = {"accepted": True, "cached_event": cached_event}
+
+    def state_snapshot(self, participant_id: int) -> dict:
+        return {
+            "type": "state_snapshot",
+            "target_participant_id": str(participant_id),
+            "session_id": self.id,
+            "state": self.state or {},
+            "event_ids": self.events or [],
+        }
+
+
 @register_table
-class PDLiveSession(SQLBase, SQLMixin):
+class PDLiveSession(LiveSessionBase, SQLBase, SQLMixin):
     __tablename__ = "pd_live_session"
 
     dyad_id = Column(Integer, index=True)
@@ -90,45 +126,6 @@ class PDLiveSession(SQLBase, SQLMixin):
             "is_complete": False,
         }
 
-    @staticmethod
-    def cached_event(event: PDLiveEvent) -> dict:
-        return {
-            "id": event.id,
-            "event_type": event.event_type,
-            "participant_id": event.participant_id,
-            "payload": event.payload or {},
-        }
-
-    def reduce_event(
-        self, event: PDLiveEvent, participants: list[Participant]
-    ) -> tuple[dict, dict]:
-        previous_state = deepcopy(
-            self.state or self.initial_state(participants, self.treatment)
-        )
-        state = deepcopy(previous_state)
-        participants = sorted(participants, key=lambda p: p.id)
-        treatment = state.get("params", {}).get("treatment")
-        event_type = event.event_type
-        payload = event.payload or {}
-
-        if event_type == "chat_message" and treatment == "communication":
-            state.setdefault("chat_messages", []).append(
-                {
-                    "event_id": event.id,
-                    "sender_participant_id": event.participant_id,
-                    "content": payload.get("content", ""),
-                    "receive_time": payload.get("receive_time"),
-                }
-            )
-        elif event_type == "choice":
-            self._reduce_choice_event(state, event, participants, treatment)
-
-        events = list(self.events or [])
-        events.append(event.id)
-        self.events = events
-        self.state = state
-        return previous_state, state
-
     @property
     def current_round(self) -> int:
         state = self.state or {}
@@ -143,6 +140,38 @@ class PDLiveSession(SQLBase, SQLMixin):
             for event in state.get("choice_events", [])
             if event["payload"]["round"] == current_round
         }
+
+    def reduce_event(self, event: PDLiveEvent, participants: list[Participant]):
+        previous_state = deepcopy(
+            self.state or self.initial_state(participants, self.treatment)
+        )
+        state = deepcopy(previous_state)
+        participants = sorted(participants, key=lambda p: p.id)
+        treatment = state.get("params", {}).get("treatment")
+        event_type = event.event_type
+        payload = event.payload or {}
+        self.last_reduction = {"accepted": False}
+
+        if event_type == "chat_message" and treatment == "communication":
+            chat_entry = {
+                "event_id": event.id,
+                "sender_participant_id": event.participant_id,
+                "content": payload.get("content", ""),
+                "receive_time": payload.get("receive_time"),
+            }
+            state.setdefault("chat_messages", []).append(chat_entry)
+            self.last_reduction = {"accepted": True, "chat_entry": chat_entry}
+        elif event_type == "choice":
+            entry = self._reduce_choice_event(state, event, participants, treatment)
+            if entry is not None:
+                self.last_reduction = {"accepted": True, "round_result": entry}
+        elif event_type == "state_request":
+            self.last_reduction = {"accepted": True, "state_snapshot": True}
+
+        events = list(self.events or [])
+        events.append(event.id)
+        self.events = events
+        self.state = state
 
     def state_snapshot(self, participant_id: int) -> dict:
         state = self.state or {}
@@ -168,7 +197,7 @@ class PDLiveSession(SQLBase, SQLMixin):
         try:
             round_index = int(payload["round"])
         except (KeyError, TypeError, ValueError):
-            return
+            return None
 
         action = payload.get("action")
         current_round = len(state.get("sequence", [])) + 1
@@ -177,7 +206,8 @@ class PDLiveSession(SQLBase, SQLMixin):
             or action not in ACTION_CHOICES
             or round_index > SEQUENCE_LENGTH
         ):
-            return
+            self.last_reduction = {"accepted": False, "state_snapshot": True}
+            return None
 
         choice_events = state.setdefault("choice_events", [])
         current_events = [
@@ -189,14 +219,15 @@ class PDLiveSession(SQLBase, SQLMixin):
             choice_event["participant_id"] == event.participant_id
             for choice_event in current_events
         ):
-            return
+            return None
 
         cached_event = self.cached_event(event)
         choice_events.append(cached_event)
         current_events.append(cached_event)
 
         if len(current_events) != len(participants):
-            return
+            self.last_reduction = {"accepted": True, "state_snapshot": True}
+            return None
 
         round_events = {
             choice_event["participant_id"]: choice_event
@@ -224,17 +255,16 @@ class PDLiveSession(SQLBase, SQLMixin):
                     "submitted_at": round_events[participant.id].get("receive_time"),
                 }
             )
-        state.setdefault("sequence", []).append(
-            {
-                "round": round_index,
-                "treatment": treatment,
-                "players": players,
-            }
-        )
+        entry = {
+            "round": round_index,
+            "treatment": treatment,
+            "players": players,
+        }
+        state.setdefault("sequence", []).append(entry)
         state["cumulative"] = {str(k): v for k, v in cumulative.items()}
         state["current_round"] = len(state["sequence"]) + 1
         state["is_complete"] = len(state["sequence"]) >= SEQUENCE_LENGTH
-
+        return entry
 
 
 def money(points: int | float) -> str:
@@ -401,7 +431,7 @@ def build_bot_answer(bot):
                     "receive_time": None,
                 },
             )
-            _previous_state, state = live_session.reduce_event(
+            live_session.reduce_event(
                 event,
                 participants,
             )
@@ -451,8 +481,9 @@ def initialize_live_session(participants: List[Participant]):
         db.session.commit()
 
 
-class PrisonersDilemmaGameWebSocket(NullElt, WebSocketElt):
-    channel = GAME_WS_CHANNEL
+class LiveSessionWebSocket(NullElt, WebSocketElt):
+    session_class = None
+    event_class = None
 
     def handle_message(
         self, message, channel_name, participant, node, receive_time, experiment
@@ -464,12 +495,26 @@ class PrisonersDilemmaGameWebSocket(NullElt, WebSocketElt):
         except json.JSONDecodeError:
             return
 
-        trial = participant.current_trial
-        treatment = trial.definition["treatment"]
-        group = participant.active_sync_groups[GROUP_TYPE]
-        participants = sorted(group.participants, key=lambda p: p.id)
-        recipient_ids = [str(p.id) for p in participants]
-        dyad_id = int(group.id)
+        context = self.session_context(participant)
+        event = self.create_event(data, participant, receive_time, context)
+        db.session.add(event)
+        db.session.flush()
+
+        session = self.get_or_create_session(context)
+        participants = context["participants"]
+        session.reduce_event(event, participants)
+        self.broadcast_event(
+            experiment=experiment,
+            session=session,
+            event=event,
+            participants=participants,
+        )
+        db.session.commit()
+
+    def session_context(self, participant):
+        raise NotImplementedError
+
+    def create_event(self, data, participant, receive_time, context):
         payload = {
             key: value
             for key, value in data.items()
@@ -478,86 +523,85 @@ class PrisonersDilemmaGameWebSocket(NullElt, WebSocketElt):
         payload["receive_time"] = (
             receive_time.astimezone(timezone.utc).isoformat() if receive_time else None
         )
-        event = PDLiveEvent(
-            dyad_id=dyad_id,
+        return self.event_class(
+            dyad_id=context["dyad_id"],
             participant_id=participant.id,
-            treatment=treatment,
+            treatment=context["treatment"],
             event_type=data.get("type", "unknown"),
             payload=payload,
         )
-        db.session.add(event)
-        db.session.flush()
 
-        live_session = (
-            PDLiveSession.query.filter_by(
-                dyad_id=dyad_id,
-                network_id=trial.network.id,
-            )
-            .with_for_update(of=PDLiveSession)
+    def get_or_create_session(self, context):
+        session = (
+            self.session_class.query.filter_by(**context["session_filter"])
+            .with_for_update(of=self.session_class)
             .one_or_none()
         )
-        if live_session is None:
-            live_session = PDLiveSession(
-                dyad_id=dyad_id,
-                network_id=trial.network.id,
-                treatment=treatment,
-                events=[],
-                state=PDLiveSession.initial_state(participants, treatment),
-            )
-            db.session.add(live_session)
+        if session is None:
+            session = self.session_class(**context["session_create"])
+            db.session.add(session)
             db.session.flush()
+        return session
 
-        previous_state, state = live_session.reduce_event(event, participants)
-
-        self.broadcast_event(
-            experiment=experiment,
-            session=live_session,
-            event=event,
-            participants=participants,
-            previous_state=previous_state,
-        )
-
-        db.session.commit()
-
-    def broadcast_event(
-        self,
-        *,
-        experiment,
-        session: PDLiveSession,
-        event: PDLiveEvent,
-        participants: list[Participant],
-        previous_state: dict,
-    ):
-        for payload in self.event_payloads(session, event, participants, previous_state):
+    def broadcast_event(self, *, experiment, session, event, participants):
+        for payload in self.event_payloads(session, event, participants):
             self.broadcast(experiment, payload)
 
-    def event_payloads(
-        self,
-        session: PDLiveSession,
-        event: PDLiveEvent,
-        participants: list[Participant],
-        previous_state: dict,
-    ) -> list[dict]:
+    def event_payloads(self, session, event, participants) -> list[dict]:
+        return [session.state_snapshot(event.participant_id)]
+
+    def broadcast(self, experiment, payload):
+        experiment.publish_to_subscribers(json.dumps(payload), channel_name=self.channel)
+
+
+class PrisonersDilemmaGameWebSocket(LiveSessionWebSocket):
+    channel = GAME_WS_CHANNEL
+    session_class = PDLiveSession
+    event_class = PDLiveEvent
+
+    def session_context(self, participant):
+        trial = participant.current_trial
+        treatment = trial.definition["treatment"]
+        group = participant.active_sync_groups[GROUP_TYPE]
+        participants = sorted(group.participants, key=lambda p: p.id)
+        dyad_id = int(group.id)
+        return {
+            "trial": trial,
+            "treatment": treatment,
+            "group": group,
+            "participants": participants,
+            "dyad_id": dyad_id,
+            "session_filter": {
+                "dyad_id": dyad_id,
+                "network_id": trial.network.id,
+            },
+            "session_create": {
+                "dyad_id": dyad_id,
+                "network_id": trial.network.id,
+                "treatment": treatment,
+                "events": [],
+                "state": self.session_class.initial_state(participants, treatment),
+            },
+        }
+
+    def event_payloads(self, session, event, participants) -> list[dict]:
         state = session.state or {}
         recipient_ids = [str(p.id) for p in sorted(participants, key=lambda p: p.id)]
+        last_reduction = getattr(session, "last_reduction", {"kind": "none"})
+        kind = last_reduction.get("kind")
 
-        if event.event_type == "chat_message" and (
-            len(state.get("chat_messages", []))
-            > len(previous_state.get("chat_messages", []))
-        ):
+        if kind == "chat_message":
             return [
                 {
                     "type": "chat_message",
                     "dyad_id": session.dyad_id,
                     "target_participant_ids": recipient_ids,
-                    **state["chat_messages"][-1],
+                    **last_reduction["chat_entry"],
                 }
             ]
 
-        if event.event_type == "choice" and (
-            len(state.get("sequence", [])) > len(previous_state.get("sequence", []))
-        ):
-            entry = state["sequence"][-1]
+        if kind == "round_result":
+            entry = last_reduction["entry"]
             return [
                 {
                     "type": "round_result",
@@ -569,13 +613,10 @@ class PrisonersDilemmaGameWebSocket(NullElt, WebSocketElt):
                 }
             ]
 
-        if event.event_type in {"state_request", "choice"}:
+        if kind == "state_snapshot" or event.event_type in {"state_request", "choice"}:
             return [session.state_snapshot(event.participant_id)]
 
         return []
-
-    def broadcast(self, experiment, payload):
-        experiment.publish_to_subscribers(json.dumps(payload), channel_name=self.channel)
 
 
 class RealTimeGamePage(Page):

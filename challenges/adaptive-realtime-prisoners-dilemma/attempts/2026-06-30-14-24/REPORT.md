@@ -28,15 +28,16 @@ Key features:
   stale or duplicate choices, and broadcasts results/chat messages to explicit
   dyad recipient ids. Chat messages are persisted in the same session row and
   restored from state snapshots after browser refresh.
-- Session state is updated by the `PDLiveSession.reduce_event(event, participants)`
-  method, which accepts a persisted `PDLiveEvent` object and mutates the locked
-  session row. Treatment is stored with the other session parameters in
-  `PDLiveSession.state`, and choice/chat events share the same reducer interface;
-  event-type branching is kept inside the experiment-specific session reducer
-  implementation.
-- `PrisonersDilemmaGameWebSocket` now focuses on event I/O and broadcasting:
-  `broadcast_event(session, event, ...)` maps reduced session state into outbound
-  websocket payloads and can be overridden for alternate privacy/filtering rules.
+- `PDLiveSession` subclasses the generic `LiveSessionBase`; its
+  `reduce_event(event, participants)` method accepts a persisted `PDLiveEvent`
+  object and mutates the locked session row. Treatment is stored with the other
+  session parameters in `PDLiveSession.state`, and choice/chat events share the
+  same reducer interface; event-type branching is kept inside the
+  experiment-specific session reducer implementation.
+- `PrisonersDilemmaGameWebSocket` subclasses the generic `LiveSessionWebSocket`
+  and focuses on event I/O and broadcasting. Its `broadcast_event(session,
+  event, ...)` hook maps reduced session state into outbound websocket payloads
+  and can be overridden for alternate privacy/filtering rules.
 - The participant-facing game interface avoids exposing treatment labels,
   participant IDs, and internal points; it presents bonuses in dollars and
   updates PsyNet's footer reward display as the game progresses.

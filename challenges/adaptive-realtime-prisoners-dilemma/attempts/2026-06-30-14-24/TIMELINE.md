@@ -71,4 +71,6 @@
 - T+02:00:00 [agent] Moved raw websocket normalization to the boundary and made `PDLiveSession.reduce_event` consume `PDLiveEvent` objects.
 - T+02:02:00 [manual] User requested refocusing `PrisonersDilemmaGameWebSocket` on broadcast responsibilities.
 - T+02:03:00 [agent] Added `broadcast_event(session, event, ...)` and moved outbound payload selection behind that websocket hook.
-- T+02:04:00 [agent-stop] Implementation and first-pass evidence collection complete.
+- T+02:05:00 [manual] User asked whether `PDLiveSession` and the websocket class subclass generic base classes.
+- T+02:06:00 [agent] Added `LiveSessionBase` and `LiveSessionWebSocket` parents, with `PDLiveSession` and `PrisonersDilemmaGameWebSocket` as concrete subclasses.
+- T+02:07:00 [agent-stop] Implementation and first-pass evidence collection complete.
