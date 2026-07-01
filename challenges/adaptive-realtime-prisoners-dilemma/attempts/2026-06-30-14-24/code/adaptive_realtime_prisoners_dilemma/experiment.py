@@ -112,6 +112,8 @@ class PDLiveEvent(LiveEventBase, SQLBase, SQLMixin):
 class LiveSessionBase:
     """Generic event-sourced live session projection."""
 
+    event_class = LiveEvent
+
     @staticmethod
     def initial_state(participant_ids=None, **params) -> dict:
         return {
@@ -147,6 +149,14 @@ class LiveSessionBase:
         state = self.state or {}
         return [int(p) for p in state.get("params", {}).get("participant_ids", [])]
 
+    @property
+    def events(self):
+        return (
+            self.event_class.query.filter_by(session_id=self.session_id)
+            .order_by(self.event_class.id)
+            .all()
+        )
+
     def reduce_event(self, event: PDLiveEvent):
         state = deepcopy(self.state or self.initial_state())
         cached_event = self.cached_event(event)
@@ -175,6 +185,8 @@ class LiveSession(LiveSessionBase, SQLBase, SQLMixin):
 @register_table
 class PDLiveSession(LiveSessionBase, SQLBase, SQLMixin):
     __tablename__ = "pd_live_session"
+
+    event_class = PDLiveEvent
 
     session_id = Column(String(128), index=True)
     dyad_id = Column(Integer, index=True)
@@ -529,12 +541,7 @@ class LiveSessionWebSocket(NullElt, WebSocketElt):
         except json.JSONDecodeError:
             return
 
-        session_id = data.get("session_id")
-        if session_id is None:
-            return
-        session = self.get_session(str(session_id))
-        if session is None:
-            return
+        session = self.get_session(self.get_session_id(data))
 
         event = self.create_event(data, participant, receive_time, session)
         db.session.add(event)
@@ -548,12 +555,20 @@ class LiveSessionWebSocket(NullElt, WebSocketElt):
         )
         db.session.commit()
 
+    def get_session_id(self, data) -> str:
+        if data.get("session_id") is None:
+            raise ValueError("Live websocket message missing session_id")
+        return str(data["session_id"])
+
     def get_session(self, session_id: str):
-        return (
+        session = (
             self.session_class.query.filter_by(session_id=session_id)
             .with_for_update(of=self.session_class)
             .one_or_none()
         )
+        if session is None:
+            raise ValueError(f"Unknown live session_id: {session_id}")
+        return session
 
     def create_event(self, data, participant, receive_time, session):
         return self.event_class.from_message(

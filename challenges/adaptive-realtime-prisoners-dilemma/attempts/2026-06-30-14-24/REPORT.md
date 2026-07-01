@@ -37,7 +37,8 @@ Key features:
   every event/session carries a stable `session_id`.
 - Live sessions do not duplicate event ids in their own columns; the event table
   remains the source of truth for event history, while sessions store only the
-  current projection state.
+  current projection state. `LiveSessionBase.events` dynamically retrieves the
+  associated event rows by `session_id`.
 - `PDLiveSession` subclasses the generic `LiveSessionBase`; its
   `reduce_event(event, participants)` method accepts a persisted `PDLiveEvent`
   object and mutates the locked session row. Treatment is stored with the other
@@ -48,9 +49,10 @@ Key features:
   and focuses on event I/O and broadcasting. The generic socket uses the
   client-provided `session_id` to retrieve an already-created session; the page
   is responsible for creating sessions with the contextual parameters needed by
-  the experiment. Its `broadcast_event(session, event, ...)` hook maps reduced
-  session state into outbound websocket payloads and can be overridden for
-  alternate privacy/filtering rules.
+  the experiment. Missing or unknown `session_id` values are treated as protocol
+  errors. Its `broadcast_event(session, event, ...)` hook maps reduced session
+  state into outbound websocket payloads and can be overridden for alternate
+  privacy/filtering rules.
 - The participant-facing game interface avoids exposing treatment labels,
   participant IDs, and internal points; it presents bonuses in dollars and
   updates PsyNet's footer reward display as the game progresses.

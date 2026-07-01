@@ -81,4 +81,6 @@
 - T+02:15:00 [agent] Refactored `LiveSessionWebSocket` to retrieve existing sessions by client-provided `session_id`, with `RealTimeGamePage` responsible for session creation.
 - T+02:17:00 [manual] User pointed out that session tables should not duplicate event ids.
 - T+02:18:00 [agent] Removed session-level event-id storage so event history lives only in the event table.
-- T+02:19:00 [agent-stop] Implementation and first-pass evidence collection complete.
+- T+02:20:00 [manual] User requested a dynamic `events` property on live sessions and clearer session-id protocol handling.
+- T+02:21:00 [agent] Added `LiveSessionBase.events` as a dynamic event-table query and made missing/unknown websocket `session_id` values explicit protocol errors.
+- T+02:22:00 [agent-stop] Implementation and first-pass evidence collection complete.
