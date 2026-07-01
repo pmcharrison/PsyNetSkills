@@ -77,4 +77,6 @@
 - T+02:09:00 [agent] Added `LiveEventBase` and made `PDLiveEvent` the concrete mapped event subclass.
 - T+02:11:00 [manual] User clarified that generic event/session classes should also be mapped tables and usable directly.
 - T+02:12:00 [agent] Added generic mapped `LiveEvent` and `LiveSession` tables and introduced stable `session_id` routing for generic/PD live sessions.
-- T+02:13:00 [agent-stop] Implementation and first-pass evidence collection complete.
+- T+02:14:00 [manual] User clarified that the socket should not be context-aware or create sessions; it should use `session_id` only.
+- T+02:15:00 [agent] Refactored `LiveSessionWebSocket` to retrieve existing sessions by client-provided `session_id`, with `RealTimeGamePage` responsible for session creation.
+- T+02:16:00 [agent-stop] Implementation and first-pass evidence collection complete.

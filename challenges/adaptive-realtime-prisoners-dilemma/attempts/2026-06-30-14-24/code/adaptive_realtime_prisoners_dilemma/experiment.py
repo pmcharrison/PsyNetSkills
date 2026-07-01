@@ -70,12 +70,18 @@ class LiveEventBase:
         return payload
 
     @classmethod
-    def from_message(cls, *, data, participant, receive_time, context):
+    def from_message(cls, *, data, participant, receive_time, session):
+        kwargs = {}
+        for attr in ("dyad_id", "network_id", "treatment"):
+            # Only copy fields that exist on the concrete event table.
+            if hasattr(cls, attr) and hasattr(session, attr):
+                kwargs[attr] = getattr(session, attr)
         return cls(
+            session_id=session.session_id,
             participant_id=participant.id,
             event_type=data.get("type", "unknown"),
             payload=cls.message_payload(data, receive_time),
-            **context.get("event_create", {}),
+            **kwargs,
         )
 
 
@@ -528,92 +534,52 @@ class LiveSessionWebSocket(NullElt, WebSocketElt):
     def handle_message(
         self, message, channel_name, participant, node, receive_time, experiment
     ):
-        if participant is None or participant.current_trial is None:
+        if participant is None:
             return
         try:
             data = json.loads(message)
         except json.JSONDecodeError:
             return
 
-        context = self.session_context(participant)
-        session_id = data.get("session_id") or context.get("session_id")
+        session_id = data.get("session_id")
         if session_id is None:
             return
-        context["session_id"] = str(session_id)
-        event = self.create_event(data, participant, receive_time, context)
+        session = self.get_session(str(session_id))
+        if session is None:
+            return
+
+        event = self.create_event(data, participant, receive_time, session)
         db.session.add(event)
         db.session.flush()
 
-        session = self.get_or_create_session(context)
-        participants = context["participants"]
         session.reduce_event(event)
         self.broadcast_event(
             experiment=experiment,
             session=session,
             event=event,
-            participants=participants,
         )
         db.session.commit()
 
-    def session_context(self, participant):
-        return {
-            "participants": [participant],
-            "event_create": {
-                "session_id": None,
-            },
-            "session_filter": {
-                "session_id": None,
-            },
-            "session_create": {
-                "session_id": None,
-                "events": [],
-                "state": self.session_class.initial_state([participant]),
-            },
-        }
+    def get_session(self, session_id: str):
+        return (
+            self.session_class.query.filter_by(session_id=session_id)
+            .with_for_update(of=self.session_class)
+            .one_or_none()
+        )
 
-    def create_event(self, data, participant, receive_time, context):
-        context = {
-            **context,
-            "event_create": {
-                **context.get("event_create", {}),
-                "session_id": context["session_id"],
-            },
-        }
+    def create_event(self, data, participant, receive_time, session):
         return self.event_class.from_message(
             data=data,
             participant=participant,
             receive_time=receive_time,
-            context=context,
+            session=session,
         )
 
-    def get_or_create_session(self, context):
-        context = {
-            **context,
-            "session_filter": {
-                **context.get("session_filter", {}),
-                "session_id": context["session_id"],
-            },
-            "session_create": {
-                **context.get("session_create", {}),
-                "session_id": context["session_id"],
-            },
-        }
-        session = (
-            self.session_class.query.filter_by(**context["session_filter"])
-            .with_for_update(of=self.session_class)
-            .one_or_none()
-        )
-        if session is None:
-            session = self.session_class(**context["session_create"])
-            db.session.add(session)
-            db.session.flush()
-        return session
-
-    def broadcast_event(self, *, experiment, session, event, participants):
-        for payload in self.event_payloads(session, event, participants):
+    def broadcast_event(self, *, experiment, session, event):
+        for payload in self.event_payloads(session, event):
             self.broadcast(experiment, payload)
 
-    def event_payloads(self, session, event, participants) -> list[dict]:
+    def event_payloads(self, session, event) -> list[dict]:
         return [session.state_snapshot(event.participant_id)]
 
     def broadcast(self, experiment, payload):
@@ -625,44 +591,9 @@ class PrisonersDilemmaGameWebSocket(LiveSessionWebSocket):
     session_class = PDLiveSession
     event_class = PDLiveEvent
 
-    def session_context(self, participant):
-        trial = participant.current_trial
-        treatment = trial.definition["treatment"]
-        group = participant.active_sync_groups[GROUP_TYPE]
-        participants = sorted(group.participants, key=lambda p: p.id)
-        dyad_id = int(group.id)
-        session_id = f"pd_sequence:{trial.network_id}:dyad:{dyad_id}"
-        return {
-            "session_id": session_id,
-            "trial": trial,
-            "treatment": treatment,
-            "group": group,
-            "participants": participants,
-            "dyad_id": dyad_id,
-            "event_create": {
-                "session_id": session_id,
-                "dyad_id": dyad_id,
-                "treatment": treatment,
-            },
-            "session_filter": {
-                "dyad_id": dyad_id,
-                "network_id": trial.network.id,
-            },
-            "session_create": {
-                "session_id": session_id,
-                "dyad_id": dyad_id,
-                "network_id": trial.network.id,
-                "treatment": treatment,
-                "events": [],
-                "state": self.session_class.initial_state(
-                    [p.id for p in participants], treatment
-                ),
-            },
-        }
-
-    def event_payloads(self, session, event, participants) -> list[dict]:
+    def event_payloads(self, session, event) -> list[dict]:
         state = session.state or {}
-        recipient_ids = [str(p.id) for p in sorted(participants, key=lambda p: p.id)]
+        recipient_ids = [str(p_id) for p_id in session.participant_ids]
         last_reduction = getattr(session, "last_reduction", {"kind": "none"})
         kind = last_reduction.get("kind")
 

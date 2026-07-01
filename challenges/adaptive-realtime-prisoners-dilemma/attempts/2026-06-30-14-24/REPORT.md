@@ -42,9 +42,12 @@ Key features:
   same reducer interface; event-type branching is kept inside the
   experiment-specific session reducer implementation.
 - `PrisonersDilemmaGameWebSocket` subclasses the generic `LiveSessionWebSocket`
-  and focuses on event I/O and broadcasting. Its `broadcast_event(session,
-  event, ...)` hook maps reduced session state into outbound websocket payloads
-  and can be overridden for alternate privacy/filtering rules.
+  and focuses on event I/O and broadcasting. The generic socket uses the
+  client-provided `session_id` to retrieve an already-created session; the page
+  is responsible for creating sessions with the contextual parameters needed by
+  the experiment. Its `broadcast_event(session, event, ...)` hook maps reduced
+  session state into outbound websocket payloads and can be overridden for
+  alternate privacy/filtering rules.
 - The participant-facing game interface avoids exposing treatment labels,
   participant IDs, and internal points; it presents bonuses in dollars and
   updates PsyNet's footer reward display as the game progresses.
