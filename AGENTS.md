@@ -123,7 +123,13 @@ git clone --depth 1 https://gitlab.com/PsyNetDev/PsyNet.git ~/PsyNet
 
 **One-time system setup** (see `~/PsyNet/psynet/resources/experiment_scripts/AGENTS.md` and `~/PsyNet/docs/installation/`):
 
-- PostgreSQL with `dallinger` user/database (password `dallinger`)
+- PostgreSQL with `dallinger` user/database (password `dallinger`). On a fresh cluster, create them once:
+
+```bash
+sudo -u postgres psql -c "CREATE USER dallinger WITH PASSWORD 'dallinger' CREATEDB;"
+sudo -u postgres psql -c "CREATE DATABASE dallinger OWNER dallinger;"
+```
+
 - Redis (`redis-cli ping` → `PONG`)
 - Heroku CLI (`heroku --version`) — required for `psynet debug local` / `psynet test local`
 - `libpq-dev` (for building PsyNet Python deps)
