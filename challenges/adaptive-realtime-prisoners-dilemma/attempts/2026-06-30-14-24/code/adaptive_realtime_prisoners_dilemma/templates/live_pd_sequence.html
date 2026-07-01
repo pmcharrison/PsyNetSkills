@@ -225,7 +225,7 @@ document.addEventListener("DOMContentLoaded", function () {
   );
   socket.onopen = function () {
     setStatus("Live connection ready.");
-    wsSend({type: "state_request"});
+    wsSend({type: "state_request", skip_reduce: true});
     window.setTimeout(function () {
       if (!restoredFromServer) startRound({playCue: false});
     }, 1000);

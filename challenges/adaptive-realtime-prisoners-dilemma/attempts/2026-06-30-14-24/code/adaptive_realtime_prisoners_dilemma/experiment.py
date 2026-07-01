@@ -9,7 +9,7 @@ from typing import List
 
 from dallinger import db
 from dominate import tags
-from sqlalchemy import Column, Integer, JSON, String
+from sqlalchemy import Boolean, Column, Integer, JSON, String
 
 import psynet.experiment
 
@@ -62,7 +62,7 @@ class LiveEventBase:
         payload = {
             key: value
             for key, value in data.items()
-            if key not in {"type", "participant_id"}
+            if key not in {"type", "participant_id", "skip_reduce"}
         }
         payload["receive_time"] = (
             receive_time.astimezone(timezone.utc).isoformat() if receive_time else None
@@ -80,6 +80,7 @@ class LiveEventBase:
             session_id=session.session_id,
             participant_id=participant.id,
             event_type=data.get("type", "unknown"),
+            skip_reduce=bool(data.get("skip_reduce", False)),
             payload=cls.message_payload(data, receive_time),
             **kwargs,
         )
@@ -94,6 +95,7 @@ class LiveEvent(LiveEventBase, SQLBase, SQLMixin):
     session_id = Column(String(128), index=True)
     participant_id = Column(Integer, index=True, nullable=True)
     event_type = Column(String(64), index=True)
+    skip_reduce = Column(Boolean, default=False, index=True)
     payload = Column(JSON)
 
 
@@ -106,6 +108,7 @@ class PDLiveEvent(LiveEventBase, SQLBase, SQLMixin):
     participant_id = Column(Integer, index=True, nullable=True)
     treatment = Column(String(64), index=True)
     event_type = Column(String(64), index=True)
+    skip_reduce = Column(Boolean, default=False, index=True)
     payload = Column(JSON)
 
 
@@ -140,6 +143,7 @@ class LiveSessionBase:
         return {
             "id": event.id,
             "event_type": event.event_type,
+            "skip_reduce": bool(event.skip_reduce),
             "participant_id": event.participant_id,
             "payload": event.payload or {},
         }
@@ -547,7 +551,8 @@ class LiveSessionWebSocket(NullElt, WebSocketElt):
         db.session.add(event)
         db.session.flush()
 
-        session.reduce_event(event)
+        if not event.skip_reduce:
+            session.reduce_event(event)
         self.broadcast_event(
             experiment=experiment,
             session=session,
@@ -599,6 +604,9 @@ class PrisonersDilemmaGameWebSocket(LiveSessionWebSocket):
         recipient_ids = [str(p_id) for p_id in session.participant_ids]
         last_reduction = getattr(session, "last_reduction", {"kind": "none"})
         kind = last_reduction.get("kind")
+
+        if event.skip_reduce and event.event_type == "state_request":
+            return [session.state_snapshot(event.participant_id)]
 
         if kind == "chat_message":
             return [

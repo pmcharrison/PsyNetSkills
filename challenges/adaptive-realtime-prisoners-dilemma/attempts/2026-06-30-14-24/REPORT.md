@@ -34,7 +34,9 @@ Key features:
 - `PDLiveEvent` subclasses the generic `LiveEventBase`, which normalizes raw
   websocket messages into persisted event objects. PD-specific event columns
   such as dyad and treatment are supplied by the websocket session context, and
-  every event/session carries a stable `session_id`.
+  every event/session carries a stable `session_id`. Events can set
+  `skip_reduce` for request-style messages that should be persisted and
+  broadcast without mutating the session projection.
 - Live sessions do not duplicate event ids in their own columns; the event table
   remains the source of truth for event history, while sessions store only the
   current projection state. `LiveSessionBase.events` dynamically retrieves the

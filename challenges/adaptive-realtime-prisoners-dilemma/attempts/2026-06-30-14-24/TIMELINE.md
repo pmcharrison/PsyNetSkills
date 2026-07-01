@@ -83,4 +83,6 @@
 - T+02:18:00 [agent] Removed session-level event-id storage so event history lives only in the event table.
 - T+02:20:00 [manual] User requested a dynamic `events` property on live sessions and clearer session-id protocol handling.
 - T+02:21:00 [agent] Added `LiveSessionBase.events` as a dynamic event-table query and made missing/unknown websocket `session_id` values explicit protocol errors.
-- T+02:22:00 [agent-stop] Implementation and first-pass evidence collection complete.
+- T+02:23:00 [manual] User requested a generic `skip_reduce` event attribute for request-style messages such as state snapshots.
+- T+02:24:00 [agent] Added event-level `skip_reduce` and made client state requests persist/broadcast without mutating session state.
+- T+02:25:00 [agent-stop] Implementation and first-pass evidence collection complete.
