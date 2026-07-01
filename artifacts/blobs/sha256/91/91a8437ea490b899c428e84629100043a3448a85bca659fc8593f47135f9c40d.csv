@@ -1,0 +1,9 @@
+profile,condition,n_trials,accuracy,target,semantic_lure,recent_lure,neutral_lure,median_response_time_ms
+mock_llm_memory_limited,interference,12,0.75,9,0,3,0,2082
+mock_llm_memory_limited,literal,12,1.0,12,0,0,0,2082
+psynet_bot_rule,interference,12,1.0,12,0,0,0,1226
+psynet_bot_rule,literal,12,1.0,12,0,0,0,1226
+scripted_noisy,interference,12,0.917,11,1,0,0,2906
+scripted_noisy,literal,12,0.75,9,1,2,0,2906
+semantic_bias,interference,12,0.333,4,8,0,0,1770
+semantic_bias,literal,12,0.417,5,7,0,0,1770

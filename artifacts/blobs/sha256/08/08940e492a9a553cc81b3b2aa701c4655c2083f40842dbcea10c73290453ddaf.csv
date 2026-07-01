@@ -1,0 +1,7 @@
+stimulus,red,orange,yellow,green,blue,purple
+red,,,2.0,,3.0,2.0
+orange,,,,,4.0,3.0
+yellow,2.0,,,,4.0,
+green,,,,,2.0,
+blue,3.0,4.0,4.0,2.0,5.0,4.0
+purple,2.0,3.0,,,4.0,5.0

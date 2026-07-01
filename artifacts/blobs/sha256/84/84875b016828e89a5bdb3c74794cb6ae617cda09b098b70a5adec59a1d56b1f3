@@ -1,0 +1,16 @@
+env/
+.venv/
+.deploy/
+node_modules/
+server.log
+static/assets
+source_code.zip
+data/local-data.zip
+data/simulated_data/
+.idea
+__pycache__
+.pytest_cache/
+*.DS_Store
+develop/
+deploy/
+deploy_logs/

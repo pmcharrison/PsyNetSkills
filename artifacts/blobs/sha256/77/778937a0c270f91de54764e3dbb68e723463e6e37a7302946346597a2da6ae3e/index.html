@@ -1,0 +1,14 @@
+{% extends "timeline-page.html" %}
+
+{% block main_body %}
+{{ super() }}
+<div id="discovery-app" class="discovery-app" aria-live="polite"></div>
+{% endblock main_body %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+  window.discoveryTrialDefinition = psynet.var["trial_definition"];
+</script>
+<script src="./static/discovery-game.js"></script>
+{% endblock scripts %}

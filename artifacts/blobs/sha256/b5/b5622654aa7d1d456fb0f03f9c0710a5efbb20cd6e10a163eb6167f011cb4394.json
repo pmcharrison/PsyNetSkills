@@ -1,0 +1,66 @@
+{
+  "stimuli": [
+    {
+      "stimulus_id": "calibration_100bpm",
+      "trial_kind": "calibration",
+      "condition": "calibration",
+      "tempo_bpm": 100,
+      "beats": 5,
+      "accent_every": null,
+      "filename": "calibration_100bpm.wav",
+      "pre_roll_seconds": 0.8,
+      "post_roll_seconds": 0.8,
+      "click_duration_seconds": 0.045,
+      "beat_interval_seconds": 0.6,
+      "duration_seconds": 4.045
+    },
+    {
+      "stimulus_id": "main_slow_90bpm",
+      "trial_kind": "main",
+      "condition": "slow_isochronous",
+      "tempo_bpm": 90,
+      "beats": 6,
+      "accent_every": null,
+      "filename": "main_slow_90bpm.wav",
+      "pre_roll_seconds": 0.8,
+      "post_roll_seconds": 0.8,
+      "click_duration_seconds": 0.045,
+      "beat_interval_seconds": 0.666667,
+      "duration_seconds": 4.978333
+    },
+    {
+      "stimulus_id": "main_medium_120bpm",
+      "trial_kind": "main",
+      "condition": "medium_isochronous",
+      "tempo_bpm": 120,
+      "beats": 7,
+      "accent_every": null,
+      "filename": "main_medium_120bpm.wav",
+      "pre_roll_seconds": 0.8,
+      "post_roll_seconds": 0.8,
+      "click_duration_seconds": 0.045,
+      "beat_interval_seconds": 0.5,
+      "duration_seconds": 4.645
+    },
+    {
+      "stimulus_id": "main_accented_110bpm",
+      "trial_kind": "main",
+      "condition": "accented_every_two",
+      "tempo_bpm": 110,
+      "beats": 7,
+      "accent_every": 2,
+      "filename": "main_accented_110bpm.wav",
+      "pre_roll_seconds": 0.8,
+      "post_roll_seconds": 0.8,
+      "click_duration_seconds": 0.045,
+      "beat_interval_seconds": 0.545455,
+      "duration_seconds": 4.917727
+    }
+  ],
+  "timing_constants": {
+    "sample_rate": 44100,
+    "pre_roll_seconds": 0.8,
+    "post_roll_seconds": 0.8,
+    "click_duration_seconds": 0.045
+  }
+}

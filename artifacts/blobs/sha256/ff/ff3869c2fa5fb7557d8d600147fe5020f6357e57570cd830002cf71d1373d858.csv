@@ -1,0 +1,11 @@
+vars,creation_time,failed,failed_reason,time_of_death,id,module_id,participant_id,time_started,time_finished,time_aborted,started,finished,aborted,type,class,object_type
+{},2026-06-15 09:30:17,False,,,2,feedback,1,2026-06-15 09:30:17,2026-06-15 09:30:18,,True,True,False,ModuleState,ModuleState,ModuleState
+{},2026-06-15 09:30:19,False,,,4,feedback,2,2026-06-15 09:30:19,2026-06-15 09:30:20,,True,True,False,ModuleState,ModuleState,ModuleState
+{},2026-06-15 09:30:22,False,,,6,feedback,3,2026-06-15 09:30:22,2026-06-15 09:30:22,,True,True,False,ModuleState,ModuleState,ModuleState
+{},2026-06-15 09:30:23,False,,,8,feedback,4,2026-06-15 09:30:23,2026-06-15 09:30:24,,True,True,False,ModuleState,ModuleState,ModuleState
+{},2026-06-15 09:30:25,False,,,10,feedback,5,2026-06-15 09:30:25,2026-06-15 09:30:26,,True,True,False,ModuleState,ModuleState,ModuleState
+{},2026-06-15 09:30:27,False,,,12,feedback,6,2026-06-15 09:30:27,2026-06-15 09:30:28,,True,True,False,ModuleState,ModuleState,ModuleState
+{},2026-06-15 09:30:29,False,,,14,feedback,7,2026-06-15 09:30:29,2026-06-15 09:30:30,,True,True,False,ModuleState,ModuleState,ModuleState
+{},2026-06-15 09:30:31,False,,,16,feedback,8,2026-06-15 09:30:31,2026-06-15 09:30:32,,True,True,False,ModuleState,ModuleState,ModuleState
+{},2026-06-15 09:30:33,False,,,18,feedback,9,2026-06-15 09:30:33,2026-06-15 09:30:34,,True,True,False,ModuleState,ModuleState,ModuleState
+{},2026-06-15 09:30:35,False,,,20,feedback,10,2026-06-15 09:30:35,2026-06-15 09:30:36,,True,True,False,ModuleState,ModuleState,ModuleState

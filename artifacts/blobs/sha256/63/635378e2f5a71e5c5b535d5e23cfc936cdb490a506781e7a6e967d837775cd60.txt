@@ -1,0 +1,9 @@
+[Config]
+title = Predicting the Future Across Cultures
+description = Make short intuitive numerical predictions from limited everyday information.
+contact_email_on_error = noreply@example.com
+organization_name = PsyNetSkills
+
+recruiter = generic
+currency = $
+wage_per_hour = 12.0

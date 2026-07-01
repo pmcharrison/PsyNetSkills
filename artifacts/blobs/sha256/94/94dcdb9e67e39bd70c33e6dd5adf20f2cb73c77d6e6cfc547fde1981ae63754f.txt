@@ -1,0 +1,15 @@
+[Config]
+title = Visual priors serial reproduction (Chrome browser, 4 minutes to complete)
+description = In this experiment you will remember and reproduce the position of dots inside geometric shapes. Please use a Chrome browser in incognito mode.
+contact_email_on_error = XXX@gmail.com
+organization_name = XXX
+
+recruiter = generic
+currency = $
+wage_per_hour = 12.0
+show_reward = false
+
+[Prolific]
+auto_recruit = false
+prolific_estimated_completion_minutes = 4
+base_payment = 0.80

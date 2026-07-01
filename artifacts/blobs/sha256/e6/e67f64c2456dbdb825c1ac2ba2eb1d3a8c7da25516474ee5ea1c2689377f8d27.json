@@ -1,0 +1,9 @@
+{
+  "captions": {
+    "01_timeout_demo_interface.png": "Timeout demonstration round using the imported three.js tabletop interface.",
+    "02_proposer_offer_interface.png": "Proposer view with the three.js table, avatars, coin split preview, and offer slider.",
+    "03_responder_decision_interface.png": "Responder view after the live proposal update, showing accept/reject controls and coin allocation.",
+    "04_round_feedback_interface.png": "Synchronized round feedback in the three.js interface after the responder decision.",
+    "05_completion_page.png": "Completion page after both participants finish the required counted rounds."
+  }
+}

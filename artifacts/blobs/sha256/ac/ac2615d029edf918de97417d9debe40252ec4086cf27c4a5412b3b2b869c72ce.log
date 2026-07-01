@@ -1,0 +1,13 @@
+Manual-review thresholds:
+- failed_attention_check: Attention/comprehension check answer did not match the expected answer.
+- very_fast_response: Normal text response latency was below 3 seconds.
+- short_response: Normal text response was shorter than 20 characters.
+- paste_activity: Pasted text appeared in an open-text response.
+- focus_or_visibility_loss: The browser lost focus or visibility during a response page.
+- sparse_keydown_telemetry: Keydown count was low relative to final response length.
+- short_first_key_latency: First keypress happened within 250 ms of page load.
+- ai_disclosure: Participant disclosed AI assistance in local fixture metadata.
+P001 (attentive_human_like): no review flag; signals=none
+P002 (rushed_failed_check): FLAG FOR MANUAL REVIEW; signals=failed_attention_check, focus_or_visibility_loss, short_first_key_latency, short_response, sparse_keydown_telemetry, very_fast_response
+P003 (pasted_ai_disclosed): FLAG FOR MANUAL REVIEW; signals=ai_disclosure, focus_or_visibility_loss, paste_activity, sparse_keydown_telemetry
+Wrote ../../evidence/manual_review.json

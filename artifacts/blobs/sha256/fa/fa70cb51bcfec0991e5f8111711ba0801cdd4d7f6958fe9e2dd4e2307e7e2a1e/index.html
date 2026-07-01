@@ -1,0 +1,179 @@
+{% extends "timeline-page.html" %}
+{% block main_body %}
+<style>
+  .pd-shell { max-width: 1120px; margin: 0 auto; font-family: system-ui, sans-serif; }
+  .pd-grid { display: grid; grid-template-columns: minmax(0, 2fr) minmax(260px, 1fr); gap: 1.2rem; align-items: start; }
+  .pd-card { border: 1px solid #ddd; border-radius: 12px; padding: 1rem; background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,.04); }
+  .pd-actions { display: flex; gap: .75rem; margin: 1rem 0; flex-wrap: wrap; }
+  .pd-actions button { font-size: 1.05rem; padding: .75rem 1rem; border-radius: 8px; }
+  .pd-status { font-weight: 700; color: #284b63; }
+  .pd-history { max-height: 260px; overflow-y: auto; background: #f8f9fb; padding: .75rem; border-radius: 8px; }
+  .pd-chat-feed { height: 230px; overflow-y: auto; background: #f8f9fb; border-radius: 8px; padding: .75rem; margin-bottom: .75rem; }
+  .pd-hidden { display: none; }
+</style>
+<div class="pd-shell">
+  <h2>10-round real-time decision game</h2>
+  <p class="pd-status" id="pd-status">Connecting to the live game...</p>
+  <div class="pd-grid">
+    <main class="pd-card">
+      <p>You are <strong>{{ role }}</strong>. Your partner is Participant {{ partner_id }}.</p>
+      <p>Treatment: <strong>{{ treatment_label }}</strong></p>
+      <p>Round <strong id="pd-round">1</strong> of {{ sequence_length }}. Time remaining:
+        <strong id="pd-countdown">{{ decision_seconds }} seconds</strong>
+      </p>
+      {{ payoff_table | safe }}
+      <div class="pd-actions">
+        <button id="pd-cooperate" class="btn btn-primary">Play "{{ cooperate }}"</button>
+        <button id="pd-defect" class="btn btn-secondary">Play "{{ defect }}"</button>
+      </div>
+      <p>Your points: <strong id="pd-points">0</strong>; estimated bonus:
+        <strong id="pd-bonus">$0.00</strong></p>
+      <h3>Round feedback</h3>
+      <div class="pd-history" id="pd-history">No rounds completed yet.</div>
+    </main>
+    <aside class="pd-card {% if not chat_enabled %}pd-hidden{% endif %}" id="pd-chat">
+      <h3>Chat with your partner</h3>
+      <div class="pd-chat-feed" id="pd-chat-feed"></div>
+      <input id="pd-chat-input" class="form-control" placeholder="Type a message..." />
+      <button id="pd-chat-send" class="btn btn-outline-primary mt-2">Send</button>
+    </aside>
+  </div>
+</div>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  var cfg = {{ game_config | tojson }};
+  var round = 1;
+  var sequence = [];
+  var selectedThisRound = false;
+  var timer = null;
+  var remaining = cfg.decision_seconds;
+  var socket = null;
+
+  function wsSend(payload) {
+    if (socket && socket.readyState === WebSocket.OPEN) {
+      socket.send(cfg.channel + ":" + JSON.stringify(payload));
+    }
+  }
+  function setStatus(text) { document.getElementById("pd-status").textContent = text; }
+  function setButtons(enabled) {
+    document.getElementById("pd-cooperate").disabled = !enabled;
+    document.getElementById("pd-defect").disabled = !enabled;
+  }
+  function playCue() {
+    try {
+      var ctx = new (window.AudioContext || window.webkitAudioContext)();
+      var osc = ctx.createOscillator();
+      var gain = ctx.createGain();
+      osc.frequency.value = 660;
+      gain.gain.value = 0.04;
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      window.setTimeout(function () { osc.stop(); }, 180);
+    } catch (e) {}
+  }
+  function startRound() {
+    if (round > cfg.sequence_length) return finishGame();
+    selectedThisRound = false;
+    remaining = cfg.decision_seconds;
+    document.getElementById("pd-round").textContent = round;
+    setButtons(true);
+    setStatus("Choose your action for round " + round + ".");
+    playCue();
+    if (timer) clearInterval(timer);
+    timer = setInterval(function () {
+      remaining -= 1;
+      document.getElementById("pd-countdown").textContent = remaining + " seconds";
+      if (remaining <= 0 && !selectedThisRound) choose(cfg.defect);
+    }, 1000);
+  }
+  function choose(action) {
+    if (selectedThisRound) return;
+    selectedThisRound = true;
+    setButtons(false);
+    setStatus("Choice submitted. Waiting for your partner...");
+    wsSend({type: "choice", round: round, action: action});
+  }
+  function renderResult(entry) {
+    sequence[entry.round - 1] = entry;
+    var me = entry.players.find(function (p) { return String(p.participant_id) === String(cfg.participant_id); });
+    var partner = entry.players.find(function (p) { return String(p.participant_id) !== String(cfg.participant_id); });
+    document.getElementById("pd-points").textContent = me.cumulative_points;
+    document.getElementById("pd-bonus").textContent = "$" + me.bonus.toFixed(2);
+    var history = document.getElementById("pd-history");
+    if (entry.round === 1) history.innerHTML = "";
+    var p = document.createElement("p");
+    p.textContent = "Round " + entry.round + ": you played " + me.action +
+      ", your partner played " + partner.action + ". You got $" +
+      me.bonus.toFixed(2) + " cumulative bonus.";
+    history.appendChild(p);
+  }
+  function finishGame() {
+    clearInterval(timer);
+    setButtons(false);
+    setStatus("Game complete. Submitting your results...");
+    var finalRound = sequence[cfg.sequence_length - 1] || {players: []};
+    var finalCoop = finalRound.players.filter(function (p) { return p.cooperated; }).length;
+    var me = finalRound.players.find(function (p) { return String(p.participant_id) === String(cfg.participant_id); }) || {};
+    psynet.response.staged.rawAnswer = {
+      dyad_id: cfg.dyad_id,
+      participant_id: cfg.participant_id,
+      role: cfg.role,
+      treatment: cfg.treatment,
+      experiment_mode: cfg.experiment_mode,
+      sequence_length: cfg.sequence_length,
+      sequence: sequence,
+      final_round_cooperative_choices: finalCoop,
+      final_round_trials: 2,
+      total_points_self: me.cumulative_points || 0,
+      final_bonus_self: me.bonus || 0,
+      assignment_decision: cfg.assignment_decision
+    };
+    psynet.response.staged.metadata = {completed_live_sequence: true};
+    psynet.submitResponse(function () { setStatus("Submission failed; please try again."); });
+  }
+  function appendChat(sender, content) {
+    var feed = document.getElementById("pd-chat-feed");
+    if (!feed) return;
+    var p = document.createElement("p");
+    p.textContent = (String(sender) === String(cfg.participant_id) ? "You" : "Partner") + ": " + content;
+    feed.appendChild(p);
+    feed.scrollTop = feed.scrollHeight;
+  }
+  document.getElementById("pd-cooperate").onclick = function () { choose(cfg.cooperate); };
+  document.getElementById("pd-defect").onclick = function () { choose(cfg.defect); };
+  if (cfg.chat_enabled) {
+    document.getElementById("pd-chat-send").onclick = function () {
+      var input = document.getElementById("pd-chat-input");
+      var content = input.value.trim();
+      if (!content) return;
+      wsSend({type: "chat_message", content: content});
+      input.value = "";
+    };
+  }
+  var wsScheme = location.protocol === "https:" ? "wss://" : "ws://";
+  socket = new ReconnectingWebSocket(
+    wsScheme + location.host + "/chat?channel=" + cfg.channel
+    + "&worker_id=" + dallinger.identity.workerId
+    + "&participant_id=" + cfg.participant_id
+  );
+  socket.onopen = function () {
+    setStatus("Live connection ready.");
+    wsSend({type: "state_request"});
+    startRound();
+  };
+  socket.onmessage = function (event) {
+    if (event.data.indexOf(cfg.channel + ":") !== 0) return;
+    var msg = JSON.parse(event.data.slice(cfg.channel.length + 1));
+    if (Number(msg.dyad_id) !== Number(cfg.dyad_id) && !msg.target_participant_id) return;
+    if (msg.type === "round_result") {
+      renderResult(msg.entry);
+      round += 1;
+      window.setTimeout(startRound, 800);
+    } else if (msg.type === "chat_message" && cfg.chat_enabled) {
+      appendChat(msg.sender, msg.content);
+    }
+  };
+});
+</script>
+{% endblock %}

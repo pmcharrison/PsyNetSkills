@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <base href="./">
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>Experiment Monitoring -  Dashboard</title>
+        
+          <link rel="stylesheet" href="./static/css/bootstrap.min.css" type="text/css">
+          <link rel="stylesheet" href="./static/css/dashboard.css" type="text/css">
+          
+    <script src="https://use.fontawesome.com/ffb1fe552d.js"></script>
+    <link href="./static/vis@4.17.0/dist/vis-network.min.css" rel="stylesheet"
+          type="text/css"/>
+
+        
+        
+        
+    
+        <style>
+          body { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; margin: 1rem; }
+          .container { max-width: none; }
+          #dashboard-navigation, #logout { display: none; }
+          #monitor-wrapper { display: flex; gap: 1rem; align-items: flex-start; }
+          #sidebar { flex: 0 0 18rem; }
+          #timeline-wrapper, #timeline, main { flex: 1 1 auto; min-width: 0; }
+          table { border-collapse: collapse; width: 100%; }
+          th, td { border: 1px solid #d0d7de; padding: 0.4rem; text-align: left; vertical-align: top; }
+          button { border: 1px solid #d0d7de; border-radius: 0.35rem; background: #f6f8fa; padding: 0.3rem 0.6rem; }
+        </style>
+    </head>
+    <body>
+      <div class="container">
+        
+          <nav id="dashboard-navigation">
+            <ul class="nav nav-tabs">
+              
+                
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Config</a>
+                  </li>
+                
+              
+                
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Deployments</a>
+                  </li>
+                
+              
+                
+                <li class="nav-item">
+                  <a class="nav-link dropdown-toggle active" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Monitor</a>
+                  <div class="dropdown-menu">
+                    
+                      <a class="dropdown-item" href="#">Monitoring</a>
+                    
+                      <a class="dropdown-item" href="#">Timeline</a>
+                    
+                      <a class="dropdown-item" href="#">Resources</a>
+                    
+                      <a class="dropdown-item" href="#">Participants</a>
+                    
+                      <a class="dropdown-item" href="#">Logger</a>
+                    
+                      <a class="dropdown-item" href="#">Errors</a>
+                    
+                  </div>
+                </li>
+                
+              
+                
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Basic data</a>
+                  </li>
+                
+              
+                
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Export</a>
+                  </li>
+                
+              
+                
+                <li class="nav-item">
+                  <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Database</a>
+                  <div class="dropdown-menu">
+                    
+                      <a class="dropdown-item" href="#">AssetTrial</a>
+                    
+                      <a class="dropdown-item" href="#">ChainTrialMakerState</a>
+                    
+                      <a class="dropdown-item" href="#">Coin</a>
+                    
+                      <a class="dropdown-item" href="#">CustomNetwork</a>
+                    
+                      <a class="dropdown-item" href="#">CustomNode</a>
+                    
+                      <a class="dropdown-item" href="#">CustomTrial</a>
+                    
+                      <a class="dropdown-item" href="#">ExperimentAsset</a>
+                    
+                      <a class="dropdown-item" href="#">ExperimentConfig</a>
+                    
+                      <a class="dropdown-item" href="#">ExperimentStatus</a>
+                    
+                      <a class="dropdown-item" href="#">ModuleState</a>
+                    
+                      <a class="dropdown-item" href="#">Notification</a>
+                    
+                      <a class="dropdown-item" href="#">Participant</a>
+                    
+                      <a class="dropdown-item" href="#">Request</a>
+                    
+                      <a class="dropdown-item" href="#">Response</a>
+                    
+                      <a class="dropdown-item" href="#">WorkerAsyncProcess</a>
+                    
+                  </div>
+                </li>
+                
+              
+                
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Development</a>
+                  </li>
+                
+              
+            </ul>
+          </nav>
+          
+        
+        
+          
+          
+        
+        
+        
+    <h1>Experiment Monitoring</h1>
+    <div id="monitor-wrapper" class="d-flex justify-content-between align-items-stretch">
+        <main class="flex-fill">
+            <div style="display: -ms-flexbox; display: flex; -ms-flex-wrap: wrap; flex-wrap: wrap;">
+                    <div class="form-group">
+                        <label for="sortBy">Sort networks by</label>
+                        <div class="input-group mb-3">
+                            <select class="form-control" id="sortBy">
+                                <option value="network_id">Network ID</option>
+                                <option value="n_pending_infos">Number of pending infos</option>
+                                <option value="n_completed_infos">Number of completed infos</option>
+                                <option value="n_failed_infos">Number of failed infos</option>
+                                <option value="n_alive_nodes">Number of completed nodes</option>
+                                <option value="n_failed_nodes">Number of failed nodes</option>
+                            </select>
+                            <div class="input-group-append">
+                                <div class="btn-group btn-group-toggle" id="order" data-toggle="buttons">
+
+                                    <label class="btn btn-secondary active">
+                                        <input type="radio" name="options" checked>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                             fill="currentColor"
+                                             class="bi bi-arrow-down" viewBox="0 0 16 16">
+                                            <path fill-rule="evenodd"
+                                                  d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1z"/>
+                                        </svg>
+                                    </label>
+                                    <label class="btn btn-secondary">
+                                        <input type="radio" name="options">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                             fill="currentColor"
+                                             class="bi bi-arrow-up" viewBox="0 0 16 16">
+                                            <path fill-rule="evenodd"
+                                                  d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z"/>
+                                        </svg>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                <div id="search-container" class="mx-auto row">
+                    <div class="form-group pr-3">
+                        <label for="max-networks">Number of networks</label>
+                        <input type="number" min="1" class="form-control" id="max-networks"
+                               placeholder="Networks to print">
+                    </div>
+                    <div class="form-group">
+                        <label for="search">Freetext search</label>
+                        <input type="text" class="form-control" id="search" placeholder="Search networks">
+                    </div>
+                </div>
+                <div>
+                    <div class="form-group">
+
+                        <label></label>
+                        <div>
+                            <a class="text-primary" data-toggle="collapse" href="#statistics" role="button"
+                               aria-expanded="false" aria-controls="statistics">
+                                Experiment Statistics
+                            </a>
+                            <a class="text-secondary" data-toggle="collapse" href="#advanced-filter"
+                               role="button" aria-expanded="false" aria-controls="advanced-filter">
+                                Advanced Filter
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="collapse p-3 bg-light" id="statistics">
+                <h4>Statistics</h4>
+                <div class="row">
+                    
+                        <div class="col">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Participants</h5>
+                                    <p class="card-text"><span class="nowrap"><span class="statistics-key">approved</span>: <span class="statistics-value">1</span></span></p>
+                                </div>
+                            </div>
+                        </div>
+                    
+                        <div class="col">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Networks</h5>
+                                    <p class="card-text"><span class="nowrap"><span class="statistics-key">default</span>: <span class="statistics-value"><span class="statistics-value no-failures">8 total, 0 failed (0.0%)</span></span></span></p>
+                                </div>
+                            </div>
+                        </div>
+                    
+                        <div class="col">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Nodes</h5>
+                                    <p class="card-text"><span class="statistics-value no-failures">8 total, 0 failed (0.0%)</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    
+                        <div class="col">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Trials</h5>
+                                    <p class="card-text"><span class="statistics-value no-failures">7 total, 0 failed (0.0%)</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    
+                </div>
+
+            </div>
+            <div class="collapse p-3  bg-light" id="advanced-filter">
+            <h4>Advanced Filter</h4>
+                <form>
+                    
+                        <fieldset id="network-ids">
+                            <h5>Network IDs</h5>
+                            
+                                <div class="field p-1">
+                                    <input class="network-input" id="val-1" type="checkbox" name="network_ids"
+                                           value="1" checked />
+                                    <label for="val-1">1</label>
+                                </div>
+                            
+                                <div class="field p-1">
+                                    <input class="network-input" id="val-2" type="checkbox" name="network_ids"
+                                           value="2" checked />
+                                    <label for="val-2">2</label>
+                                </div>
+                            
+                                <div class="field p-1">
+                                    <input class="network-input" id="val-3" type="checkbox" name="network_ids"
+                                           value="3" checked />
+                                    <label for="val-3">3</label>
+                                </div>
+                            
+                                <div class="field p-1">
+                                    <input class="network-input" id="val-4" type="checkbox" name="network_ids"
+                                           value="4" checked />
+                                    <label for="val-4">4</label>
+                                </div>
+                            
+                                <div class="field p-1">
+                                    <input class="network-input" id="val-5" type="checkbox" name="network_ids"
+                                           value="5" checked />
+                                    <label for="val-5">5</label>
+                                </div>
+                            
+                                <div class="field p-1">
+                                    <input class="network-input" id="val-6" type="checkbox" name="network_ids"
+                                           value="6" checked />
+                                    <label for="val-6">6</label>
+                                </div>
+                            
+                                <div class="field p-1">
+                                    <input class="network-input" id="val-7" type="checkbox" name="network_ids"
+                                           value="7" checked />
+                                    <label for="val-7">7</label>
+                                </div>
+                            
+                                <div class="field p-1">
+                                    <input class="network-input" id="val-8" type="checkbox" name="network_ids"
+                                           value="8" checked />
+                                    <label for="val-8">8</label>
+                                </div>
+                            
+                        </fieldset>
+                </form>
+                <form method="GET">
+
+                    <div class="reload-onclick">
+                        <input name="collapsed"
+                               type="checkbox" />
+                        <label for="transformations">Collapse (networks and sources only)</label>
+                    </div>
+                    <div class="reload-onclick">
+                        <input name="transformations"
+                               type="checkbox" />
+                        <label for="transformations">Show transformations</label>
+                    </div>
+                </form>
+            </div>
+
+            <section id="mynetwork">
+            </section>
+            <section id="details-pane">
+                <div id="element-details">
+                </div>
+            </section>
+        </main>
+    </div>
+
+        <footer>
+          
+          
+        </footer>
+      </div>
+      
+    
+      <script src="./static/scripts/jquery-3.7.1.min.js"></script>
+      <script src="./static/scripts/popper.min.js"></script>
+      <script src="./static/scripts/bootstrap.min.js"></script>
+      <script src="./static/scripts/clipboard.min.js"></script>
+      
+    <script>
+        $('.reload-onclick').on('change', function () {
+            $(this).parents('form').submit();
+        });
+        window.templateGlobals = function () {
+            // Values inscribed by Jinja2 when this template is rendered.
+            const network_structure = {"networks": [{"dimension_order": "[0, 1, 2]", "vars": "{}", "id": 1, "creation_time": "2026-06-10 05:40:11", "failed": false, "failed_reason": null, "time_of_death": null, "type": "CustomNetwork", "max_size": 2, "full": false, "role": "default", "n_pending_infos": 0, "n_completed_infos": 2, "n_failed_infos": 0, "n_alive_nodes": 1, "n_failed_nodes": 0, "trial_maker_id": "gibbs_demo", "module_id": "gibbs_demo", "target_n_trials": 4, "participant_group": "A", "sync_group_type": null, "sync_group_id": null, "participant_id": null, "async_post_grow_network_required": true, "async_post_grow_network_requested": false, "async_post_grow_network_complete": false, "async_post_grow_network_failed": false, "id_within_participant": null, "n_all_trials": 2, "n_alive_trials": 2, "n_failed_trials": 0, "n_completed_trials": 1, "n_all_nodes": 1, "chain_type": "across", "head_id": 1, "trials_per_node": 2, "definition": "{}", "context": "{'target': 'tree'}", "block": "default", "class": "CustomNetwork", "object_type": "Network"}, {"dimension_order": "[0, 1, 2]", "vars": "{}", "id": 2, "creation_time": "2026-06-10 05:40:11", "failed": false, "failed_reason": null, "time_of_death": null, "type": "CustomNetwork", "max_size": 2, "full": false, "role": "default", "n_pending_infos": 0, "n_completed_infos": 0, "n_failed_infos": 0, "n_alive_nodes": 1, "n_failed_nodes": 0, "trial_maker_id": "gibbs_demo", "module_id": "gibbs_demo", "target_n_trials": 4, "participant_group": "B", "sync_group_type": null, "sync_group_id": null, "participant_id": null, "async_post_grow_network_required": true, "async_post_grow_network_requested": false, "async_post_grow_network_complete": false, "async_post_grow_network_failed": false, "id_within_participant": null, "n_all_trials": 0, "n_alive_trials": 0, "n_failed_trials": 0, "n_completed_trials": 0, "n_all_nodes": 1, "chain_type": "across", "head_id": 2, "trials_per_node": 2, "definition": "{}", "context": "{'target': 'tree'}", "block": "default", "class": "CustomNetwork", "object_type": "Network"}, {"dimension_order": "[0, 1, 2]", "vars": "{}", "id": 3, "creation_time": "2026-06-10 05:40:11", "failed": false, "failed_reason": null, "time_of_death": null, "type": "CustomNetwork", "max_size": 2, "full": false, "role": "default", "n_pending_infos": 0, "n_completed_infos": 1, "n_failed_infos": 0, "n_alive_nodes": 1, "n_failed_nodes": 0, "trial_maker_id": "gibbs_demo", "module_id": "gibbs_demo", "target_n_trials": 4, "participant_group": "A", "sync_group_type": null, "sync_group_id": null, "participant_id": null, "async_post_grow_network_required": true, "async_post_grow_network_requested": false, "async_post_grow_network_complete": false, "async_post_grow_network_failed": false, "id_within_participant": null, "n_all_trials": 1, "n_alive_trials": 1, "n_failed_trials": 0, "n_completed_trials": 1, "n_all_nodes": 1, "chain_type": "across", "head_id": 3, "trials_per_node": 2, "definition": "{}", "context": "{'target': 'rock'}", "block": "default", "class": "CustomNetwork", "object_type": "Network"}, {"dimension_order": "[0, 1, 2]", "vars": "{}", "id": 4, "creation_time": "2026-06-10 05:40:11", "failed": false, "failed_reason": null, "time_of_death": null, "type": "CustomNetwork", "max_size": 2, "full": false, "role": "default", "n_pending_infos": 0, "n_completed_infos": 0, "n_failed_infos": 0, "n_alive_nodes": 1, "n_failed_nodes": 0, "trial_maker_id": "gibbs_demo", "module_id": "gibbs_demo", "target_n_trials": 4, "participant_group": "B", "sync_group_type": null, "sync_group_id": null, "participant_id": null, "async_post_grow_network_required": true, "async_post_grow_network_requested": false, "async_post_grow_network_complete": false, "async_post_grow_network_failed": false, "id_within_participant": null, "n_all_trials": 0, "n_alive_trials": 0, "n_failed_trials": 0, "n_completed_trials": 0, "n_all_nodes": 1, "chain_type": "across", "head_id": 4, "trials_per_node": 2, "definition": "{}", "context": "{'target': 'rock'}", "block": "default", "class": "CustomNetwork", "object_type": "Network"}, {"dimension_order": "[0, 1, 2]", "vars": "{}", "id": 5, "creation_time": "2026-06-10 05:40:11", "failed": false, "failed_reason": null, "time_of_death": null, "type": "CustomNetwork", "max_size": 2, "full": false, "role": "default", "n_pending_infos": 0, "n_completed_infos": 2, "n_failed_infos": 0, "n_alive_nodes": 1, "n_failed_nodes": 0, "trial_maker_id": "gibbs_demo", "module_id": "gibbs_demo", "target_n_trials": 4, "participant_group": "A", "sync_group_type": null, "sync_group_id": null, "participant_id": null, "async_post_grow_network_required": true, "async_post_grow_network_requested": false, "async_post_grow_network_complete": false, "async_post_grow_network_failed": false, "id_within_participant": null, "n_all_trials": 2, "n_alive_trials": 2, "n_failed_trials": 0, "n_completed_trials": 1, "n_all_nodes": 1, "chain_type": "across", "head_id": 5, "trials_per_node": 2, "definition": "{}", "context": "{'target': 'carrot'}", "block": "default", "class": "CustomNetwork", "object_type": "Network"}, {"dimension_order": "[0, 1, 2]", "vars": "{}", "id": 6, "creation_time": "2026-06-10 05:40:11", "failed": false, "failed_reason": null, "time_of_death": null, "type": "CustomNetwork", "max_size": 2, "full": false, "role": "default", "n_pending_infos": 0, "n_completed_infos": 0, "n_failed_infos": 0, "n_alive_nodes": 1, "n_failed_nodes": 0, "trial_maker_id": "gibbs_demo", "module_id": "gibbs_demo", "target_n_trials": 4, "participant_group": "B", "sync_group_type": null, "sync_group_id": null, "participant_id": null, "async_post_grow_network_required": true, "async_post_grow_network_requested": false, "async_post_grow_network_complete": false, "async_post_grow_network_failed": false, "id_within_participant": null, "n_all_trials": 0, "n_alive_trials": 0, "n_failed_trials": 0, "n_completed_trials": 0, "n_all_nodes": 1, "chain_type": "across", "head_id": 6, "trials_per_node": 2, "definition": "{}", "context": "{'target': 'carrot'}", "block": "default", "class": "CustomNetwork", "object_type": "Network"}, {"dimension_order": "[0, 1, 2]", "vars": "{}", "id": 7, "creation_time": "2026-06-10 05:40:11", "failed": false, "failed_reason": null, "time_of_death": null, "type": "CustomNetwork", "max_size": 2, "full": false, "role": "default", "n_pending_infos": 0, "n_completed_infos": 2, "n_failed_infos": 0, "n_alive_nodes": 1, "n_failed_nodes": 0, "trial_maker_id": "gibbs_demo", "module_id": "gibbs_demo", "target_n_trials": 4, "participant_group": "A", "sync_group_type": null, "sync_group_id": null, "participant_id": null, "async_post_grow_network_required": true, "async_post_grow_network_requested": false, "async_post_grow_network_complete": false, "async_post_grow_network_failed": false, "id_within_participant": null, "n_all_trials": 2, "n_alive_trials": 2, "n_failed_trials": 0, "n_completed_trials": 1, "n_all_nodes": 1, "chain_type": "across", "head_id": 7, "trials_per_node": 2, "definition": "{}", "context": "{'target': 'banana'}", "block": "default", "class": "CustomNetwork", "object_type": "Network"}, {"dimension_order": "[0, 1, 2]", "vars": "{}", "id": 8, "creation_time": "2026-06-10 05:40:11", "failed": false, "failed_reason": null, "time_of_death": null, "type": "CustomNetwork", "max_size": 2, "full": false, "role": "default", "n_pending_infos": 0, "n_completed_infos": 0, "n_failed_infos": 0, "n_alive_nodes": 1, "n_failed_nodes": 0, "trial_maker_id": "gibbs_demo", "module_id": "gibbs_demo", "target_n_trials": 4, "participant_group": "B", "sync_group_type": null, "sync_group_id": null, "participant_id": null, "async_post_grow_network_required": true, "async_post_grow_network_requested": false, "async_post_grow_network_complete": false, "async_post_grow_network_failed": false, "id_within_participant": null, "n_all_trials": 0, "n_alive_trials": 0, "n_failed_trials": 0, "n_completed_trials": 0, "n_all_nodes": 1, "chain_type": "across", "head_id": 8, "trials_per_node": 2, "definition": "{}", "context": "{'target': 'banana'}", "block": "default", "class": "CustomNetwork", "object_type": "Network"}], "nodes": [{"vars": "{}", "id": 1, "creation_time": "2026-06-10 05:40:11", "failed": false, "failed_reason": null, "time_of_death": null, "type": "TrialSource", "network_id": 1, "participant_id": null, "trial_maker_id": "gibbs_demo", "module_id": "gibbs_demo", "module_state_id": null, "is_global": null, "on_deploy_complete": true, "async_on_deploy_required": false, "async_on_deploy_requested": false, "async_on_deploy_complete": false, "async_on_deploy_failed": false, "key": null, "degree": 0, "target_n_trials": 2, "can_spawn": true, "child_id": null, "parent_id": null, "seed": "{'vector': [243, 2, 92], 'initial_index': 1}", "definition": "{'vector': [243, 2, 92], 'initial_index': 1, 'active_index': 1}", "context": "{'target': 'tree'}", "participant_group": "A", "block": "default", "propagate_failure": false, "n_viable_trials": 1, "class": "CustomNode", "object_type": "Node"}, {"vars": "{}", "id": 2, "creation_time": "2026-06-10 05:40:11", "failed": false, "failed_reason": null, "time_of_death": null, "type": "TrialSource", "network_id": 2, "participant_id": null, "trial_maker_id": "gibbs_demo", "module_id": "gibbs_demo", "module_state_id": null, "is_global": null, "on_deploy_complete": true, "async_on_deploy_required": false, "async_on_deploy_requested": false, "async_on_deploy_complete": false, "async_on_deploy_failed": false, "key": null, "degree": 0, "target_n_trials": 2, "can_spawn": true, "child_id": null, "parent_id": null, "seed": "{'vector': [121, 84, 59], 'initial_index': 1}", "definition": "{'vector': [121, 84, 59], 'initial_index': 1, 'active_index': 1}", "context": "{'target': 'tree'}", "participant_group": "B", "block": "default", "propagate_failure": false, "n_viable_trials": 0, "class": "CustomNode", "object_type": "Node"}, {"vars": "{}", "id": 3, "creation_time": "2026-06-10 05:40:11", "failed": false, "failed_reason": null, "time_of_death": null, "type": "TrialSource", "network_id": 3, "participant_id": null, "trial_maker_id": "gibbs_demo", "module_id": "gibbs_demo", "module_state_id": null, "is_global": null, "on_deploy_complete": true, "async_on_deploy_required": false, "async_on_deploy_requested": false, "async_on_deploy_complete": false, "async_on_deploy_failed": false, "key": null, "degree": 0, "target_n_trials": 2, "can_spawn": true, "child_id": null, "parent_id": null, "seed": "{'vector': [236, 82, 9], 'initial_index': 1}", "definition": "{'vector': [236, 82, 9], 'initial_index': 1, 'active_index': 1}", "context": "{'target': 'rock'}", "participant_group": "A", "block": "default", "propagate_failure": false, "n_viable_trials": 1, "class": "CustomNode", "object_type": "Node"}, {"vars": "{}", "id": 4, "creation_time": "2026-06-10 05:40:11", "failed": false, "failed_reason": null, "time_of_death": null, "type": "TrialSource", "network_id": 4, "participant_id": null, "trial_maker_id": "gibbs_demo", "module_id": "gibbs_demo", "module_state_id": null, "is_global": null, "on_deploy_complete": true, "async_on_deploy_required": false, "async_on_deploy_requested": false, "async_on_deploy_complete": false, "async_on_deploy_failed": false, "key": null, "degree": 0, "target_n_trials": 2, "can_spawn": true, "child_id": null, "parent_id": null, "seed": "{'vector': [78, 19, 44], 'initial_index': 1}", "definition": "{'vector': [78, 19, 44], 'initial_index': 1, 'active_index': 1}", "context": "{'target': 'rock'}", "participant_group": "B", "block": "default", "propagate_failure": false, "n_viable_trials": 0, "class": "CustomNode", "object_type": "Node"}, {"vars": "{}", "id": 5, "creation_time": "2026-06-10 05:40:11", "failed": false, "failed_reason": null, "time_of_death": null, "type": "TrialSource", "network_id": 5, "participant_id": null, "trial_maker_id": "gibbs_demo", "module_id": "gibbs_demo", "module_state_id": null, "is_global": null, "on_deploy_complete": true, "async_on_deploy_required": false, "async_on_deploy_requested": false, "async_on_deploy_complete": false, "async_on_deploy_failed": false, "key": null, "degree": 0, "target_n_trials": 2, "can_spawn": true, "child_id": null, "parent_id": null, "seed": "{'vector': [112, 107, 75], 'initial_index': 1}", "definition": "{'vector': [112, 107, 75], 'initial_index': 1, 'active_index': 1}", "context": "{'target': 'carrot'}", "participant_group": "A", "block": "default", "propagate_failure": false, "n_viable_trials": 1, "class": "CustomNode", "object_type": "Node"}, {"vars": "{}", "id": 6, "creation_time": "2026-06-10 05:40:11", "failed": false, "failed_reason": null, "time_of_death": null, "type": "TrialSource", "network_id": 6, "participant_id": null, "trial_maker_id": "gibbs_demo", "module_id": "gibbs_demo", "module_state_id": null, "is_global": null, "on_deploy_complete": true, "async_on_deploy_required": false, "async_on_deploy_requested": false, "async_on_deploy_complete": false, "async_on_deploy_failed": false, "key": null, "degree": 0, "target_n_trials": 2, "can_spawn": true, "child_id": null, "parent_id": null, "seed": "{'vector': [34, 71, 121], 'initial_index': 0}", "definition": "{'vector': [34, 71, 121], 'initial_index': 0, 'active_index': 0}", "context": "{'target': 'carrot'}", "participant_group": "B", "block": "default", "propagate_failure": false, "n_viable_trials": 0, "class": "CustomNode", "object_type": "Node"}, {"vars": "{}", "id": 7, "creation_time": "2026-06-10 05:40:11", "failed": false, "failed_reason": null, "time_of_death": null, "type": "TrialSource", "network_id": 7, "participant_id": null, "trial_maker_id": "gibbs_demo", "module_id": "gibbs_demo", "module_state_id": null, "is_global": null, "on_deploy_complete": true, "async_on_deploy_required": false, "async_on_deploy_requested": false, "async_on_deploy_complete": false, "async_on_deploy_failed": false, "key": null, "degree": 0, "target_n_trials": 2, "can_spawn": true, "child_id": null, "parent_id": null, "seed": "{'vector': [23, 155, 74], 'initial_index': 2}", "definition": "{'vector': [23, 155, 74], 'initial_index': 2, 'active_index': 2}", "context": "{'target': 'banana'}", "participant_group": "A", "block": "default", "propagate_failure": false, "n_viable_trials": 1, "class": "CustomNode", "object_type": "Node"}, {"vars": "{}", "id": 8, "creation_time": "2026-06-10 05:40:11", "failed": false, "failed_reason": null, "time_of_death": null, "type": "TrialSource", "network_id": 8, "participant_id": null, "trial_maker_id": "gibbs_demo", "module_id": "gibbs_demo", "module_state_id": null, "is_global": null, "on_deploy_complete": true, "async_on_deploy_required": false, "async_on_deploy_requested": false, "async_on_deploy_complete": false, "async_on_deploy_failed": false, "key": null, "degree": 0, "target_n_trials": 2, "can_spawn": true, "child_id": null, "parent_id": null, "seed": "{'vector': [19, 150, 96], 'initial_index': 2}", "definition": "{'vector': [19, 150, 96], 'initial_index': 2, 'active_index': 2}", "context": "{'target': 'banana'}", "participant_group": "B", "block": "default", "propagate_failure": false, "n_viable_trials": 0, "class": "CustomNode", "object_type": "Node"}], "vectors": [], "infos": [{"_initial_assets": "{}", "vars": "{'async_post_trial_completed': True}", "id": 1, "creation_time": "2026-06-10 05:42:10", "failed": false, "failed_reason": null, "time_of_death": null, "type": "CustomTrial", "origin_id": 1, "network_id": 1, "contents": null, "complete": true, "node_id": 1, "participant_id": 1, "module_state_id": 1, "trial_maker_id": "gibbs_demo", "definition": "{'vector': [243, 122, 92], 'initial_index': 1, 'active_index': 1, 'reverse_scale': False}", "finalized": true, "is_repeat_trial": false, "score": null, "performance_reward": 0.0, "parent_trial_id": 6, "answer": 122.004200420042, "propagate_failure": false, "response_id": 2, "repeat_trial_index": null, "n_repeat_trials": null, "time_taken": 6.685, "time_credit_before_trial": 5.0, "time_credit_after_trial": 10.0, "time_credit_from_trial": 5.0, "progress_before_trial": 0.08333333333333333, "progress_after_trial": 0.16666666666666666, "async_post_trial_required": true, "async_post_trial_requested": true, "async_post_trial_complete": true, "async_post_trial_failed": false, "block_position": 0, "block": "default", "class": "CustomTrial", "object_type": "Info", "initial_vector": "[243, 122, 92]", "initial_index": 1, "active_index": 1, "reverse_scale": false, "updated_vector": "[243, 122.004200420042, 92]", "async_post_trial_completed": true, "vector": "[243, 122, 92]"}, {"_initial_assets": "{}", "vars": "{'async_post_trial_completed': True}", "id": 2, "creation_time": "2026-06-10 05:42:17", "failed": false, "failed_reason": null, "time_of_death": null, "type": "CustomTrial", "origin_id": 5, "network_id": 5, "contents": null, "complete": true, "node_id": 5, "participant_id": 1, "module_state_id": 1, "trial_maker_id": "gibbs_demo", "definition": "{'vector': [112, 95, 75], 'initial_index': 1, 'active_index': 1, 'reverse_scale': True}", "finalized": true, "is_repeat_trial": false, "score": null, "performance_reward": 0.0, "parent_trial_id": 5, "answer": 94.99699969997, "propagate_failure": false, "response_id": 3, "repeat_trial_index": null, "n_repeat_trials": null, "time_taken": 21.571, "time_credit_before_trial": 10.0, "time_credit_after_trial": 15.0, "time_credit_from_trial": 5.0, "progress_before_trial": 0.16666666666666666, "progress_after_trial": 0.25, "async_post_trial_required": true, "async_post_trial_requested": true, "async_post_trial_complete": true, "async_post_trial_failed": false, "block_position": 0, "block": "default", "class": "CustomTrial", "object_type": "Info", "initial_vector": "[112, 95, 75]", "initial_index": 1, "active_index": 1, "reverse_scale": true, "updated_vector": "[112, 94.99699969997, 75]", "async_post_trial_completed": true, "vector": "[112, 95, 75]"}, {"_initial_assets": "{}", "vars": "{'async_post_trial_completed': True}", "id": 3, "creation_time": "2026-06-10 05:42:39", "failed": false, "failed_reason": null, "time_of_death": null, "type": "CustomTrial", "origin_id": 3, "network_id": 3, "contents": null, "complete": true, "node_id": 3, "participant_id": 1, "module_state_id": 1, "trial_maker_id": "gibbs_demo", "definition": "{'vector': [236, 93, 9], 'initial_index': 1, 'active_index': 1, 'reverse_scale': True}", "finalized": true, "is_repeat_trial": false, "score": null, "performance_reward": 0.0, "parent_trial_id": null, "answer": 93.007800780078, "propagate_failure": false, "response_id": 4, "repeat_trial_index": null, "n_repeat_trials": null, "time_taken": 21.309, "time_credit_before_trial": 15.0, "time_credit_after_trial": 20.0, "time_credit_from_trial": 5.0, "progress_before_trial": 0.25, "progress_after_trial": 0.3333333333333333, "async_post_trial_required": true, "async_post_trial_requested": true, "async_post_trial_complete": true, "async_post_trial_failed": false, "block_position": 0, "block": "default", "class": "CustomTrial", "object_type": "Info", "initial_vector": "[236, 93, 9]", "initial_index": 1, "active_index": 1, "reverse_scale": true, "updated_vector": "[236, 93.007800780078, 9]", "async_post_trial_completed": true, "vector": "[236, 93, 9]"}, {"_initial_assets": "{}", "vars": "{'async_post_trial_completed': True}", "id": 4, "creation_time": "2026-06-10 05:43:01", "failed": false, "failed_reason": null, "time_of_death": null, "type": "CustomTrial", "origin_id": 7, "network_id": 7, "contents": null, "complete": true, "node_id": 7, "participant_id": 1, "module_state_id": 1, "trial_maker_id": "gibbs_demo", "definition": "{'vector': [23, 155, 200], 'initial_index': 2, 'active_index': 2, 'reverse_scale': False}", "finalized": true, "is_repeat_trial": false, "score": null, "performance_reward": 0.0, "parent_trial_id": 7, "answer": 199.99099909991, "propagate_failure": false, "response_id": 5, "repeat_trial_index": null, "n_repeat_trials": null, "time_taken": 21.647, "time_credit_before_trial": 20.0, "time_credit_after_trial": 25.0, "time_credit_from_trial": 5.0, "progress_before_trial": 0.3333333333333333, "progress_after_trial": 0.41666666666666663, "async_post_trial_required": true, "async_post_trial_requested": true, "async_post_trial_complete": true, "async_post_trial_failed": false, "block_position": 0, "block": "default", "class": "CustomTrial", "object_type": "Info", "initial_vector": "[23, 155, 200]", "initial_index": 2, "active_index": 2, "reverse_scale": false, "updated_vector": "[23, 155, 199.99099909991]", "async_post_trial_completed": true, "vector": "[23, 155, 200]"}, {"_initial_assets": null, "vars": "{'async_post_trial_completed': True}", "id": 5, "creation_time": "2026-06-10 05:43:23", "failed": false, "failed_reason": null, "time_of_death": null, "type": "CustomTrial", "origin_id": 5, "network_id": 5, "contents": null, "complete": true, "node_id": 5, "participant_id": 1, "module_state_id": 1, "trial_maker_id": "gibbs_demo", "definition": "{'vector': [112, 95, 75], 'initial_index': 1, 'active_index': 1, 'reverse_scale': True}", "finalized": true, "is_repeat_trial": true, "score": null, "performance_reward": 0.0, "parent_trial_id": null, "answer": 94.99699969997, "propagate_failure": false, "response_id": 6, "repeat_trial_index": 0, "n_repeat_trials": 3, "time_taken": 21.299, "time_credit_before_trial": 25.0, "time_credit_after_trial": 30.0, "time_credit_from_trial": 5.0, "progress_before_trial": 0.41666666666666663, "progress_after_trial": 0.49999999999999994, "async_post_trial_required": true, "async_post_trial_requested": true, "async_post_trial_complete": true, "async_post_trial_failed": false, "block_position": 0, "block": "default", "class": "CustomTrial", "object_type": "Info", "initial_vector": "[112, 95, 75]", "initial_index": 1, "active_index": 1, "reverse_scale": true, "updated_vector": "[112, 94.99699969997, 75]", "async_post_trial_completed": true, "vector": "[112, 95, 75]"}, {"_initial_assets": null, "vars": "{'async_post_trial_completed': True}", "id": 6, "creation_time": "2026-06-10 05:43:45", "failed": false, "failed_reason": null, "time_of_death": null, "type": "CustomTrial", "origin_id": 1, "network_id": 1, "contents": null, "complete": true, "node_id": 1, "participant_id": 1, "module_state_id": 1, "trial_maker_id": "gibbs_demo", "definition": "{'vector': [243, 122, 92], 'initial_index': 1, 'active_index': 1, 'reverse_scale': False}", "finalized": true, "is_repeat_trial": true, "score": null, "performance_reward": 0.0, "parent_trial_id": null, "answer": 122.004200420042, "propagate_failure": false, "response_id": 7, "repeat_trial_index": 1, "n_repeat_trials": 3, "time_taken": 21.857, "time_credit_before_trial": 30.0, "time_credit_after_trial": 35.0, "time_credit_from_trial": 5.0, "progress_before_trial": 0.49999999999999994, "progress_after_trial": 0.5833333333333333, "async_post_trial_required": true, "async_post_trial_requested": true, "async_post_trial_complete": true, "async_post_trial_failed": false, "block_position": 0, "block": "default", "class": "CustomTrial", "object_type": "Info", "initial_vector": "[243, 122, 92]", "initial_index": 1, "active_index": 1, "reverse_scale": false, "updated_vector": "[243, 122.004200420042, 92]", "async_post_trial_completed": true, "vector": "[243, 122, 92]"}, {"_initial_assets": null, "vars": "{'async_post_trial_completed': True}", "id": 7, "creation_time": "2026-06-10 05:44:07", "failed": false, "failed_reason": null, "time_of_death": null, "type": "CustomTrial", "origin_id": 7, "network_id": 7, "contents": null, "complete": true, "node_id": 7, "participant_id": 1, "module_state_id": 1, "trial_maker_id": "gibbs_demo", "definition": "{'vector': [23, 155, 200], 'initial_index': 2, 'active_index': 2, 'reverse_scale': False}", "finalized": true, "is_repeat_trial": true, "score": null, "performance_reward": 0.0, "parent_trial_id": null, "answer": 199.99099909991, "propagate_failure": false, "response_id": 8, "repeat_trial_index": 2, "n_repeat_trials": 3, "time_taken": 21.941, "time_credit_before_trial": 35.0, "time_credit_after_trial": 40.0, "time_credit_from_trial": 5.0, "progress_before_trial": 0.5833333333333333, "progress_after_trial": 0.6666666666666666, "async_post_trial_required": true, "async_post_trial_requested": true, "async_post_trial_complete": true, "async_post_trial_failed": false, "block_position": 0, "block": "default", "class": "CustomTrial", "object_type": "Info", "initial_vector": "[23, 155, 200]", "initial_index": 2, "active_index": 2, "reverse_scale": false, "updated_vector": "[23, 155, 199.99099909991]", "async_post_trial_completed": true, "vector": "[23, 155, 200]"}], "participants": [{"vars": "{'participant_controller': 'human', 'is_ai_participant': False, 'participant_group': 'A', '__Waiting for trial__loop_start_time__loop_start_time': '2026-06-10T05:44:29.542546', '__gibbs_demo__trial_loop__loop_start_time__loop_start_time': '2026-06-10T05:42:10.748185', 'test_variable': 123, 'liked_experiment': '', 'find_experiment_difficult': '', 'encountered_technical_problems': ''}", "id": 1, "creation_time": "2026-06-10 05:42:04", "failed": false, "failed_reason": null, "time_of_death": null, "type": "Participant", "fingerprint_hash": "22d5c056df37cb741b403fe6cd8ed228", "recruiter_id": "hotair", "worker_id": "BI3YQ0", "assignment_id": "MNRKIZ", "unique_id": "BI3YQ0:MNRKIZ", "hit_id": "7ATESE", "mode": "debug", "end_time": "2026-06-10 05:45:35", "base_pay": 0.34, "bonus": 0.86, "entry_information": "{'recruiter': 'hotair'}", "status": "approved", "elt_id": "['successful_end', 3, 1]", "elt_id_max": "[2, 2, 2]", "time_credit": 60.0, "estimated_max_time_credit": 60.0, "progress": 1.0, "time_credit_fixes": "[]", "progress_fixes": "[1.0]", "page_uuid": "6d309b57-888b-2925-79d3-b5f981979886", "page_count": 14, "aborted": false, "complete": true, "pending_redirect": null, "answer": "Finish", "answer_accumulators": "[]", "sequences": "[]", "branch_log": "[['init_participant', False]]", "for_loops": "{}", "failure_tags": "[]", "base_payment": 0.34, "performance_reward": 1.0, "unpaid_bonus": 0.0, "total_wait_page_time": 0.0, "client_ip_address": "127.0.0.1", "answer_is_fresh": true, "browser_platform": "Chrome 148.0.0.0 on Linux 64-bit", "module_state_id": null, "current_trial_id": null, "trial_status": "exit", "awaited_async_code_block_process_id": null, "class": "Participant", "object_type": "Participant", "aborted_modules": "[]", "started_modules": "['gibbs_demo', 'feedback']", "finished_modules": "['gibbs_demo', 'feedback']", "module_id": null, "participant_controller": "human", "is_ai_participant": false, "participant_group": "A", "test_variable": 123, "liked_experiment": "", "find_experiment_difficult": "", "encountered_technical_problems": ""}], "trans": []};
+            const vis_options = {};
+            return {
+                network_structure: network_structure,
+                vis_options: vis_options
+            };
+        };
+    </script>
+    <script src="../../../../monitor-static/vis@4.17.0/dist/vis.min.js"></script>
+    <script src="./static/scripts/network-monitor.js"></script>
+
+
+      
+      
+    </body>
+</html>

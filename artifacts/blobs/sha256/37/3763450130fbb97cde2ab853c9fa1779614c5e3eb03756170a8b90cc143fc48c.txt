@@ -1,0 +1,9 @@
+[Config]
+title = Quorum personality and guessing game
+description = Participants complete productive waiting-room tasks until a quorum forms, then enter a synchronized main loop.
+contact_email_on_error = researcher@example.com
+organization_name = PsyNetSkills
+
+recruiter = generic
+currency = $
+wage_per_hour = 12.0

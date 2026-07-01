@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    
+    
+      <meta name="description" content="Page author: @eandrade-lotero">
+    
+    <title>Tweak a PsyNet interface | PsyNetSkills</title>
+    <link rel="stylesheet" href="/PsyNetSkills/css/chroma.css">
+    <link rel="stylesheet" href="/PsyNetSkills/css/site.css">
+  </head>
+  <body>
+    <header class="site-header">
+      <nav class="primary-nav" aria-label="Main navigation">
+        <span class="nav-links">
+          <a
+            
+            href="/PsyNetSkills/"
+          >PsyNetSkills</a>
+          <a
+            aria-current="page" class="current"
+            href="/PsyNetSkills/skills/"
+          >Skills</a>
+          <a
+            
+            href="/PsyNetSkills/challenges/"
+          >Challenges</a>
+          <a
+            
+            href="/PsyNetSkills/attempts/"
+          >Attempts</a>
+          <a
+            
+            href="/PsyNetSkills/actions/"
+          >Actions</a>
+        </span>
+        
+
+
+
+
+
+
+
+        <span class="nav-actions">
+          
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+  
+
+<a
+  class="workflow-status-link workflow-status-unknown workflow-freshness-current"
+  href="https://github.com/pmcharrison/PsyNetSkills/actions/workflows/pages.yml?query=branch%3Amain"
+  target="_blank"
+  rel="noopener noreferrer"
+  aria-label="Checking pages.yml workflow status for main."
+  aria-describedby="workflow-status-popover"
+  data-workflow-status
+  data-enabled="true"
+  data-owner="pmcharrison"
+  data-repo="PsyNetSkills"
+  data-workflow="pages.yml"
+  data-branch="main"
+  data-rendered-sha="d04a4fe43afec86ba33b77223900e4fde7886bea"
+  data-mode="production"
+  data-poll-ms="90000"
+  data-hidden-poll-ms="300000"
+>
+  <span class="workflow-status-icon" aria-hidden="true">?</span>
+  <span class="workflow-freshness-badge" aria-hidden="true">!</span>
+  <span class="workflow-status-popover" id="workflow-status-popover" role="tooltip" hidden>
+    <span>Checking pages.yml workflow status for main.</span>
+  </span>
+  <span class="visually-hidden">Workflow status</span>
+</a>
+
+          
+            <a class="github-nav-link" href="https://github.com/pmcharrison/PsyNetSkills" aria-label="PsyNetSkills on GitHub" target="_blank" rel="noopener noreferrer">
+              <svg class="github-nav-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+                <path d="M8 0C3.58 0 0 3.69 0 8.25c0 3.64 2.29 6.73 5.47 7.82.4.08.55-.18.55-.4v-1.4c-2.23.5-2.7-1.1-2.7-1.1-.36-.95-.89-1.2-.89-1.2-.73-.52.06-.51.06-.51.8.06 1.23.85 1.23.85.72 1.27 1.88.9 2.34.69.07-.53.28-.9.51-1.11-1.78-.21-3.64-.92-3.64-4.08 0-.9.31-1.64.82-2.22-.08-.21-.36-1.05.08-2.19 0 0 .67-.22 2.2.85A7.4 7.4 0 0 1 8 3.98c.68 0 1.36.09 2 .27 1.52-1.07 2.19-.85 2.19-.85.44 1.14.16 1.98.08 2.19.51.58.82 1.32.82 2.22 0 3.17-1.87 3.87-3.65 4.07.29.26.54.76.54 1.53v2.26c0 .22.15.48.55.4A8.2 8.2 0 0 0 16 8.25C16 3.69 12.42 0 8 0Z" />
+              </svg>
+            </a>
+          
+        </span>
+      </nav>
+    </header>
+    <main>
+      
+  
+  
+  
+  
+    
+  
+
+  <article class="prose">
+    
+    <div class="page-heading">
+      <h1>Tweak a PsyNet interface</h1>
+      
+
+
+
+
+
+
+  
+
+
+  <p class="page-actions">
+    <a class="edit-source-link" href="https://github.com/pmcharrison/PsyNetSkills/edit/main/.cursor/skills/tweak-interface/SKILL.md">
+      Edit in GitHub
+    </a>
+  </p>
+
+
+    </div>
+    <p>Modify only PsyNet participant interface elements while preserving experiment logic, trial structure, nodes, and networks.</p>
+    
+      <p>
+        <strong>Author:</strong>
+        <a href="https://github.com/eandrade-lotero">Edgar Andrade-Lotero</a>
+      </p>
+    
+    <p><strong>Source:</strong> <code>.cursor/skills/tweak-interface/SKILL.md</code></p>
+    <p>Use this skill when asked to adjust the participant-facing interface of an
+existing PsyNet experiment without changing the experiment design.</p>
+<h2 id="scope-boundary">Scope boundary</h2>
+<p>Only modify interface-layer code:</p>
+<ul>
+<li><code>Page</code> classes and page factories;</li>
+<li><code>Control</code> classes and control configuration;</li>
+<li>prompts, labels, instructions, feedback, and validation messages;</li>
+<li>PsyNet event-management hooks that affect display or interaction timing.</li>
+</ul>
+<p>Do not modify experiment logic:</p>
+<ul>
+<li>trials or trial subclasses;</li>
+<li>trial makers;</li>
+<li>nodes or node makers;</li>
+<li>networks, chains, source selection, or propagation behavior.</li>
+</ul>
+<p>If the requested interface change appears to require changing trials,
+trial makers, nodes, or networks, stop and report the boundary conflict instead
+of making a hidden design change.</p>
+<h2 id="required-reads">Required reads</h2>
+<ol>
+<li>Read <code>psynet-experiment-implementation/SKILL.md</code> for the general PsyNet setup
+and validation expectations.</li>
+<li>Read the target experiment&rsquo;s interface code and the code that instantiates
+those pages or controls.</li>
+<li>If collecting visual evidence for a challenge attempt, read
+<code>record-participant-video/SKILL.md</code>.</li>
+<li>If the interface text is multilingual, cross-cultural, or intended for later
+localization, read <code>prepare-for-translation/SKILL.md</code> before editing text.</li>
+</ol>
+<h2 id="workflow">Workflow</h2>
+<ol>
+<li>Identify the exact interface elements to change and list the files that own
+them.</li>
+<li>Confirm the implementation can stay within pages, controls, prompts, or
+events. Keep trials, trial makers, nodes, and networks read-only.</li>
+<li>Make the smallest interface-layer edit that satisfies the request. Prefer
+PsyNet-native pages, controls, prompts, events, and <code>dominate.tags</code> page
+structure over custom browser code.</li>
+<li>Create a separate minimal preview experiment that shows the changed interface
+in a simple <code>Timeline</code>. This preview should exercise the relevant pages,
+controls, prompts, or events without copying or modifying the experiment&rsquo;s
+trial maker, nodes, or network.</li>
+<li>Run the preview experiment and capture a simple screenshot for static changes
+or a short video for dynamic behavior.</li>
+<li>Run the target experiment&rsquo;s existing tests or the narrowest <code>psynet test local</code>
+check that proves the interface still loads.</li>
+<li>Audit the final diff before committing: no behavior changes should appear
+outside the allowed interface-layer files unless the user explicitly approved
+a scope expansion.</li>
+</ol>
+<h2 id="validation-checklist">Validation checklist</h2>
+<ul>
+<li>The participant can see and interact with the changed interface.</li>
+<li>The separate preview timeline demonstrates the interface without relying on
+trials, trial makers, nodes, or networks.</li>
+<li>Existing trial allocation, node construction, network growth, scoring, and data
+schema remain unchanged.</li>
+<li>Screenshot or video evidence shows the changed interface clearly.</li>
+<li>Any bot path that reaches the modified page or control still returns the same
+formatted answer shape as the browser path.</li>
+</ul>
+<h2 id="common-failures">Common failures</h2>
+<ul>
+<li>Do not move display-only changes into a <code>Trial</code> subclass just because the page
+is normally shown from a trial.</li>
+<li>Do not alter a trial maker or network to make the preview easier to run.</li>
+<li>Do not let a demo preview replace testing the real target experiment path.</li>
+<li>Do not present a screenshot of the wrong experiment as proof that the target
+interface changed.</li>
+</ul>
+
+  </article>
+
+    </main>
+    
+      
+
+
+
+  <section class="comments" aria-label="Comments">
+    <script
+      src="https://giscus.app/client.js"
+      data-repo="pmcharrison/PsyNetSkills"
+      data-repo-id="R_kgDOSw3rlA"
+      data-category="Announcements"
+      data-category-id="DIC_kwDOSw3rlM4C-xgp"
+      data-mapping="pathname"
+      data-strict="1"
+      data-reactions-enabled="1"
+      data-emit-metadata="0"
+      data-input-position="bottom"
+      data-theme="light"
+      data-lang="en"
+      crossorigin="anonymous"
+      async
+    ></script>
+  </section>
+
+
+    
+    <footer>
+    </footer>
+    <script src="/PsyNetSkills/js/workflow-status.js" defer></script>
+    <script src="/PsyNetSkills/js/actions-copy.js" defer></script>
+    <script src="/PsyNetSkills/js/screenshot-gallery.js" defer></script>
+  </body>
+</html>

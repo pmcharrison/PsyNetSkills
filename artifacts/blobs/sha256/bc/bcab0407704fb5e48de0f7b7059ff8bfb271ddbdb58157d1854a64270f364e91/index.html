@@ -1,0 +1,148 @@
+{% macro trial_block_control(params) %}
+<style>
+  #sdi-root { text-align: center; min-height: 380px; }
+  #sdi-trial-count { color: #555; margin-bottom: 8px; }
+  #sdi-fixation { font-size: 54px; line-height: 250px; font-weight: 700; }
+  #sdi-display { min-height: 285px; }
+  .sdi-pair { display: flex; justify-content: center; gap: 72px; margin: 36px auto; }
+  .sdi-stage {
+    position: relative; width: 430px; height: 300px; margin: 0 auto 14px auto;
+    border: 1px solid #ddd; border-radius: 12px; background: #fafafa;
+  }
+  .sdi-probe { display: flex; justify-content: center; margin: 24px auto; }
+  .stimulus-circle { border-radius: 50%; border: 2px solid #222; margin: auto; }
+  .stimulus-number { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
+  .sdi-button { min-width: 82px; margin: 6px; }
+</style>
+
+<div id="sdi-root">
+  <div id="sdi-trial-count"></div>
+  <div id="sdi-fixation">+</div>
+  <div id="sdi-display" style="display:none;"></div>
+  <div id="sdi-response" style="display:none;"></div>
+</div>
+
+<script>
+const blockName = {{ params.block_name | tojson }};
+const trials = {{ params.trials | tojson }};
+const globalChoices = {{ params.choices | tojson }};
+const timing = {{ params.timing | tojson }};
+let trialIndex = 0;
+let responseStart = null;
+let responses = [];
+
+function stimulusHtml(stimulus, number, position) {
+  const size = stimulus.dimensions.size_px;
+  const positionStyle = position ? `position:absolute; left:${position.x}%; top:${position.y}%; transform:translate(-50%, -50%);` : "";
+  const numberHtml = number ? `<div class="stimulus-number">${number}</div>` : "";
+  return `
+    <div class="stimulus-wrap" style="${positionStyle}">
+      ${numberHtml}
+      <div class="stimulus-circle" style="width:${size}px; height:${size}px; background:${stimulus.color_hex};"></div>
+    </div>
+  `;
+}
+
+function showFixation() {
+  document.getElementById("sdi-fixation").style.display = "block";
+  document.getElementById("sdi-display").style.display = "none";
+  document.getElementById("sdi-response").style.display = "none";
+}
+
+function renderPairTrial(trial, question) {
+  const left = stimulusHtml(trial.stimuli[0]);
+  const right = stimulusHtml(trial.stimuli[1]);
+  document.getElementById("sdi-display").innerHTML = `<div class="sdi-pair">${left}${right}</div><p>${question}</p>`;
+}
+
+function renderIdentificationMemory(trial) {
+  const items = trial.display_items.map(item => stimulusHtml(item.stimulus, item.number, item.position)).join("");
+  document.getElementById("sdi-display").innerHTML = `
+    <div class="sdi-stage">
+      ${items}
+      <div style="position:absolute; left:50%; top:50%; transform:translate(-50%, -50%); font-size:36px; font-weight:700;">+</div>
+    </div>
+  `;
+}
+
+function renderIdentificationProbe(trial) {
+  document.getElementById("sdi-display").innerHTML = `
+    <p>Which numbered item was most similar to this probe?</p>
+    <div class="sdi-probe">${stimulusHtml(trial.probe)}</div>
+  `;
+}
+
+function responseChoices(trial) {
+  if (blockName === "multi_item_identification") {
+    return trial.display_items.map(item => item.number);
+  }
+  return globalChoices;
+}
+
+function showResponseButtons(trial) {
+  const response = document.getElementById("sdi-response");
+  response.innerHTML = "";
+  responseChoices(trial).forEach(choice => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "btn btn-primary sdi-button response-choice";
+    button.textContent = blockName === "multi_item_identification" ? `Item ${choice}` : choice;
+    button.onclick = () => recordResponse(choice);
+    response.appendChild(button);
+  });
+  response.style.display = "block";
+  responseStart = performance.now();
+}
+
+function recordResponse(choice) {
+  const trial = trials[trialIndex];
+  const rt = (performance.now() - responseStart) / 1000.0;
+  const correct = trial.correct_answer === undefined ? true : String(choice) === String(trial.correct_answer);
+  responses.push({
+    trial_index: trialIndex,
+    response: String(choice),
+    reaction_time: rt,
+    accuracy: correct ? 1.0 : 0.0,
+    definition: trial
+  });
+  trialIndex += 1;
+  if (trialIndex >= trials.length) {
+    psynet.nextPage({block_name: blockName, trials: responses});
+  } else {
+    runTrial();
+  }
+}
+
+function runTrial() {
+  const trial = trials[trialIndex];
+  document.getElementById("sdi-trial-count").innerText = `Trial ${trialIndex + 1} of ${trials.length}`;
+  showFixation();
+  if (blockName === "multi_item_identification") {
+    setTimeout(() => {
+      document.getElementById("sdi-fixation").style.display = "none";
+      document.getElementById("sdi-display").style.display = "block";
+      renderIdentificationMemory(trial);
+      setTimeout(() => {
+        showFixation();
+        setTimeout(() => {
+          document.getElementById("sdi-fixation").style.display = "none";
+          document.getElementById("sdi-display").style.display = "block";
+          renderIdentificationProbe(trial);
+          showResponseButtons(trial);
+        }, timing.identification_delay);
+      }, timing.memory_presentation);
+    }, timing.fixation);
+  } else {
+    setTimeout(() => {
+      document.getElementById("sdi-fixation").style.display = "none";
+      document.getElementById("sdi-display").style.display = "block";
+      const question = blockName === "similarity_judgment" ? "Rate how similar the two stimuli are." : "Are these two stimuli identical or different?";
+      renderPairTrial(trial, question);
+      setTimeout(() => showResponseButtons(trial), timing.pair_presentation);
+    }, timing.fixation);
+  }
+}
+
+document.addEventListener("DOMContentLoaded", runTrial);
+</script>
+{% endmacro %}

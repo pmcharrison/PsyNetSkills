@@ -1,0 +1,11 @@
+{
+  "captions": {
+    "01-introduction.png": "Generated-tone tapping introduction and public-safe data notice.",
+    "02-volume-check.png": "Representative generated click-track volume check.",
+    "03-calibration.png": "Isochronous calibration tapping trial before taps are entered.",
+    "04-calibration-passed.png": "Calibration success gate before main tapping trials.",
+    "05-main-trial.png": "Main generated metronome tapping trial.",
+    "06-main-taps-entered.png": "Main trial after scripted participant taps.",
+    "07-completion.png": "Successful recruiter exit after completing all main trials."
+  }
+}

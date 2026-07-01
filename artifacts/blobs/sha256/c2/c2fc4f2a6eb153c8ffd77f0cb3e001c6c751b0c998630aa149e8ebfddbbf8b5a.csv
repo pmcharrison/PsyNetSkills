@@ -1,0 +1,7 @@
+clip_id,culture,audio_path,description
+us_bright,US,data/audio/us_bright.wav,Synthetic bright major arpeggio
+us_melancholy,US,data/audio/us_melancholy.wav,Synthetic descending minor phrase
+brazil_warm,Brazil,data/audio/brazil_warm.wav,Synthetic syncopated warm phrase
+brazil_calm,Brazil,data/audio/brazil_calm.wav,Synthetic slow calm phrase
+korea_clear,Korea,data/audio/korea_clear.wav,Synthetic clear pentatonic phrase
+korea_tense,Korea,data/audio/korea_tense.wav,Synthetic tense repeated phrase

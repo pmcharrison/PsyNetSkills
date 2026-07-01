@@ -1,0 +1,12 @@
+{
+  "participant_url": "http://127.0.0.1:5000/ad?generate_tokens=true&recruiter=hotair",
+  "started_at": "2026-06-15T10:10:56.313Z",
+  "finished_at": "2026-06-15T10:11:08.600Z",
+  "final_url": "http://127.0.0.1:5000/recruiter-exit?participant_id=1",
+  "screenshots": [
+    "01-human-group-choice.png",
+    "02-human-color-trial.png",
+    "03-human-feedback.png",
+    "04-human-completion.png"
+  ]
+}

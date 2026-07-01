@@ -1,0 +1,63 @@
+{
+  "tasks": [
+    {
+      "id": "task_river_garden",
+      "title": "Community garden summary",
+      "passage": "A neighborhood group moved a small community garden from a shaded lot to a brighter riverside space. Volunteers reported that the new location helped seedlings grow more evenly, but it also required extra weekend watering because the soil dried faster.",
+      "question": "Summarize the trade-off described in two or three sentences.",
+      "topic": "local planning",
+      "expected_keywords": ["brighter", "watering", "trade-off"]
+    },
+    {
+      "id": "task_library_hours",
+      "title": "Library hours reasoning",
+      "passage": "A library tested opening one hour earlier on weekdays. Morning visits increased among parents after school drop-off, while late-afternoon visits stayed about the same. Staff said the change was useful only if morning volunteers were available.",
+      "question": "Explain whether the earlier opening seems useful and what condition matters most.",
+      "topic": "public services",
+      "expected_keywords": ["morning", "volunteers", "useful"]
+    },
+    {
+      "id": "task_bike_racks",
+      "title": "Bike rack decision",
+      "passage": "A campus survey found that students wanted more bike racks near the science building, but maintenance staff warned that the narrow walkway already became crowded during class changes. The planning team considered racks near a wider side entrance instead.",
+      "question": "Describe the planning team's dilemma and the compromise under consideration.",
+      "topic": "campus planning",
+      "expected_keywords": ["bike racks", "crowded", "side entrance"]
+    }
+  ],
+  "checks": [
+    {
+      "id": "attention_color",
+      "type": "attention_check",
+      "title": "Attention check",
+      "passage": "This is an attention check. To show that you are reading the instructions, type the word blue in the response box.",
+      "question": "What word were you asked to type?",
+      "expected_response": "blue"
+    },
+    {
+      "id": "comprehension_source",
+      "type": "comprehension_check",
+      "title": "Comprehension check",
+      "passage": "For the study tasks, you should base your answer only on the passage shown on the page and your own reasoning. You should not use external websites or AI tools.",
+      "question": "According to the instructions, what sources should you use for your answers?",
+      "expected_response": "the passage and my own reasoning"
+    }
+  ],
+  "probes": [
+    {
+      "id": "probe_strategy",
+      "title": "Writing strategy probe",
+      "question": "Briefly describe how you wrote your answers in this study."
+    },
+    {
+      "id": "probe_assistance",
+      "title": "AI-use disclosure probe",
+      "question": "Did you use any AI assistant, browser agent, search engine, or external writing aid? If yes, describe what you used. If no, write 'No external assistance'."
+    },
+    {
+      "id": "probe_confidence",
+      "title": "Confidence probe",
+      "question": "Which answer felt least certain to you, and why?"
+    }
+  ]
+}

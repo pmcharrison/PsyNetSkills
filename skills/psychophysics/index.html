@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    
+    
+      <meta name="description" content="Page authors: @raja-marjieh, @jacobyn">
+    
+    <title>Implement PsyNet psychophysics experiment | PsyNetSkills</title>
+    <link rel="stylesheet" href="/PsyNetSkills/css/chroma.css">
+    <link rel="stylesheet" href="/PsyNetSkills/css/site.css">
+  </head>
+  <body>
+    <header class="site-header">
+      <nav class="primary-nav" aria-label="Main navigation">
+        <span class="nav-links">
+          <a
+            
+            href="/PsyNetSkills/"
+          >PsyNetSkills</a>
+          <a
+            aria-current="page" class="current"
+            href="/PsyNetSkills/skills/"
+          >Skills</a>
+          <a
+            
+            href="/PsyNetSkills/challenges/"
+          >Challenges</a>
+          <a
+            
+            href="/PsyNetSkills/attempts/"
+          >Attempts</a>
+          <a
+            
+            href="/PsyNetSkills/actions/"
+          >Actions</a>
+        </span>
+        
+
+
+
+
+
+
+
+        <span class="nav-actions">
+          
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+  
+
+<a
+  class="workflow-status-link workflow-status-unknown workflow-freshness-current"
+  href="https://github.com/pmcharrison/PsyNetSkills/actions/workflows/pages.yml?query=branch%3Amain"
+  target="_blank"
+  rel="noopener noreferrer"
+  aria-label="Checking pages.yml workflow status for main."
+  aria-describedby="workflow-status-popover"
+  data-workflow-status
+  data-enabled="true"
+  data-owner="pmcharrison"
+  data-repo="PsyNetSkills"
+  data-workflow="pages.yml"
+  data-branch="main"
+  data-rendered-sha="d04a4fe43afec86ba33b77223900e4fde7886bea"
+  data-mode="production"
+  data-poll-ms="90000"
+  data-hidden-poll-ms="300000"
+>
+  <span class="workflow-status-icon" aria-hidden="true">?</span>
+  <span class="workflow-freshness-badge" aria-hidden="true">!</span>
+  <span class="workflow-status-popover" id="workflow-status-popover" role="tooltip" hidden>
+    <span>Checking pages.yml workflow status for main.</span>
+  </span>
+  <span class="visually-hidden">Workflow status</span>
+</a>
+
+          
+            <a class="github-nav-link" href="https://github.com/pmcharrison/PsyNetSkills" aria-label="PsyNetSkills on GitHub" target="_blank" rel="noopener noreferrer">
+              <svg class="github-nav-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+                <path d="M8 0C3.58 0 0 3.69 0 8.25c0 3.64 2.29 6.73 5.47 7.82.4.08.55-.18.55-.4v-1.4c-2.23.5-2.7-1.1-2.7-1.1-.36-.95-.89-1.2-.89-1.2-.73-.52.06-.51.06-.51.8.06 1.23.85 1.23.85.72 1.27 1.88.9 2.34.69.07-.53.28-.9.51-1.11-1.78-.21-3.64-.92-3.64-4.08 0-.9.31-1.64.82-2.22-.08-.21-.36-1.05.08-2.19 0 0 .67-.22 2.2.85A7.4 7.4 0 0 1 8 3.98c.68 0 1.36.09 2 .27 1.52-1.07 2.19-.85 2.19-.85.44 1.14.16 1.98.08 2.19.51.58.82 1.32.82 2.22 0 3.17-1.87 3.87-3.65 4.07.29.26.54.76.54 1.53v2.26c0 .22.15.48.55.4A8.2 8.2 0 0 0 16 8.25C16 3.69 12.42 0 8 0Z" />
+              </svg>
+            </a>
+          
+        </span>
+      </nav>
+    </header>
+    <main>
+      
+  
+  
+  
+  
+    
+  
+
+  <article class="prose">
+    
+    <div class="page-heading">
+      <h1>Implement PsyNet psychophysics experiment</h1>
+      
+
+
+
+
+
+
+  
+
+
+  <p class="page-actions">
+    <a class="edit-source-link" href="https://github.com/pmcharrison/PsyNetSkills/edit/main/.cursor/skills/psychophysics/SKILL.md">
+      Edit in GitHub
+    </a>
+  </p>
+
+
+    </div>
+    <p>Implement psychophysics experiments with PsyNet, focusing on precise visual displays, timing, response collection, and conservative interpretation of reference figures.</p>
+    
+      <p>
+        <strong>Authors:</strong>
+        <a href="https://github.com/raja-marjieh">Raja Marjieh</a>, <a href="https://github.com/jacobyn">Nori Jacoby</a>
+      </p>
+    
+    <p><strong>Source:</strong> <code>.cursor/skills/psychophysics/SKILL.md</code></p>
+    <h2 id="general-guidelines">General guidelines</h2>
+<p>Follow the general workflow in <code>psynet-experiment-implementation/SKILL.md</code>.</p>
+<ul>
+<li>
+<p>Prioritize correct display of all visual elements, correct timing, and no
+additional lingering display items such as fixation crosses or unrelated
+graphical elements that are not specified.</p>
+</li>
+<li>
+<p>Do not display any additional elements that are not mentioned in the task
+description, including participant-facing text overlays inside the visual
+stimulus area.</p>
+</li>
+<li>
+<p>During visual presentation frames, do not insert prompts or labels such as
+&ldquo;same or different&rdquo; between/over stimuli unless the instructions explicitly
+require that text to appear within the visual display itself. Put decision
+wording in instructions or response controls otherwise.</p>
+</li>
+<li>
+<p>For white image or stimulus backgrounds, avoid visible borders, container
+frames, or contrasting panels unless the experiment design explicitly calls
+for them. A frame around a white visual field can change the apparent stimulus
+context; white stimulus backgrounds should normally blend into the surrounding
+white page background.</p>
+</li>
+<li>
+<p>Make sure that PsyNet node and trial constructs are used correctly.</p>
+</li>
+<li>
+<p>Measure reaction time with JavaScript only when needed, and keep it minimal.
+Reaction time should be strongly tied to native events in PsyNet&rsquo;s event
+management system, and reaction-time JavaScript should be isolated. Responses
+should be recorded in the answer of each trial. Prefer existing PsyNet Control
+mechanisms where possible, for example <code>GraphicPrompt</code> frame sequencing with
+<code>prevent_control_response</code>/<code>activate_control_response</code>,
+<code>KeyboardPushButtonControl</code>, and event-log reaction-time extraction before
+adding custom JavaScript.</p>
+</li>
+<li>
+<p>Implement keyboard-button responses with <code>KeyboardPushButtonControl</code> rather
+than dedicated JavaScript.</p>
+</li>
+<li>
+<p>Center response buttons and questions around the stimuli.</p>
+</li>
+<li>
+<p>Do not show technical details that are not participant-facing, such as labeling
+display items &ldquo;stimuli&rdquo;.</p>
+</li>
+<li>
+<p>When implementing an experiment based on a PDF paper, keep in mind that display
+items such as dots and stimuli may be exaggerated in size in schematic figures.
+If the paper provides explicit size specifications for the elements, use those
+values. If not, be cautious when estimating sizes from schematic figures,
+especially when the figure contains multiple components and the actual display
+is only one part of the image. However, if a screenshot or a clear
+single-display schematic is provided, the relative sizes are likely to be more
+indicative of the intended appearance.</p>
+</li>
+<li>
+<p>Use a neutral color theme for psynet buttons and progress bars (e.g. gray) to
+avoid biasing color-related experiments.</p>
+</li>
+</ul>
+<h2 id="task-guidance-and-neutral-ui-chrome">Task guidance and neutral UI chrome</h2>
+<ul>
+<li>
+<p>Avoid putting decision prompts or labels inside the stimulus area, but do not
+remove all trial-level guidance when the participant&rsquo;s task would become
+ambiguous. Put concise task guidance outside the visual field, for example
+above the <code>GraphicPrompt</code>, when participants need a reminder such as &ldquo;Choose
+the number of the original item most similar to the probe.&rdquo;</p>
+</li>
+<li>
+<p>PsyNet&rsquo;s top progress bar may keep its default blue styling even when response
+buttons are customized. For color-related or color-sensitive experiments,
+neutralize the progress bar along with buttons and other UI chrome, for
+example by adding page CSS for <code>#timeline-progress-bar</code> and <code>.progress</code>.</p>
+</li>
+<li>
+<p>Verify neutral UI chrome in the final participant screenshot or video. For
+PsyNet pages, target the actual header selectors, including
+<code>#timeline-progress-bar</code>, <code>.progress-bar[role=&quot;progressbar&quot;]</code>, and
+<code>.header .progress</code>, not only response-button classes.</p>
+</li>
+</ul>
+<h2 id="reaction-time-from-the-native-event-log">Reaction time from the native event log</h2>
+<p>You should not measure reaction time, unless explicityly instructed to do so.
+All instructions below applies only if you explicitly required to provide reaction times.</p>
+<p>Reaction time can usually be recorded without any bespoke timing JavaScript. Drive
+the stimulus with a <code>GraphicPrompt</code> whose response is locked until the stimulus
+frame, and read the timing back from the page&rsquo;s event log in <code>format_answer</code>.</p>
+<p>The key wiring:</p>
+<ul>
+<li>Set <code>prevent_control_response=True</code> (and usually <code>prevent_control_submit=True</code>)
+on the <code>GraphicPrompt</code>, so the response interface is locked during the fixation
+frame.</li>
+<li>Mark the stimulus frame with <code>activate_control_response=True</code> (and
+<code>activate_control_submit=True</code>). PsyNet then fires the standard <code>responseEnable</code>
+event exactly at stimulus onset, which is logged in the event log.</li>
+<li>Use <code>KeyboardPushButtonControl</code>; each press logs a <code>pushButtonClicked</code> event.</li>
+<li>Reaction time is <code>localTime(pushButtonClicked) − localTime(responseEnable)</code>,
+i.e. stimulus-onset-to-response.</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">psynet.graphics</span> <span class="kn">import</span> <span class="n">Circle</span><span class="p">,</span> <span class="n">Frame</span><span class="p">,</span> <span class="n">GraphicPrompt</span><span class="p">,</span> <span class="n">Path</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">psynet.modular_page</span> <span class="kn">import</span> <span class="n">KeyboardPushButtonControl</span><span class="p">,</span> <span class="n">ModularPage</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">_parse</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># Front-end localTime values are ISO 8601 strings ending in &#34;Z&#34;.</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">fromisoformat</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&#34;Z&#34;</span><span class="p">,</span> <span class="s2">&#34;+00:00&#34;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">reaction_time_msec</span><span class="p">(</span><span class="n">event_log</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">onset</span> <span class="o">=</span> <span class="nb">next</span><span class="p">((</span><span class="n">e</span><span class="p">[</span><span class="s2">&#34;localTime&#34;</span><span class="p">]</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">event_log</span> <span class="k">if</span> <span class="n">e</span><span class="p">[</span><span class="s2">&#34;eventType&#34;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&#34;responseEnable&#34;</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">click</span> <span class="o">=</span> <span class="nb">next</span><span class="p">((</span><span class="n">e</span><span class="p">[</span><span class="s2">&#34;localTime&#34;</span><span class="p">]</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">event_log</span><span class="p">)</span> <span class="k">if</span> <span class="n">e</span><span class="p">[</span><span class="s2">&#34;eventType&#34;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&#34;pushButtonClicked&#34;</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="n">onset</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">click</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="kc">None</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="p">(</span><span class="n">_parse</span><span class="p">(</span><span class="n">click</span><span class="p">)</span> <span class="o">-</span> <span class="n">_parse</span><span class="p">(</span><span class="n">onset</span><span class="p">))</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">()</span> <span class="o">*</span> <span class="mf">1000.0</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">RatingControl</span><span class="p">(</span><span class="n">KeyboardPushButtonControl</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">format_answer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">raw_answer</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="n">event_log</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&#34;metadata&#34;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&#34;event_log&#34;</span><span class="p">,</span> <span class="p">[])</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="p">{</span><span class="s2">&#34;rating&#34;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">raw_answer</span><span class="p">),</span> <span class="s2">&#34;rt_msec&#34;</span><span class="p">:</span> <span class="n">reaction_time_msec</span><span class="p">(</span><span class="n">event_log</span><span class="p">)}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">page</span> <span class="o">=</span> <span class="n">ModularPage</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;trial&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">prompt</span><span class="o">=</span><span class="n">GraphicPrompt</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">        <span class="n">text</span><span class="o">=</span><span class="s2">&#34;How similar are these two shapes?&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="n">dimensions</span><span class="o">=</span><span class="p">[</span><span class="mi">200</span><span class="p">,</span> <span class="mi">100</span><span class="p">],</span>
+</span></span><span class="line"><span class="cl">        <span class="n">frames</span><span class="o">=</span><span class="p">[</span>
+</span></span><span class="line"><span class="cl">            <span class="n">Frame</span><span class="p">([</span><span class="n">Path</span><span class="p">(</span><span class="s2">&#34;fixation&#34;</span><span class="p">,</span> <span class="s2">&#34;M93,50 L107,50 M100,43 L100,57&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                        <span class="n">attributes</span><span class="o">=</span><span class="p">{</span><span class="s2">&#34;stroke&#34;</span><span class="p">:</span> <span class="s2">&#34;#000&#34;</span><span class="p">,</span> <span class="s2">&#34;stroke-width&#34;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s2">&#34;fill&#34;</span><span class="p">:</span> <span class="s2">&#34;none&#34;</span><span class="p">})],</span>
+</span></span><span class="line"><span class="cl">                  <span class="n">duration</span><span class="o">=</span><span class="mf">0.8</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">            <span class="n">Frame</span><span class="p">([</span><span class="n">Circle</span><span class="p">(</span><span class="s2">&#34;left&#34;</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mi">26</span><span class="p">,</span> <span class="n">attributes</span><span class="o">=</span><span class="p">{</span><span class="s2">&#34;fill&#34;</span><span class="p">:</span> <span class="s2">&#34;#ff0000&#34;</span><span class="p">}),</span>
+</span></span><span class="line"><span class="cl">                   <span class="n">Circle</span><span class="p">(</span><span class="s2">&#34;right&#34;</span><span class="p">,</span> <span class="mi">140</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mi">26</span><span class="p">,</span> <span class="n">attributes</span><span class="o">=</span><span class="p">{</span><span class="s2">&#34;fill&#34;</span><span class="p">:</span> <span class="s2">&#34;#0000ff&#34;</span><span class="p">})],</span>
+</span></span><span class="line"><span class="cl">                  <span class="n">duration</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">activate_control_response</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">activate_control_submit</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">        <span class="p">],</span>
+</span></span><span class="line"><span class="cl">        <span class="n">prevent_control_response</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="n">prevent_control_submit</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="p">),</span>
+</span></span><span class="line"><span class="cl">    <span class="n">control</span><span class="o">=</span><span class="n">RatingControl</span><span class="p">(</span><span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s2">&#34;1&#34;</span><span class="p">,</span> <span class="s2">&#34;2&#34;</span><span class="p">,</span> <span class="s2">&#34;3&#34;</span><span class="p">,</span> <span class="s2">&#34;4&#34;</span><span class="p">,</span> <span class="s2">&#34;5&#34;</span><span class="p">],</span>
+</span></span><span class="line"><span class="cl">                          <span class="n">keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&#34;Digit1&#34;</span><span class="p">,</span> <span class="s2">&#34;Digit2&#34;</span><span class="p">,</span> <span class="s2">&#34;Digit3&#34;</span><span class="p">,</span> <span class="s2">&#34;Digit4&#34;</span><span class="p">,</span> <span class="s2">&#34;Digit5&#34;</span><span class="p">]),</span>
+</span></span><span class="line"><span class="cl">    <span class="n">time_estimate</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span>
+</span></span></code></pre></div><p>For simulation, leave <code>bot_response</code> unset and implement <code>get_bot_response</code> to
+return <code>BotResponse(raw_answer=..., metadata={&quot;event_log&quot;: [...]})</code> with a
+synthetic <code>responseEnable</code>/<code>pushButtonClicked</code> pair, so simulated bots flow through
+the same <code>format_answer</code> and produce real <code>rt_msec</code> values. (Passing
+<code>bot_response=None</code> instead would bypass <code>get_bot_response</code> and <code>format_answer</code>.)</p>
+
+  </article>
+
+    </main>
+    
+      
+
+
+
+  <section class="comments" aria-label="Comments">
+    <script
+      src="https://giscus.app/client.js"
+      data-repo="pmcharrison/PsyNetSkills"
+      data-repo-id="R_kgDOSw3rlA"
+      data-category="Announcements"
+      data-category-id="DIC_kwDOSw3rlM4C-xgp"
+      data-mapping="pathname"
+      data-strict="1"
+      data-reactions-enabled="1"
+      data-emit-metadata="0"
+      data-input-position="bottom"
+      data-theme="light"
+      data-lang="en"
+      crossorigin="anonymous"
+      async
+    ></script>
+  </section>
+
+
+    
+    <footer>
+    </footer>
+    <script src="/PsyNetSkills/js/workflow-status.js" defer></script>
+    <script src="/PsyNetSkills/js/actions-copy.js" defer></script>
+    <script src="/PsyNetSkills/js/screenshot-gallery.js" defer></script>
+  </body>
+</html>

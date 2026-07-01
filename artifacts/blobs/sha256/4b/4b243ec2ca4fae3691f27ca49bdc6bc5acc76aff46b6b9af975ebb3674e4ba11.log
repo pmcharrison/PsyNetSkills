@@ -1,0 +1,92 @@
+Bot output log: /tmp/psynet_bots_lnq_8yg5.log
+[1m================================================================================[0m
+[1m⚡ PERFORMANCE TEST SUITE[0m
+Bots per test:        1
+Test duration:        0.1 min
+Bot start stagger:    ~0.1s
+Bot time factor:      0.0
+
+[1m================================================================================[0m
+[1mTEST 1/1: Running with 1 concurrent bots[0m
+
+▶ Starting load test with 1 concurrent bots for 0.1 minutes...
+
+
+🤖 Running: 1 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 0:05 left
+                                                                       
+🤖 Running: 1 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 0:03 left
+                                                                       
+🤖 Running: 1 | ✓ Completed: 1 | ✗ Errors: 0 | ⏱ Avg: 1.6s | ⏳ 0:02 left
+                                                                       
+🤖 Running: 1 | ✓ Completed: 1 | ✗ Errors: 0 | ⏱ Avg: 1.6s | ⏳ 0:00 left
+                                                                       
+🤖 Running: 0 | ✓ Completed: 2 | ✗ Errors: 0 | ⏱ Avg: 1.6s | ⏳ 0:00 left
+                                                                                                                                                      
+[92m✓ Test completed[0m
+[1mTEST RESULTS (n=1 bots)[0m
+
+[1m  BOT OUTCOMES[0m
+  ------------------------------------
+  Bots started                  2
+  Completed successfully        2
+  Completed with error          0
+  Timed out (still running)     0
+  Completion rate            [92m100%[0m
+
+[1m  BOT RUNTIMES[0m
+  ------------------------------------
+  Test duration            6.3s
+  Avg runtime              1.6s
+  Avg runtime (succeeded)  1.5s
+  Avg runtime (failed)     1.6s
+
+[1m  BOT INIT TIMES (n=2):[0m
+  ------------------------------------
+  Median           1.205s
+  95th percentile  1.205s
+  Max              1.205s
+
+[1m  REQUEST METRICS[0m
+  ------------------------------------
+  Total requests          30
+  Request errors           0
+  Throughput      4.77 req/s
+
+[1m  RESPONSE TIMES (n=30)[0m
+  ------------------------------------
+  Median           0.100s
+  95th percentile  0.109s
+  99th percentile  0.113s
+  Max              0.114s
+  Mean             0.071s
+  Std dev          0.040s
+
+[1m  WAIT PAGE TIMES (n=2 pages)[0m
+  ------------------------------------
+  Median           0.0s
+  95th percentile  0.0s
+  Max              0.0s
+
+[1m  TRIALS PER BOT (n=2 bots succeeded)[0m
+  ------------------------------------
+  Min     4
+  Median  4
+  Max     4
+
+[1m  ASYNC PROCESS TIMES, 1 workers[0m
+  ------------------------------------
+  No completed async processes.
+
+
+[1mCUMULATIVE PERFORMANCE TEST SUMMARY
+[0m
+  Resp P95 — P95 HTTP response time for key endpoints (/timeline, /response)
+  Q P95 all — P95 queue delay across all async processes
+  vs base — ratio to the first (lowest bot-count) row, if multiple counts are run
+
+    || Bots    Succeeded    Requests    Req/s    Resp P95 (s)  Q P95 all (s)
+  ---------  -----------  ----------  -------  --------------  ---------------
+          1            2          30      4.8           0.109  N/A
+
+Bot output log: /tmp/psynet_bots_lnq_8yg5.log
+Performance results (JSON): /workspace/challenges/audio-memory-sequence/attempts/2026-06-07-22-41/evidence/performance.json

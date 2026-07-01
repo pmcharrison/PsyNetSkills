@@ -1,0 +1,11 @@
+[Config]
+title = Generated tapping rhythm demo (Chrome browser, 3 minutes to complete)
+description = Hear short generated metronome click tracks and tap along with an on-screen button. Please use a Chrome browser and headphones or speakers at a comfortable volume.
+contact_email_on_error = demo@example.com
+organization_name = PsyNetSkills workshop
+
+recruiter = generic
+currency = $
+wage_per_hour = 12.0
+show_reward = false
+base_payment = 0.60

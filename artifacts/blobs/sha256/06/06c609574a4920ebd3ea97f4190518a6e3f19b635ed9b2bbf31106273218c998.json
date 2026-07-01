@@ -1,0 +1,9 @@
+[
+  {
+    "reference_id": "cat",
+    "category": "cat",
+    "path": "static/references/cat.png",
+    "source": "https://drive.google.com/file/d/1gwbbQPIsBJqn4ZsEL66H6u3VgQ7DSIs1/view?usp=sharing",
+    "notes": "User-supplied cat reference image downloaded via Google Drive public export URL for local testing."
+  }
+]

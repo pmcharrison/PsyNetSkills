@@ -1,0 +1,295 @@
+{% extends "timeline-page.html" %}
+
+{% block stylesheets %}
+    {{ super() }}
+    <style>
+        #grid-game-layout {
+            display: grid;
+            grid-template-columns: minmax(320px, 1fr) minmax(320px, 1fr);
+            gap: 1.25rem;
+            align-items: start;
+        }
+
+        .grid-game-panel {
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 1rem;
+            background: #fff;
+        }
+
+        .grid-game-grid {
+            display: grid;
+            gap: 3px;
+            margin-top: 0.75rem;
+            max-width: 520px;
+        }
+
+        .grid-cell {
+            aspect-ratio: 1;
+            min-width: 28px;
+            border: 1px solid #9aa0a6;
+            border-radius: 4px;
+            background: #f8f9fa;
+            color: #1f2937;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .grid-cell:disabled {
+            cursor: not-allowed;
+            opacity: 0.65;
+        }
+
+        .own-clicked {
+            background: #dbeafe;
+            border-color: #2563eb;
+        }
+
+        .partner-cell {
+            cursor: default;
+        }
+
+        #grid-game-status {
+            margin: 1rem 0;
+            padding: 0.75rem;
+            border-radius: 6px;
+            background: #eef2ff;
+        }
+
+        #signal-card {
+            min-height: 2.5rem;
+            margin-top: 0.75rem;
+            font-weight: 600;
+        }
+
+        #finish-btn {
+            margin-top: 1rem;
+        }
+
+        @media (max-width: 900px) {
+            #grid-game-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block main_body %}
+    <h2>Real-time grid game</h2>
+    <p>
+        Click one cell per round. Your private signal appears after your click.
+        Your partner sees only where you clicked, and you see only their click
+        locations in the heatmap.
+    </p>
+    <div id="grid-game-status">Connecting to partner...</div>
+
+    <div id="grid-game-layout">
+        <section class="grid-game-panel">
+            <h4>Your grid</h4>
+            <p>Click a cell when the round is ready.</p>
+            <div id="own-grid" class="grid-game-grid"></div>
+            <div id="signal-card">Latest private signal: none yet.</div>
+        </section>
+
+        <section class="grid-game-panel">
+            <h4>Partner click heatmap</h4>
+            <p>Darker cells mean your partner has clicked that cell more often.</p>
+            <div id="partner-grid" class="grid-game-grid"></div>
+        </section>
+    </div>
+
+    <button id="finish-btn" class="btn btn-primary" disabled>Finish game</button>
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    <script>
+        (function () {
+            var CHANNEL = psynet.var["grid_game_channel"];
+            var ROOM_ID = psynet.var["grid_game_room_id"];
+            var GRID_SIZE = Number(psynet.var["grid_game_grid_size"]);
+            var NUM_ROUNDS = Number(psynet.var["grid_game_num_rounds"]);
+            var MY_ID = String(dallinger.identity.participantId);
+            var UNIQUE_ID = dallinger.identity.uniqueId;
+            var socket = null;
+            var latestState = null;
+            var privateClicks = [];
+
+            var ownGrid = document.getElementById("own-grid");
+            var partnerGrid = document.getElementById("partner-grid");
+            var status = document.getElementById("grid-game-status");
+            var signalCard = document.getElementById("signal-card");
+            var finishBtn = document.getElementById("finish-btn");
+
+            ownGrid.style.gridTemplateColumns = "repeat(" + GRID_SIZE + ", 1fr)";
+            partnerGrid.style.gridTemplateColumns = "repeat(" + GRID_SIZE + ", 1fr)";
+
+            buildGrids();
+            setCellsDisabled(true);
+            openSocket();
+
+            finishBtn.onclick = function () {
+                psynet.nextPage({
+                    client_completed: true,
+                    own_click_count: privateClicks.length,
+                    partner_click_count: countPartnerClicks(),
+                });
+            };
+
+            function buildGrids() {
+                ownGrid.innerHTML = "";
+                partnerGrid.innerHTML = "";
+                for (var i = 0; i < GRID_SIZE; i += 1) {
+                    for (var j = 0; j < GRID_SIZE; j += 1) {
+                        var own = document.createElement("button");
+                        own.type = "button";
+                        own.className = "grid-cell";
+                        own.dataset.row = String(i);
+                        own.dataset.col = String(j);
+                        own.textContent = "";
+                        own.onclick = onCellClick;
+                        ownGrid.appendChild(own);
+
+                        var partner = document.createElement("button");
+                        partner.type = "button";
+                        partner.className = "grid-cell partner-cell";
+                        partner.disabled = true;
+                        partner.dataset.row = String(i);
+                        partner.dataset.col = String(j);
+                        partner.textContent = "0";
+                        partnerGrid.appendChild(partner);
+                    }
+                }
+            }
+
+            function openSocket() {
+                var wsScheme = location.protocol === "https:" ? "wss://" : "ws://";
+                socket = new ReconnectingWebSocket(
+                    wsScheme + location.host + "/chat?channel=" + CHANNEL
+                    + "&worker_id=" + dallinger.identity.workerId
+                    + "&participant_id=" + MY_ID
+                );
+                socket.onopen = function () {
+                    send({type: "join_game"});
+                    requestPrivateState();
+                };
+                socket.onmessage = function (event) {
+                    if (event.data.indexOf(CHANNEL + ":") !== 0) return;
+                    var msg;
+                    try {
+                        msg = JSON.parse(event.data.slice(CHANNEL.length + 1));
+                    } catch (e) {
+                        return;
+                    }
+                    if (String(msg.room_id) !== String(ROOM_ID)) return;
+                    if (String(msg.target_participant_id) !== MY_ID) return;
+                    if (msg.type === "state_update" || msg.type === "click_rejected") {
+                        latestState = msg;
+                        renderState();
+                        requestPrivateState();
+                    }
+                };
+            }
+
+            function send(payload) {
+                payload.room_id = ROOM_ID;
+                payload.sender = MY_ID;
+                socket.send(CHANNEL + ":" + JSON.stringify(payload));
+            }
+
+            function onCellClick(event) {
+                if (!latestState || latestState.completed || latestState.waiting_for_partner) return;
+                send({
+                    type: "click",
+                    row: Number(event.target.dataset.row),
+                    col: Number(event.target.dataset.col),
+                    client_event_id: String(Date.now()) + "-" + Math.random().toString(16).slice(2),
+                });
+                setCellsDisabled(true);
+                status.textContent = "Click sent. Waiting for the server and your partner...";
+            }
+
+            function requestPrivateState() {
+                dallinger.get("/grid_game_private_state", {
+                    participant_id: MY_ID,
+                    unique_id: UNIQUE_ID,
+                    room_id: ROOM_ID,
+                }).done(function (resp) {
+                    privateClicks = resp.own_clicks || [];
+                    renderPrivateSignals();
+                });
+            }
+
+            function renderState() {
+                var waiting = latestState.waiting_for_partner;
+                var completed = latestState.completed;
+                var round = latestState.current_round;
+                var msg = completed ? "All " + NUM_ROUNDS + " rounds are complete." :
+                    waiting ? "Round " + round + ": waiting for your partner." :
+                    "Round " + round + " of " + NUM_ROUNDS + ": choose one cell.";
+                status.textContent = msg;
+                finishBtn.disabled = !completed;
+                setCellsDisabled(waiting || completed);
+                renderPartnerHeatmap(latestState.partner_heatmap || []);
+            }
+
+            function renderPrivateSignals() {
+                markOwnClicks(privateClicks);
+                if (privateClicks.length === 0) {
+                    signalCard.textContent = "Latest private signal: none yet.";
+                    return;
+                }
+                var latest = privateClicks[privateClicks.length - 1];
+                signalCard.textContent = "Latest private signal from your click at ("
+                    + latest.row + ", " + latest.col + "): " + latest.signal;
+            }
+
+            function renderPartnerHeatmap(heatmap) {
+                var maxCount = 0;
+                heatmap.forEach(function (row) {
+                    row.forEach(function (value) {
+                        if (value > maxCount) maxCount = value;
+                    });
+                });
+                Array.prototype.forEach.call(partnerGrid.children, function (cell) {
+                    var row = Number(cell.dataset.row);
+                    var col = Number(cell.dataset.col);
+                    var count = heatmap[row] && heatmap[row][col] ? heatmap[row][col] : 0;
+                    var alpha = maxCount === 0 ? 0 : 0.15 + (0.75 * count / maxCount);
+                    cell.textContent = String(count);
+                    cell.style.background = count === 0 ? "#f8f9fa" : "rgba(245, 158, 11, " + alpha + ")";
+                });
+            }
+
+            function markOwnClicks(clicks) {
+                Array.prototype.forEach.call(ownGrid.children, function (cell) {
+                    cell.classList.remove("own-clicked");
+                    cell.textContent = "";
+                });
+                clicks.forEach(function (click) {
+                    var selector = "[data-row='" + click.row + "'][data-col='" + click.col + "']";
+                    var cell = ownGrid.querySelector(selector);
+                    if (cell) {
+                        cell.classList.add("own-clicked");
+                        cell.textContent = String(click.signal === undefined ? "x" : click.signal);
+                    }
+                });
+            }
+
+            function setCellsDisabled(disabled) {
+                Array.prototype.forEach.call(ownGrid.children, function (cell) {
+                    cell.disabled = disabled;
+                });
+            }
+
+            function countPartnerClicks() {
+                if (!latestState || !latestState.partner_heatmap) return 0;
+                return latestState.partner_heatmap.reduce(function (total, row) {
+                    return total + row.reduce(function (rowTotal, value) {
+                        return rowTotal + value;
+                    }, 0);
+                }, 0);
+            }
+        })();
+    </script>
+{% endblock %}

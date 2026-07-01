@@ -1,0 +1,10 @@
+__pycache__/
+.pytest_cache/
+*.pyc
+/data/
+/local_config.py
+source_code.zip
+.deploy/
+dump.rdb
+Dockertag
+static/assets/

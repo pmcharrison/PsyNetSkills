@@ -1,0 +1,15 @@
+__pycache__/
+.pytest_cache/
+.venv/
+node_modules/
+playwright-report/
+test-results/
+*.pyc
+*.log
+.deploy/
+data/
+exports/
+local.db
+dump.rdb
+source_code.zip
+static/

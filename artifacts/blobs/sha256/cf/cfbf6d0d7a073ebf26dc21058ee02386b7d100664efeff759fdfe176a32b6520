@@ -1,0 +1,12 @@
+.dallinger
+.deploy
+.pytest_cache
+__pycache__
+data
+local
+node_modules
+server.log
+static/assets
+Dockertag
+source_code.zip
+*.pyc

@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    
+    
+      <meta name="description" content="Page author: @lucasgautheron">
+    
+    <title>Adaptive real-time Prisoner&#39;s Dilemma | PsyNetSkills</title>
+    <link rel="stylesheet" href="/PsyNetSkills/pr-preview/pr-298/css/chroma.css">
+    <link rel="stylesheet" href="/PsyNetSkills/pr-preview/pr-298/css/site.css">
+  </head>
+  <body>
+    <header class="site-header">
+      <nav class="primary-nav" aria-label="Main navigation">
+        <span class="nav-links">
+          <a
+            
+            href="/PsyNetSkills/pr-preview/pr-298/"
+          >PsyNetSkills</a>
+          <a
+            
+            href="/PsyNetSkills/pr-preview/pr-298/skills/"
+          >Skills</a>
+          <a
+            aria-current="page" class="current"
+            href="/PsyNetSkills/pr-preview/pr-298/challenges/"
+          >Challenges</a>
+          <a
+            
+            href="/PsyNetSkills/pr-preview/pr-298/attempts/"
+          >Attempts</a>
+          <a
+            
+            href="/PsyNetSkills/pr-preview/pr-298/actions/"
+          >Actions</a>
+        </span>
+        
+
+
+
+
+
+
+  
+  
+  
+  <span class="branch-context" aria-label="Draft branch cursor/attempt-adaptive-realtime-prisoners-dilemma-f0b3">
+    <span class="branch-context-label-wrap" tabindex="0" aria-describedby="branch-context-popover" data-branch-context-label>
+      <span class="branch-context-label">Draft:</span>
+      
+        <span class="branch-context-popover" id="branch-context-popover" role="tooltip" hidden>
+          This is a draft preview for the branch. Merge the pull request to release these changes on the main dashboard.
+        </span>
+      
+    </span>
+    <a class="branch-context-link" href="https://github.com/pmcharrison/PsyNetSkills/tree/cursor%2Fattempt-adaptive-realtime-prisoners-dilemma-f0b3" target="_blank" rel="noopener noreferrer">cursor/attempt-adaptive-realtime-prisoners-dilemma-f0b3</a>
+  </span>
+
+
+        <span class="nav-actions">
+          
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+  
+
+<a
+  class="workflow-status-link workflow-status-unknown workflow-freshness-current"
+  href="https://github.com/pmcharrison/PsyNetSkills/actions/workflows/dashboard-preview.yml?query=branch%3Acursor%2Fattempt-adaptive-realtime-prisoners-dilemma-f0b3"
+  target="_blank"
+  rel="noopener noreferrer"
+  aria-label="Checking dashboard-preview.yml workflow status for cursor/attempt-adaptive-realtime-prisoners-dilemma-f0b3."
+  aria-describedby="workflow-status-popover"
+  data-workflow-status
+  data-enabled="true"
+  data-owner="pmcharrison"
+  data-repo="PsyNetSkills"
+  data-workflow="dashboard-preview.yml"
+  data-branch="cursor/attempt-adaptive-realtime-prisoners-dilemma-f0b3"
+  data-rendered-sha="e700d3e8c05976ece7d436e7b521fe9b3b76d2cb"
+  data-mode="pr-preview"
+  data-poll-ms="90000"
+  data-hidden-poll-ms="300000"
+>
+  <span class="workflow-status-icon" aria-hidden="true">?</span>
+  <span class="workflow-freshness-badge" aria-hidden="true">!</span>
+  <span class="workflow-status-popover" id="workflow-status-popover" role="tooltip" hidden>
+    <span>Checking dashboard-preview.yml workflow status for cursor/attempt-adaptive-realtime-prisoners-dilemma-f0b3.</span>
+  </span>
+  <span class="visually-hidden">Workflow status</span>
+</a>
+
+          
+            <a class="github-nav-link" href="https://github.com/pmcharrison/PsyNetSkills" aria-label="PsyNetSkills on GitHub" target="_blank" rel="noopener noreferrer">
+              <svg class="github-nav-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+                <path d="M8 0C3.58 0 0 3.69 0 8.25c0 3.64 2.29 6.73 5.47 7.82.4.08.55-.18.55-.4v-1.4c-2.23.5-2.7-1.1-2.7-1.1-.36-.95-.89-1.2-.89-1.2-.73-.52.06-.51.06-.51.8.06 1.23.85 1.23.85.72 1.27 1.88.9 2.34.69.07-.53.28-.9.51-1.11-1.78-.21-3.64-.92-3.64-4.08 0-.9.31-1.64.82-2.22-.08-.21-.36-1.05.08-2.19 0 0 .67-.22 2.2.85A7.4 7.4 0 0 1 8 3.98c.68 0 1.36.09 2 .27 1.52-1.07 2.19-.85 2.19-.85.44 1.14.16 1.98.08 2.19.51.58.82 1.32.82 2.22 0 3.17-1.87 3.87-3.65 4.07.29.26.54.76.54 1.53v2.26c0 .22.15.48.55.4A8.2 8.2 0 0 0 16 8.25C16 3.69 12.42 0 8 0Z" />
+              </svg>
+            </a>
+          
+        </span>
+      </nav>
+    </header>
+    <main>
+      
+  
+  
+  
+  
+    
+  
+
+  <article class="prose">
+    
+    <div class="page-heading">
+      <h1>Adaptive real-time Prisoner&#39;s Dilemma</h1>
+      
+
+
+
+
+
+
+  
+
+
+  <p class="page-actions">
+    <a class="edit-source-link" href="https://github.com/pmcharrison/PsyNetSkills/edit/cursor%2Fattempt-adaptive-realtime-prisoners-dilemma-f0b3/challenges/adaptive-realtime-prisoners-dilemma/INSTRUCTIONS.md">
+      Edit in GitHub
+    </a>
+  </p>
+
+
+    </div>
+    <dl class="metadata-grid challenge-frontmatter">
+      <div>
+        <dt>Type</dt>
+        <dd>experiment implementation</dd>
+      </div>
+      <div>
+        <dt>Difficulty</dt>
+        <dd>9</dd>
+      </div>
+      
+        <div>
+          <dt>Author</dt>
+          <dd><a href="https://github.com/lucasgautheron">Lucas Gautheron</a></dd>
+        </div>
+      
+      
+    </dl>
+
+    <p>Implement a PsyNet experiment in which pairs of participants play a real-time,
+synchronous, iterated Prisoner&rsquo;s Dilemma game. The experiment should compare two
+treatments: one in which dyads play without communication, and one in which dyads
+can chat while the game is underway. Treatment assignment should support both a
+static mode and an adaptive mode controlled by one global variable in
+<code>experiment.py</code>.</p>
+<h2 id="procedure">Procedure</h2>
+<p>Participants should first read concise instructions explaining the two available
+actions, the payoff logic, the communication treatment, and how their points map
+onto real bonus payments. After any necessary consent and instruction checks,
+participants should wait until they can be paired with another active participant.
+Use PsyNet groupers and barriers to form dyads and to ensure that both members of
+the dyad enter the game together.</p>
+<p>Each dyad should be assigned to exactly one treatment before its game begins.
+Dyads in the no-communication treatment play the game without chat. Dyads in the
+communication treatment see a chat room to the right of the main game interface
+and can exchange messages during the game. A dyad should play one sequence only;
+participants should not be regrouped for additional sequences.</p>
+<p>The game should contain 10 scored iterations. On each iteration, both players
+choose simultaneously between two clearly labelled actions. Make the action
+labels easy to change globally, but render them in the participant interface as
+buttons of the form <strong>Play &ldquo;XXX&rdquo;</strong> and <strong>Play &ldquo;YYY&rdquo;</strong>. The interface should show a
+visible countdown for the current decision window and a visible indication of how
+much of the 10-iteration sequence remains. Play an audible cue when a participant
+needs to make a choice.</p>
+<p>After both players have submitted their choices, both participants should receive
+immediate feedback showing what each player chose, how many points each player
+earned on that iteration, and each player&rsquo;s cumulative points. Participants
+should then advance synchronously to the next iteration until all 10 iterations
+are complete.</p>
+<h2 id="adaptive-treatment-assignment">Adaptive treatment assignment</h2>
+<p>Provide a single global experiment variable in <code>experiment.py</code> that switches
+between:</p>
+<ul>
+<li><strong>Static mode</strong>, in which treatment assignment uses a fixed experiment-level
+rule such as equal random assignment across dyads.</li>
+<li><strong>Adaptive mode</strong>, in which treatment assignment uses an active-inference
+multi-armed bandit approach to decide whether the next dyad should receive the
+communication or no-communication treatment.</li>
+</ul>
+<p>The adaptive objective is to maximize the probability of cooperation. Define the
+outcome measure before implementation begins, for example the proportion of
+cooperative choices across the dyad&rsquo;s 10 iterations or cooperation in the final
+iterations. Save enough model state and assignment metadata to reconstruct why
+each dyad received its treatment, including the experiment mode, the candidate
+treatments, prior settings, posterior or belief updates, observed cooperation
+outcomes, and the random seed or stochastic choices used by the assignment
+algorithm.</p>
+<p>Use the active-inference multi-armed bandit implementation from the
+<code>active-inference-with-people</code> repository as the main methodological reference,
+adapting it to dyad-level treatment assignment rather than individual stimulus
+selection.</p>
+<h2 id="interface">Interface</h2>
+<p>Build a sober, polished JavaScript interface suitable for real-time dyadic play.
+Participants should always be able to understand the payoff consequences of
+their next choice. Present the payoff structure in natural language, not only as
+a mathematical table. For example, explain what happens if both players choose
+one action, if both choose the other action, and if the two players choose
+different actions. It is fine to include a compact visual summary as long as the
+plain-language explanation is primary.</p>
+<p>The main game area should show:</p>
+<ul>
+<li>The participant&rsquo;s two action buttons.</li>
+<li>The current iteration number out of 10.</li>
+<li>A timer for the current decision window.</li>
+<li>A timer or progress indicator for the remaining game sequence.</li>
+<li>The participant&rsquo;s own cumulative points and estimated bonus.</li>
+<li>Feedback from the previous iteration once it is available.</li>
+</ul>
+<p>When communication is enabled, show the chat room to the right of the main game
+area. The chat should be clearly unavailable or absent in the no-communication
+treatment. Chat messages should not block simultaneous play, timers, or choice
+submission.</p>
+<h2 id="data-and-bonuses">Data and bonuses</h2>
+<p>Convert points into real participant bonuses using a clear, documented exchange
+rate. Participants should be told before the game how bonuses are computed and
+should see their final bonus at the end of the sequence.</p>
+<p>Record enough data to reconstruct the full dyadic interaction:</p>
+<ul>
+<li>Dyad membership, barrier timing, treatment assignment, and experiment mode.</li>
+<li>Every iteration&rsquo;s decision-window timing, choice submissions, missing or late
+responses, and feedback timing.</li>
+<li>Both players&rsquo; choices, iteration payoffs, cumulative points, and final bonuses.</li>
+<li>Chat transcripts and message timestamps for communication dyads.</li>
+<li>Websocket events needed to audit real-time synchronization.</li>
+<li>Adaptive-model inputs, outputs, and updates for each dyad assignment.</li>
+</ul>
+<h2 id="implementation-requirements">Implementation requirements</h2>
+<ul>
+<li>Use PsyNet&rsquo;s synchronous grouping and barrier patterns to form and release
+dyads.</li>
+<li>Use websockets for real-time game state, simultaneous decisions, timers, chat
+updates, and feedback.</li>
+<li>Keep treatment assignment at the dyad level, before the dyad starts its single
+10-iteration sequence.</li>
+<li>Keep the static/adaptive mode switch centralized in <code>experiment.py</code>.</li>
+<li>Do not require production credentials or external services beyond local PsyNet
+development defaults.</li>
+<li>Include automated bots or simulations that can exercise both treatments and
+both experiment modes locally.</li>
+</ul>
+<h2 id="evidence">Evidence</h2>
+<p>Submitted evidence should demonstrate:</p>
+<ul>
+<li>Two participants being grouped into a dyad and released through the game
+barriers together.</li>
+<li>A dyad completing all 10 real-time simultaneous iterations.</li>
+<li>Choice buttons, timers, sounds, feedback, cumulative points, and final bonuses
+working as specified.</li>
+<li>The communication treatment showing a functional chat room while the
+no-communication treatment does not.</li>
+<li>Static mode assigning treatments according to the fixed rule.</li>
+<li>Adaptive mode updating treatment-assignment beliefs from observed cooperation
+outcomes and using those beliefs for later dyads.</li>
+</ul>
+
+
+    <h2>Attempts</h2>
+    
+      <table>
+        <thead>
+          <tr>
+            <th>Date/time</th>
+            <th>Model</th>
+            <th>Score</th>
+            <th>Implementation time</th>
+            <th>Interventions</th>
+            <th>Cost</th>
+            <th>Open actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+            
+            
+            
+              
+            
+            <tr class="attempt-row">
+              <td><a href="/PsyNetSkills/pr-preview/pr-298/challenges/adaptive-realtime-prisoners-dilemma/2026-06-30-14-24/">06/30 14:24</a></td>
+              <td>GPT-5.5</td>
+              <td>Not scored</td>
+              <td>2h 26m 10s</td>
+              <td>0</td>
+              <td>-</td>
+              <td><span class="open-actions-count open-actions-success">0</span></td>
+            </tr>
+          
+        </tbody>
+      </table>
+    
+  </article>
+
+    </main>
+    
+      
+
+
+
+  <section class="comments" aria-label="Comments">
+    <script
+      src="https://giscus.app/client.js"
+      data-repo="pmcharrison/PsyNetSkills"
+      data-repo-id="R_kgDOSw3rlA"
+      data-category="Announcements"
+      data-category-id="DIC_kwDOSw3rlM4C-xgp"
+      data-mapping="pathname"
+      data-strict="1"
+      data-reactions-enabled="1"
+      data-emit-metadata="0"
+      data-input-position="bottom"
+      data-theme="light"
+      data-lang="en"
+      crossorigin="anonymous"
+      async
+    ></script>
+  </section>
+
+
+    
+    <footer>
+    </footer>
+    <script src="/PsyNetSkills/pr-preview/pr-298/js/workflow-status.js" defer></script>
+    <script src="/PsyNetSkills/pr-preview/pr-298/js/actions-copy.js" defer></script>
+    <script src="/PsyNetSkills/pr-preview/pr-298/js/screenshot-gallery.js" defer></script>
+  </body>
+</html>

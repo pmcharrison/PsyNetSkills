@@ -1,0 +1,7 @@
+[Parameters]
+server_pem = /Users/researcher/cap.pem
+
+[Prolific]
+prolific_workspace = Old Workspace
+prolific_project = Old Beat Validation
+

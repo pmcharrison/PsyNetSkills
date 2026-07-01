@@ -1,0 +1,11 @@
+vars,id,creation_time,failed,failed_reason,time_of_death,participant_id,type,class,object_type,test
+"{""test"": ""123""}",1,2026-06-15 09:30:17,False,,,1,Coin,Coin,Coin,123
+"{""test"": ""123""}",2,2026-06-15 09:30:19,False,,,2,Coin,Coin,Coin,123
+"{""test"": ""123""}",3,2026-06-15 09:30:22,False,,,3,Coin,Coin,Coin,123
+"{""test"": ""123""}",4,2026-06-15 09:30:23,False,,,4,Coin,Coin,Coin,123
+"{""test"": ""123""}",5,2026-06-15 09:30:25,False,,,5,Coin,Coin,Coin,123
+"{""test"": ""123""}",6,2026-06-15 09:30:27,False,,,6,Coin,Coin,Coin,123
+"{""test"": ""123""}",7,2026-06-15 09:30:29,False,,,7,Coin,Coin,Coin,123
+"{""test"": ""123""}",8,2026-06-15 09:30:31,False,,,8,Coin,Coin,Coin,123
+"{""test"": ""123""}",9,2026-06-15 09:30:33,False,,,9,Coin,Coin,Coin,123
+"{""test"": ""123""}",10,2026-06-15 09:30:35,False,,,10,Coin,Coin,Coin,123
