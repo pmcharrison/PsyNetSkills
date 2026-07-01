@@ -119,7 +119,6 @@ class LiveSessionBase:
                 "participant_ids": [str(p) for p in (participant_ids or [])],
                 **params,
             },
-            "events": [],
         }
 
     @classmethod
@@ -151,10 +150,6 @@ class LiveSessionBase:
     def reduce_event(self, event: PDLiveEvent):
         state = deepcopy(self.state or self.initial_state())
         cached_event = self.cached_event(event)
-        state.setdefault("events", []).append(cached_event)
-        events = list(self.events or [])
-        events.append(event.id)
-        self.events = events
         self.state = state
         self.last_reduction = {"kind": "generic_event", "event": cached_event}
 
@@ -164,7 +159,6 @@ class LiveSessionBase:
             "target_participant_id": str(participant_id),
             "session_id": self.session_id,
             "state": self.state or {},
-            "event_ids": self.events or [],
         }
 
 
@@ -175,7 +169,6 @@ class LiveSession(LiveSessionBase, SQLBase, SQLMixin):
     __tablename__ = "live_session"
 
     session_id = Column(String(128), index=True)
-    events = Column(JSON)
     state = Column(JSON)
 
 
@@ -187,7 +180,6 @@ class PDLiveSession(LiveSessionBase, SQLBase, SQLMixin):
     dyad_id = Column(Integer, index=True)
     network_id = Column(Integer, index=True)
     treatment = Column(String(64), index=True)
-    events = Column(JSON)
     state = Column(JSON)
 
     @staticmethod
@@ -244,9 +236,6 @@ class PDLiveSession(LiveSessionBase, SQLBase, SQLMixin):
         elif event_type == "state_request":
             self.last_reduction = {"kind": "state_snapshot"}
 
-        events = list(self.events or [])
-        events.append(event.id)
-        self.events = events
         self.state = state
 
     def state_snapshot(self, participant_id: int) -> dict:
@@ -487,7 +476,6 @@ def build_bot_answer(bot):
     treatment = trial.definition["treatment"]
     live_session = PDLiveSession(
         treatment=treatment,
-        events=[],
         state=PDLiveSession.initial_state([p.id for p in participants], treatment),
     )
     for round_index in range(1, SEQUENCE_LENGTH + 1):
@@ -642,7 +630,6 @@ class RealTimeGamePage(Page):
                 "dyad_id": int(group.id),
                 "network_id": trial.network.id,
                 "treatment": treatment,
-                "events": [],
                 "state": PDLiveSession.initial_state([p.id for p in ordered], treatment),
             },
         )

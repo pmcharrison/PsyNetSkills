@@ -79,4 +79,6 @@
 - T+02:12:00 [agent] Added generic mapped `LiveEvent` and `LiveSession` tables and introduced stable `session_id` routing for generic/PD live sessions.
 - T+02:14:00 [manual] User clarified that the socket should not be context-aware or create sessions; it should use `session_id` only.
 - T+02:15:00 [agent] Refactored `LiveSessionWebSocket` to retrieve existing sessions by client-provided `session_id`, with `RealTimeGamePage` responsible for session creation.
-- T+02:16:00 [agent-stop] Implementation and first-pass evidence collection complete.
+- T+02:17:00 [manual] User pointed out that session tables should not duplicate event ids.
+- T+02:18:00 [agent] Removed session-level event-id storage so event history lives only in the event table.
+- T+02:19:00 [agent-stop] Implementation and first-pass evidence collection complete.

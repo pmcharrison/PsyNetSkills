@@ -35,6 +35,9 @@ Key features:
   websocket messages into persisted event objects. PD-specific event columns
   such as dyad and treatment are supplied by the websocket session context, and
   every event/session carries a stable `session_id`.
+- Live sessions do not duplicate event ids in their own columns; the event table
+  remains the source of truth for event history, while sessions store only the
+  current projection state.
 - `PDLiveSession` subclasses the generic `LiveSessionBase`; its
   `reduce_event(event, participants)` method accepts a persisted `PDLiveEvent`
   object and mutates the locked session row. Treatment is stored with the other
