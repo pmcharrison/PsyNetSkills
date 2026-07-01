@@ -89,4 +89,6 @@
 - T+02:27:00 [agent] Removed the specialized `PDLiveEvent` table and used the generic `LiveEvent` table directly.
 - T+02:29:00 [manual] User requested simple bot answers that do not use live-session calls.
 - T+02:30:00 [agent] Changed bot responses to compact play sequences and moved full answer expansion into `PrisonersDilemmaTrial.format_answer`.
-- T+02:31:00 [agent-stop] Implementation and first-pass evidence collection complete.
+- T+02:32:00 [manual] User clarified that all `trial.answer` values should be compact play sequences, with richer data reconstructed from events/session state.
+- T+02:33:00 [agent] Simplified browser and bot `trial.answer` values to ordered `C`/`D` sequences and adjusted scoring/feedback/tests accordingly.
+- T+02:34:00 [agent-stop] Implementation and first-pass evidence collection complete.

@@ -401,25 +401,35 @@ def instruction_page(treatment: str):
 
 
 def active_observations() -> list[TreatmentObservation]:
-    observations_by_dyad = {}
+    answers_by_dyad = {}
     for trial in PrisonersDilemmaTrial.query.filter_by(
         finalized=True,
         failed=False,
     ).all():
         answer = trial.answer
-        if not isinstance(answer, dict):
+        if not isinstance(answer, list) or len(answer) != SEQUENCE_LENGTH:
             continue
-        dyad_id = answer.get("dyad_id")
-        treatment = answer.get("treatment")
-        successes = answer.get("final_round_both_cooperated")
-        if dyad_id is None or treatment not in TREATMENTS or successes is None:
+        group = trial.participant.active_sync_groups.get(GROUP_TYPE)
+        if group is None:
             continue
-        observations_by_dyad[dyad_id] = TreatmentObservation(
+        dyad_id = int(group.id)
+        treatment = trial.definition["treatment"]
+        if treatment not in TREATMENTS:
+            continue
+        answers_by_dyad.setdefault((dyad_id, treatment), []).append(answer)
+
+    observations = []
+    for (_dyad_id, treatment), answers in answers_by_dyad.items():
+        if len(answers) != 2:
+            continue
+        observations.append(
+            TreatmentObservation(
             treatment=treatment,
-            successes=int(successes),
+                successes=int(all(answer[-1] == "C" for answer in answers)),
             trials=1,
         )
-    return list(observations_by_dyad.values())
+        )
+    return observations
 
 
 def treatment_from_network(network):
@@ -477,6 +487,10 @@ def build_bot_answer(bot):
         action_code(deterministic_bot_action(bot.id, round_index))
         for round_index in range(1, SEQUENCE_LENGTH + 1)
     ]
+
+
+def points_from_plays(plays: list[str]) -> int:
+    return sum(payoff_for_self(action_from_code(play), ACTION_DEFECT) for play in plays)
 
 
 
@@ -678,82 +692,26 @@ class PrisonersDilemmaTrial(StaticTrial):
             raw_answer["assignment_decision"] = self.definition.get("assignment_decision")
         return raw_answer
 
-    def format_play_sequence_answer(self, plays: list[str]) -> dict:
-        participant = self.participant
-        group = participant.active_sync_groups[GROUP_TYPE]
-        participants = sorted(group.participants, key=lambda p: p.id)
+    def format_play_sequence_answer(self, plays: list[str]) -> list[str]:
         if len(plays) != SEQUENCE_LENGTH:
             raise ValueError(f"Expected {SEQUENCE_LENGTH} plays, got {len(plays)}")
-
-        cumulative = {p.id: 0 for p in participants}
-        sequence = []
-        for round_index in range(1, SEQUENCE_LENGTH + 1):
-            actions = []
-            for p in participants:
-                if p.id == participant.id:
-                    action = action_from_code(plays[round_index - 1])
-                else:
-                    action = deterministic_bot_action(p.id, round_index)
-                actions.append(action)
-
-            payoff_0, payoff_1 = PAYOFF_POINTS[actions[0]][actions[1]]
-            players = []
-            for index, (p, action, payoff) in enumerate(
-                zip(participants, actions, [payoff_0, payoff_1])
-            ):
-                cumulative[p.id] += payoff
-                players.append(
-                    {
-                        "participant_id": p.id,
-                        "role": f"Player {index + 1}",
-                        "action": action,
-                        "cooperated": action == ACTION_COOPERATE,
-                        "payoff_points": payoff,
-                        "cumulative_points": cumulative[p.id],
-                        "bonus": cumulative[p.id] * BONUS_PER_POINT,
-                        "submitted_at": None,
-                    }
-                )
-            sequence.append(
-                {
-                    "round": round_index,
-                    "treatment": self.definition["treatment"],
-                    "players": players,
-                }
-            )
-
-        final_round = sequence[-1]
-        final_successes = sum(1 for p in final_round["players"] if p["cooperated"])
-        me = next(p for p in final_round["players"] if p["participant_id"] == participant.id)
-        return {
-            "dyad_id": int(group.id),
-            "participant_id": participant.id,
-            "role": player_role(participant),
-            "treatment": self.definition["treatment"],
-            "experiment_mode": EXPERIMENT_MODE,
-            "sequence_length": SEQUENCE_LENGTH,
-            "plays": plays,
-            "sequence": sequence,
-            "final_round_both_cooperated": int(final_successes == 2),
-            "final_round_cooperative_choices": final_successes,
-            "final_round_trials": 2,
-            "total_points_self": me["cumulative_points"],
-            "final_bonus_self": me["bonus"],
-            "assignment_decision": self.definition.get("assignment_decision"),
-        }
+        if any(play not in {"C", "D"} for play in plays):
+            raise ValueError("Plays must be coded as 'C' or 'D'.")
+        return plays
 
     def score_answer(self, answer, definition):
-        return answer["total_points_self"]
+        return points_from_plays(answer)
 
     def compute_performance_reward(self, score):
         return max(0.0, score * BONUS_PER_POINT)
 
     def show_feedback(self, experiment, participant):
-        answer = self.answer or {}
+        answer = self.answer or []
+        bonus = points_from_plays(answer) * BONUS_PER_POINT if isinstance(answer, list) else 0
         content = tags.div()
         with content:
             tags.h2("Game complete")
-            tags.p(f"Your game bonus is ${answer.get('final_bonus_self', 0):.2f}.")
+            tags.p(f"Your game bonus is ${bonus:.2f}.")
             tags.p("Thank you for playing.")
         return InfoPage(content, time_estimate=5)
 
@@ -835,22 +793,16 @@ class Exp(psynet.experiment.Experiment):
             assert "Game complete" in bot.current_page_text
             answer = bot.current_trial.answer
             answers.append(answer)
-            assert answer["sequence_length"] == SEQUENCE_LENGTH
-            assert len(answer["sequence"]) == SEQUENCE_LENGTH, answer
-            assert answer["final_round_trials"] == 2
-            assert answer["final_round_both_cooperated"] in [0, 1]
-            assert answer["final_round_cooperative_choices"] in [0, 1, 2]
-            assert answer["assignment_decision"]["selected_treatment"] in TREATMENTS
-            assert answer["treatment"] in TREATMENTS
+            assert isinstance(answer, list)
+            assert len(answer) == SEQUENCE_LENGTH
+            assert set(answer).issubset({"C", "D"})
 
         answers_by_dyad = {}
-        for answer in answers:
-            answers_by_dyad.setdefault(answer["dyad_id"], []).append(answer)
+        for bot, answer in zip(bots, answers):
+            participant = Participant.query.get(bot.id)
+            dyad_id = int(participant.active_sync_groups[GROUP_TYPE].id)
+            answers_by_dyad.setdefault(dyad_id, []).append(answer)
         assert len(answers_by_dyad) == 2
         for dyad_answers in answers_by_dyad.values():
             assert len(dyad_answers) == 2
-            participant_ids = {answer["participant_id"] for answer in dyad_answers}
-            for answer in dyad_answers:
-                for round_index, entry in enumerate(answer["sequence"], start=1):
-                    assert entry["round"] == round_index
-                    assert {p["participant_id"] for p in entry["players"]} == participant_ids
+            assert all(len(answer) == SEQUENCE_LENGTH for answer in dyad_answers)

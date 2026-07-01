@@ -62,9 +62,9 @@ Key features:
   communication treatment.
 - The dyad grouper uses explicit dyad batching and a 180-second wait window for
   manual review sessions.
-- The finalized `trial.answer` contains the full ordered action sequence for
-  both players, final-round mutual-cooperation event, treatment, bonus, and
-  assignment metadata.
+- The finalized `trial.answer` is a compact ordered play sequence such as
+  `["C", "D", ...]`; richer round/state reconstruction comes from `LiveEvent`
+  and `PDLiveSession`.
 - Adaptive scoring uses the analytical Beta-Bernoulli active-inference EIG
   expression with a gamma-scaled expected utility term over posterior probability of
   final-round `(Cooperate, Cooperate)`.
@@ -84,13 +84,10 @@ Passed:
 - `psynet simulate`
 - `psynet performance-test local --n-bots 40 --duration-minutes 5 --time-factor 1.0 --json-output .../evidence/performance.json`
 
-The local PsyNet bot test verifies that a dyad reaches the single live game page,
-submits a 10-round sequence answer, finalizes a `trial.answer` with all 10 rounds,
-and records adaptive assignment metadata. The bot test now runs four bots as two
-dyads and verifies that each finalized sequence contains only the two
-participants belonging to that dyad. Bot responses are simple play sequences
-such as `["D", "D", ..., "C"]`; `PrisonersDilemmaTrial.format_answer` expands
-them into the full exported trial answer.
+The local PsyNet bot test verifies that dyads reach the single live game page,
+submit compact 10-round play-sequence answers, and finalize those compact
+sequences as `trial.answer`. The bot test runs four bots as two dyads and
+verifies that each dyad has two 10-action answers.
 
 ## Simulation and analysis
 

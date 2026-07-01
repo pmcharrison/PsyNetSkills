@@ -169,24 +169,13 @@ document.addEventListener("DOMContentLoaded", function () {
     setButtons(false);
     setStatus("Game complete. Submitting your results...");
     var finalRound = sequence[cfg.sequence_length - 1] || {players: []};
-    var finalCoop = finalRound.players.filter(function (p) { return p.cooperated; }).length;
-    var finalBothCooperated = finalCoop === 2 ? 1 : 0;
     var me = finalRound.players.find(function (p) { return String(p.participant_id) === String(cfg.participant_id); }) || {};
-    psynet.response.staged.rawAnswer = {
-      dyad_id: cfg.dyad_id,
-      participant_id: cfg.participant_id,
-      role: cfg.role,
-      treatment: cfg.treatment,
-      experiment_mode: cfg.experiment_mode,
-      sequence_length: cfg.sequence_length,
-      sequence: sequence,
-      final_round_both_cooperated: finalBothCooperated,
-      final_round_cooperative_choices: finalCoop,
-      final_round_trials: 2,
-      total_points_self: me.cumulative_points || 0,
-      final_bonus_self: me.bonus || 0,
-      assignment_decision: cfg.assignment_decision
-    };
+    psynet.response.staged.rawAnswer = sequence.map(function (entry) {
+      var player = entry.players.find(function (p) {
+        return String(p.participant_id) === String(cfg.participant_id);
+      });
+      return player && player.action === cfg.cooperate ? "C" : "D";
+    });
     psynet.response.staged.metadata = {completed_live_sequence: true};
     psynet.submitResponse(function () { setStatus("Submission failed; please try again."); });
   }
