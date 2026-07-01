@@ -464,49 +464,19 @@ def deterministic_bot_action(participant_id: int, round_index: int) -> str:
     return ACTION_COOPERATE if round_index >= 8 else ACTION_DEFECT
 
 
+def action_code(action: str) -> str:
+    return "C" if action == ACTION_COOPERATE else "D"
+
+
+def action_from_code(code: str) -> str:
+    return ACTION_COOPERATE if code == "C" else ACTION_DEFECT
+
+
 def build_bot_answer(bot):
-    participant = Participant.query.get(bot.id)
-    group = participant.active_sync_groups[GROUP_TYPE]
-    participants = sorted(group.participants, key=lambda p: p.id)
-    trial = participant.current_trial
-    treatment = trial.definition["treatment"]
-    live_session = PDLiveSession(
-        treatment=treatment,
-        state=PDLiveSession.initial_state([p.id for p in participants], treatment),
-    )
-    for round_index in range(1, SEQUENCE_LENGTH + 1):
-        for p in participants:
-            event = LiveEvent(
-                session_id=f"pd_sequence:{trial.network_id}:dyad:{int(group.id)}",
-                participant_id=p.id,
-                event_type="choice",
-                payload={
-                    "round": round_index,
-                    "action": deterministic_bot_action(p.id, round_index),
-                    "receive_time": None,
-                },
-            )
-            live_session.reduce_event(event)
-    sequence = live_session.state["sequence"]
-    final_round = sequence[-1]
-    final_successes = sum(1 for p in final_round["players"] if p["cooperated"])
-    final_both_cooperated = int(final_successes == 2)
-    me = next(p for p in final_round["players"] if p["participant_id"] == bot.id)
-    return {
-        "dyad_id": int(group.id),
-        "participant_id": bot.id,
-        "role": player_role(participant),
-        "treatment": treatment,
-        "experiment_mode": EXPERIMENT_MODE,
-        "sequence_length": SEQUENCE_LENGTH,
-        "sequence": sequence,
-        "final_round_both_cooperated": final_both_cooperated,
-        "final_round_cooperative_choices": final_successes,
-        "final_round_trials": 2,
-        "total_points_self": me["cumulative_points"],
-        "final_bonus_self": me["bonus"],
-        "assignment_decision": trial.definition.get("assignment_decision"),
-    }
+    return [
+        action_code(deterministic_bot_action(bot.id, round_index))
+        for round_index in range(1, SEQUENCE_LENGTH + 1)
+    ]
 
 
 
@@ -702,9 +672,75 @@ class PrisonersDilemmaTrial(StaticTrial):
         )
 
     def format_answer(self, raw_answer, **kwargs):
+        if isinstance(raw_answer, list):
+            return self.format_play_sequence_answer(raw_answer)
         if isinstance(raw_answer, dict) and raw_answer.get("assignment_decision") is None:
             raw_answer["assignment_decision"] = self.definition.get("assignment_decision")
         return raw_answer
+
+    def format_play_sequence_answer(self, plays: list[str]) -> dict:
+        participant = self.participant
+        group = participant.active_sync_groups[GROUP_TYPE]
+        participants = sorted(group.participants, key=lambda p: p.id)
+        if len(plays) != SEQUENCE_LENGTH:
+            raise ValueError(f"Expected {SEQUENCE_LENGTH} plays, got {len(plays)}")
+
+        cumulative = {p.id: 0 for p in participants}
+        sequence = []
+        for round_index in range(1, SEQUENCE_LENGTH + 1):
+            actions = []
+            for p in participants:
+                if p.id == participant.id:
+                    action = action_from_code(plays[round_index - 1])
+                else:
+                    action = deterministic_bot_action(p.id, round_index)
+                actions.append(action)
+
+            payoff_0, payoff_1 = PAYOFF_POINTS[actions[0]][actions[1]]
+            players = []
+            for index, (p, action, payoff) in enumerate(
+                zip(participants, actions, [payoff_0, payoff_1])
+            ):
+                cumulative[p.id] += payoff
+                players.append(
+                    {
+                        "participant_id": p.id,
+                        "role": f"Player {index + 1}",
+                        "action": action,
+                        "cooperated": action == ACTION_COOPERATE,
+                        "payoff_points": payoff,
+                        "cumulative_points": cumulative[p.id],
+                        "bonus": cumulative[p.id] * BONUS_PER_POINT,
+                        "submitted_at": None,
+                    }
+                )
+            sequence.append(
+                {
+                    "round": round_index,
+                    "treatment": self.definition["treatment"],
+                    "players": players,
+                }
+            )
+
+        final_round = sequence[-1]
+        final_successes = sum(1 for p in final_round["players"] if p["cooperated"])
+        me = next(p for p in final_round["players"] if p["participant_id"] == participant.id)
+        return {
+            "dyad_id": int(group.id),
+            "participant_id": participant.id,
+            "role": player_role(participant),
+            "treatment": self.definition["treatment"],
+            "experiment_mode": EXPERIMENT_MODE,
+            "sequence_length": SEQUENCE_LENGTH,
+            "plays": plays,
+            "sequence": sequence,
+            "final_round_both_cooperated": int(final_successes == 2),
+            "final_round_cooperative_choices": final_successes,
+            "final_round_trials": 2,
+            "total_points_self": me["cumulative_points"],
+            "final_bonus_self": me["bonus"],
+            "assignment_decision": self.definition.get("assignment_decision"),
+        }
 
     def score_answer(self, answer, definition):
         return answer["total_points_self"]

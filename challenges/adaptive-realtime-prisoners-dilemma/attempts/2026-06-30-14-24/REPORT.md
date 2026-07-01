@@ -88,7 +88,9 @@ The local PsyNet bot test verifies that a dyad reaches the single live game page
 submits a 10-round sequence answer, finalizes a `trial.answer` with all 10 rounds,
 and records adaptive assignment metadata. The bot test now runs four bots as two
 dyads and verifies that each finalized sequence contains only the two
-participants belonging to that dyad.
+participants belonging to that dyad. Bot responses are simple play sequences
+such as `["D", "D", ..., "C"]`; `PrisonersDilemmaTrial.format_answer` expands
+them into the full exported trial answer.
 
 ## Simulation and analysis
 

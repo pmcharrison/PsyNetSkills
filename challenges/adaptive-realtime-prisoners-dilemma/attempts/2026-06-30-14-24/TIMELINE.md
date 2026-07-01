@@ -87,4 +87,6 @@
 - T+02:24:00 [agent] Added event-level `skip_reduce` and made client state requests persist/broadcast without mutating session state.
 - T+02:26:00 [manual] User pointed out that PD-specific event columns were unnecessary.
 - T+02:27:00 [agent] Removed the specialized `PDLiveEvent` table and used the generic `LiveEvent` table directly.
-- T+02:28:00 [agent-stop] Implementation and first-pass evidence collection complete.
+- T+02:29:00 [manual] User requested simple bot answers that do not use live-session calls.
+- T+02:30:00 [agent] Changed bot responses to compact play sequences and moved full answer expansion into `PrisonersDilemmaTrial.format_answer`.
+- T+02:31:00 [agent-stop] Implementation and first-pass evidence collection complete.
