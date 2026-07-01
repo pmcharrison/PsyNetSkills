@@ -1,0 +1,2 @@
+vars,creation_time,failed,failed_reason,time_of_death,id,module_id,participant_id,time_started,time_finished,time_aborted,started,finished,aborted,type,class,object_type
+{},2026-06-11 10:11:41,False,,,2,feedback,1,2026-06-11 10:11:41,2026-06-11 10:12:55,,True,True,False,ModuleState,ModuleState,ModuleState
