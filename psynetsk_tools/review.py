@@ -19,7 +19,11 @@ from psynetsk_tools.review_artifacts import (
     write_hashed_artifact,
     write_shared_monitor_static_assets,
 )
-from psynetsk_tools.review_html import render_evidence_section, render_visible_artifacts
+from psynetsk_tools.review_html import (
+    render_evidence_section,
+    render_markdown_document,
+    render_visible_artifacts,
+)
 from psynetsk_tools.review_model import (
     ReviewFile,
     classify_review_evidence,
@@ -600,12 +604,12 @@ def read_review_artifact_content(source_file: Path, max_bytes: int = 100_000) ->
 
 
 def render_report(report_path: Path) -> str:
-    """Render a plain Markdown report as escaped preformatted text."""
+    """Render a Markdown report as safe HTML."""
 
     if not report_path.is_file():
         return '<p class="missing">Report file missing.</p>'
     text = report_path.read_text(encoding="utf-8")
-    return f"<pre>{html.escape(text)}</pre>"
+    return f'<div class="attempt-markdown">{render_markdown_document(text)}</div>'
 
 
 def render_check_list(manifest: dict[str, Any]) -> str:
@@ -709,6 +713,13 @@ def render_review_site(review_dir: Path, site_dir: Path | None = None) -> Path:
     .notebook-cell {{ background: #fff; border: 1px solid #d0d7de; border-radius: 0.45rem; overflow: hidden; padding: 0.85rem; }}
     .notebook-code pre, .notebook-outputs pre {{ margin: 0; }}
     .notebook-outputs {{ border-top: 1px solid #d0d7de; margin-top: 0.75rem; padding-top: 0.75rem; }}
+    .notebook-html {{ overflow-x: auto; }}
+    .notebook-html table {{ border-collapse: collapse; font-size: 0.9rem; width: auto; }}
+    .notebook-html th, .notebook-html td {{ border: 1px solid #d0d7de; padding: 0.35rem 0.55rem; }}
+    .notebook-svg svg {{ display: block; height: auto; max-width: 100%; }}
+    .notebook-error {{ background: #ffebe9; }}
+    .attempt-markdown > :first-child {{ margin-top: 0; }}
+    .attempt-markdown > :last-child {{ margin-bottom: 0; }}
     .artifact-checklist {{ list-style: none; padding-left: 0; }}
     .artifact-checklist li {{ display: flex; justify-content: space-between; border-bottom: 1px solid #d0d7de; padding: 0.35rem 0; }}
     .artifact-checklist .missing, .missing-artifact {{ color: #9a6700; }}

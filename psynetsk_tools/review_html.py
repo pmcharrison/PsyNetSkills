@@ -3,7 +3,10 @@
 from __future__ import annotations
 
 import html
+import re
 from collections.abc import Callable, Iterable
+from html.parser import HTMLParser
+from urllib.parse import urlparse
 
 from psynetsk_tools.review_model import (
     CompletenessItem,
@@ -13,6 +16,87 @@ from psynetsk_tools.review_model import (
 )
 
 UrlTransform = Callable[[str], str]
+SAFE_HTML_TAGS = {
+    "a",
+    "b",
+    "blockquote",
+    "br",
+    "code",
+    "dd",
+    "div",
+    "dl",
+    "dt",
+    "em",
+    "h1",
+    "h2",
+    "h3",
+    "h4",
+    "h5",
+    "h6",
+    "hr",
+    "i",
+    "li",
+    "ol",
+    "p",
+    "pre",
+    "span",
+    "strong",
+    "table",
+    "tbody",
+    "td",
+    "th",
+    "thead",
+    "tr",
+    "ul",
+}
+SAFE_SVG_TAGS = {
+    "circle",
+    "ellipse",
+    "g",
+    "line",
+    "path",
+    "polygon",
+    "polyline",
+    "rect",
+    "svg",
+    "text",
+    "title",
+}
+SAFE_ATTRS = {
+    "align",
+    "aria-label",
+    "class",
+    "colspan",
+    "height",
+    "id",
+    "role",
+    "rowspan",
+    "scope",
+    "title",
+    "width",
+}
+SAFE_SVG_ATTRS = {
+    "cx",
+    "cy",
+    "d",
+    "fill",
+    "height",
+    "points",
+    "r",
+    "rx",
+    "ry",
+    "stroke",
+    "stroke-width",
+    "viewbox",
+    "width",
+    "x",
+    "x1",
+    "x2",
+    "xmlns",
+    "y",
+    "y1",
+    "y2",
+}
 
 
 def identity_url(url: str) -> str:
@@ -25,6 +109,208 @@ def escape_url(url: str, url_transform: UrlTransform = identity_url) -> str:
     """Escape a transformed URL for use in an HTML attribute."""
 
     return html.escape(url_transform(url), quote=True)
+
+
+def is_safe_url(url: str) -> bool:
+    """Return whether a URL is safe to emit in rendered review HTML."""
+
+    if not url:
+        return False
+    parsed = urlparse(url)
+    return parsed.scheme in {"", "http", "https", "mailto"} and not url.lstrip().lower().startswith(
+        "javascript:",
+    )
+
+
+class SafeHTMLRenderer(HTMLParser):
+    """Render a small safe subset of HTML or SVG."""
+
+    def __init__(self, allowed_tags: set[str], allowed_attrs: set[str]):
+        super().__init__(convert_charrefs=True)
+        self.allowed_tags = allowed_tags
+        self.allowed_attrs = allowed_attrs
+        self.skip_content_depth = 0
+        self.parts: list[str] = []
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        """Emit a safe start tag when the tag is allowed."""
+
+        tag = tag.lower()
+        if tag in {"script", "style"}:
+            self.skip_content_depth += 1
+            return
+        if tag not in self.allowed_tags:
+            return
+        attr_text = "".join(self.safe_attr(tag, name, value) for name, value in attrs)
+        self.parts.append(f"<{tag}{attr_text}>")
+
+    def handle_startendtag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        """Emit a safe self-closing tag when the tag is allowed."""
+
+        tag = tag.lower()
+        if tag in {"script", "style"}:
+            return
+        if tag not in self.allowed_tags:
+            return
+        attr_text = "".join(self.safe_attr(tag, name, value) for name, value in attrs)
+        if tag in {"br", "hr"}:
+            self.parts.append(f"<{tag}{attr_text}>")
+        else:
+            self.parts.append(f"<{tag}{attr_text}></{tag}>")
+
+    def handle_endtag(self, tag: str) -> None:
+        """Emit a safe end tag when the tag is allowed."""
+
+        tag = tag.lower()
+        if self.skip_content_depth and tag in {"script", "style"}:
+            self.skip_content_depth -= 1
+            return
+        if tag in self.allowed_tags:
+            self.parts.append(f"</{tag}>")
+
+    def handle_data(self, data: str) -> None:
+        """Escape text data."""
+
+        if not self.skip_content_depth:
+            self.parts.append(html.escape(data))
+
+    def safe_attr(self, tag: str, name: str, value: str | None) -> str:
+        """Return a sanitized attribute or an empty string."""
+
+        if value is None:
+            return ""
+        name = name.lower()
+        if name.startswith("on") or name == "style":
+            return ""
+        if tag == "a" and name == "href":
+            return f' href="{html.escape(value, quote=True)}"' if is_safe_url(value) else ""
+        if name not in self.allowed_attrs:
+            return ""
+        output_name = "viewBox" if name == "viewbox" else name
+        return f' {output_name}="{html.escape(value, quote=True)}"'
+
+    def render(self) -> str:
+        """Return the sanitized HTML string."""
+
+        return "".join(self.parts)
+
+
+def sanitize_html_fragment(source: str) -> str:
+    """Render a safe subset of an HTML fragment."""
+
+    renderer = SafeHTMLRenderer(SAFE_HTML_TAGS, SAFE_ATTRS)
+    renderer.feed(source)
+    renderer.close()
+    return renderer.render()
+
+
+def sanitize_svg_fragment(source: str) -> str:
+    """Render a safe subset of an SVG fragment."""
+
+    renderer = SafeHTMLRenderer(SAFE_SVG_TAGS, SAFE_ATTRS | SAFE_SVG_ATTRS)
+    renderer.feed(source)
+    renderer.close()
+    return renderer.render()
+
+
+def render_markdown_inline(source: str) -> str:
+    """Render a small safe inline Markdown subset."""
+
+    placeholders: list[str] = []
+
+    def stash(value: str) -> str:
+        placeholders.append(value)
+        return f"\x00{len(placeholders) - 1}\x00"
+
+    text = html.escape(source)
+    text = re.sub(
+        r"`([^`]+)`",
+        lambda match: stash(f"<code>{match.group(1)}</code>"),
+        text,
+    )
+    text = re.sub(
+        r"\[([^\]]+)\]\(([^)]+)\)",
+        lambda match: stash(
+            f'<a href="{html.escape(match.group(2), quote=True)}">{match.group(1)}</a>',
+        )
+        if is_safe_url(html.unescape(match.group(2)))
+        else match.group(1),
+        text,
+    )
+    text = re.sub(r"\*\*([^*]+)\*\*", lambda match: stash(f"<strong>{match.group(1)}</strong>"), text)
+    text = re.sub(r"\*([^*]+)\*", lambda match: stash(f"<em>{match.group(1)}</em>"), text)
+    for index, value in enumerate(placeholders):
+        text = text.replace(f"\x00{index}\x00", value)
+    return text
+
+
+def render_markdown_document(source: str) -> str:
+    """Render a small safe Markdown subset for reports and notebook cells."""
+
+    blocks: list[str] = []
+    paragraph: list[str] = []
+    list_items: list[str] = []
+    ordered_list = False
+    code_lines: list[str] | None = None
+
+    def flush_paragraph() -> None:
+        if paragraph:
+            blocks.append(f"<p>{render_markdown_inline(' '.join(paragraph))}</p>")
+            paragraph.clear()
+
+    def flush_list() -> None:
+        nonlocal ordered_list
+        if list_items:
+            tag = "ol" if ordered_list else "ul"
+            blocks.append(f"<{tag}>" + "".join(list_items) + f"</{tag}>")
+            list_items.clear()
+            ordered_list = False
+
+    for line in source.splitlines():
+        stripped = line.strip()
+        if code_lines is not None:
+            if stripped.startswith("```"):
+                blocks.append(f"<pre><code>{html.escape(chr(10).join(code_lines))}</code></pre>")
+                code_lines = None
+            else:
+                code_lines.append(line)
+            continue
+        if stripped.startswith("```"):
+            flush_paragraph()
+            flush_list()
+            code_lines = []
+            continue
+        if not stripped:
+            flush_paragraph()
+            flush_list()
+            continue
+        if stripped.startswith("#"):
+            marks, _, title = stripped.partition(" ")
+            if title and set(marks) == {"#"}:
+                flush_paragraph()
+                flush_list()
+                level = min(len(marks), 6)
+                blocks.append(f"<h{level}>{render_markdown_inline(title)}</h{level}>")
+                continue
+        bullet_match = re.match(r"^[-*]\s+(.+)$", stripped)
+        ordered_match = re.match(r"^\d+[.)]\s+(.+)$", stripped)
+        if bullet_match or ordered_match:
+            flush_paragraph()
+            item = bullet_match.group(1) if bullet_match else ordered_match.group(1)
+            item_ordered = ordered_match is not None
+            if list_items and item_ordered != ordered_list:
+                flush_list()
+            ordered_list = item_ordered
+            list_items.append(f"<li>{render_markdown_inline(item)}</li>")
+            continue
+        flush_list()
+        paragraph.append(stripped)
+
+    if code_lines is not None:
+        blocks.append(f"<pre><code>{html.escape(chr(10).join(code_lines))}</code></pre>")
+    flush_paragraph()
+    flush_list()
+    return "\n".join(blocks) if blocks else ""
 
 
 def render_artifact_card(
@@ -230,13 +516,13 @@ def render_analysis_notebook(
 
 
 def render_notebook_cell(cell: dict[str, object]) -> str:
-    """Render one notebook cell with escaped source and text outputs."""
+    """Render one notebook cell with safe source and outputs."""
 
     cell_type = str(cell.get("cell_type") or "raw")
     source = notebook_text(cell.get("source"))
     safe_type = html.escape(cell_type)
     if cell_type == "markdown":
-        body = f'<div class="attempt-markdown">{render_minimal_markdown(source)}</div>'
+        body = f'<div class="attempt-markdown">{render_markdown_document(source)}</div>'
     elif cell_type == "code":
         body = (
             '<div class="notebook-code">'
@@ -259,36 +545,8 @@ def notebook_text(value: object) -> str:
     return ""
 
 
-def render_minimal_markdown(source: str) -> str:
-    """Render a tiny safe Markdown subset used for notebook previews."""
-
-    blocks: list[str] = []
-    paragraph: list[str] = []
-
-    def flush_paragraph() -> None:
-        if paragraph:
-            blocks.append(f"<p>{html.escape(' '.join(paragraph))}</p>")
-            paragraph.clear()
-
-    for line in source.splitlines():
-        stripped = line.strip()
-        if not stripped:
-            flush_paragraph()
-            continue
-        if stripped.startswith("#"):
-            marks, _, title = stripped.partition(" ")
-            if title and set(marks) == {"#"}:
-                flush_paragraph()
-                level = min(len(marks), 6)
-                blocks.append(f"<h{level}>{html.escape(title)}</h{level}>")
-                continue
-        paragraph.append(stripped)
-    flush_paragraph()
-    return "\n".join(blocks) if blocks else ""
-
-
 def render_notebook_outputs(outputs: object) -> str:
-    """Render escaped text outputs from a notebook code cell."""
+    """Render safe text, HTML, or SVG outputs from a notebook code cell."""
 
     if not isinstance(outputs, list) or not outputs:
         return ""
@@ -296,17 +554,39 @@ def render_notebook_outputs(outputs: object) -> str:
     for output in outputs:
         if not isinstance(output, dict):
             continue
-        text = output.get("text")
-        if text is None:
-            data = output.get("data")
-            if isinstance(data, dict):
-                text = data.get("text/plain") or data.get("text/html") or data.get("image/svg+xml")
-        text_value = notebook_text(text)
-        if text_value:
-            rendered_outputs.append(f"<pre><code>{html.escape(text_value)}</code></pre>")
+        rendered = render_notebook_output(output)
+        if rendered:
+            rendered_outputs.append(rendered)
     if not rendered_outputs:
         return ""
     return '<div class="notebook-outputs">' + "\n".join(rendered_outputs) + "</div>"
+
+
+def render_notebook_output(output: dict[str, object]) -> str:
+    """Render one notebook output."""
+
+    output_type = output.get("output_type")
+    if output_type == "error":
+        traceback = notebook_text(output.get("traceback"))
+        return f'<pre class="notebook-error"><code>{html.escape(traceback)}</code></pre>' if traceback else ""
+
+    text = notebook_text(output.get("text"))
+    if text:
+        return f"<pre><code>{html.escape(text)}</code></pre>"
+
+    data = output.get("data")
+    if not isinstance(data, dict):
+        return ""
+    svg = notebook_text(data.get("image/svg+xml"))
+    if svg:
+        return f'<div class="notebook-svg">{sanitize_svg_fragment(svg)}</div>'
+    html_output = notebook_text(data.get("text/html"))
+    if html_output:
+        return f'<div class="notebook-html">{sanitize_html_fragment(html_output)}</div>'
+    plain = notebook_text(data.get("text/plain"))
+    if plain:
+        return f"<pre><code>{html.escape(plain)}</code></pre>"
+    return ""
 
 
 def render_performance_result(

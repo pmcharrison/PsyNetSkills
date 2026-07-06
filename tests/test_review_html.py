@@ -1,6 +1,6 @@
 import json
 
-from psynetsk_tools.review_html import render_evidence_section
+from psynetsk_tools.review_html import render_evidence_section, render_markdown_document
 from psynetsk_tools.review_model import CompletenessItem, ReviewFile, classify_review_evidence
 
 
@@ -113,3 +113,86 @@ def test_render_evidence_section_marks_unpublished_actions_without_empty_links()
     assert "Simulated data export not published" in html
     assert "Analysis summary not published" in html
     assert 'href=""' not in html
+
+
+def test_render_markdown_document_renders_safe_report_markup() -> None:
+    html = render_markdown_document(
+        "# Report\n\n"
+        "Experiment **works** with `psynet test local`.\n\n"
+        "- Evidence captured\n"
+        "- [Preview](https://example.test/review)\n\n"
+        "```bash\npsynet-review-bundle validate\n```\n\n"
+        "<script>alert('x')</script>\n"
+    )
+
+    assert "<h1>Report</h1>" in html
+    assert "<strong>works</strong>" in html
+    assert "<code>psynet test local</code>" in html
+    assert "<ul><li>Evidence captured</li>" in html
+    assert '<a href="https://example.test/review">Preview</a>' in html
+    assert "psynet-review-bundle validate" in html
+    assert "<script>" not in html
+    assert "&lt;script&gt;alert(&#x27;x&#x27;)&lt;/script&gt;" in html
+
+
+def test_render_evidence_section_renders_safe_notebook_rich_outputs() -> None:
+    view = classify_review_evidence(
+        [
+            file(
+                "analyses/analysis.ipynb",
+                json.dumps(
+                    {
+                        "cells": [
+                            {
+                                "cell_type": "markdown",
+                                "source": ["## Results\n\n- passed"],
+                            },
+                            {
+                                "cell_type": "code",
+                                "source": ["display_table()"],
+                                "outputs": [
+                                    {
+                                        "output_type": "execute_result",
+                                        "data": {
+                                            "text/html": (
+                                                "<table><tr><th>n</th></tr>"
+                                                "<tr><td onclick=\"bad()\">4</td></tr></table>"
+                                                "<script>bad()</script>"
+                                            ),
+                                        },
+                                    },
+                                    {
+                                        "output_type": "display_data",
+                                        "data": {
+                                            "image/svg+xml": (
+                                                '<svg viewBox="0 0 10 10" onload="bad()">'
+                                                '<circle cx="5" cy="5" r="4" />'
+                                                "<script>bad()</script></svg>"
+                                            ),
+                                        },
+                                    },
+                                    {
+                                        "output_type": "execute_result",
+                                        "data": {"text/plain": "plain result"},
+                                    },
+                                ],
+                            },
+                        ],
+                    }
+                ),
+            ),
+        ]
+    )
+
+    html = render_evidence_section(view, include_heading=False, section_id=None)
+
+    assert "<h2>Results</h2>" in html
+    assert "<ul><li>passed</li></ul>" in html
+    assert '<div class="notebook-html">' in html
+    assert "<table><tr><th>n</th></tr><tr><td>4</td></tr></table>" in html
+    assert 'onclick="bad()"' not in html
+    assert '<div class="notebook-svg">' in html
+    assert '<svg viewBox="0 0 10 10"><circle cx="5" cy="5" r="4"></circle></svg>' in html
+    assert 'onload="bad()"' not in html
+    assert "<script>" not in html
+    assert "plain result" in html

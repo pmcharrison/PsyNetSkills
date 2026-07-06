@@ -86,7 +86,13 @@ def review_manifest() -> dict[str, object]:
 def test_render_review_site_publishes_sanitized_artifacts(tmp_path: Path) -> None:
     review_dir = tmp_path / "pitch-discrimination-demo" / "review"
     write(review_dir / "review.json", json.dumps(review_manifest()) + "\n")
-    write(review_dir / "REPORT.md", "# Report\n\nExperiment behaves as expected.\n")
+    write(
+        review_dir / "REPORT.md",
+        "# Report\n\n"
+        "Experiment **behaves** as expected.\n\n"
+        "- Functional check passed\n\n"
+        "<script>bad()</script>\n",
+    )
     write(
         review_dir / "artifacts/psynet_debug.log",
         "Dashboard user: admin password: local-password\n",
@@ -103,7 +109,10 @@ def test_render_review_site_publishes_sanitized_artifacts(tmp_path: Path) -> Non
 
     index = (site_dir / "index.html").read_text(encoding="utf-8")
     assert "Pitch Discrimination Demo" in index
-    assert "Experiment behaves as expected." in index
+    assert "<h1>Report</h1>" in index
+    assert "Experiment <strong>behaves</strong> as expected." in index
+    assert "<li>Functional check passed</li>" in index
+    assert "<script>bad()</script>" not in index
     assert "psynet test local" in index
     assert "No simulated export has been produced yet." in index
     assert index.count("Open artifact") == 2
