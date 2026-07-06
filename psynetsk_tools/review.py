@@ -1,4 +1,4 @@
-"""Render standalone PsyNet experiment reviews."""
+"""Render standalone PsyNet experiment review bundles."""
 
 from __future__ import annotations
 
@@ -16,15 +16,21 @@ from typing import Any
 from psynetsk_tools.review_artifacts import (
     HASHED_ARTIFACTS_DIR,
     MONITOR_STATIC_ARTIFACTS_DIR,
+    redact_known_credentials,
     write_hashed_artifact,
     write_shared_monitor_static_assets,
 )
+from psynetsk_tools.review_html import (
+    pygments_css,
+    render_evidence_section,
+    render_markdown_document,
+    render_visible_artifacts,
+)
 from psynetsk_tools.review_model import (
-    ReviewEvidenceView,
     ReviewFile,
+    TEXT_REVIEW_EXTENSIONS,
     classify_review_evidence,
     file_kind,
-    screenshot_caption,
 )
 from psynetsk_tools.validate import validate_evidence_video
 
@@ -35,11 +41,13 @@ REVIEW_TOP_LEVEL_REQUIRED = {
     "experiment",
     "implementation",
     "environment",
-    "report",
+    "sections",
     "artifacts",
     "checks",
     "blockers",
 }
+SECTION_REQUIRED_FIELDS = {"id", "title", "kind"}
+SECTION_KINDS = {"markdown", "evidence", "files", "checks", "blockers"}
 ARTIFACT_REQUIRED_FIELDS = {
     "id",
     "kind",
@@ -70,14 +78,30 @@ ARTIFACT_CREATORS = {"agent", "cli", "manual", "unknown"}
 BLOCKER_SEVERITIES = {"warning", "error"}
 CHECK_STATUSES = {"pass", "fail", "warning", "not_run"}
 MAX_REVIEW_NOTEBOOK_BYTES = 100_000
-STARTER_REPORT = """# Review report
+CLI_NAME = "psynet-review-bundle"
+REVIEW_BUNDLE_CSS = Path(__file__).parent / "assets" / "review-bundle" / "review-bundle.css"
+REVIEW_BUNDLE_CSS_OUTPUT = "css/review-bundle.css"
+STARTER_PROMPT = """# Prompt
+
+Summarize the original request or experiment brief.
+"""
+STARTER_PLAN = """# Plan
+
+Summarize the implementation plan or remove this section from `review.json`.
+"""
+STARTER_TIMELINE = """# Timeline
+
+Record notable implementation and evidence-collection events, or remove this
+section from `review.json`.
+"""
+STARTER_REPORT = """# Review bundle report
 
 Summarize the implementation, validation, analysis, and any unresolved issues.
 """
 
 
 def read_review_manifest(review_dir: Path) -> dict[str, Any]:
-    """Read the review manifest from a review directory."""
+    """Read the review bundle manifest from a review bundle directory."""
 
     manifest_path = review_dir / "review.json"
     with manifest_path.open(encoding="utf-8") as file:
@@ -92,11 +116,11 @@ def display_title_from_path(review_dir: Path) -> str:
 
     source = review_dir.parent if review_dir.name == "review" else review_dir
     normalized = re.sub(r"[-_]+", " ", source.name).strip()
-    return normalized.title() if normalized else "Experiment Review"
+    return normalized.title() if normalized else "Experiment Review Bundle"
 
 
 def review_display_title(review_dir: Path, manifest: dict[str, Any]) -> str:
-    """Return the display title for a review."""
+    """Return the display title for a review bundle."""
 
     experiment = manifest.get("experiment")
     if isinstance(experiment, dict):
@@ -148,8 +172,29 @@ def starter_blocker(artifact_id: str, reason: str, next_step: str) -> dict[str, 
     }
 
 
+def starter_section(
+    section_id: str,
+    title: str,
+    kind: str,
+    *,
+    path: str | None = None,
+    display: bool = True,
+) -> dict[str, object]:
+    """Create a starter review section."""
+
+    section: dict[str, object] = {
+        "id": section_id,
+        "title": title,
+        "kind": kind,
+        "display": display,
+    }
+    if path is not None:
+        section["path"] = path
+    return section
+
+
 def starter_review_manifest(source_path: str) -> dict[str, object]:
-    """Create a starter review manifest."""
+    """Create a starter review bundle manifest."""
 
     timestamp = utc_timestamp()
     return {
@@ -166,18 +211,17 @@ def starter_review_manifest(source_path: str) -> dict[str, object]:
             "os": platform.system().lower(),
             "python_version": f"{sys.version_info.major}.{sys.version_info.minor}",
         },
-        "report": "REPORT.md",
+        "sections": [
+            starter_section("prompt", "Prompt", "markdown", path="PROMPT.md"),
+            starter_section("plan", "Plan", "markdown", path="PLAN.md"),
+            starter_section("timeline", "Timeline", "markdown", path="TIMELINE.md"),
+            starter_section("report", "Report", "markdown", path="REPORT.md"),
+            starter_section("evidence", "Evidence", "evidence"),
+            starter_section("files", "Additional files", "files"),
+            starter_section("checks", "Checks", "checks"),
+            starter_section("blockers", "Blockers", "blockers"),
+        ],
         "artifacts": [
-            starter_artifact(
-                "review_report",
-                "report",
-                "REPORT.md",
-                "Review report",
-                "Summary of implementation, validation, analysis, and remaining issues.",
-                required=True,
-                status="present",
-                created_by="cli",
-            ),
             starter_artifact(
                 "participant_video",
                 "video",
@@ -263,13 +307,13 @@ def starter_review_manifest(source_path: str) -> dict[str, object]:
         ],
         "render": {
             "site_path": "site",
-            "generator": "psynet-review",
+            "generator": CLI_NAME,
         },
     }
 
 
 def init_review(review_dir: Path, source_path: str = ".", force: bool = False) -> None:
-    """Create a starter review directory."""
+    """Create a starter review bundle directory."""
 
     manifest_path = review_dir / "review.json"
     if manifest_path.exists() and not force:
@@ -289,6 +333,9 @@ def init_review(review_dir: Path, source_path: str = ".", force: bool = False) -
         encoding="utf-8",
     )
     (review_dir / "REPORT.md").write_text(STARTER_REPORT, encoding="utf-8")
+    (review_dir / "PROMPT.md").write_text(STARTER_PROMPT, encoding="utf-8")
+    (review_dir / "PLAN.md").write_text(STARTER_PLAN, encoding="utf-8")
+    (review_dir / "TIMELINE.md").write_text(STARTER_TIMELINE, encoding="utf-8")
 
 
 def relative_review_path(
@@ -296,19 +343,19 @@ def relative_review_path(
     path_text: object,
     label: str,
 ) -> tuple[Path | None, list[str]]:
-    """Resolve a manifest path and ensure it stays inside the review directory."""
+    """Resolve a manifest path and ensure it stays inside the bundle directory."""
 
     if not isinstance(path_text, str) or not path_text:
         return None, [f"{label}: path must be a non-empty string"]
 
     relative_path = Path(path_text)
     if relative_path.is_absolute():
-        return None, [f"{label}: path must be relative to the review directory"]
+        return None, [f"{label}: path must be relative to the review bundle directory"]
 
     review_root = review_dir.resolve()
     resolved_path = (review_dir / relative_path).resolve()
     if not resolved_path.is_relative_to(review_root):
-        return None, [f"{label}: path must stay inside the review directory"]
+        return None, [f"{label}: path must stay inside the review bundle directory"]
     return resolved_path, []
 
 
@@ -366,7 +413,7 @@ def validate_review_blockers(
 
 
 def validate_review_checks(review_dir: Path, manifest: dict[str, Any]) -> list[str]:
-    """Validate check records in a review manifest."""
+    """Validate check records in a review bundle manifest."""
 
     checks = manifest.get("checks")
     if not isinstance(checks, list):
@@ -390,6 +437,59 @@ def validate_review_checks(review_dir: Path, manifest: dict[str, Any]) -> list[s
             problems.append(
                 f"{label}: status must be pass, fail, warning, or not_run",
             )
+    return problems
+
+
+def validate_review_sections(review_dir: Path, manifest: dict[str, Any]) -> list[str]:
+    """Validate section records in a review bundle manifest."""
+
+    sections = manifest.get("sections")
+    if not isinstance(sections, list):
+        return [f"{review_dir / 'review.json'}: sections must be a list"]
+
+    problems: list[str] = []
+    section_ids: set[str] = set()
+    for index, section in enumerate(sections):
+        label = f"{review_dir / 'review.json'}: sections[{index}]"
+        if not isinstance(section, dict):
+            problems.append(f"{label}: section must be a JSON object")
+            continue
+        for field in sorted(SECTION_REQUIRED_FIELDS):
+            if field not in section:
+                problems.append(f"{label}: missing {field}")
+
+        section_id = section.get("id")
+        if not isinstance(section_id, str) or not ARTIFACT_ID_RE.fullmatch(section_id):
+            problems.append(f"{label}: id must be a valid section ID")
+        elif section_id in section_ids:
+            problems.append(f"{label}: duplicate section ID {section_id!r}")
+        else:
+            section_ids.add(section_id)
+
+        if not isinstance(section.get("title"), str) or not section["title"].strip():
+            problems.append(f"{label}: title must be a non-empty string")
+        kind = section.get("kind")
+        if kind not in SECTION_KINDS:
+            problems.append(f"{label}: kind is not recognized")
+        if "display" in section and not isinstance(section.get("display"), bool):
+            problems.append(f"{label}: display must be a boolean")
+        if kind == "markdown":
+            section_path, path_problems = relative_review_path(
+                review_dir,
+                section.get("path"),
+                f"{label}: path",
+            )
+            problems.extend(path_problems)
+            if section_path is not None and section.get("display") is not False:
+                if not section_path.is_file():
+                    problems.append(f"{label}: section file is missing: {section_path}")
+        elif "path" in section:
+            _, path_problems = relative_review_path(
+                review_dir,
+                section.get("path"),
+                f"{label}: path",
+            )
+            problems.extend(path_problems)
     return problems
 
 
@@ -468,7 +568,7 @@ def validate_review_artifacts(
 
 
 def validate_review_manifest(review_dir: Path, manifest: dict[str, Any]) -> list[str]:
-    """Validate review manifest structure and local artifact files."""
+    """Validate review bundle manifest structure and local artifact files."""
 
     problems: list[str] = []
     manifest_path = review_dir / "review.json"
@@ -502,29 +602,20 @@ def validate_review_manifest(review_dir: Path, manifest: dict[str, Any]) -> list
             problems.append(
                 f"{manifest_path}: implementation.summary must be a non-empty string",
             )
-
-    report_path, report_problems = relative_review_path(
-        review_dir,
-        manifest.get("report"),
-        f"{manifest_path}: report",
-    )
-    problems.extend(report_problems)
-    if report_path is not None and not report_path.is_file():
-        problems.append(f"{manifest_path}: report file is missing: {report_path}")
-
     blocker_ids, blocker_problems = validate_review_blockers(review_dir, manifest)
     problems.extend(blocker_problems)
+    problems.extend(validate_review_sections(review_dir, manifest))
     problems.extend(validate_review_checks(review_dir, manifest))
     problems.extend(validate_review_artifacts(review_dir, manifest, blocker_ids))
     return problems
 
 
 def validate_review(review_dir: Path) -> list[str]:
-    """Validate a standalone review directory."""
+    """Validate a standalone review bundle directory."""
 
     manifest_path = review_dir / "review.json"
     if not manifest_path.exists():
-        return [f"{manifest_path}: missing review manifest"]
+        return [f"{manifest_path}: missing review bundle manifest"]
     try:
         manifest = read_review_manifest(review_dir)
     except json.JSONDecodeError as exc:
@@ -587,6 +678,8 @@ def publish_review_artifacts(
 def read_review_artifact_content(source_file: Path, max_bytes: int = 100_000) -> str | None:
     """Read text artifact content for review classification."""
 
+    if source_file.suffix.lower() not in TEXT_REVIEW_EXTENSIONS:
+        return None
     try:
         data = source_file.read_bytes()
     except OSError:
@@ -594,196 +687,132 @@ def read_review_artifact_content(source_file: Path, max_bytes: int = 100_000) ->
     if len(data) > max_bytes:
         data = data[:max_bytes]
     try:
-        return data.decode("utf-8")
+        return redact_known_credentials(data.decode("utf-8"))
     except UnicodeDecodeError:
         return None
 
 
-def render_report(report_path: Path) -> str:
-    """Render a plain Markdown report as escaped preformatted text."""
+def render_metadata_grid(items: list[tuple[str, str]]) -> str:
+    """Render a dashboard-style metadata grid."""
 
-    if not report_path.is_file():
-        return '<p class="missing">Report file missing.</p>'
-    text = report_path.read_text(encoding="utf-8")
-    return f"<pre>{html.escape(text)}</pre>"
+    rows = []
+    for label, value in items:
+        rows.append(
+            "<div>"
+            f"<dt>{html.escape(label)}</dt>"
+            f"<dd>{value}</dd>"
+            "</div>",
+        )
+    return '<dl class="metadata-grid attempt-summary">' + "".join(rows) + "</dl>"
 
 
-def render_artifact_card(artifact: ReviewFile) -> str:
-    """Render one artifact card."""
+def render_metadata_value(value: object, fallback: str = "-") -> str:
+    """Render one metadata value."""
 
-    path = html.escape(artifact.path)
-    kind = html.escape(artifact.kind)
+    if value is None or value == "":
+        return html.escape(fallback)
+    return html.escape(str(value))
 
-    if artifact.url:
-        action = f'<a href="{html.escape(artifact.url)}">Open artifact</a>'
+
+def render_metadata_code(value: object, fallback: str = "-") -> str:
+    """Render one metadata value as code."""
+
+    return f"<code>{render_metadata_value(value, fallback)}</code>"
+
+
+def write_review_bundle_static_assets(site_dir: Path) -> str:
+    """Write static review bundle CSS and return its page-relative URL."""
+
+    target = site_dir / "static" / REVIEW_BUNDLE_CSS_OUTPUT
+    target.parent.mkdir(parents=True, exist_ok=True)
+    css = REVIEW_BUNDLE_CSS.read_text(encoding="utf-8")
+    target.write_text(f"{css}\n\n{pygments_css()}\n", encoding="utf-8")
+    return f"static/{REVIEW_BUNDLE_CSS_OUTPUT}"
+
+
+def display_sections(manifest: dict[str, Any]) -> list[dict[str, Any]]:
+    """Return displayable section records in manifest order."""
+
+    sections = manifest.get("sections")
+    if not isinstance(sections, list):
+        return []
+    return [
+        section
+        for section in sections
+        if isinstance(section, dict) and section.get("display") is not False
+    ]
+
+
+def section_panel_class(section: dict[str, Any]) -> str:
+    """Return the section-specific panel class."""
+
+    section_id = str(section.get("id") or "")
+    kind = str(section.get("kind") or "")
+    if section_id == "report":
+        return "report-panel"
+    if section_id == "plan":
+        return "plan-panel"
+    if kind == "evidence":
+        return "evidence-panel"
+    return ""
+
+
+def render_markdown_section(review_dir: Path, section: dict[str, Any]) -> str:
+    """Render one markdown section."""
+
+    section_path, problems = relative_review_path(
+        review_dir,
+        section.get("path"),
+        f"{review_dir / 'review.json'}: sections[{section.get('id', '')}].path",
+    )
+    if problems or section_path is None:
+        return '<p class="missing">Section path is invalid.</p>'
+    if not section_path.is_file():
+        return '<p class="missing">Section file missing.</p>'
+    return f'<div class="attempt-markdown">{render_markdown_document(section_path.read_text(encoding="utf-8"))}</div>'
+
+
+def section_paths(manifest: dict[str, Any]) -> set[str]:
+    """Return paths rendered by markdown sections."""
+
+    paths: set[str] = set()
+    for section in display_sections(manifest):
+        if section.get("kind") == "markdown" and isinstance(section.get("path"), str):
+            paths.add(section["path"])
+    return paths
+
+
+def render_review_section(
+    review_dir: Path,
+    manifest: dict[str, Any],
+    section: dict[str, Any],
+    evidence: Any,
+) -> str:
+    """Render one review bundle section."""
+
+    section_id = html.escape(str(section.get("id") or "section"), quote=True)
+    title = html.escape(str(section.get("title") or section_id))
+    kind = section.get("kind")
+    if kind == "markdown":
+        body = render_markdown_section(review_dir, section)
+    elif kind == "evidence":
+        body = render_evidence_section(evidence, include_heading=False, section_id=None)
+    elif kind == "files":
+        body = render_visible_artifacts(evidence, exclude_paths=section_paths(manifest))
+    elif kind == "checks":
+        body = render_check_list(manifest)
+    elif kind == "blockers":
+        body = render_blockers(manifest)
     else:
-        action = "<span>No artifact file published.</span>"
+        body = '<p class="missing">Section kind is not supported.</p>'
 
+    panel_class = section_panel_class(section)
+    class_attr = f"attempt-panel {panel_class}".strip()
     return (
-        '<article class="artifact-card">'
-        f"<h3><code>{path}</code></h3>"
-        "<dl>"
-        f"<dt>Kind</dt><dd>{kind}</dd>"
-        f"<dt>Size</dt><dd>{artifact.size_bytes} bytes</dd>"
-        "</dl>"
-        f"<p>{action}</p>"
-        "</article>"
-    )
-
-
-def render_participant_video(evidence: ReviewEvidenceView) -> str:
-    """Render participant video evidence."""
-
-    video = evidence.participant_video
-    if video is None:
-        return "<p>No participant recording was found.</p>"
-    return (
-        '<video class="attempt-video" controls preload="metadata">'
-        f'<source src="{html.escape(video.url)}" type="video/mp4">'
-        "Your browser does not support embedded video."
-        "</video>"
-        f'<p class="artifact-note"><code>{html.escape(video.path)}</code> '
-        f"· {video.size_bytes} bytes</p>"
-    )
-
-
-def render_screenshot_gallery(evidence: ReviewEvidenceView) -> str:
-    """Render screenshot evidence."""
-
-    if not evidence.screenshots:
-        return ""
-    figures: list[str] = []
-    for screenshot in evidence.screenshots:
-        caption = screenshot_caption(screenshot, evidence.screenshot_captions)
-        figures.append(
-            '<figure class="screenshot-card">'
-            f'<a href="{html.escape(screenshot.url)}">'
-            f'<img src="{html.escape(screenshot.url)}" alt="{html.escape(caption)}">'
-            "</a>"
-            f"<figcaption>{html.escape(caption)}</figcaption>"
-            "</figure>"
-        )
-    return (
-        '<section class="screenshot-gallery">'
-        "<h3>Screenshot walkthrough</h3>"
-        '<div class="screenshot-frame">'
-        + "\n".join(figures)
-        + "</div></section>"
-    )
-
-
-def render_evidence_actions(evidence: ReviewEvidenceView) -> str:
-    """Render direct evidence artifact links."""
-
-    actions = [
-        ("Monitor snapshot", evidence.monitor_file, "Open monitor snapshot"),
-        ("Performance result", evidence.performance_file, "View performance test result"),
-        ("Data export", evidence.data_file, "Download data export"),
-        ("Simulated data export", evidence.simulated_data_file, "Download simulated data"),
-        ("Analysis notebook", evidence.analysis_notebook_file, "Open analysis notebook"),
-    ]
-    items: list[str] = []
-    for label, file, action in actions:
-        if file is None:
-            items.append(
-                f'<li><span class="missing-artifact">{html.escape(label)} missing</span></li>',
-            )
-        else:
-            items.append(
-                f'<li><a href="{html.escape(file.url)}">{html.escape(action)}</a></li>',
-            )
-    return '<ul class="evidence-actions">' + "\n".join(items) + "</ul>"
-
-
-def render_performance_result(evidence: ReviewEvidenceView) -> str:
-    """Render performance results when available."""
-
-    if evidence.performance_file is None:
-        return ""
-    rows = evidence.performance_results
-    if not rows:
-        return (
-            '<section class="performance-result">'
-            "<h3>Performance test result</h3>"
-            '<p class="artifact-note">This performance artifact does not contain '
-            "tabular result rows.</p></section>"
-        )
-
-    body: list[str] = []
-    for row in rows:
-        errors = int(row.get("request_errors") or 0) + int(row.get("bot_errors") or 0)
-        body.append(
-            "<tr>"
-            f"<td>{html.escape(str(row.get('n_bots', '')))}</td>"
-            f"<td>{html.escape(str(row.get('total_bots_started', '')))}</td>"
-            f"<td>{html.escape(str(row.get('bots_succeeded', '')))}</td>"
-            f"<td>{html.escape(str(row.get('total_requests', '')))}</td>"
-            f"<td>{format_metric(row.get('median_response_time'))}</td>"
-            f"<td>{format_metric(row.get('p95_response_time'))}</td>"
-            f"<td>{format_metric(row.get('q_delay_p95'))}</td>"
-            f"<td>{errors}</td>"
-            "</tr>"
-        )
-    return (
-        '<section class="performance-result">'
-        "<h3>Performance test result</h3>"
-        f'<p><a href="{html.escape(evidence.performance_file.url)}">Raw JSON</a></p>'
-        '<table class="performance-table"><thead><tr>'
-        "<th>Concurrent target</th><th>Bots started</th><th>Succeeded</th>"
-        "<th>Requests</th><th>Resp Med (s)</th><th>Resp P95 (s)</th>"
-        "<th>Q P95 all (s)</th><th>Errors</th>"
-        "</tr></thead><tbody>"
-        + "\n".join(body)
-        + "</tbody></table></section>"
-    )
-
-
-def format_metric(value: object) -> str:
-    """Format a numeric performance metric."""
-
-    if isinstance(value, int | float) and not isinstance(value, bool):
-        return f"{value:.3f}"
-    return "N/A"
-
-
-def render_completeness(evidence: ReviewEvidenceView) -> str:
-    """Render artifact completeness rows."""
-
-    items = [
-        f'<li class="{"present" if item.present else "missing"}">'
-        f"{html.escape(item.label)} <span>{html.escape(item.detail)}</span></li>"
-        for item in evidence.completeness
-    ]
-    return (
-        '<section class="evidence-subsection">'
-        "<h3>Artifact completeness</h3>"
-        '<ul class="artifact-checklist">'
-        + "\n".join(items)
-        + "</ul></section>"
-    )
-
-
-def render_visible_artifacts(evidence: ReviewEvidenceView) -> str:
-    """Render remaining evidence files."""
-
-    if not evidence.visible_files:
-        return "<p>No additional evidence files were found.</p>"
-    cards = "\n".join(render_artifact_card(file) for file in evidence.visible_files)
-    return f'<div class="artifact-grid">{cards}</div>'
-
-
-def render_evidence_section(evidence: ReviewEvidenceView) -> str:
-    """Render the main evidence section."""
-
-    return (
-        '<section id="evidence">'
-        "<h2>Evidence</h2>"
-        f"{render_participant_video(evidence)}"
-        f"{render_screenshot_gallery(evidence)}"
-        f"{render_evidence_actions(evidence)}"
-        f"{render_performance_result(evidence)}"
-        f"{render_completeness(evidence)}"
-        "</section>"
+        f'<details id="{section_id}" class="{html.escape(class_attr, quote=True)}" open>'
+        f"<summary><h2>{title}</h2></summary>"
+        f"{body}"
+        "</details>"
     )
 
 
@@ -833,7 +862,7 @@ def render_blockers(manifest: dict[str, Any]) -> str:
 
 
 def render_review_site(review_dir: Path, site_dir: Path | None = None) -> Path:
-    """Render a standalone static review site."""
+    """Render a standalone static review bundle site."""
 
     manifest = read_review_manifest(review_dir)
     if site_dir is None:
@@ -853,8 +882,41 @@ def render_review_site(review_dir: Path, site_dir: Path | None = None) -> Path:
         if isinstance(implementation, dict) and implementation.get("summary")
         else ""
     )
-    report_path = review_dir / str(manifest.get("report") or "REPORT.md")
     evidence = classify_review_evidence(rendered_artifacts)
+    css_url = write_review_bundle_static_assets(site_dir)
+    sections = display_sections(manifest)
+    experiment = manifest.get("experiment", {})
+    environment = manifest.get("environment", {})
+    artifacts = manifest.get("artifacts", [])
+    checks = manifest.get("checks", [])
+    blockers = manifest.get("blockers", [])
+    experiment = experiment if isinstance(experiment, dict) else {}
+    environment = environment if isinstance(environment, dict) else {}
+    artifact_count = len(artifacts) if isinstance(artifacts, list) else 0
+    check_count = len(checks) if isinstance(checks, list) else 0
+    blocker_count = len(blockers) if isinstance(blockers, list) else 0
+    metadata = render_metadata_grid(
+        [
+            ("Source path", render_metadata_code(experiment.get("source_path"))),
+            ("Entry point", render_metadata_code(experiment.get("entry_point"))),
+            ("PsyNet version", render_metadata_value(experiment.get("psynet_version"))),
+            ("Git commit", render_metadata_code(experiment.get("git_commit"))),
+            ("OS", render_metadata_value(environment.get("os"))),
+            ("Python", render_metadata_value(environment.get("python_version"))),
+            ("Sections", render_metadata_value(len(sections))),
+            ("Checks", render_metadata_value(check_count)),
+            ("Blockers", render_metadata_value(blocker_count)),
+        ],
+    )
+    section_nav = "".join(
+        f'<li><a href="#{html.escape(str(section.get("id")), quote=True)}">'
+        f'{html.escape(str(section.get("title") or section.get("id")))}</a></li>'
+        for section in sections
+    )
+    section_panels = "\n".join(
+        render_review_section(review_dir, manifest, section, evidence)
+        for section in sections
+    )
 
     html_text = f"""<!doctype html>
 <html lang="en">
@@ -862,52 +924,60 @@ def render_review_site(review_dir: Path, site_dir: Path | None = None) -> Path:
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{html.escape(title)}</title>
-  <style>
-    body {{ font-family: system-ui, sans-serif; margin: 2rem; line-height: 1.5; }}
-    main {{ max-width: 70rem; }}
-    .artifact-grid {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); gap: 1rem; }}
-    .artifact-card {{ border: 1px solid #d0d7de; border-radius: 0.5rem; padding: 1rem; }}
-    .attempt-video {{ width: 100%; max-width: 56rem; border: 1px solid #d0d7de; border-radius: 0.5rem; }}
-    .screenshot-frame {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 1rem; }}
-    .screenshot-card {{ border: 1px solid #d0d7de; border-radius: 0.5rem; padding: 0.75rem; }}
-    .screenshot-card img {{ max-width: 100%; height: auto; }}
-    .evidence-actions {{ display: flex; flex-wrap: wrap; gap: 0.75rem; padding-left: 0; list-style: none; }}
-    .performance-table {{ border-collapse: collapse; width: 100%; }}
-    .performance-table th, .performance-table td {{ border: 1px solid #d0d7de; padding: 0.4rem; text-align: left; }}
-    .artifact-checklist {{ list-style: none; padding-left: 0; }}
-    .artifact-checklist li {{ display: flex; justify-content: space-between; border-bottom: 1px solid #d0d7de; padding: 0.35rem 0; }}
-    .artifact-checklist .missing, .missing-artifact {{ color: #9a6700; }}
-    dt {{ font-weight: 700; }}
-    dd {{ margin: 0 0 0.5rem; }}
-    pre {{ white-space: pre-wrap; background: #f6f8fa; padding: 1rem; overflow: auto; }}
-    .missing {{ color: #9a6700; }}
-  </style>
+  <link rel="stylesheet" href="{html.escape(css_url)}">
 </head>
-<body>
-  <main>
-    <header>
-      <p>Experiment review</p>
-      <h1>{html.escape(title)}</h1>
-      <p>{html.escape(summary)}</p>
+<body class="attempt-page">
+  <article class="prose attempt-detail">
+    <header class="attempt-hero">
+      <div>
+        <p class="eyebrow">Experiment review bundle</p>
+        <h1>{html.escape(title)}</h1>
+        <p>{html.escape(summary)}</p>
+      </div>
+      <div class="score-card">
+        <span class="score-label">Artifacts</span>
+        <strong>{artifact_count}</strong>
+      </div>
     </header>
-    <section>
-      <h2>Report</h2>
-      {render_report(report_path)}
-    </section>
-    {render_evidence_section(evidence)}
-    <section>
-      <h2>Additional Files</h2>
-      {render_visible_artifacts(evidence)}
-    </section>
-    <section>
-      <h2>Checks</h2>
-      {render_check_list(manifest)}
-    </section>
-    <section>
-      <h2>Blockers</h2>
-      {render_blockers(manifest)}
-    </section>
-  </main>
+    {metadata}
+    <div class="attempt-layout">
+      <aside class="attempt-sidebar" aria-label="Review bundle sections">
+        <nav class="attempt-section-nav">
+          <ol>
+            {section_nav}
+          </ol>
+        </nav>
+      </aside>
+      <div class="attempt-main">
+        {section_panels}
+      </div>
+    </div>
+  </article>
+  <script>
+    document.querySelectorAll("[data-screenshot-gallery]").forEach((gallery) => {{
+      const cards = Array.from(gallery.querySelectorAll("[data-screenshot-card]"));
+      const panel = gallery.closest(".screenshot-gallery");
+      const counter = panel.querySelector("[data-screenshot-counter]");
+      const previous = panel.querySelector("[data-screenshot-prev]");
+      const next = panel.querySelector("[data-screenshot-next]");
+      const caption = panel.querySelector("[data-screenshot-caption]");
+      const show = (index) => {{
+        cards.forEach((card, cardIndex) => {{ card.hidden = cardIndex !== index; }});
+        caption.textContent = cards[index]?.dataset.screenshotCaptionText || "";
+        counter.textContent = `${{index + 1}} / ${{cards.length}}`;
+        gallery.dataset.screenshotIndex = String(index);
+      }};
+      const step = (offset) => {{
+        const current = Number(gallery.dataset.screenshotIndex || 0);
+        show((current + offset + cards.length) % cards.length);
+      }};
+      if (cards.length > 0) {{
+        show(0);
+        previous.addEventListener("click", () => step(-1));
+        next.addEventListener("click", () => step(1));
+      }}
+    }});
+  </script>
 </body>
 </html>
 """
@@ -922,43 +992,46 @@ def build_parser() -> argparse.ArgumentParser:
     subparsers = parser.add_subparsers(dest="command", required=True)
     init_parser = subparsers.add_parser(
         "init",
-        help="create a starter review directory",
+        help="create a starter review bundle directory",
     )
     init_parser.add_argument(
         "review_dir",
         nargs="?",
         default="review",
         type=Path,
-        help="review directory to create",
+        help="review bundle directory to create",
     )
     init_parser.add_argument(
         "--source-path",
         default=".",
-        help="experiment source path, relative to the review directory",
+        help="experiment source path, relative to the review bundle directory",
     )
     init_parser.add_argument(
         "--force",
         action="store_true",
-        help="replace an existing review.json and REPORT.md",
+        help="replace review.json and starter section files",
     )
     validate_parser = subparsers.add_parser(
         "validate",
-        help="validate a review directory",
+        help="validate a review bundle directory",
     )
     validate_parser.add_argument(
         "review_dir",
         nargs="?",
         default="review",
         type=Path,
-        help="review directory containing review.json",
+        help="review bundle directory containing review.json",
     )
-    render_parser = subparsers.add_parser("render", help="render a static review site")
+    render_parser = subparsers.add_parser(
+        "render",
+        help="render a static review bundle site",
+    )
     render_parser.add_argument(
         "review_dir",
         nargs="?",
         default="review",
         type=Path,
-        help="review directory containing review.json",
+        help="review bundle directory containing review.json",
     )
     render_parser.add_argument(
         "--output",
@@ -969,7 +1042,7 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def main(argv: list[str] | None = None) -> None:
-    """Run the psynet-review command."""
+    """Run the review bundle command."""
 
     parser = build_parser()
     args = parser.parse_args(argv)
@@ -979,19 +1052,19 @@ def main(argv: list[str] | None = None) -> None:
         except FileExistsError as exc:
             print(exc)
             raise SystemExit(1) from exc
-        print(f"Initialized review directory: {args.review_dir}")
-        print(f"Next: psynet-review validate {args.review_dir}")
-        print(f"Next: psynet-review render {args.review_dir}")
+        print(f"Initialized review bundle directory: {args.review_dir}")
+        print(f"Next: {CLI_NAME} validate {args.review_dir}")
+        print(f"Next: {CLI_NAME} render {args.review_dir}")
     elif args.command == "validate":
         problems = validate_review(args.review_dir)
         if problems:
             for problem in problems:
                 print(problem)
             raise SystemExit(1)
-        print(f"Review validation passed: {args.review_dir}")
+        print(f"Review bundle validation passed: {args.review_dir}")
     elif args.command == "render":
         site_dir = render_review_site(args.review_dir, args.output)
-        print(f"Rendered review site to {site_dir}")
+        print(f"Rendered review bundle site to {site_dir}")
 
 
 if __name__ == "__main__":

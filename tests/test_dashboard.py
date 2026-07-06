@@ -138,6 +138,64 @@ def render_challenges_list_page(tmp_path: Path, challenges_data: list[dict[str, 
     return (public / "challenges/index.html").read_text(encoding="utf-8")
 
 
+def render_attempt_page(tmp_path: Path, attempt_data: dict[str, object]) -> str:
+    hugo = shutil.which("hugo")
+    if hugo is None:
+        pytest.skip("hugo is required to test dashboard templates")
+
+    repo_root = Path(__file__).resolve().parents[1]
+    dashboard = tmp_path / "dashboard"
+    shutil.copytree(repo_root / "dashboard/layouts", dashboard / "layouts")
+    shutil.copy2(repo_root / "dashboard/hugo.toml", dashboard / "hugo.toml")
+    write(
+        dashboard / "content/challenges/example/attempt-1/index.md",
+        "---\n"
+        'title: "attempt-1"\n'
+        'challenge: "example"\n'
+        'attempt: "attempt-1"\n'
+        'layout: "attempt"\n'
+        "---\n",
+    )
+    write(dashboard / "data/workflow_context.json", "{}")
+    write(
+        dashboard / "data/psynetsk.json",
+        json.dumps(
+            {
+                "actions": [],
+                "attempts": [],
+                "challenges": [
+                    {
+                        "slug": "example",
+                        "title": "Example challenge",
+                        "url": "challenges/example/",
+                        "attempts": [attempt_data],
+                    },
+                ],
+                "skills": [],
+            },
+        ),
+    )
+
+    public = tmp_path / "public"
+    subprocess.run(
+        [
+            hugo,
+            "--source",
+            str(dashboard),
+            "--destination",
+            str(public),
+            "--cleanDestinationDir",
+            "--quiet",
+        ],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    return (public / "challenges/example/attempt-1/index.html").read_text(
+        encoding="utf-8"
+    )
+
+
 def authors_yaml() -> str:
     return (
         "pmcharrison: Peter Harrison\n"
@@ -315,6 +373,38 @@ def test_challenges_table_shows_author_and_past_editors(tmp_path: Path) -> None:
     assert "<th>Past editors</th>" in html
     assert "Peter Harrison" in html
     assert "Harin Lee" in html
+
+
+def test_attempt_page_embeds_exported_evidence_html(tmp_path: Path) -> None:
+    html = render_attempt_page(
+        tmp_path,
+        {
+            "name": "attempt-1",
+            "path": "challenges/example/attempts/attempt-1",
+            "score": None,
+            "date_time": "07/06 12:00",
+            "model": "test-model",
+            "agent_json": "{}",
+            "evaluation": "",
+            "plan": "",
+            "timeline": "",
+            "timeline_entries": [],
+            "implementation_time_display": "-",
+            "human_intervention_display": "-",
+            "run_cost_display": "-",
+            "run_cost_attribution_status": "",
+            "challenge_instructions": "",
+            "challenge_criteria": "",
+            "challenge_files": [],
+            "code_files": [],
+            "evidence_files": [],
+            "evidence_view": {"visible_files": []},
+            "evidence_html": '<strong data-shared-evidence>Shared evidence</strong>',
+        },
+    )
+
+    assert '<strong data-shared-evidence>Shared evidence</strong>' in html
+    assert "&lt;strong data-shared-evidence&gt;" not in html
 
 
 def test_collect_challenges_reports_latest_score(tmp_path: Path) -> None:
@@ -1353,10 +1443,38 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
         file["path"]: file for file in exported_attempt["code_files"]
     }
     evidence_view = exported_attempt["evidence_view"]
+    evidence_html = exported_attempt["evidence_html"]
+    review_sections = exported_attempt["review_sections"]
 
     assert evidence_by_path["participant.mp4"]["url"].startswith(
         "artifacts/blobs/sha256/",
     )
+    assert [section["id"] for section in review_sections] == [
+        "challenge",
+        "plan",
+        "evaluation",
+        "learnings",
+        "evidence",
+        "timeline",
+        "code_files",
+        "evidence_files",
+        "agent_metadata",
+        "challenge_snapshot",
+    ]
+    assert review_sections[0]["kind"] == "markdown"
+    assert review_sections[0]["display"] is True
+    assert "Implement the exported snapshot." in review_sections[0]["content"]
+    assert review_sections[4]["kind"] == "evidence"
+    assert review_sections[4]["html"] == evidence_html
+    assert review_sections[5]["kind"] == "timeline"
+    assert review_sections[5]["entries"][0]["actor"] == "agent-start"
+    assert review_sections[6]["kind"] == "files"
+    assert review_sections[8]["kind"] == "json"
+    assert 'data-screenshot-gallery' in evidence_html
+    assert 'href="/artifacts/blobs/sha256/' in evidence_html
+    assert "Screenshot walkthrough" in evidence_html
+    assert "Simulated data export not published" in evidence_html
+    assert "code/experiment.py <span>missing</span>" in evidence_html
     participant_blob = (
         tmp_path / "dashboard/static" / evidence_by_path["participant.mp4"]["url"]
     )

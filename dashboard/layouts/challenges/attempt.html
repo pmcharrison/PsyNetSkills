@@ -12,37 +12,12 @@
     {{ $attempt = index $attemptMatches 0 }}
   {{ end }}
   {{ $missingData := or (eq (len $challengeMatches) 0) (eq (len $attemptMatches) 0) }}
-  {{ $hasExperiment := false }}
-  {{ range $attempt.code_files }}
-    {{ if or (eq .path "experiment.py") (strings.HasSuffix .path "/experiment.py") }}
-      {{ $hasExperiment = true }}
-    {{ end }}
-  {{ end }}
   {{ $evidenceView := default (dict) $attempt.evidence_view }}
-  {{ $participantVideo := default (dict) $evidenceView.participant_video }}
-  {{ $hasParticipantVideo := $participantVideo }}
-  {{ $screenshotFiles := default (slice) $evidenceView.screenshots }}
-  {{ $hasScreenshots := gt (len $screenshotFiles) 0 }}
-  {{ $performanceFile := default (dict) $evidenceView.performance_file }}
-  {{ $hasPerformance := $performanceFile }}
-  {{ $performanceData := default (dict) $evidenceView.performance_data }}
-  {{ $performanceResults := default (slice) $evidenceView.performance_results }}
-  {{ $hasPerformanceResults := gt (len $performanceResults) 0 }}
-  {{ $monitorFile := default (dict) $evidenceView.monitor_file }}
-  {{ $hasMonitor := $monitorFile }}
-  {{ $dataFile := default (dict) $evidenceView.data_file }}
-  {{ $hasData := $dataFile }}
-  {{ $analysisFiles := default (slice) $evidenceView.analysis_files }}
-  {{ $hasAnalyses := gt (len $analysisFiles) 0 }}
-  {{ $analysisFile := dict }}
-  {{ if $hasAnalyses }}
-    {{ $analysisFile = index $analysisFiles 0 }}
-  {{ end }}
   {{ $analysisNotebookFile := default (dict) $evidenceView.analysis_notebook_file }}
   {{ $analysisNotebook := default (dict) $evidenceView.analysis_notebook }}
   {{ $hasAnalysisNotebook := and $analysisNotebookFile $analysisNotebook }}
   {{ $visibleEvidenceFiles := default (slice) $evidenceView.visible_files }}
-  {{ $evidenceCompleteness := default (slice) $evidenceView.completeness }}
+  {{ $evidenceHtml := default "" $attempt.evidence_html }}
   {{ $hasTimeline := gt (len $attempt.timeline_entries) 0 }}
   {{ $plan := default "" $attempt.plan }}
   {{ $hasPlan := gt (len $plan) 0 }}
@@ -227,16 +202,11 @@
 
     <details id="evidence" class="attempt-panel" open>
       <summary><h2>Evidence</h2></summary>
-      {{ partial "attempt/evidence-video.html" (dict "hasParticipantVideo" $hasParticipantVideo "participantVideo" $participantVideo) }}
-
-      {{ partial "attempt/evidence-screenshots.html" (dict "hasScreenshots" $hasScreenshots "screenshotFiles" $screenshotFiles) }}
-
-      {{ partial "attempt/evidence-actions.html" (dict "hasMonitor" $hasMonitor "monitorFile" $monitorFile "hasPerformance" $hasPerformance "performanceFile" $performanceFile "hasData" $hasData "dataFile" $dataFile "hasAnalysisNotebook" $hasAnalysisNotebook "hasAnalyses" $hasAnalyses "analysisFile" $analysisFile) }}
-
-      {{ partial "attempt/evidence-notebook.html" (dict "hasAnalysisNotebook" $hasAnalysisNotebook "analysisNotebookFile" $analysisNotebookFile "analysisNotebook" $analysisNotebook) }}
-
-      {{ partial "attempt/evidence-performance.html" (dict "hasPerformance" $hasPerformance "performanceData" $performanceData "performanceFile" $performanceFile "performanceResults" $performanceResults "hasPerformanceResults" $hasPerformanceResults) }}
-      {{ partial "attempt/evidence-completeness.html" (dict "challengeFiles" $attempt.challenge_files "hasPlan" $hasPlan "hasTimeline" $hasTimeline "hasExperiment" $hasExperiment "evidenceCompleteness" $evidenceCompleteness) }}
+      {{ with $evidenceHtml }}
+        {{ . | safeHTML }}
+      {{ else }}
+        <p>No evidence summary was exported for this attempt.</p>
+      {{ end }}
     </details>
 
     <details class="attempt-panel">

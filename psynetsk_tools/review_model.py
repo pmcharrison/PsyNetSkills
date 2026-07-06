@@ -121,6 +121,7 @@ TEXT_REVIEW_EXTENSIONS = {
     ".json",
     ".log",
     ".md",
+    ".py",
     ".txt",
     ".yaml",
     ".yml",
@@ -333,7 +334,7 @@ def completeness_items(
     simulated_data_file: ReviewFile | None,
     analyses: list[ReviewFile],
 ) -> list[CompletenessItem]:
-    """Build review artifact completeness rows."""
+    """Build review bundle artifact completeness rows."""
 
     return [
         CompletenessItem(

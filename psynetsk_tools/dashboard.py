@@ -41,9 +41,11 @@ from psynetsk_tools.review_artifacts import (
     write_hashed_artifact,
     write_shared_monitor_static_assets,
 )
+from psynetsk_tools.review_html import render_evidence_section
 from psynetsk_tools.review_model import (
     CompletenessItem,
     ReviewFile,
+    ReviewEvidenceView,
     classify_review_evidence,
     screenshot_caption,
 )
@@ -221,6 +223,8 @@ class Attempt:
     code_files: list[AttemptFile]
     evidence_files: list[AttemptFile]
     evidence_view: dict[str, object]
+    evidence_html: str
+    review_sections: list[dict[str, object]]
 
 
 @dataclass(frozen=True)
@@ -545,10 +549,9 @@ def completeness_item_data(item: CompletenessItem) -> dict[str, object]:
     }
 
 
-def evidence_view_data(evidence_files: list[AttemptFile]) -> dict[str, object]:
+def evidence_view_data(view: ReviewEvidenceView) -> dict[str, object]:
     """Return dashboard-ready shared evidence classification data."""
 
-    view = classify_review_evidence(evidence_files)
     return {
         "participant_video": review_file_data(view.participant_video),
         "screenshots": [
@@ -582,6 +585,171 @@ def evidence_view_data(evidence_files: list[AttemptFile]) -> dict[str, object]:
             for item in view.completeness
         ],
     }
+
+
+def dashboard_artifact_url(url: str) -> str:
+    """Return an artifact URL that works from nested dashboard pages."""
+
+    if not url or url.startswith(("http://", "https://", "/")):
+        return url
+    return f"/{url.lstrip('/')}"
+
+
+def attempt_evidence_completeness(
+    *,
+    challenge_files: list[AttemptFile],
+    has_plan: bool,
+    has_timeline: bool,
+    has_experiment: bool,
+) -> list[CompletenessItem]:
+    """Return attempt-level completeness rows for the shared evidence section."""
+
+    return [
+        CompletenessItem(
+            "challenge",
+            "challenge/",
+            True,
+            f"{len(challenge_files)} file{'s' if len(challenge_files) != 1 else ''}",
+        ),
+        CompletenessItem("agent_json", "agent.json", True, "metadata captured"),
+        CompletenessItem("plan", "PLAN.md", has_plan, "present" if has_plan else "missing"),
+        CompletenessItem(
+            "timeline",
+            "TIMELINE.md",
+            has_timeline,
+            "present" if has_timeline else "missing",
+        ),
+        CompletenessItem(
+            "experiment",
+            "code/experiment.py",
+            has_experiment,
+            "present" if has_experiment else "missing",
+        ),
+    ]
+
+
+def markdown_review_section(
+    section_id: str,
+    title: str,
+    content: str,
+    *,
+    path: str = "",
+    display: bool | None = None,
+) -> dict[str, object]:
+    """Return a review section for markdown-like attempt content."""
+
+    section: dict[str, object] = {
+        "id": section_id,
+        "title": title,
+        "kind": "markdown",
+        "content": content,
+        "display": bool(content) if display is None else display,
+    }
+    if path:
+        section["path"] = path
+    return section
+
+
+def attempt_review_sections(
+    *,
+    attempt_path: str,
+    challenge_instructions: str,
+    challenge_criteria: str,
+    plan: str,
+    evaluation: str,
+    learnings: str,
+    timeline: str,
+    timeline_entries: list[TimelineEntry],
+    evidence_html: str,
+    code_files: list[AttemptFile],
+    visible_evidence_files: list[dict[str, object]],
+    challenge_files: list[AttemptFile],
+    agent_json: str,
+) -> list[dict[str, object]]:
+    """Return dashboard-ready review sections for a challenge attempt."""
+
+    challenge_content = challenge_instructions
+    if challenge_criteria:
+        challenge_content = (
+            f"{challenge_content.rstrip()}\n\n"
+            "## Evaluation criteria\n\n"
+            "These criteria are shown for review. The implementing agent was not "
+            "allowed to inspect them before evidence collection.\n\n"
+            f"{challenge_criteria}"
+        )
+    return [
+        markdown_review_section(
+            "challenge",
+            "Challenge",
+            challenge_content,
+            path=f"{attempt_path}/challenge/INSTRUCTIONS.md",
+            display=True,
+        ),
+        markdown_review_section(
+            "plan",
+            "Plan",
+            plan,
+            path=f"{attempt_path}/PLAN.md",
+        ),
+        markdown_review_section(
+            "evaluation",
+            "Evaluation",
+            evaluation,
+            path=f"{attempt_path}/EVALUATION.md",
+            display=True,
+        ),
+        markdown_review_section(
+            "learnings",
+            "Learnings",
+            learnings,
+            path=f"{attempt_path}/LEARNINGS.md",
+        ),
+        {
+            "id": "evidence",
+            "title": "Evidence",
+            "kind": "evidence",
+            "html": evidence_html,
+            "display": True,
+        },
+        {
+            "id": "timeline",
+            "title": "Timeline",
+            "kind": "timeline",
+            "content": timeline,
+            "entries": [asdict(entry) for entry in timeline_entries],
+            "path": f"{attempt_path}/TIMELINE.md",
+            "display": bool(timeline_entries or timeline),
+        },
+        {
+            "id": "code_files",
+            "title": "All code files",
+            "kind": "files",
+            "files": [asdict(file) for file in code_files],
+            "display": True,
+        },
+        {
+            "id": "evidence_files",
+            "title": "All evidence files",
+            "kind": "files",
+            "files": visible_evidence_files,
+            "display": True,
+        },
+        {
+            "id": "agent_metadata",
+            "title": "Agent metadata",
+            "kind": "json",
+            "content": agent_json,
+            "path": f"{attempt_path}/agent.json",
+            "display": True,
+        },
+        {
+            "id": "challenge_snapshot",
+            "title": "Challenge snapshot",
+            "kind": "files",
+            "files": [asdict(file) for file in challenge_files],
+            "display": True,
+        },
+    ]
 
 
 def attempt_artifact_url_prefix(challenge_slug: str, attempt_name: str) -> str:
@@ -641,6 +809,11 @@ def collect_attempts(
             if timeline_file.exists()
             else ""
         )
+        plan = (
+            strip_first_heading(plan_file.read_text(encoding="utf-8"))
+            if plan_file.exists()
+            else ""
+        )
         timeline_entries = parse_timeline_entries(timeline)
         implementation_seconds = implementation_time_seconds(timeline_entries)
         intervention_count = human_intervention_count(timeline_entries)
@@ -695,14 +868,50 @@ def collect_attempts(
                 "evidence",
             ),
         )
+        evidence_view = classify_review_evidence(evidence_files)
+        has_experiment = any(
+            file.path == "experiment.py" or file.path.endswith("/experiment.py")
+            for file in code_files
+        )
+        extra_completeness = attempt_evidence_completeness(
+            challenge_files=challenge_files,
+            has_plan=bool(plan),
+            has_timeline=bool(timeline_entries),
+            has_experiment=has_experiment,
+        )
+        evidence_view_export = evidence_view_data(evidence_view)
+        evidence_html = render_evidence_section(
+            evidence_view,
+            extra_completeness=extra_completeness,
+            include_heading=False,
+            section_id=None,
+            url_transform=dashboard_artifact_url,
+        )
+        attempt_path = f"challenges/{challenge_dir.name}/attempts/{attempt_dir.name}"
+        challenge_instructions = read_challenge_snapshot_instructions(attempt_dir)
+        challenge_criteria = read_challenge_criteria(
+            challenge_dir,
+            attempt_dir,
+        )
+        evaluation = (
+            strip_first_heading(
+                strip_frontmatter(
+                    evaluation_file.read_text(encoding="utf-8")
+                )
+            )
+            if evaluation_file.exists()
+            else ""
+        )
+        visible_evidence_files = [
+            file
+            for file in evidence_view_export["visible_files"]
+            if isinstance(file, dict)
+        ]
         attempts.append(
             Attempt(
                 name=attempt_dir.name,
                 score=score,
-                path=(
-                    f"challenges/{challenge_dir.name}/attempts/"
-                    f"{attempt_dir.name}"
-                ),
+                path=attempt_path,
                 url=f"challenges/{challenge_dir.name}/{attempt_dir.name}/",
                 date_time=attempt_date_time(attempt_dir.name, agent),
                 sort_key=attempt_sort_key(attempt_dir.name, agent),
@@ -712,20 +921,8 @@ def collect_attempts(
                     author_registry,
                 ),
                 agent_json=agent_json,
-                evaluation=(
-                    strip_first_heading(
-                        strip_frontmatter(
-                            evaluation_file.read_text(encoding="utf-8")
-                        )
-                    )
-                    if evaluation_file.exists()
-                    else ""
-                ),
-                plan=(
-                    strip_first_heading(plan_file.read_text(encoding="utf-8"))
-                    if plan_file.exists()
-                    else ""
-                ),
+                evaluation=evaluation,
+                plan=plan,
                 timeline=timeline,
                 timeline_entries=timeline_entries,
                 implementation_time_seconds=implementation_seconds,
@@ -741,17 +938,28 @@ def collect_attempts(
                 learnings=learnings,
                 open_actions=open_actions,
                 evaluation_metadata=evaluation_metadata,
-                challenge_instructions=read_challenge_snapshot_instructions(
-                    attempt_dir,
-                ),
-                challenge_criteria=read_challenge_criteria(
-                    challenge_dir,
-                    attempt_dir,
-                ),
+                challenge_instructions=challenge_instructions,
+                challenge_criteria=challenge_criteria,
                 challenge_files=challenge_files,
                 code_files=code_files,
                 evidence_files=evidence_files,
-                evidence_view=evidence_view_data(evidence_files),
+                evidence_view=evidence_view_export,
+                evidence_html=evidence_html,
+                review_sections=attempt_review_sections(
+                    attempt_path=attempt_path,
+                    challenge_instructions=challenge_instructions,
+                    challenge_criteria=challenge_criteria,
+                    plan=plan,
+                    evaluation=evaluation,
+                    learnings=learnings,
+                    timeline=timeline,
+                    timeline_entries=timeline_entries,
+                    evidence_html=evidence_html,
+                    code_files=code_files,
+                    visible_evidence_files=visible_evidence_files,
+                    challenge_files=challenge_files,
+                    agent_json=agent_json,
+                ),
             )
         )
     return attempts

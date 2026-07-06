@@ -31,7 +31,34 @@ def review_manifest() -> dict[str, object]:
         "environment": {
             "os": "linux",
         },
-        "report": "REPORT.md",
+        "sections": [
+            {
+                "id": "report",
+                "title": "Report",
+                "kind": "markdown",
+                "path": "REPORT.md",
+            },
+            {
+                "id": "evidence",
+                "title": "Evidence",
+                "kind": "evidence",
+            },
+            {
+                "id": "files",
+                "title": "Additional files",
+                "kind": "files",
+            },
+            {
+                "id": "checks",
+                "title": "Checks",
+                "kind": "checks",
+            },
+            {
+                "id": "blockers",
+                "title": "Blockers",
+                "kind": "blockers",
+            },
+        ],
         "artifacts": [
             {
                 "id": "debug_log",
@@ -85,8 +112,27 @@ def review_manifest() -> dict[str, object]:
 
 def test_render_review_site_publishes_sanitized_artifacts(tmp_path: Path) -> None:
     review_dir = tmp_path / "pitch-discrimination-demo" / "review"
-    write(review_dir / "review.json", json.dumps(review_manifest()) + "\n")
-    write(review_dir / "REPORT.md", "# Report\n\nExperiment behaves as expected.\n")
+    manifest = review_manifest()
+    sections = manifest["sections"]
+    assert isinstance(sections, list)
+    sections.insert(
+        1,
+        {
+            "id": "plan",
+            "title": "Plan",
+            "kind": "markdown",
+            "path": "PLAN.md",
+        },
+    )
+    write(review_dir / "review.json", json.dumps(manifest) + "\n")
+    write(
+        review_dir / "REPORT.md",
+        "# Report\n\n"
+        "Experiment **behaves** as expected.\n\n"
+        "- Functional check passed\n\n"
+        "<script>bad()</script>\n",
+    )
+    write(review_dir / "PLAN.md", "# Plan\n\nUse a chain trial maker.\n")
     write(
         review_dir / "artifacts/psynet_debug.log",
         "Dashboard user: admin password: local-password\n",
@@ -102,11 +148,23 @@ def test_render_review_site_publishes_sanitized_artifacts(tmp_path: Path) -> Non
     site_dir = render_review_site(review_dir)
 
     index = (site_dir / "index.html").read_text(encoding="utf-8")
+    assert '<link rel="stylesheet" href="static/css/review-bundle.css">' in index
+    assert '<body class="attempt-page">' in index
+    assert 'class="attempt-layout"' in index
     assert "Pitch Discrimination Demo" in index
-    assert "Experiment behaves as expected." in index
+    assert "<h1>Report</h1>" in index
+    assert "Experiment <strong>behaves</strong> as expected." in index
+    assert "<li>Functional check passed</li>" in index
+    assert "<script>bad()</script>" not in index
+    assert '<details id="plan" class="attempt-panel plan-panel" open>' in index
+    assert "<h1>Plan</h1>" in index
+    assert "Use a chain trial maker." in index
     assert "psynet test local" in index
     assert "No simulated export has been produced yet." in index
-    assert index.count("Open artifact") == 2
+    assert index.count('class="attempt-file"') >= 2
+    assert '<summary class="file-header"><h3><code>artifacts/psynet_debug.log</code></h3>' in index
+    assert '<pre class="file-preview"><code>Dashboard user: admin password: [REDACTED]' in index
+    assert '<summary class="file-header"><h3><code>artifacts/monitor.html</code></h3>' in index
 
     published_files = sorted((site_dir / "static/artifacts/blobs/sha256").glob("**/*"))
     published_text = "\n".join(
@@ -122,6 +180,7 @@ def test_render_review_site_publishes_sanitized_artifacts(tmp_path: Path) -> Non
         site_dir
         / "static/artifacts/monitor-static/vis@4.17.0/dist/vis.min.js"
     ).exists()
+    assert (site_dir / "static/css/review-bundle.css").exists()
 
 
 def test_render_review_site_renders_evidence_view(tmp_path: Path) -> None:
@@ -150,6 +209,16 @@ def test_render_review_site_renders_evidence_view(tmp_path: Path) -> None:
                 "path": "artifacts/screenshots/01-intro.png",
                 "title": "Intro screenshot",
                 "description": "Intro screen.",
+                "required": False,
+                "status": "present",
+                "created_by": "agent",
+            },
+            {
+                "id": "screenshot_second",
+                "kind": "screenshot",
+                "path": "artifacts/screenshots/02-trial.png",
+                "title": "Trial screenshot",
+                "description": "Trial screen.",
                 "required": False,
                 "status": "present",
                 "created_by": "agent",
@@ -194,6 +263,16 @@ def test_render_review_site_renders_evidence_view(tmp_path: Path) -> None:
                 "status": "present",
                 "created_by": "agent",
             },
+            {
+                "id": "experiment_source",
+                "kind": "source",
+                "path": "artifacts/source/experiment.py",
+                "title": "Experiment source",
+                "description": "Main experiment source.",
+                "required": False,
+                "status": "present",
+                "created_by": "agent",
+            },
         ]
     )
     manifest["blockers"] = []
@@ -203,9 +282,17 @@ def test_render_review_site_renders_evidence_view(tmp_path: Path) -> None:
     write(review_dir / "artifacts/monitor.html", "<html><head></head><body></body></html>")
     write_bytes(review_dir / "artifacts/participant.mp4", b"video bytes")
     write_bytes(review_dir / "artifacts/screenshots/01-intro.png", b"png bytes")
+    write_bytes(review_dir / "artifacts/screenshots/02-trial.png", b"png bytes 2")
     write(
         review_dir / "artifacts/screenshots/manifest.json",
-        json.dumps({"captions": {"screenshots/01-intro.png": "Intro screen"}}),
+        json.dumps(
+            {
+                "captions": {
+                    "screenshots/01-intro.png": "Intro screen",
+                    "screenshots/02-trial.png": "Trial screen",
+                }
+            }
+        ),
     )
     write(
         review_dir / "artifacts/performance.json",
@@ -229,6 +316,7 @@ def test_render_review_site_renders_evidence_view(tmp_path: Path) -> None:
     )
     write_bytes(review_dir / "artifacts/data.zip", b"data")
     write_bytes(review_dir / "artifacts/simulated_data.zip", b"simulated")
+    write(review_dir / "artifacts/source/experiment.py", "print('hello')\n")
     write(review_dir / "analyses/analysis.ipynb", json.dumps({"cells": []}))
 
     site_dir = render_review_site(review_dir)
@@ -237,13 +325,20 @@ def test_render_review_site_renders_evidence_view(tmp_path: Path) -> None:
     assert "<video" in index
     assert "Screenshot walkthrough" in index
     assert "Intro screen" in index
+    assert "Trial screen" in index
+    assert 'data-screenshot-counter>1 / 2</span>' in index
     assert "Performance test result" in index
     assert "<td>4</td>" in index
     assert "<td>3</td>" in index
     assert "Download data export" in index
     assert "simulated_data.zip" in index
+    assert "<h3><code>artifacts/data.zip</code></h3>" in index
+    assert "Preview is not available." in index
+    assert "<h3><code>artifacts/source/experiment.py</code></h3>" in index
+    assert '<div class="file-preview code-preview">' in index
+    assert "print" in index
     assert "participant.mp4 <span>present</span>" in index
-    assert "screenshots/ <span>1 image</span>" in index
+    assert "screenshots/ <span>2 images</span>" in index
 
 
 def write_valid_review(review_dir: Path) -> None:
@@ -299,6 +394,29 @@ def test_validate_review_fails_when_required_artifact_lacks_blocker(
     assert any("required artifact must be present" in problem for problem in problems)
 
 
+def test_validate_review_fails_when_markdown_section_path_is_missing(tmp_path: Path) -> None:
+    review_dir = tmp_path / "review"
+    manifest = review_manifest()
+    sections = manifest["sections"]
+    assert isinstance(sections, list)
+    sections.append(
+        {
+            "id": "plan",
+            "title": "Plan",
+            "kind": "markdown",
+            "path": "PLAN.md",
+        },
+    )
+    write(review_dir / "review.json", json.dumps(manifest) + "\n")
+    write(review_dir / "REPORT.md", "# Report\n")
+    write(review_dir / "artifacts/psynet_debug.log", "ok\n")
+    write(review_dir / "artifacts/monitor.html", "<html><head></head><body></body></html>")
+
+    problems = validate_review(review_dir)
+
+    assert any("section file is missing" in problem for problem in problems)
+
+
 def test_validate_review_fails_for_invalid_notebook_json(tmp_path: Path) -> None:
     review_dir = tmp_path / "review"
     manifest = review_manifest()
@@ -330,7 +448,7 @@ def test_validate_review_cli_exits_nonzero_on_problems(
         main(["validate", str(review_dir)])
 
     assert exc_info.value.code == 1
-    assert "report file is missing" in capsys.readouterr().out
+    assert "section file is missing" in capsys.readouterr().out
 
 
 def test_init_review_creates_starter_structure_and_manifest(tmp_path: Path) -> None:
@@ -340,14 +458,27 @@ def test_init_review_creates_starter_structure_and_manifest(tmp_path: Path) -> N
 
     assert (review_dir / "review.json").exists()
     assert (review_dir / "REPORT.md").exists()
+    assert (review_dir / "PROMPT.md").exists()
+    assert (review_dir / "PLAN.md").exists()
+    assert (review_dir / "TIMELINE.md").exists()
     assert (review_dir / "artifacts/screenshots").is_dir()
     assert (review_dir / "analyses").is_dir()
     assert (review_dir / "logs").is_dir()
     manifest = json.loads((review_dir / "review.json").read_text(encoding="utf-8"))
     assert "title" not in manifest["experiment"]
     assert manifest["experiment"]["source_path"] == "."
-    assert manifest["artifacts"][0]["id"] == "review_report"
-    assert manifest["artifacts"][0]["status"] == "present"
+    assert [section["id"] for section in manifest["sections"]] == [
+        "prompt",
+        "plan",
+        "timeline",
+        "report",
+        "evidence",
+        "files",
+        "checks",
+        "blockers",
+    ]
+    assert manifest["artifacts"][0]["id"] == "participant_video"
+    assert manifest["artifacts"][0]["status"] == "blocked"
     assert {
         blocker["artifact_id"]
         for blocker in manifest["blockers"]
@@ -370,8 +501,8 @@ def test_init_review_cli_prints_next_steps(
     main(["init", str(review_dir), "--source-path", "../experiment"])
 
     out = capsys.readouterr().out
-    assert "Initialized review directory" in out
-    assert f"psynet-review validate {review_dir}" in out
+    assert "Initialized review bundle directory" in out
+    assert f"psynet-review-bundle validate {review_dir}" in out
     manifest = json.loads((review_dir / "review.json").read_text(encoding="utf-8"))
     assert manifest["experiment"]["source_path"] == "../experiment"
 
