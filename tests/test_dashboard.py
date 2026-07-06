@@ -1451,7 +1451,7 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
     assert 'data-screenshot-gallery' in evidence_html
     assert 'href="/artifacts/blobs/sha256/' in evidence_html
     assert "Screenshot walkthrough" in evidence_html
-    assert "Download simulated data" in evidence_html
+    assert "Simulated data export not published" in evidence_html
     assert "code/experiment.py <span>missing</span>" in evidence_html
     participant_blob = (
         tmp_path / "dashboard/static" / evidence_by_path["participant.mp4"]["url"]

@@ -14,6 +14,18 @@ def file(path: str, content: str | None = "") -> ReviewFile:
     )
 
 
+def unpublished_file(path: str) -> ReviewFile:
+    return ReviewFile(
+        path=path,
+        url="",
+        content=None,
+        size_bytes=10,
+        kind=path.rsplit(".", 1)[-1] if "." in path else "file",
+        published=False,
+        publication_note="Excluded from publication.",
+    )
+
+
 def test_render_evidence_section_uses_shared_dashboard_markup() -> None:
     view = classify_review_evidence(
         [
@@ -86,3 +98,18 @@ def test_render_evidence_section_uses_shared_dashboard_markup() -> None:
     assert "<td>0.123</td>" in html
     assert "<td>3</td>" in html
     assert "PLAN.md <span>present</span>" in html
+
+
+def test_render_evidence_section_marks_unpublished_actions_without_empty_links() -> None:
+    view = classify_review_evidence(
+        [
+            unpublished_file("simulated_data.zip"),
+            unpublished_file("analyses/summary.html"),
+        ]
+    )
+
+    html = render_evidence_section(view, include_heading=False, section_id=None)
+
+    assert "Simulated data export not published" in html
+    assert "Analysis summary not published" in html
+    assert 'href=""' not in html

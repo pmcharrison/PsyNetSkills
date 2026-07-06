@@ -164,6 +164,12 @@ def evidence_action_item(
 
     if file is None:
         return f'<li><span class="missing-artifact">{html.escape(missing_label)} missing</span></li>'
+    if not file.url:
+        detail = file.publication_note or "artifact file is not published"
+        return (
+            f'<li><span class="missing-artifact" title="{html.escape(detail, quote=True)}">'
+            f"{html.escape(missing_label)} not published</span></li>"
+        )
     return f'<li><a href="{escape_url(file.url, url_transform)}">{html.escape(action)}</a></li>'
 
 
@@ -177,6 +183,12 @@ def analysis_action_item(
     if evidence.has_analysis_notebook:
         return '<li><a href="#analysis-notebook">View analysis notebook</a></li>'
     if analysis_file is not None:
+        if not analysis_file.url:
+            detail = analysis_file.publication_note or "artifact file is not published"
+            return (
+                '<li><span class="missing-artifact" '
+                f'title="{html.escape(detail, quote=True)}">Analysis summary not published</span></li>'
+            )
         return (
             f'<li><a href="{escape_url(analysis_file.url, url_transform)}">'
             "View analysis artifact</a></li>"
