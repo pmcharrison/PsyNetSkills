@@ -11,9 +11,9 @@ combines source artifacts, generated dashboard inputs, and validation tooling.
 challenges/      Challenge definitions, criteria, references, and attempts.
 dashboard/       Hugo site layouts, content mount, static CSS, and generated inputs.
 docs/            Detailed repository specifications for contributors and agents.
-examples/        Example review manifests and other lightweight fixtures.
+examples/        Example review bundle manifests and other lightweight fixtures.
 psynetsk_tools/  Python validation and dashboard export tools.
-schemas/         Draft machine-readable schemas for portable review artifacts.
+schemas/         Draft machine-readable schemas for portable review bundle artifacts.
 tests/           Pytest coverage for repository tooling.
 public/          Generated Hugo output, ignored by default.
 ```

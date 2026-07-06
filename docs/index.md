@@ -8,10 +8,8 @@ specifications for contributors and agents.
 - `challenges.md` describes challenge format and authoring guidance.
 - `attempts.md` describes attempt structure, evidence, timelines, evaluations,
   learnings, and credential policy.
-- `review.md` drafts the standalone PsyNet experiment review folder, manifest,
+- `review.md` drafts the standalone PsyNet experiment review bundle, manifest,
   and CLI contract.
-- `review-specification.md` describes the artifact-producing workflow for
-  standalone experiment reviews.
 - `authors.md` describes the central author registry and attribution workflow.
 - `architecture.md` describes the repository layout and dashboard data flow.
 - `dashboard.md` describes static-site export, builds, and previews.

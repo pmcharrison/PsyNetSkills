@@ -89,7 +89,7 @@
       "id": "review_report",
       "kind": "report",
       "path": "REPORT.md",
-      "title": "Review report",
+      "title": "Review bundle report",
       "description": "Summary of implementation, validation, analysis, and remaining issues.",
       "required": true,
       "status": "present",
@@ -101,7 +101,7 @@
       "id": "manifest_valid",
       "title": "Manifest validates against schema",
       "status": "pass",
-      "command": "psynet-review validate"
+      "command": "psynet-review-bundle validate"
     },
     {
       "id": "local_test",
@@ -119,6 +119,6 @@
   "blockers": [],
   "render": {
     "site_path": "site",
-    "generator": "psynet-review"
+    "generator": "psynet-review-bundle"
   }
 }

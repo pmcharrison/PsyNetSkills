@@ -1,4 +1,4 @@
-"""Render standalone PsyNet experiment reviews."""
+"""Render standalone PsyNet experiment review bundles."""
 
 from __future__ import annotations
 
@@ -69,14 +69,15 @@ ARTIFACT_CREATORS = {"agent", "cli", "manual", "unknown"}
 BLOCKER_SEVERITIES = {"warning", "error"}
 CHECK_STATUSES = {"pass", "fail", "warning", "not_run"}
 MAX_REVIEW_NOTEBOOK_BYTES = 100_000
-STARTER_REPORT = """# Review report
+CLI_NAME = "psynet-review-bundle"
+STARTER_REPORT = """# Review bundle report
 
 Summarize the implementation, validation, analysis, and any unresolved issues.
 """
 
 
 def read_review_manifest(review_dir: Path) -> dict[str, Any]:
-    """Read the review manifest from a review directory."""
+    """Read the review bundle manifest from a review bundle directory."""
 
     manifest_path = review_dir / "review.json"
     with manifest_path.open(encoding="utf-8") as file:
@@ -91,11 +92,11 @@ def display_title_from_path(review_dir: Path) -> str:
 
     source = review_dir.parent if review_dir.name == "review" else review_dir
     normalized = re.sub(r"[-_]+", " ", source.name).strip()
-    return normalized.title() if normalized else "Experiment Review"
+    return normalized.title() if normalized else "Experiment Review Bundle"
 
 
 def review_display_title(review_dir: Path, manifest: dict[str, Any]) -> str:
-    """Return the display title for a review."""
+    """Return the display title for a review bundle."""
 
     experiment = manifest.get("experiment")
     if isinstance(experiment, dict):
@@ -148,7 +149,7 @@ def starter_blocker(artifact_id: str, reason: str, next_step: str) -> dict[str, 
 
 
 def starter_review_manifest(source_path: str) -> dict[str, object]:
-    """Create a starter review manifest."""
+    """Create a starter review bundle manifest."""
 
     timestamp = utc_timestamp()
     return {
@@ -171,7 +172,7 @@ def starter_review_manifest(source_path: str) -> dict[str, object]:
                 "review_report",
                 "report",
                 "REPORT.md",
-                "Review report",
+                "Review bundle report",
                 "Summary of implementation, validation, analysis, and remaining issues.",
                 required=True,
                 status="present",
@@ -262,13 +263,13 @@ def starter_review_manifest(source_path: str) -> dict[str, object]:
         ],
         "render": {
             "site_path": "site",
-            "generator": "psynet-review",
+            "generator": CLI_NAME,
         },
     }
 
 
 def init_review(review_dir: Path, source_path: str = ".", force: bool = False) -> None:
-    """Create a starter review directory."""
+    """Create a starter review bundle directory."""
 
     manifest_path = review_dir / "review.json"
     if manifest_path.exists() and not force:
@@ -295,19 +296,19 @@ def relative_review_path(
     path_text: object,
     label: str,
 ) -> tuple[Path | None, list[str]]:
-    """Resolve a manifest path and ensure it stays inside the review directory."""
+    """Resolve a manifest path and ensure it stays inside the bundle directory."""
 
     if not isinstance(path_text, str) or not path_text:
         return None, [f"{label}: path must be a non-empty string"]
 
     relative_path = Path(path_text)
     if relative_path.is_absolute():
-        return None, [f"{label}: path must be relative to the review directory"]
+        return None, [f"{label}: path must be relative to the review bundle directory"]
 
     review_root = review_dir.resolve()
     resolved_path = (review_dir / relative_path).resolve()
     if not resolved_path.is_relative_to(review_root):
-        return None, [f"{label}: path must stay inside the review directory"]
+        return None, [f"{label}: path must stay inside the review bundle directory"]
     return resolved_path, []
 
 
@@ -365,7 +366,7 @@ def validate_review_blockers(
 
 
 def validate_review_checks(review_dir: Path, manifest: dict[str, Any]) -> list[str]:
-    """Validate check records in a review manifest."""
+    """Validate check records in a review bundle manifest."""
 
     checks = manifest.get("checks")
     if not isinstance(checks, list):
@@ -467,7 +468,7 @@ def validate_review_artifacts(
 
 
 def validate_review_manifest(review_dir: Path, manifest: dict[str, Any]) -> list[str]:
-    """Validate review manifest structure and local artifact files."""
+    """Validate review bundle manifest structure and local artifact files."""
 
     problems: list[str] = []
     manifest_path = review_dir / "review.json"
@@ -519,11 +520,11 @@ def validate_review_manifest(review_dir: Path, manifest: dict[str, Any]) -> list
 
 
 def validate_review(review_dir: Path) -> list[str]:
-    """Validate a standalone review directory."""
+    """Validate a standalone review bundle directory."""
 
     manifest_path = review_dir / "review.json"
     if not manifest_path.exists():
-        return [f"{manifest_path}: missing review manifest"]
+        return [f"{manifest_path}: missing review bundle manifest"]
     try:
         manifest = read_review_manifest(review_dir)
     except json.JSONDecodeError as exc:
@@ -653,7 +654,7 @@ def render_blockers(manifest: dict[str, Any]) -> str:
 
 
 def render_review_site(review_dir: Path, site_dir: Path | None = None) -> Path:
-    """Render a standalone static review site."""
+    """Render a standalone static review bundle site."""
 
     manifest = read_review_manifest(review_dir)
     if site_dir is None:
@@ -720,7 +721,7 @@ def render_review_site(review_dir: Path, site_dir: Path | None = None) -> Path:
 <body>
   <main>
     <header>
-      <p>Experiment review</p>
+      <p>Experiment review bundle</p>
       <h1>{html.escape(title)}</h1>
       <p>{html.escape(summary)}</p>
     </header>
@@ -781,19 +782,19 @@ def build_parser() -> argparse.ArgumentParser:
     subparsers = parser.add_subparsers(dest="command", required=True)
     init_parser = subparsers.add_parser(
         "init",
-        help="create a starter review directory",
+        help="create a starter review bundle directory",
     )
     init_parser.add_argument(
         "review_dir",
         nargs="?",
         default="review",
         type=Path,
-        help="review directory to create",
+        help="review bundle directory to create",
     )
     init_parser.add_argument(
         "--source-path",
         default=".",
-        help="experiment source path, relative to the review directory",
+        help="experiment source path, relative to the review bundle directory",
     )
     init_parser.add_argument(
         "--force",
@@ -802,22 +803,25 @@ def build_parser() -> argparse.ArgumentParser:
     )
     validate_parser = subparsers.add_parser(
         "validate",
-        help="validate a review directory",
+        help="validate a review bundle directory",
     )
     validate_parser.add_argument(
         "review_dir",
         nargs="?",
         default="review",
         type=Path,
-        help="review directory containing review.json",
+        help="review bundle directory containing review.json",
     )
-    render_parser = subparsers.add_parser("render", help="render a static review site")
+    render_parser = subparsers.add_parser(
+        "render",
+        help="render a static review bundle site",
+    )
     render_parser.add_argument(
         "review_dir",
         nargs="?",
         default="review",
         type=Path,
-        help="review directory containing review.json",
+        help="review bundle directory containing review.json",
     )
     render_parser.add_argument(
         "--output",
@@ -828,7 +832,7 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def main(argv: list[str] | None = None) -> None:
-    """Run the psynet-review command."""
+    """Run the review bundle command."""
 
     parser = build_parser()
     args = parser.parse_args(argv)
@@ -838,19 +842,19 @@ def main(argv: list[str] | None = None) -> None:
         except FileExistsError as exc:
             print(exc)
             raise SystemExit(1) from exc
-        print(f"Initialized review directory: {args.review_dir}")
-        print(f"Next: psynet-review validate {args.review_dir}")
-        print(f"Next: psynet-review render {args.review_dir}")
+        print(f"Initialized review bundle directory: {args.review_dir}")
+        print(f"Next: {CLI_NAME} validate {args.review_dir}")
+        print(f"Next: {CLI_NAME} render {args.review_dir}")
     elif args.command == "validate":
         problems = validate_review(args.review_dir)
         if problems:
             for problem in problems:
                 print(problem)
             raise SystemExit(1)
-        print(f"Review validation passed: {args.review_dir}")
+        print(f"Review bundle validation passed: {args.review_dir}")
     elif args.command == "render":
         site_dir = render_review_site(args.review_dir, args.output)
-        print(f"Rendered review site to {site_dir}")
+        print(f"Rendered review bundle site to {site_dir}")
 
 
 if __name__ == "__main__":

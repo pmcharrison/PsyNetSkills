@@ -44,7 +44,7 @@ TEXT_ARTIFACT_EXTENSIONS = {
 
 @dataclass(frozen=True)
 class ArtifactPublication:
-    """Publication metadata for a review artifact."""
+    """Publication metadata for a review bundle artifact."""
 
     url: str
     published: bool = True

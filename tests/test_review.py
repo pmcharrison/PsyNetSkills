@@ -370,8 +370,8 @@ def test_init_review_cli_prints_next_steps(
     main(["init", str(review_dir), "--source-path", "../experiment"])
 
     out = capsys.readouterr().out
-    assert "Initialized review directory" in out
-    assert f"psynet-review validate {review_dir}" in out
+    assert "Initialized review bundle directory" in out
+    assert f"psynet-review-bundle validate {review_dir}" in out
     manifest = json.loads((review_dir / "review.json").read_text(encoding="utf-8"))
     assert manifest["experiment"]["source_path"] == "../experiment"
 

@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://pmcharrison.github.io/PsyNetSkills/schemas/review.schema.json",
-  "title": "PsyNet experiment review manifest",
+  "title": "PsyNet experiment review bundle manifest",
   "type": "object",
   "additionalProperties": false,
   "required": [

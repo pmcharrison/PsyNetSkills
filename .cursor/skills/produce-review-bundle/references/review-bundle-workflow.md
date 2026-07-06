@@ -1,7 +1,7 @@
-# Standalone experiment review specification
+# Review bundle workflow
 
-This specification describes how to produce a portable `review/` folder for a
-standalone PsyNet experiment. The folder is a review artifact, not an experiment
+This reference describes how to produce a portable `review/` folder for a
+standalone PsyNet experiment. The bundle is a review artifact, not an experiment
 runner: it records what was implemented, which validation commands ran, which
 evidence files exist, and what remains blocked.
 
@@ -9,12 +9,12 @@ Use this workflow when an experiment is not part of a PsyNetSkills challenge
 attempt but still needs enough structure for a reviewer to inspect participant
 flow, exported data, analysis, and technical readiness.
 
-## Review folder contract
+## Bundle contract
 
-Create the review folder with:
+Create the bundle with:
 
 ```bash
-psynet-review init
+psynet-review-bundle init
 ```
 
 The command creates the conventional structure:
@@ -37,8 +37,8 @@ only a render target and should normally stay out of version control.
 After each material change, run:
 
 ```bash
-psynet-review validate
-psynet-review render
+psynet-review-bundle validate
+psynet-review-bundle render
 ```
 
 Validation checks structure and internal consistency. Rendering should never be
@@ -47,7 +47,7 @@ blockers in `review.json`.
 
 ## Required review questions
 
-The completed folder should let a reviewer answer:
+The completed bundle should let a reviewer answer:
 
 1. What experiment was implemented?
 2. What commands, scripts, or manual procedures validated it?
@@ -73,8 +73,8 @@ has no participant UI. Good options include:
   representative trials, validation errors, feedback, and completion.
 - `artifacts/screenshots/manifest.json`: optional screenshot captions.
 
-Keep participant-flow scripts with the experiment source, not only in the review
-folder. For Playwright-based checks, make the script assert the behavior that
+Keep participant-flow scripts with the experiment source, not only in the
+bundle. For Playwright-based checks, make the script assert the behavior that
 the screenshots or recording show.
 
 ### Local test and simulation evidence
@@ -130,7 +130,7 @@ the artifact as not applicable with a clear reason.
 Place the main analysis under `analyses/`, conventionally
 `analyses/analysis.ipynb`. The notebook or equivalent analysis should:
 
-- Read exported files directly from the review folder.
+- Read exported files directly from the bundle.
 - Show data-loading and data-cleaning code.
 - Display summary tables or plots relevant to the experiment.
 - Include a short interpretation that distinguishes validation evidence from
@@ -143,7 +143,7 @@ it with `kind: "other"` or a more specific existing kind.
 
 Use `logs/` for concise command logs that explain what ran or why a step failed.
 Do not commit real credentials, API tokens, or production secrets. If a log
-contains unsafe values, redact it before adding it to the review folder.
+contains unsafe values, redact it before adding it to the bundle.
 
 ## Updating `review.json`
 
@@ -182,7 +182,7 @@ Example:
 }
 ```
 
-Do not convert a failed or skipped check into a passing check. A complete review
+Do not convert a failed or skipped check into a passing check. A complete bundle
 can include blockers, but it must not imply that blocked work succeeded.
 
 ## Writing `REPORT.md`
@@ -201,16 +201,16 @@ Avoid broad claims such as "fully validated" unless every required artifact and
 check is present. Prefer concrete statements like "local functional test passed"
 or "performance evidence is blocked by missing Redis."
 
-## Rendering and review handoff
+## Rendering and handoff
 
 Before handoff, run:
 
 ```bash
-psynet-review validate
-psynet-review render
+psynet-review-bundle validate
+psynet-review-bundle render
 ```
 
-If the review is being inspected in Cursor Cloud, prefer hosting a live preview
+If the bundle is being inspected in Cursor Cloud, prefer hosting a live preview
 of the rendered site and sharing a temporary tunnel link. A zip archive or PR
 diff can supplement the live preview, but the manifest and report remain the
 source of truth.
@@ -223,5 +223,5 @@ custom code.
 
 Prefer manifest fields and a small optional `review/style.css` for future
 customization before introducing custom templates. Keep the common review UI
-stable enough that standalone reviews and dashboard attempt reviews can share
+stable enough that standalone bundles and dashboard attempt reviews can share
 the same evidence renderer.
