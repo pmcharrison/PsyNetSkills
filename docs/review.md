@@ -179,19 +179,15 @@ CLI.
 
 ## Planned next steps
 
-The shared renderer now keeps Hugo responsible for the full workshop dashboard,
-routing, navigation, and surrounding page layout, while Python owns the
-review-specific evidence UI used by both standalone review bundles and challenge
-attempts.
+The current follow-up plan lives in `docs/review-bundle-next-steps.md`. In
+brief, the next implementation should make Hugo attempt pages consume the same
+optional `review_sections` model that standalone review bundles use. Hugo should
+keep responsibility for routing, global navigation, comments, and surrounding
+layout, while Python owns review-specific section HTML.
 
-Useful follow-up work includes:
-
-- Improve standalone report rendering beyond escaped preformatted Markdown.
-- Add notebook preview parity for markdown, code, text/plain, HTML, and SVG
-  outputs where safe.
-- Decide whether `psynet-review-bundle` should remain in `psynetsk_tools`, move
-  into PsyNet itself, or become a small standalone package once the workflow
-  stabilizes.
+Later, decide whether `psynet-review-bundle` should remain in `psynetsk_tools`,
+move into PsyNet itself, or become a small standalone package once the workflow
+stabilizes.
 
 The `produce-review-bundle` skill owns the judgment-heavy workflow around the
 CLI contract. It tells agents when to initialize `review/`, how to choose
