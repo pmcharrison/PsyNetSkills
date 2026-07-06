@@ -25,6 +25,9 @@ Use this layout for a complete review bundle:
 ```text
 review/
 review.json
+PROMPT.md
+PLAN.md
+TIMELINE.md
 REPORT.md
 artifacts/
   participant.mp4
@@ -43,8 +46,9 @@ site/
 checks, and blockers. The source files remain the durable artifacts; the
 manifest explains how they should be interpreted.
 
-`REPORT.md` is the human-readable summary of the implementation, simulation,
-analysis, validation, and unresolved issues.
+`PROMPT.md`, `PLAN.md`, `TIMELINE.md`, and `REPORT.md` are default Markdown
+context sections. Agents can remove a file and its section entry from
+`review.json` when it is not relevant.
 
 `artifacts/` contains participant-facing media and technical outputs.
 `analyses/` contains the executed analysis notebook or equivalent analysis
@@ -63,10 +67,11 @@ The manifest records:
 - `experiment`: source path, optional slug, git commit, PsyNet version, and
   optional entry point. The rendered display title is inferred from the review
   folder location unless `experiment.title` is explicitly provided.
-- `implementation`: short implementation description and optional plan path.
+- `implementation`: short implementation description and optional notes.
 - `environment`: operating system, Python version, PsyNet checkout, and local
   services used.
-- `report`: path to `REPORT.md`.
+- `sections`: ordered, optional display sections such as prompt, plan, timeline,
+  report, evidence, files, checks, and blockers.
 - `artifacts`: typed artifact records.
 - `checks`: validation results.
 - `blockers`: explicit missing, failed, or incomplete work.
@@ -83,13 +88,22 @@ Required artifacts should either have `status: "present"` and an existing path,
 or a blocker that explains what was attempted, what failed, and the next step.
 Missing artifacts should never be presented as passing checks.
 
+Section records use:
+
+- `id`: stable lowercase snake-case section ID.
+- `title`: displayed heading.
+- `kind`: `markdown`, `evidence`, `files`, `checks`, or `blockers`.
+- `path`: required for `markdown` sections.
+- `display`: optional boolean. Set to `false` to keep a section in the manifest
+  without showing it by default.
+
 ## CLI surface
 
 The first implemented commands are:
 
 - `psynet-review-bundle init`, which creates a starter `review/` folder,
-  `review.json`, `REPORT.md`, artifact directories, analysis directory, and logs
-  directory.
+  `review.json`, default Markdown section files, artifact directories, analysis
+  directory, and logs directory.
 - `psynet-review-bundle validate`, which checks `review/review.json`, required
   artifact paths, blocker coverage, report presence, video limits, and notebook
   JSON readiness.
@@ -99,8 +113,8 @@ The first implemented commands are:
 
 The intended CLI surface is:
 
-- `psynet-review-bundle init`: create `review/`, `review.json`, `REPORT.md`, and
-  ignored output directories.
+- `psynet-review-bundle init`: create `review/`, `review.json`, default section
+  files, and ignored output directories.
 - `psynet-review-bundle validate`: validate `review.json`, required paths, video
   limits, notebook JSON, and blocker coverage.
 - `psynet-review-bundle render`: build `review/site/` as a self-contained static
@@ -125,8 +139,7 @@ Artifact collection is intentionally not part of the core CLI contract. Agents
 should be free to run the experiment, debug failures, adjust commands, choose
 meaningful screenshots, and document blockers using whatever workflow is
 appropriate for the experiment. The review bundle contract is the resulting
-folder: artifacts, `review.json`, `REPORT.md`, blockers, validation, and
-rendering.
+folder: sections, artifacts, `review.json`, blockers, validation, and rendering.
 
 ## Current implementation
 
@@ -160,8 +173,9 @@ The implementation also shares several pieces with the PsyNetSkills dashboard:
 
 The artifact-producing workflow is specified in the
 `produce-review-bundle` skill. That skill describes how agents should
-initialize `review/`, collect evidence, update `review.json`, write `REPORT.md`,
-and document blockers without hard-coding artifact collection into the CLI.
+initialize `review/`, collect evidence, update `review.json`, write section
+files, and document blockers without hard-coding artifact collection into the
+CLI.
 
 ## Planned next steps
 
@@ -182,7 +196,7 @@ Useful follow-up work includes:
 The `produce-review-bundle` skill owns the judgment-heavy workflow around the
 CLI contract. It tells agents when to initialize `review/`, how to choose
 meaningful screenshots, when video evidence is worth recording, how to keep
-participant-flow scripts with the experiment source, how to write `REPORT.md`,
+participant-flow scripts with the experiment source, how to write section files,
 and how to describe missing evidence without implying that skipped checks
 passed. The skill uses the CLI as the formal contract (`init`, `validate`, and
 `render`), but leaves experiment-specific decisions such as what participant

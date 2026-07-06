@@ -29,8 +29,8 @@ collection is judgment-heavy and experiment-specific.
 1. Initialize or inspect the bundle with `psynet-review-bundle init`.
 2. Collect evidence using experiment-appropriate commands and scripts.
 3. Update `review/review.json` after each artifact changes.
-4. Write `review/REPORT.md` with what was implemented, what ran, what evidence
-   exists, and what remains blocked.
+4. Write or prune the default section files (`PROMPT.md`, `PLAN.md`,
+   `TIMELINE.md`, and `REPORT.md`) so the bundle shows the context that matters.
 5. Run `psynet-review-bundle validate` and fix structural problems.
 6. Run `psynet-review-bundle render` and share a live preview link when
    reviewing in Cursor Cloud.
@@ -42,6 +42,9 @@ The conventional bundle structure is:
 ```text
 review/
   review.json
+  PROMPT.md
+  PLAN.md
+  TIMELINE.md
   REPORT.md
   artifacts/
     screenshots/
@@ -49,10 +52,10 @@ review/
   logs/
 ```
 
-`review.json` is the machine-readable manifest. `REPORT.md` is the
-human-readable review summary. `artifacts/`, `analyses/`, and `logs/` contain
-the source files that reviewers should inspect. Generated `review/site/` output
-is only a render target and should normally stay out of version control.
+`review.json` is the machine-readable manifest. Markdown section files provide
+review context. `artifacts/`, `analyses/`, and `logs/` contain the source files
+that reviewers should inspect. Generated `review/site/` output is only a render
+target and should normally stay out of version control.
 
 Validation checks structure and internal consistency. Rendering should never be
 used to hide missing work: incomplete required artifacts must be represented by
@@ -75,6 +78,19 @@ The completed bundle should let a reviewer answer:
 Artifact collection is intentionally outside the CLI. Use the commands that fit
 the experiment and record the outcome honestly in `review.json` and `REPORT.md`.
 The examples below are guidance, not required interfaces.
+
+## Updating sections
+
+`review.json` uses an ordered `sections` array to decide what appears in the
+rendered bundle. Default sections include prompt, plan, timeline, report,
+evidence, additional files, checks, and blockers.
+
+- Remove a section when it is not relevant.
+- Set `display: false` when the section should remain in the manifest but stay
+  hidden from the default page.
+- Use `kind: "markdown"` with `path` for Markdown context files.
+- Use `kind: "evidence"`, `files`, `checks`, or `blockers` for generated
+  sections.
 
 ### Participant flow
 
@@ -202,7 +218,11 @@ Example:
 Do not convert a failed or skipped check into a passing check. A complete bundle
 can include blockers, but it must not imply that blocked work succeeded.
 
-## Writing `REPORT.md`
+## Writing section files
+
+`PROMPT.md` should capture the original user prompt or experiment brief when
+available. `PLAN.md` should capture the implementation plan. `TIMELINE.md`
+should record notable implementation and evidence events.
 
 `REPORT.md` should be concise and explicit. Include:
 

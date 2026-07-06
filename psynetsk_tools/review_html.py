@@ -666,15 +666,18 @@ def render_completeness(
 def render_visible_artifacts(
     evidence: ReviewEvidenceView,
     *,
+    exclude_paths: set[str] | None = None,
     url_transform: UrlTransform = identity_url,
 ) -> str:
     """Render remaining evidence files."""
 
-    if not evidence.visible_files:
+    excluded = exclude_paths or set()
+    visible_files = [file for file in evidence.visible_files if file.path not in excluded]
+    if not visible_files:
         return "<p>No additional evidence files were found.</p>"
     cards = "\n".join(
         render_artifact_card(file, url_transform=url_transform)
-        for file in evidence.visible_files
+        for file in visible_files
     )
     return f'<div class="artifact-grid">{cards}</div>'
 

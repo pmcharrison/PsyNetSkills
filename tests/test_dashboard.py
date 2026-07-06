@@ -1444,10 +1444,32 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
     }
     evidence_view = exported_attempt["evidence_view"]
     evidence_html = exported_attempt["evidence_html"]
+    review_sections = exported_attempt["review_sections"]
 
     assert evidence_by_path["participant.mp4"]["url"].startswith(
         "artifacts/blobs/sha256/",
     )
+    assert [section["id"] for section in review_sections] == [
+        "challenge",
+        "plan",
+        "evaluation",
+        "learnings",
+        "evidence",
+        "timeline",
+        "code_files",
+        "evidence_files",
+        "agent_metadata",
+        "challenge_snapshot",
+    ]
+    assert review_sections[0]["kind"] == "markdown"
+    assert review_sections[0]["display"] is True
+    assert "Implement the exported snapshot." in review_sections[0]["content"]
+    assert review_sections[4]["kind"] == "evidence"
+    assert review_sections[4]["html"] == evidence_html
+    assert review_sections[5]["kind"] == "timeline"
+    assert review_sections[5]["entries"][0]["actor"] == "agent-start"
+    assert review_sections[6]["kind"] == "files"
+    assert review_sections[8]["kind"] == "json"
     assert 'data-screenshot-gallery' in evidence_html
     assert 'href="/artifacts/blobs/sha256/' in evidence_html
     assert "Screenshot walkthrough" in evidence_html

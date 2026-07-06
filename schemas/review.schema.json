@@ -11,7 +11,7 @@
     "experiment",
     "implementation",
     "environment",
-    "report",
+    "sections",
     "artifacts",
     "checks",
     "blockers"
@@ -64,9 +64,6 @@
           "type": "string",
           "minLength": 1
         },
-        "plan_path": {
-          "$ref": "#/$defs/relativePath"
-        },
         "notes": {
           "type": "string"
         }
@@ -110,8 +107,11 @@
         }
       }
     },
-    "report": {
-      "$ref": "#/$defs/relativePath"
+    "sections": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/section"
+      }
     },
     "artifacts": {
       "type": "array",
@@ -157,6 +157,30 @@
       "minLength": 1,
       "not": {
         "pattern": "^/"
+      }
+    },
+    "section": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "title", "kind"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:_[a-z0-9]+)*$"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "kind": {
+          "enum": ["markdown", "evidence", "files", "checks", "blockers"]
+        },
+        "path": {
+          "$ref": "#/$defs/relativePath"
+        },
+        "display": {
+          "type": "boolean"
+        }
       }
     },
     "artifact": {

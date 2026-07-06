@@ -31,7 +31,34 @@ def review_manifest() -> dict[str, object]:
         "environment": {
             "os": "linux",
         },
-        "report": "REPORT.md",
+        "sections": [
+            {
+                "id": "report",
+                "title": "Report",
+                "kind": "markdown",
+                "path": "REPORT.md",
+            },
+            {
+                "id": "evidence",
+                "title": "Evidence",
+                "kind": "evidence",
+            },
+            {
+                "id": "files",
+                "title": "Additional files",
+                "kind": "files",
+            },
+            {
+                "id": "checks",
+                "title": "Checks",
+                "kind": "checks",
+            },
+            {
+                "id": "blockers",
+                "title": "Blockers",
+                "kind": "blockers",
+            },
+        ],
         "artifacts": [
             {
                 "id": "debug_log",
@@ -86,9 +113,17 @@ def review_manifest() -> dict[str, object]:
 def test_render_review_site_publishes_sanitized_artifacts(tmp_path: Path) -> None:
     review_dir = tmp_path / "pitch-discrimination-demo" / "review"
     manifest = review_manifest()
-    implementation = manifest["implementation"]
-    assert isinstance(implementation, dict)
-    implementation["plan_path"] = "PLAN.md"
+    sections = manifest["sections"]
+    assert isinstance(sections, list)
+    sections.insert(
+        1,
+        {
+            "id": "plan",
+            "title": "Plan",
+            "kind": "markdown",
+            "path": "PLAN.md",
+        },
+    )
     write(review_dir / "review.json", json.dumps(manifest) + "\n")
     write(
         review_dir / "REPORT.md",
@@ -359,12 +394,19 @@ def test_validate_review_fails_when_required_artifact_lacks_blocker(
     assert any("required artifact must be present" in problem for problem in problems)
 
 
-def test_validate_review_fails_when_plan_path_is_missing(tmp_path: Path) -> None:
+def test_validate_review_fails_when_markdown_section_path_is_missing(tmp_path: Path) -> None:
     review_dir = tmp_path / "review"
     manifest = review_manifest()
-    implementation = manifest["implementation"]
-    assert isinstance(implementation, dict)
-    implementation["plan_path"] = "PLAN.md"
+    sections = manifest["sections"]
+    assert isinstance(sections, list)
+    sections.append(
+        {
+            "id": "plan",
+            "title": "Plan",
+            "kind": "markdown",
+            "path": "PLAN.md",
+        },
+    )
     write(review_dir / "review.json", json.dumps(manifest) + "\n")
     write(review_dir / "REPORT.md", "# Report\n")
     write(review_dir / "artifacts/psynet_debug.log", "ok\n")
@@ -372,7 +414,7 @@ def test_validate_review_fails_when_plan_path_is_missing(tmp_path: Path) -> None
 
     problems = validate_review(review_dir)
 
-    assert any("implementation plan file is missing" in problem for problem in problems)
+    assert any("section file is missing" in problem for problem in problems)
 
 
 def test_validate_review_fails_for_invalid_notebook_json(tmp_path: Path) -> None:
@@ -406,7 +448,7 @@ def test_validate_review_cli_exits_nonzero_on_problems(
         main(["validate", str(review_dir)])
 
     assert exc_info.value.code == 1
-    assert "report file is missing" in capsys.readouterr().out
+    assert "section file is missing" in capsys.readouterr().out
 
 
 def test_init_review_creates_starter_structure_and_manifest(tmp_path: Path) -> None:
@@ -416,14 +458,27 @@ def test_init_review_creates_starter_structure_and_manifest(tmp_path: Path) -> N
 
     assert (review_dir / "review.json").exists()
     assert (review_dir / "REPORT.md").exists()
+    assert (review_dir / "PROMPT.md").exists()
+    assert (review_dir / "PLAN.md").exists()
+    assert (review_dir / "TIMELINE.md").exists()
     assert (review_dir / "artifacts/screenshots").is_dir()
     assert (review_dir / "analyses").is_dir()
     assert (review_dir / "logs").is_dir()
     manifest = json.loads((review_dir / "review.json").read_text(encoding="utf-8"))
     assert "title" not in manifest["experiment"]
     assert manifest["experiment"]["source_path"] == "."
-    assert manifest["artifacts"][0]["id"] == "review_report"
-    assert manifest["artifacts"][0]["status"] == "present"
+    assert [section["id"] for section in manifest["sections"]] == [
+        "prompt",
+        "plan",
+        "timeline",
+        "report",
+        "evidence",
+        "files",
+        "checks",
+        "blockers",
+    ]
+    assert manifest["artifacts"][0]["id"] == "participant_video"
+    assert manifest["artifacts"][0]["status"] == "blocked"
     assert {
         blocker["artifact_id"]
         for blocker in manifest["blockers"]
