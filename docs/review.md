@@ -180,14 +180,14 @@ Useful follow-up work includes:
   PsyNet itself, or become a small standalone package once the workflow
   stabilizes.
 
-The review specification should describe the artifact-producing workflow without
-requiring hard-coded collection subcommands. It can give example commands such
-as `psynet simulate`, `psynet performance-test`, notebook execution, monitor
+The review specification describes the artifact-producing workflow without
+requiring hard-coded collection subcommands. It gives example commands such as
+`psynet simulate`, `psynet performance-test`, notebook execution, monitor
 snapshot capture, and Playwright screenshot/video scripts, but those examples
-should be guidance rather than mandatory interfaces. The agent should be allowed
-to adapt commands, rerun failed steps, choose a different visual-review profile,
-or mark an artifact as not applicable when the experiment design justifies it.
-The important invariant is that the final `review/` folder records what was
+are guidance rather than mandatory interfaces. The agent can adapt commands,
+rerun failed steps, choose a different visual-review profile, or mark an
+artifact as not applicable when the experiment design justifies it. The
+important invariant is that the final `review/` folder records what was
 produced, what was attempted, what remains blocked, and how a reviewer can
 inspect the result.
 
