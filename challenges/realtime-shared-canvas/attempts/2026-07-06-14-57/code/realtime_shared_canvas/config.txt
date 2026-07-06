@@ -1,0 +1,14 @@
+[Config]
+title = Real-time shared canvas navigation
+description = You will move around a shared square canvas with other participants and collect visible coins for a small bonus. Please use a Chrome browser.
+contact_email_on_error = researcher@example.com
+organization_name = PsyNetSkills
+
+recruiter = generic
+currency = $
+wage_per_hour = 12.0
+
+[Prolific]
+auto_recruit = false
+prolific_estimated_completion_minutes = 4
+base_payment = 0.80

@@ -70,8 +70,8 @@ It will contain:
 
 - A square canvas with the participant's own avatar, remote avatars, and all
   uncollected coins.
-- A status panel with world id, group size, own position, own velocity,
-  collected-coin count, and coin bonus.
+- A small bonus display showing the participant's current coin bonus, without a
+  full status panel.
 - Keyboard handlers for arrow-key input.
 - One 25 ms rendering loop.
 - One 50 ms websocket send loop for local position and velocity.
