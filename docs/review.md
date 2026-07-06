@@ -150,34 +150,30 @@ The implementation also shares several pieces with the PsyNetSkills dashboard:
 - `psynetsk_tools.review_model` owns evidence classification for participant
   video, screenshots, screenshot captions, performance JSON, monitor snapshots,
   data exports, analysis notebooks, visible files, and completeness rows.
-- The dashboard exporter writes the shared `evidence_view` for each attempt, and
-  the dashboard attempt template consumes that exported view instead of
-  recomputing evidence classification in Hugo.
+- `psynetsk_tools.review_html` owns the shared evidence-section HTML used by
+  standalone reviews and dashboard attempt pages.
+- The dashboard exporter writes `evidence_view` and `evidence_html` for each
+  attempt, and the dashboard attempt template embeds the exported HTML inside
+  the surrounding Hugo page shell.
+
+The artifact-producing workflow is specified in
+`docs/review-specification.md`. That document describes how agents or humans
+should initialize `review/`, collect evidence, update `review.json`, write
+`REPORT.md`, and document blockers without hard-coding artifact collection into
+the CLI.
 
 ## Planned next steps
 
-The next design goal is to make the standalone renderer and dashboard renderer
-share more of the same evidence presentation logic without making
-`psynet-review` depend on Hugo. The intended direction is:
+The shared renderer now keeps Hugo responsible for the full workshop dashboard,
+routing, navigation, and surrounding page layout, while Python owns the
+review-specific evidence UI used by both standalone reviews and challenge
+attempts.
 
-1. Move evidence-section HTML rendering into a Python module, for example
-   `psynetsk_tools.review_html`, which renders a `ReviewEvidenceView`.
-2. Use that renderer from `psynet-review render`.
-3. Export `evidence_html` from the dashboard data, alongside `evidence_view`.
-4. Let the Hugo attempt page embed the exported evidence HTML inside the
-   existing attempt page shell.
-
-This would keep Hugo responsible for the full workshop dashboard, routing,
-navigation, and surrounding page layout, while Python owns the review-specific
-evidence UI used by both standalone reviews and challenge attempts.
-
-After that, useful follow-up work includes:
+Useful follow-up work includes:
 
 - Improve standalone report rendering beyond escaped preformatted Markdown.
 - Add notebook preview parity for markdown, code, text/plain, HTML, and SVG
   outputs where safe.
-- Write a clear review specification that tells an agent which artifacts to
-  produce, how to update `review.json`, and how to document blockers.
 - Add an agent skill for producing `review/` folders during standalone PsyNet
   experiment implementation.
 - Decide whether `psynet-review` should remain in `psynetsk_tools`, move into
