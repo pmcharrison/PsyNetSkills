@@ -121,6 +121,7 @@ TEXT_REVIEW_EXTENSIONS = {
     ".json",
     ".log",
     ".md",
+    ".py",
     ".txt",
     ".yaml",
     ".yml",

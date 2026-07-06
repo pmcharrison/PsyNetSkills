@@ -16,6 +16,7 @@ from typing import Any
 from psynetsk_tools.review_artifacts import (
     HASHED_ARTIFACTS_DIR,
     MONITOR_STATIC_ARTIFACTS_DIR,
+    redact_known_credentials,
     write_hashed_artifact,
     write_shared_monitor_static_assets,
 )
@@ -27,6 +28,7 @@ from psynetsk_tools.review_html import (
 )
 from psynetsk_tools.review_model import (
     ReviewFile,
+    TEXT_REVIEW_EXTENSIONS,
     classify_review_evidence,
     file_kind,
 )
@@ -605,6 +607,8 @@ def publish_review_artifacts(
 def read_review_artifact_content(source_file: Path, max_bytes: int = 100_000) -> str | None:
     """Read text artifact content for review classification."""
 
+    if source_file.suffix.lower() not in TEXT_REVIEW_EXTENSIONS:
+        return None
     try:
         data = source_file.read_bytes()
     except OSError:
@@ -612,7 +616,7 @@ def read_review_artifact_content(source_file: Path, max_bytes: int = 100_000) ->
     if len(data) > max_bytes:
         data = data[:max_bytes]
     try:
-        return data.decode("utf-8")
+        return redact_known_credentials(data.decode("utf-8"))
     except UnicodeDecodeError:
         return None
 

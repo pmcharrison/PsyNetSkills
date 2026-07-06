@@ -126,7 +126,10 @@ def test_render_review_site_publishes_sanitized_artifacts(tmp_path: Path) -> Non
     assert "Use a chain trial maker." in index
     assert "psynet test local" in index
     assert "No simulated export has been produced yet." in index
-    assert index.count("Open artifact") == 2
+    assert index.count('class="attempt-file"') >= 2
+    assert '<summary class="file-header"><h3><code>artifacts/psynet_debug.log</code></h3>' in index
+    assert '<pre class="file-preview"><code>Dashboard user: admin password: [REDACTED]' in index
+    assert '<summary class="file-header"><h3><code>artifacts/monitor.html</code></h3>' in index
 
     published_files = sorted((site_dir / "static/artifacts/blobs/sha256").glob("**/*"))
     published_text = "\n".join(
@@ -225,6 +228,16 @@ def test_render_review_site_renders_evidence_view(tmp_path: Path) -> None:
                 "status": "present",
                 "created_by": "agent",
             },
+            {
+                "id": "experiment_source",
+                "kind": "source",
+                "path": "artifacts/source/experiment.py",
+                "title": "Experiment source",
+                "description": "Main experiment source.",
+                "required": False,
+                "status": "present",
+                "created_by": "agent",
+            },
         ]
     )
     manifest["blockers"] = []
@@ -268,6 +281,7 @@ def test_render_review_site_renders_evidence_view(tmp_path: Path) -> None:
     )
     write_bytes(review_dir / "artifacts/data.zip", b"data")
     write_bytes(review_dir / "artifacts/simulated_data.zip", b"simulated")
+    write(review_dir / "artifacts/source/experiment.py", "print('hello')\n")
     write(review_dir / "analyses/analysis.ipynb", json.dumps({"cells": []}))
 
     site_dir = render_review_site(review_dir)
@@ -283,6 +297,11 @@ def test_render_review_site_renders_evidence_view(tmp_path: Path) -> None:
     assert "<td>3</td>" in index
     assert "Download data export" in index
     assert "simulated_data.zip" in index
+    assert "<h3><code>artifacts/data.zip</code></h3>" in index
+    assert "Preview is not available." in index
+    assert "<h3><code>artifacts/source/experiment.py</code></h3>" in index
+    assert '<div class="file-preview code-preview">' in index
+    assert "print" in index
     assert "participant.mp4 <span>present</span>" in index
     assert "screenshots/ <span>2 images</span>" in index
 

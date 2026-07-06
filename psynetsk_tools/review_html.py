@@ -192,26 +192,73 @@ def render_artifact_card(
     *,
     url_transform: UrlTransform = identity_url,
 ) -> str:
-    """Render one artifact card."""
+    """Render one artifact as a dashboard-style file card."""
 
     path = html.escape(artifact.path)
     kind = html.escape(artifact.kind)
-
-    if artifact.url:
-        action = f'<a href="{escape_url(artifact.url, url_transform)}">Open artifact</a>'
-    else:
-        action = "<span>No artifact file published.</span>"
+    badges = [
+        f"<span>{kind}</span>",
+        f"<span>{artifact.size_bytes} bytes</span>",
+    ]
+    if artifact.truncated:
+        badges.append("<span>truncated</span>")
 
     return (
-        '<article class="artifact-card">'
+        '<details class="attempt-file">'
+        '<summary class="file-header">'
         f"<h3><code>{path}</code></h3>"
-        "<dl>"
-        f"<dt>Kind</dt><dd>{kind}</dd>"
-        f"<dt>Size</dt><dd>{artifact.size_bytes} bytes</dd>"
-        "</dl>"
-        f"<p>{action}</p>"
-        "</article>"
+        + "".join(badges)
+        + "</summary>"
+        f"{render_file_preview(artifact, url_transform=url_transform)}"
+        "</details>"
     )
+
+
+def render_file_preview(
+    artifact: ReviewFile,
+    *,
+    url_transform: UrlTransform = identity_url,
+) -> str:
+    """Render a typed preview for one review bundle file."""
+
+    if artifact.content:
+        if artifact.kind == "md":
+            return (
+                '<div class="file-preview markdown-preview">'
+                f"{render_markdown_document(strip_first_markdown_heading(artifact.content))}"
+                "</div>"
+            )
+        if artifact.kind == "py":
+            return (
+                '<div class="file-preview code-preview">'
+                f"{render_code_block(artifact.content, 'python')}"
+                "</div>"
+            )
+        return f'<pre class="file-preview"><code>{html.escape(artifact.content)}</code></pre>'
+
+    if not artifact.published:
+        note = artifact.publication_note or "This artifact is retained in the bundle but not published."
+        return f'<p class="file-preview binary-preview">{html.escape(note)}</p>'
+
+    if artifact.url:
+        return (
+            '<p class="file-preview binary-preview">'
+            "Preview is not available. "
+            f'<a href="{escape_url(artifact.url, url_transform)}">Open artifact</a>.'
+            "</p>"
+        )
+    return '<p class="file-preview binary-preview">No artifact file published.</p>'
+
+
+def strip_first_markdown_heading(markdown: str) -> str:
+    """Remove one leading H1 heading from a Markdown preview."""
+
+    lines = markdown.splitlines()
+    if lines and lines[0].startswith("# "):
+        lines = lines[1:]
+        while lines and not lines[0].strip():
+            lines = lines[1:]
+    return "\n".join(lines)
 
 
 def render_participant_video(
