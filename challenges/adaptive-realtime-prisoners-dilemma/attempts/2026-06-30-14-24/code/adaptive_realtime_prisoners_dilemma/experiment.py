@@ -54,8 +54,17 @@ PAYOFF_POINTS = {
 }
 
 
-class LiveEventBase:
-    """Generic websocket event normalization for live sessions."""
+@register_table
+class LiveEvent(SQLBase, SQLMixin):
+    """Generic persisted live-session event, usable without subclassing."""
+
+    __tablename__ = "live_event"
+
+    session_id = Column(String(128), index=True)
+    participant_id = Column(Integer, index=True, nullable=True)
+    event_type = Column(String(64), index=True)
+    skip_reduce = Column(Boolean, default=False, index=True)
+    payload = Column(JSON)
 
     @staticmethod
     def message_payload(data, receive_time) -> dict:
@@ -81,21 +90,15 @@ class LiveEventBase:
 
 
 @register_table
-class LiveEvent(LiveEventBase, SQLBase, SQLMixin):
-    """Generic persisted live-session event, usable without subclassing."""
+class LiveSession(SQLBase, SQLMixin):
+    """Generic persisted live-session projection, usable without subclassing."""
 
-    __tablename__ = "live_event"
-
-    session_id = Column(String(128), index=True)
-    participant_id = Column(Integer, index=True, nullable=True)
-    event_type = Column(String(64), index=True)
-    skip_reduce = Column(Boolean, default=False, index=True)
-    payload = Column(JSON)
-
-class LiveSessionBase:
-    """Generic event-sourced live session projection."""
+    __tablename__ = "live_session"
 
     event_class = LiveEvent
+
+    session_id = Column(String(128), index=True)
+    state = Column(JSON)
 
     @staticmethod
     def initial_state(participant_ids=None, **params) -> dict:
@@ -157,17 +160,7 @@ class LiveSessionBase:
 
 
 @register_table
-class LiveSession(LiveSessionBase, SQLBase, SQLMixin):
-    """Generic persisted live-session projection, usable without subclassing."""
-
-    __tablename__ = "live_session"
-
-    session_id = Column(String(128), index=True)
-    state = Column(JSON)
-
-
-@register_table
-class PDLiveSession(LiveSessionBase, SQLBase, SQLMixin):
+class PDLiveSession(SQLBase, SQLMixin):
     __tablename__ = "pd_live_session"
 
     event_class = LiveEvent
@@ -177,6 +170,31 @@ class PDLiveSession(LiveSessionBase, SQLBase, SQLMixin):
     network_id = Column(Integer, index=True)
     treatment = Column(String(64), index=True)
     state = Column(JSON)
+
+    @classmethod
+    def get_or_create(cls, session_id: str, *, defaults=None, for_update=False):
+        query = cls.query.filter_by(session_id=session_id)
+        if for_update:
+            query = query.with_for_update(of=cls)
+        session = query.one_or_none()
+        if session is None:
+            session = cls(session_id=session_id, **(defaults or {}))
+            db.session.add(session)
+            db.session.flush()
+        return session
+
+    @property
+    def participant_ids(self) -> list[int]:
+        state = self.state or {}
+        return [int(p) for p in state.get("params", {}).get("participant_ids", [])]
+
+    @property
+    def events(self):
+        return (
+            self.event_class.query.filter_by(session_id=self.session_id)
+            .order_by(self.event_class.id)
+            .all()
+        )
 
     @staticmethod
     def initial_state(participant_ids: list[int], treatment: str) -> dict:
