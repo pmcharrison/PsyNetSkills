@@ -75,6 +75,8 @@ BLOCKER_SEVERITIES = {"warning", "error"}
 CHECK_STATUSES = {"pass", "fail", "warning", "not_run"}
 MAX_REVIEW_NOTEBOOK_BYTES = 100_000
 CLI_NAME = "psynet-review-bundle"
+REVIEW_BUNDLE_CSS = Path(__file__).parent / "assets" / "review-bundle" / "review-bundle.css"
+REVIEW_BUNDLE_CSS_OUTPUT = "css/review-bundle.css"
 STARTER_REPORT = """# Review bundle report
 
 Summarize the implementation, validation, analysis, and any unresolved issues.
@@ -613,6 +615,44 @@ def render_report(report_path: Path) -> str:
     return f'<div class="attempt-markdown">{render_markdown_document(text)}</div>'
 
 
+def render_metadata_grid(items: list[tuple[str, str]]) -> str:
+    """Render a dashboard-style metadata grid."""
+
+    rows = []
+    for label, value in items:
+        rows.append(
+            "<div>"
+            f"<dt>{html.escape(label)}</dt>"
+            f"<dd>{value}</dd>"
+            "</div>",
+        )
+    return '<dl class="metadata-grid attempt-summary">' + "".join(rows) + "</dl>"
+
+
+def render_metadata_value(value: object, fallback: str = "-") -> str:
+    """Render one metadata value."""
+
+    if value is None or value == "":
+        return html.escape(fallback)
+    return html.escape(str(value))
+
+
+def render_metadata_code(value: object, fallback: str = "-") -> str:
+    """Render one metadata value as code."""
+
+    return f"<code>{render_metadata_value(value, fallback)}</code>"
+
+
+def write_review_bundle_static_assets(site_dir: Path) -> str:
+    """Write static review bundle CSS and return its page-relative URL."""
+
+    target = site_dir / "static" / REVIEW_BUNDLE_CSS_OUTPUT
+    target.parent.mkdir(parents=True, exist_ok=True)
+    css = REVIEW_BUNDLE_CSS.read_text(encoding="utf-8")
+    target.write_text(f"{css}\n\n{pygments_css()}\n", encoding="utf-8")
+    return f"static/{REVIEW_BUNDLE_CSS_OUTPUT}"
+
+
 def render_check_list(manifest: dict[str, Any]) -> str:
     """Render validation checks from the manifest."""
 
@@ -681,6 +721,29 @@ def render_review_site(review_dir: Path, site_dir: Path | None = None) -> Path:
     )
     report_path = review_dir / str(manifest.get("report") or "REPORT.md")
     evidence = classify_review_evidence(rendered_artifacts)
+    css_url = write_review_bundle_static_assets(site_dir)
+    experiment = manifest.get("experiment", {})
+    environment = manifest.get("environment", {})
+    artifacts = manifest.get("artifacts", [])
+    checks = manifest.get("checks", [])
+    blockers = manifest.get("blockers", [])
+    experiment = experiment if isinstance(experiment, dict) else {}
+    environment = environment if isinstance(environment, dict) else {}
+    artifact_count = len(artifacts) if isinstance(artifacts, list) else 0
+    check_count = len(checks) if isinstance(checks, list) else 0
+    blocker_count = len(blockers) if isinstance(blockers, list) else 0
+    metadata = render_metadata_grid(
+        [
+            ("Source path", render_metadata_code(experiment.get("source_path"))),
+            ("Entry point", render_metadata_code(experiment.get("entry_point"))),
+            ("PsyNet version", render_metadata_value(experiment.get("psynet_version"))),
+            ("Git commit", render_metadata_code(experiment.get("git_commit"))),
+            ("OS", render_metadata_value(environment.get("os"))),
+            ("Python", render_metadata_value(environment.get("python_version"))),
+            ("Checks", render_metadata_value(check_count)),
+            ("Blockers", render_metadata_value(blocker_count)),
+        ],
+    )
 
     html_text = f"""<!doctype html>
 <html lang="en">
@@ -688,74 +751,58 @@ def render_review_site(review_dir: Path, site_dir: Path | None = None) -> Path:
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{html.escape(title)}</title>
-  <style>
-    body {{ font-family: system-ui, sans-serif; margin: 2rem; line-height: 1.5; }}
-    main {{ max-width: 70rem; }}
-    .artifact-grid {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); gap: 1rem; }}
-    .artifact-card {{ border: 1px solid #d0d7de; border-radius: 0.5rem; padding: 1rem; }}
-    .attempt-video {{ width: 100%; max-width: 56rem; border: 1px solid #d0d7de; border-radius: 0.5rem; }}
-    .screenshot-gallery {{ border-top: 1px solid #d0d7de; margin-top: 1rem; padding-top: 1rem; }}
-    .screenshot-frame {{ border: 1px solid #d0d7de; border-radius: 0.5rem; overflow: hidden; }}
-    .screenshot-carousel {{ display: grid; }}
-    .screenshot-card {{ margin: 0; }}
-    .screenshot-card[hidden] {{ display: none; }}
-    .screenshot-card a {{ align-items: center; background: #f6f8fa; display: flex; height: min(52vw, 20rem); justify-content: center; }}
-    .screenshot-card img {{ display: block; height: 100%; object-fit: contain; width: 100%; }}
-    .screenshot-caption-panel {{ border-top: 1px solid #d0d7de; padding: 0.65rem 0.9rem; text-align: center; }}
-    .screenshot-controls {{ display: inline-flex; gap: 0.45rem; }}
-    .screenshot-nav {{ border: 1px solid #d0d7de; border-radius: 999px; background: #fff; cursor: pointer; height: 1.8rem; width: 1.8rem; }}
-    .evidence-actions {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); gap: 0.5rem 1rem; padding-left: 0; list-style: none; }}
-    .performance-result-header {{ align-items: start; display: flex; gap: 1rem; justify-content: space-between; }}
-    .performance-options {{ background: #f6f8fa; border: 1px solid #d0d7de; border-radius: 0.5rem; display: grid; gap: 0.75rem 1rem; grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr)); padding: 1rem; }}
-    .performance-table-wrap {{ overflow-x: auto; }}
-    .performance-table {{ border-collapse: collapse; width: 100%; }}
-    .performance-table th, .performance-table td {{ border: 1px solid #d0d7de; padding: 0.4rem; text-align: left; }}
-    .notebook-preview {{ display: grid; gap: 0.85rem; }}
-    .notebook-cell {{ background: #fff; border: 1px solid #d0d7de; border-radius: 0.45rem; overflow: hidden; padding: 0.85rem; }}
-    .notebook-code pre, .notebook-outputs pre {{ margin: 0; }}
-    .notebook-outputs {{ border-top: 1px solid #d0d7de; margin-top: 0.75rem; padding-top: 0.75rem; }}
-    .notebook-html {{ overflow-x: auto; }}
-    .notebook-html table {{ border-collapse: collapse; font-size: 0.9rem; width: auto; }}
-    .notebook-html th, .notebook-html td {{ border: 1px solid #d0d7de; padding: 0.35rem 0.55rem; }}
-    .notebook-svg svg {{ display: block; height: auto; max-width: 100%; }}
-    .notebook-error {{ background: #ffebe9; }}
-    .attempt-markdown > :first-child {{ margin-top: 0; }}
-    .attempt-markdown > :last-child {{ margin-bottom: 0; }}
-    .artifact-checklist {{ list-style: none; padding-left: 0; }}
-    .artifact-checklist li {{ display: flex; justify-content: space-between; border-bottom: 1px solid #d0d7de; padding: 0.35rem 0; }}
-    .artifact-checklist .missing, .missing-artifact {{ color: #9a6700; }}
-    dt {{ font-weight: 700; }}
-    dd {{ margin: 0 0 0.5rem; }}
-    pre {{ white-space: pre-wrap; background: #f6f8fa; padding: 1rem; overflow: auto; }}
-    .missing {{ color: #9a6700; }}
-    {pygments_css()}
-  </style>
+  <link rel="stylesheet" href="{html.escape(css_url)}">
 </head>
-<body>
-  <main>
-    <header>
-      <p>Experiment review bundle</p>
-      <h1>{html.escape(title)}</h1>
-      <p>{html.escape(summary)}</p>
+<body class="attempt-page">
+  <article class="prose attempt-detail">
+    <header class="attempt-hero">
+      <div>
+        <p class="eyebrow">Experiment review bundle</p>
+        <h1>{html.escape(title)}</h1>
+        <p>{html.escape(summary)}</p>
+      </div>
+      <div class="score-card">
+        <span class="score-label">Artifacts</span>
+        <strong>{artifact_count}</strong>
+      </div>
     </header>
-    <section>
-      <h2>Report</h2>
-      {render_report(report_path)}
-    </section>
-    {render_evidence_section(evidence)}
-    <section>
-      <h2>Additional Files</h2>
-      {render_visible_artifacts(evidence)}
-    </section>
-    <section>
-      <h2>Checks</h2>
-      {render_check_list(manifest)}
-    </section>
-    <section>
-      <h2>Blockers</h2>
-      {render_blockers(manifest)}
-    </section>
-  </main>
+    {metadata}
+    <div class="attempt-layout">
+      <aside class="attempt-sidebar" aria-label="Review bundle sections">
+        <nav class="attempt-section-nav">
+          <ol>
+            <li><a href="#report">Report</a></li>
+            <li><a href="#evidence">Evidence</a></li>
+            <li><a href="#files">Additional files</a></li>
+            <li><a href="#checks">Checks</a></li>
+            <li><a href="#blockers">Blockers</a></li>
+          </ol>
+        </nav>
+      </aside>
+      <div class="attempt-main">
+        <details id="report" class="attempt-panel report-panel" open>
+          <summary><h2>Report</h2></summary>
+          {render_report(report_path)}
+        </details>
+        <details id="evidence" class="attempt-panel evidence-panel" open>
+          <summary><h2>Evidence</h2></summary>
+          {render_evidence_section(evidence, include_heading=False, section_id=None)}
+        </details>
+        <details id="files" class="attempt-panel">
+          <summary><h2>Additional files</h2></summary>
+          {render_visible_artifacts(evidence)}
+        </details>
+        <details id="checks" class="attempt-panel" open>
+          <summary><h2>Checks</h2></summary>
+          {render_check_list(manifest)}
+        </details>
+        <details id="blockers" class="attempt-panel" open>
+          <summary><h2>Blockers</h2></summary>
+          {render_blockers(manifest)}
+        </details>
+      </div>
+    </div>
+  </article>
   <script>
     document.querySelectorAll("[data-screenshot-gallery]").forEach((gallery) => {{
       const cards = Array.from(gallery.querySelectorAll("[data-screenshot-card]"));

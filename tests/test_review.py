@@ -108,6 +108,9 @@ def test_render_review_site_publishes_sanitized_artifacts(tmp_path: Path) -> Non
     site_dir = render_review_site(review_dir)
 
     index = (site_dir / "index.html").read_text(encoding="utf-8")
+    assert '<link rel="stylesheet" href="static/css/review-bundle.css">' in index
+    assert '<body class="attempt-page">' in index
+    assert 'class="attempt-layout"' in index
     assert "Pitch Discrimination Demo" in index
     assert "<h1>Report</h1>" in index
     assert "Experiment <strong>behaves</strong> as expected." in index
@@ -131,6 +134,7 @@ def test_render_review_site_publishes_sanitized_artifacts(tmp_path: Path) -> Non
         site_dir
         / "static/artifacts/monitor-static/vis@4.17.0/dist/vis.min.js"
     ).exists()
+    assert (site_dir / "static/css/review-bundle.css").exists()
 
 
 def test_render_review_site_renders_evidence_view(tmp_path: Path) -> None:
