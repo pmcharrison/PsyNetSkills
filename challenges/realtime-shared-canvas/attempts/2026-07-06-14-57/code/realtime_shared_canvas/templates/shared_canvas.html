@@ -266,6 +266,7 @@ document.addEventListener("DOMContentLoaded", function () {
     wsScheme + location.host + "/chat?channel=" + cfg.channel
     + "&worker_id=" + dallinger.identity.workerId
     + "&participant_id=" + cfg.participant_id
+    + "&tolerance=0.005"
   );
   socket.onopen = function () {
     wsSend({type: "state_request"});
