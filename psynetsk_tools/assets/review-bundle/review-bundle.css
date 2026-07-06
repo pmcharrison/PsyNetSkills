@@ -171,6 +171,11 @@ a {
   border-color: #d4a72c;
 }
 
+.plan-panel {
+  background: #f0f6ff;
+  border-color: #80b7ff;
+}
+
 .evidence-panel {
   background: #ffffff;
 }

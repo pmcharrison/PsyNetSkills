@@ -85,7 +85,11 @@ def review_manifest() -> dict[str, object]:
 
 def test_render_review_site_publishes_sanitized_artifacts(tmp_path: Path) -> None:
     review_dir = tmp_path / "pitch-discrimination-demo" / "review"
-    write(review_dir / "review.json", json.dumps(review_manifest()) + "\n")
+    manifest = review_manifest()
+    implementation = manifest["implementation"]
+    assert isinstance(implementation, dict)
+    implementation["plan_path"] = "PLAN.md"
+    write(review_dir / "review.json", json.dumps(manifest) + "\n")
     write(
         review_dir / "REPORT.md",
         "# Report\n\n"
@@ -93,6 +97,7 @@ def test_render_review_site_publishes_sanitized_artifacts(tmp_path: Path) -> Non
         "- Functional check passed\n\n"
         "<script>bad()</script>\n",
     )
+    write(review_dir / "PLAN.md", "# Plan\n\nUse a chain trial maker.\n")
     write(
         review_dir / "artifacts/psynet_debug.log",
         "Dashboard user: admin password: local-password\n",
@@ -116,6 +121,9 @@ def test_render_review_site_publishes_sanitized_artifacts(tmp_path: Path) -> Non
     assert "Experiment <strong>behaves</strong> as expected." in index
     assert "<li>Functional check passed</li>" in index
     assert "<script>bad()</script>" not in index
+    assert '<details id="plan" class="attempt-panel plan-panel" open>' in index
+    assert "<h1>Plan</h1>" in index
+    assert "Use a chain trial maker." in index
     assert "psynet test local" in index
     assert "No simulated export has been produced yet." in index
     assert index.count("Open artifact") == 2
@@ -163,6 +171,16 @@ def test_render_review_site_renders_evidence_view(tmp_path: Path) -> None:
                 "path": "artifacts/screenshots/01-intro.png",
                 "title": "Intro screenshot",
                 "description": "Intro screen.",
+                "required": False,
+                "status": "present",
+                "created_by": "agent",
+            },
+            {
+                "id": "screenshot_second",
+                "kind": "screenshot",
+                "path": "artifacts/screenshots/02-trial.png",
+                "title": "Trial screenshot",
+                "description": "Trial screen.",
                 "required": False,
                 "status": "present",
                 "created_by": "agent",
@@ -216,9 +234,17 @@ def test_render_review_site_renders_evidence_view(tmp_path: Path) -> None:
     write(review_dir / "artifacts/monitor.html", "<html><head></head><body></body></html>")
     write_bytes(review_dir / "artifacts/participant.mp4", b"video bytes")
     write_bytes(review_dir / "artifacts/screenshots/01-intro.png", b"png bytes")
+    write_bytes(review_dir / "artifacts/screenshots/02-trial.png", b"png bytes 2")
     write(
         review_dir / "artifacts/screenshots/manifest.json",
-        json.dumps({"captions": {"screenshots/01-intro.png": "Intro screen"}}),
+        json.dumps(
+            {
+                "captions": {
+                    "screenshots/01-intro.png": "Intro screen",
+                    "screenshots/02-trial.png": "Trial screen",
+                }
+            }
+        ),
     )
     write(
         review_dir / "artifacts/performance.json",
@@ -250,13 +276,15 @@ def test_render_review_site_renders_evidence_view(tmp_path: Path) -> None:
     assert "<video" in index
     assert "Screenshot walkthrough" in index
     assert "Intro screen" in index
+    assert "Trial screen" in index
+    assert 'data-screenshot-counter>1 / 2</span>' in index
     assert "Performance test result" in index
     assert "<td>4</td>" in index
     assert "<td>3</td>" in index
     assert "Download data export" in index
     assert "simulated_data.zip" in index
     assert "participant.mp4 <span>present</span>" in index
-    assert "screenshots/ <span>1 image</span>" in index
+    assert "screenshots/ <span>2 images</span>" in index
 
 
 def write_valid_review(review_dir: Path) -> None:
@@ -310,6 +338,22 @@ def test_validate_review_fails_when_required_artifact_lacks_blocker(
     problems = validate_review(review_dir)
 
     assert any("required artifact must be present" in problem for problem in problems)
+
+
+def test_validate_review_fails_when_plan_path_is_missing(tmp_path: Path) -> None:
+    review_dir = tmp_path / "review"
+    manifest = review_manifest()
+    implementation = manifest["implementation"]
+    assert isinstance(implementation, dict)
+    implementation["plan_path"] = "PLAN.md"
+    write(review_dir / "review.json", json.dumps(manifest) + "\n")
+    write(review_dir / "REPORT.md", "# Report\n")
+    write(review_dir / "artifacts/psynet_debug.log", "ok\n")
+    write(review_dir / "artifacts/monitor.html", "<html><head></head><body></body></html>")
+
+    problems = validate_review(review_dir)
+
+    assert any("implementation plan file is missing" in problem for problem in problems)
 
 
 def test_validate_review_fails_for_invalid_notebook_json(tmp_path: Path) -> None:

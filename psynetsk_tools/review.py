@@ -509,6 +509,17 @@ def validate_review_manifest(review_dir: Path, manifest: dict[str, Any]) -> list
             problems.append(
                 f"{manifest_path}: implementation.summary must be a non-empty string",
             )
+        if "plan_path" in implementation:
+            plan_path, plan_problems = relative_review_path(
+                review_dir,
+                implementation.get("plan_path"),
+                f"{manifest_path}: implementation.plan_path",
+            )
+            problems.extend(plan_problems)
+            if plan_path is not None and not plan_path.is_file():
+                problems.append(
+                    f"{manifest_path}: implementation plan file is missing: {plan_path}",
+                )
 
     report_path, report_problems = relative_review_path(
         review_dir,
@@ -612,6 +623,34 @@ def render_report(report_path: Path) -> str:
     if not report_path.is_file():
         return '<p class="missing">Report file missing.</p>'
     text = report_path.read_text(encoding="utf-8")
+    return f'<div class="attempt-markdown">{render_markdown_document(text)}</div>'
+
+
+def review_plan_path(review_dir: Path, manifest: dict[str, Any]) -> Path | None:
+    """Return the optional implementation plan path."""
+
+    implementation = manifest.get("implementation")
+    if not isinstance(implementation, dict):
+        return None
+    plan_path = implementation.get("plan_path")
+    if not isinstance(plan_path, str) or not plan_path.strip():
+        return None
+    resolved, problems = relative_review_path(
+        review_dir,
+        plan_path,
+        f"{review_dir / 'review.json'}: implementation.plan_path",
+    )
+    return None if problems else resolved
+
+
+def render_plan(plan_path: Path | None) -> str:
+    """Render an optional Markdown implementation plan as safe HTML."""
+
+    if plan_path is None:
+        return '<p class="missing">No implementation plan path recorded.</p>'
+    if not plan_path.is_file():
+        return '<p class="missing">Implementation plan file missing.</p>'
+    text = plan_path.read_text(encoding="utf-8")
     return f'<div class="attempt-markdown">{render_markdown_document(text)}</div>'
 
 
@@ -720,6 +759,7 @@ def render_review_site(review_dir: Path, site_dir: Path | None = None) -> Path:
         else ""
     )
     report_path = review_dir / str(manifest.get("report") or "REPORT.md")
+    plan_path = review_plan_path(review_dir, manifest)
     evidence = classify_review_evidence(rendered_artifacts)
     css_url = write_review_bundle_static_assets(site_dir)
     experiment = manifest.get("experiment", {})
@@ -736,6 +776,10 @@ def render_review_site(review_dir: Path, site_dir: Path | None = None) -> Path:
         [
             ("Source path", render_metadata_code(experiment.get("source_path"))),
             ("Entry point", render_metadata_code(experiment.get("entry_point"))),
+            (
+                "Plan",
+                '<a href="#plan">Review plan</a>' if plan_path is not None else "-",
+            ),
             ("PsyNet version", render_metadata_value(experiment.get("psynet_version"))),
             ("Git commit", render_metadata_code(experiment.get("git_commit"))),
             ("OS", render_metadata_value(environment.get("os"))),
@@ -743,6 +787,15 @@ def render_review_site(review_dir: Path, site_dir: Path | None = None) -> Path:
             ("Checks", render_metadata_value(check_count)),
             ("Blockers", render_metadata_value(blocker_count)),
         ],
+    )
+    plan_nav_item = '<li><a href="#plan">Plan</a></li>' if plan_path is not None else ""
+    plan_panel = (
+        '<details id="plan" class="attempt-panel plan-panel" open>'
+        "<summary><h2>Plan</h2></summary>"
+        f"{render_plan(plan_path)}"
+        "</details>"
+        if plan_path is not None
+        else ""
     )
 
     html_text = f"""<!doctype html>
@@ -772,6 +825,7 @@ def render_review_site(review_dir: Path, site_dir: Path | None = None) -> Path:
         <nav class="attempt-section-nav">
           <ol>
             <li><a href="#report">Report</a></li>
+            {plan_nav_item}
             <li><a href="#evidence">Evidence</a></li>
             <li><a href="#files">Additional files</a></li>
             <li><a href="#checks">Checks</a></li>
@@ -784,6 +838,7 @@ def render_review_site(review_dir: Path, site_dir: Path | None = None) -> Path:
           <summary><h2>Report</h2></summary>
           {render_report(report_path)}
         </details>
+        {plan_panel}
         <details id="evidence" class="attempt-panel evidence-panel" open>
           <summary><h2>Evidence</h2></summary>
           {render_evidence_section(evidence, include_heading=False, section_id=None)}

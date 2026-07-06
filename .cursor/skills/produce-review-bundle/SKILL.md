@@ -86,6 +86,10 @@ has no participant UI. Good options include:
   representative trials, validation errors, feedback, and completion.
 - `artifacts/screenshots/manifest.json`: optional screenshot captions.
 
+Add each screenshot image that should appear in the rendered bundle as a
+`present` artifact in `review.json`; the caption manifest alone does not publish
+or render the screenshots.
+
 Keep participant-flow scripts with the experiment source, not only in the
 bundle. For Playwright-based checks, make the script assert the behavior that
 the screenshots or recording show.
