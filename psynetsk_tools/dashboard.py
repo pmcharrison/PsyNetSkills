@@ -41,9 +41,11 @@ from psynetsk_tools.review_artifacts import (
     write_hashed_artifact,
     write_shared_monitor_static_assets,
 )
+from psynetsk_tools.review_html import render_evidence_section
 from psynetsk_tools.review_model import (
     CompletenessItem,
     ReviewFile,
+    ReviewEvidenceView,
     classify_review_evidence,
     screenshot_caption,
 )
@@ -221,6 +223,7 @@ class Attempt:
     code_files: list[AttemptFile]
     evidence_files: list[AttemptFile]
     evidence_view: dict[str, object]
+    evidence_html: str
 
 
 @dataclass(frozen=True)
@@ -545,10 +548,9 @@ def completeness_item_data(item: CompletenessItem) -> dict[str, object]:
     }
 
 
-def evidence_view_data(evidence_files: list[AttemptFile]) -> dict[str, object]:
+def evidence_view_data(view: ReviewEvidenceView) -> dict[str, object]:
     """Return dashboard-ready shared evidence classification data."""
 
-    view = classify_review_evidence(evidence_files)
     return {
         "participant_video": review_file_data(view.participant_video),
         "screenshots": [
@@ -582,6 +584,47 @@ def evidence_view_data(evidence_files: list[AttemptFile]) -> dict[str, object]:
             for item in view.completeness
         ],
     }
+
+
+def dashboard_artifact_url(url: str) -> str:
+    """Return an artifact URL that works from nested dashboard pages."""
+
+    if not url or url.startswith(("http://", "https://", "/")):
+        return url
+    return f"/{url.lstrip('/')}"
+
+
+def attempt_evidence_completeness(
+    *,
+    challenge_files: list[AttemptFile],
+    has_plan: bool,
+    has_timeline: bool,
+    has_experiment: bool,
+) -> list[CompletenessItem]:
+    """Return attempt-level completeness rows for the shared evidence section."""
+
+    return [
+        CompletenessItem(
+            "challenge",
+            "challenge/",
+            True,
+            f"{len(challenge_files)} file{'s' if len(challenge_files) != 1 else ''}",
+        ),
+        CompletenessItem("agent_json", "agent.json", True, "metadata captured"),
+        CompletenessItem("plan", "PLAN.md", has_plan, "present" if has_plan else "missing"),
+        CompletenessItem(
+            "timeline",
+            "TIMELINE.md",
+            has_timeline,
+            "present" if has_timeline else "missing",
+        ),
+        CompletenessItem(
+            "experiment",
+            "code/experiment.py",
+            has_experiment,
+            "present" if has_experiment else "missing",
+        ),
+    ]
 
 
 def attempt_artifact_url_prefix(challenge_slug: str, attempt_name: str) -> str:
@@ -641,6 +684,11 @@ def collect_attempts(
             if timeline_file.exists()
             else ""
         )
+        plan = (
+            strip_first_heading(plan_file.read_text(encoding="utf-8"))
+            if plan_file.exists()
+            else ""
+        )
         timeline_entries = parse_timeline_entries(timeline)
         implementation_seconds = implementation_time_seconds(timeline_entries)
         intervention_count = human_intervention_count(timeline_entries)
@@ -695,6 +743,17 @@ def collect_attempts(
                 "evidence",
             ),
         )
+        evidence_view = classify_review_evidence(evidence_files)
+        has_experiment = any(
+            file.path == "experiment.py" or file.path.endswith("/experiment.py")
+            for file in code_files
+        )
+        extra_completeness = attempt_evidence_completeness(
+            challenge_files=challenge_files,
+            has_plan=bool(plan),
+            has_timeline=bool(timeline_entries),
+            has_experiment=has_experiment,
+        )
         attempts.append(
             Attempt(
                 name=attempt_dir.name,
@@ -721,11 +780,7 @@ def collect_attempts(
                     if evaluation_file.exists()
                     else ""
                 ),
-                plan=(
-                    strip_first_heading(plan_file.read_text(encoding="utf-8"))
-                    if plan_file.exists()
-                    else ""
-                ),
+                plan=plan,
                 timeline=timeline,
                 timeline_entries=timeline_entries,
                 implementation_time_seconds=implementation_seconds,
@@ -751,7 +806,14 @@ def collect_attempts(
                 challenge_files=challenge_files,
                 code_files=code_files,
                 evidence_files=evidence_files,
-                evidence_view=evidence_view_data(evidence_files),
+                evidence_view=evidence_view_data(evidence_view),
+                evidence_html=render_evidence_section(
+                    evidence_view,
+                    extra_completeness=extra_completeness,
+                    include_heading=False,
+                    section_id=None,
+                    url_transform=dashboard_artifact_url,
+                ),
             )
         )
     return attempts

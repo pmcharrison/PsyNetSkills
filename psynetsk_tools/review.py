@@ -19,12 +19,11 @@ from psynetsk_tools.review_artifacts import (
     write_hashed_artifact,
     write_shared_monitor_static_assets,
 )
+from psynetsk_tools.review_html import render_evidence_section, render_visible_artifacts
 from psynetsk_tools.review_model import (
-    ReviewEvidenceView,
     ReviewFile,
     classify_review_evidence,
     file_kind,
-    screenshot_caption,
 )
 from psynetsk_tools.validate import validate_evidence_video
 
@@ -608,185 +607,6 @@ def render_report(report_path: Path) -> str:
     return f"<pre>{html.escape(text)}</pre>"
 
 
-def render_artifact_card(artifact: ReviewFile) -> str:
-    """Render one artifact card."""
-
-    path = html.escape(artifact.path)
-    kind = html.escape(artifact.kind)
-
-    if artifact.url:
-        action = f'<a href="{html.escape(artifact.url)}">Open artifact</a>'
-    else:
-        action = "<span>No artifact file published.</span>"
-
-    return (
-        '<article class="artifact-card">'
-        f"<h3><code>{path}</code></h3>"
-        "<dl>"
-        f"<dt>Kind</dt><dd>{kind}</dd>"
-        f"<dt>Size</dt><dd>{artifact.size_bytes} bytes</dd>"
-        "</dl>"
-        f"<p>{action}</p>"
-        "</article>"
-    )
-
-
-def render_participant_video(evidence: ReviewEvidenceView) -> str:
-    """Render participant video evidence."""
-
-    video = evidence.participant_video
-    if video is None:
-        return "<p>No participant recording was found.</p>"
-    return (
-        '<video class="attempt-video" controls preload="metadata">'
-        f'<source src="{html.escape(video.url)}" type="video/mp4">'
-        "Your browser does not support embedded video."
-        "</video>"
-        f'<p class="artifact-note"><code>{html.escape(video.path)}</code> '
-        f"· {video.size_bytes} bytes</p>"
-    )
-
-
-def render_screenshot_gallery(evidence: ReviewEvidenceView) -> str:
-    """Render screenshot evidence."""
-
-    if not evidence.screenshots:
-        return ""
-    figures: list[str] = []
-    for screenshot in evidence.screenshots:
-        caption = screenshot_caption(screenshot, evidence.screenshot_captions)
-        figures.append(
-            '<figure class="screenshot-card">'
-            f'<a href="{html.escape(screenshot.url)}">'
-            f'<img src="{html.escape(screenshot.url)}" alt="{html.escape(caption)}">'
-            "</a>"
-            f"<figcaption>{html.escape(caption)}</figcaption>"
-            "</figure>"
-        )
-    return (
-        '<section class="screenshot-gallery">'
-        "<h3>Screenshot walkthrough</h3>"
-        '<div class="screenshot-frame">'
-        + "\n".join(figures)
-        + "</div></section>"
-    )
-
-
-def render_evidence_actions(evidence: ReviewEvidenceView) -> str:
-    """Render direct evidence artifact links."""
-
-    actions = [
-        ("Monitor snapshot", evidence.monitor_file, "Open monitor snapshot"),
-        ("Performance result", evidence.performance_file, "View performance test result"),
-        ("Data export", evidence.data_file, "Download data export"),
-        ("Simulated data export", evidence.simulated_data_file, "Download simulated data"),
-        ("Analysis notebook", evidence.analysis_notebook_file, "Open analysis notebook"),
-    ]
-    items: list[str] = []
-    for label, file, action in actions:
-        if file is None:
-            items.append(
-                f'<li><span class="missing-artifact">{html.escape(label)} missing</span></li>',
-            )
-        else:
-            items.append(
-                f'<li><a href="{html.escape(file.url)}">{html.escape(action)}</a></li>',
-            )
-    return '<ul class="evidence-actions">' + "\n".join(items) + "</ul>"
-
-
-def render_performance_result(evidence: ReviewEvidenceView) -> str:
-    """Render performance results when available."""
-
-    if evidence.performance_file is None:
-        return ""
-    rows = evidence.performance_results
-    if not rows:
-        return (
-            '<section class="performance-result">'
-            "<h3>Performance test result</h3>"
-            '<p class="artifact-note">This performance artifact does not contain '
-            "tabular result rows.</p></section>"
-        )
-
-    body: list[str] = []
-    for row in rows:
-        errors = int(row.get("request_errors") or 0) + int(row.get("bot_errors") or 0)
-        body.append(
-            "<tr>"
-            f"<td>{html.escape(str(row.get('n_bots', '')))}</td>"
-            f"<td>{html.escape(str(row.get('total_bots_started', '')))}</td>"
-            f"<td>{html.escape(str(row.get('bots_succeeded', '')))}</td>"
-            f"<td>{html.escape(str(row.get('total_requests', '')))}</td>"
-            f"<td>{format_metric(row.get('median_response_time'))}</td>"
-            f"<td>{format_metric(row.get('p95_response_time'))}</td>"
-            f"<td>{format_metric(row.get('q_delay_p95'))}</td>"
-            f"<td>{errors}</td>"
-            "</tr>"
-        )
-    return (
-        '<section class="performance-result">'
-        "<h3>Performance test result</h3>"
-        f'<p><a href="{html.escape(evidence.performance_file.url)}">Raw JSON</a></p>'
-        '<table class="performance-table"><thead><tr>'
-        "<th>Concurrent target</th><th>Bots started</th><th>Succeeded</th>"
-        "<th>Requests</th><th>Resp Med (s)</th><th>Resp P95 (s)</th>"
-        "<th>Q P95 all (s)</th><th>Errors</th>"
-        "</tr></thead><tbody>"
-        + "\n".join(body)
-        + "</tbody></table></section>"
-    )
-
-
-def format_metric(value: object) -> str:
-    """Format a numeric performance metric."""
-
-    if isinstance(value, int | float) and not isinstance(value, bool):
-        return f"{value:.3f}"
-    return "N/A"
-
-
-def render_completeness(evidence: ReviewEvidenceView) -> str:
-    """Render artifact completeness rows."""
-
-    items = [
-        f'<li class="{"present" if item.present else "missing"}">'
-        f"{html.escape(item.label)} <span>{html.escape(item.detail)}</span></li>"
-        for item in evidence.completeness
-    ]
-    return (
-        '<section class="evidence-subsection">'
-        "<h3>Artifact completeness</h3>"
-        '<ul class="artifact-checklist">'
-        + "\n".join(items)
-        + "</ul></section>"
-    )
-
-
-def render_visible_artifacts(evidence: ReviewEvidenceView) -> str:
-    """Render remaining evidence files."""
-
-    if not evidence.visible_files:
-        return "<p>No additional evidence files were found.</p>"
-    cards = "\n".join(render_artifact_card(file) for file in evidence.visible_files)
-    return f'<div class="artifact-grid">{cards}</div>'
-
-
-def render_evidence_section(evidence: ReviewEvidenceView) -> str:
-    """Render the main evidence section."""
-
-    return (
-        '<section id="evidence">'
-        "<h2>Evidence</h2>"
-        f"{render_participant_video(evidence)}"
-        f"{render_screenshot_gallery(evidence)}"
-        f"{render_evidence_actions(evidence)}"
-        f"{render_performance_result(evidence)}"
-        f"{render_completeness(evidence)}"
-        "</section>"
-    )
-
-
 def render_check_list(manifest: dict[str, Any]) -> str:
     """Render validation checks from the manifest."""
 
@@ -868,12 +688,26 @@ def render_review_site(review_dir: Path, site_dir: Path | None = None) -> Path:
     .artifact-grid {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); gap: 1rem; }}
     .artifact-card {{ border: 1px solid #d0d7de; border-radius: 0.5rem; padding: 1rem; }}
     .attempt-video {{ width: 100%; max-width: 56rem; border: 1px solid #d0d7de; border-radius: 0.5rem; }}
-    .screenshot-frame {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 1rem; }}
-    .screenshot-card {{ border: 1px solid #d0d7de; border-radius: 0.5rem; padding: 0.75rem; }}
-    .screenshot-card img {{ max-width: 100%; height: auto; }}
-    .evidence-actions {{ display: flex; flex-wrap: wrap; gap: 0.75rem; padding-left: 0; list-style: none; }}
+    .screenshot-gallery {{ border-top: 1px solid #d0d7de; margin-top: 1rem; padding-top: 1rem; }}
+    .screenshot-frame {{ border: 1px solid #d0d7de; border-radius: 0.5rem; overflow: hidden; }}
+    .screenshot-carousel {{ display: grid; }}
+    .screenshot-card {{ margin: 0; }}
+    .screenshot-card[hidden] {{ display: none; }}
+    .screenshot-card a {{ align-items: center; background: #f6f8fa; display: flex; height: min(52vw, 20rem); justify-content: center; }}
+    .screenshot-card img {{ display: block; height: 100%; object-fit: contain; width: 100%; }}
+    .screenshot-caption-panel {{ border-top: 1px solid #d0d7de; padding: 0.65rem 0.9rem; text-align: center; }}
+    .screenshot-controls {{ display: inline-flex; gap: 0.45rem; }}
+    .screenshot-nav {{ border: 1px solid #d0d7de; border-radius: 999px; background: #fff; cursor: pointer; height: 1.8rem; width: 1.8rem; }}
+    .evidence-actions {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); gap: 0.5rem 1rem; padding-left: 0; list-style: none; }}
+    .performance-result-header {{ align-items: start; display: flex; gap: 1rem; justify-content: space-between; }}
+    .performance-options {{ background: #f6f8fa; border: 1px solid #d0d7de; border-radius: 0.5rem; display: grid; gap: 0.75rem 1rem; grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr)); padding: 1rem; }}
+    .performance-table-wrap {{ overflow-x: auto; }}
     .performance-table {{ border-collapse: collapse; width: 100%; }}
     .performance-table th, .performance-table td {{ border: 1px solid #d0d7de; padding: 0.4rem; text-align: left; }}
+    .notebook-preview {{ display: grid; gap: 0.85rem; }}
+    .notebook-cell {{ background: #fff; border: 1px solid #d0d7de; border-radius: 0.45rem; overflow: hidden; padding: 0.85rem; }}
+    .notebook-code pre, .notebook-outputs pre {{ margin: 0; }}
+    .notebook-outputs {{ border-top: 1px solid #d0d7de; margin-top: 0.75rem; padding-top: 0.75rem; }}
     .artifact-checklist {{ list-style: none; padding-left: 0; }}
     .artifact-checklist li {{ display: flex; justify-content: space-between; border-bottom: 1px solid #d0d7de; padding: 0.35rem 0; }}
     .artifact-checklist .missing, .missing-artifact {{ color: #9a6700; }}
@@ -908,6 +742,31 @@ def render_review_site(review_dir: Path, site_dir: Path | None = None) -> Path:
       {render_blockers(manifest)}
     </section>
   </main>
+  <script>
+    document.querySelectorAll("[data-screenshot-gallery]").forEach((gallery) => {{
+      const cards = Array.from(gallery.querySelectorAll("[data-screenshot-card]"));
+      const panel = gallery.closest(".screenshot-gallery");
+      const counter = panel.querySelector("[data-screenshot-counter]");
+      const previous = panel.querySelector("[data-screenshot-prev]");
+      const next = panel.querySelector("[data-screenshot-next]");
+      const caption = panel.querySelector("[data-screenshot-caption]");
+      const show = (index) => {{
+        cards.forEach((card, cardIndex) => {{ card.hidden = cardIndex !== index; }});
+        caption.textContent = cards[index]?.dataset.screenshotCaptionText || "";
+        counter.textContent = `${{index + 1}} / ${{cards.length}}`;
+        gallery.dataset.screenshotIndex = String(index);
+      }};
+      const step = (offset) => {{
+        const current = Number(gallery.dataset.screenshotIndex || 0);
+        show((current + offset + cards.length) % cards.length);
+      }};
+      if (cards.length > 0) {{
+        show(0);
+        previous.addEventListener("click", () => step(-1));
+        next.addEventListener("click", () => step(1));
+      }}
+    }});
+  </script>
 </body>
 </html>
 """
