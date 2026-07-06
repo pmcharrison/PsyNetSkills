@@ -707,6 +707,11 @@ class Exp(psynet.experiment.Experiment):
         "send_interval_ms": SEND_INTERVAL_MS,
         "draw_interval_ms": DRAW_INTERVAL_MS,
         "coin_bonus": COIN_BONUS,
+        "soft_max_experiment_payment": 1000.0,
+        "hard_max_experiment_payment": 1100.0,
+        "max_participant_payment": 25.0,
+        "soft_max_experiment_payment_email_sent": False,
+        "hard_max_experiment_payment_email_sent": False,
     }
 
     timeline = Timeline(
