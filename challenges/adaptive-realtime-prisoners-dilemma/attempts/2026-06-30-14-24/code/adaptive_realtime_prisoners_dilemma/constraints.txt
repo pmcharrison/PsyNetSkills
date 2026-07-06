@@ -1,0 +1,7 @@
+# Constraints generation was attempted with `dallinger constraints generate`, but
+# PyPI requests repeatedly failed with connection resets in this Cursor Cloud VM.
+# The experiment adds no extra notifier dependencies; this file is present so
+# PsyNet local prechecks can proceed. Regenerate with:
+#   dallinger constraints generate
+psynet @ git+https://gitlab.com/PsyNetDev/PsyNet@c661ae4e3e483a0b270268e4727e70c25475c9aa
+scipy==1.16.3
