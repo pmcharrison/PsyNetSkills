@@ -70,7 +70,7 @@ def render_participant_video(
         "Your browser does not support embedded video."
         "</video>"
         f'<p class="artifact-note"><code>{html.escape(video.path)}</code> '
-        f"· {video.size_bytes} bytes</p>"
+        f"&middot; {video.size_bytes} bytes</p>"
     )
 
 
