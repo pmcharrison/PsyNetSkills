@@ -128,11 +128,13 @@ def test_render_markdown_document_renders_safe_report_markup() -> None:
     assert "<h1>Report</h1>" in html
     assert "<strong>works</strong>" in html
     assert "<code>psynet test local</code>" in html
-    assert "<ul><li>Evidence captured</li>" in html
+    assert "<ul>" in html
+    assert "<li>Evidence captured</li>" in html
     assert '<a href="https://example.test/review">Preview</a>' in html
-    assert "psynet-review-bundle validate" in html
+    assert "psynet-review-bundle" in html
+    assert "validate" in html
     assert "<script>" not in html
-    assert "&lt;script&gt;alert(&#x27;x&#x27;)&lt;/script&gt;" in html
+    assert "&lt;script&gt;alert('x')&lt;/script&gt;" in html
 
 
 def test_render_evidence_section_renders_safe_notebook_rich_outputs() -> None:
@@ -187,12 +189,17 @@ def test_render_evidence_section_renders_safe_notebook_rich_outputs() -> None:
     html = render_evidence_section(view, include_heading=False, section_id=None)
 
     assert "<h2>Results</h2>" in html
-    assert "<ul><li>passed</li></ul>" in html
+    assert "<ul>" in html
+    assert "<li>passed</li>" in html
+    assert '<div class="notebook-code"><pre class="highlight">' in html
     assert '<div class="notebook-html">' in html
-    assert "<table><tr><th>n</th></tr><tr><td>4</td></tr></table>" in html
+    assert "<table>" in html
+    assert "<th>n</th>" in html
+    assert "<td>4</td>" in html
     assert 'onclick="bad()"' not in html
     assert '<div class="notebook-svg">' in html
-    assert '<svg viewBox="0 0 10 10"><circle cx="5" cy="5" r="4"></circle></svg>' in html
+    assert '<svg viewBox="0 0 10 10">' in html
+    assert '<circle cx="5" cy="5" r="4"></circle>' in html
     assert 'onload="bad()"' not in html
     assert "<script>" not in html
     assert "plain result" in html

@@ -9,6 +9,9 @@ description = "Validation and dashboard tooling for the PsyNetSkills workshop re
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
+    "markdown-it-py>=4.2.0",
+    "nh3>=0.3.6",
+    "pygments>=2.20.0",
     "pyyaml>=6.0.3",
 ]
 

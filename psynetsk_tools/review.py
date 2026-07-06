@@ -20,6 +20,7 @@ from psynetsk_tools.review_artifacts import (
     write_shared_monitor_static_assets,
 )
 from psynetsk_tools.review_html import (
+    pygments_css,
     render_evidence_section,
     render_markdown_document,
     render_visible_artifacts,
@@ -727,6 +728,7 @@ def render_review_site(review_dir: Path, site_dir: Path | None = None) -> Path:
     dd {{ margin: 0 0 0.5rem; }}
     pre {{ white-space: pre-wrap; background: #f6f8fa; padding: 1rem; overflow: auto; }}
     .missing {{ color: #9a6700; }}
+    {pygments_css()}
   </style>
 </head>
 <body>
