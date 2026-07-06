@@ -35,12 +35,12 @@
 <div class="canvas-shell">
   <h2>Shared canvas</h2>
   <div class="bonus-pill">Coin bonus: $<span id="coin-bonus">0.00</span></div>
-  <canvas id="shared-canvas" width="{{ game_config.canvas_size }}" height="{{ game_config.canvas_size }}"></canvas>
+  <canvas id="shared-canvas" width="{{ js_vars.game_config.canvas_size }}" height="{{ js_vars.game_config.canvas_size }}"></canvas>
   <p class="canvas-help">Use the arrow keys to move. Collect the gold coins before the session ends.</p>
 </div>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
-  var cfg = {{ game_config | tojson }};
+  var cfg = {{ js_vars.game_config | tojson }};
   var canvas = document.getElementById("shared-canvas");
   var ctx = canvas.getContext("2d");
   var socket = null;
@@ -69,7 +69,8 @@ document.addEventListener("DOMContentLoaded", function () {
     if (socket && socket.readyState === WebSocket.OPEN) {
       var message = Object.assign({
         participant_id: cfg.participant_id,
-        session_id: cfg.session_id
+        session_id: cfg.session_id,
+        immediate: true
       }, payload);
       socket.send(cfg.channel + ":" + JSON.stringify(message));
     }
@@ -228,7 +229,8 @@ document.addEventListener("DOMContentLoaded", function () {
       y: own.y,
       vx: own.vx,
       vy: own.vy,
-      client_time: performance.now()
+      client_time: performance.now(),
+      low_latency: true
     });
   }
 
@@ -264,9 +266,10 @@ document.addEventListener("DOMContentLoaded", function () {
     wsScheme + location.host + "/chat?channel=" + cfg.channel
     + "&worker_id=" + dallinger.identity.workerId
     + "&participant_id=" + cfg.participant_id
+    + "&tolerance=0.005"
   );
   socket.onopen = function () {
-    wsSend({type: "state_request", skip_reduce: true});
+    wsSend({type: "state_request"});
   };
   socket.onmessage = function (event) {
     if (event.data.indexOf(cfg.channel + ":") !== 0) return;

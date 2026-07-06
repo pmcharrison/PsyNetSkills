@@ -5,6 +5,7 @@ import math
 import os
 import random
 from copy import deepcopy
+from dataclasses import dataclass
 from datetime import timezone
 from typing import List
 
@@ -80,15 +81,15 @@ WORLD_DEFINITIONS = [generate_world(i + 1) for i in range(N_WORLDS)]
 
 
 @register_table
-class LiveEvent(SQLBase, SQLMixin):
-    """Generic persisted live-session event, usable without subclassing."""
+class ClientEvent(SQLBase, SQLMixin):
+    """Generic persisted client-originated event, usable without subclassing."""
 
-    __tablename__ = "live_event"
+    __tablename__ = "client_event"
 
     session_id = Column(String(128), index=True)
     participant_id = Column(Integer, index=True, nullable=True)
     event_type = Column(String(64), index=True)
-    skip_reduce = Column(Boolean, default=False, index=True)
+    low_latency = Column(Boolean, default=False, index=True)
     payload = Column(JSON)
 
     @staticmethod
@@ -96,7 +97,7 @@ class LiveEvent(SQLBase, SQLMixin):
         payload = {
             key: value
             for key, value in data.items()
-            if key not in {"type", "participant_id", "skip_reduce"}
+            if key not in {"type", "participant_id", "low_latency"}
         }
         payload["receive_time"] = (
             receive_time.astimezone(timezone.utc).isoformat() if receive_time else None
@@ -109,21 +110,30 @@ class LiveEvent(SQLBase, SQLMixin):
             session_id=session.session_id,
             participant_id=participant.id,
             event_type=data.get("type", "unknown"),
-            skip_reduce=bool(data.get("skip_reduce", False)),
+            low_latency=bool(data.get("low_latency", False)),
             payload=cls.message_payload(data, receive_time),
         )
 
 
-@register_table
-class LiveSession(SQLBase, SQLMixin):
-    """Generic persisted live-session projection, usable without subclassing."""
+@dataclass(frozen=True)
+class ServerEvent:
+    """Transient server-originated event to broadcast after reducing a client event."""
 
-    __tablename__ = "live_session"
+    payloads: tuple[dict, ...] = ()
 
-    event_class = LiveEvent
+    @classmethod
+    def from_payload(cls, payload: dict):
+        return cls((payload,))
 
-    session_id = Column(String(128), index=True)
-    state = Column(JSON)
+    @classmethod
+    def state_snapshot(cls, session, participant_id: int):
+        return cls.from_payload(session.state_snapshot(participant_id))
+
+
+class LiveSessionMixin:
+    """Shared live-session behavior for separately mapped session tables."""
+
+    event_class = ClientEvent
 
     @staticmethod
     def initial_state(participant_ids=None, **params) -> dict:
@@ -147,12 +157,12 @@ class LiveSession(SQLBase, SQLMixin):
         return session
 
     @staticmethod
-    def cached_event(event: LiveEvent) -> dict:
+    def cached_event(event: ClientEvent) -> dict:
         return {
             "id": event.id,
             "event_type": event.event_type,
-            "skip_reduce": bool(event.skip_reduce),
             "participant_id": event.participant_id,
+            "low_latency": bool(event.low_latency),
             "payload": event.payload or {},
         }
 
@@ -169,11 +179,18 @@ class LiveSession(SQLBase, SQLMixin):
             .all()
         )
 
-    def reduce_event(self, event: LiveEvent):
+    def reduce_event(self, event: ClientEvent) -> ServerEvent | None:
         state = deepcopy(self.state or self.initial_state())
         cached_event = self.cached_event(event)
         self.state = state
-        self.last_reduction = {"kind": "generic_event", "event": cached_event}
+        return ServerEvent.from_payload(
+            {
+                "type": "generic_event",
+                "session_id": self.session_id,
+                "target_participant_id": str(event.participant_id),
+                "event": cached_event,
+            }
+        )
 
     def state_snapshot(self, participant_id: int) -> dict:
         return {
@@ -185,41 +202,24 @@ class LiveSession(SQLBase, SQLMixin):
 
 
 @register_table
-class CanvasLiveSession(SQLBase, SQLMixin):
-    __tablename__ = "canvas_live_session"
+class LiveSession(SQLBase, SQLMixin, LiveSessionMixin):
+    """Generic persisted live-session projection, usable without subclassing."""
 
-    event_class = LiveEvent
+    __tablename__ = "live_session"
+
+    session_id = Column(String(128), index=True)
+    state = Column(JSON)
+
+
+@register_table
+class CanvasLiveSession(SQLBase, SQLMixin, LiveSessionMixin):
+    __tablename__ = "canvas_live_session"
 
     session_id = Column(String(128), index=True)
     group_id = Column(Integer, index=True)
     network_id = Column(Integer, index=True)
     world_id = Column(String(64), index=True)
     state = Column(JSON)
-
-    @classmethod
-    def get_or_create(cls, session_id: str, *, defaults=None, for_update=False):
-        query = cls.query.filter_by(session_id=session_id)
-        if for_update:
-            query = query.with_for_update(of=cls)
-        session = query.one_or_none()
-        if session is None:
-            session = cls(session_id=session_id, **(defaults or {}))
-            db.session.add(session)
-            db.session.flush()
-        return session
-
-    @property
-    def participant_ids(self) -> list[int]:
-        state = self.state or {}
-        return [int(p) for p in state.get("params", {}).get("participant_ids", [])]
-
-    @property
-    def events(self):
-        return (
-            self.event_class.query.filter_by(session_id=self.session_id)
-            .order_by(self.event_class.id)
-            .all()
-        )
 
     @staticmethod
     def initial_state(participant_ids: list[int], world: dict) -> dict:
@@ -255,34 +255,35 @@ class CanvasLiveSession(SQLBase, SQLMixin):
             "collection_counts": {participant_id: 0 for participant_id in ordered_ids},
         }
 
-    def reduce_event(self, event: LiveEvent):
+    def reduce_event(self, event: ClientEvent) -> ServerEvent | None:
         state = deepcopy(self.state or {})
         event_type = event.event_type
         payload = event.payload or {}
-        self.last_reduction = {"kind": "none"}
+        server_event = None
 
         if event_type == POSITION_EVENT:
-            self._reduce_position_event(state, event, payload)
+            server_event = self._reduce_position_event(state, event, payload)
         elif event_type == COLLECT_EVENT:
-            self._reduce_collect_event(state, event, payload)
+            server_event = self._reduce_collect_event(state, event, payload)
         elif event_type == "state_request":
-            self.last_reduction = {"kind": "state_snapshot"}
+            server_event = ServerEvent.state_snapshot(self, event.participant_id)
 
         self.state = state
+        return server_event
 
-    def _reduce_position_event(self, state: dict, event: LiveEvent, payload: dict):
+    def _reduce_position_event(
+        self, state: dict, event: ClientEvent, payload: dict
+    ) -> ServerEvent | None:
         participant_id = str(event.participant_id)
         if participant_id not in state.get("players", {}):
-            self.last_reduction = {"kind": "state_snapshot"}
-            return
+            return ServerEvent.state_snapshot(self, event.participant_id)
         try:
             x = float(payload["x"])
             y = float(payload["y"])
             vx = float(payload["vx"])
             vy = float(payload["vy"])
         except (KeyError, TypeError, ValueError):
-            self.last_reduction = {"kind": "state_snapshot"}
-            return
+            return ServerEvent.state_snapshot(self, event.participant_id)
 
         canvas_size = state["params"]["world"]["canvas_size"]
         player = state["players"][participant_id]
@@ -296,33 +297,38 @@ class CanvasLiveSession(SQLBase, SQLMixin):
                 "receive_time": payload.get("receive_time"),
             }
         )
-        self.last_reduction = {
-            "kind": "position",
-            "player": deepcopy(player),
-        }
+        return ServerEvent.from_payload(
+            {
+                "type": "position_update",
+                "session_id": self.session_id,
+                "group_id": self.group_id,
+                "target_participant_ids": [str(p_id) for p_id in self.participant_ids],
+                "player": deepcopy(player),
+            }
+        )
 
-    def _reduce_collect_event(self, state: dict, event: LiveEvent, payload: dict):
+    def _reduce_collect_event(
+        self, state: dict, event: ClientEvent, payload: dict
+    ) -> ServerEvent:
         participant_id = str(event.participant_id)
         coin_id = payload.get("coin_id")
         coin = next((c for c in state.get("coins", []) if c["id"] == coin_id), None)
         if coin is None:
-            self.last_reduction = {
-                "kind": "collect_rejected",
-                "participant_id": participant_id,
-                "coin_id": coin_id,
-                "reason": "already_collected_or_unknown",
-            }
-            return
+            return self.collect_rejected_event(
+                event=event,
+                participant_id=participant_id,
+                coin_id=coin_id,
+                reason="already_collected_or_unknown",
+            )
 
         player = state.get("players", {}).get(participant_id)
         if player is None:
-            self.last_reduction = {
-                "kind": "collect_rejected",
-                "participant_id": participant_id,
-                "coin_id": coin_id,
-                "reason": "unknown_player",
-            }
-            return
+            return self.collect_rejected_event(
+                event=event,
+                participant_id=participant_id,
+                coin_id=coin_id,
+                reason="unknown_player",
+            )
 
         try:
             x = float(payload.get("x", player["x"]))
@@ -333,13 +339,12 @@ class CanvasLiveSession(SQLBase, SQLMixin):
         distance = math.hypot(float(coin["x"]) - x, float(coin["y"]) - y)
         collect_radius = float(coin.get("radius", COIN_RADIUS)) + PLAYER_RADIUS + 4
         if distance > collect_radius:
-            self.last_reduction = {
-                "kind": "collect_rejected",
-                "participant_id": participant_id,
-                "coin_id": coin_id,
-                "reason": "too_far",
-            }
-            return
+            return self.collect_rejected_event(
+                event=event,
+                participant_id=participant_id,
+                coin_id=coin_id,
+                reason="too_far",
+            )
 
         state["coins"] = [c for c in state.get("coins", []) if c["id"] != coin_id]
         collected = {
@@ -359,7 +364,36 @@ class CanvasLiveSession(SQLBase, SQLMixin):
             float(state["bonuses"][participant_id]) + COIN_BONUS,
             2,
         )
-        self.last_reduction = {"kind": "coin_collected", "collection": collected}
+        return ServerEvent.from_payload(
+            {
+                "type": "coin_collected",
+                "session_id": self.session_id,
+                "group_id": self.group_id,
+                "target_participant_ids": [str(p_id) for p_id in self.participant_ids],
+                "collection": collected,
+                "coins": state.get("coins", []),
+                "bonuses": state.get("bonuses", {}),
+            }
+        )
+
+    def collect_rejected_event(
+        self,
+        *,
+        event: ClientEvent,
+        participant_id: str,
+        coin_id,
+        reason: str,
+    ) -> ServerEvent:
+        return ServerEvent.from_payload(
+            {
+                "type": "collect_rejected",
+                "session_id": self.session_id,
+                "target_participant_id": str(event.participant_id),
+                "participant_id": participant_id,
+                "coin_id": coin_id,
+                "reason": reason,
+            }
+        )
 
     def state_snapshot(self, participant_id: int) -> dict:
         state = self.state or {}
@@ -382,31 +416,41 @@ class CanvasLiveSession(SQLBase, SQLMixin):
 
 class LiveSessionWebSocket(NullElt, WebSocketElt):
     session_class = LiveSession
-    event_class = LiveEvent
+    event_class = ClientEvent
 
     def handle_message(
         self, message, channel_name, participant, node, receive_time, experiment
     ):
-        if participant is None:
-            return
         try:
             data = json.loads(message)
         except json.JSONDecodeError:
             return
+        if participant is None:
+            participant = self.get_participant(data)
+            if participant is None:
+                return
 
-        session = self.get_session(self.get_session_id(data))
+        low_latency = self.is_low_latency_event(data)
+        session = self.get_session(
+            self.get_session_id(data),
+            for_update=not low_latency,
+        )
 
         event = self.create_event(data, participant, receive_time, session)
         db.session.add(event)
         db.session.flush()
 
-        if not event.skip_reduce:
-            session.reduce_event(event)
-        self.broadcast_event(
-            experiment=experiment,
-            session=session,
-            event=event,
-        )
+        if low_latency:
+            server_event = self.server_event_from_client_event(session, event)
+        else:
+            server_event = session.reduce_event(event)
+
+        if server_event is not None:
+            self.broadcast_server_event(
+                experiment=experiment,
+                server_event=server_event,
+            )
+
         db.session.commit()
 
     def get_session_id(self, data) -> str:
@@ -414,12 +458,23 @@ class LiveSessionWebSocket(NullElt, WebSocketElt):
             raise ValueError("Live websocket message missing session_id")
         return str(data["session_id"])
 
-    def get_session(self, session_id: str):
-        session = (
-            self.session_class.query.filter_by(session_id=session_id)
-            .with_for_update(of=self.session_class)
-            .one_or_none()
-        )
+    def is_low_latency_event(self, data) -> bool:
+        return bool(data.get("low_latency", False))
+
+    def get_participant(self, data):
+        participant_id = data.get("participant_id")
+        if participant_id is None:
+            return None
+        try:
+            return Participant.query.get(int(participant_id))
+        except (TypeError, ValueError):
+            return None
+
+    def get_session(self, session_id: str, *, for_update: bool = True):
+        query = self.session_class.query.filter_by(session_id=session_id)
+        if for_update:
+            query = query.with_for_update(of=self.session_class)
+        session = query.one_or_none()
         if session is None:
             raise ValueError(f"Unknown live session_id: {session_id}")
         return session
@@ -432,12 +487,12 @@ class LiveSessionWebSocket(NullElt, WebSocketElt):
             session=session,
         )
 
-    def broadcast_event(self, *, experiment, session, event):
-        for payload in self.event_payloads(session, event):
-            self.broadcast(experiment, payload)
+    def server_event_from_client_event(self, session, event) -> ServerEvent | None:
+        return None
 
-    def event_payloads(self, session, event) -> list[dict]:
-        return [session.state_snapshot(event.participant_id)]
+    def broadcast_server_event(self, *, experiment, server_event: ServerEvent):
+        for payload in server_event.payloads:
+            self.broadcast(experiment, payload)
 
     def broadcast(self, experiment, payload):
         experiment.publish_to_subscribers(json.dumps(payload), channel_name=self.channel)
@@ -446,54 +501,51 @@ class LiveSessionWebSocket(NullElt, WebSocketElt):
 class CanvasWebSocket(LiveSessionWebSocket):
     channel = CANVAS_WS_CHANNEL
     session_class = CanvasLiveSession
-    event_class = LiveEvent
+    event_class = ClientEvent
 
-    def event_payloads(self, session, event) -> list[dict]:
-        recipient_ids = [str(p_id) for p_id in session.participant_ids]
-        last_reduction = getattr(session, "last_reduction", {"kind": "none"})
-        kind = last_reduction.get("kind")
+    def server_event_from_client_event(self, session, event) -> ServerEvent | None:
+        if event.event_type != POSITION_EVENT:
+            return None
 
-        if event.skip_reduce and event.event_type == "state_request":
-            return [session.state_snapshot(event.participant_id)]
+        state = session.state or {}
+        participant_id = str(event.participant_id)
+        players = state.get("players", {})
+        if participant_id not in players:
+            return None
 
-        if kind == "position":
-            return [
-                {
-                    "type": "position_update",
-                    "session_id": session.session_id,
-                    "group_id": session.group_id,
-                    "target_participant_ids": recipient_ids,
-                    "player": last_reduction["player"],
-                }
-            ]
+        payload = event.payload or {}
+        try:
+            x = float(payload["x"])
+            y = float(payload["y"])
+            vx = float(payload["vx"])
+            vy = float(payload["vy"])
+        except (KeyError, TypeError, ValueError):
+            return None
 
-        if kind == "coin_collected":
-            return [
-                {
-                    "type": "coin_collected",
-                    "session_id": session.session_id,
-                    "group_id": session.group_id,
-                    "target_participant_ids": recipient_ids,
-                    "collection": last_reduction["collection"],
-                    "coins": (session.state or {}).get("coins", []),
-                    "bonuses": (session.state or {}).get("bonuses", {}),
-                }
-            ]
-
-        if kind == "collect_rejected":
-            return [
-                {
-                    "type": "collect_rejected",
-                    "session_id": session.session_id,
-                    "target_participant_id": str(event.participant_id),
-                    **last_reduction,
-                }
-            ]
-
-        if kind == "state_snapshot":
-            return [session.state_snapshot(event.participant_id)]
-
-        return []
+        canvas_size = state.get("params", {}).get("world", {}).get(
+            "canvas_size", CANVAS_SIZE
+        )
+        player = deepcopy(players[participant_id])
+        player.update(
+            {
+                "x": round(clamp(x, 0, canvas_size), 3),
+                "y": round(clamp(y, 0, canvas_size), 3),
+                "vx": round(vx, 3),
+                "vy": round(vy, 3),
+                "client_time": payload.get("client_time"),
+                "receive_time": payload.get("receive_time"),
+            }
+        )
+        return ServerEvent.from_payload(
+            {
+                "type": "position_update",
+                "session_id": session.session_id,
+                "group_id": session.group_id,
+                "target_participant_ids": [str(p_id) for p_id in session.participant_ids],
+                "event_id": event.id,
+                "player": player,
+            }
+        )
 
 
 def waiting_page(participant: Participant):
@@ -585,10 +637,8 @@ class RealTimeCanvasPage(Page):
         super().__init__(
             label="shared_canvas",
             template_path=template_path,
-            template_arg={
-                "game_config": game_config,
-                "trial_seconds": TRIAL_SECONDS,
-            },
+            template_arg={"trial_seconds": TRIAL_SECONDS},
+            js_vars={"game_config": game_config},
             time_estimate=TRIAL_SECONDS + 5,
             **kwargs,
         )
