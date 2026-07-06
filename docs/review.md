@@ -92,10 +92,13 @@ Section records use:
 
 - `id`: stable lowercase snake-case section ID.
 - `title`: displayed heading.
-- `kind`: `markdown`, `evidence`, `files`, `checks`, or `blockers`.
-- `path`: required for `markdown` sections.
+- `kind`: `markdown`, `evidence`, `files`, `timeline`, `json`, `checks`, or
+  `blockers`.
+- `path`: required for file-backed `markdown` sections.
 - `display`: optional boolean. Set to `false` to keep a section in the manifest
   without showing it by default.
+- `content`, `html`, `entries`, and `files`: optional rendered or structured
+  fields used by dashboard exports and generated review pages.
 
 ## CLI surface
 

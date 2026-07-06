@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import html
 import json
 import os
 import re
@@ -41,7 +42,11 @@ from psynetsk_tools.review_artifacts import (
     write_hashed_artifact,
     write_shared_monitor_static_assets,
 )
-from psynetsk_tools.review_html import render_evidence_section
+from psynetsk_tools.review_html import (
+    render_artifact_card,
+    render_evidence_section,
+    render_markdown_document,
+)
 from psynetsk_tools.review_model import (
     CompletenessItem,
     ReviewFile,
@@ -595,6 +600,281 @@ def dashboard_artifact_url(url: str) -> str:
     return f"/{url.lstrip('/')}"
 
 
+def review_file_from_data(file: AttemptFile | Mapping[str, object]) -> ReviewFile:
+    """Return shared review-file metadata from attempt file data."""
+
+    if isinstance(file, AttemptFile):
+        return ReviewFile(
+            path=file.path,
+            url=file.url,
+            content=file.content,
+            size_bytes=file.size_bytes,
+            kind=file.kind,
+            truncated=file.truncated,
+            published=file.published,
+            publication_note=file.publication_note,
+        )
+    return ReviewFile(
+        path=str(file.get("path") or ""),
+        url=str(file.get("url") or ""),
+        content=file.get("content") if isinstance(file.get("content"), str) else None,
+        size_bytes=file.get("size_bytes") if isinstance(file.get("size_bytes"), int) else 0,
+        kind=str(file.get("kind") or "file"),
+        truncated=bool(file.get("truncated")),
+        published=file.get("published") is not False,
+        publication_note=str(file.get("publication_note") or ""),
+    )
+
+
+def render_file_section(files: object, empty_message: str) -> str:
+    """Render attempt files with the shared review file-card renderer."""
+
+    if not isinstance(files, list) or not files:
+        return f"<p>{html.escape(empty_message)}</p>"
+    cards = [
+        render_artifact_card(
+            review_file_from_data(file),
+            url_transform=dashboard_artifact_url,
+        )
+        for file in files
+        if isinstance(file, AttemptFile | Mapping)
+    ]
+    if not cards:
+        return f"<p>{html.escape(empty_message)}</p>"
+    return '<div class="file-grid">' + "\n".join(cards) + "</div>"
+
+
+def render_inline_markdown(markdown: str) -> str:
+    """Render Markdown suitable for inline timeline descriptions."""
+
+    rendered = render_markdown_document(markdown).strip()
+    if rendered.startswith("<p>") and rendered.endswith("</p>"):
+        return rendered[3:-4]
+    return rendered
+
+
+def action_id_from_anchor(
+    anchor_id: str,
+    *,
+    challenge_slug: str,
+    attempt_name: str,
+) -> str:
+    """Return a learning action ID from its rendered anchor marker."""
+
+    prefix = f"{challenge_slug}-{attempt_name}-"
+    if anchor_id.startswith(prefix):
+        return f"{challenge_slug}/{attempt_name}/{anchor_id[len(prefix):]}"
+    return anchor_id
+
+
+def render_learning_chip(label: str, value: str) -> str:
+    """Render a learning metadata chip."""
+
+    slug = value.replace("_", "-")
+    safe_label = html.escape(label)
+    safe_value = html.escape(value.replace("_", " "))
+    safe_slug = html.escape(slug, quote=True)
+    safe_kind = html.escape(label.casefold(), quote=True)
+    return (
+        f'<span class="learning-chip learning-chip-{safe_kind} '
+        f'learning-chip-{safe_kind}-{safe_slug}">'
+        f'<span class="learning-chip-label">{safe_label}</span> '
+        f"{safe_value}</span>"
+    )
+
+
+def render_learning_action_checkbox(
+    match: re.Match[str],
+    *,
+    challenge_slug: str,
+    attempt_name: str,
+) -> str:
+    """Render a copy-select checkbox for one marked learning action."""
+
+    anchor_id = match.group("anchor_id")
+    action_id = action_id_from_anchor(
+        anchor_id,
+        challenge_slug=challenge_slug,
+        attempt_name=attempt_name,
+    )
+    safe_anchor = html.escape(anchor_id, quote=True)
+    safe_action = html.escape(action_id, quote=True)
+    return (
+        f'<li class="learning-action" id="{safe_anchor}">'
+        '<input class="learning-action-select" type="checkbox" '
+        f'value="{safe_action}" data-action-copy-checkbox '
+        f'aria-label="Select action {safe_action} for copying">'
+    )
+
+
+def render_learnings_markdown(
+    markdown: str,
+    *,
+    challenge_slug: str,
+    attempt_name: str,
+) -> str:
+    """Render learnings Markdown with dashboard action controls."""
+
+    rendered = render_markdown_document(markdown)
+    for label, values in {
+        "Confidence": ("high", "medium", "low"),
+        "Impact": ("high", "medium", "low"),
+    }.items():
+        rendered = re.sub(
+            rf"{label}:\s+({'|'.join(values)})\.",
+            lambda match, chip_label=label: render_learning_chip(
+                chip_label,
+                match.group(1),
+            ),
+            rendered,
+        )
+    rendered = re.sub(
+        r"Status:\s+(considering|in_progress|planned|completed|dismissed|superseded)\.",
+        lambda match: render_learning_chip("Status", match.group(1)),
+        rendered,
+    )
+    rendered = rendered.replace("<p><em>Actions:</em></p>", "")
+    rendered = rendered.replace("<li>", '<li class="learning-action">')
+    rendered = re.sub(
+        r'<li class="learning-action">PSYNETSK_ACTION_ANCHOR_(?P<anchor_id>[a-zA-Z0-9_-]+)\s+',
+        lambda match: render_learning_action_checkbox(
+            match,
+            challenge_slug=challenge_slug,
+            attempt_name=attempt_name,
+        ),
+        rendered,
+    )
+    rendered = rendered.replace("<h3", '</div><div class="learning-card"><h3')
+    rendered = re.sub(r"^\s*</div>", "", rendered)
+    if "learning-card" in rendered:
+        rendered = f"{rendered}</div>"
+    return f'<div class="attempt-markdown learning-markdown">{rendered}</div>'
+
+
+def render_markdown_section_html(
+    section_id: str,
+    content: str,
+    *,
+    challenge_slug: str,
+    attempt_name: str,
+) -> str:
+    """Render one attempt Markdown section body."""
+
+    if not content:
+        fallback = {
+            "challenge": "No rendered challenge instructions were found for this attempt.",
+            "evaluation": "No evaluation file was found for this attempt.",
+            "learnings": "No learnings file was found for this attempt.",
+            "plan": "No implementation plan was found for this attempt.",
+        }.get(section_id, "No section content was found for this attempt.")
+        return f"<p>{html.escape(fallback)}</p>"
+    if section_id == "learnings":
+        return render_learnings_markdown(
+            content,
+            challenge_slug=challenge_slug,
+            attempt_name=attempt_name,
+        )
+    note = (
+        '<p class="artifact-note">'
+        "Implementation plan captured before experiment code and evidence collection."
+        "</p>"
+        if section_id == "plan"
+        else ""
+    )
+    return (
+        f"{note}<div class=\"attempt-markdown\">"
+        f"{render_markdown_document(content)}</div>"
+    )
+
+
+def render_timeline_section_html(section: Mapping[str, object]) -> str:
+    """Render a structured attempt timeline."""
+
+    entries = section.get("entries")
+    if isinstance(entries, list) and entries:
+        items: list[str] = []
+        for entry in entries:
+            if not isinstance(entry, Mapping):
+                continue
+            actor = str(entry.get("actor") or "")
+            timestamp = str(entry.get("timestamp") or "")
+            description = str(entry.get("description") or "")
+            actor_class = html.escape(actor, quote=True)
+            items.append(
+                f'<li class="timeline-entry timeline-entry-{actor_class}">'
+                f'<span class="timeline-time">{html.escape(timestamp)}</span>'
+                f'<span class="timeline-actor">{html.escape(actor.replace("-", " "))}</span>'
+                f'<span class="timeline-description">{render_inline_markdown(description)}</span>'
+                "</li>"
+            )
+        if items:
+            return '<ol class="timeline-list">' + "\n".join(items) + "</ol>"
+    content = section.get("content")
+    if isinstance(content, str) and content:
+        return (
+            '<div class="attempt-markdown timeline-markdown">'
+            f"{render_markdown_document(content)}</div>"
+        )
+    return "<p>No timeline was found for this attempt.</p>"
+
+
+def render_json_section_html(content: object) -> str:
+    """Render escaped JSON or metadata text."""
+
+    return f'<pre><code>{html.escape(str(content or ""))}</code></pre>'
+
+
+def review_section_panel_class(section: Mapping[str, object]) -> str:
+    """Return the dashboard panel class for one review section."""
+
+    section_id = str(section.get("id") or "")
+    kind = str(section.get("kind") or "")
+    if section_id == "challenge":
+        return "challenge-brief"
+    if section_id == "plan":
+        return "plan-panel"
+    if kind == "evidence":
+        return "evidence-panel"
+    if kind == "timeline":
+        return "timeline-panel"
+    return ""
+
+
+def render_attempt_review_section_html(
+    section: Mapping[str, object],
+    *,
+    challenge_slug: str,
+    attempt_name: str,
+) -> str:
+    """Render the safe HTML body for one attempt review section."""
+
+    kind = section.get("kind")
+    section_id = str(section.get("id") or "")
+    if kind == "markdown":
+        return render_markdown_section_html(
+            section_id,
+            str(section.get("content") or ""),
+            challenge_slug=challenge_slug,
+            attempt_name=attempt_name,
+        )
+    if kind == "evidence":
+        return str(
+            section.get("html")
+            or "<p>No evidence summary was exported for this attempt.</p>"
+        )
+    if kind == "files":
+        title = str(section.get("title") or "files").casefold()
+        return render_file_section(
+            section.get("files"),
+            f"No {title} were found for this attempt.",
+        )
+    if kind == "timeline":
+        return render_timeline_section_html(section)
+    if kind == "json":
+        return render_json_section_html(section.get("content"))
+    return "<p>Section kind is not supported.</p>"
+
+
 def attempt_evidence_completeness(
     *,
     challenge_files: list[AttemptFile],
@@ -652,6 +932,8 @@ def markdown_review_section(
 
 def attempt_review_sections(
     *,
+    challenge_slug: str,
+    attempt_name: str,
     attempt_path: str,
     challenge_instructions: str,
     challenge_criteria: str,
@@ -677,7 +959,7 @@ def attempt_review_sections(
             "allowed to inspect them before evidence collection.\n\n"
             f"{challenge_criteria}"
         )
-    return [
+    sections: list[dict[str, object]] = [
         markdown_review_section(
             "challenge",
             "Challenge",
@@ -750,6 +1032,14 @@ def attempt_review_sections(
             "display": True,
         },
     ]
+    for section in sections:
+        section["html"] = render_attempt_review_section_html(
+            section,
+            challenge_slug=challenge_slug,
+            attempt_name=attempt_name,
+        )
+        section["panel_class"] = review_section_panel_class(section)
+    return sections
 
 
 def attempt_artifact_url_prefix(challenge_slug: str, attempt_name: str) -> str:
@@ -946,6 +1236,8 @@ def collect_attempts(
                 evidence_view=evidence_view_export,
                 evidence_html=evidence_html,
                 review_sections=attempt_review_sections(
+                    challenge_slug=challenge_dir.name,
+                    attempt_name=attempt_dir.name,
                     attempt_path=attempt_path,
                     challenge_instructions=challenge_instructions,
                     challenge_criteria=challenge_criteria,

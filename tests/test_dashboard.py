@@ -375,7 +375,7 @@ def test_challenges_table_shows_author_and_past_editors(tmp_path: Path) -> None:
     assert "Harin Lee" in html
 
 
-def test_attempt_page_embeds_exported_evidence_html(tmp_path: Path) -> None:
+def test_attempt_page_embeds_exported_review_section_html(tmp_path: Path) -> None:
     html = render_attempt_page(
         tmp_path,
         {
@@ -400,11 +400,39 @@ def test_attempt_page_embeds_exported_evidence_html(tmp_path: Path) -> None:
             "evidence_files": [],
             "evidence_view": {"visible_files": []},
             "evidence_html": '<strong data-shared-evidence>Shared evidence</strong>',
+            "review_sections": [
+                {
+                    "id": "challenge",
+                    "title": "Challenge",
+                    "kind": "markdown",
+                    "display": True,
+                    "html": "<p>Rendered challenge</p>",
+                    "panel_class": "challenge-brief",
+                },
+                {
+                    "id": "evidence",
+                    "title": "Evidence",
+                    "kind": "evidence",
+                    "display": True,
+                    "html": '<strong data-shared-evidence>Shared evidence</strong>',
+                    "panel_class": "evidence-panel",
+                },
+                {
+                    "id": "hidden",
+                    "title": "Hidden",
+                    "kind": "markdown",
+                    "display": False,
+                    "html": "<p>Hidden body</p>",
+                },
+            ],
         },
     )
 
+    assert '<details id="challenge" class="attempt-panel challenge-brief" open>' in html
     assert '<strong data-shared-evidence>Shared evidence</strong>' in html
     assert "&lt;strong data-shared-evidence&gt;" not in html
+    assert '<a href="#evidence">Evidence</a>' in html
+    assert "Hidden body" not in html
 
 
 def test_collect_challenges_reports_latest_score(tmp_path: Path) -> None:
@@ -1464,12 +1492,22 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
     assert review_sections[0]["kind"] == "markdown"
     assert review_sections[0]["display"] is True
     assert "Implement the exported snapshot." in review_sections[0]["content"]
+    assert review_sections[0]["panel_class"] == "challenge-brief"
+    assert "<h2>Evaluation criteria</h2>" in review_sections[0]["html"]
     assert review_sections[4]["kind"] == "evidence"
     assert review_sections[4]["html"] == evidence_html
     assert review_sections[5]["kind"] == "timeline"
     assert review_sections[5]["entries"][0]["actor"] == "agent-start"
+    assert 'class="timeline-list"' in review_sections[5]["html"]
     assert review_sections[6]["kind"] == "files"
+    assert 'class="file-grid"' in review_sections[6]["html"]
+    assert "<code>README.md</code>" in review_sections[6]["html"]
     assert review_sections[8]["kind"] == "json"
+    assert "&quot;model&quot;: &quot;test-model&quot;" in review_sections[8]["html"]
+    assert all("html" in section for section in review_sections)
+    assert 'data-action-copy-checkbox' in review_sections[3]["html"]
+    assert 'id="example-2026-06-01-10-10-action-001"' in review_sections[3]["html"]
+    assert "learning-chip-confidence-high" in review_sections[3]["html"]
     assert 'data-screenshot-gallery' in evidence_html
     assert 'href="/artifacts/blobs/sha256/' in evidence_html
     assert "Screenshot walkthrough" in evidence_html

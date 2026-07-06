@@ -16,12 +16,13 @@
   {{ $analysisNotebookFile := default (dict) $evidenceView.analysis_notebook_file }}
   {{ $analysisNotebook := default (dict) $evidenceView.analysis_notebook }}
   {{ $hasAnalysisNotebook := and $analysisNotebookFile $analysisNotebook }}
-  {{ $visibleEvidenceFiles := default (slice) $evidenceView.visible_files }}
-  {{ $evidenceHtml := default "" $attempt.evidence_html }}
-  {{ $hasTimeline := gt (len $attempt.timeline_entries) 0 }}
-  {{ $plan := default "" $attempt.plan }}
-  {{ $hasPlan := gt (len $plan) 0 }}
   {{ $attemptActions := where (where hugo.Data.psynetsk.actions "challenge_slug" $challengeSlug) "attempt_name" $attemptName }}
+  {{ $reviewSections := slice }}
+  {{ range default (slice) $attempt.review_sections }}
+    {{ if ne .display false }}
+      {{ $reviewSections = $reviewSections | append . }}
+    {{ end }}
+  {{ end }}
 
   <article class="prose attempt-detail">
     <p class="back-link"><a href="{{ $challenge.url | relURL }}">Back to {{ $challenge.title }}</a></p>
@@ -94,186 +95,42 @@
       <aside class="attempt-sidebar" aria-label="Attempt sections">
         <nav class="attempt-section-nav">
           <ol>
-            <li><a href="#challenge">Challenge</a></li>
-            {{ if $hasPlan }}
-              <li><a href="#plan">Plan</a></li>
+            {{ range $reviewSections }}
+              <li><a href="#{{ .id }}">{{ .title }}</a></li>
             {{ end }}
-            <li><a href="#evaluation">Evaluation</a></li>
-            {{ with $attempt.learnings }}
-              <li><a href="#learnings">Learnings</a></li>
-            {{ end }}
-            <li><a href="#evidence">Evidence</a></li>
-            <li><a href="#timeline">Timeline</a></li>
           </ol>
         </nav>
       </aside>
 
       <div class="attempt-main">
-        <details id="challenge" class="attempt-panel challenge-brief" open>
-          <summary><h2>Challenge</h2></summary>
-          {{ with $attempt.challenge_instructions }}
-            <div class="attempt-markdown">
-              {{ . | markdownify }}
-            </div>
-          {{ else }}
-            <p>No rendered challenge instructions were found for this attempt.</p>
+        {{ range $reviewSections }}
+          {{ $panelClass := "attempt-panel" }}
+          {{ with .panel_class }}
+            {{ $panelClass = printf "attempt-panel %s" . }}
           {{ end }}
-          {{ with $attempt.challenge_criteria }}
-            <h3>Evaluation criteria</h3>
-            <p class="criteria-note">
-              These criteria are shown for review. The implementing agent was not
-              allowed to inspect them before evidence collection.
-            </p>
-            <div class="attempt-markdown">
-              {{ . | markdownify }}
-            </div>
+          <details id="{{ .id }}" class="{{ $panelClass }}" open>
+            <summary><h2>{{ .title }}</h2></summary>
+            {{ if and (in (slice "plan" "evaluation" "learnings") .id) .path }}
+              <div class="collapsible-actions">
+                {{ partial "edit-in-github.html" .path }}
+              </div>
+            {{ end }}
+            {{ if and (eq .id "learnings") $attemptActions }}
+              {{ partial "action-copy-toolbar.html" . }}
+              {{ partial "action-copy-data.html" $attemptActions }}
+            {{ end }}
+            {{ with .html }}
+              {{ . | safeHTML }}
+            {{ else }}
+              <p>No section content was exported for this attempt.</p>
+            {{ end }}
+          </details>
+        {{ else }}
+          <details class="attempt-panel" open>
+            <summary><h2>Review sections</h2></summary>
+            <p>No review sections were exported for this attempt.</p>
+          </details>
           {{ end }}
-        </details>
-
-        {{ if $hasPlan }}
-      <details id="plan" class="attempt-panel plan-panel" open>
-        <summary><h2>Plan</h2></summary>
-          {{ with $attempt.path }}
-            <div class="collapsible-actions">
-              {{ partial "edit-in-github.html" (printf "%s/PLAN.md" .) }}
-            </div>
-          {{ end }}
-        <p class="artifact-note">Implementation plan captured before experiment code and evidence collection.</p>
-        <div class="attempt-markdown">
-          {{ $plan | markdownify }}
-        </div>
-      </details>
-        {{ end }}
-
-    <details id="evaluation" class="attempt-panel" open>
-      <summary><h2>Evaluation</h2></summary>
-        {{ with $attempt.path }}
-          <div class="collapsible-actions">
-            {{ partial "edit-in-github.html" (printf "%s/EVALUATION.md" .) }}
-          </div>
-        {{ end }}
-      {{ with $attempt.evaluation }}
-        <div class="attempt-markdown">
-          {{ . | markdownify }}
-        </div>
-      {{ else }}
-        <p>No evaluation file was found for this attempt.</p>
-      {{ end }}
-    </details>
-
-    {{ with $attempt.learnings }}
-      <details id="learnings" class="attempt-panel" open>
-        <summary><h2>Learnings</h2></summary>
-          {{ with $attempt.path }}
-            <div class="collapsible-actions">
-              {{ partial "edit-in-github.html" (printf "%s/LEARNINGS.md" .) }}
-            </div>
-          {{ end }}
-        {{ if $attemptActions }}
-          {{ partial "action-copy-toolbar.html" . }}
-          {{ partial "action-copy-data.html" $attemptActions }}
-        {{ end }}
-        <div class="attempt-markdown learning-markdown">
-          {{ $learningHtml := . | markdownify }}
-          {{ $learningHtml = replaceRE `Confidence:\s+(high|medium|low)\.` `<span class="learning-chip learning-chip-confidence learning-chip-confidence-$1"><span class="learning-chip-label">Confidence</span> $1</span>` $learningHtml }}
-          {{ $learningHtml = replaceRE `Impact:\s+(high|medium|low)\.` `<span class="learning-chip learning-chip-impact learning-chip-impact-$1"><span class="learning-chip-label">Impact</span> $1</span>` $learningHtml }}
-          {{ $learningHtml = replaceRE `Status:\s+considering\.` `<span class="learning-chip learning-chip-status learning-chip-status-considering"><span class="learning-chip-label">Status</span> considering</span>` $learningHtml }}
-          {{ $learningHtml = replaceRE `Status:\s+in_progress\.` `<span class="learning-chip learning-chip-status learning-chip-status-in-progress"><span class="learning-chip-label">Status</span> in progress</span>` $learningHtml }}
-          {{ $learningHtml = replaceRE `Status:\s+planned\.` `<span class="learning-chip learning-chip-status learning-chip-status-planned"><span class="learning-chip-label">Status</span> planned</span>` $learningHtml }}
-          {{ $learningHtml = replaceRE `Status:\s+completed\.` `<span class="learning-chip learning-chip-status learning-chip-status-completed"><span class="learning-chip-label">Status</span> completed</span>` $learningHtml }}
-          {{ $learningHtml = replaceRE `Status:\s+dismissed\.` `<span class="learning-chip learning-chip-status learning-chip-status-dismissed"><span class="learning-chip-label">Status</span> dismissed</span>` $learningHtml }}
-          {{ $learningHtml = replaceRE `Status:\s+superseded\.` `<span class="learning-chip learning-chip-status learning-chip-status-superseded"><span class="learning-chip-label">Status</span> superseded</span>` $learningHtml }}
-          {{ $learningHtml = replace $learningHtml `<p><em>Actions:</em></p>` `` }}
-          {{ $learningHtml = replace $learningHtml `<li>` `<li class="learning-action">` }}
-          {{ range $attemptActions }}
-            {{ $marker := printf `<li class="learning-action">%s ` .anchor_marker }}
-            {{ $replacement := printf `<li class="learning-action" id="%s"><input class="learning-action-select" type="checkbox" value="%s" data-action-copy-checkbox aria-label="Select action %s for copying">` .anchor_id .id .id }}
-            {{ $learningHtml = replace $learningHtml $marker $replacement }}
-          {{ end }}
-          {{ $learningHtml = replace $learningHtml `<h3` `</div><div class="learning-card"><h3` }}
-          {{ $learningHtml = replaceRE `^\s*</div>` `` $learningHtml }}
-          {{ if in $learningHtml `learning-card` }}
-            {{ $learningHtml = printf `%s</div>` $learningHtml }}
-          {{ end }}
-          {{ $learningHtml | safeHTML }}
-        </div>
-      </details>
-    {{ end }}
-
-    <details id="evidence" class="attempt-panel" open>
-      <summary><h2>Evidence</h2></summary>
-      {{ with $evidenceHtml }}
-        {{ . | safeHTML }}
-      {{ else }}
-        <p>No evidence summary was exported for this attempt.</p>
-      {{ end }}
-    </details>
-
-    <details class="attempt-panel">
-      <summary>All code files</summary>
-      {{ with $attempt.code_files }}
-        <div class="file-grid">
-          {{ range . }}
-            {{ partial "attempt/file-card.html" (dict "file" . "container" "details" "previewMode" "typed") }}
-          {{ end }}
-        </div>
-      {{ else }}
-        <p>No code files were found for this attempt.</p>
-      {{ end }}
-    </details>
-
-    <details class="attempt-panel">
-      <summary>All evidence files</summary>
-      {{ with $visibleEvidenceFiles }}
-        <div class="file-grid">
-          {{ range . }}
-            {{ partial "attempt/file-card.html" (dict "file" . "container" "section" "previewMode" "typed") }}
-          {{ end }}
-        </div>
-      {{ else }}
-        <p>No evidence files were found for this attempt.</p>
-      {{ end }}
-    </details>
-
-    <details class="attempt-panel">
-      <summary>Agent metadata</summary>
-      <pre><code>{{ $attempt.agent_json }}</code></pre>
-    </details>
-
-    <details class="attempt-panel">
-      <summary>Challenge snapshot</summary>
-      {{ with $attempt.challenge_files }}
-        <div class="file-grid">
-          {{ range . }}
-            {{ partial "attempt/file-card.html" (dict "file" . "container" "section" "previewMode" "plain") }}
-          {{ end }}
-        </div>
-      {{ else }}
-        <p>No challenge snapshot files were found for this attempt.</p>
-      {{ end }}
-    </details>
-    </section>
-
-    <details id="timeline" class="attempt-panel timeline-panel">
-      <summary><h2>Timeline</h2></summary>
-      {{ if $hasTimeline }}
-        <ol class="timeline-list">
-          {{ range $attempt.timeline_entries }}
-            <li class="timeline-entry timeline-entry-{{ .actor }}">
-              <span class="timeline-time">{{ .timestamp }}</span>
-              <span class="timeline-actor">{{ replace .actor "-" " " }}</span>
-              <span class="timeline-description">{{ .description | markdownify }}</span>
-            </li>
-          {{ end }}
-        </ol>
-      {{ else if $attempt.timeline }}
-        <div class="attempt-markdown timeline-markdown">
-          {{ $attempt.timeline | markdownify }}
-        </div>
-      {{ else }}
-        <p>No timeline was found for this attempt.</p>
-      {{ end }}
-    </details>
       </div>
     </div>
   </article>

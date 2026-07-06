@@ -625,6 +625,44 @@ table td {
   gap: 0.75rem;
 }
 
+.timeline-list {
+  border-left: 3px solid #8cc8ff;
+  display: grid;
+  gap: 0.75rem;
+  list-style: none;
+  margin-bottom: 0;
+  padding-left: 1rem;
+}
+
+.timeline-entry {
+  border-radius: 0.35rem;
+  display: grid;
+  gap: 0.25rem 0.75rem;
+  grid-template-columns: minmax(5.5rem, auto) minmax(6rem, auto) 1fr;
+  margin: 0;
+  padding: 0.45rem 0.65rem;
+}
+
+.timeline-time {
+  color: var(--muted);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.85rem;
+}
+
+.timeline-actor {
+  color: var(--muted);
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+.timeline-description > :first-child {
+  margin-top: 0;
+}
+
+.timeline-description > :last-child {
+  margin-bottom: 0;
+}
+
 .attempt-file {
   border: 1px solid var(--border);
   border-radius: 0.5rem;

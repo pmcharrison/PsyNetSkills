@@ -341,6 +341,51 @@ def test_render_review_site_renders_evidence_view(tmp_path: Path) -> None:
     assert "screenshots/ <span>2 images</span>" in index
 
 
+def test_render_review_site_renders_timeline_and_json_sections(tmp_path: Path) -> None:
+    review_dir = tmp_path / "pitch-discrimination-demo" / "review"
+    manifest = review_manifest()
+    sections = manifest["sections"]
+    assert isinstance(sections, list)
+    sections.insert(
+        1,
+        {
+            "id": "timeline",
+            "title": "Timeline",
+            "kind": "timeline",
+            "path": "TIMELINE.md",
+        },
+    )
+    sections.insert(
+        2,
+        {
+            "id": "agent_metadata",
+            "title": "Agent metadata",
+            "kind": "json",
+            "path": "agent.json",
+        },
+    )
+    write(review_dir / "review.json", json.dumps(manifest) + "\n")
+    write(review_dir / "REPORT.md", "# Report\n\nExperiment works.\n")
+    write(
+        review_dir / "TIMELINE.md",
+        "# Timeline\n\n"
+        "- T+00:00:00 [agent-start] Started.\n"
+        "- T+00:02:00 [agent-stop] Finished with **evidence**.\n",
+    )
+    write(review_dir / "agent.json", '{"model": "test-model"}\n')
+    write(review_dir / "artifacts/psynet_debug.log", "ok\n")
+    write(review_dir / "artifacts/monitor.html", "<!doctype html><html></html>")
+
+    site_dir = render_review_site(review_dir)
+
+    index = (site_dir / "index.html").read_text(encoding="utf-8")
+    assert '<details id="timeline" class="attempt-panel" open>' in index
+    assert 'class="timeline-list"' in index
+    assert "Finished with <strong>evidence</strong>." in index
+    assert '<details id="agent_metadata" class="attempt-panel" open>' in index
+    assert "{&quot;model&quot;: &quot;test-model&quot;}" in index
+
+
 def write_valid_review(review_dir: Path) -> None:
     write(review_dir / "review.json", json.dumps(review_manifest()) + "\n")
     write(review_dir / "REPORT.md", "# Report\n\nExperiment behaves as expected.\n")

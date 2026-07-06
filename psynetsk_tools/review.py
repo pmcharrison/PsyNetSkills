@@ -32,6 +32,7 @@ from psynetsk_tools.review_model import (
     classify_review_evidence,
     file_kind,
 )
+from psynetsk_tools.timeline import parse_timeline_entries
 from psynetsk_tools.validate import validate_evidence_video
 
 REVIEW_TOP_LEVEL_REQUIRED = {
@@ -47,7 +48,15 @@ REVIEW_TOP_LEVEL_REQUIRED = {
     "blockers",
 }
 SECTION_REQUIRED_FIELDS = {"id", "title", "kind"}
-SECTION_KINDS = {"markdown", "evidence", "files", "checks", "blockers"}
+SECTION_KINDS = {
+    "markdown",
+    "evidence",
+    "files",
+    "timeline",
+    "json",
+    "checks",
+    "blockers",
+}
 ARTIFACT_REQUIRED_FIELDS = {
     "id",
     "kind",
@@ -473,7 +482,10 @@ def validate_review_sections(review_dir: Path, manifest: dict[str, Any]) -> list
             problems.append(f"{label}: kind is not recognized")
         if "display" in section and not isinstance(section.get("display"), bool):
             problems.append(f"{label}: display must be a boolean")
-        if kind == "markdown":
+        if kind in {"markdown", "timeline", "json"} and not isinstance(
+            section.get("content"),
+            str,
+        ):
             section_path, path_problems = relative_review_path(
                 review_dir,
                 section.get("path"),
@@ -760,6 +772,9 @@ def section_panel_class(section: dict[str, Any]) -> str:
 def render_markdown_section(review_dir: Path, section: dict[str, Any]) -> str:
     """Render one markdown section."""
 
+    content = section.get("content")
+    if isinstance(content, str):
+        return f'<div class="attempt-markdown">{render_markdown_document(content)}</div>'
     section_path, problems = relative_review_path(
         review_dir,
         section.get("path"),
@@ -770,6 +785,60 @@ def render_markdown_section(review_dir: Path, section: dict[str, Any]) -> str:
     if not section_path.is_file():
         return '<p class="missing">Section file missing.</p>'
     return f'<div class="attempt-markdown">{render_markdown_document(section_path.read_text(encoding="utf-8"))}</div>'
+
+
+def render_inline_markdown(markdown: str) -> str:
+    """Render Markdown for inline timeline descriptions."""
+
+    rendered = render_markdown_document(markdown).strip()
+    if rendered.startswith("<p>") and rendered.endswith("</p>"):
+        return rendered[3:-4]
+    return rendered
+
+
+def section_text(review_dir: Path, section: dict[str, Any]) -> str | None:
+    """Return inline or file-backed section text."""
+
+    content = section.get("content")
+    if isinstance(content, str):
+        return content
+    section_path, problems = relative_review_path(
+        review_dir,
+        section.get("path"),
+        f"{review_dir / 'review.json'}: sections[{section.get('id', '')}].path",
+    )
+    if problems or section_path is None or not section_path.is_file():
+        return None
+    return section_path.read_text(encoding="utf-8")
+
+
+def render_timeline_section(review_dir: Path, section: dict[str, Any]) -> str:
+    """Render one timeline section."""
+
+    text = section_text(review_dir, section)
+    if text is None:
+        return '<p class="missing">Timeline section file missing.</p>'
+    entries = parse_timeline_entries(text)
+    if not entries:
+        return f'<div class="attempt-markdown timeline-markdown">{render_markdown_document(text)}</div>'
+    items = [
+        f'<li class="timeline-entry timeline-entry-{html.escape(entry.actor, quote=True)}">'
+        f'<span class="timeline-time">{html.escape(entry.timestamp)}</span>'
+        f'<span class="timeline-actor">{html.escape(entry.actor.replace("-", " "))}</span>'
+        f'<span class="timeline-description">{render_inline_markdown(entry.description)}</span>'
+        "</li>"
+        for entry in entries
+    ]
+    return '<ol class="timeline-list">' + "\n".join(items) + "</ol>"
+
+
+def render_json_section(review_dir: Path, section: dict[str, Any]) -> str:
+    """Render one JSON or metadata section."""
+
+    text = section_text(review_dir, section)
+    if text is None:
+        return '<p class="missing">JSON section file missing.</p>'
+    return f"<pre><code>{html.escape(text)}</code></pre>"
 
 
 def section_paths(manifest: dict[str, Any]) -> set[str]:
@@ -799,6 +868,10 @@ def render_review_section(
         body = render_evidence_section(evidence, include_heading=False, section_id=None)
     elif kind == "files":
         body = render_visible_artifacts(evidence, exclude_paths=section_paths(manifest))
+    elif kind == "timeline":
+        body = render_timeline_section(review_dir, section)
+    elif kind == "json":
+        body = render_json_section(review_dir, section)
     elif kind == "checks":
         body = render_check_list(manifest)
     elif kind == "blockers":
