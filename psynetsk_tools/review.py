@@ -23,8 +23,10 @@ from psynetsk_tools.review_artifacts import (
 from psynetsk_tools.review_html import (
     pygments_css,
     render_evidence_section,
-    render_markdown_document,
+    render_json_block,
+    render_markdown_block,
     render_visible_artifacts,
+    render_timeline_section as render_shared_timeline_section,
 )
 from psynetsk_tools.review_model import (
     ReviewFile,
@@ -774,7 +776,7 @@ def render_markdown_section(review_dir: Path, section: dict[str, Any]) -> str:
 
     content = section.get("content")
     if isinstance(content, str):
-        return f'<div class="attempt-markdown">{render_markdown_document(content)}</div>'
+        return render_markdown_block(content)
     section_path, problems = relative_review_path(
         review_dir,
         section.get("path"),
@@ -784,16 +786,7 @@ def render_markdown_section(review_dir: Path, section: dict[str, Any]) -> str:
         return '<p class="missing">Section path is invalid.</p>'
     if not section_path.is_file():
         return '<p class="missing">Section file missing.</p>'
-    return f'<div class="attempt-markdown">{render_markdown_document(section_path.read_text(encoding="utf-8"))}</div>'
-
-
-def render_inline_markdown(markdown: str) -> str:
-    """Render Markdown for inline timeline descriptions."""
-
-    rendered = render_markdown_document(markdown).strip()
-    if rendered.startswith("<p>") and rendered.endswith("</p>"):
-        return rendered[3:-4]
-    return rendered
+    return render_markdown_block(section_path.read_text(encoding="utf-8"))
 
 
 def section_text(review_dir: Path, section: dict[str, Any]) -> str | None:
@@ -819,17 +812,7 @@ def render_timeline_section(review_dir: Path, section: dict[str, Any]) -> str:
     if text is None:
         return '<p class="missing">Timeline section file missing.</p>'
     entries = parse_timeline_entries(text)
-    if not entries:
-        return f'<div class="attempt-markdown timeline-markdown">{render_markdown_document(text)}</div>'
-    items = [
-        f'<li class="timeline-entry timeline-entry-{html.escape(entry.actor, quote=True)}">'
-        f'<span class="timeline-time">{html.escape(entry.timestamp)}</span>'
-        f'<span class="timeline-actor">{html.escape(entry.actor.replace("-", " "))}</span>'
-        f'<span class="timeline-description">{render_inline_markdown(entry.description)}</span>'
-        "</li>"
-        for entry in entries
-    ]
-    return '<ol class="timeline-list">' + "\n".join(items) + "</ol>"
+    return render_shared_timeline_section(entries, fallback_markdown=text)
 
 
 def render_json_section(review_dir: Path, section: dict[str, Any]) -> str:
@@ -838,7 +821,7 @@ def render_json_section(review_dir: Path, section: dict[str, Any]) -> str:
     text = section_text(review_dir, section)
     if text is None:
         return '<p class="missing">JSON section file missing.</p>'
-    return f"<pre><code>{html.escape(text)}</code></pre>"
+    return render_json_block(text)
 
 
 def section_paths(manifest: dict[str, Any]) -> set[str]:

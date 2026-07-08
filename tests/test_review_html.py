@@ -1,7 +1,14 @@
 import json
 
-from psynetsk_tools.review_html import render_evidence_section, render_markdown_document
+from psynetsk_tools.review_html import (
+    render_evidence_section,
+    render_file_grid,
+    render_json_block,
+    render_markdown_document,
+    render_timeline_section,
+)
 from psynetsk_tools.review_model import CompletenessItem, ReviewFile, classify_review_evidence
+from psynetsk_tools.timeline import TimelineEntry
 
 
 def file(path: str, content: str | None = "") -> ReviewFile:
@@ -135,6 +142,29 @@ def test_render_markdown_document_renders_safe_report_markup() -> None:
     assert "validate" in html
     assert "<script>" not in html
     assert "&lt;script&gt;alert('x')&lt;/script&gt;" in html
+
+
+def test_shared_section_renderers_cover_files_timeline_and_json() -> None:
+    files_html = render_file_grid(
+        [file("experiment.py", "print('ok')\n")],
+        empty_message="No files.",
+        grid_class="file-grid",
+    )
+    timeline_html = render_timeline_section(
+        [
+            TimelineEntry("T+00:00:00", "agent-start", "Started **work**.", []),
+            {"timestamp": "T+00:01:00", "actor": "agent-stop", "description": "Stopped."},
+        ],
+    )
+    json_html = render_json_block('{"model": "test"}')
+
+    assert 'class="file-grid"' in files_html
+    assert "<code>experiment.py</code>" in files_html
+    assert "print" in files_html
+    assert 'class="timeline-list"' in timeline_html
+    assert "Started <strong>work</strong>." in timeline_html
+    assert "agent stop" in timeline_html
+    assert "{&quot;model&quot;: &quot;test&quot;}" in json_html
 
 
 def test_render_evidence_section_renders_safe_notebook_rich_outputs() -> None:

@@ -43,9 +43,12 @@ from psynetsk_tools.review_artifacts import (
     write_shared_monitor_static_assets,
 )
 from psynetsk_tools.review_html import (
-    render_artifact_card,
     render_evidence_section,
+    render_file_grid,
+    render_json_block,
+    render_markdown_block,
     render_markdown_document,
+    render_timeline_section,
 )
 from psynetsk_tools.review_model import (
     CompletenessItem,
@@ -631,26 +634,17 @@ def render_file_section(files: object, empty_message: str) -> str:
 
     if not isinstance(files, list) or not files:
         return f"<p>{html.escape(empty_message)}</p>"
-    cards = [
-        render_artifact_card(
-            review_file_from_data(file),
-            url_transform=dashboard_artifact_url,
-        )
+    review_files = [
+        review_file_from_data(file)
         for file in files
         if isinstance(file, AttemptFile | Mapping)
     ]
-    if not cards:
-        return f"<p>{html.escape(empty_message)}</p>"
-    return '<div class="file-grid">' + "\n".join(cards) + "</div>"
-
-
-def render_inline_markdown(markdown: str) -> str:
-    """Render Markdown suitable for inline timeline descriptions."""
-
-    rendered = render_markdown_document(markdown).strip()
-    if rendered.startswith("<p>") and rendered.endswith("</p>"):
-        return rendered[3:-4]
-    return rendered
+    return render_file_grid(
+        review_files,
+        empty_message=empty_message,
+        grid_class="file-grid",
+        url_transform=dashboard_artifact_url,
+    )
 
 
 def action_id_from_anchor(
@@ -781,47 +775,7 @@ def render_markdown_section_html(
         if section_id == "plan"
         else ""
     )
-    return (
-        f"{note}<div class=\"attempt-markdown\">"
-        f"{render_markdown_document(content)}</div>"
-    )
-
-
-def render_timeline_section_html(section: Mapping[str, object]) -> str:
-    """Render a structured attempt timeline."""
-
-    entries = section.get("entries")
-    if isinstance(entries, list) and entries:
-        items: list[str] = []
-        for entry in entries:
-            if not isinstance(entry, Mapping):
-                continue
-            actor = str(entry.get("actor") or "")
-            timestamp = str(entry.get("timestamp") or "")
-            description = str(entry.get("description") or "")
-            actor_class = html.escape(actor, quote=True)
-            items.append(
-                f'<li class="timeline-entry timeline-entry-{actor_class}">'
-                f'<span class="timeline-time">{html.escape(timestamp)}</span>'
-                f'<span class="timeline-actor">{html.escape(actor.replace("-", " "))}</span>'
-                f'<span class="timeline-description">{render_inline_markdown(description)}</span>'
-                "</li>"
-            )
-        if items:
-            return '<ol class="timeline-list">' + "\n".join(items) + "</ol>"
-    content = section.get("content")
-    if isinstance(content, str) and content:
-        return (
-            '<div class="attempt-markdown timeline-markdown">'
-            f"{render_markdown_document(content)}</div>"
-        )
-    return "<p>No timeline was found for this attempt.</p>"
-
-
-def render_json_section_html(content: object) -> str:
-    """Render escaped JSON or metadata text."""
-
-    return f'<pre><code>{html.escape(str(content or ""))}</code></pre>'
+    return f"{note}{render_markdown_block(content)}"
 
 
 def review_section_panel_class(section: Mapping[str, object]) -> str:
@@ -869,9 +823,15 @@ def render_attempt_review_section_html(
             f"No {title} were found for this attempt.",
         )
     if kind == "timeline":
-        return render_timeline_section_html(section)
+        entries = section.get("entries")
+        return render_timeline_section(
+            entries if isinstance(entries, list) else [],
+            fallback_markdown=(
+                section.get("content") if isinstance(section.get("content"), str) else ""
+            ),
+        )
     if kind == "json":
-        return render_json_section_html(section.get("content"))
+        return render_json_block(section.get("content"))
     return "<p>Section kind is not supported.</p>"
 
 

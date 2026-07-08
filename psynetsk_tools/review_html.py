@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import html
-from collections.abc import Callable, Iterable
+from collections.abc import Callable, Iterable, Mapping
 
 import nh3
 from markdown_it import MarkdownIt
@@ -187,6 +187,43 @@ def render_markdown_document(source: str) -> str:
     return sanitize_html_fragment(MARKDOWN.render(source))
 
 
+def render_markdown_block(source: str, class_name: str = "attempt-markdown") -> str:
+    """Render Markdown wrapped in a dashboard/review content block."""
+
+    return (
+        f'<div class="{html.escape(class_name, quote=True)}">'
+        f"{render_markdown_document(source)}</div>"
+    )
+
+
+def render_inline_markdown(source: str) -> str:
+    """Render Markdown for inline contexts such as timeline descriptions."""
+
+    rendered = render_markdown_document(source).strip()
+    if rendered.startswith("<p>") and rendered.endswith("</p>"):
+        return rendered[3:-4]
+    return rendered
+
+
+def render_file_grid(
+    files: Iterable[ReviewFile],
+    *,
+    empty_message: str,
+    grid_class: str = "artifact-grid",
+    url_transform: UrlTransform = identity_url,
+) -> str:
+    """Render review files as a grid of reusable file cards."""
+
+    file_list = list(files)
+    if not file_list:
+        return f"<p>{html.escape(empty_message)}</p>"
+    cards = "\n".join(
+        render_artifact_card(file, url_transform=url_transform)
+        for file in file_list
+    )
+    return f'<div class="{html.escape(grid_class, quote=True)}">{cards}</div>'
+
+
 def render_artifact_card(
     artifact: ReviewFile,
     *,
@@ -259,6 +296,55 @@ def strip_first_markdown_heading(markdown: str) -> str:
         while lines and not lines[0].strip():
             lines = lines[1:]
     return "\n".join(lines)
+
+
+def timeline_value(entry: object, key: str) -> str:
+    """Return one value from a dataclass-like or mapping timeline entry."""
+
+    if isinstance(entry, Mapping):
+        return str(entry.get(key) or "")
+    return str(getattr(entry, key, "") or "")
+
+
+def render_timeline_list(entries: Iterable[object]) -> str:
+    """Render structured timeline entries."""
+
+    items: list[str] = []
+    for entry in entries:
+        actor = timeline_value(entry, "actor")
+        timestamp = timeline_value(entry, "timestamp")
+        description = timeline_value(entry, "description")
+        actor_class = html.escape(actor, quote=True)
+        items.append(
+            f'<li class="timeline-entry timeline-entry-{actor_class}">'
+            f'<span class="timeline-time">{html.escape(timestamp)}</span>'
+            f'<span class="timeline-actor">{html.escape(actor.replace("-", " "))}</span>'
+            f'<span class="timeline-description">{render_inline_markdown(description)}</span>'
+            "</li>"
+        )
+    return '<ol class="timeline-list">' + "\n".join(items) + "</ol>"
+
+
+def render_timeline_section(
+    entries: Iterable[object],
+    *,
+    fallback_markdown: str = "",
+    empty_message: str = "No timeline was found for this attempt.",
+) -> str:
+    """Render a timeline from structured entries with a Markdown fallback."""
+
+    entry_list = list(entries)
+    if entry_list:
+        return render_timeline_list(entry_list)
+    if fallback_markdown:
+        return render_markdown_block(fallback_markdown, "attempt-markdown timeline-markdown")
+    return f"<p>{html.escape(empty_message)}</p>"
+
+
+def render_json_block(content: object) -> str:
+    """Render escaped JSON or metadata text."""
+
+    return f"<pre><code>{html.escape(str(content or ''))}</code></pre>"
 
 
 def render_participant_video(
@@ -443,7 +529,7 @@ def render_notebook_cell(cell: dict[str, object]) -> str:
     source = notebook_text(cell.get("source"))
     safe_type = html.escape(cell_type)
     if cell_type == "markdown":
-        body = f'<div class="attempt-markdown">{render_markdown_document(source)}</div>'
+        body = render_markdown_block(source)
     elif cell_type == "code":
         body = (
             '<div class="notebook-code">'
@@ -673,13 +759,11 @@ def render_visible_artifacts(
 
     excluded = exclude_paths or set()
     visible_files = [file for file in evidence.visible_files if file.path not in excluded]
-    if not visible_files:
-        return "<p>No additional evidence files were found.</p>"
-    cards = "\n".join(
-        render_artifact_card(file, url_transform=url_transform)
-        for file in visible_files
+    return render_file_grid(
+        visible_files,
+        empty_message="No additional evidence files were found.",
+        url_transform=url_transform,
     )
-    return f'<div class="artifact-grid">{cards}</div>'
 
 
 def render_evidence_section(
