@@ -16,6 +16,11 @@ python experiment.py
 psynet test local
 ```
 
+For chain experiments where each visible round should become a `ChainNode`, also
+run the audit in
+`state-dependent-round-structure/references/chain-structure-integrity.md` and
+assert the expected number of distinct trial-attached node ids.
+
 ## Performance evidence
 
 For challenge attempts and other work that needs performance evidence, run this

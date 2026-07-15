@@ -25,6 +25,9 @@ instead.
 - Read `~/PsyNet/docs/getting_started/chain_experiments.rst` and inspect the
   closest PsyNet chain, graph, Gibbs, MCMCP, or create-and-rate demo before
   coding.
+- When a specification says each visible round, game, or iteration should map to
+  a chain node, read `references/chain-structure-integrity.md` before testing or
+  reviewing the experiment.
 - For grouped allocation or barriers, also read
   `psynet-synchronous-experiments/SKILL.md`.
 - For live websocket interaction inside a trial, also read
@@ -70,6 +73,10 @@ Use explicit PsyNet node/trial-maker architecture when:
   expected node class and `trial_maker_id`.
 - Assert that the finalized answer data required for `summarize_trials` is
   present and generates the expected next node or node summary.
+- For designs where each visible round should be a `ChainNode`, run the
+  `references/chain-structure-integrity.md` audit with bots. Assert the expected
+  number of distinct `trial.node_id` values, not just the number of raw node
+  table rows.
 - After local simulation or performance testing, inspect the dashboard/database
   for the expected network, node, trial-maker state, and trial tables.
 - For performance evidence, check trial-count metrics. A round-based experiment
@@ -82,6 +89,9 @@ Use explicit PsyNet node/trial-maker architecture when:
   PsyNet trial or node records.
 - Do not add chain classes only as a wrapper if bot tests and dashboard data do
   not prove the generated trials are attached to the intended nodes.
+- Do not hide many visible rounds inside one `ChainTrial` when the spec expects
+  downstream chain state per round. In that case, participant answers may report
+  all rounds completed while PsyNet only stores one trial-attached node.
 - Do not treat `ChainNode` as a generic data container; use it when PsyNet needs
   a node state that can be allocated, summarized, or advanced.
 - Do not let websocket or synchronization code hide the core PsyNet structure.
