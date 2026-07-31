@@ -1,0 +1,17 @@
+# Standard places to put a virtual environment
+env/
+.venv/
+
+# PsyNet/Dallinger runtime outputs
+.deploy/
+server.log
+static/assets
+source_code.zip
+
+# Python cache files
+__pycache__/
+*.pyc
+
+# Local exports and debug data
+data/
+*.log
