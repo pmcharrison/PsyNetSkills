@@ -1,0 +1,14 @@
+[Config]
+title = Simple visual discrimination experiment (Chrome browser, 4 minutes to complete)
+description = Judge whether pairs of colored circles are the same or different, then complete a color vision check and demographics survey. Please use a Chrome browser.
+contact_email_on_error = researcher@example.com
+organization_name = PsyNetSkills
+
+recruiter = generic
+currency = $
+wage_per_hour = 12.0
+base_payment = 0.80
+
+[Prolific]
+auto_recruit = false
+prolific_estimated_completion_minutes = 4

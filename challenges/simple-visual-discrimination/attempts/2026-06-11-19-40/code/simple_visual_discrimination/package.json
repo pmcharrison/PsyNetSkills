@@ -1,0 +1,12 @@
+{
+  "name": "simple_visual_discrimination",
+  "version": "1.0.0",
+  "description": "Playwright participant-flow checks for the simple visual discrimination attempt.",
+  "private": true,
+  "scripts": {
+    "test": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.60.0"
+  }
+}
