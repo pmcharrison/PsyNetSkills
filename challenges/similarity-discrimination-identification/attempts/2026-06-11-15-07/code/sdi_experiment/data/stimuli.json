@@ -1,0 +1,56 @@
+[
+  {
+    "stimulus_id": "red",
+    "label": "Red",
+    "dimensions": {
+      "color": {"hex": "#d73027", "hue_degrees": 5, "lightness": 48},
+      "size": {"radius_px": 24},
+      "shape": "filled_circle"
+    }
+  },
+  {
+    "stimulus_id": "orange",
+    "label": "Orange",
+    "dimensions": {
+      "color": {"hex": "#fc8d59", "hue_degrees": 24, "lightness": 67},
+      "size": {"radius_px": 24},
+      "shape": "filled_circle"
+    }
+  },
+  {
+    "stimulus_id": "yellow",
+    "label": "Yellow",
+    "dimensions": {
+      "color": {"hex": "#fee08b", "hue_degrees": 50, "lightness": 77},
+      "size": {"radius_px": 24},
+      "shape": "filled_circle"
+    }
+  },
+  {
+    "stimulus_id": "green",
+    "label": "Green",
+    "dimensions": {
+      "color": {"hex": "#91cf60", "hue_degrees": 104, "lightness": 59},
+      "size": {"radius_px": 24},
+      "shape": "filled_circle"
+    }
+  },
+  {
+    "stimulus_id": "blue",
+    "label": "Blue",
+    "dimensions": {
+      "color": {"hex": "#4575b4", "hue_degrees": 212, "lightness": 49},
+      "size": {"radius_px": 24},
+      "shape": "filled_circle"
+    }
+  },
+  {
+    "stimulus_id": "purple",
+    "label": "Purple",
+    "dimensions": {
+      "color": {"hex": "#7b3294", "hue_degrees": 286, "lightness": 39},
+      "size": {"radius_px": 24},
+      "shape": "filled_circle"
+    }
+  }
+]
