@@ -1,5 +1,5 @@
 ---
-score:
+score: 5
 ---
 
 # Evaluation
@@ -10,11 +10,12 @@ Pending human evaluation of this follow-up repair attempt.
 
 ## Strengths
 
-- Pending human evaluation.
+- Nice UI
 
 ## Weaknesses
 
-- Pending human evaluation.
+- Shady distribution of efforts between the traditional node/trial system and the websocket-based logic
+- Too much work on the client side
 
 ## Criteria
 

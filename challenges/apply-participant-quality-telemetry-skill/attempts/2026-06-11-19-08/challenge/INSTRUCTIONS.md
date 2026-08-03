@@ -2,7 +2,7 @@
 title: Apply participant quality telemetry skill
 type: experiment implementation
 difficulty: 7
-authors: [ww577]
+authors: [williambotticelli-wells]
 ---
 
 Use the `psynet-participant-quality-telemetry` skill to add participant-quality

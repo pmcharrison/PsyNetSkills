@@ -15,7 +15,13 @@ Follow the general workflow in `psynet-experiment-implementation/SKILL.md`.
   graphical elements that are not specified.
 
 - Do not display any additional elements that are not mentioned in the task
-  description.
+  description, including participant-facing text overlays inside the visual
+  stimulus area.
+
+- During visual presentation frames, do not insert prompts or labels such as
+  "same or different" between/over stimuli unless the instructions explicitly
+  require that text to appear within the visual display itself. Put decision
+  wording in instructions or response controls otherwise.
 
 - For white image or stimulus backgrounds, avoid visible borders, container
   frames, or contrasting panels unless the experiment design explicitly calls
@@ -51,7 +57,30 @@ Follow the general workflow in `psynet-experiment-implementation/SKILL.md`.
   single-display schematic is provided, the relative sizes are likely to be more
   indicative of the intended appearance.
 
-## Reaction time from the native event log
+- Use a neutral color theme for psynet buttons and progress bars (e.g. gray) to
+  avoid biasing color-related experiments.
+
+## Task guidance and neutral UI chrome
+
+- Avoid putting decision prompts or labels inside the stimulus area, but do not
+  remove all trial-level guidance when the participant's task would become
+  ambiguous. Put concise task guidance outside the visual field, for example
+  above the `GraphicPrompt`, when participants need a reminder such as "Choose
+  the number of the original item most similar to the probe."
+
+- PsyNet's top progress bar may keep its default blue styling even when response
+  buttons are customized. For color-related or color-sensitive experiments,
+  neutralize the progress bar along with buttons and other UI chrome, for
+  example by adding page CSS for `#timeline-progress-bar` and `.progress`.
+
+- Verify neutral UI chrome in the final participant screenshot or video. For
+  PsyNet pages, target the actual header selectors, including
+  `#timeline-progress-bar`, `.progress-bar[role="progressbar"]`, and
+  `.header .progress`, not only response-button classes.
+
+## Reaction time from the native event log 
+You should not measure reaction time, unless explicityly instructed to do so. 
+All instructions below applies only if you explicitly required to provide reaction times.
 
 Reaction time can usually be recorded without any bespoke timing JavaScript. Drive
 the stimulus with a `GraphicPrompt` whose response is locked until the stimulus

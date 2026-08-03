@@ -2,7 +2,7 @@
 title: Participant telemetry and bot defense
 type: experiment implementation
 difficulty: 7
-authors: [ww577]
+authors: [williambotticelli-wells]
 ---
 
 Implement a small PsyNet experiment that records participant telemetry useful

@@ -17,7 +17,43 @@
     "update_command": "git pull --ff-only origin master",
     "dirty": false
   },
-  "run_cost": null,
+  "run_cost": {
+    "currency": "USD",
+    "amount": 30.73,
+    "source": "cursor_usage_csv_batch_import",
+    "recorded_at": "2026-06-15T16:10:35.356510Z",
+    "attribution_status": "matched_cloud_agent_id",
+    "window_started_at": "2026-06-13T12:43:59Z",
+    "window_ended_at": "2026-06-13T14:39:33Z",
+    "matched_started_at": "2026-06-13T14:05:11.806000Z",
+    "matched_ended_at": "2026-06-13T14:05:11.806000Z",
+    "matched_cloud_agent_ids": [
+      "bc-7612b521-aeaf-4550-8309-1f4987163bdc"
+    ],
+    "usage": {
+      "rows": 1,
+      "input_with_cache_write": 469336,
+      "input_without_cache_write": 15861,
+      "cache_read": 33140162,
+      "output_tokens": 114530,
+      "total_tokens": 33739889,
+      "models": {
+        "claude-opus-4-8-thinking-high": {
+          "rows": 1,
+          "input_with_cache_write": 469336,
+          "input_without_cache_write": 15861,
+          "cache_read": 33140162,
+          "output_tokens": 114530,
+          "total_tokens": 33739889,
+          "cost": 30.73
+        }
+      }
+    },
+    "notes": [
+      "Matched Cursor CSV rows by cursor_conversation_id.",
+      "Applied attempt time window plus padding."
+    ]
+  },
   "notes": [
     "Plan was reviewed and approved by the user before implementation began.",
     "Implementation and first-pass evidence collection are complete (see TIMELINE.md [agent-stop] at T+01:55:34).",

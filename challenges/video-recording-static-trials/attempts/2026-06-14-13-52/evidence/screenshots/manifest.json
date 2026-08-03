@@ -1,0 +1,9 @@
+{
+  "captions": {
+    "01-recording-notice.png": "Timeline notice page informing participants that camera video will be recorded and uploaded.",
+    "02-first-streaming-trial.png": "First static trial with recording-status banner active while participant response controls are visible.",
+    "02-streaming-trial-2.png": "Representative later trial showing repeated static-trial flow with recording-enabled page wrapper.",
+    "03-streaming-trial-3.png": "Additional representative trial state used to verify consistent participant interaction and page transitions.",
+    "99-exit-state.png": "Recruiter exit page reached after trial completion, confirming end-to-end participant flow."
+  }
+}

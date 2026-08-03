@@ -1,0 +1,388 @@
+{
+  "role_conditions": {
+    "human_led": {
+      "label": "Human-led",
+      "instructor_human_probability": 1.0,
+      "selector_human_probability": 1.0,
+      "description": "Humans write guidance and make comparison choices."
+    },
+    "ai_led": {
+      "label": "AI-led",
+      "instructor_human_probability": 0.0,
+      "selector_human_probability": 0.0,
+      "description": "Mock AI writes guidance and makes comparison choices."
+    },
+    "hybrid": {
+      "label": "Hybrid",
+      "instructor_human_probability": 0.5,
+      "selector_human_probability": 0.5,
+      "description": "Instructor and selector roles can be human or AI by configured probability."
+    }
+  },
+  "condition_summaries": {
+    "human_led": {
+      "configuration": {
+        "label": "Human-led",
+        "instructor_human_probability": 1.0,
+        "selector_human_probability": 1.0,
+        "description": "Humans write guidance and make comparison choices."
+      },
+      "records": [
+        {
+          "reference_id": "cat",
+          "chain_id": "human_led-cat-demo",
+          "condition": "human_led",
+          "iteration": 1,
+          "instructor_role": "human",
+          "selector_role": "not_applicable_before_selection_phase",
+          "guidance": "Scripted local human guidance: Emphasize the cat features: round face, pointed ears, whiskers, warm orange fur. Start with a clear simple animal silhouette.",
+          "generated_svg_id": "human_led-cat-demo-i1-mock",
+          "generated_svg_code": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 180' role='img' aria-label='mock cat iteration 1'><rect width='240' height='180' fill='#f7fbff'/><circle cx='120' cy='93' r='50' fill='#f6c36a' stroke='#2a2a2a' stroke-width='5'/><circle cx='101' cy='86' r='7' fill='#111'/><circle cx='139' cy='86' r='7' fill='#111'/><path d='M78 103 H45 M80 116 H50 M162 103 H195 M160 116 H190' stroke='#111' stroke-width='4' stroke-linecap='round'/><path d='M116 105 Q120 112 124 105' fill='none' stroke='#111' stroke-width='4'/></svg>",
+          "render_state": {
+            "ok": true,
+            "error": null
+          },
+          "selector_choice": "current",
+          "selector_reasoning": "not_applicable_before_selection_phase selector carried forward the current candidate in the deterministic demo.",
+          "previous_svg_id": null,
+          "selected_svg_id": "human_led-cat-demo-i1-mock",
+          "model_name": "deterministic-mock-svg-generator-v1",
+          "provider_mode": "mock",
+          "prompt_metadata": {
+            "reference_id": "cat",
+            "reference_label": "Cat",
+            "reference_features": [
+              "round face",
+              "pointed ears",
+              "whiskers",
+              "warm orange fur"
+            ],
+            "has_previous_svg": false,
+            "guidance": "Scripted local human guidance: Emphasize the cat features: round face, pointed ears, whiskers, warm orange fur. Start with a clear simple animal silhouette."
+          },
+          "generation_settings": {
+            "temperature": 0.0,
+            "max_iterations": 3
+          }
+        },
+        {
+          "reference_id": "cat",
+          "chain_id": "human_led-cat-demo",
+          "condition": "human_led",
+          "iteration": 2,
+          "instructor_role": "human",
+          "selector_role": "not_applicable_before_selection_phase",
+          "guidance": "Scripted local human guidance: Emphasize the cat features: round face, pointed ears, whiskers, warm orange fur. Refine the current SVG so the silhouette and distinctive details match more closely.",
+          "generated_svg_id": "human_led-cat-demo-i2-mock",
+          "generated_svg_code": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 180' role='img' aria-label='mock cat iteration 2'><rect width='240' height='180' fill='#f7fbff'/><circle cx='120' cy='93' r='50' fill='#f6c36a' stroke='#2a2a2a' stroke-width='5'/><path d='M82 55 L93 25 L107 62 Z M134 62 L149 25 L160 55 Z' fill='#f6c36a' stroke='#2a2a2a' stroke-width='4'/><circle cx='101' cy='86' r='7' fill='#111'/><circle cx='139' cy='86' r='7' fill='#111'/><path d='M78 103 H45 M80 116 H50 M162 103 H195 M160 116 H190' stroke='#111' stroke-width='4' stroke-linecap='round'/><path d='M116 105 Q120 112 124 105' fill='none' stroke='#111' stroke-width='4'/></svg>",
+          "render_state": {
+            "ok": true,
+            "error": null
+          },
+          "selector_choice": "current",
+          "selector_reasoning": "not_applicable_before_selection_phase selector carried forward the current candidate in the deterministic demo.",
+          "previous_svg_id": "human_led-cat-demo-i1-mock",
+          "selected_svg_id": "human_led-cat-demo-i2-mock",
+          "model_name": "deterministic-mock-svg-generator-v1",
+          "provider_mode": "mock",
+          "prompt_metadata": {
+            "reference_id": "cat",
+            "reference_label": "Cat",
+            "reference_features": [
+              "round face",
+              "pointed ears",
+              "whiskers",
+              "warm orange fur"
+            ],
+            "has_previous_svg": true,
+            "guidance": "Scripted local human guidance: Emphasize the cat features: round face, pointed ears, whiskers, warm orange fur. Refine the current SVG so the silhouette and distinctive details match more closely."
+          },
+          "generation_settings": {
+            "temperature": 0.0,
+            "max_iterations": 3
+          }
+        },
+        {
+          "reference_id": "cat",
+          "chain_id": "human_led-cat-demo",
+          "condition": "human_led",
+          "iteration": 3,
+          "instructor_role": "human",
+          "selector_role": "human",
+          "guidance": "Scripted local human guidance: Emphasize the cat features: round face, pointed ears, whiskers, warm orange fur. Refine the current SVG so the silhouette and distinctive details match more closely.",
+          "generated_svg_id": "human_led-cat-demo-i3-mock",
+          "generated_svg_code": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 180' role='img' aria-label='mock cat iteration 3'><rect width='240' height='180' fill='#f7fbff'/><circle cx='120' cy='93' r='50' fill='#f6c36a' stroke='#2a2a2a' stroke-width='5'/><path d='M82 55 L93 25 L107 62 Z M134 62 L149 25 L160 55 Z' fill='#f6c36a' stroke='#2a2a2a' stroke-width='4'/><circle cx='101' cy='86' r='7' fill='#111'/><circle cx='139' cy='86' r='7' fill='#111'/><path d='M78 103 H45 M80 116 H50 M162 103 H195 M160 116 H190' stroke='#111' stroke-width='4' stroke-linecap='round'/><path d='M116 105 Q120 112 124 105' fill='none' stroke='#111' stroke-width='4'/></svg>",
+          "render_state": {
+            "ok": true,
+            "error": null
+          },
+          "selector_choice": "current",
+          "selector_reasoning": "human selector carried forward the current candidate in the deterministic demo.",
+          "previous_svg_id": "human_led-cat-demo-i2-mock",
+          "selected_svg_id": "human_led-cat-demo-i3-mock",
+          "model_name": "deterministic-mock-svg-generator-v1",
+          "provider_mode": "mock",
+          "prompt_metadata": {
+            "reference_id": "cat",
+            "reference_label": "Cat",
+            "reference_features": [
+              "round face",
+              "pointed ears",
+              "whiskers",
+              "warm orange fur"
+            ],
+            "has_previous_svg": true,
+            "guidance": "Scripted local human guidance: Emphasize the cat features: round face, pointed ears, whiskers, warm orange fur. Refine the current SVG so the silhouette and distinctive details match more closely."
+          },
+          "generation_settings": {
+            "temperature": 0.0,
+            "max_iterations": 3
+          }
+        }
+      ]
+    },
+    "ai_led": {
+      "configuration": {
+        "label": "AI-led",
+        "instructor_human_probability": 0.0,
+        "selector_human_probability": 0.0,
+        "description": "Mock AI writes guidance and makes comparison choices."
+      },
+      "records": [
+        {
+          "reference_id": "penguin",
+          "chain_id": "ai_led-penguin-demo",
+          "condition": "ai_led",
+          "iteration": 1,
+          "instructor_role": "ai",
+          "selector_role": "not_applicable_before_selection_phase",
+          "guidance": "Emphasize the penguin features: black body, white belly, orange beak, flippers. Start with a clear simple animal silhouette.",
+          "generated_svg_id": "ai_led-penguin-demo-i1-mock",
+          "generated_svg_code": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 180' role='img' aria-label='mock penguin iteration 1'><rect width='240' height='180' fill='#f7fbff'/><ellipse cx='120' cy='100' rx='48' ry='60' fill='#242735'/><ellipse cx='120' cy='111' rx='31' ry='41' fill='#fff7e8'/><circle cx='103' cy='63' r='6' fill='#fff'/><circle cx='137' cy='63' r='6' fill='#fff'/><path d='M77 119 C48 120 51 84 86 88 M163 119 C192 120 189 84 154 88' fill='#242735'/><path d='M92 160 L76 171 H111 Z M147 160 L130 171 H164 Z' fill='#f2a51a'/></svg>",
+          "render_state": {
+            "ok": true,
+            "error": null
+          },
+          "selector_choice": "current",
+          "selector_reasoning": "not_applicable_before_selection_phase selector carried forward the current candidate in the deterministic demo.",
+          "previous_svg_id": null,
+          "selected_svg_id": "ai_led-penguin-demo-i1-mock",
+          "model_name": "deterministic-mock-svg-generator-v1",
+          "provider_mode": "mock",
+          "prompt_metadata": {
+            "reference_id": "penguin",
+            "reference_label": "Penguin",
+            "reference_features": [
+              "black body",
+              "white belly",
+              "orange beak",
+              "flippers"
+            ],
+            "has_previous_svg": false,
+            "guidance": "Emphasize the penguin features: black body, white belly, orange beak, flippers. Start with a clear simple animal silhouette."
+          },
+          "generation_settings": {
+            "temperature": 0.0,
+            "max_iterations": 3
+          }
+        },
+        {
+          "reference_id": "penguin",
+          "chain_id": "ai_led-penguin-demo",
+          "condition": "ai_led",
+          "iteration": 2,
+          "instructor_role": "ai",
+          "selector_role": "not_applicable_before_selection_phase",
+          "guidance": "Emphasize the penguin features: black body, white belly, orange beak, flippers. Refine the current SVG so the silhouette and distinctive details match more closely.",
+          "generated_svg_id": "ai_led-penguin-demo-i2-mock",
+          "generated_svg_code": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 180' role='img' aria-label='mock penguin iteration 2'><rect width='240' height='180' fill='#f7fbff'/><ellipse cx='120' cy='100' rx='48' ry='60' fill='#242735'/><ellipse cx='120' cy='111' rx='31' ry='41' fill='#fff7e8'/><circle cx='103' cy='63' r='6' fill='#fff'/><circle cx='137' cy='63' r='6' fill='#fff'/><path d='M112 78 L128 78 L120 91 Z' fill='#f2a51a'/><path d='M77 119 C48 120 51 84 86 88 M163 119 C192 120 189 84 154 88' fill='#242735'/><path d='M92 160 L76 171 H111 Z M147 160 L130 171 H164 Z' fill='#f2a51a'/></svg>",
+          "render_state": {
+            "ok": true,
+            "error": null
+          },
+          "selector_choice": "current",
+          "selector_reasoning": "not_applicable_before_selection_phase selector carried forward the current candidate in the deterministic demo.",
+          "previous_svg_id": "ai_led-penguin-demo-i1-mock",
+          "selected_svg_id": "ai_led-penguin-demo-i2-mock",
+          "model_name": "deterministic-mock-svg-generator-v1",
+          "provider_mode": "mock",
+          "prompt_metadata": {
+            "reference_id": "penguin",
+            "reference_label": "Penguin",
+            "reference_features": [
+              "black body",
+              "white belly",
+              "orange beak",
+              "flippers"
+            ],
+            "has_previous_svg": true,
+            "guidance": "Emphasize the penguin features: black body, white belly, orange beak, flippers. Refine the current SVG so the silhouette and distinctive details match more closely."
+          },
+          "generation_settings": {
+            "temperature": 0.0,
+            "max_iterations": 3
+          }
+        },
+        {
+          "reference_id": "penguin",
+          "chain_id": "ai_led-penguin-demo",
+          "condition": "ai_led",
+          "iteration": 3,
+          "instructor_role": "ai",
+          "selector_role": "ai",
+          "guidance": "Emphasize the penguin features: black body, white belly, orange beak, flippers. Refine the current SVG so the silhouette and distinctive details match more closely.",
+          "generated_svg_id": "ai_led-penguin-demo-i3-mock",
+          "generated_svg_code": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 180' role='img' aria-label='mock penguin iteration 3'><rect width='240' height='180' fill='#f7fbff'/><ellipse cx='120' cy='100' rx='48' ry='60' fill='#242735'/><ellipse cx='120' cy='111' rx='31' ry='41' fill='#fff7e8'/><circle cx='103' cy='63' r='6' fill='#fff'/><circle cx='137' cy='63' r='6' fill='#fff'/><path d='M112 78 L128 78 L120 91 Z' fill='#f2a51a'/><path d='M77 119 C48 120 51 84 86 88 M163 119 C192 120 189 84 154 88' fill='#242735'/><path d='M92 160 L76 171 H111 Z M147 160 L130 171 H164 Z' fill='#f2a51a'/></svg>",
+          "render_state": {
+            "ok": true,
+            "error": null
+          },
+          "selector_choice": "current",
+          "selector_reasoning": "ai selector carried forward the current candidate in the deterministic demo.",
+          "previous_svg_id": "ai_led-penguin-demo-i2-mock",
+          "selected_svg_id": "ai_led-penguin-demo-i3-mock",
+          "model_name": "deterministic-mock-svg-generator-v1",
+          "provider_mode": "mock",
+          "prompt_metadata": {
+            "reference_id": "penguin",
+            "reference_label": "Penguin",
+            "reference_features": [
+              "black body",
+              "white belly",
+              "orange beak",
+              "flippers"
+            ],
+            "has_previous_svg": true,
+            "guidance": "Emphasize the penguin features: black body, white belly, orange beak, flippers. Refine the current SVG so the silhouette and distinctive details match more closely."
+          },
+          "generation_settings": {
+            "temperature": 0.0,
+            "max_iterations": 3
+          }
+        }
+      ]
+    },
+    "hybrid": {
+      "configuration": {
+        "label": "Hybrid",
+        "instructor_human_probability": 0.5,
+        "selector_human_probability": 0.5,
+        "description": "Instructor and selector roles can be human or AI by configured probability."
+      },
+      "records": [
+        {
+          "reference_id": "giraffe",
+          "chain_id": "hybrid-giraffe-demo",
+          "condition": "hybrid",
+          "iteration": 1,
+          "instructor_role": "human",
+          "selector_role": "not_applicable_before_selection_phase",
+          "guidance": "Scripted local human guidance: Emphasize the giraffe features: long neck, brown spots, ossicones, yellow coat. Start with a clear simple animal silhouette.",
+          "generated_svg_id": "hybrid-giraffe-demo-i1-mock",
+          "generated_svg_code": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 180' role='img' aria-label='mock giraffe iteration 1'><rect width='240' height='180' fill='#f7fbff'/><path d='M94 157 L102 80 C105 50 143 49 148 80 L157 157 Z' fill='#e7b558' stroke='#4b3420' stroke-width='5'/><ellipse cx='124' cy='59' rx='40' ry='26' fill='#e7b558' stroke='#4b3420' stroke-width='5'/><circle cx='110' cy='56' r='5' fill='#111'/><circle cx='139' cy='56' r='5' fill='#111'/><g fill='#8b572a'><circle cx='116' cy='91' r='8'/><circle cx='136' cy='113' r='7'/><circle cx='102' cy='130' r='6'/><circle cx='145' cy='145' r='8'/></g></svg>",
+          "render_state": {
+            "ok": true,
+            "error": null
+          },
+          "selector_choice": "current",
+          "selector_reasoning": "not_applicable_before_selection_phase selector carried forward the current candidate in the deterministic demo.",
+          "previous_svg_id": null,
+          "selected_svg_id": "hybrid-giraffe-demo-i1-mock",
+          "model_name": "deterministic-mock-svg-generator-v1",
+          "provider_mode": "mock",
+          "prompt_metadata": {
+            "reference_id": "giraffe",
+            "reference_label": "Giraffe",
+            "reference_features": [
+              "long neck",
+              "brown spots",
+              "ossicones",
+              "yellow coat"
+            ],
+            "has_previous_svg": false,
+            "guidance": "Scripted local human guidance: Emphasize the giraffe features: long neck, brown spots, ossicones, yellow coat. Start with a clear simple animal silhouette."
+          },
+          "generation_settings": {
+            "temperature": 0.0,
+            "max_iterations": 3
+          }
+        },
+        {
+          "reference_id": "giraffe",
+          "chain_id": "hybrid-giraffe-demo",
+          "condition": "hybrid",
+          "iteration": 2,
+          "instructor_role": "ai",
+          "selector_role": "not_applicable_before_selection_phase",
+          "guidance": "Emphasize the giraffe features: long neck, brown spots, ossicones, yellow coat. Refine the current SVG so the silhouette and distinctive details match more closely.",
+          "generated_svg_id": "hybrid-giraffe-demo-i2-mock",
+          "generated_svg_code": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 180' role='img' aria-label='mock giraffe iteration 2'><rect width='240' height='180' fill='#f7fbff'/><path d='M94 157 L102 80 C105 50 143 49 148 80 L157 157 Z' fill='#e7b558' stroke='#4b3420' stroke-width='5'/><ellipse cx='124' cy='59' rx='40' ry='26' fill='#e7b558' stroke='#4b3420' stroke-width='5'/><circle cx='110' cy='56' r='5' fill='#111'/><circle cx='139' cy='56' r='5' fill='#111'/><g fill='#8b572a'><circle cx='116' cy='91' r='8'/><circle cx='136' cy='113' r='7'/><circle cx='102' cy='130' r='6'/><circle cx='145' cy='145' r='8'/><path d='M96 43 L87 22 M136 38 L141 17' stroke='#4b3420' stroke-width='5' stroke-linecap='round'/><circle cx='87' cy='21' r='6'/><circle cx='141' cy='17' r='6'/></g></svg>",
+          "render_state": {
+            "ok": true,
+            "error": null
+          },
+          "selector_choice": "current",
+          "selector_reasoning": "not_applicable_before_selection_phase selector carried forward the current candidate in the deterministic demo.",
+          "previous_svg_id": "hybrid-giraffe-demo-i1-mock",
+          "selected_svg_id": "hybrid-giraffe-demo-i2-mock",
+          "model_name": "deterministic-mock-svg-generator-v1",
+          "provider_mode": "mock",
+          "prompt_metadata": {
+            "reference_id": "giraffe",
+            "reference_label": "Giraffe",
+            "reference_features": [
+              "long neck",
+              "brown spots",
+              "ossicones",
+              "yellow coat"
+            ],
+            "has_previous_svg": true,
+            "guidance": "Emphasize the giraffe features: long neck, brown spots, ossicones, yellow coat. Refine the current SVG so the silhouette and distinctive details match more closely."
+          },
+          "generation_settings": {
+            "temperature": 0.0,
+            "max_iterations": 3
+          }
+        },
+        {
+          "reference_id": "giraffe",
+          "chain_id": "hybrid-giraffe-demo",
+          "condition": "hybrid",
+          "iteration": 3,
+          "instructor_role": "human",
+          "selector_role": "ai",
+          "guidance": "Scripted local human guidance: Emphasize the giraffe features: long neck, brown spots, ossicones, yellow coat. Refine the current SVG so the silhouette and distinctive details match more closely.",
+          "generated_svg_id": "hybrid-giraffe-demo-i3-mock",
+          "generated_svg_code": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 180' role='img' aria-label='mock giraffe iteration 3'><rect width='240' height='180' fill='#f7fbff'/><path d='M94 157 L102 80 C105 50 143 49 148 80 L157 157 Z' fill='#e7b558' stroke='#4b3420' stroke-width='5'/><ellipse cx='124' cy='59' rx='40' ry='26' fill='#e7b558' stroke='#4b3420' stroke-width='5'/><circle cx='110' cy='56' r='5' fill='#111'/><circle cx='139' cy='56' r='5' fill='#111'/><g fill='#8b572a'><circle cx='116' cy='91' r='8'/><circle cx='136' cy='113' r='7'/><circle cx='102' cy='130' r='6'/><circle cx='145' cy='145' r='8'/><path d='M96 43 L87 22 M136 38 L141 17' stroke='#4b3420' stroke-width='5' stroke-linecap='round'/><circle cx='87' cy='21' r='6'/><circle cx='141' cy='17' r='6'/></g></svg>",
+          "render_state": {
+            "ok": true,
+            "error": null
+          },
+          "selector_choice": "current",
+          "selector_reasoning": "ai selector carried forward the current candidate in the deterministic demo.",
+          "previous_svg_id": "hybrid-giraffe-demo-i2-mock",
+          "selected_svg_id": "hybrid-giraffe-demo-i3-mock",
+          "model_name": "deterministic-mock-svg-generator-v1",
+          "provider_mode": "mock",
+          "prompt_metadata": {
+            "reference_id": "giraffe",
+            "reference_label": "Giraffe",
+            "reference_features": [
+              "long neck",
+              "brown spots",
+              "ossicones",
+              "yellow coat"
+            ],
+            "has_previous_svg": true,
+            "guidance": "Scripted local human guidance: Emphasize the giraffe features: long neck, brown spots, ossicones, yellow coat. Refine the current SVG so the silhouette and distinctive details match more closely."
+          },
+          "generation_settings": {
+            "temperature": 0.0,
+            "max_iterations": 3
+          }
+        }
+      ]
+    }
+  },
+  "mock_ai_mode": true
+}

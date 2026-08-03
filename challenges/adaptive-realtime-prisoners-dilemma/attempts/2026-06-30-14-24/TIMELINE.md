@@ -1,0 +1,94 @@
+# Timeline
+
+- T+00:00:00 [agent-start] Started autonomous implementation work.
+- T+00:00:15 [agent] Read attempt workflow and experiment implementation evidence requirements.
+- T+00:00:45 [agent] Created attempt branch from the challenge-definition branch for a separate PR.
+- T+00:01:30 [agent] Read public challenge instructions and relevant PsyNet synchronous, real-time, adaptive, frontend, backend, and simulation skills.
+- T+00:02:30 [agent] Refreshed local PsyNet checkout to origin/master at c661ae4e3e483a0b270268e4727e70c25475c9aa.
+- T+00:04:30 [agent] Inspected current PsyNet synchronization, chatroom, websocket, and bot-testing patterns for planning.
+- T+00:08:30 [agent-stop] Paused for required human review of PLAN.md before coding.
+- T+00:08:45 [manual] User clarified that payoff explanations should be an explicit participant-centered table with readable dollar rewards in each cell.
+- T+00:09:00 [agent-start] Resumed plan revision work.
+- T+00:09:20 [agent] Updated PLAN.md to specify row labels for "If I play...", column labels for "If my partner plays...", and cells such as "I get $0.12".
+- T+00:09:30 [agent-stop] Paused again for required human review of PLAN.md before coding.
+- T+00:09:45 [manual] User clarified that chat room ids should be derived from `participant.active_sync_groups[self.trial_maker.sync_group_type].id` rather than direct `participant.sync_group`.
+- T+00:10:00 [agent-start] Resumed plan revision work.
+- T+00:10:15 [agent] Updated PLAN.md to derive communication dyad chat room ids from the trial maker's sync-group namespace.
+- T+00:10:20 [agent-stop] Paused again for required human review of PLAN.md before coding.
+- T+00:10:35 [manual] User clarified that adaptive treatment assignment must use active inference with EIG plus gamma-scaled expected utility over log probability of cooperation, with no fallback policy.
+- T+00:10:50 [agent-start] Resumed plan revision work.
+- T+00:11:05 [agent] Updated PLAN.md to require active-inference scoring, exported EIG and utility terms, and review of the exact EIG formula before implementation.
+- T+00:11:10 [agent-stop] Paused again for required human review of PLAN.md before coding.
+- T+00:11:25 [manual] User clarified that success should be measured as probability of cooperation in the last round.
+- T+00:11:40 [agent-start] Resumed plan revision work.
+- T+00:11:55 [agent] Updated PLAN.md so each dyad contributes one final-round mutual-cooperation observation to the adaptive model.
+- T+00:12:00 [agent-stop] Paused again for required human review of PLAN.md before coding.
+- T+00:12:15 [manual] User clarified that `trial.answer` after the sequence should contain the sequence of actions.
+- T+00:12:30 [agent-start] Resumed plan revision work.
+- T+00:12:45 [agent] Updated PLAN.md to require full ordered per-iteration action sequences in finalized `trial.answer`.
+- T+00:12:50 [agent-stop] Paused again for required human review of PLAN.md before coding.
+- T+00:18:00 [manual] User approved the plan and instructed the agent to attempt according to it.
+- T+00:18:10 [agent-start] Resumed implementation work.
+- T+00:33:00 [agent] Added initial self-contained PsyNet experiment code, active-inference logic, standard support files, and offline adaptive simulation helper.
+- T+00:43:00 [manual] User identified that real-time play must happen within one trial without page reloads, treatment should live in network assignment, and EIG should use the analytical digamma formula.
+- T+00:48:00 [agent] Rewrote experiment around one custom real-time trial page, websocket choice/result/chat messages, network/node treatment assignment, and analytical active-inference scoring.
+- T+00:56:00 [agent] Passed compile/import checks, offline adaptive simulation, and `psynet test local`.
+- T+00:58:00 [agent] Ran `psynet simulate` and packaged simulation evidence.
+- T+00:59:30 [agent] Recorded blockers for SciPy installation, browser recording, constraints generation, and performance JSON.
+- T+01:04:00 [manual] User requested moving the live game page HTML into a dedicated template.
+- T+01:05:00 [agent] Moved live game HTML and JavaScript into `templates/live_pd_sequence.html` and kept `RealTimeGamePage` focused on template arguments.
+- T+01:08:00 [manual] User requested robustness to client-side page refresh.
+- T+01:09:30 [agent] Added websocket state snapshot rehydration for page refresh and increased manual dyad waiting robustness.
+- T+01:12:00 [manual] User requested interface cleanups: no duplicate instruction payoff table, no visible treatment/player IDs/points, 20-second rounds, footer reward updates, and more reliable chat display.
+- T+01:14:00 [agent] Updated the participant-facing interface to show one payoff table, dollars-only rewards, no treatment labels or participant IDs, 20-second rounds, footer reward updates, and optimistic chat echoes.
+- T+01:17:00 [manual] User reported that chat messages were not received by the partner and simultaneous play did not seem to work.
+- T+01:19:00 [agent] Added network row locking for websocket session mutation, current-round duplicate/stale choice guards, and explicit dyad recipient routing for chat and round results.
+- T+01:22:00 [manual] User clarified that the adaptive target is the probability that both players cooperate in the last round, i.e. `(Cooperate, Cooperate)` as a single event.
+- T+01:23:00 [agent] Updated adaptive observations, simulation, notebook, and documentation to model one binary `(Cooperate, Cooperate)` event per dyad.
+- T+01:26:00 [manual] User clarified that expected utility should use `E[u]`, not `E[log u]`.
+- T+01:27:00 [agent] Updated adaptive scoring and exports to use posterior predictive probability of final-round `(Cooperate, Cooperate)` as the utility term.
+- T+01:29:00 [manual] User requested setting `GAMMA = 0.2`.
+- T+01:30:00 [agent] Updated experiment and simulation gamma defaults to 0.2.
+- T+01:32:00 [manual] User requested setting `GAMMA = 0.1` and adding notebook plots for EIG, utility, and `-G` by treatment.
+- T+01:33:00 [agent] Updated gamma to 0.1 and expanded the analysis notebook with an inline SVG plot of EIG, expected utility, and `-G` trajectories.
+- T+01:35:00 [manual] User requested moving treatment-choice logic into its own class for future optimizer swaps.
+- T+01:36:00 [agent] Refactored active-inference treatment selection into `ActiveInferenceTreatmentOptimizer` and updated experiment/simulation callers.
+- T+01:38:00 [manual] User requested moving live session state out of network var storage and into a dedicated table.
+- T+01:39:00 [agent] Added `PDLiveSession` and moved websocket choices, sequence, and cumulative live state into a row locked per dyad/session.
+- T+01:41:00 [manual] User requested restoring chat history after refresh.
+- T+01:42:00 [agent] Added persistent chat messages to `PDLiveSession` and rehydrated the chat feed from state snapshots.
+- T+01:44:00 [manual] User requested showing instructions after dyad formation and treatment assignment.
+- T+01:45:00 [agent] Moved instructions into the allocated trial and made communication wording treatment-specific.
+- T+01:47:00 [manual] User suggested making session-state construction event-based and renaming `build_sequence_from_actions` to `summarize_events`.
+- T+01:48:00 [agent] Refactored sequence construction into `summarize_events`, with live and bot paths reducing choice events into sequence/cumulative state.
+- T+01:50:00 [manual] User clarified that runtime should use the same low-level reducer interface for all event types.
+- T+01:51:00 [agent] Replaced `summarize_events` with incremental `reduce_event(state, event, ...)` for choice, chat, and no-op event reduction.
+- T+01:53:00 [manual] User clarified that treatment should be a session parameter, not a `reduce_event` argument.
+- T+01:54:00 [agent] Moved treatment into session `state.params` and simplified the reducer signature to `reduce_event(state, event, participants)`.
+- T+01:56:00 [manual] User clarified that `reduce_event` should be a method on the retrieved `PDLiveSession` object and should update that session.
+- T+01:57:00 [agent] Refactored `reduce_event` into a `PDLiveSession` instance method that appends events and mutates the session projection.
+- T+01:59:00 [manual] User clarified that `PDLiveSession` should accept `PDLiveEvent` objects rather than normalizing raw events itself.
+- T+02:00:00 [agent] Moved raw websocket normalization to the boundary and made `PDLiveSession.reduce_event` consume `PDLiveEvent` objects.
+- T+02:02:00 [manual] User requested refocusing `PrisonersDilemmaGameWebSocket` on broadcast responsibilities.
+- T+02:03:00 [agent] Added `broadcast_event(session, event, ...)` and moved outbound payload selection behind that websocket hook.
+- T+02:05:00 [manual] User asked whether `PDLiveSession` and the websocket class subclass generic base classes.
+- T+02:06:00 [agent] Added `LiveSessionBase` and `LiveSessionWebSocket` parents, with `PDLiveSession` and `PrisonersDilemmaGameWebSocket` as concrete subclasses.
+- T+02:08:00 [manual] User requested the same generic/concrete split for live events.
+- T+02:09:00 [agent] Added `LiveEventBase` and made `PDLiveEvent` the concrete mapped event subclass.
+- T+02:11:00 [manual] User clarified that generic event/session classes should also be mapped tables and usable directly.
+- T+02:12:00 [agent] Added generic mapped `LiveEvent` and `LiveSession` tables and introduced stable `session_id` routing for generic/PD live sessions.
+- T+02:14:00 [manual] User clarified that the socket should not be context-aware or create sessions; it should use `session_id` only.
+- T+02:15:00 [agent] Refactored `LiveSessionWebSocket` to retrieve existing sessions by client-provided `session_id`, with `RealTimeGamePage` responsible for session creation.
+- T+02:17:00 [manual] User pointed out that session tables should not duplicate event ids.
+- T+02:18:00 [agent] Removed session-level event-id storage so event history lives only in the event table.
+- T+02:20:00 [manual] User requested a dynamic `events` property on live sessions and clearer session-id protocol handling.
+- T+02:21:00 [agent] Added `LiveSessionBase.events` as a dynamic event-table query and made missing/unknown websocket `session_id` values explicit protocol errors.
+- T+02:23:00 [manual] User requested a generic `skip_reduce` event attribute for request-style messages such as state snapshots.
+- T+02:24:00 [agent] Added event-level `skip_reduce` and made client state requests persist/broadcast without mutating session state.
+- T+02:26:00 [manual] User pointed out that PD-specific event columns were unnecessary.
+- T+02:27:00 [agent] Removed the specialized `PDLiveEvent` table and used the generic `LiveEvent` table directly.
+- T+02:29:00 [manual] User requested simple bot answers that do not use live-session calls.
+- T+02:30:00 [agent] Changed bot responses to compact play sequences and moved full answer expansion into `PrisonersDilemmaTrial.format_answer`.
+- T+02:32:00 [manual] User clarified that all `trial.answer` values should be compact play sequences, with richer data reconstructed from events/session state.
+- T+02:33:00 [agent] Simplified browser and bot `trial.answer` values to ordered `C`/`D` sequences and adjusted scoring/feedback/tests accordingly.
+- T+02:34:00 [agent-stop] Implementation and first-pass evidence collection complete.

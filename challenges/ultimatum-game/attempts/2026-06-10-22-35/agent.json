@@ -19,7 +19,43 @@
     "update_command": "git pull --ff-only origin master",
     "dirty": false
   },
-  "run_cost": null,
+  "run_cost": {
+    "currency": "USD",
+    "amount": 42.43,
+    "source": "cursor_usage_csv_batch_import",
+    "recorded_at": "2026-06-15T16:10:35.356510Z",
+    "attribution_status": "matched_cloud_agent_id",
+    "window_started_at": "2026-06-10T22:35:40Z",
+    "window_ended_at": "2026-06-10T23:41:08Z",
+    "matched_started_at": "2026-06-10T22:32:29.674000Z",
+    "matched_ended_at": "2026-06-10T22:32:29.674000Z",
+    "matched_cloud_agent_ids": [
+      "bc-5e598a14-7796-41c9-b898-d899a0309311"
+    ],
+    "usage": {
+      "rows": 1,
+      "input_with_cache_write": 303031,
+      "input_without_cache_write": 547608,
+      "cache_read": 39910113,
+      "output_tokens": 105331,
+      "total_tokens": 40866083,
+      "models": {
+        "gpt-5.5-high": {
+          "rows": 1,
+          "input_with_cache_write": 303031,
+          "input_without_cache_write": 547608,
+          "cache_read": 39910113,
+          "output_tokens": 105331,
+          "total_tokens": 40866083,
+          "cost": 42.43
+        }
+      }
+    },
+    "notes": [
+      "Matched Cursor CSV rows by cursor_conversation_id.",
+      "Applied attempt time window plus padding."
+    ]
+  },
   "notes": [
     "Takeover from attempts/2026-06-10-17-15 per user request; refactored toward the external ultimatum_game Trial/TrialMaker/Page/control structure."
   ]

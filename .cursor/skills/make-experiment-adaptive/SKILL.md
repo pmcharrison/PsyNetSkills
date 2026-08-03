@@ -62,11 +62,9 @@ which choices are assumptions.
   function as a list; for continuous `y`, store only the predictive mean and
   standard deviation. Do not add extra integrals, sampling, or approximation work
   just to produce this record.
-- Make the adaptive path deterministic under a fixed seed where possible, or
-  explicitly record random seeds for stochastic policies.
 - Keep selection code fast enough for the participant response path. Adaptive
   computation should normally take less than 1 second per selection; treat
-  roughly 2 seconds halfway through an actual deployment as a warning threshold
+  computations longer than 2 seconds halfway through an actual deployment as a critical threshold
   that requires simplification, caching, or a different posterior strategy.
 - Add timing logs around data loading, posterior fitting/sampling, and objective
   scoring.
@@ -79,16 +77,16 @@ that needs these procedures. Avoid duplicating the core model specification.
    - Simulates the adaptive setup against a static baseline outside psynet,
    on a reasonable number of participants. 
    - If an approximate inference scheme is used, check the accuracy of posterior estimates
-   in these simulations, using less approximate inference strategies such as HMC.
-   - Perform performance checks (average posterior reconstruction time and average design selection time),
+   in these simulations, using less approximate inference strategies such as HMC as gold-standard. 
+   - Runs performance checks (average posterior reconstruction time and average design selection time),
    to detect and isolate performance issues owing to the computations themslves.
    - Produces accuracy diagnostic plots, in particular posterior predictive checks,
    to confirm that Bayesian computations are reliable.
 - If performance is insufficient, consider using more approximate sampling methods,
-or lowering the number of samples, but always make sure the accuracy does not degrade too much.
+or lowering the number of learning-steps, but always make sure the accuracy does not degrade too much.
 - If simulations within psynet are sufficiently slower than simulations outside of psynet, make sure that
 performance is not degraded by using inefficient data retrieval techniques when updating the posteriors.
-For instance, avoid relying on the varstore. Optimize the SQL queries retrieving the data.
+For instance, avoid relying on the VarStore. Optimize the SQL queries retrieving the data.
   
 ## Posterior update strategy
 
@@ -103,8 +101,7 @@ Choose one of these strategies explicitly:
    - Initialize fitting from the last persisted posterior, but include all data
      needed to avoid missing observations.
    - Persist posterior snapshots in the database using an appropriate custom
-     table, including model version, optimizer version, data cutoff, fit status,
-     diagnostics, and timestamp.
+     table.
    - Treat stale snapshots as hints, not proof that data has been incorporated.
 
 3. `online_learning`

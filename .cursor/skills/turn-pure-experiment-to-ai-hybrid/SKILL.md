@@ -11,6 +11,8 @@ human participants into an AI-assisted or mixed human-AI experiment.
 
 ## Workflow
 
+- For local mock or stochastic participant profiles before live hybrid launch,
+  read `psynet-simulated-participants/SKILL.md`.
 - Start from the pure-human experiment and identify the participant-facing task,
   stimuli, instructions, response format, trial maker, recruitment target, and
   trial capacity.
