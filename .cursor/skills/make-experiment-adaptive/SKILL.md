@@ -51,8 +51,8 @@ which choices are assumptions.
 - Use `y` for trial-level observations and `z` for participant or context
   covariates throughout adaptive code, logs, and exports.
 - Ask for or implement explicit mapping logic from raw answers to observations `y`, and covariates `z`.
-- Prefer custom persisted attributes for core adaptive variables (e.g. `y`, `z`) over ad hoc JSON varstores, unless they have complex formats. Use PsyNet field patterns such as `claim_field` when the value deserves a real
-  queryable/exported column. Use vars only for metadata that has complex types or that does not need to be retrieved in large batches.
+- Prefer SQLAlchemy columns for storing variables (e.g. `y`, `z`). Note that PsyNet's `PythonObject` column
+  can be used for complex objects if neede.
 - Keep raw answer data available for audit; do not replace it with only `y`.
 - Log each adaptive decision: candidate IDs, chosen ID, objective components,
   posterior version or snapshot, data cutoff, and optimizer version.
@@ -75,9 +75,9 @@ a separate file (`adaptive_logic.py`) imported from `experiment.py` and any othe
 that needs these procedures. Avoid duplicating the core model specification.
 - Implementations should include a concise standalone simulation script (`simulate_procedure.py`) that:
    - Simulates the adaptive setup against a static baseline outside psynet,
-   on a reasonable number of participants. 
+   on a reasonable number of participants.
    - If an approximate inference scheme is used, check the accuracy of posterior estimates
-   in these simulations, using less approximate inference strategies such as HMC as gold-standard. 
+   in these simulations, using less approximate inference strategies such as HMC as gold-standard.
    - Runs performance checks (average posterior reconstruction time and average design selection time),
    to detect and isolate performance issues owing to the computations themslves.
    - Produces accuracy diagnostic plots, in particular posterior predictive checks,
@@ -87,7 +87,7 @@ or lowering the number of learning-steps, but always make sure the accuracy does
 - If simulations within psynet are sufficiently slower than simulations outside of psynet, make sure that
 performance is not degraded by using inefficient data retrieval techniques when updating the posteriors.
 For instance, avoid relying on the VarStore. Optimize the SQL queries retrieving the data.
-  
+
 ## Posterior update strategy
 
 Choose one of these strategies explicitly:
