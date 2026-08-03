@@ -87,14 +87,14 @@ Only continue when they are happy.
 
 Use `psynet simulate` to simulate participants and produce an example dataset.
 This dataset should contain a decent number of participants representative of a real study;
-adjust `Exp.test_n_bots` to ensure this. Save the simulated export at `evidence/simulated_data.zip`.
+adjust `Exp.test_n_bots` to ensure this. Save the simulated export at `artifacts/simulated_data.zip`.
 For profile design, data-path parity, mock-LLM patterns, and simulation
 limitations, follow `psynet-simulated-participants/SKILL.md`.
 
 ### Develop analysis scripts
 
 Write scripts to analyze the generated data. Use a Jupyter notebook for this,
-with the canonical filename `evidence/analyses/analysis.ipynb` when working in a
+with the canonical filename `analyses/analysis.ipynb` when working in a
 challenge attempt. The notebook should be self-contained for review,
 including all code, tables, and plots.
 If the implementation is inspired by a published paper, replicate the analyses reported in the paper as closely as possible.
@@ -105,7 +105,7 @@ headlessly so its outputs are embedded for review:
 
 ```bash
 uv pip install matplotlib jupyter nbconvert nbformat ipykernel
-jupyter nbconvert --to notebook --execute --inplace evidence/analyses/analysis.ipynb
+jupyter nbconvert --to notebook --execute --inplace analyses/analysis.ipynb
 ```
 
 Keep the executed notebook small (the dashboard truncates inline file content

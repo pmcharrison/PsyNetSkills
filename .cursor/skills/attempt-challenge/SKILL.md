@@ -94,6 +94,20 @@ Note the `cloud-agent-links` skill for sharing user review links.
    Repository validation treats an attempt whose `agent.json` explicitly has
    `"ended_at": null` as in progress, so plan-review pauses can pass CI without
    pretending that implementation evidence or criteria review is complete.
+7b. Initialize the attempt root as an audit packet with the challenge extension.
+   From the attempt directory (or via Python):
+
+   ```bash
+   uv run python - <<'PY'
+   from pathlib import Path
+   from psynetsk_tools.challenge_audit import init_challenge_attempt_audit
+   init_challenge_attempt_audit(Path("."), write_starter_markdown=True)
+   PY
+   ```
+
+   This writes `audit.json` with `extensions: ["psynetskills.challenge"]` plus
+   `artifacts/`, `analyses/`, and `logs/`. Do **not** create a legacy `evidence/`
+   directory for new attempts. See `docs/audit.md`.
 8. Start `TIMELINE.md` and initialize `LEARNINGS.md` from the template before
    implementation. Follow `references/attempt-artifacts.md` for timeline and
    learning-note conventions.
@@ -124,17 +138,21 @@ Note the `cloud-agent-links` skill for sharing user review links.
      things that took a long time to find in documentation, etc. Follow
      `references/attempt-artifacts.md` for standalone action bullets and
      learning-card format.
-10. Collect evidence in `evidence/`. Use the `record-participant-video` skill
-   when creating participant-flow screenshots or `evidence/participant.mp4`, and follow
+10. Collect evidence in `artifacts/` (with `analyses/` / `logs/` at the attempt
+   root). Use the `record-participant-video` skill
+   when creating participant-flow screenshots or `artifacts/participant.mp4`, and follow
    `references/attempt-artifacts.md` for challenge-type-specific evidence
    guidance.
     - For experiment implementation challenges, do not stop after functional
       evidence. Complete the `psynet-experiment-implementation` post-coding
       steps as review artifacts: run `psynet simulate`, save a simulated export,
-      write the canonical `evidence/analyses/analysis.ipynb` notebook with
+      write the canonical `analyses/analysis.ipynb` notebook with
       visible CSV-reading code, inline tables, plots, and interpretation, and add
       `REPORT.md`. If any of these cannot be completed, record the blocker in
-      `EVALUATION.md`.
+      `EVALUATION.md` and keep matching `audit.json` blockers honest.
+    - When an artifact file is ready, update `audit.json` (status present /
+      remove blockers), ideally via `psynet audit mark-present <id>` from the
+      attempt root.
 11. When implementation and first-pass evidence collection are complete, close
    `TIMELINE.md` with `[agent-stop]` and set `ended_at` in `agent.json` to the
    matching UTC ISO timestamp. Leave `run_cost` as `null`; maintainers can

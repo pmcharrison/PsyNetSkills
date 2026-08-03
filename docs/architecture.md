@@ -52,5 +52,7 @@ repository should record only challenge definitions, attempts, evidence, skills,
 and documentation needed for the workshop loop.
 
 Experiment readiness audits (`psynet audit`, `psynet.audit`) live in the
-PsyNet checkout. This repository depends on `psynet[audit]` for shared
-evidence HTML used by challenge attempt pages.
+PsyNet checkout. Challenge attempts use the attempt root as an audit packet
+with the `psynetskills.challenge` extension; this repository depends on
+`psynet[audit]` for shared evidence HTML and dual-reads historic
+`evidence/` attempts.

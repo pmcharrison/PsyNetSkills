@@ -5,17 +5,19 @@ Use these conventions when preparing any challenge attempt for review.
 ## Evidence notes
 
 Use the public challenge instructions as the source of truth for required
-evidence. Put review artifacts in `evidence/` and choose formats that match the
+evidence. Put review artifacts in `artifacts/` (legacy attempts may still use
+`evidence/`) and choose formats that match the
 challenge type, such as screenshots, logs, reports, exported data, recordings,
-or generated outputs.
+or generated outputs. New attempts must also have `audit.json` at the attempt
+root; see `docs/audit.md`.
 
 For experiment implementation challenges, read `experiment-evidence.md` for the
 standard evidence checklist. Do not add experiment-specific artifacts to other
 challenge types unless they are relevant to that challenge.
 
 For challenges with a participant-facing flow, use the `record-participant-video`
-skill when creating `evidence/participant.mp4` or
-`evidence/screenshots/` visual review artifacts.
+skill when creating `artifacts/participant.mp4` or
+`artifacts/screenshots/` visual review artifacts.
 
 When a challenge's central requirement depends on an external service or
 integration, such as S3, payment APIs, webhooks, or third-party recruitment

@@ -27,12 +27,12 @@ psynet performance-test local \
   --n-bots 40 \
   --duration-minutes 5 \
   --time-factor 1.0 \
-  --json-output ../../evidence/performance.json
+  --json-output ../../artifacts/performance.json
 ```
 
 Adjust the JSON output path to match the attempt or project layout.
 For export commands and commands that may spawn subprocesses, prefer an absolute
-path under the attempt's `evidence/` directory; relative paths can resolve from a
+path under the attempt's `artifacts/` directory; relative paths can resolve from a
 temporary deployment directory rather than the experiment directory.
 If the experiment customizes `run_bot`, preserve `bot=None` support and delegate
 to `super().run_bot(...)` for framework-created bots; `psynet performance-test`
@@ -56,6 +56,6 @@ reliable evidence collection.
 
 ## Evidence notes
 
-Record what you ran and what happened in the challenge attempt's `evidence/`
+Record what you ran and what happened in the challenge attempt's `artifacts/`
 folder. If a command cannot run because system services are unavailable, record
 that clearly rather than pretending validation passed.

@@ -8,8 +8,9 @@ specifications for contributors and agents.
 - `challenges.md` describes challenge format and authoring guidance.
 - `attempts.md` describes attempt structure, evidence, timelines, evaluations,
   learnings, and credential policy.
-- `audit.md` points at the PsyNet-owned `psynet audit` contract and documents
-  how the workshop dashboard consumes `psynet.audit` helpers.
+- `audit.md` points at the PsyNet-owned `psynet audit` contract, the
+  `psynetskills.challenge` extension, and dashboard dual-read of audit-root
+  attempts versus legacy `evidence/` layouts.
 - `authors.md` describes the central author registry and attribution workflow.
 - `architecture.md` describes the repository layout and dashboard data flow.
 - `dashboard.md` describes static-site export, builds, and previews.

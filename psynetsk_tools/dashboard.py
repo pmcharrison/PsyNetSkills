@@ -10,9 +10,16 @@ import re
 import shutil
 import subprocess
 from collections.abc import Mapping
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, replace
 from pathlib import Path
 
+from psynetsk_tools.challenge_audit import (
+    evidence_collection_roots,
+    evidence_zip_is_publishable,
+    is_evidence_publish_section,
+    publish_sections_for_attempt,
+    read_attempt_audit_manifest,
+)
 from psynetsk_tools.actions import (
     ACTION_REVIEW_SCOPE,
     LearningAction,
@@ -531,6 +538,48 @@ def collect_attempt_files(
     return files
 
 
+def collect_attempt_evidence_files(
+    attempt_dir: Path,
+    artifact_prefix: str,
+    artifact_publications: Mapping[
+        tuple[str, str, str, str],
+        ArtifactPublication,
+    ],
+    challenge_slug: str,
+    attempt_name: str,
+    max_files: int = 50,
+) -> list[AttemptFile]:
+    """Collect evidence files with dual-read for audit vs legacy layouts."""
+
+    files: list[AttemptFile] = []
+    for section, source_dir in evidence_collection_roots(attempt_dir):
+        if not source_dir.exists():
+            continue
+        publications = attempt_section_urls(
+            artifact_publications,
+            challenge_slug,
+            attempt_name,
+            section,
+        )
+        for path in sorted(path for path in source_dir.rglob("*") if path.is_file()):
+            if len(files) >= max_files:
+                return files
+            if path.name == ".gitkeep":
+                continue
+            file = read_attempt_file(
+                path,
+                source_dir,
+                f"{artifact_prefix}/{section}",
+                publications,
+            )
+            # analyses/ and logs/ need a section prefix so shared classifiers
+            # that look for analyses/... keep working.
+            if section in {"analyses", "logs"}:
+                file = replace(file, path=f"{section}/{file.path}")
+            files.append(file)
+    return files
+
+
 def review_file_data(file: AuditFile | None) -> dict[str, object] | None:
     """Return dashboard-safe metadata for one review file."""
 
@@ -908,8 +957,76 @@ def attempt_review_sections(
     visible_evidence_files: list[dict[str, object]],
     challenge_files: list[AttemptFile],
     agent_json: str,
+    attempt_dir: Path | None = None,
+    audit_manifest: dict[str, object] | None = None,
 ) -> list[dict[str, object]]:
-    """Return dashboard-ready review sections for a challenge attempt."""
+    """Return dashboard-ready review sections for a challenge attempt.
+
+    When ``audit.json`` is present, section order and kinds come from the
+    manifest. Skills still overlay workshop HTML polish (criteria disclosure,
+    learning-action checkboxes, score chrome elsewhere in Hugo).
+    """
+
+    if audit_manifest is None and attempt_dir is not None:
+        audit_manifest = read_attempt_audit_manifest(attempt_dir)
+
+    if audit_manifest is not None:
+        sections = attempt_review_sections_from_audit(
+            audit_manifest,
+            challenge_slug=challenge_slug,
+            attempt_name=attempt_name,
+            attempt_path=attempt_path,
+            challenge_instructions=challenge_instructions,
+            challenge_criteria=challenge_criteria,
+            plan=plan,
+            evaluation=evaluation,
+            learnings=learnings,
+            timeline=timeline,
+            timeline_entries=timeline_entries,
+            evidence_html=evidence_html,
+            code_files=code_files,
+            visible_evidence_files=visible_evidence_files,
+            challenge_files=challenge_files,
+            agent_json=agent_json,
+        )
+    else:
+        sections = attempt_review_sections_legacy(
+            challenge_slug=challenge_slug,
+            attempt_name=attempt_name,
+            attempt_path=attempt_path,
+            challenge_instructions=challenge_instructions,
+            challenge_criteria=challenge_criteria,
+            plan=plan,
+            evaluation=evaluation,
+            learnings=learnings,
+            timeline=timeline,
+            timeline_entries=timeline_entries,
+            evidence_html=evidence_html,
+            code_files=code_files,
+            visible_evidence_files=visible_evidence_files,
+            challenge_files=challenge_files,
+            agent_json=agent_json,
+        )
+
+    for section in sections:
+        section_id = str(section.get("id") or "unknown")
+        section["html"] = safe_section_html(
+            section_id,
+            lambda section=section: render_attempt_review_section_html(
+                section,
+                challenge_slug=challenge_slug,
+                attempt_name=attempt_name,
+            ),
+        )
+        section["panel_class"] = review_section_panel_class(section)
+    return sections
+
+
+def _challenge_brief_content(
+    challenge_instructions: str,
+    challenge_criteria: str,
+) -> str:
+    """Compose challenge brief markdown with optional criteria disclosure."""
 
     challenge_content = challenge_instructions
     if challenge_criteria:
@@ -920,7 +1037,35 @@ def attempt_review_sections(
             "allowed to inspect them before evidence collection.\n\n"
             f"{challenge_criteria}"
         )
-    sections: list[dict[str, object]] = [
+    return challenge_content
+
+
+def attempt_review_sections_legacy(
+    *,
+    challenge_slug: str,
+    attempt_name: str,
+    attempt_path: str,
+    challenge_instructions: str,
+    challenge_criteria: str,
+    plan: str,
+    evaluation: str,
+    learnings: str,
+    timeline: str,
+    timeline_entries: list[TimelineEntry],
+    evidence_html: str,
+    code_files: list[AttemptFile],
+    visible_evidence_files: list[dict[str, object]],
+    challenge_files: list[AttemptFile],
+    agent_json: str,
+) -> list[dict[str, object]]:
+    """Synthesize review sections for historic attempts without audit.json."""
+
+    del challenge_slug, attempt_name  # reserved for overlay parity with audit path
+    challenge_content = _challenge_brief_content(
+        challenge_instructions,
+        challenge_criteria,
+    )
+    return [
         markdown_review_section(
             "challenge",
             "Challenge",
@@ -993,17 +1138,146 @@ def attempt_review_sections(
             "display": True,
         },
     ]
-    for section in sections:
-        section_id = str(section.get("id") or "unknown")
-        section["html"] = safe_section_html(
-            section_id,
-            lambda section=section: render_attempt_review_section_html(
-                section,
-                challenge_slug=challenge_slug,
-                attempt_name=attempt_name,
-            ),
+
+
+def attempt_review_sections_from_audit(
+    manifest: Mapping[str, object],
+    *,
+    challenge_slug: str,
+    attempt_name: str,
+    attempt_path: str,
+    challenge_instructions: str,
+    challenge_criteria: str,
+    plan: str,
+    evaluation: str,
+    learnings: str,
+    timeline: str,
+    timeline_entries: list[TimelineEntry],
+    evidence_html: str,
+    code_files: list[AttemptFile],
+    visible_evidence_files: list[dict[str, object]],
+    challenge_files: list[AttemptFile],
+    agent_json: str,
+) -> list[dict[str, object]]:
+    """Build review sections primarily from audit.json section declarations."""
+
+    del challenge_slug, attempt_name
+    content_by_id = {
+        "challenge": _challenge_brief_content(
+            challenge_instructions,
+            challenge_criteria,
+        ),
+        "plan": plan,
+        "evaluation": evaluation,
+        "learnings": learnings,
+        "timeline": timeline,
+        "agent_metadata": agent_json,
+    }
+    files_by_id = {
+        "code_files": [asdict(file) for file in code_files],
+        "evidence_files": visible_evidence_files,
+        "challenge_snapshot": [asdict(file) for file in challenge_files],
+    }
+    raw_sections = manifest.get("sections")
+    if not isinstance(raw_sections, list):
+        return attempt_review_sections_legacy(
+            challenge_slug="",
+            attempt_name="",
+            attempt_path=attempt_path,
+            challenge_instructions=challenge_instructions,
+            challenge_criteria=challenge_criteria,
+            plan=plan,
+            evaluation=evaluation,
+            learnings=learnings,
+            timeline=timeline,
+            timeline_entries=timeline_entries,
+            evidence_html=evidence_html,
+            code_files=code_files,
+            visible_evidence_files=visible_evidence_files,
+            challenge_files=challenge_files,
+            agent_json=agent_json,
         )
-        section["panel_class"] = review_section_panel_class(section)
+
+    sections: list[dict[str, object]] = []
+    for raw in raw_sections:
+        if not isinstance(raw, dict):
+            continue
+        section_id = str(raw.get("id") or "")
+        kind = str(raw.get("kind") or "")
+        title = str(raw.get("title") or section_id or "Section")
+        display = raw.get("display")
+        if display is False:
+            continue
+        path = raw.get("path")
+        path_text = str(path) if isinstance(path, str) and path else None
+        if path_text and not path_text.startswith(attempt_path):
+            path_text = f"{attempt_path}/{path_text}"
+
+        if kind == "markdown":
+            content = content_by_id.get(section_id, "")
+            if not content and isinstance(raw.get("content"), str):
+                content = str(raw["content"])
+            sections.append(
+                markdown_review_section(
+                    section_id,
+                    title,
+                    str(content or ""),
+                    path=path_text,
+                    display=True if display is None else bool(display),
+                )
+            )
+            continue
+        if kind == "evidence":
+            sections.append(
+                {
+                    "id": section_id or "evidence",
+                    "title": title,
+                    "kind": "evidence",
+                    "html": evidence_html,
+                    "display": True,
+                }
+            )
+            continue
+        if kind == "timeline":
+            sections.append(
+                {
+                    "id": section_id or "timeline",
+                    "title": title,
+                    "kind": "timeline",
+                    "content": content_by_id.get("timeline", timeline),
+                    "entries": [asdict(entry) for entry in timeline_entries],
+                    "path": path_text or f"{attempt_path}/TIMELINE.md",
+                    "display": bool(timeline_entries or timeline),
+                }
+            )
+            continue
+        if kind == "json":
+            sections.append(
+                {
+                    "id": section_id or "json",
+                    "title": title,
+                    "kind": "json",
+                    "content": content_by_id.get(section_id, agent_json),
+                    "path": path_text,
+                    "display": True if display is None else bool(display),
+                }
+            )
+            continue
+        if kind == "files":
+            sections.append(
+                {
+                    "id": section_id or "files",
+                    "title": title,
+                    "kind": "files",
+                    "files": files_by_id.get(section_id, []),
+                    "display": True if display is None else bool(display),
+                }
+            )
+            continue
+        if kind in {"checks", "blockers"}:
+            # Core audit kinds rendered elsewhere for standalone audits; the
+            # dashboard attempt page keeps workshop-focused sections only.
+            continue
     return sections
 
 
@@ -1117,15 +1391,12 @@ def collect_attempts(
                 "code",
             ),
         )
-        evidence_files = collect_attempt_files(
-            attempt_dir / "evidence",
-            f"{artifact_prefix}/evidence",
-            attempt_section_urls(
-                artifact_publications,
-                challenge_dir.name,
-                attempt_dir.name,
-                "evidence",
-            ),
+        evidence_files = collect_attempt_evidence_files(
+            attempt_dir,
+            artifact_prefix,
+            artifact_publications,
+            challenge_dir.name,
+            attempt_dir.name,
         )
         evidence_view = classify_audit_evidence(evidence_files)
         has_experiment = any(
@@ -1220,6 +1491,7 @@ def collect_attempts(
                     visible_evidence_files=visible_evidence_files,
                     challenge_files=challenge_files,
                     agent_json=agent_json,
+                    attempt_dir=attempt_dir,
                 ),
             )
         )
@@ -1675,7 +1947,7 @@ def write_attempt_artifacts(
         for attempt_dir in sorted(
             path for path in attempts_dir.iterdir() if path.is_dir()
         ):
-            for section in ("challenge", "code", "evidence"):
+            for section in publish_sections_for_attempt(attempt_dir):
                 source_dir = attempt_dir / section
                 if not source_dir.exists():
                     continue
@@ -1713,7 +1985,10 @@ def should_publish_attempt_artifact(
 
     if source_file.suffix.lower() != ".zip":
         return True
-    if section == "evidence" and relative_path == "data.zip":
+    if is_evidence_publish_section(section) and evidence_zip_is_publishable(
+        section,
+        relative_path,
+    ):
         return True
     return False
 
@@ -1721,9 +1996,9 @@ def should_publish_attempt_artifact(
 def excluded_attempt_artifact_note(section: str, relative_path: str) -> str:
     """Explain why an attempt artifact is metadata-only on the dashboard."""
 
-    if section == "evidence":
+    if is_evidence_publish_section(section):
         return (
-            "Excluded from dashboard publication because only evidence/data.zip "
+            "Excluded from dashboard publication because only data.zip "
             "is published among attempt evidence ZIP files."
         )
     if section == "challenge":

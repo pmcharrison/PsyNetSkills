@@ -25,6 +25,12 @@ from psynetsk_tools.authors import (
     validate_authors,
     validate_yaml_mapping,
 )
+from psynetsk_tools.challenge_audit import (
+    attempt_uses_audit_layout,
+    evidence_video_roots,
+    read_attempt_audit_manifest,
+    validate_challenge_extension_manifest,
+)
 from psynetsk_tools.learnings import (
     LEARNING_ACTION_RE,
     is_learning_actions_heading,
@@ -504,6 +510,18 @@ def validate_skills(
     return problems
 
 
+def attempt_forward_cutover_warnings(attempt_dir: Path) -> list[str]:
+    """Return soft warnings for forward-only audit cutover."""
+
+    if attempt_is_in_progress(attempt_dir) and not attempt_uses_audit_layout(attempt_dir):
+        return [
+            f"{attempt_dir}: in-progress attempt is missing audit.json; "
+            "new attempts should initialize the attempt root as an audit packet "
+            "with extensions including psynetskills.challenge",
+        ]
+    return []
+
+
 def validate_attempt(
     attempt_dir: Path,
     challenge_dir: Path,
@@ -512,12 +530,30 @@ def validate_attempt(
     """Validate one challenge attempt folder."""
     problems: list[str] = []
     in_progress = attempt_is_in_progress(attempt_dir)
+    uses_audit = attempt_uses_audit_layout(attempt_dir)
     required = ["challenge", "agent.json", "EVALUATION.md"]
     if not in_progress:
-        required.extend(["code", "evidence"])
+        required.append("code")
+        if uses_audit:
+            required.append("artifacts")
+        else:
+            required.append("evidence")
     for name in required:
         if not (attempt_dir / name).exists():
             problems.append(f"{attempt_dir}: missing {name}")
+
+    if uses_audit:
+        try:
+            manifest = read_attempt_audit_manifest(attempt_dir)
+        except (OSError, ValueError, json.JSONDecodeError) as exc:
+            problems.append(f"{attempt_dir / 'audit.json'}: {exc}")
+            manifest = None
+        if manifest is not None:
+            problems.extend(
+                validate_challenge_extension_manifest(attempt_dir, manifest),
+            )
+            if not (attempt_dir / "PLAN.md").exists():
+                problems.append(f"{attempt_dir}: missing PLAN.md for audit-layout attempt")
 
     agent_file = attempt_dir / "agent.json"
     if agent_file.exists():
@@ -555,12 +591,33 @@ def validate_attempt(
     elif not attempt_dir.name.startswith("example-"):
         problems.append(f"{attempt_dir}: missing TIMELINE.md")
 
-    evidence_dir = attempt_dir / "evidence"
-    if evidence_dir.exists():
-        for video_file in sorted(evidence_dir.rglob("*.mp4")):
+    for evidence_root in evidence_video_roots(attempt_dir):
+        if not evidence_root.exists():
+            continue
+        for video_file in sorted(evidence_root.rglob("*.mp4")):
             problems.extend(validate_evidence_video(video_file))
 
     return problems
+
+
+def collect_repository_warnings(root: Path) -> list[str]:
+    """Collect non-fatal repository validation warnings."""
+
+    warnings: list[str] = []
+    challenges_dir = root / "challenges"
+    if not challenges_dir.exists():
+        return warnings
+    for challenge_dir in sorted(
+        path for path in challenges_dir.iterdir() if path.is_dir()
+    ):
+        attempts_dir = challenge_dir / "attempts"
+        if not attempts_dir.exists():
+            continue
+        for attempt_dir in sorted(
+            path for path in attempts_dir.iterdir() if path.is_dir()
+        ):
+            warnings.extend(attempt_forward_cutover_warnings(attempt_dir))
+    return warnings
 
 
 def validate_challenges(
@@ -756,6 +813,9 @@ def build_parser() -> argparse.ArgumentParser:
 def main(argv: list[str] | None = None) -> int:
     """Run repository validation."""
     args = build_parser().parse_args(argv)
+    warnings = collect_repository_warnings(args.root)
+    for warning in warnings:
+        print(f"Warning: {warning}", file=sys.stderr)
     problems = validate_repository(args.root)
     if problems:
         for problem in problems:

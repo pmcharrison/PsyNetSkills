@@ -1598,9 +1598,7 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
     )
     assert evidence_by_path["archive.zip"]["published"] is False
     assert evidence_by_path["archive.zip"]["url"] == ""
-    assert "evidence/data.zip" in evidence_by_path["archive.zip"][
-        "publication_note"
-    ]
+    assert "data.zip" in evidence_by_path["archive.zip"]["publication_note"]
 
     monitor_blob = (
         tmp_path / "dashboard/static" / evidence_by_path["monitor.html"]["url"]
