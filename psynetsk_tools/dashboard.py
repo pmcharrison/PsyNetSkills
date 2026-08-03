@@ -3,13 +3,12 @@
 from __future__ import annotations
 
 import argparse
-import hashlib
+import html
 import json
 import os
 import re
 import shutil
 import subprocess
-import tempfile
 from collections.abc import Mapping
 from dataclasses import asdict, dataclass
 from pathlib import Path
@@ -32,6 +31,32 @@ from psynetsk_tools.authors import (
 from psynetsk_tools.learnings import (
     COMPLETED_LEARNING_STATUSES,
     parse_learning_actions,
+)
+from psynetsk_tools.review_artifacts import (
+    ARTIFACT_URL_PREFIX_ENV,
+    HASHED_ARTIFACTS_DIR,
+    MONITOR_STATIC_ARTIFACTS_DIR,
+    ArtifactPublication,
+    sanitize_html_artifact,
+    sanitize_text_artifact,
+    write_hashed_artifact,
+    write_shared_monitor_static_assets,
+)
+from psynetsk_tools.review_html import (
+    render_evidence_section,
+    render_file_grid,
+    render_json_block,
+    render_markdown_block,
+    render_markdown_document,
+    render_timeline_section,
+    safe_section_html,
+)
+from psynetsk_tools.review_model import (
+    CompletenessItem,
+    ReviewFile,
+    ReviewEvidenceView,
+    classify_review_evidence,
+    screenshot_caption,
 )
 from psynetsk_tools.validate import (
     SKILLS_ROOT,
@@ -65,36 +90,7 @@ TEXT_FILE_EXTENSIONS = {
     ".yml",
 }
 ATTEMPT_ARTIFACTS_DIR = "artifacts/challenges"
-HASHED_ARTIFACTS_DIR = "artifacts/blobs/sha256"
-MONITOR_STATIC_ARTIFACTS_DIR = "artifacts/monitor-static"
 CHALLENGE_REFERENCES_DIR = "challenges"
-ARTIFACT_URL_PREFIX_ENV = "PSYNETSK_ARTIFACT_URL_PREFIX"
-MONITOR_STATIC_ROOT = Path(__file__).parent / "assets" / "monitor-static" / "static"
-STATIC_REF_RE = re.compile(r'(?:href|src)="/static/(?P<path>[^"]+)"')
-CENTRAL_MONITOR_STATIC_REFS = {"vis@4.17.0/dist/vis.min.js"}
-CREDENTIAL_REDACTIONS = (
-    (re.compile(r"(?i)(dashboard_password=)[^&\"'\s<)]+"), r"\1[REDACTED]"),
-    (re.compile(r"(?i)(dashboard_user=)[^&\"'\s<)]+"), r"\1[REDACTED]"),
-    (re.compile(r"(?i)(Dashboard user:\s*\S+\s+password:\s*)\S+"), r"\1[REDACTED]"),
-    (re.compile(r"(?i)(Username:\s*`?)[^`\s]+(`?)"), r"\1[REDACTED]\2"),
-    (re.compile(r"(?i)(Password:\s*`?)[^`\s]+(`?)"), r"\1[REDACTED]\2"),
-    (re.compile(r"(?i)(AWS_ACCESS_KEY_ID\s*=\s*)[^\s\"']+"), r"\1[REDACTED]"),
-    (re.compile(r"(?i)(AWS_SECRET_ACCESS_KEY\s*=\s*)[^\s\"']+"), r"\1[REDACTED]"),
-    (re.compile(r"(?i)(AWS_SESSION_TOKEN\s*=\s*)[^\s\"']+"), r"\1[REDACTED]"),
-    (re.compile(r"(?i)(PROLIFIC_API_TOKEN\s*=\s*)[^\s\"']+"), r"\1[REDACTED]"),
-    (re.compile(r"(?i)(PROLIFIC_API_KEY\s*=\s*)[^\s\"']+"), r"\1[REDACTED]"),
-)
-TEXT_ARTIFACT_EXTENSIONS = {
-    ".html",
-    ".ipynb",
-    ".log",
-    ".md",
-    ".txt",
-    ".json",
-    ".csv",
-    ".yaml",
-    ".yml",
-}
 WORKFLOW_CONTEXT_REPOSITORY = "pmcharrison/PsyNetSkills"
 WORKFLOW_CONTEXT_FILES_BY_NAME = {
     "Deploy dashboard PR preview": "dashboard-preview.yml",
@@ -203,15 +199,6 @@ class AttemptFile:
 
 
 @dataclass(frozen=True)
-class ArtifactPublication:
-    """Publication metadata for an attempt artifact."""
-
-    url: str
-    published: bool = True
-    note: str = ""
-
-
-@dataclass(frozen=True)
 class Attempt:
     """A dashboard summary of a challenge attempt."""
 
@@ -244,6 +231,9 @@ class Attempt:
     challenge_files: list[AttemptFile]
     code_files: list[AttemptFile]
     evidence_files: list[AttemptFile]
+    evidence_view: dict[str, object]
+    evidence_html: str
+    review_sections: list[dict[str, object]]
 
 
 @dataclass(frozen=True)
@@ -541,114 +531,487 @@ def collect_attempt_files(
     return files
 
 
+def review_file_data(file: ReviewFile | None) -> dict[str, object] | None:
+    """Return dashboard-safe metadata for one review file."""
+
+    if file is None:
+        return None
+    return {
+        "path": file.path,
+        "url": file.url,
+        "kind": file.kind,
+        "size_bytes": file.size_bytes,
+        "published": file.published,
+        "publication_note": file.publication_note,
+        "truncated": file.truncated,
+    }
+
+
+def completeness_item_data(item: CompletenessItem) -> dict[str, object]:
+    """Return dashboard-safe metadata for one completeness item."""
+
+    return {
+        "key": item.key,
+        "label": item.label,
+        "present": item.present,
+        "detail": item.detail,
+    }
+
+
+def evidence_view_data(view: ReviewEvidenceView) -> dict[str, object]:
+    """Return dashboard-ready shared evidence classification data."""
+
+    return {
+        "participant_video": review_file_data(view.participant_video),
+        "screenshots": [
+            {
+                **(review_file_data(screenshot) or {}),
+                "caption": screenshot_caption(screenshot, view.screenshot_captions),
+            }
+            for screenshot in view.screenshots
+        ],
+        "screenshot_captions": view.screenshot_captions,
+        "performance_file": review_file_data(view.performance_file),
+        "performance_data": view.performance_data,
+        "performance_results": view.performance_results,
+        "monitor_file": review_file_data(view.monitor_file),
+        "data_file": review_file_data(view.data_file),
+        "simulated_data_file": review_file_data(view.simulated_data_file),
+        "analysis_files": [
+            review_file_data(file)
+            for file in view.analysis_files
+            if review_file_data(file) is not None
+        ],
+        "analysis_notebook_file": review_file_data(view.analysis_notebook_file),
+        "analysis_notebook": view.analysis_notebook,
+        "visible_files": [
+            review_file_data(file)
+            for file in view.visible_files
+            if review_file_data(file) is not None
+        ],
+        "completeness": [
+            completeness_item_data(item)
+            for item in view.completeness
+        ],
+    }
+
+
+def dashboard_artifact_url(url: str) -> str:
+    """Return an artifact URL that works from nested dashboard pages."""
+
+    if not url or url.startswith(("http://", "https://", "/")):
+        return url
+    return f"/{url.lstrip('/')}"
+
+
+def review_file_from_data(file: AttemptFile | Mapping[str, object]) -> ReviewFile:
+    """Return shared review-file metadata from attempt file data."""
+
+    if isinstance(file, AttemptFile):
+        return ReviewFile(
+            path=file.path,
+            url=file.url,
+            content=file.content,
+            size_bytes=file.size_bytes,
+            kind=file.kind,
+            truncated=file.truncated,
+            published=file.published,
+            publication_note=file.publication_note,
+        )
+    return ReviewFile(
+        path=str(file.get("path") or ""),
+        url=str(file.get("url") or ""),
+        content=file.get("content") if isinstance(file.get("content"), str) else None,
+        size_bytes=file.get("size_bytes") if isinstance(file.get("size_bytes"), int) else 0,
+        kind=str(file.get("kind") or "file"),
+        truncated=bool(file.get("truncated")),
+        published=file.get("published") is not False,
+        publication_note=str(file.get("publication_note") or ""),
+    )
+
+
+def render_file_section(files: object, empty_message: str) -> str:
+    """Render attempt files with the shared review file-card renderer."""
+
+    if not isinstance(files, list) or not files:
+        return f"<p>{html.escape(empty_message)}</p>"
+    review_files = [
+        review_file_from_data(file)
+        for file in files
+        if isinstance(file, AttemptFile | Mapping)
+    ]
+    return render_file_grid(
+        review_files,
+        empty_message=empty_message,
+        grid_class="file-grid",
+        url_transform=dashboard_artifact_url,
+    )
+
+
+def action_id_from_anchor(
+    anchor_id: str,
+    *,
+    challenge_slug: str,
+    attempt_name: str,
+) -> str:
+    """Return a learning action ID from its rendered anchor marker."""
+
+    prefix = f"{challenge_slug}-{attempt_name}-"
+    if anchor_id.startswith(prefix):
+        return f"{challenge_slug}/{attempt_name}/{anchor_id[len(prefix):]}"
+    return anchor_id
+
+
+def render_learning_chip(label: str, value: str) -> str:
+    """Render a learning metadata chip."""
+
+    slug = value.replace("_", "-")
+    safe_label = html.escape(label)
+    safe_value = html.escape(value.replace("_", " "))
+    safe_slug = html.escape(slug, quote=True)
+    safe_kind = html.escape(label.casefold(), quote=True)
+    return (
+        f'<span class="learning-chip learning-chip-{safe_kind} '
+        f'learning-chip-{safe_kind}-{safe_slug}">'
+        f'<span class="learning-chip-label">{safe_label}</span> '
+        f"{safe_value}</span>"
+    )
+
+
+def render_learning_action_checkbox(
+    match: re.Match[str],
+    *,
+    challenge_slug: str,
+    attempt_name: str,
+) -> str:
+    """Render a copy-select checkbox for one marked learning action."""
+
+    anchor_id = match.group("anchor_id")
+    action_id = action_id_from_anchor(
+        anchor_id,
+        challenge_slug=challenge_slug,
+        attempt_name=attempt_name,
+    )
+    safe_anchor = html.escape(anchor_id, quote=True)
+    safe_action = html.escape(action_id, quote=True)
+    return (
+        f'<li class="learning-action" id="{safe_anchor}">'
+        '<input class="learning-action-select" type="checkbox" '
+        f'value="{safe_action}" data-action-copy-checkbox '
+        f'aria-label="Select action {safe_action} for copying">'
+    )
+
+
+def render_learnings_markdown(
+    markdown: str,
+    *,
+    challenge_slug: str,
+    attempt_name: str,
+) -> str:
+    """Render learnings Markdown with dashboard action controls."""
+
+    rendered = render_markdown_document(markdown)
+    for label, values in {
+        "Confidence": ("high", "medium", "low"),
+        "Impact": ("high", "medium", "low"),
+    }.items():
+        rendered = re.sub(
+            rf"{label}:\s+({'|'.join(values)})\.",
+            lambda match, chip_label=label: render_learning_chip(
+                chip_label,
+                match.group(1),
+            ),
+            rendered,
+        )
+    rendered = re.sub(
+        r"Status:\s+(considering|in_progress|planned|completed|dismissed|superseded)\.",
+        lambda match: render_learning_chip("Status", match.group(1)),
+        rendered,
+    )
+    rendered = rendered.replace("<p><em>Actions:</em></p>", "")
+    rendered = rendered.replace("<li>", '<li class="learning-action">')
+    rendered = re.sub(
+        r'<li class="learning-action">PSYNETSK_ACTION_ANCHOR_(?P<anchor_id>[a-zA-Z0-9_-]+)\s+',
+        lambda match: render_learning_action_checkbox(
+            match,
+            challenge_slug=challenge_slug,
+            attempt_name=attempt_name,
+        ),
+        rendered,
+    )
+    rendered = rendered.replace("<h3", '</div><div class="learning-card"><h3')
+    rendered = re.sub(r"^\s*</div>", "", rendered)
+    if "learning-card" in rendered:
+        rendered = f"{rendered}</div>"
+    return f'<div class="attempt-markdown learning-markdown">{rendered}</div>'
+
+
+def render_markdown_section_html(
+    section_id: str,
+    content: str,
+    *,
+    challenge_slug: str,
+    attempt_name: str,
+) -> str:
+    """Render one attempt Markdown section body."""
+
+    if not content:
+        fallback = {
+            "challenge": "No rendered challenge instructions were found for this attempt.",
+            "evaluation": "No evaluation file was found for this attempt.",
+            "learnings": "No learnings file was found for this attempt.",
+            "plan": "No implementation plan was found for this attempt.",
+        }.get(section_id, "No section content was found for this attempt.")
+        return f"<p>{html.escape(fallback)}</p>"
+    if section_id == "learnings":
+        return render_learnings_markdown(
+            content,
+            challenge_slug=challenge_slug,
+            attempt_name=attempt_name,
+        )
+    note = (
+        '<p class="artifact-note">'
+        "Implementation plan captured before experiment code and evidence collection."
+        "</p>"
+        if section_id == "plan"
+        else ""
+    )
+    return f"{note}{render_markdown_block(content)}"
+
+
+def review_section_panel_class(section: Mapping[str, object]) -> str:
+    """Return the dashboard panel class for one review section."""
+
+    section_id = str(section.get("id") or "")
+    kind = str(section.get("kind") or "")
+    if section_id == "challenge":
+        return "challenge-brief"
+    if section_id == "plan":
+        return "plan-panel"
+    if kind == "evidence":
+        return "evidence-panel"
+    if kind == "timeline":
+        return "timeline-panel"
+    return ""
+
+
+def render_attempt_review_section_html(
+    section: Mapping[str, object],
+    *,
+    challenge_slug: str,
+    attempt_name: str,
+) -> str:
+    """Render the safe HTML body for one attempt review section."""
+
+    kind = section.get("kind")
+    section_id = str(section.get("id") or "")
+    if kind == "markdown":
+        return render_markdown_section_html(
+            section_id,
+            str(section.get("content") or ""),
+            challenge_slug=challenge_slug,
+            attempt_name=attempt_name,
+        )
+    if kind == "evidence":
+        return str(
+            section.get("html")
+            or "<p>No evidence summary was exported for this attempt.</p>"
+        )
+    if kind == "files":
+        title = str(section.get("title") or "files").casefold()
+        return render_file_section(
+            section.get("files"),
+            f"No {title} were found for this attempt.",
+        )
+    if kind == "timeline":
+        entries = section.get("entries")
+        return render_timeline_section(
+            entries if isinstance(entries, list) else [],
+            fallback_markdown=(
+                section.get("content") if isinstance(section.get("content"), str) else ""
+            ),
+        )
+    if kind == "json":
+        return render_json_block(section.get("content"))
+    return "<p>Section kind is not supported.</p>"
+
+
+def attempt_evidence_completeness(
+    *,
+    challenge_files: list[AttemptFile],
+    has_plan: bool,
+    has_timeline: bool,
+    has_experiment: bool,
+) -> list[CompletenessItem]:
+    """Return attempt-level completeness rows for the shared evidence section."""
+
+    return [
+        CompletenessItem(
+            "challenge",
+            "challenge/",
+            True,
+            f"{len(challenge_files)} file{'s' if len(challenge_files) != 1 else ''}",
+        ),
+        CompletenessItem("agent_json", "agent.json", True, "metadata captured"),
+        CompletenessItem("plan", "PLAN.md", has_plan, "present" if has_plan else "missing"),
+        CompletenessItem(
+            "timeline",
+            "TIMELINE.md",
+            has_timeline,
+            "present" if has_timeline else "missing",
+        ),
+        CompletenessItem(
+            "experiment",
+            "code/experiment.py",
+            has_experiment,
+            "present" if has_experiment else "missing",
+        ),
+    ]
+
+
+def markdown_review_section(
+    section_id: str,
+    title: str,
+    content: str,
+    *,
+    path: str = "",
+    display: bool | None = None,
+) -> dict[str, object]:
+    """Return a review section for markdown-like attempt content."""
+
+    section: dict[str, object] = {
+        "id": section_id,
+        "title": title,
+        "kind": "markdown",
+        "content": content,
+        "display": bool(content) if display is None else display,
+    }
+    if path:
+        section["path"] = path
+    return section
+
+
+def attempt_review_sections(
+    *,
+    challenge_slug: str,
+    attempt_name: str,
+    attempt_path: str,
+    challenge_instructions: str,
+    challenge_criteria: str,
+    plan: str,
+    evaluation: str,
+    learnings: str,
+    timeline: str,
+    timeline_entries: list[TimelineEntry],
+    evidence_html: str,
+    code_files: list[AttemptFile],
+    visible_evidence_files: list[dict[str, object]],
+    challenge_files: list[AttemptFile],
+    agent_json: str,
+) -> list[dict[str, object]]:
+    """Return dashboard-ready review sections for a challenge attempt."""
+
+    challenge_content = challenge_instructions
+    if challenge_criteria:
+        challenge_content = (
+            f"{challenge_content.rstrip()}\n\n"
+            "## Evaluation criteria\n\n"
+            "These criteria are shown for review. The implementing agent was not "
+            "allowed to inspect them before evidence collection.\n\n"
+            f"{challenge_criteria}"
+        )
+    sections: list[dict[str, object]] = [
+        markdown_review_section(
+            "challenge",
+            "Challenge",
+            challenge_content,
+            path=f"{attempt_path}/challenge/INSTRUCTIONS.md",
+            display=True,
+        ),
+        markdown_review_section(
+            "plan",
+            "Plan",
+            plan,
+            path=f"{attempt_path}/PLAN.md",
+        ),
+        markdown_review_section(
+            "evaluation",
+            "Evaluation",
+            evaluation,
+            path=f"{attempt_path}/EVALUATION.md",
+            display=True,
+        ),
+        markdown_review_section(
+            "learnings",
+            "Learnings",
+            learnings,
+            path=f"{attempt_path}/LEARNINGS.md",
+        ),
+        {
+            "id": "evidence",
+            "title": "Evidence",
+            "kind": "evidence",
+            "html": evidence_html,
+            "display": True,
+        },
+        {
+            "id": "timeline",
+            "title": "Timeline",
+            "kind": "timeline",
+            "content": timeline,
+            "entries": [asdict(entry) for entry in timeline_entries],
+            "path": f"{attempt_path}/TIMELINE.md",
+            "display": bool(timeline_entries or timeline),
+        },
+        {
+            "id": "code_files",
+            "title": "All code files",
+            "kind": "files",
+            "files": [asdict(file) for file in code_files],
+            "display": True,
+        },
+        {
+            "id": "evidence_files",
+            "title": "All evidence files",
+            "kind": "files",
+            "files": visible_evidence_files,
+            "display": True,
+        },
+        {
+            "id": "agent_metadata",
+            "title": "Agent metadata",
+            "kind": "json",
+            "content": agent_json,
+            "path": f"{attempt_path}/agent.json",
+            "display": True,
+        },
+        {
+            "id": "challenge_snapshot",
+            "title": "Challenge snapshot",
+            "kind": "files",
+            "files": [asdict(file) for file in challenge_files],
+            "display": True,
+        },
+    ]
+    for section in sections:
+        section_id = str(section.get("id") or "unknown")
+        section["html"] = safe_section_html(
+            section_id,
+            lambda section=section: render_attempt_review_section_html(
+                section,
+                challenge_slug=challenge_slug,
+                attempt_name=attempt_name,
+            ),
+        )
+        section["panel_class"] = review_section_panel_class(section)
+    return sections
+
+
 def attempt_artifact_url_prefix(challenge_slug: str, attempt_name: str) -> str:
     """Return the public URL prefix for an attempt's copied artifacts."""
 
     base_url = os.environ.get(ARTIFACT_URL_PREFIX_ENV, ATTEMPT_ARTIFACTS_DIR)
     return f"{base_url.rstrip('/')}/{challenge_slug}/attempts/{attempt_name}"
-
-
-def hashed_artifact_url(relative_path: str) -> str:
-    """Return the public URL for a content-addressed artifact path."""
-
-    base_url = normalized_hashed_artifact_url_prefix()
-    return f"{base_url.rstrip('/')}/{relative_path}"
-
-
-def normalized_hashed_artifact_url_prefix() -> str:
-    """Return a URL prefix compatible with old and new preview workflows."""
-
-    base_url = os.environ.get(ARTIFACT_URL_PREFIX_ENV, HASHED_ARTIFACTS_DIR).rstrip("/")
-    old_attempt_suffix = f"/{ATTEMPT_ARTIFACTS_DIR}"
-    if base_url.endswith(old_attempt_suffix):
-        return base_url[: -len(old_attempt_suffix)] + f"/{HASHED_ARTIFACTS_DIR}"
-    return base_url
-
-
-def redact_known_credentials(text: str) -> str:
-    """Redact credential values that should never appear in public artifacts."""
-
-    for pattern, replacement in CREDENTIAL_REDACTIONS:
-        text = pattern.sub(replacement, text)
-    return text
-
-
-def sanitize_text_artifact(path: Path) -> None:
-    """Redact known credential values from copied text evidence."""
-
-    if path.suffix.lower() not in TEXT_ARTIFACT_EXTENSIONS:
-        return
-    try:
-        text = path.read_text(encoding="utf-8")
-    except UnicodeDecodeError:
-        return
-    path.write_text(redact_known_credentials(text), encoding="utf-8")
-
-
-def sanitize_html_artifact(path: Path) -> None:
-    """Make copied HTML evidence safer to view from static dashboard previews."""
-    html = redact_known_credentials(path.read_text(encoding="utf-8"))
-    static_refs = sorted(set(STATIC_REF_RE.findall(html)))
-    if "<head>" in html and "<base " not in html:
-        html = html.replace("<head>", '<head>\n        <base href="./">', 1)
-    html = re.sub(r'href="/dashboard/[^"]*"', 'href="#"', html)
-    html = re.sub(r'src="/dashboard/[^"]*"', 'src="#"', html)
-    html = html.replace('href="/static/', 'href="./static/')
-    html = html.replace('src="/static/', 'src="./static/')
-    html = re.sub(r'<script([^>]*)\s*/></script>', r'<script\1></script>', html)
-    for ref in CENTRAL_MONITOR_STATIC_REFS:
-        html = html.replace(
-            f'src="./static/{ref}"',
-            f'src="../../../../monitor-static/{ref}"',
-        )
-        html = html.replace(
-            f'href="./static/{ref}"',
-            f'href="../../../../monitor-static/{ref}"',
-        )
-    html = html.replace(
-        "</head>",
-        """
-        <style>
-          body { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; margin: 1rem; }
-          .container { max-width: none; }
-          #dashboard-navigation, #logout { display: none; }
-          #monitor-wrapper { display: flex; gap: 1rem; align-items: flex-start; }
-          #sidebar { flex: 0 0 18rem; }
-          #timeline-wrapper, #timeline, main { flex: 1 1 auto; min-width: 0; }
-          table { border-collapse: collapse; width: 100%; }
-          th, td { border: 1px solid #d0d7de; padding: 0.4rem; text-align: left; vertical-align: top; }
-          button { border: 1px solid #d0d7de; border-radius: 0.35rem; background: #f6f8fa; padding: 0.3rem 0.6rem; }
-        </style>
-    </head>""",
-        1,
-    )
-    path.write_text(html, encoding="utf-8")
-    copy_monitor_static_assets(path.parent, static_refs)
-
-
-def copy_monitor_static_assets(html_dir: Path, static_refs: list[str]) -> None:
-    """Copy vendored Dallinger monitor assets next to a copied HTML artifact."""
-    for ref in static_refs:
-        if ref in CENTRAL_MONITOR_STATIC_REFS:
-            continue
-        source = MONITOR_STATIC_ROOT / ref
-        if not source.is_file():
-            continue
-        destination = html_dir / "static" / ref
-        destination.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copy2(source, destination)
-        if ref == "scripts/network-monitor.js":
-            disable_live_node_details(destination)
-
-
-def disable_live_node_details(script_path: Path) -> None:
-    """Avoid live dashboard fetches while preserving embedded JSON click details."""
-    text = script_path.read_text(encoding="utf-8")
-    text = text.replace(
-        "$(custom_node).load('/dashboard/node_details/' + node.options.data.object_type + '/' + String(node.options.data.id));",
-        "custom_node.textContent = 'Live dashboard node details are unavailable in this static snapshot.';",
-    )
-    script_path.write_text(text, encoding="utf-8")
 
 
 def collect_attempts(
@@ -701,6 +1064,11 @@ def collect_attempts(
             if timeline_file.exists()
             else ""
         )
+        plan = (
+            strip_first_heading(plan_file.read_text(encoding="utf-8"))
+            if plan_file.exists()
+            else ""
+        )
         timeline_entries = parse_timeline_entries(timeline)
         implementation_seconds = implementation_time_seconds(timeline_entries)
         intervention_count = human_intervention_count(timeline_entries)
@@ -725,14 +1093,80 @@ def collect_attempts(
             challenge_dir.name,
             attempt_dir.name,
         )
+        challenge_files = collect_attempt_files(
+            attempt_dir / "challenge",
+            f"{artifact_prefix}/challenge",
+            attempt_section_urls(
+                artifact_publications,
+                challenge_dir.name,
+                attempt_dir.name,
+                "challenge",
+            ),
+        )
+        code_files = collect_attempt_files(
+            attempt_dir / "code",
+            f"{artifact_prefix}/code",
+            attempt_section_urls(
+                artifact_publications,
+                challenge_dir.name,
+                attempt_dir.name,
+                "code",
+            ),
+        )
+        evidence_files = collect_attempt_files(
+            attempt_dir / "evidence",
+            f"{artifact_prefix}/evidence",
+            attempt_section_urls(
+                artifact_publications,
+                challenge_dir.name,
+                attempt_dir.name,
+                "evidence",
+            ),
+        )
+        evidence_view = classify_review_evidence(evidence_files)
+        has_experiment = any(
+            file.path == "experiment.py" or file.path.endswith("/experiment.py")
+            for file in code_files
+        )
+        extra_completeness = attempt_evidence_completeness(
+            challenge_files=challenge_files,
+            has_plan=bool(plan),
+            has_timeline=bool(timeline_entries),
+            has_experiment=has_experiment,
+        )
+        evidence_view_export = evidence_view_data(evidence_view)
+        evidence_html = render_evidence_section(
+            evidence_view,
+            extra_completeness=extra_completeness,
+            include_heading=False,
+            section_id=None,
+            url_transform=dashboard_artifact_url,
+        )
+        attempt_path = f"challenges/{challenge_dir.name}/attempts/{attempt_dir.name}"
+        challenge_instructions = read_challenge_snapshot_instructions(attempt_dir)
+        challenge_criteria = read_challenge_criteria(
+            challenge_dir,
+            attempt_dir,
+        )
+        evaluation = (
+            strip_first_heading(
+                strip_frontmatter(
+                    evaluation_file.read_text(encoding="utf-8")
+                )
+            )
+            if evaluation_file.exists()
+            else ""
+        )
+        visible_evidence_files = [
+            file
+            for file in evidence_view_export["visible_files"]
+            if isinstance(file, dict)
+        ]
         attempts.append(
             Attempt(
                 name=attempt_dir.name,
                 score=score,
-                path=(
-                    f"challenges/{challenge_dir.name}/attempts/"
-                    f"{attempt_dir.name}"
-                ),
+                path=attempt_path,
                 url=f"challenges/{challenge_dir.name}/{attempt_dir.name}/",
                 date_time=attempt_date_time(attempt_dir.name, agent),
                 sort_key=attempt_sort_key(attempt_dir.name, agent),
@@ -742,20 +1176,8 @@ def collect_attempts(
                     author_registry,
                 ),
                 agent_json=agent_json,
-                evaluation=(
-                    strip_first_heading(
-                        strip_frontmatter(
-                            evaluation_file.read_text(encoding="utf-8")
-                        )
-                    )
-                    if evaluation_file.exists()
-                    else ""
-                ),
-                plan=(
-                    strip_first_heading(plan_file.read_text(encoding="utf-8"))
-                    if plan_file.exists()
-                    else ""
-                ),
+                evaluation=evaluation,
+                plan=plan,
                 timeline=timeline,
                 timeline_entries=timeline_entries,
                 implementation_time_seconds=implementation_seconds,
@@ -771,42 +1193,29 @@ def collect_attempts(
                 learnings=learnings,
                 open_actions=open_actions,
                 evaluation_metadata=evaluation_metadata,
-                challenge_instructions=read_challenge_snapshot_instructions(
-                    attempt_dir,
-                ),
-                challenge_criteria=read_challenge_criteria(
-                    challenge_dir,
-                    attempt_dir,
-                ),
-                challenge_files=collect_attempt_files(
-                    attempt_dir / "challenge",
-                    f"{artifact_prefix}/challenge",
-                    attempt_section_urls(
-                        artifact_publications,
-                        challenge_dir.name,
-                        attempt_dir.name,
-                        "challenge",
-                    ),
-                ),
-                code_files=collect_attempt_files(
-                    attempt_dir / "code",
-                    f"{artifact_prefix}/code",
-                    attempt_section_urls(
-                        artifact_publications,
-                        challenge_dir.name,
-                        attempt_dir.name,
-                        "code",
-                    ),
-                ),
-                evidence_files=collect_attempt_files(
-                    attempt_dir / "evidence",
-                    f"{artifact_prefix}/evidence",
-                    attempt_section_urls(
-                        artifact_publications,
-                        challenge_dir.name,
-                        attempt_dir.name,
-                        "evidence",
-                    ),
+                challenge_instructions=challenge_instructions,
+                challenge_criteria=challenge_criteria,
+                challenge_files=challenge_files,
+                code_files=code_files,
+                evidence_files=evidence_files,
+                evidence_view=evidence_view_export,
+                evidence_html=evidence_html,
+                review_sections=attempt_review_sections(
+                    challenge_slug=challenge_dir.name,
+                    attempt_name=attempt_dir.name,
+                    attempt_path=attempt_path,
+                    challenge_instructions=challenge_instructions,
+                    challenge_criteria=challenge_criteria,
+                    plan=plan,
+                    evaluation=evaluation,
+                    learnings=learnings,
+                    timeline=timeline,
+                    timeline_entries=timeline_entries,
+                    evidence_html=evidence_html,
+                    code_files=code_files,
+                    visible_evidence_files=visible_evidence_files,
+                    challenge_files=challenge_files,
+                    agent_json=agent_json,
                 ),
             )
         )
@@ -1324,53 +1733,6 @@ def excluded_attempt_artifact_note(section: str, relative_path: str) -> str:
         "implementation code are retained as source/LFS artifacts, not copied to "
         "GitHub Pages."
     )
-
-
-def write_shared_monitor_static_assets(target_root: Path) -> None:
-    """Write monitor static assets shared by all hashed HTML snapshots."""
-
-    for ref in sorted(CENTRAL_MONITOR_STATIC_REFS):
-        source = MONITOR_STATIC_ROOT / ref
-        if not source.is_file():
-            continue
-        destination = target_root / ref
-        destination.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copy2(source, destination)
-
-
-def write_hashed_artifact(source_file: Path, target_root: Path) -> str:
-    """Sanitize and write one artifact to the content-addressed store."""
-
-    with tempfile.TemporaryDirectory() as temp_dir:
-        temp_path = Path(temp_dir) / source_file.name
-        shutil.copy2(source_file, temp_path)
-        if temp_path.suffix.lower() == ".html":
-            sanitize_html_artifact(temp_path)
-        else:
-            sanitize_text_artifact(temp_path)
-        digest = hashlib.sha256(temp_path.read_bytes()).hexdigest()
-        digest_dir = target_root / digest[:2]
-
-        if temp_path.suffix.lower() == ".html":
-            blob_dir = digest_dir / digest
-            blob_file = blob_dir / "index.html"
-            if not blob_file.exists():
-                blob_dir.mkdir(parents=True, exist_ok=True)
-                shutil.copy2(temp_path, blob_file)
-                static_dir = temp_path.parent / "static"
-                if static_dir.exists():
-                    shutil.copytree(
-                        static_dir,
-                        blob_dir / "static",
-                        dirs_exist_ok=True,
-                    )
-            return hashed_artifact_url(f"{digest[:2]}/{digest}/index.html")
-
-        blob_file = digest_dir / f"{digest}{temp_path.suffix.lower()}"
-        if not blob_file.exists():
-            digest_dir.mkdir(parents=True, exist_ok=True)
-            shutil.copy2(temp_path, blob_file)
-        return hashed_artifact_url(blob_file.relative_to(target_root).as_posix())
 
 
 def write_challenge_references(root: Path, dashboard_dir: Path) -> None:

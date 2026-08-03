@@ -7,6 +7,7 @@ import pytest
 import psynetsk_tools.dashboard as dashboard_module
 
 from psynetsk_tools.dashboard import (
+    attempt_review_sections,
     collect_challenges,
     collect_skills,
     dashboard_data,
@@ -136,6 +137,64 @@ def render_challenges_list_page(tmp_path: Path, challenges_data: list[dict[str, 
         text=True,
     )
     return (public / "challenges/index.html").read_text(encoding="utf-8")
+
+
+def render_attempt_page(tmp_path: Path, attempt_data: dict[str, object]) -> str:
+    hugo = shutil.which("hugo")
+    if hugo is None:
+        pytest.skip("hugo is required to test dashboard templates")
+
+    repo_root = Path(__file__).resolve().parents[1]
+    dashboard = tmp_path / "dashboard"
+    shutil.copytree(repo_root / "dashboard/layouts", dashboard / "layouts")
+    shutil.copy2(repo_root / "dashboard/hugo.toml", dashboard / "hugo.toml")
+    write(
+        dashboard / "content/challenges/example/attempt-1/index.md",
+        "---\n"
+        'title: "attempt-1"\n'
+        'challenge: "example"\n'
+        'attempt: "attempt-1"\n'
+        'layout: "attempt"\n'
+        "---\n",
+    )
+    write(dashboard / "data/workflow_context.json", "{}")
+    write(
+        dashboard / "data/psynetsk.json",
+        json.dumps(
+            {
+                "actions": [],
+                "attempts": [],
+                "challenges": [
+                    {
+                        "slug": "example",
+                        "title": "Example challenge",
+                        "url": "challenges/example/",
+                        "attempts": [attempt_data],
+                    },
+                ],
+                "skills": [],
+            },
+        ),
+    )
+
+    public = tmp_path / "public"
+    subprocess.run(
+        [
+            hugo,
+            "--source",
+            str(dashboard),
+            "--destination",
+            str(public),
+            "--cleanDestinationDir",
+            "--quiet",
+        ],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    return (public / "challenges/example/attempt-1/index.html").read_text(
+        encoding="utf-8"
+    )
 
 
 def authors_yaml() -> str:
@@ -315,6 +374,66 @@ def test_challenges_table_shows_author_only(tmp_path: Path) -> None:
     assert "<th>Past editors</th>" not in html
     assert "Peter Harrison" in html
     assert "Harin Lee" not in html
+
+
+def test_attempt_page_embeds_exported_review_section_html(tmp_path: Path) -> None:
+    html = render_attempt_page(
+        tmp_path,
+        {
+            "name": "attempt-1",
+            "path": "challenges/example/attempts/attempt-1",
+            "score": None,
+            "date_time": "07/06 12:00",
+            "model": "test-model",
+            "agent_json": "{}",
+            "evaluation": "",
+            "plan": "",
+            "timeline": "",
+            "timeline_entries": [],
+            "implementation_time_display": "-",
+            "human_intervention_display": "-",
+            "run_cost_display": "-",
+            "run_cost_attribution_status": "",
+            "challenge_instructions": "",
+            "challenge_criteria": "",
+            "challenge_files": [],
+            "code_files": [],
+            "evidence_files": [],
+            "evidence_view": {"visible_files": []},
+            "evidence_html": '<strong data-shared-evidence>Shared evidence</strong>',
+            "review_sections": [
+                {
+                    "id": "challenge",
+                    "title": "Challenge",
+                    "kind": "markdown",
+                    "display": True,
+                    "html": "<p>Rendered challenge</p>",
+                    "panel_class": "challenge-brief",
+                },
+                {
+                    "id": "evidence",
+                    "title": "Evidence",
+                    "kind": "evidence",
+                    "display": True,
+                    "html": '<strong data-shared-evidence>Shared evidence</strong>',
+                    "panel_class": "evidence-panel",
+                },
+                {
+                    "id": "hidden",
+                    "title": "Hidden",
+                    "kind": "markdown",
+                    "display": False,
+                    "html": "<p>Hidden body</p>",
+                },
+            ],
+        },
+    )
+
+    assert '<details id="challenge" class="attempt-panel challenge-brief" open>' in html
+    assert '<strong data-shared-evidence>Shared evidence</strong>' in html
+    assert "&lt;strong data-shared-evidence&gt;" not in html
+    assert '<a href="#evidence">Evidence</a>' in html
+    assert "Hidden body" not in html
 
 
 def test_collect_challenges_reports_latest_score(tmp_path: Path) -> None:
@@ -1132,6 +1251,39 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
         / "challenges/example/attempts/2026-06-01-10-10/evidence/README.md",
         "# Evidence notes\n",
     )
+    write_bytes(
+        tmp_path
+        / "challenges/example/attempts/2026-06-01-10-10/evidence/screenshots/01-intro.png",
+        b"example screenshot",
+    )
+    write(
+        tmp_path
+        / "challenges/example/attempts/2026-06-01-10-10/evidence/screenshots/manifest.json",
+        json.dumps(
+            {
+                "captions": {
+                    "screenshots/01-intro.png": "Intro screen",
+                },
+            },
+        )
+        + "\n",
+    )
+    write(
+        tmp_path
+        / "challenges/example/attempts/2026-06-01-10-10/evidence/performance.json",
+        json.dumps(
+            {
+                "results": [
+                    {
+                        "n_bots": 4,
+                        "total_bots_started": 5,
+                        "bots_succeeded": 4,
+                    },
+                ],
+            },
+        )
+        + "\n",
+    )
     write(
         tmp_path
         / "challenges/example/attempts/2026-06-01-10-10/evidence/analyses/analysis.ipynb",
@@ -1177,6 +1329,11 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
         tmp_path
         / "challenges/example/attempts/2026-06-01-10-10/evidence/data.zip",
         b"exported experiment data",
+    )
+    write_bytes(
+        tmp_path
+        / "challenges/example/attempts/2026-06-01-10-10/evidence/simulated_data.zip",
+        b"simulated experiment data",
     )
     write_bytes(
         tmp_path
@@ -1314,10 +1471,49 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
     code_by_path = {
         file["path"]: file for file in exported_attempt["code_files"]
     }
+    evidence_view = exported_attempt["evidence_view"]
+    evidence_html = exported_attempt["evidence_html"]
+    review_sections = exported_attempt["review_sections"]
 
     assert evidence_by_path["participant.mp4"]["url"].startswith(
         "artifacts/blobs/sha256/",
     )
+    assert [section["id"] for section in review_sections] == [
+        "challenge",
+        "plan",
+        "evaluation",
+        "learnings",
+        "evidence",
+        "timeline",
+        "code_files",
+        "evidence_files",
+        "agent_metadata",
+        "challenge_snapshot",
+    ]
+    assert review_sections[0]["kind"] == "markdown"
+    assert review_sections[0]["display"] is True
+    assert "Implement the exported snapshot." in review_sections[0]["content"]
+    assert review_sections[0]["panel_class"] == "challenge-brief"
+    assert "<h2>Evaluation criteria</h2>" in review_sections[0]["html"]
+    assert review_sections[4]["kind"] == "evidence"
+    assert review_sections[4]["html"] == evidence_html
+    assert review_sections[5]["kind"] == "timeline"
+    assert review_sections[5]["entries"][0]["actor"] == "agent-start"
+    assert 'class="timeline-list"' in review_sections[5]["html"]
+    assert review_sections[6]["kind"] == "files"
+    assert 'class="file-grid"' in review_sections[6]["html"]
+    assert "<code>README.md</code>" in review_sections[6]["html"]
+    assert review_sections[8]["kind"] == "json"
+    assert "&quot;model&quot;: &quot;test-model&quot;" in review_sections[8]["html"]
+    assert all("html" in section for section in review_sections)
+    assert 'data-action-copy-checkbox' in review_sections[3]["html"]
+    assert 'id="example-2026-06-01-10-10-action-001"' in review_sections[3]["html"]
+    assert "learning-chip-confidence-high" in review_sections[3]["html"]
+    assert 'data-screenshot-gallery' in evidence_html
+    assert 'href="/artifacts/blobs/sha256/' in evidence_html
+    assert "Screenshot walkthrough" in evidence_html
+    assert "Simulated data export not published" in evidence_html
+    assert "code/experiment.py <span>missing</span>" in evidence_html
     participant_blob = (
         tmp_path / "dashboard/static" / evidence_by_path["participant.mp4"]["url"]
     )
@@ -1341,6 +1537,58 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
     assert evidence_by_path["data.zip"]["url"].startswith(
         "artifacts/blobs/sha256/",
     )
+    assert evidence_by_path["simulated_data.zip"]["published"] is False
+    assert evidence_by_path["performance.json"]["kind"] == "json"
+    assert evidence_view["participant_video"]["path"] == "participant.mp4"
+    assert evidence_view["screenshots"] == [
+        {
+            "path": "screenshots/01-intro.png",
+            "url": evidence_by_path["screenshots/01-intro.png"]["url"],
+            "kind": "png",
+            "size_bytes": len(b"example screenshot"),
+            "published": True,
+            "publication_note": "",
+            "truncated": False,
+            "caption": "Intro screen",
+        },
+    ]
+    assert evidence_view["screenshot_captions"] == {
+        "screenshots/01-intro.png": "Intro screen",
+    }
+    assert evidence_view["performance_file"]["path"] == "performance.json"
+    assert evidence_view["performance_results"] == [
+        {
+            "n_bots": 4,
+            "total_bots_started": 5,
+            "bots_succeeded": 4,
+        },
+    ]
+    assert evidence_view["monitor_file"]["path"] == "monitor.html"
+    assert evidence_view["data_file"]["path"] == "data.zip"
+    assert evidence_view["simulated_data_file"]["path"] == "simulated_data.zip"
+    assert evidence_view["analysis_notebook_file"]["path"] == "analyses/analysis.ipynb"
+    assert [file["path"] for file in evidence_view["visible_files"]] == [
+        "README.md",
+        "archive.zip",
+        "dashboard_data.html",
+        "data.zip",
+        "monitor.html",
+        "performance.json",
+        "psynet_debug.log",
+        "simulated_data.zip",
+    ]
+    assert {
+        item["key"]: item["present"]
+        for item in evidence_view["completeness"]
+    } == {
+        "participant_video": True,
+        "screenshots": True,
+        "performance": True,
+        "monitor": True,
+        "data": True,
+        "simulated_data": True,
+        "analyses": True,
+    }
     assert evidence_by_path["analyses/analysis.ipynb"]["kind"] == "ipynb"
     assert "This notebook is rendered." in evidence_by_path["analyses/analysis.ipynb"][
         "content"
@@ -1489,3 +1737,51 @@ def test_export_dashboard_deduplicates_hashed_artifacts(tmp_path: Path) -> None:
     assert video_urls[0] == video_urls[1]
     assert len(video_blobs) == 1
     assert video_blobs[0].read_bytes() == b"shared video"
+
+
+def test_attempt_review_sections_isolates_render_failures(monkeypatch: pytest.MonkeyPatch) -> None:
+    original = dashboard_module.render_attempt_review_section_html
+
+    def flaky_renderer(
+        section: dict[str, object],
+        *,
+        challenge_slug: str,
+        attempt_name: str,
+    ) -> str:
+        if section.get("id") == "plan":
+            raise RuntimeError("plan render failed")
+        return original(
+            section,
+            challenge_slug=challenge_slug,
+            attempt_name=attempt_name,
+        )
+
+    monkeypatch.setattr(
+        dashboard_module,
+        "render_attempt_review_section_html",
+        flaky_renderer,
+    )
+
+    sections = attempt_review_sections(
+        challenge_slug="example",
+        attempt_name="attempt-1",
+        attempt_path="challenges/example/attempts/attempt-1",
+        challenge_instructions="Do the task.",
+        challenge_criteria="",
+        plan="# Plan\n\nSteps.",
+        evaluation="# Evaluation\n\nDone.",
+        learnings="",
+        timeline="",
+        timeline_entries=[],
+        evidence_html="<p>Evidence summary</p>",
+        code_files=[],
+        visible_evidence_files=[],
+        challenge_files=[],
+        agent_json='{"model": "test"}',
+    )
+
+    by_id = {str(section["id"]): section for section in sections}
+    assert 'class="section-render-error"' in str(by_id["plan"]["html"])
+    assert "Failed to render section plan." in str(by_id["plan"]["html"])
+    assert "<h1>Evaluation</h1>" in str(by_id["evaluation"]["html"])
+    assert "Evidence summary" in str(by_id["evidence"]["html"])

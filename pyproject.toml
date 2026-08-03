@@ -9,6 +9,9 @@ description = "Validation and dashboard tooling for the PsyNetSkills workshop re
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
+    "markdown-it-py>=4.2.0",
+    "nh3>=0.3.6",
+    "pygments>=2.20.0",
     "pyyaml>=6.0.3",
 ]
 
@@ -16,6 +19,8 @@ dependencies = [
 psynetsk-validate = "psynetsk_tools.validate:main"
 psynetsk-export-dashboard-data = "psynetsk_tools.dashboard:main"
 psynetsk-import-cursor-costs = "psynetsk_tools.cursor_costs:main"
+psynet-review-bundle = "psynetsk_tools.review:main"
+psynet-review = "psynetsk_tools.review:main"
 
 [dependency-groups]
 dev = [
@@ -27,7 +32,10 @@ where = ["."]
 include = ["psynetsk_tools*"]
 
 [tool.setuptools.package-data]
-psynetsk_tools = ["assets/monitor-static/static/**/*"]
+psynetsk_tools = [
+    "assets/monitor-static/static/**/*",
+    "assets/review-bundle/**/*",
+]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
