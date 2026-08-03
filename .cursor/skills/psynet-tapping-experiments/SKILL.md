@@ -124,10 +124,6 @@ not human rhythm perception.
 
 ## Public-safety rules
 
-- Do not commit or publish private participant data, deployment logs, real app or
-  server details, credentials, `cap.pem`, API keys, recruiter tokens, `.env`
-  files, copyrighted audio, unreleased stimuli, raw private file paths, or
-  identifiable participant metadata.
 - Keep public examples self-contained with generated/demo audio and synthetic or
   clearly anonymized mock PsyNet-format data.
 - If a real research pipeline uses ground truth, proprietary audio, or private
