@@ -5,7 +5,9 @@ from psynetsk_tools.review_html import (
     render_file_grid,
     render_json_block,
     render_markdown_document,
+    render_notebook_output,
     render_timeline_section,
+    safe_section_html,
 )
 from psynetsk_tools.review_model import CompletenessItem, ReviewFile, classify_review_evidence
 from psynetsk_tools.timeline import TimelineEntry
@@ -31,6 +33,23 @@ def unpublished_file(path: str) -> ReviewFile:
         published=False,
         publication_note="Excluded from publication.",
     )
+
+
+def test_safe_section_html_returns_body_on_success() -> None:
+    html = safe_section_html("plan", lambda: "<p>Plan body</p>")
+
+    assert html == "<p>Plan body</p>"
+
+
+def test_safe_section_html_returns_fallback_on_failure() -> None:
+    def boom() -> str:
+        raise RuntimeError("secret internals")
+
+    html = safe_section_html("plan", boom)
+
+    assert 'class="section-render-error"' in html
+    assert "Failed to render section plan." in html
+    assert "secret internals" not in html
 
 
 def test_render_evidence_section_uses_shared_dashboard_markup() -> None:
@@ -233,3 +252,62 @@ def test_render_evidence_section_renders_safe_notebook_rich_outputs() -> None:
     assert 'onload="bad()"' not in html
     assert "<script>" not in html
     assert "plain result" in html
+
+
+PNG_B64 = (
+    "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg=="
+)
+
+
+def test_render_notebook_output_renders_valid_png() -> None:
+    html = render_notebook_output(
+        {
+            "output_type": "display_data",
+            "data": {"image/png": PNG_B64},
+        }
+    )
+
+    assert '<div class="notebook-image">' in html
+    assert 'src="data:image/png;base64,' in html
+    assert PNG_B64 in html
+    assert 'alt="Notebook image output"' in html
+
+
+def test_render_notebook_output_renders_valid_png_from_list() -> None:
+    html = render_notebook_output(
+        {
+            "output_type": "display_data",
+            "data": {"image/png": [PNG_B64]},
+        }
+    )
+
+    assert '<div class="notebook-image">' in html
+    assert 'src="data:image/png;base64,' in html
+    assert PNG_B64 in html
+
+
+def test_render_notebook_output_rejects_invalid_png_payload() -> None:
+    malformed = render_notebook_output(
+        {
+            "output_type": "display_data",
+            "data": {"image/png": "not-valid-base64!!!"},
+        }
+    )
+    non_png = render_notebook_output(
+        {
+            "output_type": "display_data",
+            "data": {"image/png": "aGVsbG8="},
+        }
+    )
+    empty = render_notebook_output(
+        {
+            "output_type": "display_data",
+            "data": {"image/png": "   "},
+        }
+    )
+
+    assert "notebook-image" not in malformed
+    assert "data:image/png;base64," not in malformed
+    assert "notebook-image" not in non_png
+    assert "data:image/png;base64," not in non_png
+    assert empty == ""

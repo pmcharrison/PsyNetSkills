@@ -616,6 +616,12 @@ table td {
   max-width: 100%;
 }
 
+.notebook-image img {
+  display: block;
+  height: auto;
+  max-width: 100%;
+}
+
 .notebook-error {
   background: var(--danger-background);
 }

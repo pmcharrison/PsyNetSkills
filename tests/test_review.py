@@ -3,7 +3,13 @@ from pathlib import Path
 
 import pytest
 
-from psynetsk_tools.review import init_review, main, render_review_site, validate_review
+from psynetsk_tools.review import (
+    init_review,
+    main,
+    render_review_section,
+    render_review_site,
+    validate_review,
+)
 
 
 def write(path: Path, text: str) -> None:
@@ -384,6 +390,33 @@ def test_render_review_site_renders_timeline_and_json_sections(tmp_path: Path) -
     assert "Finished with <strong>evidence</strong>." in index
     assert '<details id="agent_metadata" class="attempt-panel" open>' in index
     assert "{&quot;model&quot;: &quot;test-model&quot;}" in index
+
+
+def test_render_review_section_isolates_render_failures(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    review_dir = tmp_path / "review"
+    manifest = review_manifest()
+    section = {
+        "id": "report",
+        "title": "Report",
+        "kind": "markdown",
+        "path": "REPORT.md",
+    }
+    write(review_dir / "REPORT.md", "# Report\n\nWorks.\n")
+
+    def boom_markdown(review_dir: Path, section: dict[str, object]) -> str:
+        raise RuntimeError("markdown render failed")
+
+    monkeypatch.setattr("psynetsk_tools.review.render_markdown_section", boom_markdown)
+
+    html = render_review_section(review_dir, manifest, section, [])
+
+    assert '<details id="report" class="attempt-panel report-panel" open>' in html
+    assert 'class="section-render-error"' in html
+    assert "Failed to render section report." in html
+    assert "markdown render failed" not in html
 
 
 def write_valid_review(review_dir: Path) -> None:

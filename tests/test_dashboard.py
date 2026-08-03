@@ -7,6 +7,7 @@ import pytest
 import psynetsk_tools.dashboard as dashboard_module
 
 from psynetsk_tools.dashboard import (
+    attempt_review_sections,
     collect_challenges,
     collect_skills,
     dashboard_data,
@@ -1736,3 +1737,51 @@ def test_export_dashboard_deduplicates_hashed_artifacts(tmp_path: Path) -> None:
     assert video_urls[0] == video_urls[1]
     assert len(video_blobs) == 1
     assert video_blobs[0].read_bytes() == b"shared video"
+
+
+def test_attempt_review_sections_isolates_render_failures(monkeypatch: pytest.MonkeyPatch) -> None:
+    original = dashboard_module.render_attempt_review_section_html
+
+    def flaky_renderer(
+        section: dict[str, object],
+        *,
+        challenge_slug: str,
+        attempt_name: str,
+    ) -> str:
+        if section.get("id") == "plan":
+            raise RuntimeError("plan render failed")
+        return original(
+            section,
+            challenge_slug=challenge_slug,
+            attempt_name=attempt_name,
+        )
+
+    monkeypatch.setattr(
+        dashboard_module,
+        "render_attempt_review_section_html",
+        flaky_renderer,
+    )
+
+    sections = attempt_review_sections(
+        challenge_slug="example",
+        attempt_name="attempt-1",
+        attempt_path="challenges/example/attempts/attempt-1",
+        challenge_instructions="Do the task.",
+        challenge_criteria="",
+        plan="# Plan\n\nSteps.",
+        evaluation="# Evaluation\n\nDone.",
+        learnings="",
+        timeline="",
+        timeline_entries=[],
+        evidence_html="<p>Evidence summary</p>",
+        code_files=[],
+        visible_evidence_files=[],
+        challenge_files=[],
+        agent_json='{"model": "test"}',
+    )
+
+    by_id = {str(section["id"]): section for section in sections}
+    assert 'class="section-render-error"' in str(by_id["plan"]["html"])
+    assert "Failed to render section plan." in str(by_id["plan"]["html"])
+    assert "<h1>Evaluation</h1>" in str(by_id["evaluation"]["html"])
+    assert "Evidence summary" in str(by_id["evidence"]["html"])

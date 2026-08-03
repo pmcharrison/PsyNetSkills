@@ -27,6 +27,7 @@ from psynetsk_tools.review_html import (
     render_markdown_block,
     render_visible_artifacts,
     render_timeline_section as render_shared_timeline_section,
+    safe_section_html,
 )
 from psynetsk_tools.review_model import (
     ReviewFile,
@@ -842,25 +843,29 @@ def render_review_section(
 ) -> str:
     """Render one review bundle section."""
 
-    section_id = html.escape(str(section.get("id") or "section"), quote=True)
-    title = html.escape(str(section.get("title") or section_id))
+    section_id_raw = str(section.get("id") or "section")
+    section_id = html.escape(section_id_raw, quote=True)
+    title = html.escape(str(section.get("title") or section_id_raw))
     kind = section.get("kind")
-    if kind == "markdown":
-        body = render_markdown_section(review_dir, section)
-    elif kind == "evidence":
-        body = render_evidence_section(evidence, include_heading=False, section_id=None)
-    elif kind == "files":
-        body = render_visible_artifacts(evidence, exclude_paths=section_paths(manifest))
-    elif kind == "timeline":
-        body = render_timeline_section(review_dir, section)
-    elif kind == "json":
-        body = render_json_section(review_dir, section)
-    elif kind == "checks":
-        body = render_check_list(manifest)
-    elif kind == "blockers":
-        body = render_blockers(manifest)
-    else:
-        body = '<p class="missing">Section kind is not supported.</p>'
+
+    def render_body() -> str:
+        if kind == "markdown":
+            return render_markdown_section(review_dir, section)
+        if kind == "evidence":
+            return render_evidence_section(evidence, include_heading=False, section_id=None)
+        if kind == "files":
+            return render_visible_artifacts(evidence, exclude_paths=section_paths(manifest))
+        if kind == "timeline":
+            return render_timeline_section(review_dir, section)
+        if kind == "json":
+            return render_json_section(review_dir, section)
+        if kind == "checks":
+            return render_check_list(manifest)
+        if kind == "blockers":
+            return render_blockers(manifest)
+        return '<p class="missing">Section kind is not supported.</p>'
+
+    body = safe_section_html(section_id_raw, render_body)
 
     panel_class = section_panel_class(section)
     class_attr = f"attempt-panel {panel_class}".strip()

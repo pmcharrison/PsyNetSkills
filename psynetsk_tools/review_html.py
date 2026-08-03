@@ -2,7 +2,10 @@
 
 from __future__ import annotations
 
+import base64
+import binascii
 import html
+import logging
 from collections.abc import Callable, Iterable, Mapping
 
 import nh3
@@ -112,6 +115,7 @@ SAFE_SVG_ATTRS_BY_TAG = {
     "svg": SAFE_ATTRS | SAFE_SVG_ATTRS | {"viewBox"},
 }
 URL_SCHEMES = {"http", "https", "mailto"}
+PNG_MAGIC = b"\x89PNG\r\n\x1a\n"
 MARKDOWN = MarkdownIt(
     "commonmark",
     {
@@ -122,6 +126,22 @@ MARKDOWN = MarkdownIt(
         ),
     },
 ).enable(["table", "strikethrough"])
+
+logger = logging.getLogger(__name__)
+
+
+def safe_section_html(section_id: str, render: Callable[[], str]) -> str:
+    """Render section HTML, isolating failures to one section."""
+
+    try:
+        return render()
+    except Exception:
+        logger.exception("Failed to render section %s", section_id)
+        return (
+            '<p class="section-render-error">'
+            f"Failed to render section {html.escape(section_id or 'unknown')}."
+            "</p>"
+        )
 
 
 def identity_url(url: str) -> str:
@@ -526,19 +546,22 @@ def render_notebook_cell(cell: dict[str, object]) -> str:
     """Render one notebook cell with safe source and outputs."""
 
     cell_type = str(cell.get("cell_type") or "raw")
-    source = notebook_text(cell.get("source"))
     safe_type = html.escape(cell_type)
-    if cell_type == "markdown":
-        body = render_markdown_block(source)
-    elif cell_type == "code":
-        body = (
-            '<div class="notebook-code">'
-            f"{render_code_block(source, 'python')}"
-            "</div>"
-            f"{render_notebook_outputs(cell.get('outputs'))}"
-        )
-    else:
-        body = f"<pre><code>{html.escape(source)}</code></pre>"
+
+    def render_body() -> str:
+        source = notebook_text(cell.get("source"))
+        if cell_type == "markdown":
+            return render_markdown_block(source)
+        if cell_type == "code":
+            return (
+                '<div class="notebook-code">'
+                f"{render_code_block(source, 'python')}"
+                "</div>"
+                f"{render_notebook_outputs(cell.get('outputs'))}"
+            )
+        return f"<pre><code>{html.escape(source)}</code></pre>"
+
+    body = safe_section_html(f"notebook-cell-{cell_type}", render_body)
     return f'<section class="notebook-cell notebook-cell-{safe_type}">{body}</section>'
 
 
@@ -552,16 +575,34 @@ def notebook_text(value: object) -> str:
     return ""
 
 
+def normalized_png_base64(value: object) -> str:
+    """Return normalized PNG base64 for embedding, or empty on invalid payload."""
+
+    cleaned = "".join(notebook_text(value).split())
+    if not cleaned:
+        return ""
+    try:
+        decoded = base64.b64decode(cleaned, validate=True)
+    except binascii.Error:
+        return ""
+    if not decoded.startswith(PNG_MAGIC):
+        return ""
+    return base64.b64encode(decoded).decode("ascii")
+
+
 def render_notebook_outputs(outputs: object) -> str:
     """Render safe text, HTML, or SVG outputs from a notebook code cell."""
 
     if not isinstance(outputs, list) or not outputs:
         return ""
     rendered_outputs: list[str] = []
-    for output in outputs:
+    for index, output in enumerate(outputs):
         if not isinstance(output, dict):
             continue
-        rendered = render_notebook_output(output)
+        rendered = safe_section_html(
+            f"notebook-output-{index}",
+            lambda output=output: render_notebook_output(output),
+        )
         if rendered:
             rendered_outputs.append(rendered)
     if not rendered_outputs:
@@ -587,6 +628,13 @@ def render_notebook_output(output: dict[str, object]) -> str:
     svg = notebook_text(data.get("image/svg+xml"))
     if svg:
         return f'<div class="notebook-svg">{sanitize_svg_fragment(svg)}</div>'
+    png_b64 = normalized_png_base64(data.get("image/png"))
+    if png_b64:
+        return (
+            '<div class="notebook-image">'
+            f'<img src="data:image/png;base64,{png_b64}" alt="Notebook image output">'
+            "</div>"
+        )
     html_output = notebook_text(data.get("text/html"))
     if html_output:
         return f'<div class="notebook-html">{sanitize_html_fragment(html_output)}</div>'

@@ -49,6 +49,7 @@ from psynetsk_tools.review_html import (
     render_markdown_block,
     render_markdown_document,
     render_timeline_section,
+    safe_section_html,
 )
 from psynetsk_tools.review_model import (
     CompletenessItem,
@@ -993,10 +994,14 @@ def attempt_review_sections(
         },
     ]
     for section in sections:
-        section["html"] = render_attempt_review_section_html(
-            section,
-            challenge_slug=challenge_slug,
-            attempt_name=attempt_name,
+        section_id = str(section.get("id") or "unknown")
+        section["html"] = safe_section_html(
+            section_id,
+            lambda section=section: render_attempt_review_section_html(
+                section,
+                challenge_slug=challenge_slug,
+                attempt_name=attempt_name,
+            ),
         )
         section["panel_class"] = review_section_panel_class(section)
     return sections
