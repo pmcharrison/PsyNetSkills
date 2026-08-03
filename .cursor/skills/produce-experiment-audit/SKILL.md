@@ -9,9 +9,10 @@ authors: [pmcharrison]
 Use this skill when the user asks you to create, complete, validate, or hand off
 a standalone PsyNet experiment audit.
 
-An experiment audit is a portable `audit/` folder for a standalone experiment. It
-uses the `psynet audit` CLI as its formal contract, but artifact
-collection is judgment-heavy and experiment-specific.
+An experiment audit is a portable `audit/` folder **inside the experiment
+directory**. Run the CLI from the experiment root so `./audit/` is created and
+`source_path` stays `.`. It uses the `psynet audit` CLI as its formal contract,
+but artifact collection is judgment-heavy and experiment-specific.
 
 ## Required reads
 
@@ -26,12 +27,15 @@ collection is judgment-heavy and experiment-specific.
 
 ## Workflow
 
-1. Initialize or inspect the bundle with `psynet audit init`.
+1. From the experiment directory, initialize with `psynet audit init`.
 2. Collect evidence using experiment-appropriate commands and scripts.
-3. Update `audit/audit.json` after each artifact changes.
+3. After each artifact file exists, prefer
+   `psynet audit mark-present <artifact_id>` (or add the artifact then mark it)
+   over hand-editing status fields. Update section markdown as needed.
 4. Write or prune the default section files (`PROMPT.md`, `PLAN.md`,
    `TIMELINE.md`, and `REPORT.md`) so the bundle shows the context that matters.
-5. Run `psynet audit validate` and fix structural problems.
+5. Run `psynet audit validate` and fix structural problems. A pass with blockers
+   means the packet is coherent, not that the experiment is ready.
 6. Run `psynet audit render` and share a live preview link when
    reviewing in Cursor Cloud.
 
