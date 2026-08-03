@@ -56,6 +56,11 @@ reliable evidence collection.
 
 ## Evidence notes
 
-Record what you ran and what happened in the challenge attempt's `artifacts/`
-folder. If a command cannot run because system services are unavailable, record
-that clearly rather than pretending validation passed.
+For challenge attempts, the attempt root is the audit packet
+(`docs/audit.md`): put review artifacts under `artifacts/`, analysis under
+`analyses/`, and command logs under `logs/`. Keep `audit.json` in sync with
+`psynet audit mark-present` / blockers as files land.
+
+Record what you ran and what happened in those directories. If a command cannot
+run because system services are unavailable, record that clearly rather than
+pretending validation passed.

@@ -16,6 +16,10 @@ specification.
   performance checks.
 - Read `psynet-simulated-participants/SKILL.md` before designing multi-profile,
   stochastic, mock-LLM, or export-validation simulations.
+- For challenge attempts, follow `attempt-challenge` for attempt-root audit
+  setup (`audit.json` with `extensions: ["psynetskills.challenge"]`) and read
+  `docs/audit.md` for the audit contract. Standalone experiments use nested
+  `audit/` via `psynet audit init` (skill `produce-experiment-audit`).
 
 ## Preview links
 
@@ -26,7 +30,10 @@ For cloud agents, hand off using the `cloud-agent-links` skill.
 ### Planning
 
 The planning phase is responsible for turning the original natural-language specification into a detailed implementation plan.
-The plan should be saved in PLAN.md, and have the following sections:
+The plan should be saved in `PLAN.md` (required core audit section id `plan`).
+In a challenge attempt that is the attempt-root file next to `audit.json`; for a
+standalone experiment audit it lives under `audit/PLAN.md`. Include the
+following sections:
 
 #### Science (optional)
 
@@ -87,7 +94,9 @@ Only continue when they are happy.
 
 Use `psynet simulate` to simulate participants and produce an example dataset.
 This dataset should contain a decent number of participants representative of a real study;
-adjust `Exp.test_n_bots` to ensure this. Save the simulated export at `artifacts/simulated_data.zip`.
+adjust `Exp.test_n_bots` to ensure this. Save the simulated export at
+`artifacts/simulated_data.zip` (challenge attempt root) or
+`audit/artifacts/simulated_data.zip` (standalone experiment audit).
 For profile design, data-path parity, mock-LLM patterns, and simulation
 limitations, follow `psynet-simulated-participants/SKILL.md`.
 
@@ -95,8 +104,9 @@ limitations, follow `psynet-simulated-participants/SKILL.md`.
 
 Write scripts to analyze the generated data. Use a Jupyter notebook for this,
 with the canonical filename `analyses/analysis.ipynb` when working in a
-challenge attempt. The notebook should be self-contained for review,
-including all code, tables, and plots.
+challenge attempt (or `audit/analyses/analysis.ipynb` for a standalone audit).
+The notebook should be self-contained for review, including all code, tables,
+and plots.
 If the implementation is inspired by a published paper, replicate the analyses reported in the paper as closely as possible.
 
 The analysis-notebook tooling is not part of the PsyNet editable install. Install
@@ -119,12 +129,18 @@ Return to previous steps if necessary to address these.
 
 ### Final report
 
-Compile a final report of the experiment (REPORT.md), summarizing the process taken
-and any findings that arose.
+Compile a final report of the experiment (`REPORT.md`), summarizing the process
+taken and any findings that arose. This is the core audit report section.
 Cloud agents should hand off using the `cloud-agent-links` skill.
 
 ### Completion gate
 
 Do not treat an experiment implementation as complete until the simulation
 export, canonical analysis notebook, and `REPORT.md` are present, or until a
-blocker for each missing artifact is recorded in `EVALUATION.md`.
+blocker for each missing artifact is recorded honestly:
+
+- Challenge attempts: update `audit.json` (prefer `psynet audit mark-present`
+  from the attempt root) and note blockers in `EVALUATION.md`. Validate with
+  `psynet audit validate` at the attempt root.
+- Standalone experiment audits: same CLI under `./audit/` (see
+  `produce-experiment-audit` and `docs/audit.md`).
