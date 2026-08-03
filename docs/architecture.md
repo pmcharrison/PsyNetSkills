@@ -11,9 +11,7 @@ combines source artifacts, generated dashboard inputs, and validation tooling.
 challenges/      Challenge definitions, criteria, references, and attempts.
 dashboard/       Hugo site layouts, content mount, static CSS, and generated inputs.
 docs/            Detailed repository specifications for contributors and agents.
-examples/        Example review bundle manifests and other lightweight fixtures.
 psynetsk_tools/  Python validation and dashboard export tools.
-schemas/         Draft machine-readable schemas for portable review bundle artifacts.
 tests/           Pytest coverage for repository tooling.
 public/          Generated Hugo output, ignored by default.
 ```
@@ -52,3 +50,7 @@ PsyNet itself is expected at `~/PsyNet` when implementing experiments. PsyNet
 framework changes should be made in that checkout and submitted upstream; this
 repository should record only challenge definitions, attempts, evidence, skills,
 and documentation needed for the workshop loop.
+
+Experiment readiness audits (`psynet audit`, `psynet.audit`) live in the
+PsyNet checkout. This repository depends on `psynet[audit]` for shared
+evidence HTML used by challenge attempt pages.
