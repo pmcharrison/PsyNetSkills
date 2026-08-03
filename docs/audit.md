@@ -112,8 +112,8 @@ the attempt root:
 
 ```bash
 cd challenges/<slug>/attempts/<name>
-psynet audit validate
-psynet audit render
+psynet audit validate .
+psynet audit render .
 ```
 
 Skills-side checks (`psynetsk-validate`) require the challenge extension section

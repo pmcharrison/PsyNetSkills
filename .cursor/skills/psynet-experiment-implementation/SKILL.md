@@ -18,8 +18,9 @@ specification.
   stochastic, mock-LLM, or export-validation simulations.
 - For challenge attempts, follow `attempt-challenge` for attempt-root audit
   setup (`audit.json` with `extensions: ["psynetskills.challenge"]`) and read
-  `docs/audit.md` for the audit contract. Standalone experiments use nested
-  `audit/` via `psynet audit init` (skill `produce-experiment-audit`).
+  `produce-experiment-audit/references/populating-an-audit.md` for the shared
+  audit population contract. Standalone experiments use nested `audit/` via
+  `psynet audit init` (skill `produce-experiment-audit`).
 
 ## Preview links
 
@@ -139,8 +140,8 @@ Do not treat an experiment implementation as complete until the simulation
 export, canonical analysis notebook, and `REPORT.md` are present, or until a
 blocker for each missing artifact is recorded honestly:
 
-- Challenge attempts: update `audit.json` (prefer `psynet audit mark-present`
-  from the attempt root) and note blockers in `EVALUATION.md`. Validate with
-  `psynet audit validate` at the attempt root.
+- Challenge attempts: update `audit.json` (prefer
+  `psynet audit mark-present <artifact_id> .` from the attempt root) and note
+  blockers in `EVALUATION.md`. Validate there with `psynet audit validate .`.
 - Standalone experiment audits: same CLI under `./audit/` (see
   `produce-experiment-audit` and `docs/audit.md`).

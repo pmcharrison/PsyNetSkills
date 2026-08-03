@@ -17,14 +17,17 @@ challenge before starting a fresh attempt.
 
 ## Required reads
 
-- Read `references/attempt-artifacts.md` before setting up attempt templates or
-  collecting evidence.
+- Read `references/challenge-audit-extension.md` before creating the attempt.
+- Read `produce-experiment-audit/references/populating-an-audit.md` before
+  collecting artifacts. That shared reference owns artifact selection,
+  manifest statuses, blockers, validation, and rendering.
+- Read `references/attempt-lifecycle.md` for workshop timeline, learning, and
+  cost conventions.
 - For experiment implementation challenges, also read and follow
   `psynet-experiment-implementation/SKILL.md` before implementing the experiment.
   This underlying skill requires a `PLAN.md` and a human planning review; stop
   there until the plan is approved. It also requires simulation, a canonical
-  analysis notebook, and `REPORT.md` before the attempt is complete. Also read
-  `references/experiment-evidence.md` before collecting experiment evidence.
+  analysis notebook, and `REPORT.md` before the attempt is complete.
 - If the challenge is explicitly cross-cultural, cross-national, multilingual,
   international, or compares cultures/regions/language groups, read and apply
   `prepare-for-translation/SKILL.md` before implementing participant-facing
@@ -94,22 +97,10 @@ Note the `cloud-agent-links` skill for sharing user review links.
    Repository validation treats an attempt whose `agent.json` explicitly has
    `"ended_at": null` as in progress, so plan-review pauses can pass CI without
    pretending that implementation evidence or criteria review is complete.
-7b. Initialize the attempt root as an audit packet with the challenge extension.
-   From the attempt directory (or via Python):
-
-   ```bash
-   uv run python - <<'PY'
-   from pathlib import Path
-   from psynetsk_tools.challenge_audit import init_challenge_attempt_audit
-   init_challenge_attempt_audit(Path("."), write_starter_markdown=True)
-   PY
-   ```
-
-   This writes `audit.json` with `extensions: ["psynetskills.challenge"]` plus
-   `artifacts/`, `analyses/`, and `logs/`. Do **not** create a legacy `evidence/`
-   directory for new attempts. See `docs/audit.md`.
+7b. Initialize the attempt root as an audit packet by following
+   `references/challenge-audit-extension.md`.
 8. Start `TIMELINE.md` and initialize `LEARNINGS.md` from the template before
-   implementation. Follow `references/attempt-artifacts.md` for timeline and
+   implementation. Follow `references/attempt-lifecycle.md` for timeline and
    learning-note conventions.
 9. Implement the challenge in `code/`.
    - For experiment implementation challenges, first follow
@@ -136,23 +127,12 @@ Note the `cloud-agent-links` skill for sharing user review links.
    - Update `LEARNINGS.md` with any generalizable lessons you encounter.
      This should include mistakes you made when running tests,
      things that took a long time to find in documentation, etc. Follow
-     `references/attempt-artifacts.md` for standalone action bullets and
+     `references/attempt-lifecycle.md` for standalone action bullets and
      learning-card format.
-10. Collect evidence in `artifacts/` (with `analyses/` / `logs/` at the attempt
-   root). Use the `record-participant-video` skill
-   when creating participant-flow screenshots or `artifacts/participant.mp4`, and follow
-   `references/attempt-artifacts.md` for challenge-type-specific evidence
-   guidance.
-    - For experiment implementation challenges, do not stop after functional
-      evidence. Complete the `psynet-experiment-implementation` post-coding
-      steps as review artifacts: run `psynet simulate`, save a simulated export,
-      write the canonical `analyses/analysis.ipynb` notebook with
-      visible CSV-reading code, inline tables, plots, and interpretation, and add
-      `REPORT.md`. If any of these cannot be completed, record the blocker in
-      `EVALUATION.md` and keep matching `audit.json` blockers honest.
-    - When an artifact file is ready, update `audit.json` (status present /
-      remove blockers), ideally via `psynet audit mark-present <id>` from the
-      attempt root.
+10. Populate and validate the attempt audit according to
+    `produce-experiment-audit/references/populating-an-audit.md`. The challenge
+    instructions and implementation skills determine which additional
+    artifacts are relevant.
 11. When implementation and first-pass evidence collection are complete, close
    `TIMELINE.md` with `[agent-stop]` and set `ended_at` in `agent.json` to the
    matching UTC ISO timestamp. Leave `run_cost` as `null`; maintainers can
@@ -170,18 +150,6 @@ Note the `cloud-agent-links` skill for sharing user review links.
    conversationally, including a 1-10 score and concise feedback. Use the
    `evaluate-attempt` skill for that conversation and any resulting updates to
    `EVALUATION.md` or `LEARNINGS.md`.
-
-## Evidence expectations
-
-Evidence should give reviewers enough material to judge both the
-participant-facing behavior and the technical health of the attempt. Match the
-evidence to the challenge type and public instructions. For experiment
-implementation challenges, use the required artifact checklist in
-`references/experiment-evidence.md`. For PsyNet functional and performance
-checks, follow `psynet-experiment-implementation/references/validation.md`.
-
-For external-service requirements and blocked checks, follow the evidence policy
-in `references/attempt-artifacts.md`. Do not imply a skipped check passed.
 
 ## Credential policy
 
