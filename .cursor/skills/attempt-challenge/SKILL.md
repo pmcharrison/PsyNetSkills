@@ -25,9 +25,10 @@ challenge before starting a fresh attempt.
   cost conventions.
 - For experiment implementation challenges, also read and follow
   `psynet-experiment-implementation/SKILL.md` before implementing the experiment.
-  This underlying skill requires a `PLAN.md` and a human planning review; stop
-  there until the plan is approved. It also requires simulation, a canonical
-  analysis notebook, and `REPORT.md` before the attempt is complete.
+  That skill requires a `PLAN.md` and a human planning review before coding
+  (skip the wait when infrastructure-testing or dogfooding the workflow; see
+  that skill). It also requires simulation, a canonical analysis notebook, and
+  `REPORT.md` before the attempt is complete.
 - If the challenge is explicitly cross-cultural, cross-national, multilingual,
   international, or compares cultures/regions/language groups, read and apply
   `prepare-for-translation/SKILL.md` before implementing participant-facing
@@ -108,8 +109,9 @@ Note the `cloud-agent-links` skill for sharing user review links.
    `produce-experiment-audit/references/populating-an-audit.md`. Do not defer
    all evidence generation until a later packaging step.
    - For experiment implementation challenges, first follow
-     `psynet-experiment-implementation/SKILL.md`, including its requirement to
-     stop for human review of `PLAN.md` before coding.
+     `psynet-experiment-implementation/SKILL.md`, including its `PLAN.md` human
+     review step (skip the wait when infrastructure-testing or dogfooding; see
+     that skill).
      For cloud agents, use `cloud-agent-links` skill for the handoff,
      pointing the user to the Plan section of the challenge attempt page.
    - Do not make challenge code depend on files outside its attempt directory

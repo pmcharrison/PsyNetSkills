@@ -46,10 +46,11 @@ If the experiment customizes `run_bot`, preserve `bot=None` support and delegate
 to `super().run_bot(...)` for framework-created bots; `psynet performance-test`
 calls `exp.run_bot(time_factor=...)` without passing a bot object.
 
-Short smoke runs are useful while debugging; do not mark them `present`. Only
-claim performance evidence after a review-ready sustained run for the current
-implementation. Skip the expensive re-run when that review-ready
-`artifacts/performance.json` already exists.
+Short smoke runs are fine while iterating or infrastructure-testing; write them
+with `--audit` when you want the JSON in the packet. Prefer a sustained run
+when claiming production-like performance evidence. Skip an expensive re-run
+when a suitable `artifacts/performance.json` already exists for the current
+implementation.
 
 ## Interactive evidence
 

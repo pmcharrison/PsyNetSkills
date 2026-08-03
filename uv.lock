@@ -1466,7 +1466,7 @@ wheels = [
 [[package]]
 name = "psynet"
 version = "13.4.0a0"
-source = { git = "https://gitlab.com/PsyNetDev/PsyNet.git?rev=f195bd04d697654a4f711ebdc914fbec12892b84#f195bd04d697654a4f711ebdc914fbec12892b84" }
+source = { git = "https://gitlab.com/PsyNetDev/PsyNet.git?rev=c68f8560d7f79e8f001ead7b551e3661be10d58f#c68f8560d7f79e8f001ead7b551e3661be10d58f" }
 dependencies = [
     { name = "arabic-reshaper" },
     { name = "babel" },
@@ -1476,11 +1476,14 @@ dependencies = [
     { name = "html2text" },
     { name = "joblib" },
     { name = "jsonpickle" },
+    { name = "markdown-it-py" },
+    { name = "nh3" },
     { name = "pandas" },
     { name = "paramiko" },
     { name = "pillow" },
     { name = "polib" },
     { name = "progress" },
+    { name = "pygments" },
     { name = "pytest" },
     { name = "pytest-dependency" },
     { name = "pytest-mock" },
@@ -1495,19 +1498,12 @@ dependencies = [
     { name = "yaspin" },
 ]
 
-[package.optional-dependencies]
-audit = [
-    { name = "markdown-it-py" },
-    { name = "nh3" },
-    { name = "pygments" },
-]
-
 [[package]]
 name = "psynetsk-tools"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [
-    { name = "psynet", extra = ["audit"] },
+    { name = "psynet" },
     { name = "pyyaml" },
 ]
 
@@ -1518,7 +1514,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "psynet", extras = ["audit"], git = "https://gitlab.com/PsyNetDev/PsyNet.git?rev=f195bd04d697654a4f711ebdc914fbec12892b84" },
+    { name = "psynet", git = "https://gitlab.com/PsyNetDev/PsyNet.git?rev=c68f8560d7f79e8f001ead7b551e3661be10d58f" },
     { name = "pyyaml", specifier = ">=6.0.3" },
 ]
 

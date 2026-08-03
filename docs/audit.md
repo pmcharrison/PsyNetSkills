@@ -23,15 +23,9 @@ validate first (use `--allow-invalid` only to preview a broken manifest).
 Monitor snapshot publishing copies `/static/...` assets from the **installed
 Dallinger** frontend (not a vendored copy in PsyNet).
 
-Install PsyNet with the optional extra (already pulled in by `psynetsk-tools`
-via `psynet[audit]`). Use a PsyNet revision that includes the audit CLI (see
-this repo's `pyproject.toml` pin); do not assume `master` has `psynet audit`
-until that work is merged:
-
-```bash
-# In ~/PsyNet (on a revision that includes the audit CLI)
-uv pip install -e '.[audit]'
-```
+Audit support is part of core PsyNet. Use a PsyNet revision that includes the
+audit CLI (see this repo's `pyproject.toml` pin); do not assume older `master`
+checkouts have `psynet audit` until that work is merged.
 
 ## Contract
 

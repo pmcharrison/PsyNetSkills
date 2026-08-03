@@ -22,10 +22,10 @@ implementation.
 
 ## PsyNet revision
 
-`psynet audit` lives in PsyNet's optional `[audit]` extra. Use a PsyNet checkout
-that includes the audit CLI (see this repo's `pyproject.toml` `psynet[audit]`
-pin). Do not assume `master` has the command until that work is merged. Prefer
-`uv pip install -e '.[dev,slack,audit]'` in `~/PsyNet`.
+`psynet audit` is part of core PsyNet (Click group on the `psynet` CLI). Use a
+PsyNet checkout that includes the audit commands (see this repo's
+`pyproject.toml` pin). Do not assume older `master` revisions have the command
+until that work is merged.
 
 ## Path cheat-sheet
 
@@ -37,8 +37,8 @@ pin). Do not assume `master` has the command until that work is merged. Prefer
 | Challenge attempt root (`./audit.json`) | `psynet audit validate` or `validate .` | `.` |
 | Inside the packet itself | `psynet audit validate` | `.` |
 
-Do **not** `cd audit` and then run bare `validate` expecting the default nested
-path; stay at the experiment or attempt root and let auto-detect work.
+Prefer staying at the experiment or attempt root. Running from inside `audit/`
+also works when `audit.json` is in the current directory.
 
 For `mark-present` / `render`, the same rules apply. Pass an explicit packet
 path only when you are not already at the experiment or attempt root.
@@ -51,9 +51,8 @@ onward, write outputs into the audit layout even when they are interim:
 - Prefer canonical paths such as `artifacts/performance.json`,
   `artifacts/simulated_data.zip`, and `analyses/analysis.ipynb`.
 - Overwrite the same path when a later run supersedes an interim result.
-- Keep smoke-only outputs out of `status: "present"` until they are review-ready;
-  leave the artifact `blocked`/`missing` or replace the file before marking
-  present.
+- Mark artifacts `present` when the file is the evidence you intend to hand
+  off (including smoke runs used for infrastructure testing).
 - Update `audit.json` as files land (`psynet audit mark-present ...`).
 
 ## Workflow
@@ -128,9 +127,9 @@ Overwrite the same zip when a later simulation supersedes an interim run.
 
 ### Performance evidence
 
-For review-ready performance evidence, use a sustained test (typically
-`--n-bots 40 --duration-minutes 5`), not a one-bot smoke. Prefer `--audit` so
-PsyNet writes the canonical path:
+For review-ready performance evidence, prefer a sustained test (typically
+`--n-bots 40 --duration-minutes 5`). Prefer `--audit` so PsyNet writes the
+canonical path:
 
 ```bash
 # From experiment root with ./audit/, or challenge attempt root
@@ -152,10 +151,10 @@ psynet performance-test local \
 Use `--json-output` only for a non-audit path. Prefer an absolute `--audit`
 path when PsyNet may execute from a temporary deployment directory.
 
-Smoke runs (few bots / short duration) are fine while iterating; do **not** mark
-them `present`. Only mark `performance_result` present after a review-ready
-sustained run for the final implementation. Skip the expensive re-run when that
-review-ready file already exists.
+Shorter smoke runs are fine while iterating or infrastructure-testing; write
+them with `--audit` and mark present when the file is the evidence you intend
+to hand off. Skip an expensive re-run when a suitable
+`artifacts/performance.json` already exists for the current implementation.
 
 ## Manifest rules
 
