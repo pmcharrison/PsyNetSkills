@@ -10,10 +10,16 @@ psynet audit mark-present <artifact_id>
 psynet audit render
 ```
 
+Use the Click command only (`psynet audit …`). There is no separate
+`psynet-audit` console script.
+
 `experiment.source_path` defaults to `.` (the experiment directory that contains
 `audit/`). Validate checks structure and can pass while blockers remain; that
 means the packet is coherent, not that the experiment is ready. Render runs
 validate first (use `--allow-invalid` only to preview a broken manifest).
+
+Monitor snapshot publishing copies `/static/...` assets from the **installed
+Dallinger** frontend (not a vendored copy in PsyNet).
 
 Install PsyNet with the optional extra (already pulled in by `psynetsk-tools`
 via `psynet[audit]`):
@@ -57,6 +63,9 @@ calling `psynet.audit` helpers (`classify_audit_evidence`, evidence/section HTML
 renderers, artifact sanitization). Hugo remains shell/nav only (see merged PR
 #302).
 
+Artifact URL prefixes: prefer `PSYNET_AUDIT_ARTIFACT_URL_PREFIX`; the legacy
+`PSYNETSK_ARTIFACT_URL_PREFIX` remains a fallback for dashboard preview CI.
+
 Agent workflow for standalone experiments: skill `produce-experiment-audit`.
 
 ## Migration note
@@ -71,6 +80,7 @@ When PsyNet splits Dallinger behind an install-time extra (for example
 `psynet[experiment]`), re-check that workshop CI stays light:
 
 1. `uv sync --group dev` should install `psynet` core + `[audit]` without
-   Dallinger / Postgres / Redis clients.
+   Dallinger / Postgres / Redis clients **if** monitor snapshot publishing is
+   not required at export time (or add a CDN fallback then).
 2. `uv run pytest` and `uv run psynetsk-validate` still pass.
 3. Drop any temporary notes about heavy dashboard CI deps.

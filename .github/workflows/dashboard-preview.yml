@@ -54,6 +54,7 @@ jobs:
       - run: uv run psynetsk-validate
       - run: uv run psynetsk-export-dashboard-data
         env:
+          PSYNET_AUDIT_ARTIFACT_URL_PREFIX: ${{ steps.preview.outputs.artifact_url }}
           PSYNETSK_ARTIFACT_URL_PREFIX: ${{ steps.preview.outputs.artifact_url }}
       - run: >
           hugo

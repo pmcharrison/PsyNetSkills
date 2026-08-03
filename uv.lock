@@ -1466,7 +1466,7 @@ wheels = [
 [[package]]
 name = "psynet"
 version = "13.4.0a0"
-source = { git = "https://gitlab.com/PsyNetDev/PsyNet.git?rev=c2f91c92820b45e104052df44c858df4fd2d5cbf#c2f91c92820b45e104052df44c858df4fd2d5cbf" }
+source = { git = "https://gitlab.com/PsyNetDev/PsyNet.git?rev=5121aa800ddbd1023f8fb193c00271b50180f0dc#5121aa800ddbd1023f8fb193c00271b50180f0dc" }
 dependencies = [
     { name = "arabic-reshaper" },
     { name = "babel" },
@@ -1518,7 +1518,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "psynet", extras = ["audit"], git = "https://gitlab.com/PsyNetDev/PsyNet.git?rev=c2f91c92820b45e104052df44c858df4fd2d5cbf" },
+    { name = "psynet", extras = ["audit"], git = "https://gitlab.com/PsyNetDev/PsyNet.git?rev=5121aa800ddbd1023f8fb193c00271b50180f0dc" },
     { name = "pyyaml", specifier = ">=6.0.3" },
 ]
 
