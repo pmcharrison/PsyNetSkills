@@ -22,7 +22,7 @@ as they provide standardized helpers for administration and visualization.
 
 If the experiment is cross-cultural, cross-national, multilingual,
 international, or compares cultures/regions/language groups, read
-`prepare-for-translation/SKILL.md` now and mark participant-facing strings as
+use the /prepare-for-translation skill now and mark participant-facing strings as
 you implement them.
 
 ## Testing
@@ -36,6 +36,7 @@ Use video review sparingly as it is time-consuming.
 ## Fidelity
 
 It is very important that the back-end logic is faithful to the experiment design.
+If something seems very hard to achieve, stop and ask the user rather than deviate.
 
 ## Misc. guidance
 
