@@ -135,7 +135,7 @@ Note the `cloud-agent-links` skill for sharing user review links.
      learning-card format.
 10. Close the audit packet: inventory what implementation already wrote, mark
     present artifacts, record blockers for gaps, then
-    `psynet audit validate .` (and render if useful). Do **not** re-run
+    `psynet audit validate` (and render if useful). Do **not** re-run
     expensive checks that already produced review-ready files under
     `artifacts/` / `analyses/` / `logs/`.
 11. When implementation and first-pass evidence collection are complete, close

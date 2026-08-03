@@ -20,6 +20,29 @@ from implementation, mark it present and move on. Re-run an expensive check only
 when the existing file is missing, invalid, or no longer represents the final
 implementation.
 
+## PsyNet revision
+
+`psynet audit` lives in PsyNet's optional `[audit]` extra. Use a PsyNet checkout
+that includes the audit CLI (see this repo's `pyproject.toml` `psynet[audit]`
+pin). Do not assume `master` has the command until that work is merged. Prefer
+`uv pip install -e '.[dev,slack,audit]'` in `~/PsyNet`.
+
+## Path cheat-sheet
+
+`psynet audit` auto-detects the packet from the current directory:
+
+| Working directory | Typical command | Resolved packet |
+|-------------------|-----------------|-----------------|
+| Standalone experiment root (`./audit/audit.json`) | `psynet audit validate` or `validate .` | `./audit` |
+| Challenge attempt root (`./audit.json`) | `psynet audit validate` or `validate .` | `.` |
+| Inside the packet itself | `psynet audit validate` | `.` |
+
+Do **not** `cd audit` and then run bare `validate` expecting the default nested
+path; stay at the experiment or attempt root and let auto-detect work.
+
+For `mark-present` / `render`, the same rules apply. Pass an explicit packet
+path only when you are not already at the experiment or attempt root.
+
 ## Early audit-aware habit
 
 Initialize the packet before meaningful runs. From the first useful command
@@ -54,22 +77,19 @@ onward, write outputs into the audit layout even when they are interim:
 5. After an artifact exists, run:
 
    ```bash
-   psynet audit mark-present <artifact_id> <AUDIT_ROOT>
+   psynet audit mark-present <artifact_id>
    ```
 
    Add a manifest entry first when the artifact is not already declared.
-6. Record checks and blockers honestly in `audit.json`. A structurally valid
-   packet may still contain blockers.
+6. Record checks and blockers honestly in `audit.json`. A coherent packet may
+   still have blockers; validate success means structure is OK, not that the
+   experiment is ready.
 7. Before handoff, run:
 
    ```bash
-   psynet audit validate <AUDIT_ROOT>
-   psynet audit render <AUDIT_ROOT>
+   psynet audit validate
+   psynet audit render
    ```
-
-   When the current directory is the audit root, pass `.`. The CLI default is
-   `audit/`, which is convenient from a standalone experiment root but is not
-   correct from a challenge attempt root.
 
 ## Evidence checklist
 
@@ -89,28 +109,53 @@ Use `record-participant-video` for screenshot and video production. Keep videos
 at most 3 minutes and 1280×720. Keep rendered notebooks small enough for the
 dashboard to read (normally under about 100 KB).
 
-For performance evidence, use a sustained test rather than a one-bot smoke test.
-Prefer `--audit-dir` so PsyNet writes the canonical audit path:
+### Simulation export packaging
+
+`psynet simulate` writes `data/simulated_data/` (a directory). It does **not**
+write the audit zip. After a useful simulation:
 
 ```bash
-# From code/<slug>/ in a challenge attempt
-psynet performance-test local \
-  --n-bots 40 \
-  --duration-minutes 5 \
-  --time-factor 1.0 \
-  --audit-dir ../..
+# Challenge attempt root
+zip -r artifacts/simulated_data.zip data/simulated_data
+psynet audit mark-present simulation_export
 
-# Standalone experiment with ./audit/
-psynet performance-test local \
-  --n-bots 40 \
-  --duration-minutes 5 \
-  --time-factor 1.0 \
-  --audit-dir audit
+# Standalone experiment (from experiment root)
+zip -r audit/artifacts/simulated_data.zip data/simulated_data
+psynet audit mark-present simulation_export
 ```
 
-`--audit-dir` writes `<AUDIT_ROOT>/artifacts/performance.json`. Use
-`--json-output` only when you need a non-audit path. Prefer an absolute audit
+Overwrite the same zip when a later simulation supersedes an interim run.
+
+### Performance evidence
+
+For review-ready performance evidence, use a sustained test (typically
+`--n-bots 40 --duration-minutes 5`), not a one-bot smoke. Prefer `--audit` so
+PsyNet writes the canonical path:
+
+```bash
+# From experiment root with ./audit/, or challenge attempt root
+psynet performance-test local \
+  --n-bots 40 \
+  --duration-minutes 5 \
+  --time-factor 1.0 \
+  --audit
+
+# From code/<slug>/ in a challenge attempt (packet is ../..)
+psynet performance-test local \
+  --n-bots 40 \
+  --duration-minutes 5 \
+  --time-factor 1.0 \
+  --audit ../..
+```
+
+`--audit` (alone or with a path) writes `<AUDIT_ROOT>/artifacts/performance.json`.
+Use `--json-output` only for a non-audit path. Prefer an absolute `--audit`
 path when PsyNet may execute from a temporary deployment directory.
+
+Smoke runs (few bots / short duration) are fine while iterating; do **not** mark
+them `present`. Only mark `performance_result` present after a review-ready
+sustained run for the final implementation. Skip the expensive re-run when that
+review-ready file already exists.
 
 ## Manifest rules
 

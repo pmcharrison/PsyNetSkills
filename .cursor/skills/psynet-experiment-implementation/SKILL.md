@@ -67,14 +67,24 @@ This section focuses on the software implementation of the experiment, including
 Once the plan is complete, ask the human user to review it and provide feedback.
 Only continue when they are happy.
 
+You may skip waiting for human confirmation when doing infrastructure testing
+or dogfooding the implementation/audit workflow itself; record that assumption
+briefly in `PLAN.md` or `TIMELINE.md` and continue.
+
 ### Developing the experiment
 
 #### Setup
 
-- Use a relevant PsyNet demo as a starting point.
-- In `requirements.txt`, pin PsyNet to the local checkout commit used for the implementation, for example:
+- Use a relevant PsyNet demo as a starting point. Prefer copying a full demo
+  directory (or run `psynet update-scripts`) so scaffolding such as `test.py`,
+  `pytest.ini`, and `.gitignore` is present—not only `experiment.py`.
+- In `requirements.txt`, pin PsyNet to the local checkout commit used for the
+  implementation, for example:
   `psynet@git+https://gitlab.com/PsyNetDev/PsyNet@<commit>#egg=psynet`.
-- Generate `constraints.txt` using `dallinger constraints generate`.
+- Generate `constraints.txt` using `dallinger constraints generate` for future
+  deploy. While developing against an editable `~/PsyNet` install, do **not**
+  `uv pip install -r constraints.txt` (that replaces the editable install with a
+  git-pinned wheel). See PsyNetSkills `AGENTS.md`.
 
 #### Coding
 
@@ -95,11 +105,19 @@ Only continue when they are happy.
 
 Use `psynet simulate` to simulate participants and produce an example dataset.
 This dataset should contain a decent number of participants representative of a real study;
-adjust `Exp.test_n_bots` to ensure this. Save the simulated export at
-`artifacts/simulated_data.zip` (challenge attempt root) or
-`audit/artifacts/simulated_data.zip` (standalone experiment audit). Write into
-those audit paths from the first useful simulation onward; overwrite interim
-exports rather than regenerating later for packaging.
+adjust `Exp.test_n_bots` to ensure this. `psynet simulate` writes
+`data/simulated_data/` (a directory). Zip it into the audit packet:
+
+```bash
+# Challenge attempt root
+zip -r artifacts/simulated_data.zip data/simulated_data
+
+# Standalone experiment root
+zip -r audit/artifacts/simulated_data.zip data/simulated_data
+```
+
+Write into those audit paths from the first useful simulation onward; overwrite
+interim exports rather than regenerating later for packaging.
 For profile design, data-path parity, mock-LLM patterns, and simulation
 limitations, follow `psynet-simulated-participants/SKILL.md`.
 
@@ -143,10 +161,12 @@ export, canonical analysis notebook, and `REPORT.md` are present, or until a
 blocker for each missing artifact is recorded honestly:
 
 - Challenge attempts: update `audit.json` (prefer
-  `psynet audit mark-present <artifact_id> .` from the attempt root) and note
-  blockers in `EVALUATION.md`. Validate there with `psynet audit validate .`.
-- Standalone experiment audits: same CLI under `./audit/` (see
-  `produce-experiment-audit` and `docs/audit.md`).
+  `psynet audit mark-present <artifact_id>` from the attempt root) and note
+  blockers in `EVALUATION.md`. Validate with `psynet audit validate` (auto-detects
+  the attempt-root packet).
+- Standalone experiment audits: from the experiment root, run
+  `psynet audit validate` / `render` (auto-detects `./audit/`). See
+  `produce-experiment-audit` and `docs/audit.md`.
 
 Closing the audit packet is inventory and bookkeeping, not a second evidence
 campaign. Do not re-run performance tests, simulations, or other expensive

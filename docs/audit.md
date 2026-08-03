@@ -7,6 +7,7 @@ audit lives at `./audit/`:
 ```bash
 psynet audit init
 psynet audit validate
+psynet audit validate .   # also fine; auto-detects ./audit/
 psynet audit mark-present <artifact_id>
 psynet audit render
 ```
@@ -23,10 +24,12 @@ Monitor snapshot publishing copies `/static/...` assets from the **installed
 Dallinger** frontend (not a vendored copy in PsyNet).
 
 Install PsyNet with the optional extra (already pulled in by `psynetsk-tools`
-via `psynet[audit]`):
+via `psynet[audit]`). Use a PsyNet revision that includes the audit CLI (see
+this repo's `pyproject.toml` pin); do not assume `master` has `psynet audit`
+until that work is merged:
 
 ```bash
-# In ~/PsyNet
+# In ~/PsyNet (on a revision that includes the audit CLI)
 uv pip install -e '.[audit]'
 ```
 
@@ -108,12 +111,12 @@ challenges/<slug>/attempts/<name>/
 
 Initialize with the attempt-challenge skill (or
 `psynetsk_tools.challenge_audit.init_challenge_attempt_audit`). Validate from
-the attempt root:
+the attempt root (auto-detects `./audit.json`):
 
 ```bash
 cd challenges/<slug>/attempts/<name>
-psynet audit validate .
-psynet audit render .
+psynet audit validate
+psynet audit render
 ```
 
 Skills-side checks (`psynetsk-validate`) require the challenge extension section

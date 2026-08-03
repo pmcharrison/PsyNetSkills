@@ -20,29 +20,36 @@ psynet test local
 
 For challenge attempts and other work that needs performance evidence, run this
 sustained load test after functional checks pass. Do not rely on experiment
-defaults such as `test_n_bots = 1`. Prefer `--audit-dir` so results land in the
+defaults such as `test_n_bots = 1`. Prefer `--audit` so results land in the
 audit packet immediately:
 
 ```bash
-# From code/<slug>/ in a challenge attempt (attempt root is ../..)
+# From experiment root (./audit/) or challenge attempt root
 psynet performance-test local \
   --n-bots 40 \
   --duration-minutes 5 \
   --time-factor 1.0 \
-  --audit-dir ../..
+  --audit
+
+# From code/<slug>/ in a challenge attempt (packet is ../..)
+psynet performance-test local \
+  --n-bots 40 \
+  --duration-minutes 5 \
+  --time-factor 1.0 \
+  --audit ../..
 ```
 
-That writes `<AUDIT_ROOT>/artifacts/performance.json`. For a standalone
-experiment audit, use `--audit-dir audit`. Use `--json-output` only for a
-custom non-audit path.
-For export commands and commands that may spawn subprocesses, prefer an absolute
-`--audit-dir` when PsyNet may run from a temporary deployment directory.
+That writes `<AUDIT_ROOT>/artifacts/performance.json`. Use `--json-output` only
+for a custom non-audit path. Prefer an absolute `--audit` path when PsyNet may
+run from a temporary deployment directory.
 If the experiment customizes `run_bot`, preserve `bot=None` support and delegate
 to `super().run_bot(...)` for framework-created bots; `psynet performance-test`
 calls `exp.run_bot(time_factor=...)` without passing a bot object.
 
-Skip this expensive run when a review-ready `artifacts/performance.json`
-already exists for the current implementation.
+Short smoke runs are useful while debugging; do not mark them `present`. Only
+claim performance evidence after a review-ready sustained run for the current
+implementation. Skip the expensive re-run when that review-ready
+`artifacts/performance.json` already exists.
 
 ## Interactive evidence
 
@@ -65,7 +72,8 @@ reliable evidence collection.
 For challenge attempts, the attempt root is the audit packet
 (`docs/audit.md`): put review artifacts under `artifacts/`, analysis under
 `analyses/`, and command logs under `logs/`. Keep `audit.json` in sync with
-`psynet audit mark-present <artifact_id> .` / blockers as files land.
+`psynet audit mark-present <artifact_id>` / blockers as files land (auto-detect
+works from the attempt root).
 
 Record what you ran and what happened in those directories. If a command cannot
 run because system services are unavailable, record that clearly rather than

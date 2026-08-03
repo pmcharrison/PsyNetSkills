@@ -30,8 +30,9 @@ the CLI from the experiment root so `experiment.source_path` stays `.`.
    canonical files rather than regenerating later.
 3. Keep evidence-generation scripts with the experiment source.
 4. Close the packet: mark present artifacts, record blockers, then run
-   `psynet audit validate` (a pass with blockers means structurally valid, not
-   complete). Do not re-run expensive checks that already produced review-ready
+   `psynet audit validate` from the experiment root (auto-detects `./audit/`).
+   A pass with blockers means the packet is coherent, not that the experiment is
+   ready. Do not re-run expensive checks that already produced review-ready
    files.
 5. Run `psynet audit render`.
 6. Share the rendered audit for review.

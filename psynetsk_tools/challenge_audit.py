@@ -273,7 +273,7 @@ def challenge_audit_manifest(
             starter_blocker(
                 "performance_result",
                 "Performance test has not been run yet.",
-                "Run psynet performance-test and save artifacts/performance.json.",
+                "Run psynet performance-test local … --audit (or --audit <packet>).",
             ),
             starter_blocker(
                 "monitor_snapshot",
@@ -283,7 +283,8 @@ def challenge_audit_manifest(
             starter_blocker(
                 "simulation_export",
                 "Simulation export has not been produced yet.",
-                "Run psynet simulate and save artifacts/simulated_data.zip.",
+                "Run psynet simulate, then zip data/simulated_data/ to "
+                "artifacts/simulated_data.zip (simulate does not write the audit path).",
             ),
             starter_blocker(
                 "analysis_notebook",

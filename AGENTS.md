@@ -57,6 +57,12 @@ refresh the local PsyNet checkout with
 record the resulting checkout under the standard `psynet` object in the
 attempt's `agent.json`.
 
+When the work needs `psynet audit`, use a PsyNet revision that includes the
+audit CLI (see this repo's `pyproject.toml` `psynet[audit]` pin) and install
+with `uv pip install -e '.[dev,slack,audit]'`. Do not assume `master` has
+`psynet audit` until that feature is merged; do not reset to `master` mid-audit
+work if it would drop the CLI.
+
 Challenge and experiment work in this repository must not use custom or real
 service credentials. Use only local, ephemeral PsyNet/Dallinger dashboard
 defaults. Do not configure real AWS credentials, Prolific API tokens, or other
