@@ -1,14 +1,10 @@
 ---
 name: process-dyadic-experiment-data
-description: Convert PsyNet two-player round-based experiment exports into clean player-round analysis datasets.
+description: Use this skill when a PsyNet experiment has two participants interacting across rounds and the user needs exported or simulated data converted into a clean analysis dataset.
 authors: [eandrade-lotero]
 ---
 
 # Process dyadic experiment data
-
-Use this skill when a PsyNet experiment has two participants interacting across
-rounds and the user needs exported or simulated data converted into a clean
-analysis dataset.
 
 The default clean layout is one row per experimental batch, dyad, round or node,
 and player.
@@ -25,10 +21,7 @@ and player.
 
 ## Workflow
 
-1. Identify the source tables or files from the PsyNet export or simulation.
-   Record which source is authoritative for accepted actions, round state, role
-   assignment, scores, timeouts, and failed or incomplete trials.
-2. Reconstruct stable identifiers:
+1. Reconstruct stable identifiers:
    - experimental batch;
    - dyad or group ID;
    - network, node, trial, or session ID;
@@ -36,38 +29,26 @@ and player.
    - participant ID;
    - player index, role, or side within the dyad;
    - partner participant ID.
-3. Define the round state before flattening data. List the variables that
+2. Define the round state before flattening data. List the variables that
    determine the state, such as shared resources, private resources, visible
    signals, hidden attributes, current turn, previous actions, timers, and
    cumulative outcomes.
-4. Extract each participant's action for each round. Include action values and
+3. Extract each participant's action for each round. Include action values and
    any analysis-relevant metadata such as submission time, acceptance time,
    timeout status, validity, revision count, duplicate submission status, or
    out-of-turn rejection.
-5. Extract scores at the right level:
+4. Extract scores at the right level:
    - player-round score;
    - partner score;
    - dyad or group score;
    - cumulative score;
    - bonus-relevant score;
    - score components when they are needed to audit the rule.
-6. Build the canonical player-round table with one row per batch, dyad, round,
+5. Build the canonical player-round table with one row per batch, dyad, round,
    and participant. Prefer explicit columns for commonly analyzed state and
    action variables. Keep nested `state_json`, `action_json`, or raw event IDs
    only when they remain useful for auditing.
-7. Show a partial reconstructed dataset before finalizing. Present a small
-   representative preview across multiple dyads and rounds, plus the proposed
-   data dictionary. Ask the user whether they want schema tweaks, such as adding
-   variables, excluding irrelevant columns, renaming fields, changing player and
-   partner representations, splitting nested state into explicit columns, or
-   adding derived analysis variables.
-8. Write final outputs after review:
-   - `clean_round_player.csv` or `.parquet`;
-   - a data dictionary describing every column;
-   - optionally `round_level.csv` with one row per dyad-round for aggregate
-     analyses;
-   - a short processing report naming source files, assumptions, exclusions, and
-     validation results.
+6. Ask the user for feedback, presenting them a small example dataset for review.
 
 ## Validation checklist
 

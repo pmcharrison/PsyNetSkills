@@ -12,12 +12,6 @@ platform qualifications before the main task.
 
 ## Required reads
 
-- Read `psynet-experiment-implementation/SKILL.md` for the general experiment
-  workflow, PsyNet setup, and validation expectations.
-- If the task is perceptual or psychophysical, read `psychophysics/SKILL.md` for
-  modality-specific stimulus and metadata guidance.
-- If the experiment is cross-cultural, multilingual, or international, read
-  `prepare-for-translation/SKILL.md` before writing participant-facing text.
 - Inspect PsyNet's current prescreening docs and demos before custom code:
   `~/PsyNet/docs/tutorials/prescreening_tasks.rst`,
   `~/PsyNet/docs/api/prescreen.rst`, and relevant demos under
