@@ -97,7 +97,9 @@ Use `psynet simulate` to simulate participants and produce an example dataset.
 This dataset should contain a decent number of participants representative of a real study;
 adjust `Exp.test_n_bots` to ensure this. Save the simulated export at
 `artifacts/simulated_data.zip` (challenge attempt root) or
-`audit/artifacts/simulated_data.zip` (standalone experiment audit).
+`audit/artifacts/simulated_data.zip` (standalone experiment audit). Write into
+those audit paths from the first useful simulation onward; overwrite interim
+exports rather than regenerating later for packaging.
 For profile design, data-path parity, mock-LLM patterns, and simulation
 limitations, follow `psynet-simulated-participants/SKILL.md`.
 
@@ -145,3 +147,8 @@ blocker for each missing artifact is recorded honestly:
   blockers in `EVALUATION.md`. Validate there with `psynet audit validate .`.
 - Standalone experiment audits: same CLI under `./audit/` (see
   `produce-experiment-audit` and `docs/audit.md`).
+
+Closing the audit packet is inventory and bookkeeping, not a second evidence
+campaign. Do not re-run performance tests, simulations, or other expensive
+checks solely because the audit skill checklist mentions them when review-ready
+files already exist.

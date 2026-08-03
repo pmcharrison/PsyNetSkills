@@ -102,7 +102,11 @@ Note the `cloud-agent-links` skill for sharing user review links.
 8. Start `TIMELINE.md` and initialize `LEARNINGS.md` from the template before
    implementation. Follow `references/attempt-lifecycle.md` for timeline and
    learning-note conventions.
-9. Implement the challenge in `code/`.
+9. Implement the challenge in `code/`. While implementing and validating, write
+   outputs into the attempt audit layout as they are produced (even interim
+   files), following
+   `produce-experiment-audit/references/populating-an-audit.md`. Do not defer
+   all evidence generation until a later packaging step.
    - For experiment implementation challenges, first follow
      `psynet-experiment-implementation/SKILL.md`, including its requirement to
      stop for human review of `PLAN.md` before coding.
@@ -129,10 +133,11 @@ Note the `cloud-agent-links` skill for sharing user review links.
      things that took a long time to find in documentation, etc. Follow
      `references/attempt-lifecycle.md` for standalone action bullets and
      learning-card format.
-10. Populate and validate the attempt audit according to
-    `produce-experiment-audit/references/populating-an-audit.md`. The challenge
-    instructions and implementation skills determine which additional
-    artifacts are relevant.
+10. Close the audit packet: inventory what implementation already wrote, mark
+    present artifacts, record blockers for gaps, then
+    `psynet audit validate .` (and render if useful). Do **not** re-run
+    expensive checks that already produced review-ready files under
+    `artifacts/` / `analyses/` / `logs/`.
 11. When implementation and first-pass evidence collection are complete, close
    `TIMELINE.md` with `[agent-stop]` and set `ended_at` in `agent.json` to the
    matching UTC ISO timestamp. Leave `run_cost` as `null`; maintainers can

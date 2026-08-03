@@ -9,6 +9,30 @@ Let `AUDIT_ROOT` mean:
 - `audit/` for a standalone experiment audit;
 - the attempt root for a PsyNetSkills challenge attempt.
 
+## Ownership
+
+Implementation and validation skills **produce** audit artifacts as they run.
+This reference owns paths, statuses, blockers, inventory, validate, and render.
+
+Do **not** treat audit population as a second evidence campaign. If
+`artifacts/performance.json` (or another required output) is already present
+from implementation, mark it present and move on. Re-run an expensive check only
+when the existing file is missing, invalid, or no longer represents the final
+implementation.
+
+## Early audit-aware habit
+
+Initialize the packet before meaningful runs. From the first useful command
+onward, write outputs into the audit layout even when they are interim:
+
+- Prefer canonical paths such as `artifacts/performance.json`,
+  `artifacts/simulated_data.zip`, and `analyses/analysis.ipynb`.
+- Overwrite the same path when a later run supersedes an interim result.
+- Keep smoke-only outputs out of `status: "present"` until they are review-ready;
+  leave the artifact `blocked`/`missing` or replace the file before marking
+  present.
+- Update `audit.json` as files land (`psynet audit mark-present ...`).
+
 ## Workflow
 
 1. Initialize the packet before collecting evidence.
@@ -65,19 +89,28 @@ Use `record-participant-video` for screenshot and video production. Keep videos
 at most 3 minutes and 1280×720. Keep rendered notebooks small enough for the
 dashboard to read (normally under about 100 KB).
 
-For performance evidence, use a sustained test rather than a one-bot smoke test,
-for example:
+For performance evidence, use a sustained test rather than a one-bot smoke test.
+Prefer `--audit-dir` so PsyNet writes the canonical audit path:
 
 ```bash
+# From code/<slug>/ in a challenge attempt
 psynet performance-test local \
   --n-bots 40 \
   --duration-minutes 5 \
   --time-factor 1.0 \
-  --json-output <AUDIT_ROOT>/artifacts/performance.json
+  --audit-dir ../..
+
+# Standalone experiment with ./audit/
+psynet performance-test local \
+  --n-bots 40 \
+  --duration-minutes 5 \
+  --time-factor 1.0 \
+  --audit-dir audit
 ```
 
-Prefer an absolute output path when PsyNet may execute from a temporary
-deployment directory.
+`--audit-dir` writes `<AUDIT_ROOT>/artifacts/performance.json`. Use
+`--json-output` only when you need a non-audit path. Prefer an absolute audit
+path when PsyNet may execute from a temporary deployment directory.
 
 ## Manifest rules
 

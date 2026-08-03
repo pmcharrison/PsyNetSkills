@@ -20,23 +20,29 @@ psynet test local
 
 For challenge attempts and other work that needs performance evidence, run this
 sustained load test after functional checks pass. Do not rely on experiment
-defaults such as `test_n_bots = 1`:
+defaults such as `test_n_bots = 1`. Prefer `--audit-dir` so results land in the
+audit packet immediately:
 
 ```bash
+# From code/<slug>/ in a challenge attempt (attempt root is ../..)
 psynet performance-test local \
   --n-bots 40 \
   --duration-minutes 5 \
   --time-factor 1.0 \
-  --json-output ../../artifacts/performance.json
+  --audit-dir ../..
 ```
 
-Adjust the JSON output path to match the attempt or project layout.
+That writes `<AUDIT_ROOT>/artifacts/performance.json`. For a standalone
+experiment audit, use `--audit-dir audit`. Use `--json-output` only for a
+custom non-audit path.
 For export commands and commands that may spawn subprocesses, prefer an absolute
-path under the attempt's `artifacts/` directory; relative paths can resolve from a
-temporary deployment directory rather than the experiment directory.
+`--audit-dir` when PsyNet may run from a temporary deployment directory.
 If the experiment customizes `run_bot`, preserve `bot=None` support and delegate
 to `super().run_bot(...)` for framework-created bots; `psynet performance-test`
 calls `exp.run_bot(time_factor=...)` without passing a bot object.
+
+Skip this expensive run when a review-ready `artifacts/performance.json`
+already exists for the current implementation.
 
 ## Interactive evidence
 

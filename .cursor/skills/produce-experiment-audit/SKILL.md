@@ -25,10 +25,14 @@ the CLI from the experiment root so `experiment.source_path` stays `.`.
 ## Workflow
 
 1. From the experiment directory, run `psynet audit init`.
-2. Populate `audit/` according to `references/populating-an-audit.md`.
+2. Produce evidence during implementation/validation into `audit/` paths as you
+   go (see `references/populating-an-audit.md`). Prefer overwriting interim
+   canonical files rather than regenerating later.
 3. Keep evidence-generation scripts with the experiment source.
-4. Run `psynet audit validate`; a pass with blockers means structurally valid,
-   not complete.
+4. Close the packet: mark present artifacts, record blockers, then run
+   `psynet audit validate` (a pass with blockers means structurally valid, not
+   complete). Do not re-run expensive checks that already produced review-ready
+   files.
 5. Run `psynet audit render`.
 6. Share the rendered audit for review.
 
