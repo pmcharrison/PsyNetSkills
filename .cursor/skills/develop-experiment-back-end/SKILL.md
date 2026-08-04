@@ -17,6 +17,8 @@ Most experiment logic should go through these components.
 
 Prefer `TrialMaker`s where possible for administering sequences of trials,
 as they provide standardized helpers for administration and visualization.
+`StaticTrialMaker`s are suitable for standard, non-adaptive experiments;
+`
 
 ## Internationalization
 
