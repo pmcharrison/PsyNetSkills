@@ -24,7 +24,11 @@ the skill tree.
      create or update a combination skill that points to the component skills.
    - If only small sections overlap, keep the new skill focused and point to the
      owner skills instead of repeating their full procedures.
-   - If no existing skill fits, create `.cursor/skills/<skill-name>/SKILL.md`.
+   - If no existing skill fits, decide ownership before creating it:
+     - general PsyNet experiment-development skills belong in
+       `~/PsyNet/.cursor/skills/experiment/<skill-name>/SKILL.md`;
+     - challenge, attempt, evaluation, dashboard, and workshop-process skills
+       belong in `.cursor/skills/<skill-name>/SKILL.md`.
 4. Mention all overlaps found to the user, including small pointer-level overlap.
 5. Use the `identify-author` skill before writing metadata.
 6. Use Agent Skills-compatible frontmatter. The `name` must match the folder and
@@ -41,6 +45,8 @@ the skill tree.
 
 - Do not add challenge-specific instructions to a general skill unless the lesson
   is likely to recur.
-- Prefer editing an existing skill over creating a near-duplicate.
+- Prefer editing an existing skill over creating a near-duplicate. Do not copy a
+  PsyNet-owned experiment skill back into PsyNetSkills; use a concise pointer
+  from a workshop skill when challenge-specific integration is needed.
 - Keep hidden criteria and private attempt material out of skills.
 - Make the skill useful to future agents without relying on the current chat.

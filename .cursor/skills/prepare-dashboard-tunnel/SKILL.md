@@ -14,4 +14,5 @@ Use this skill to obtain a temporary public tunnel to the current dashboard buil
    `uv run psynetsk-export-dashboard-data`
 2. Start Hugo in its own tmux session:
    `tmux -f /exec-daemon/tmux.portal.conf new-session -d -s dashboard-live-preview -- hugo server --source dashboard --bind 0.0.0.0 --port 1313 --baseURL http://127.0.0.1:1313/`
-3. Follow the `public-tunnel` skill for port `1313`
+3. Follow the PsyNet skill
+   `~/PsyNet/.cursor/skills/experiment/public-tunnel/SKILL.md` for port `1313`

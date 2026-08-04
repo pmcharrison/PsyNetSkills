@@ -17,7 +17,9 @@ a new skill file or edit an existing one.
 2. Refresh the comparison target when possible:
    `git fetch origin main`, then compare against both the working tree and
    `origin/main` versions of `.cursor/skills/`.
-3. Read every existing `.cursor/skills/*/SKILL.md`. For plausible matches, also
+3. Read every existing `.cursor/skills/*/SKILL.md` and the PsyNet-owned
+   experiment skills under
+   `~/PsyNet/.cursor/skills/experiment/*/SKILL.md`. For plausible matches, also
    read their `references/` files when the main skill points to them.
 4. Classify overlap with each related skill:
    - `replacement`: one existing skill already covers the behavior. Do not create
@@ -43,6 +45,8 @@ a new skill file or edit an existing one.
 ## Rules
 
 - Prefer updating or pointing to an existing skill over creating a near duplicate.
+- General PsyNet experiment-development behavior belongs in PsyNet; workshop,
+  challenge, evaluation, and dashboard behavior belongs in PsyNetSkills.
 - Do not copy hidden criteria, private attempt material, or challenge-specific
   evaluation details into a general skill.
 - Do not preserve repeated text for convenience. Keep the pointer local and the

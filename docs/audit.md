@@ -133,7 +133,8 @@ uv run psynetsk-migrate-attempt-audit challenges/<slug>/attempts/<name>
 Artifact URL prefixes: prefer `PSYNET_AUDIT_ARTIFACT_URL_PREFIX`; the legacy
 `PSYNETSK_ARTIFACT_URL_PREFIX` remains a fallback for dashboard preview CI.
 
-Agent workflow for standalone experiments: skill `produce-experiment-audit`.
+Agent workflow for standalone experiments: PsyNet skill
+`~/PsyNet/.cursor/skills/experiment/produce-experiment-audit/SKILL.md`.
 Agent workflow for challenges: skill `attempt-challenge` (audit-root layout).
 
 ## Migration note

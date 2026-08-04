@@ -12,9 +12,10 @@ deployment workflow.
 
 ## Required reads
 
-- Read `psynet-deployment-ops/SKILL.md` before preparing the request. That skill
-  owns deployment readiness, command patterns, credential safety, export
-  records, and teardown guidance.
+- Read the PsyNet skill
+  `~/PsyNet/.cursor/skills/experiment/psynet-deployment-ops/SKILL.md` before
+  preparing the request. That skill owns deployment readiness, command patterns,
+  credential safety, export records, and teardown guidance.
 - If the attempt was just created and its structure is unclear, read
   `attempt-challenge/SKILL.md` for the standard attempt layout.
 

@@ -55,7 +55,7 @@ Workshop lifecycle rules:
   directed by the challenge workflow.
 
 For artifact selection, manifest statuses, blockers, validation, and rendering,
-follow
-`produce-experiment-audit/references/populating-an-audit.md`. Challenge-specific
-instructions may add artifacts, but should not duplicate or override the core
-audit contract.
+follow the PsyNet reference
+`~/PsyNet/.cursor/skills/experiment/produce-experiment-audit/references/populating-an-audit.md`.
+Challenge-specific instructions may add artifacts, but should not duplicate or
+override the core audit contract.

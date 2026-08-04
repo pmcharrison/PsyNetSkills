@@ -74,9 +74,11 @@ workflow rather than committing or publishing them.
 
 Repository skills live in `.cursor/skills/`. At the start of each session,
 review the skills present in the checked-out repository and treat that directory
-as the authoritative source for the current skill set. If the session's attached
-skill metadata appears stale or incomplete, prefer the repository skills on disk
-and note the mismatch briefly before proceeding.
+as authoritative for workshop workflows. General PsyNet experiment skills live
+in `~/PsyNet/.cursor/skills/experiment/` and are copied into experiment
+repositories by `psynet update-scripts`. If the session's attached skill
+metadata appears stale or incomplete, prefer these on-disk sources and note the
+mismatch briefly before proceeding.
 
 ### System dependencies (not managed by `uv sync`)
 
@@ -95,9 +97,10 @@ and note the mismatch briefly before proceeding.
   locally with npm and commit `package.json`/`package-lock.json`.
 
 For Cursor Cloud participant recordings with browser audio, use the
-`record-participant-video` skill as the operational source of truth. It covers
-the PulseAudio null-sink setup, browser routing, ffmpeg capture command, and
-audio verification checks.
+PsyNet skill
+`~/PsyNet/.cursor/skills/experiment/record-participant-video/SKILL.md` as the
+operational source of truth. It covers the PulseAudio null-sink setup, browser
+routing, ffmpeg capture command, and audio verification checks.
 
 ### Standard commands
 

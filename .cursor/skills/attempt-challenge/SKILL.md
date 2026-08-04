@@ -18,21 +18,26 @@ challenge before starting a fresh attempt.
 ## Required reads
 
 - Read `references/challenge-audit-extension.md` before creating the attempt.
-- Read `produce-experiment-audit/references/populating-an-audit.md` before
+- Read the PsyNet reference
+  `~/PsyNet/.cursor/skills/experiment/produce-experiment-audit/references/populating-an-audit.md`
+  before
   collecting artifacts. That shared reference owns artifact selection,
   manifest statuses, blockers, validation, and rendering.
 - Read `references/attempt-lifecycle.md` for workshop timeline, learning, and
   cost conventions.
-- For experiment implementation challenges, also read and follow
-  `psynet-experiment-implementation/SKILL.md` before implementing the experiment.
+- For experiment implementation challenges, also read and follow the PsyNet
+  skill
+  `~/PsyNet/.cursor/skills/experiment/psynet-experiment-implementation/SKILL.md`
+  before implementing the experiment.
   That skill requires a `PLAN.md` and a human planning review before coding
   (skip the wait when infrastructure-testing or dogfooding the workflow; see
   that skill). It also requires simulation, a canonical analysis notebook, and
   `REPORT.md` before the attempt is complete.
 - If the challenge is explicitly cross-cultural, cross-national, multilingual,
   international, or compares cultures/regions/language groups, read and apply
-  `prepare-for-translation/SKILL.md` before implementing participant-facing
-  text. That skill owns translation-readiness requirements.
+  `~/PsyNet/.cursor/skills/experiment/prepare-for-translation/SKILL.md` before
+  implementing participant-facing text. That skill owns translation-readiness
+  requirements.
 
 ## Preview links
 
@@ -106,12 +111,13 @@ Note the `cloud-agent-links` skill for sharing user review links.
 9. Implement the challenge in `code/`. While implementing and validating, write
    outputs into the attempt audit layout as they are produced (even interim
    files), following
-   `produce-experiment-audit/references/populating-an-audit.md`. Do not defer
+   `~/PsyNet/.cursor/skills/experiment/produce-experiment-audit/references/populating-an-audit.md`.
+   Do not defer
    all evidence generation until a later packaging step.
    - For experiment implementation challenges, first follow
-     `psynet-experiment-implementation/SKILL.md`, including its `PLAN.md` human
-     review step (skip the wait when infrastructure-testing or dogfooding; see
-     that skill).
+     `~/PsyNet/.cursor/skills/experiment/psynet-experiment-implementation/SKILL.md`,
+     including its `PLAN.md` human review step (skip the wait when
+     infrastructure-testing or dogfooding; see that skill).
      For cloud agents, use `cloud-agent-links` skill for the handoff,
      pointing the user to the Plan section of the challenge attempt page.
    - Do not make challenge code depend on files outside its attempt directory
@@ -125,11 +131,12 @@ Note the `cloud-agent-links` skill for sharing user review links.
      experiment support files needed by PsyNet local launch checks, especially
      `.gitignore`, rather than copying only Python/config/test files.
    - For cross-cultural, cross-national, multilingual, or international
-     experiments, follow `prepare-for-translation/SKILL.md` during this
-     implementation step.
+     experiments, follow
+     `~/PsyNet/.cursor/skills/experiment/prepare-for-translation/SKILL.md`
+     during this implementation step.
    - For experiment tests and validation, follow
-     `psynet-experiment-implementation/references/validation.md` and the
-     relevant implementation subskills.
+     `~/PsyNet/.cursor/skills/experiment/psynet-experiment-implementation/references/validation.md`
+     and the relevant PsyNet implementation skills.
    - Update `LEARNINGS.md` with any generalizable lessons you encounter.
      This should include mistakes you made when running tests,
      things that took a long time to find in documentation, etc. Follow

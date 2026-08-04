@@ -37,7 +37,10 @@ The tunnel approach supports both 1 and 2, but the GitHub Pages approach only su
 
 ## Deriving links
 
-To obtain tunnel links, use the `prepare-dashboard-tunnel` and `prepare-experiment-tunnel` skills.
+To obtain tunnel links, use `prepare-dashboard-tunnel` for this repository's
+dashboard and the PsyNet skill
+`~/PsyNet/.cursor/skills/experiment/prepare-experiment-tunnel/SKILL.md` for an
+experiment.
 
 To obtain GitHub Pages links, use the `dashboard-preview-links` skill.
 

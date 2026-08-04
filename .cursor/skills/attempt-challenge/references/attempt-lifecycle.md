@@ -2,7 +2,7 @@
 
 Use these conventions for workshop-specific timeline, cost, and learning
 records. Audit artifact population is owned by
-`produce-experiment-audit/references/populating-an-audit.md`.
+`~/PsyNet/.cursor/skills/experiment/produce-experiment-audit/references/populating-an-audit.md`.
 
 ## Timeline
 
