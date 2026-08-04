@@ -10,7 +10,7 @@ readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
     # Temporary heavy pin until PsyNet light-core lands; includes audit + skills.
-    "psynet @ git+https://gitlab.com/PsyNetDev/PsyNet.git@1509d22c3d77e137922cbac9e89f65d71dfd124c",
+    "psynet @ git+https://gitlab.com/PsyNetDev/PsyNet.git@8e1807aaa14b1ecc2a206ace567ce1d7f5c85332",
     "pyyaml>=6.0.3",
 ]
 
