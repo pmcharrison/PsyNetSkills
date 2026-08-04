@@ -1,0 +1,25 @@
+2026-06-15 PsyNet tapping rhythm attempt validation
+
+PASS source ~/PsyNet/.venv/bin/activate && python experiment.py
+  Experiment constructed successfully after generated asset wiring fixes.
+
+PASS source ~/PsyNet/.venv/bin/activate && psynet test local
+  1 passed, 2 warnings in 19.68s. The test exercised good, too-few-taps, off-tempo, noisy, and dropout profiles.
+
+PASS source ~/PsyNet/.venv/bin/activate && psynet simulate
+  1 passed, 2 warnings in 19.54s. Export contained 5 Bot rows, 8 TappingTrial rows, 5 VolumeCheckTrial rows, and 28 Response rows.
+
+PASS python3 evidence/export_checks.py
+  Verified 5 participant rows, 8 tapping trial answers, all five profile ids, manifest stimulus ids, tap onset lists, calibration status, failure reasons, and dropout_no_taps.
+
+PASS source ~/PsyNet/.venv/bin/activate && jupyter nbconvert --to notebook --execute --inplace evidence/analyses/analysis.ipynb
+  Notebook executed in place and remained 28,705 bytes.
+
+PASS source ~/PsyNet/.venv/bin/activate && psynet performance-test local --n-bots 40 --duration-minutes 5 --time-factor 1.0 --json-output evidence/performance.json
+  Completed with 2,937 requests, zero request errors, zero bot errors, median response 0.119 s, and P95 response 1.182 s.
+
+PASS PSYNET_PARTICIPANT_URL=http://127.0.0.1:5000/ad?generate_tokens=true&recruiter=hotair npm run participant-flow
+  Playwright completed the participant path and wrote screenshots through successful completion.
+
+PASS ffprobe/volumedetect evidence/participant.mp4
+  MP4 duration 25.43 s, H.264 1280x720 at 15 fps, AAC audio, mean volume -26.6 dB, max volume -3.8 dB.
