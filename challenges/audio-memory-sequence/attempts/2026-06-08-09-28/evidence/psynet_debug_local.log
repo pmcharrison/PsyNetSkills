@@ -1,0 +1,1224 @@
+
+❯❯ Experiment directory size: 0.05 MB.
+Creating networks:   0%|          | 0/5 [00:00<?, ?it/s]Creating networks: 100%|██████████| 5/5 [00:00<00:00, 3229.37it/s]
+Staging assets:   0%|          | 0/5 [00:00<?, ?it/s]Staging assets: 100%|██████████| 5/5 [00:00<00:00, 170500.16it/s]
+Generating/uploading assets...:   0%|          | 0/1 [00:00<?, ?it/s]Generating/uploading assets...: 100%|██████████| 1/1 [00:00<00:00, 485.40it/s]
+✓ config.txt is PRESENT
+✓ experiment.py is PRESENT
+✓ Size OK at 0MB (max is 256MB)
+✓ experiment.py defines 1 experiment
+✓ no file conflicts
+
+
+❯❯ Experiment UID: 7da763cb-9dc2-cd3f-3112-366ac76625e6
+ * Serving Flask app 'app.py'
+ * Debug mode: on
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 127-782-800
+INFO:psynet:Launched experiment "Audio memory sequence" (`8f1783e1-b52e-4c4d-bdfd-918729791d1c`) locally
+INFO:psynet:[1mExperiment dashboard[0m: http://127.0.0.1:5000/dashboard
+Username: `admin`
+Password: `mG7LrZ7D11hRneEgITWt`
+INFO:psynet:Experiment launch complete!
+INFO:dallinger.recruiters:New participant requested: http://127.0.0.1:5000/ad?recruiter=hotair&assignmentId=I81E3K&hitId=Q88OLR&workerId=7HBLFB&mode=debug
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:45:19] "POST /launch HTTP/1.1" 200 -
+
+❯❯ Opening dashboard: http://admin:mG7LrZ7D11hRneEgITWt@127.0.0.1:5000/dashboard/develop
+
+❯❯ Opening ad: http://127.0.0.1:5000/ad?generate_tokens=true&recruiter=hotair
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:45:21] "[31m[1mGET /dashboard/develop HTTP/1.1[0m" 401 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:45:21] "[32mGET /ad?generate_tokens=true&recruiter=hotair HTTP/1.1[0m" 302 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:45:21] "GET /dashboard/develop HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:45:21] "GET /ad?recruiter=hotair&hitId=LJH84X&assignmentId=8VK2VS&workerId=QRI0B9 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:45:21] "GET /static/css/bootstrap.min.css HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:45:21] "GET /static/css/dashboard.css HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:45:21] "GET /static/scripts/jquery-3.7.1.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:45:21] "GET /static/scripts/popper.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:45:21] "GET /static/scripts/bootstrap.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:45:21] "GET /static/scripts/clipboard.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:45:21] "GET /static/scripts/platform.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:45:21] "GET /static/css/bootstrap.min.css HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:45:21] "GET /static/css/dallinger.css HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:45:21] "GET /static/css/fonts/inter.css HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:45:21] "GET /static/scripts/detectIncognito.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:45:21] "GET /static/scripts/jquery-3.7.1.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:45:21] "GET /static/scripts/reqwest.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:45:21] "GET /static/scripts/reconnecting-websocket.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:45:21] "GET /static/scripts/spin.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:45:21] "GET /static/scripts/store+json2.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:45:21] "GET /static/scripts/fingerprintjs2/1.5.1/fingerprint2.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:45:21] "GET /static/scripts/dallinger2.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:45:21] "GET /static/css/fonts/font-files/Inter-Regular.woff2 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:45:21] "GET /static/css/fonts/font-files/Inter-Light.woff2 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:45:21] "GET /static/css/fonts/font-files/Inter-Bold.woff2 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:45:21] "GET /static/css/fonts/font-files/Inter-Medium.woff2 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:45:21] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:45:21] "GET /static/favicon.png HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:45:21] "GET /static/favicon.svg HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:45:41] "GET /dashboard/develop HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:18] "[32mGET /ad?generate_tokens=true&recruiter=hotair HTTP/1.1[0m" 302 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:18] "GET /ad?recruiter=hotair&hitId=92BL2F&assignmentId=PIE47I&workerId=BIATEC HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:18] "GET /static/css/bootstrap.min.css HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:18] "GET /static/scripts/jquery-3.7.1.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:18] "GET /static/scripts/detectIncognito.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:18] "GET /static/scripts/platform.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:18] "GET /static/css/fonts/inter.css HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:18] "GET /static/css/dallinger.css HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:18] "GET /static/scripts/reqwest.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:18] "GET /static/scripts/reconnecting-websocket.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:18] "GET /static/scripts/spin.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:18] "GET /static/scripts/store+json2.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:18] "GET /static/scripts/fingerprintjs2/1.5.1/fingerprint2.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:18] "GET /static/scripts/dallinger2.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:18] "GET /static/css/fonts/font-files/Inter-Bold.woff2 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:18] "GET /static/css/fonts/font-files/Inter-Light.woff2 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:18] "GET /static/css/fonts/font-files/Inter-Regular.woff2 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:18] "GET /static/css/fonts/font-files/Inter-Medium.woff2 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:18] "GET /static/favicon.png HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:18] "GET /static/favicon.svg HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:19] "GET /consent?recruiter=hotair&hitId=92BL2F&assignmentId=PIE47I&workerId=BIATEC HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:19] "[36mGET /static/css/bootstrap.min.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:19] "[36mGET /static/scripts/jquery-3.7.1.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:19] "[36mGET /static/scripts/detectIncognito.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:19] "[36mGET /static/scripts/platform.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:19] "[36mGET /static/css/fonts/inter.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:19] "[36mGET /static/css/dallinger.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:19] "[36mGET /static/scripts/reqwest.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:19] "[36mGET /static/scripts/reconnecting-websocket.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:19] "[36mGET /static/scripts/spin.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:19] "[36mGET /static/scripts/store+json2.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:19] "[36mGET /static/scripts/fingerprintjs2/1.5.1/fingerprint2.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:19] "[36mGET /static/scripts/dallinger2.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:19] "[36mGET /static/css/fonts/font-files/Inter-Bold.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:19] "[36mGET /static/css/fonts/font-files/Inter-Light.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:19] "[36mGET /static/css/fonts/font-files/Inter-Regular.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:19] "[36mGET /static/css/fonts/font-files/Inter-Medium.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:19] "[36mGET /static/favicon.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:19] "[36mGET /static/favicon.svg HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:21] "GET /start?recruiter=hotair&hitId=92BL2F&assignmentId=PIE47I&workerId=BIATEC HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:21] "[36mGET /static/css/fonts/inter.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:21] "[36mGET /static/css/dallinger.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:21] "[36mGET /static/css/bootstrap.min.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:21] "[36mGET /static/scripts/jquery-3.7.1.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:21] "[36mGET /static/scripts/reqwest.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:21] "[36mGET /static/scripts/reconnecting-websocket.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:21] "[36mGET /static/scripts/spin.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:21] "[36mGET /static/scripts/store+json2.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:21] "[36mGET /static/scripts/fingerprintjs2/1.5.1/fingerprint2.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:21] "[36mGET /static/scripts/dallinger2.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:21] "[36mGET /static/css/fonts/font-files/Inter-Bold.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:21] "[36mGET /static/css/fonts/font-files/Inter-Light.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:21] "[36mGET /static/css/fonts/font-files/Inter-Regular.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:21] "[36mGET /static/css/fonts/font-files/Inter-Medium.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:21] "POST /participant HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:21] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:21] "GET /timeline?unique_id=BIATEC:PIE47I HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:21] "[36mGET /static/css/fonts/inter.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:21] "[36mGET /static/scripts/jquery-3.7.1.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:21] "GET /static/scripts/psynet.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:21] "[36mGET /static/scripts/detectIncognito.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:21] "GET /static/scripts/JSZip/jszip.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:21] "[36mGET /static/scripts/platform.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:21] "[36mGET /static/css/bootstrap.min.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:21] "[36mGET /static/css/dallinger.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:21] "GET /static/scripts/survey-jquery/survey-jquery.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:22] "[36mGET /static/scripts/reqwest.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:22] "[36mGET /static/scripts/reconnecting-websocket.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:22] "[36mGET /static/scripts/spin.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:22] "[36mGET /static/scripts/store+json2.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:22] "[36mGET /static/scripts/fingerprintjs2/1.5.1/fingerprint2.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:22] "[36mGET /static/scripts/dallinger2.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:22] "[36mGET /static/css/fonts/font-files/Inter-Bold.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:22] "[36mGET /static/css/fonts/font-files/Inter-Light.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:22] "[36mGET /static/css/fonts/font-files/Inter-Regular.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:22] "[36mGET /static/css/fonts/font-files/Inter-Medium.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:22] "GET /timeline/progress_and_reward?participantId=1 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:22] "[36mGET /static/favicon.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:22] "[36mGET /static/favicon.svg HTTP/1.1[0m" 304 -
+INFO:psynet:Received a response from participant 1 on page 9f102c83-3e85-ea26-a8bd-93ca58e8d3f0.
+INFO:psynet:Task 'get_current_elt' took 0.015 s
+INFO:psynet:Task 'advance_page' took 0.019 s
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:23] "POST /response HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:23] "GET /timeline?unique_id=BIATEC:PIE47I HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:23] "[36mGET /static/scripts/platform.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:23] "[36mGET /static/scripts/detectIncognito.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:23] "[36mGET /static/css/fonts/inter.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:23] "[36mGET /static/scripts/jquery-3.7.1.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:23] "[36mGET /static/scripts/JSZip/jszip.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:23] "[36mGET /static/scripts/survey-jquery/survey-jquery.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:23] "[36mGET /static/css/bootstrap.min.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:23] "[36mGET /static/css/dallinger.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:23] "[36mGET /static/scripts/psynet.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:23] "[36mGET /static/scripts/reqwest.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:23] "[36mGET /static/scripts/reconnecting-websocket.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:23] "[36mGET /static/scripts/spin.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:23] "[36mGET /static/scripts/store+json2.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:23] "[36mGET /static/scripts/fingerprintjs2/1.5.1/fingerprint2.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:23] "[36mGET /static/scripts/dallinger2.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:23] "[36mGET /static/css/fonts/font-files/Inter-Bold.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:23] "[36mGET /static/css/fonts/font-files/Inter-Light.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:23] "[36mGET /static/css/fonts/font-files/Inter-Regular.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:23] "[36mGET /static/css/fonts/font-files/Inter-Medium.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:23] "GET /timeline/progress_and_reward?participantId=1 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:23] "[36mGET /static/favicon.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:23] "[36mGET /static/favicon.svg HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:23] "GET /static/assets/cached/volume_calibration/volume_calibration_audio/a90fa3f02d7ff22cc88bd3182954cfd2.wav HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:23] "[36mGET /static/favicon.png HTTP/1.1[0m" 304 -
+INFO:psynet:Received a response from participant 1 on page 942cae62-4a01-c091-0c2f-bc6d4a3b0982.
+INFO:psynet:Preparing trial for participant 1.
+INFO:psynet:Looking for networks for participant 1.
+INFO:psynet:5 remain after applying custom network filters.
+INFO:psynet:0 out of 5 networks are awaiting async processes (or have nodes awaiting async processes).
+INFO:psynet:Task 'find_networks' took 0.015 s
+INFO:psynet:Outcome: found 1 candidate network(s) for participant 1.
+INFO:psynet:Selected node 5 from network 5 to give to participant 1.
+INFO:psynet:Task '_create_trial' took 0.014 s
+INFO:psynet:Task 'prepare_trial' took 0.030 s
+INFO:psynet:Task '_prepare_trial' took 0.030 s
+INFO:psynet:Evaluating while_loop (Waiting for trial) condition: result = False
+INFO:psynet:Evaluating while_loop (audio_memory_sequence__trial_loop) condition: result = True
+INFO:psynet:Task 'advance_page' took 0.078 s
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:26] "POST /response HTTP/1.1" 200 -
+INFO:psynet:Task 'get_current_elt' took 0.011 s
+INFO:psynet:Task 'get_current_page' took 0.011 s
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:26] "GET /timeline?unique_id=BIATEC:PIE47I HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:26] "[36mGET /static/css/fonts/inter.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:26] "GET /static/scripts/js-synthesizer/synthesis.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:26] "GET /static/scripts/js-synthesizer/instruments.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:26] "GET /static/scripts/Tonejs/Tone.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:26] "[36mGET /static/scripts/detectIncognito.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:26] "[36mGET /static/scripts/platform.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:26] "[36mGET /static/css/bootstrap.min.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:26] "[36mGET /static/css/dallinger.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:26] "[36mGET /static/scripts/jquery-3.7.1.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:26] "[36mGET /static/scripts/reqwest.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:26] "[36mGET /static/scripts/survey-jquery/survey-jquery.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:26] "[36mGET /static/scripts/psynet.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:26] "[36mGET /static/scripts/JSZip/jszip.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:26] "[36mGET /static/scripts/reconnecting-websocket.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:26] "[36mGET /static/scripts/spin.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:26] "[36mGET /static/scripts/store+json2.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:26] "[36mGET /static/scripts/fingerprintjs2/1.5.1/fingerprint2.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:26] "[36mGET /static/scripts/dallinger2.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:26] "[36mGET /static/css/fonts/font-files/Inter-Bold.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:26] "[36mGET /static/css/fonts/font-files/Inter-Light.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:26] "[36mGET /static/css/fonts/font-files/Inter-Regular.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:26] "[36mGET /static/css/fonts/font-files/Inter-Medium.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:26] "GET /timeline/progress_and_reward?participantId=1 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:26] "[36mGET /static/favicon.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:26] "[36mGET /static/favicon.svg HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:27] "[36mGET /static/favicon.png HTTP/1.1[0m" 304 -
+INFO:psynet:Received a response from participant 1 on page 2132821f-a46e-d1ea-b3fc-1ef7d0f69b27.
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:27] "POST /response HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:28] "GET /timeline?unique_id=BIATEC:PIE47I HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:28] "[36mGET /static/scripts/survey-jquery/survey-jquery.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:28] "[36mGET /static/scripts/jquery-3.7.1.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:28] "[36mGET /static/scripts/detectIncognito.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:28] "[36mGET /static/scripts/platform.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:28] "[36mGET /static/css/fonts/inter.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:28] "[36mGET /static/scripts/JSZip/jszip.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:28] "[36mGET /static/css/bootstrap.min.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:28] "[36mGET /static/css/dallinger.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:28] "[36mGET /static/scripts/psynet.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:28] "[36mGET /static/scripts/reqwest.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:28] "[36mGET /static/scripts/reconnecting-websocket.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:28] "[36mGET /static/scripts/spin.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:28] "[36mGET /static/scripts/store+json2.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:28] "[36mGET /static/scripts/fingerprintjs2/1.5.1/fingerprint2.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:28] "[36mGET /static/scripts/dallinger2.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:28] "[36mGET /static/css/fonts/font-files/Inter-Bold.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:28] "[36mGET /static/css/fonts/font-files/Inter-Light.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:28] "[36mGET /static/css/fonts/font-files/Inter-Regular.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:28] "[36mGET /static/css/fonts/font-files/Inter-Medium.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:28] "GET /timeline/progress_and_reward?participantId=1 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:28] "[36mGET /static/favicon.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:28] "[36mGET /static/favicon.svg HTTP/1.1[0m" 304 -
+INFO:psynet:Received a response from participant 1 on page 5f047a2c-d6ee-a6ce-75f3-9ed25ecf9a6e.
+INFO:psynet:Calling _finalize_trial.
+INFO:psynet:Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+INFO:psynet:Allocating a performance reward of $0.00 to participant 1 for trial 1.
+INFO:psynet:Warning: Trial 1 received an unexpected amount of time credit (expected = 35 seconds; actual = 32.0 seconds). Consider setting the trial's `time_estimate` parameter to 32.0.You can disable this warning message by setting `Trial.check_time_credit_received = False`.
+INFO:psynet:Preparing trial for participant 1.
+INFO:psynet:Looking for networks for participant 1.
+INFO:psynet:4 remain after applying custom network filters.
+INFO:psynet:0 out of 4 networks are awaiting async processes (or have nodes awaiting async processes).
+INFO:psynet:Task 'find_networks' took 0.013 s
+INFO:psynet:Outcome: found 1 candidate network(s) for participant 1.
+INFO:psynet:Selected node 1 from network 1 to give to participant 1.
+INFO:psynet:Task 'prepare_trial' took 0.019 s
+INFO:psynet:Task '_prepare_trial' took 0.019 s
+INFO:psynet:Evaluating while_loop (Waiting for trial) condition: result = False
+INFO:psynet:Evaluating while_loop (audio_memory_sequence__trial_loop) condition: result = True
+INFO:psynet:Task 'advance_page' took 0.040 s
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:29] "POST /response HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:29] "GET /timeline?unique_id=BIATEC:PIE47I HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:29] "[36mGET /static/css/fonts/inter.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:29] "[36mGET /static/scripts/psynet.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:29] "[36mGET /static/scripts/JSZip/jszip.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:29] "[36mGET /static/scripts/jquery-3.7.1.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:29] "[36mGET /static/scripts/detectIncognito.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:29] "[36mGET /static/scripts/platform.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:29] "[36mGET /static/css/bootstrap.min.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:29] "[36mGET /static/css/dallinger.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:29] "[36mGET /static/scripts/survey-jquery/survey-jquery.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:29] "[36mGET /static/scripts/Tonejs/Tone.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:29] "[36mGET /static/scripts/js-synthesizer/instruments.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:29] "[36mGET /static/scripts/js-synthesizer/synthesis.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:29] "[36mGET /static/scripts/reqwest.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:29] "[36mGET /static/scripts/reconnecting-websocket.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:29] "[36mGET /static/scripts/spin.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:29] "[36mGET /static/scripts/store+json2.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:29] "[36mGET /static/scripts/fingerprintjs2/1.5.1/fingerprint2.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:29] "[36mGET /static/scripts/dallinger2.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:29] "[36mGET /static/css/fonts/font-files/Inter-Bold.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:29] "[36mGET /static/css/fonts/font-files/Inter-Light.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:29] "[36mGET /static/css/fonts/font-files/Inter-Regular.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:29] "[36mGET /static/css/fonts/font-files/Inter-Medium.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:29] "GET /timeline/progress_and_reward?participantId=1 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:29] "[36mGET /static/favicon.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:29] "[36mGET /static/favicon.svg HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:30] "[36mGET /static/favicon.png HTTP/1.1[0m" 304 -
+INFO:psynet:Received a response from participant 1 on page 6f2192e6-e01f-a632-0ca8-d00de2c694f5.
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:31] "POST /response HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:31] "GET /timeline?unique_id=BIATEC:PIE47I HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:31] "[36mGET /static/scripts/platform.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:31] "[36mGET /static/css/fonts/inter.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:31] "[36mGET /static/scripts/survey-jquery/survey-jquery.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:31] "[36mGET /static/scripts/JSZip/jszip.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:31] "[36mGET /static/scripts/jquery-3.7.1.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:31] "[36mGET /static/scripts/detectIncognito.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:31] "[36mGET /static/css/bootstrap.min.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:31] "[36mGET /static/css/dallinger.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:31] "[36mGET /static/scripts/psynet.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:31] "[36mGET /static/scripts/reqwest.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:31] "[36mGET /static/scripts/reconnecting-websocket.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:31] "[36mGET /static/scripts/spin.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:31] "[36mGET /static/scripts/store+json2.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:31] "[36mGET /static/scripts/fingerprintjs2/1.5.1/fingerprint2.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:31] "[36mGET /static/scripts/dallinger2.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:31] "[36mGET /static/css/fonts/font-files/Inter-Bold.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:31] "[36mGET /static/css/fonts/font-files/Inter-Light.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:31] "[36mGET /static/css/fonts/font-files/Inter-Regular.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:31] "[36mGET /static/css/fonts/font-files/Inter-Medium.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:31] "GET /timeline/progress_and_reward?participantId=1 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:31] "[36mGET /static/favicon.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:31] "[36mGET /static/favicon.svg HTTP/1.1[0m" 304 -
+INFO:psynet:Received a response from participant 1 on page 9f9912a7-135d-fb3e-beb2-95455967725e.
+INFO:psynet:Calling _finalize_trial.
+INFO:psynet:Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+INFO:psynet:Allocating a performance reward of $0.00 to participant 1 for trial 2.
+INFO:psynet:Warning: Trial 2 received an unexpected amount of time credit (expected = 35 seconds; actual = 32.0 seconds). Consider setting the trial's `time_estimate` parameter to 32.0.You can disable this warning message by setting `Trial.check_time_credit_received = False`.
+INFO:psynet:Preparing trial for participant 1.
+INFO:psynet:Looking for networks for participant 1.
+INFO:psynet:3 remain after applying custom network filters.
+INFO:psynet:0 out of 3 networks are awaiting async processes (or have nodes awaiting async processes).
+INFO:psynet:Outcome: found 1 candidate network(s) for participant 1.
+INFO:psynet:Selected node 2 from network 2 to give to participant 1.
+INFO:psynet:Task 'prepare_trial' took 0.012 s
+INFO:psynet:Task '_prepare_trial' took 0.013 s
+INFO:psynet:Evaluating while_loop (Waiting for trial) condition: result = False
+INFO:psynet:Evaluating while_loop (audio_memory_sequence__trial_loop) condition: result = True
+INFO:psynet:Task 'advance_page' took 0.039 s
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:32] "POST /response HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:33] "GET /timeline?unique_id=BIATEC:PIE47I HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:33] "[36mGET /static/scripts/platform.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:33] "[36mGET /static/scripts/detectIncognito.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:33] "[36mGET /static/css/fonts/inter.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:33] "[36mGET /static/scripts/jquery-3.7.1.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:33] "[36mGET /static/scripts/JSZip/jszip.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:33] "[36mGET /static/scripts/psynet.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:33] "[36mGET /static/css/bootstrap.min.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:33] "[36mGET /static/css/dallinger.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:33] "[36mGET /static/scripts/Tonejs/Tone.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:33] "[36mGET /static/scripts/js-synthesizer/instruments.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:33] "[36mGET /static/scripts/js-synthesizer/synthesis.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:33] "[36mGET /static/scripts/reqwest.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:33] "[36mGET /static/scripts/survey-jquery/survey-jquery.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:33] "[36mGET /static/scripts/reconnecting-websocket.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:33] "[36mGET /static/scripts/spin.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:33] "[36mGET /static/scripts/store+json2.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:33] "[36mGET /static/scripts/fingerprintjs2/1.5.1/fingerprint2.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:33] "[36mGET /static/scripts/dallinger2.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:33] "[36mGET /static/css/fonts/font-files/Inter-Bold.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:33] "[36mGET /static/css/fonts/font-files/Inter-Light.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:33] "[36mGET /static/css/fonts/font-files/Inter-Regular.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:33] "[36mGET /static/css/fonts/font-files/Inter-Medium.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:33] "GET /timeline/progress_and_reward?participantId=1 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:33] "[36mGET /static/favicon.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:33] "[36mGET /static/favicon.svg HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:34] "[36mGET /static/favicon.png HTTP/1.1[0m" 304 -
+INFO:psynet:Received a response from participant 1 on page bd4821e4-6168-40f0-3af8-75112c7d109d.
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:36] "POST /response HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:36] "GET /timeline?unique_id=BIATEC:PIE47I HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:36] "[36mGET /static/css/fonts/inter.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:36] "[36mGET /static/scripts/survey-jquery/survey-jquery.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:36] "[36mGET /static/scripts/JSZip/jszip.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:36] "[36mGET /static/scripts/jquery-3.7.1.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:36] "[36mGET /static/scripts/detectIncognito.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:36] "[36mGET /static/scripts/platform.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:36] "[36mGET /static/css/bootstrap.min.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:36] "[36mGET /static/css/dallinger.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:36] "[36mGET /static/scripts/psynet.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:36] "[36mGET /static/scripts/reqwest.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:36] "[36mGET /static/scripts/reconnecting-websocket.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:36] "[36mGET /static/scripts/spin.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:36] "[36mGET /static/scripts/store+json2.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:36] "[36mGET /static/scripts/fingerprintjs2/1.5.1/fingerprint2.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:36] "[36mGET /static/scripts/dallinger2.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:36] "[36mGET /static/css/fonts/font-files/Inter-Bold.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:36] "[36mGET /static/css/fonts/font-files/Inter-Light.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:36] "[36mGET /static/css/fonts/font-files/Inter-Regular.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:36] "[36mGET /static/css/fonts/font-files/Inter-Medium.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:36] "GET /timeline/progress_and_reward?participantId=1 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:36] "[36mGET /static/favicon.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:36] "[36mGET /static/favicon.svg HTTP/1.1[0m" 304 -
+INFO:psynet:Received a response from participant 1 on page 207b7c37-5920-d004-1bb5-1c69657bae7a.
+INFO:psynet:Calling _finalize_trial.
+INFO:psynet:Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+INFO:psynet:Allocating a performance reward of $0.00 to participant 1 for trial 3.
+INFO:psynet:Warning: Trial 3 received an unexpected amount of time credit (expected = 35 seconds; actual = 32.0 seconds). Consider setting the trial's `time_estimate` parameter to 32.0.You can disable this warning message by setting `Trial.check_time_credit_received = False`.
+INFO:psynet:Preparing trial for participant 1.
+INFO:psynet:Looking for networks for participant 1.
+INFO:psynet:2 remain after applying custom network filters.
+INFO:psynet:0 out of 2 networks are awaiting async processes (or have nodes awaiting async processes).
+INFO:psynet:Outcome: found 1 candidate network(s) for participant 1.
+INFO:psynet:Selected node 4 from network 4 to give to participant 1.
+INFO:psynet:Task 'prepare_trial' took 0.013 s
+INFO:psynet:Task '_prepare_trial' took 0.013 s
+INFO:psynet:Evaluating while_loop (Waiting for trial) condition: result = False
+INFO:psynet:Evaluating while_loop (audio_memory_sequence__trial_loop) condition: result = True
+INFO:psynet:Task 'advance_page' took 0.037 s
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:39] "POST /response HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:39] "GET /timeline?unique_id=BIATEC:PIE47I HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:39] "[36mGET /static/css/fonts/inter.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:39] "[36mGET /static/scripts/survey-jquery/survey-jquery.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:39] "[36mGET /static/scripts/JSZip/jszip.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:39] "[36mGET /static/scripts/jquery-3.7.1.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:39] "[36mGET /static/scripts/detectIncognito.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:39] "[36mGET /static/scripts/platform.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:39] "[36mGET /static/css/bootstrap.min.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:39] "[36mGET /static/css/dallinger.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:39] "[36mGET /static/scripts/psynet.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:39] "[36mGET /static/scripts/Tonejs/Tone.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:39] "[36mGET /static/scripts/js-synthesizer/instruments.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:39] "[36mGET /static/scripts/js-synthesizer/synthesis.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:39] "[36mGET /static/scripts/reqwest.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:39] "[36mGET /static/scripts/reconnecting-websocket.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:39] "[36mGET /static/scripts/spin.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:39] "[36mGET /static/scripts/store+json2.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:39] "[36mGET /static/scripts/fingerprintjs2/1.5.1/fingerprint2.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:39] "[36mGET /static/scripts/dallinger2.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:39] "[36mGET /static/css/fonts/font-files/Inter-Bold.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:39] "[36mGET /static/css/fonts/font-files/Inter-Light.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:39] "[36mGET /static/css/fonts/font-files/Inter-Regular.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:39] "[36mGET /static/css/fonts/font-files/Inter-Medium.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:39] "GET /timeline/progress_and_reward?participantId=1 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:39] "[36mGET /static/favicon.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:39] "[36mGET /static/favicon.svg HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:40] "[36mGET /static/favicon.png HTTP/1.1[0m" 304 -
+INFO:psynet:Received a response from participant 1 on page 2df0654f-050b-d569-66a9-5e7a5db03e2c.
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:44] "POST /response HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:44] "GET /timeline?unique_id=BIATEC:PIE47I HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:44] "[36mGET /static/scripts/platform.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:44] "[36mGET /static/css/fonts/inter.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:44] "[36mGET /static/scripts/psynet.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:44] "[36mGET /static/scripts/survey-jquery/survey-jquery.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:44] "[36mGET /static/scripts/JSZip/jszip.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:44] "[36mGET /static/scripts/jquery-3.7.1.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:44] "[36mGET /static/scripts/detectIncognito.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:44] "[36mGET /static/css/bootstrap.min.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:44] "[36mGET /static/css/dallinger.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:44] "[36mGET /static/scripts/reqwest.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:44] "[36mGET /static/scripts/reconnecting-websocket.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:44] "[36mGET /static/scripts/spin.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:44] "[36mGET /static/scripts/store+json2.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:44] "[36mGET /static/scripts/fingerprintjs2/1.5.1/fingerprint2.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:44] "[36mGET /static/scripts/dallinger2.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:44] "[36mGET /static/css/fonts/font-files/Inter-Bold.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:44] "[36mGET /static/css/fonts/font-files/Inter-Light.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:44] "[36mGET /static/css/fonts/font-files/Inter-Regular.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:44] "[36mGET /static/css/fonts/font-files/Inter-Medium.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:44] "GET /timeline/progress_and_reward?participantId=1 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:44] "[36mGET /static/favicon.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:44] "[36mGET /static/favicon.svg HTTP/1.1[0m" 304 -
+INFO:psynet:Received a response from participant 1 on page b40f8ec3-1fc9-9a12-9ac5-4da47b007175.
+INFO:psynet:Calling _finalize_trial.
+INFO:psynet:Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+INFO:psynet:Allocating a performance reward of $0.00 to participant 1 for trial 4.
+INFO:psynet:Warning: Trial 4 received an unexpected amount of time credit (expected = 35 seconds; actual = 32.0 seconds). Consider setting the trial's `time_estimate` parameter to 32.0.You can disable this warning message by setting `Trial.check_time_credit_received = False`.
+INFO:psynet:Preparing trial for participant 1.
+INFO:psynet:Looking for networks for participant 1.
+INFO:psynet:1 remain after applying custom network filters.
+INFO:psynet:0 out of 1 networks are awaiting async processes (or have nodes awaiting async processes).
+INFO:psynet:Outcome: found 1 candidate network(s) for participant 1.
+INFO:psynet:Selected node 3 from network 3 to give to participant 1.
+INFO:psynet:Task 'prepare_trial' took 0.010 s
+INFO:psynet:Task '_prepare_trial' took 0.010 s
+INFO:psynet:Evaluating while_loop (Waiting for trial) condition: result = False
+INFO:psynet:Evaluating while_loop (audio_memory_sequence__trial_loop) condition: result = True
+INFO:psynet:Task 'advance_page' took 0.035 s
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:48] "POST /response HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:48] "GET /timeline?unique_id=BIATEC:PIE47I HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:48] "[36mGET /static/css/fonts/inter.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:48] "[36mGET /static/scripts/psynet.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:48] "[36mGET /static/scripts/JSZip/jszip.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:48] "[36mGET /static/scripts/jquery-3.7.1.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:48] "[36mGET /static/scripts/detectIncognito.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:48] "[36mGET /static/scripts/platform.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:48] "[36mGET /static/css/bootstrap.min.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:48] "[36mGET /static/css/dallinger.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:48] "[36mGET /static/scripts/Tonejs/Tone.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:48] "[36mGET /static/scripts/js-synthesizer/instruments.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:48] "[36mGET /static/scripts/js-synthesizer/synthesis.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:48] "[36mGET /static/scripts/reqwest.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:48] "[36mGET /static/scripts/reconnecting-websocket.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:48] "[36mGET /static/scripts/survey-jquery/survey-jquery.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:48] "[36mGET /static/scripts/spin.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:48] "[36mGET /static/scripts/store+json2.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:48] "[36mGET /static/scripts/fingerprintjs2/1.5.1/fingerprint2.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:48] "[36mGET /static/scripts/dallinger2.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:48] "[36mGET /static/css/fonts/font-files/Inter-Bold.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:48] "[36mGET /static/css/fonts/font-files/Inter-Light.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:48] "[36mGET /static/css/fonts/font-files/Inter-Regular.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:48] "[36mGET /static/css/fonts/font-files/Inter-Medium.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:48] "GET /timeline/progress_and_reward?participantId=1 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:48] "[36mGET /static/favicon.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:48] "[36mGET /static/favicon.svg HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:49] "[36mGET /static/favicon.png HTTP/1.1[0m" 304 -
+INFO:psynet:Received a response from participant 1 on page 8111d554-4b05-daa5-54e0-f4434d26dec9.
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:53] "POST /response HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:53] "GET /timeline?unique_id=BIATEC:PIE47I HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:53] "[36mGET /static/scripts/platform.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:53] "[36mGET /static/scripts/detectIncognito.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:53] "[36mGET /static/css/fonts/inter.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:53] "[36mGET /static/scripts/jquery-3.7.1.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:53] "[36mGET /static/scripts/JSZip/jszip.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:53] "[36mGET /static/scripts/survey-jquery/survey-jquery.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:53] "[36mGET /static/css/bootstrap.min.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:53] "[36mGET /static/css/dallinger.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:53] "[36mGET /static/scripts/psynet.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:53] "[36mGET /static/scripts/reqwest.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:53] "[36mGET /static/scripts/reconnecting-websocket.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:53] "[36mGET /static/scripts/spin.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:53] "[36mGET /static/scripts/store+json2.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:53] "[36mGET /static/scripts/fingerprintjs2/1.5.1/fingerprint2.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:53] "[36mGET /static/scripts/dallinger2.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:53] "[36mGET /static/css/fonts/font-files/Inter-Bold.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:53] "[36mGET /static/css/fonts/font-files/Inter-Light.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:53] "[36mGET /static/css/fonts/font-files/Inter-Regular.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:53] "[36mGET /static/css/fonts/font-files/Inter-Medium.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:53] "GET /timeline/progress_and_reward?participantId=1 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:53] "[36mGET /static/favicon.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:53] "[36mGET /static/favicon.svg HTTP/1.1[0m" 304 -
+INFO:psynet:Received a response from participant 1 on page c8c9a01f-9300-c3e4-6899-6790908ae656.
+INFO:psynet:Calling _finalize_trial.
+INFO:psynet:Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+INFO:psynet:Allocating a performance reward of $0.00 to participant 1 for trial 5.
+INFO:psynet:Warning: Trial 5 received an unexpected amount of time credit (expected = 35 seconds; actual = 32.0 seconds). Consider setting the trial's `time_estimate` parameter to 32.0.You can disable this warning message by setting `Trial.check_time_credit_received = False`.
+INFO:psynet:Preparing trial for participant 1.
+INFO:psynet:Looking for networks for participant 1.
+INFO:psynet:N completed trials (5) >= N trials per participant (5), skipping forward
+INFO:psynet:Outcome of find_networks: exit
+INFO:psynet:Evaluating while_loop (Waiting for trial) condition: result = False
+INFO:psynet:Evaluating while_loop (audio_memory_sequence__trial_loop) condition: result = False
+INFO:psynet:Task 'advance_page' took 0.016 s
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:56] "POST /response HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:56] "GET /timeline?unique_id=BIATEC:PIE47I HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:56] "[36mGET /static/scripts/platform.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:56] "[36mGET /static/scripts/detectIncognito.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:56] "[36mGET /static/css/fonts/inter.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:56] "[36mGET /static/scripts/jquery-3.7.1.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:56] "[36mGET /static/scripts/JSZip/jszip.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:56] "[36mGET /static/scripts/survey-jquery/survey-jquery.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:56] "[36mGET /static/css/bootstrap.min.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:56] "[36mGET /static/css/dallinger.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:56] "[36mGET /static/scripts/psynet.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:56] "[36mGET /static/scripts/reqwest.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:56] "[36mGET /static/scripts/reconnecting-websocket.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:56] "[36mGET /static/scripts/spin.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:56] "[36mGET /static/css/fonts/font-files/Inter-Bold.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:56] "[36mGET /static/scripts/dallinger2.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:56] "[36mGET /static/scripts/fingerprintjs2/1.5.1/fingerprint2.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:56] "[36mGET /static/scripts/store+json2.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:56] "[36mGET /static/css/fonts/font-files/Inter-Light.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:56] "[36mGET /static/css/fonts/font-files/Inter-Regular.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:56] "[36mGET /static/css/fonts/font-files/Inter-Medium.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:56] "GET /timeline/progress_and_reward?participantId=1 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:56] "[36mGET /static/favicon.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:46:56] "[36mGET /static/favicon.svg HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:35] "[32mGET /ad?generate_tokens=true&recruiter=hotair HTTP/1.1[0m" 302 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:35] "GET /ad?recruiter=hotair&hitId=HWCDAB&assignmentId=U3ODVY&workerId=7UJTZE HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:35] "GET /static/css/dallinger.css HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:35] "GET /static/css/bootstrap.min.css HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:35] "GET /static/scripts/jquery-3.7.1.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:35] "GET /static/scripts/detectIncognito.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:35] "GET /static/scripts/platform.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:35] "GET /static/css/fonts/inter.css HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:35] "GET /static/scripts/reqwest.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:35] "GET /static/scripts/reconnecting-websocket.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:35] "GET /static/scripts/spin.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:35] "GET /static/scripts/store+json2.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:35] "GET /static/scripts/fingerprintjs2/1.5.1/fingerprint2.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:35] "GET /static/scripts/dallinger2.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:35] "GET /static/css/fonts/font-files/Inter-Regular.woff2 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:35] "GET /static/css/fonts/font-files/Inter-Light.woff2 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:35] "GET /static/css/fonts/font-files/Inter-Bold.woff2 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:35] "GET /static/css/fonts/font-files/Inter-Medium.woff2 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:42] "[32mGET /ad?generate_tokens=true&recruiter=hotair HTTP/1.1[0m" 302 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:42] "GET /ad?recruiter=hotair&hitId=OHILYN&assignmentId=Q9BGTQ&workerId=APIUUE HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:42] "GET /static/scripts/detectIncognito.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:42] "GET /static/scripts/platform.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:42] "GET /static/css/bootstrap.min.css HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:42] "GET /static/css/dallinger.css HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:42] "GET /static/css/fonts/inter.css HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:42] "GET /static/scripts/jquery-3.7.1.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:42] "GET /static/scripts/reqwest.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:42] "GET /static/scripts/reconnecting-websocket.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:42] "GET /static/scripts/spin.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:42] "GET /static/scripts/store+json2.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:42] "GET /static/scripts/fingerprintjs2/1.5.1/fingerprint2.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:42] "GET /static/scripts/dallinger2.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:42] "GET /static/css/fonts/font-files/Inter-Bold.woff2 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:42] "GET /static/css/fonts/font-files/Inter-Medium.woff2 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:42] "GET /static/css/fonts/font-files/Inter-Regular.woff2 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:42] "GET /static/css/fonts/font-files/Inter-Light.woff2 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:42] "GET /consent?recruiter=hotair&hitId=OHILYN&assignmentId=Q9BGTQ&workerId=APIUUE HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:42] "[36mGET /static/css/bootstrap.min.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:42] "[36mGET /static/scripts/jquery-3.7.1.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:42] "[36mGET /static/scripts/detectIncognito.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:42] "[36mGET /static/scripts/platform.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:42] "[36mGET /static/css/fonts/inter.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:42] "[36mGET /static/css/dallinger.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:42] "[36mGET /static/scripts/reqwest.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:42] "[36mGET /static/scripts/reconnecting-websocket.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:42] "[36mGET /static/scripts/spin.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:42] "[36mGET /static/scripts/store+json2.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:42] "[36mGET /static/scripts/fingerprintjs2/1.5.1/fingerprint2.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:42] "[36mGET /static/scripts/dallinger2.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:42] "[36mGET /static/css/fonts/font-files/Inter-Bold.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:42] "[36mGET /static/css/fonts/font-files/Inter-Light.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:42] "[36mGET /static/css/fonts/font-files/Inter-Regular.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:42] "[36mGET /static/css/fonts/font-files/Inter-Medium.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:49] "[32mGET /ad?generate_tokens=true&recruiter=hotair HTTP/1.1[0m" 302 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:49] "GET /ad?recruiter=hotair&hitId=9PFP9F&assignmentId=FI21DW&workerId=YH8KG6 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:49] "GET /static/scripts/platform.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:49] "GET /static/scripts/detectIncognito.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:49] "GET /static/css/bootstrap.min.css HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:49] "GET /static/scripts/jquery-3.7.1.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:49] "GET /static/css/fonts/inter.css HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:49] "GET /static/css/dallinger.css HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:49] "GET /static/scripts/reqwest.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:49] "GET /static/scripts/reconnecting-websocket.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:49] "GET /static/scripts/spin.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:49] "GET /static/scripts/store+json2.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:49] "GET /static/scripts/fingerprintjs2/1.5.1/fingerprint2.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:49] "GET /static/scripts/dallinger2.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:49] "GET /static/css/fonts/font-files/Inter-Light.woff2 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:49] "GET /static/css/fonts/font-files/Inter-Bold.woff2 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:49] "GET /static/css/fonts/font-files/Inter-Medium.woff2 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:50] "GET /static/css/fonts/font-files/Inter-Regular.woff2 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:50] "GET /consent?recruiter=hotair&hitId=9PFP9F&assignmentId=FI21DW&workerId=YH8KG6 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:50] "[36mGET /static/css/bootstrap.min.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:50] "[36mGET /static/scripts/detectIncognito.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:50] "[36mGET /static/scripts/platform.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:50] "[36mGET /static/css/dallinger.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:50] "[36mGET /static/css/fonts/inter.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:50] "[36mGET /static/scripts/jquery-3.7.1.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:50] "[36mGET /static/scripts/reqwest.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:50] "[36mGET /static/scripts/reconnecting-websocket.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:50] "[36mGET /static/scripts/spin.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:50] "[36mGET /static/scripts/store+json2.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:50] "[36mGET /static/scripts/fingerprintjs2/1.5.1/fingerprint2.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:50] "[36mGET /static/scripts/dallinger2.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:50] "[36mGET /static/css/fonts/font-files/Inter-Bold.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:50] "[36mGET /static/css/fonts/font-files/Inter-Light.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:50] "[36mGET /static/css/fonts/font-files/Inter-Regular.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:50] "[36mGET /static/css/fonts/font-files/Inter-Medium.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:51] "GET /start?recruiter=hotair&hitId=9PFP9F&assignmentId=FI21DW&workerId=YH8KG6 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:51] "[36mGET /static/scripts/reqwest.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:51] "[36mGET /static/scripts/jquery-3.7.1.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:51] "[36mGET /static/css/dallinger.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:51] "[36mGET /static/css/bootstrap.min.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:51] "[36mGET /static/css/fonts/inter.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:51] "[36mGET /static/scripts/reconnecting-websocket.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:51] "[36mGET /static/scripts/spin.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:51] "[36mGET /static/scripts/store+json2.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:51] "[36mGET /static/scripts/fingerprintjs2/1.5.1/fingerprint2.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:51] "[36mGET /static/scripts/dallinger2.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:51] "[36mGET /static/css/fonts/font-files/Inter-Bold.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:51] "[36mGET /static/css/fonts/font-files/Inter-Light.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:51] "[36mGET /static/css/fonts/font-files/Inter-Regular.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:51] "[36mGET /static/css/fonts/font-files/Inter-Medium.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:51] "POST /participant HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:52] "GET /timeline?unique_id=YH8KG6:FI21DW HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:52] "[36mGET /static/scripts/platform.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:52] "[36mGET /static/css/fonts/inter.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:52] "[36mGET /static/scripts/jquery-3.7.1.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:52] "[36mGET /static/scripts/detectIncognito.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:52] "GET /static/scripts/psynet.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:52] "GET /static/scripts/JSZip/jszip.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:52] "[36mGET /static/css/bootstrap.min.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:52] "[36mGET /static/css/dallinger.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:52] "GET /static/scripts/survey-jquery/survey-jquery.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:52] "[36mGET /static/scripts/reqwest.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:52] "[36mGET /static/scripts/reconnecting-websocket.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:52] "[36mGET /static/scripts/spin.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:52] "[36mGET /static/scripts/store+json2.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:52] "[36mGET /static/scripts/fingerprintjs2/1.5.1/fingerprint2.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:52] "[36mGET /static/scripts/dallinger2.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:52] "[36mGET /static/css/fonts/font-files/Inter-Bold.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:52] "[36mGET /static/css/fonts/font-files/Inter-Light.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:52] "[36mGET /static/css/fonts/font-files/Inter-Regular.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:52] "[36mGET /static/css/fonts/font-files/Inter-Medium.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:52] "GET /timeline/progress_and_reward?participantId=2 HTTP/1.1" 200 -
+INFO:psynet:Received a response from participant 2 on page d680faee-b5cd-0559-a861-6a7a87b33a3e.
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:53] "POST /response HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:53] "GET /timeline?unique_id=YH8KG6:FI21DW HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:53] "[36mGET /static/css/fonts/inter.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:53] "[36mGET /static/scripts/survey-jquery/survey-jquery.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:53] "[36mGET /static/scripts/JSZip/jszip.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:53] "[36mGET /static/scripts/jquery-3.7.1.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:53] "[36mGET /static/scripts/detectIncognito.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:53] "[36mGET /static/scripts/platform.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:53] "[36mGET /static/css/bootstrap.min.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:53] "[36mGET /static/css/dallinger.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:53] "[36mGET /static/scripts/psynet.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:53] "[36mGET /static/scripts/reqwest.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:53] "[36mGET /static/scripts/reconnecting-websocket.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:53] "[36mGET /static/scripts/spin.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:53] "[36mGET /static/scripts/store+json2.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:53] "[36mGET /static/scripts/fingerprintjs2/1.5.1/fingerprint2.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:53] "[36mGET /static/scripts/dallinger2.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:53] "[36mGET /static/css/fonts/font-files/Inter-Bold.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:53] "[36mGET /static/css/fonts/font-files/Inter-Light.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:53] "[36mGET /static/css/fonts/font-files/Inter-Regular.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:53] "[36mGET /static/css/fonts/font-files/Inter-Medium.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:53] "GET /timeline/progress_and_reward?participantId=2 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:53] "GET /static/assets/cached/volume_calibration/volume_calibration_audio/a90fa3f02d7ff22cc88bd3182954cfd2.wav HTTP/1.1" 200 -
+INFO:psynet:Received a response from participant 2 on page b690d604-db00-a561-7efc-35f13b90c43f.
+INFO:psynet:Preparing trial for participant 2.
+INFO:psynet:Looking for networks for participant 2.
+INFO:psynet:5 remain after applying custom network filters.
+INFO:psynet:0 out of 5 networks are awaiting async processes (or have nodes awaiting async processes).
+INFO:psynet:Outcome: found 1 candidate network(s) for participant 2.
+INFO:psynet:Selected node 2 from network 2 to give to participant 2.
+INFO:psynet:Task 'prepare_trial' took 0.014 s
+INFO:psynet:Task '_prepare_trial' took 0.015 s
+INFO:psynet:Evaluating while_loop (Waiting for trial) condition: result = False
+INFO:psynet:Evaluating while_loop (audio_memory_sequence__trial_loop) condition: result = True
+INFO:psynet:Task 'advance_page' took 0.041 s
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:56] "POST /response HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:56] "GET /timeline?unique_id=YH8KG6:FI21DW HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:56] "[36mGET /static/css/fonts/inter.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:56] "GET /static/scripts/js-synthesizer/synthesis.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:56] "GET /static/scripts/js-synthesizer/instruments.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:56] "GET /static/scripts/Tonejs/Tone.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:56] "[36mGET /static/scripts/detectIncognito.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:56] "[36mGET /static/scripts/platform.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:56] "[36mGET /static/css/bootstrap.min.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:56] "[36mGET /static/css/dallinger.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:56] "[36mGET /static/scripts/jquery-3.7.1.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:56] "[36mGET /static/scripts/survey-jquery/survey-jquery.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:56] "[36mGET /static/scripts/JSZip/jszip.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:56] "[36mGET /static/scripts/psynet.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:56] "[36mGET /static/scripts/reqwest.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:56] "[36mGET /static/scripts/reconnecting-websocket.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:56] "[36mGET /static/scripts/spin.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:56] "[36mGET /static/scripts/store+json2.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:56] "[36mGET /static/scripts/fingerprintjs2/1.5.1/fingerprint2.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:56] "[36mGET /static/scripts/dallinger2.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:56] "[36mGET /static/css/fonts/font-files/Inter-Bold.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:56] "[36mGET /static/css/fonts/font-files/Inter-Light.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:56] "[36mGET /static/css/fonts/font-files/Inter-Regular.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:56] "[36mGET /static/css/fonts/font-files/Inter-Medium.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:47:56] "GET /timeline/progress_and_reward?participantId=2 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:17] "[32mGET /ad?generate_tokens=true&recruiter=hotair HTTP/1.1[0m" 302 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:17] "GET /ad?recruiter=hotair&hitId=VSPZXW&assignmentId=4GQGE9&workerId=7MZAET HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:17] "GET /static/css/bootstrap.min.css HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:17] "GET /static/scripts/jquery-3.7.1.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:17] "GET /static/scripts/detectIncognito.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:17] "GET /static/scripts/platform.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:17] "GET /static/css/fonts/inter.css HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:17] "GET /static/css/dallinger.css HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:17] "GET /static/scripts/reqwest.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:17] "GET /static/scripts/reconnecting-websocket.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:17] "GET /static/scripts/spin.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:17] "GET /static/scripts/store+json2.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:17] "GET /static/scripts/dallinger2.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:17] "GET /static/scripts/fingerprintjs2/1.5.1/fingerprint2.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:17] "GET /static/css/fonts/font-files/Inter-Bold.woff2 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:17] "GET /static/css/fonts/font-files/Inter-Light.woff2 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:17] "GET /static/css/fonts/font-files/Inter-Medium.woff2 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:17] "GET /static/css/fonts/font-files/Inter-Regular.woff2 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:17] "GET /static/favicon.png HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:17] "GET /static/favicon.svg HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:17] "GET /consent?recruiter=hotair&hitId=VSPZXW&assignmentId=4GQGE9&workerId=7MZAET HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:17] "[36mGET /static/scripts/platform.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:17] "[36mGET /static/scripts/detectIncognito.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:17] "[36mGET /static/css/bootstrap.min.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:17] "[36mGET /static/css/dallinger.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:17] "[36mGET /static/css/fonts/inter.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:17] "[36mGET /static/scripts/jquery-3.7.1.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:17] "[36mGET /static/scripts/reqwest.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:17] "[36mGET /static/scripts/reconnecting-websocket.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:17] "[36mGET /static/scripts/spin.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:17] "[36mGET /static/scripts/store+json2.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:17] "[36mGET /static/scripts/fingerprintjs2/1.5.1/fingerprint2.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:17] "[36mGET /static/scripts/dallinger2.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:17] "[36mGET /static/css/fonts/font-files/Inter-Bold.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:17] "[36mGET /static/css/fonts/font-files/Inter-Light.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:17] "[36mGET /static/css/fonts/font-files/Inter-Regular.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:17] "[36mGET /static/css/fonts/font-files/Inter-Medium.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:17] "[36mGET /static/favicon.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:17] "[36mGET /static/favicon.svg HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:18] "GET /start?recruiter=hotair&hitId=VSPZXW&assignmentId=4GQGE9&workerId=7MZAET HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:19] "[36mGET /static/css/fonts/inter.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:19] "[36mGET /static/scripts/reconnecting-websocket.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:19] "[36mGET /static/scripts/reqwest.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:19] "[36mGET /static/scripts/jquery-3.7.1.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:19] "[36mGET /static/css/dallinger.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:19] "[36mGET /static/css/bootstrap.min.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:19] "[36mGET /static/scripts/spin.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:19] "[36mGET /static/scripts/store+json2.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:19] "[36mGET /static/scripts/fingerprintjs2/1.5.1/fingerprint2.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:19] "[36mGET /static/scripts/dallinger2.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:19] "[36mGET /static/css/fonts/font-files/Inter-Bold.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:19] "[36mGET /static/css/fonts/font-files/Inter-Light.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:19] "[36mGET /static/css/fonts/font-files/Inter-Regular.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:19] "[36mGET /static/css/fonts/font-files/Inter-Medium.woff2 HTTP/1.1[0m" 304 -
+WARNING:dallinger.db:Same browser fingerprint detected.
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:19] "POST /participant HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:19] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:19] "GET /timeline?unique_id=7MZAET:4GQGE9 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:19] "[36mGET /static/scripts/platform.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:19] "[36mGET /static/scripts/detectIncognito.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:19] "[36mGET /static/css/fonts/inter.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:19] "GET /static/scripts/survey-jquery/survey-jquery.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:19] "[36mGET /static/scripts/jquery-3.7.1.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:19] "GET /static/scripts/psynet.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:19] "GET /static/scripts/JSZip/jszip.min.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:19] "[36mGET /static/css/bootstrap.min.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:19] "[36mGET /static/css/dallinger.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:19] "[36mGET /static/scripts/reqwest.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:19] "[36mGET /static/scripts/reconnecting-websocket.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:19] "[36mGET /static/scripts/spin.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:19] "[36mGET /static/scripts/store+json2.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:19] "[36mGET /static/scripts/fingerprintjs2/1.5.1/fingerprint2.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:19] "[36mGET /static/scripts/dallinger2.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:19] "[36mGET /static/css/fonts/font-files/Inter-Bold.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:19] "[36mGET /static/css/fonts/font-files/Inter-Light.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:19] "[36mGET /static/css/fonts/font-files/Inter-Regular.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:19] "[36mGET /static/css/fonts/font-files/Inter-Medium.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:19] "GET /timeline/progress_and_reward?participantId=3 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:19] "[36mGET /static/favicon.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:19] "[36mGET /static/favicon.svg HTTP/1.1[0m" 304 -
+INFO:psynet:Received a response from participant 3 on page a4b4e368-a307-f005-8d72-5aa8b632d3be.
+INFO:psynet:Task 'advance_page' took 0.011 s
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:22] "POST /response HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:22] "GET /timeline?unique_id=7MZAET:4GQGE9 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:22] "[36mGET /static/css/fonts/inter.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:22] "[36mGET /static/scripts/jquery-3.7.1.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:22] "[36mGET /static/scripts/detectIncognito.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:22] "[36mGET /static/scripts/platform.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:22] "[36mGET /static/scripts/JSZip/jszip.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:22] "[36mGET /static/css/bootstrap.min.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:22] "[36mGET /static/scripts/survey-jquery/survey-jquery.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:22] "[36mGET /static/css/dallinger.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:22] "[36mGET /static/scripts/psynet.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:22] "[36mGET /static/scripts/reqwest.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:22] "[36mGET /static/scripts/reconnecting-websocket.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:22] "[36mGET /static/scripts/spin.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:22] "[36mGET /static/scripts/store+json2.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:22] "[36mGET /static/scripts/fingerprintjs2/1.5.1/fingerprint2.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:22] "[36mGET /static/scripts/dallinger2.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:22] "[36mGET /static/css/fonts/font-files/Inter-Bold.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:22] "[36mGET /static/css/fonts/font-files/Inter-Light.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:22] "[36mGET /static/css/fonts/font-files/Inter-Regular.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:22] "[36mGET /static/css/fonts/font-files/Inter-Medium.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:22] "GET /timeline/progress_and_reward?participantId=3 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:22] "[36mGET /static/favicon.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:22] "[36mGET /static/favicon.svg HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:22] "GET /static/assets/cached/volume_calibration/volume_calibration_audio/a90fa3f02d7ff22cc88bd3182954cfd2.wav HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:22] "[36mGET /static/favicon.png HTTP/1.1[0m" 304 -
+INFO:psynet:Received a response from participant 3 on page 138bf81a-4e01-50ba-e62c-cf083089a549.
+INFO:psynet:Preparing trial for participant 3.
+INFO:psynet:Looking for networks for participant 3.
+INFO:psynet:5 remain after applying custom network filters.
+INFO:psynet:0 out of 5 networks are awaiting async processes (or have nodes awaiting async processes).
+INFO:psynet:Outcome: found 1 candidate network(s) for participant 3.
+INFO:psynet:Selected node 1 from network 1 to give to participant 3.
+INFO:psynet:Task 'prepare_trial' took 0.017 s
+INFO:psynet:Task '_prepare_trial' took 0.017 s
+INFO:psynet:Evaluating while_loop (Waiting for trial) condition: result = False
+INFO:psynet:Evaluating while_loop (audio_memory_sequence__trial_loop) condition: result = True
+INFO:psynet:Task 'advance_page' took 0.038 s
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:26] "POST /response HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:26] "GET /timeline?unique_id=7MZAET:4GQGE9 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:26] "[36mGET /static/css/fonts/inter.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:26] "GET /static/scripts/js-synthesizer/synthesis.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:26] "GET /static/scripts/js-synthesizer/instruments.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:26] "GET /static/scripts/Tonejs/Tone.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:26] "[36mGET /static/scripts/detectIncognito.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:26] "[36mGET /static/scripts/platform.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:26] "[36mGET /static/css/bootstrap.min.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:26] "[36mGET /static/css/dallinger.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:26] "[36mGET /static/scripts/jquery-3.7.1.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:26] "[36mGET /static/scripts/JSZip/jszip.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:26] "[36mGET /static/scripts/survey-jquery/survey-jquery.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:26] "[36mGET /static/scripts/psynet.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:26] "[36mGET /static/scripts/reqwest.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:26] "[36mGET /static/scripts/reconnecting-websocket.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:26] "[36mGET /static/scripts/spin.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:26] "[36mGET /static/scripts/store+json2.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:26] "[36mGET /static/scripts/fingerprintjs2/1.5.1/fingerprint2.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:26] "[36mGET /static/scripts/dallinger2.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:26] "[36mGET /static/css/fonts/font-files/Inter-Bold.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:26] "[36mGET /static/css/fonts/font-files/Inter-Light.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:26] "[36mGET /static/css/fonts/font-files/Inter-Regular.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:26] "[36mGET /static/css/fonts/font-files/Inter-Medium.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:26] "GET /timeline/progress_and_reward?participantId=3 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:26] "[36mGET /static/favicon.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:26] "[36mGET /static/favicon.svg HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:27] "[36mGET /static/favicon.png HTTP/1.1[0m" 304 -
+INFO:psynet:Received a response from participant 3 on page dc299d00-723e-a7f9-753e-e67c028ab2dc.
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:31] "POST /response HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:31] "GET /timeline?unique_id=7MZAET:4GQGE9 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:31] "[36mGET /static/scripts/detectIncognito.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:31] "[36mGET /static/scripts/platform.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:31] "[36mGET /static/css/fonts/inter.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:31] "[36mGET /static/scripts/jquery-3.7.1.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:31] "[36mGET /static/scripts/survey-jquery/survey-jquery.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:31] "[36mGET /static/scripts/JSZip/jszip.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:31] "[36mGET /static/css/bootstrap.min.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:31] "[36mGET /static/css/dallinger.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:31] "[36mGET /static/scripts/psynet.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:31] "[36mGET /static/scripts/reqwest.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:31] "[36mGET /static/scripts/reconnecting-websocket.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:31] "[36mGET /static/scripts/spin.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:31] "[36mGET /static/scripts/store+json2.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:31] "[36mGET /static/scripts/fingerprintjs2/1.5.1/fingerprint2.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:31] "[36mGET /static/scripts/dallinger2.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:31] "[36mGET /static/css/fonts/font-files/Inter-Bold.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:31] "[36mGET /static/css/fonts/font-files/Inter-Light.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:31] "[36mGET /static/css/fonts/font-files/Inter-Regular.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:31] "[36mGET /static/css/fonts/font-files/Inter-Medium.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:31] "GET /timeline/progress_and_reward?participantId=3 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:31] "[36mGET /static/favicon.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:31] "[36mGET /static/favicon.svg HTTP/1.1[0m" 304 -
+INFO:psynet:Received a response from participant 3 on page 82d9225f-2a16-912e-f186-90355a18ca0c.
+INFO:psynet:Calling _finalize_trial.
+INFO:psynet:Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+INFO:psynet:Allocating a performance reward of $0.00 to participant 3 for trial 7.
+INFO:psynet:Warning: Trial 7 received an unexpected amount of time credit (expected = 35 seconds; actual = 32.0 seconds). Consider setting the trial's `time_estimate` parameter to 32.0.You can disable this warning message by setting `Trial.check_time_credit_received = False`.
+INFO:psynet:Preparing trial for participant 3.
+INFO:psynet:Looking for networks for participant 3.
+INFO:psynet:4 remain after applying custom network filters.
+INFO:psynet:0 out of 4 networks are awaiting async processes (or have nodes awaiting async processes).
+INFO:psynet:Outcome: found 1 candidate network(s) for participant 3.
+INFO:psynet:Selected node 4 from network 4 to give to participant 3.
+INFO:psynet:Task 'prepare_trial' took 0.012 s
+INFO:psynet:Task '_prepare_trial' took 0.013 s
+INFO:psynet:Evaluating while_loop (Waiting for trial) condition: result = False
+INFO:psynet:Evaluating while_loop (audio_memory_sequence__trial_loop) condition: result = True
+INFO:psynet:Task 'advance_page' took 0.038 s
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:34] "POST /response HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:34] "GET /timeline?unique_id=7MZAET:4GQGE9 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:34] "[36mGET /static/scripts/JSZip/jszip.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:34] "[36mGET /static/scripts/jquery-3.7.1.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:34] "[36mGET /static/scripts/detectIncognito.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:34] "[36mGET /static/scripts/platform.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:34] "[36mGET /static/css/fonts/inter.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:34] "[36mGET /static/scripts/psynet.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:34] "[36mGET /static/css/bootstrap.min.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:34] "[36mGET /static/css/dallinger.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:34] "[36mGET /static/scripts/survey-jquery/survey-jquery.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:34] "[36mGET /static/scripts/Tonejs/Tone.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:34] "[36mGET /static/scripts/js-synthesizer/instruments.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:34] "[36mGET /static/scripts/js-synthesizer/synthesis.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:34] "[36mGET /static/scripts/reqwest.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:34] "[36mGET /static/scripts/reconnecting-websocket.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:34] "[36mGET /static/scripts/spin.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:34] "[36mGET /static/scripts/store+json2.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:34] "[36mGET /static/scripts/fingerprintjs2/1.5.1/fingerprint2.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:34] "[36mGET /static/scripts/dallinger2.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:34] "[36mGET /static/css/fonts/font-files/Inter-Bold.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:34] "[36mGET /static/css/fonts/font-files/Inter-Light.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:34] "[36mGET /static/css/fonts/font-files/Inter-Regular.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:34] "[36mGET /static/css/fonts/font-files/Inter-Medium.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:34] "GET /timeline/progress_and_reward?participantId=3 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:34] "[36mGET /static/favicon.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:34] "[36mGET /static/favicon.svg HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:35] "[36mGET /static/favicon.png HTTP/1.1[0m" 304 -
+INFO:psynet:Received a response from participant 3 on page cf116bcc-c1ee-73a9-14fe-3673020648c4.
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:39] "POST /response HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:39] "GET /timeline?unique_id=7MZAET:4GQGE9 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:39] "[36mGET /static/css/fonts/inter.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:39] "[36mGET /static/scripts/detectIncognito.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:39] "[36mGET /static/scripts/platform.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:39] "[36mGET /static/scripts/jquery-3.7.1.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:39] "[36mGET /static/scripts/JSZip/jszip.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:39] "[36mGET /static/scripts/survey-jquery/survey-jquery.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:39] "[36mGET /static/css/bootstrap.min.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:39] "[36mGET /static/css/dallinger.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:39] "[36mGET /static/scripts/reconnecting-websocket.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:39] "[36mGET /static/scripts/reqwest.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:39] "[36mGET /static/scripts/psynet.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:39] "[36mGET /static/scripts/fingerprintjs2/1.5.1/fingerprint2.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:39] "[36mGET /static/scripts/store+json2.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:39] "[36mGET /static/scripts/spin.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:39] "[36mGET /static/scripts/dallinger2.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:39] "[36mGET /static/css/fonts/font-files/Inter-Bold.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:39] "[36mGET /static/css/fonts/font-files/Inter-Light.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:39] "[36mGET /static/css/fonts/font-files/Inter-Regular.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:39] "[36mGET /static/css/fonts/font-files/Inter-Medium.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:39] "GET /timeline/progress_and_reward?participantId=3 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:39] "[36mGET /static/favicon.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:39] "[36mGET /static/favicon.svg HTTP/1.1[0m" 304 -
+INFO:psynet:Received a response from participant 3 on page 00bfc1bd-b69f-56dc-e2d9-c276433a07fe.
+INFO:psynet:Calling _finalize_trial.
+INFO:psynet:Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+INFO:psynet:Allocating a performance reward of $0.00 to participant 3 for trial 8.
+INFO:psynet:Warning: Trial 8 received an unexpected amount of time credit (expected = 35 seconds; actual = 32.0 seconds). Consider setting the trial's `time_estimate` parameter to 32.0.You can disable this warning message by setting `Trial.check_time_credit_received = False`.
+INFO:psynet:Preparing trial for participant 3.
+INFO:psynet:Looking for networks for participant 3.
+INFO:psynet:3 remain after applying custom network filters.
+INFO:psynet:0 out of 3 networks are awaiting async processes (or have nodes awaiting async processes).
+INFO:psynet:Outcome: found 1 candidate network(s) for participant 3.
+INFO:psynet:Selected node 3 from network 3 to give to participant 3.
+INFO:psynet:Task 'prepare_trial' took 0.011 s
+INFO:psynet:Task '_prepare_trial' took 0.011 s
+INFO:psynet:Evaluating while_loop (Waiting for trial) condition: result = False
+INFO:psynet:Evaluating while_loop (audio_memory_sequence__trial_loop) condition: result = True
+INFO:psynet:Task 'advance_page' took 0.032 s
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:43] "POST /response HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:43] "GET /timeline?unique_id=7MZAET:4GQGE9 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:43] "[36mGET /static/css/fonts/inter.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:43] "[36mGET /static/scripts/detectIncognito.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:43] "[36mGET /static/scripts/platform.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:43] "[36mGET /static/scripts/psynet.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:43] "[36mGET /static/scripts/JSZip/jszip.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:43] "[36mGET /static/scripts/jquery-3.7.1.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:43] "[36mGET /static/css/bootstrap.min.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:43] "[36mGET /static/css/dallinger.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:43] "[36mGET /static/scripts/survey-jquery/survey-jquery.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:43] "[36mGET /static/scripts/Tonejs/Tone.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:43] "[36mGET /static/scripts/js-synthesizer/instruments.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:43] "[36mGET /static/scripts/js-synthesizer/synthesis.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:43] "[36mGET /static/scripts/reqwest.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:43] "[36mGET /static/scripts/reconnecting-websocket.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:43] "[36mGET /static/scripts/spin.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:43] "[36mGET /static/scripts/store+json2.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:43] "[36mGET /static/scripts/fingerprintjs2/1.5.1/fingerprint2.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:43] "[36mGET /static/scripts/dallinger2.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:43] "[36mGET /static/css/fonts/font-files/Inter-Bold.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:43] "[36mGET /static/css/fonts/font-files/Inter-Light.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:43] "[36mGET /static/css/fonts/font-files/Inter-Regular.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:43] "[36mGET /static/css/fonts/font-files/Inter-Medium.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:43] "GET /timeline/progress_and_reward?participantId=3 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:43] "[36mGET /static/favicon.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:43] "[36mGET /static/favicon.svg HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:44] "[36mGET /static/favicon.png HTTP/1.1[0m" 304 -
+INFO:psynet:Received a response from participant 3 on page fd97a4f3-be10-7845-d05a-00dfdba2166f.
+INFO:psynet:Task 'get_current_elt' took 0.012 s
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:48] "POST /response HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:48] "GET /timeline?unique_id=7MZAET:4GQGE9 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:48] "[36mGET /static/css/fonts/inter.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:48] "[36mGET /static/scripts/detectIncognito.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:48] "[36mGET /static/scripts/platform.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:48] "[36mGET /static/scripts/jquery-3.7.1.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:48] "[36mGET /static/scripts/JSZip/jszip.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:48] "[36mGET /static/scripts/psynet.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:48] "[36mGET /static/css/bootstrap.min.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:48] "[36mGET /static/css/dallinger.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:48] "[36mGET /static/scripts/reqwest.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:48] "[36mGET /static/scripts/reconnecting-websocket.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:48] "[36mGET /static/scripts/survey-jquery/survey-jquery.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:48] "[36mGET /static/scripts/spin.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:48] "[36mGET /static/scripts/store+json2.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:48] "[36mGET /static/scripts/fingerprintjs2/1.5.1/fingerprint2.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:48] "[36mGET /static/scripts/dallinger2.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:48] "[36mGET /static/css/fonts/font-files/Inter-Bold.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:48] "[36mGET /static/css/fonts/font-files/Inter-Light.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:48] "[36mGET /static/css/fonts/font-files/Inter-Regular.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:48] "[36mGET /static/css/fonts/font-files/Inter-Medium.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:48] "GET /timeline/progress_and_reward?participantId=3 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:48] "[36mGET /static/favicon.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:48] "[36mGET /static/favicon.svg HTTP/1.1[0m" 304 -
+INFO:psynet:Received a response from participant 3 on page 38bbb3e9-d880-097b-de55-8c0377629137.
+INFO:psynet:Calling _finalize_trial.
+INFO:psynet:Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+INFO:psynet:Allocating a performance reward of $0.00 to participant 3 for trial 9.
+INFO:psynet:Warning: Trial 9 received an unexpected amount of time credit (expected = 35 seconds; actual = 32.0 seconds). Consider setting the trial's `time_estimate` parameter to 32.0.You can disable this warning message by setting `Trial.check_time_credit_received = False`.
+INFO:psynet:Preparing trial for participant 3.
+INFO:psynet:Looking for networks for participant 3.
+INFO:psynet:2 remain after applying custom network filters.
+INFO:psynet:0 out of 2 networks are awaiting async processes (or have nodes awaiting async processes).
+INFO:psynet:Outcome: found 1 candidate network(s) for participant 3.
+INFO:psynet:Selected node 5 from network 5 to give to participant 3.
+INFO:psynet:Task 'prepare_trial' took 0.012 s
+INFO:psynet:Task '_prepare_trial' took 0.012 s
+INFO:psynet:Evaluating while_loop (Waiting for trial) condition: result = False
+INFO:psynet:Evaluating while_loop (audio_memory_sequence__trial_loop) condition: result = True
+INFO:psynet:Task 'advance_page' took 0.041 s
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:52] "POST /response HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:52] "GET /timeline?unique_id=7MZAET:4GQGE9 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:52] "[36mGET /static/css/fonts/inter.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:52] "[36mGET /static/scripts/psynet.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:52] "[36mGET /static/scripts/JSZip/jszip.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:52] "[36mGET /static/scripts/jquery-3.7.1.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:52] "[36mGET /static/scripts/detectIncognito.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:52] "[36mGET /static/scripts/platform.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:52] "[36mGET /static/css/bootstrap.min.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:52] "[36mGET /static/css/dallinger.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:52] "[36mGET /static/scripts/survey-jquery/survey-jquery.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:52] "[36mGET /static/scripts/Tonejs/Tone.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:52] "[36mGET /static/scripts/js-synthesizer/instruments.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:52] "[36mGET /static/scripts/js-synthesizer/synthesis.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:52] "[36mGET /static/scripts/reqwest.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:52] "[36mGET /static/scripts/reconnecting-websocket.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:52] "[36mGET /static/scripts/spin.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:52] "[36mGET /static/scripts/store+json2.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:52] "[36mGET /static/scripts/fingerprintjs2/1.5.1/fingerprint2.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:52] "[36mGET /static/scripts/dallinger2.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:52] "[36mGET /static/css/fonts/font-files/Inter-Bold.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:52] "[36mGET /static/css/fonts/font-files/Inter-Light.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:52] "[36mGET /static/css/fonts/font-files/Inter-Regular.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:52] "[36mGET /static/css/fonts/font-files/Inter-Medium.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:52] "GET /timeline/progress_and_reward?participantId=3 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:52] "[36mGET /static/favicon.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:52] "[36mGET /static/favicon.svg HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:53] "[36mGET /static/favicon.png HTTP/1.1[0m" 304 -
+INFO:psynet:Received a response from participant 3 on page 65f51ef3-ca2d-ffd8-43d1-46ea5b660606.
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:58] "POST /response HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:58] "GET /timeline?unique_id=7MZAET:4GQGE9 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:58] "[36mGET /static/css/fonts/inter.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:58] "[36mGET /static/scripts/survey-jquery/survey-jquery.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:58] "[36mGET /static/scripts/JSZip/jszip.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:58] "[36mGET /static/scripts/jquery-3.7.1.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:58] "[36mGET /static/scripts/detectIncognito.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:58] "[36mGET /static/scripts/platform.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:58] "[36mGET /static/css/bootstrap.min.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:58] "[36mGET /static/css/dallinger.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:58] "[36mGET /static/scripts/psynet.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:58] "[36mGET /static/scripts/reqwest.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:58] "[36mGET /static/scripts/reconnecting-websocket.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:58] "[36mGET /static/scripts/spin.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:58] "[36mGET /static/scripts/store+json2.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:58] "[36mGET /static/scripts/fingerprintjs2/1.5.1/fingerprint2.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:58] "[36mGET /static/scripts/dallinger2.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:58] "[36mGET /static/css/fonts/font-files/Inter-Bold.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:58] "[36mGET /static/css/fonts/font-files/Inter-Light.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:58] "[36mGET /static/css/fonts/font-files/Inter-Regular.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:58] "[36mGET /static/css/fonts/font-files/Inter-Medium.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:58] "GET /timeline/progress_and_reward?participantId=3 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:58] "[36mGET /static/favicon.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:48:58] "[36mGET /static/favicon.svg HTTP/1.1[0m" 304 -
+INFO:psynet:Received a response from participant 3 on page 96804996-f4e7-c8b5-abd9-32cb31438e5b.
+INFO:psynet:Calling _finalize_trial.
+INFO:psynet:Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+INFO:psynet:Allocating a performance reward of $0.00 to participant 3 for trial 10.
+INFO:psynet:Warning: Trial 10 received an unexpected amount of time credit (expected = 35 seconds; actual = 32.0 seconds). Consider setting the trial's `time_estimate` parameter to 32.0.You can disable this warning message by setting `Trial.check_time_credit_received = False`.
+INFO:psynet:Preparing trial for participant 3.
+INFO:psynet:Looking for networks for participant 3.
+INFO:psynet:1 remain after applying custom network filters.
+INFO:psynet:0 out of 1 networks are awaiting async processes (or have nodes awaiting async processes).
+INFO:psynet:Outcome: found 1 candidate network(s) for participant 3.
+INFO:psynet:Selected node 2 from network 2 to give to participant 3.
+INFO:psynet:Task 'prepare_trial' took 0.011 s
+INFO:psynet:Task '_prepare_trial' took 0.011 s
+INFO:psynet:Evaluating while_loop (Waiting for trial) condition: result = False
+INFO:psynet:Evaluating while_loop (audio_memory_sequence__trial_loop) condition: result = True
+INFO:psynet:Task 'advance_page' took 0.036 s
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:49:02] "POST /response HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:49:02] "GET /timeline?unique_id=7MZAET:4GQGE9 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:49:02] "[36mGET /static/scripts/platform.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:49:02] "[36mGET /static/scripts/detectIncognito.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:49:02] "[36mGET /static/css/fonts/inter.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:49:02] "[36mGET /static/scripts/psynet.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:49:02] "[36mGET /static/scripts/JSZip/jszip.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:49:02] "[36mGET /static/scripts/jquery-3.7.1.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:49:02] "[36mGET /static/css/dallinger.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:49:02] "[36mGET /static/css/bootstrap.min.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:49:02] "[36mGET /static/scripts/survey-jquery/survey-jquery.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:49:02] "[36mGET /static/scripts/Tonejs/Tone.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:49:02] "[36mGET /static/scripts/js-synthesizer/instruments.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:49:02] "[36mGET /static/scripts/js-synthesizer/synthesis.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:49:02] "[36mGET /static/scripts/reqwest.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:49:02] "[36mGET /static/scripts/reconnecting-websocket.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:49:02] "[36mGET /static/scripts/spin.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:49:02] "[36mGET /static/scripts/store+json2.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:49:02] "[36mGET /static/scripts/fingerprintjs2/1.5.1/fingerprint2.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:49:02] "[36mGET /static/scripts/dallinger2.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:49:02] "[36mGET /static/css/fonts/font-files/Inter-Bold.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:49:02] "[36mGET /static/css/fonts/font-files/Inter-Light.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:49:02] "[36mGET /static/css/fonts/font-files/Inter-Regular.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:49:02] "[36mGET /static/css/fonts/font-files/Inter-Medium.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:49:02] "GET /timeline/progress_and_reward?participantId=3 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:49:02] "[36mGET /static/favicon.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:49:02] "[36mGET /static/favicon.svg HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:49:03] "[36mGET /static/favicon.png HTTP/1.1[0m" 304 -
+INFO:psynet:Received a response from participant 3 on page 71292685-0dce-08d3-0341-2eb22858da91.
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:49:08] "POST /response HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:49:09] "GET /timeline?unique_id=7MZAET:4GQGE9 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:49:09] "[36mGET /static/scripts/jquery-3.7.1.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:49:09] "[36mGET /static/scripts/detectIncognito.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:49:09] "[36mGET /static/scripts/platform.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:49:09] "[36mGET /static/css/fonts/inter.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:49:09] "[36mGET /static/scripts/JSZip/jszip.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:49:09] "[36mGET /static/scripts/survey-jquery/survey-jquery.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:49:09] "[36mGET /static/css/bootstrap.min.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:49:09] "[36mGET /static/css/dallinger.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:49:09] "[36mGET /static/scripts/psynet.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:49:09] "[36mGET /static/scripts/reqwest.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:49:09] "[36mGET /static/scripts/reconnecting-websocket.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:49:09] "[36mGET /static/scripts/spin.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:49:09] "[36mGET /static/scripts/store+json2.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:49:09] "[36mGET /static/scripts/fingerprintjs2/1.5.1/fingerprint2.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:49:09] "[36mGET /static/scripts/dallinger2.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:49:09] "[36mGET /static/css/fonts/font-files/Inter-Bold.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:49:09] "[36mGET /static/css/fonts/font-files/Inter-Light.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:49:09] "[36mGET /static/css/fonts/font-files/Inter-Regular.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:49:09] "[36mGET /static/css/fonts/font-files/Inter-Medium.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:49:09] "GET /timeline/progress_and_reward?participantId=3 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:49:09] "[36mGET /static/favicon.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:49:09] "[36mGET /static/favicon.svg HTTP/1.1[0m" 304 -
+INFO:psynet:Received a response from participant 3 on page 276a7b78-f69f-58c2-7263-a8bde6f601dd.
+INFO:psynet:Calling _finalize_trial.
+INFO:psynet:Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+INFO:psynet:Allocating a performance reward of $0.00 to participant 3 for trial 11.
+INFO:psynet:Warning: Trial 11 received an unexpected amount of time credit (expected = 35 seconds; actual = 32.0 seconds). Consider setting the trial's `time_estimate` parameter to 32.0.You can disable this warning message by setting `Trial.check_time_credit_received = False`.
+INFO:psynet:Preparing trial for participant 3.
+INFO:psynet:Looking for networks for participant 3.
+INFO:psynet:N completed trials (5) >= N trials per participant (5), skipping forward
+INFO:psynet:Outcome of find_networks: exit
+INFO:psynet:Evaluating while_loop (Waiting for trial) condition: result = False
+INFO:psynet:Evaluating while_loop (audio_memory_sequence__trial_loop) condition: result = False
+INFO:psynet:Task 'advance_page' took 0.018 s
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:49:13] "POST /response HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:49:13] "GET /timeline?unique_id=7MZAET:4GQGE9 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:49:13] "[36mGET /static/css/fonts/inter.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:49:13] "[36mGET /static/scripts/survey-jquery/survey-jquery.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:49:13] "[36mGET /static/scripts/JSZip/jszip.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:49:13] "[36mGET /static/scripts/jquery-3.7.1.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:49:13] "[36mGET /static/scripts/detectIncognito.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:49:13] "[36mGET /static/scripts/platform.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:49:13] "[36mGET /static/css/bootstrap.min.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:49:13] "[36mGET /static/css/dallinger.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:49:13] "[36mGET /static/scripts/psynet.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:49:13] "[36mGET /static/scripts/reqwest.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:49:13] "[36mGET /static/scripts/reconnecting-websocket.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:49:13] "[36mGET /static/scripts/spin.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:49:13] "[36mGET /static/scripts/store+json2.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:49:13] "[36mGET /static/scripts/fingerprintjs2/1.5.1/fingerprint2.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:49:13] "[36mGET /static/scripts/dallinger2.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:49:13] "[36mGET /static/css/fonts/font-files/Inter-Bold.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:49:13] "[36mGET /static/css/fonts/font-files/Inter-Light.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:49:13] "[36mGET /static/css/fonts/font-files/Inter-Regular.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:49:13] "[36mGET /static/css/fonts/font-files/Inter-Medium.woff2 HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:49:13] "GET /timeline/progress_and_reward?participantId=3 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:49:13] "[36mGET /static/favicon.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [08/Jun/2026 09:49:13] "[36mGET /static/favicon.svg HTTP/1.1[0m" 304 -

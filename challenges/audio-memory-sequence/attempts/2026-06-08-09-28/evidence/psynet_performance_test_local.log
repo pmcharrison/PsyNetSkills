@@ -1,0 +1,80 @@
+▶ Starting experiment server...
+Server log: /tmp/psynet_server_i_asir5r.log
+⏳ Waiting for server to be ready... Ready!
+
+Bot output log: /tmp/psynet_bots_ohzqaj27.log
+[1m================================================================================[0m
+[1m⚡ PERFORMANCE TEST SUITE[0m
+Bots per test:        2
+Test duration:        0.2 min
+Bot start stagger:    ~0.1s
+Bot time factor:      1.0
+
+[1m================================================================================[0m
+[1mTEST 1/1: Running with 2 concurrent bots[0m
+
+▶ Starting load test with 2 concurrent bots for 0.2 minutes...
+🤖 Running: 1 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 0:11 left                                                                       🤖 Running: 2 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 0:10 left                                                                       🤖 Running: 2 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 0:08 left                                                                       🤖 Running: 2 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 0:06 left                                                                       🤖 Running: 2 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 0:04 left                                                                       🤖 Running: 2 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 0:02 left                                                                       🤖 Running: 2 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 0:00 left                                                                                                                                                      
+[92m✓ Test completed[0m
+[1mTEST RESULTS (n=2 bots)[0m
+
+[1m  BOT OUTCOMES[0m
+  ------------------------------------
+  Bots started                2
+  Completed successfully      0
+  Completed with error        0
+  Timed out (still running)   2
+  Completion rate            [91m0%[0m
+
+[1m  BOT RUNTIMES[0m
+  ------------------------------------
+  Test duration            12.9s
+  Avg runtime              10.0s
+  Avg runtime (timed out)  10.0s
+
+[1m  BOT INIT TIMES (n=2):[0m
+  ------------------------------------
+  Median           1.607s
+  95th percentile  1.607s
+  Max              1.607s
+
+[1m  REQUEST METRICS[0m
+  ------------------------------------
+  Total requests           2
+  Request errors           0
+  Throughput      0.15 req/s
+
+[1m  RESPONSE TIMES (n=2)[0m
+  ------------------------------------
+  Median           0.121s
+  95th percentile  0.127s
+  99th percentile  0.127s
+  Max              0.127s
+  Mean             0.121s
+  Std dev          0.010s
+
+[1m  TRIALS PER BOT (n=0 bots succeeded)[0m
+  ------------------------------------
+  Min     0
+  Median  0
+  Max     0
+
+[1m  ASYNC PROCESS TIMES, 1 workers[0m
+  ------------------------------------
+  No completed async processes.
+
+
+[1mCUMULATIVE PERFORMANCE TEST SUMMARY
+[0m
+  Resp P95 — P95 HTTP response time for key endpoints (/timeline, /response)
+  Q P95 all — P95 queue delay across all async processes
+  vs base — ratio to the first (lowest bot-count) row, if multiple counts are run
+
+    || Bots    Succeeded    Requests    Req/s    Resp P95 (s)  Q P95 all (s)
+  ---------  -----------  ----------  -------  --------------  ---------------
+          2            0           2      0.2           0.127  N/A
+
+Bot output log: /tmp/psynet_bots_ohzqaj27.log
+Performance results (JSON): /workspace/challenges/audio-memory-sequence/attempts/2026-06-08-09-28/evidence/performance.json
+✓ Performance test completed
+✓ Server stopped (log: /tmp/psynet_server_i_asir5r.log)
