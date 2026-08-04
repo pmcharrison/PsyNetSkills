@@ -1,6 +1,6 @@
 ---
 name: psynet-tapping-experiments
-description: Implement PsyNet tapping, rhythm, beat perception, and sensorimotor synchronization experiments with audio recording, calibration, export checks, and conservative interpretation.
+description: Implement PsyNet tapping, rhythm, beat perception, sensorimotor synchronization, and REPP microphone-recorded tapping experiments with audio recording, calibration, export checks, and conservative interpretation.
 authors: [williambotticelli-wells]
 ---
 
@@ -26,6 +26,9 @@ produce timed tapping responses.
   profiles.
 - Read `psynet-deployment-ops/SKILL.md` if the work involves deployment,
   exports, recruiter setup, or teardown.
+- For REPP microphone-recorded SMS experiments, inspect the local PsyNet
+  examples in `~/PsyNet/demos/pipelines/tapping/` and the REPP prescreen API
+  docs in `~/PsyNet/docs/api/prescreen.rst` before copying patterns.
 
 ## Participant flow
 
@@ -45,6 +48,57 @@ A robust tapping experiment should usually include:
 
 For public examples and challenges, use generated tones, generated metronomes,
 short placeholder audio, or public/demo assets only.
+
+## REPP and microphone-recorded SMS
+
+Use REPP when the experiment needs microphone-recorded finger taps synchronized
+to audio and analyzed with the REPP signal-processing pipeline. Do not require
+REPP for keyboard, pointer, or other non-recorded tapping unless the task
+explicitly needs REPP calibration, marker detection, or `REPPAnalysis`.
+
+REPP experiments should use the package and framework pieces together:
+
+- Include `repp-tapping` in the experiment environment and use
+  `repp.config.sms_tapping` with `REPPStimulus` and `REPPAnalysis`.
+- Use `REPPVolumeCalibrationMusic` for music stimuli, or
+  `REPPVolumeCalibrationMarkers` for marker/metronome stimuli.
+- Place `REPPMarkersTest` after the volume calibration to check whether the
+  laptop speaker and microphone chain can recover REPP markers. Its default
+  PsyNet implementation runs 3 trials, uses a 0.6 performance threshold, and
+  expects all 6 markers in each test recording.
+- Place `REPPTappingCalibration` before main tapping trials so participants can
+  practice tapping on the laptop surface while watching the input meter.
+- Keep the REPP hardware policy explicit: laptop speakers, no headphones or
+  external speakers, quiet environment, and microphone permission.
+
+For prescreener eligibility decisions, thresholds, recruiter alignment, and
+whether a REPP failure should terminate participation or become a covariate,
+follow `participant-filtering-and-prescreening/SKILL.md`.
+
+Main REPP trials should follow the `~/PsyNet/demos/pipelines/tapping/` pattern:
+
+- Build generated isochronous stimuli with
+  `REPPStimulus.prepare_stim_from_onsets`.
+- Build annotated music stimuli with `REPPStimulus.filter_and_add_markers`.
+- Package each prepared stimulus as a folder asset containing `audio.wav` and
+  `info.json`; the demo reads `info.json` with a double JSON decode.
+- Use `AudioRecordTrial` with `AudioRecordControl(duration=stim_duration)`.
+- Return REPP analysis fields such as `failed`, `reason`, `output`,
+  `analysis`, and `stim_name` from `analyze_recording`.
+- Provide local recorded tap-audio fixtures through `bot_response_media` for
+  automated tests; the demo currently assumes `LocalStorage` for those fixtures.
+
+REPP stimulus preparation changes the audio. In `repp-tapping==1.4.0`,
+`sms_tapping` sets `FS = 44100`, `STIM_RANGE = [30, 1000]`, and
+`STIM_AMPLITUDE = 0.12`; `filter_stim` applies a 2nd-order Butterworth bandpass
+over that range twice with `filtfilt`, then normalizes `stim - filtered_stim`.
+Marker insertion uses `MARKERS_RANGE = [200, 340]`, `MARKERS_AMPLITUDE = 0.9`,
+`MARKERS_ATTACK = 2`, `MARKERS_DURATION = 15`, `MARKERS_IOI = [0, 280, 230]`,
+`MARKERS_BEGINNING = 2000.0`, `STIM_BEGINNING = 4000.0`,
+`MARKERS_END = 2000.0`, and `MARKERS_END_SLACK = 6000.0`.
+For stimuli where low-frequency or full-spectrum content is scientifically
+important, compare the prepared REPP output against the source stimulus and
+document that the altered stimulus is acceptable before using it.
 
 ## Timing and audio rules
 
@@ -93,6 +147,14 @@ Recommended export-visible fields include:
 Export checks should confirm that tapping trial rows, participant rows,
 response/post-survey rows, and recording references are present and keyed to the
 same stimulus ids used in the manifest.
+
+For REPP exports, also inspect `analysis` and `output` JSON for marker counts,
+marker timing error, raw and aligned tap counts, response-to-stimulus ratio,
+asynchrony summaries, and `failed`/`reason`. With `sms_tapping`, REPP marks
+trials failed when markers are missing, marker timing error is at least 15 ms,
+raw taps are below 50% or above 150% of stimulus onsets, or valid asynchrony
+statistics cannot be computed with at least 2 matched responses and SD above
+10 ms.
 
 ## Validation and simulation
 
