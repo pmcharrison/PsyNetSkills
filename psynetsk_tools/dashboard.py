@@ -32,7 +32,7 @@ from psynetsk_tools.learnings import (
     COMPLETED_LEARNING_STATUSES,
     parse_learning_actions,
 )
-from psynetsk_tools.review_artifacts import (
+from psynet.audit.artifacts import (
     ARTIFACT_URL_PREFIX_ENV,
     HASHED_ARTIFACTS_DIR,
     MONITOR_STATIC_ARTIFACTS_DIR,
@@ -42,7 +42,7 @@ from psynetsk_tools.review_artifacts import (
     write_hashed_artifact,
     write_shared_monitor_static_assets,
 )
-from psynetsk_tools.review_html import (
+from psynet.audit.html import (
     render_evidence_section,
     render_file_grid,
     render_json_block,
@@ -51,11 +51,11 @@ from psynetsk_tools.review_html import (
     render_timeline_section,
     safe_section_html,
 )
-from psynetsk_tools.review_model import (
+from psynet.audit.model import (
     CompletenessItem,
-    ReviewFile,
-    ReviewEvidenceView,
-    classify_review_evidence,
+    AuditFile,
+    AuditEvidenceView,
+    classify_audit_evidence,
     screenshot_caption,
 )
 from psynetsk_tools.validate import (
@@ -531,7 +531,7 @@ def collect_attempt_files(
     return files
 
 
-def review_file_data(file: ReviewFile | None) -> dict[str, object] | None:
+def review_file_data(file: AuditFile | None) -> dict[str, object] | None:
     """Return dashboard-safe metadata for one review file."""
 
     if file is None:
@@ -558,7 +558,7 @@ def completeness_item_data(item: CompletenessItem) -> dict[str, object]:
     }
 
 
-def evidence_view_data(view: ReviewEvidenceView) -> dict[str, object]:
+def evidence_view_data(view: AuditEvidenceView) -> dict[str, object]:
     """Return dashboard-ready shared evidence classification data."""
 
     return {
@@ -604,11 +604,11 @@ def dashboard_artifact_url(url: str) -> str:
     return f"/{url.lstrip('/')}"
 
 
-def review_file_from_data(file: AttemptFile | Mapping[str, object]) -> ReviewFile:
-    """Return shared review-file metadata from attempt file data."""
+def review_file_from_data(file: AttemptFile | Mapping[str, object]) -> AuditFile:
+    """Return shared audit-file metadata from attempt file data."""
 
     if isinstance(file, AttemptFile):
-        return ReviewFile(
+        return AuditFile(
             path=file.path,
             url=file.url,
             content=file.content,
@@ -618,7 +618,7 @@ def review_file_from_data(file: AttemptFile | Mapping[str, object]) -> ReviewFil
             published=file.published,
             publication_note=file.publication_note,
         )
-    return ReviewFile(
+    return AuditFile(
         path=str(file.get("path") or ""),
         url=str(file.get("url") or ""),
         content=file.get("content") if isinstance(file.get("content"), str) else None,
@@ -1010,7 +1010,11 @@ def attempt_review_sections(
 def attempt_artifact_url_prefix(challenge_slug: str, attempt_name: str) -> str:
     """Return the public URL prefix for an attempt's copied artifacts."""
 
-    base_url = os.environ.get(ARTIFACT_URL_PREFIX_ENV, ATTEMPT_ARTIFACTS_DIR)
+    base_url = (
+        os.environ.get(ARTIFACT_URL_PREFIX_ENV)
+        or os.environ.get("PSYNETSK_ARTIFACT_URL_PREFIX")
+        or ATTEMPT_ARTIFACTS_DIR
+    )
     return f"{base_url.rstrip('/')}/{challenge_slug}/attempts/{attempt_name}"
 
 
@@ -1123,7 +1127,7 @@ def collect_attempts(
                 "evidence",
             ),
         )
-        evidence_view = classify_review_evidence(evidence_files)
+        evidence_view = classify_audit_evidence(evidence_files)
         has_experiment = any(
             file.path == "experiment.py" or file.path.endswith("/experiment.py")
             for file in code_files

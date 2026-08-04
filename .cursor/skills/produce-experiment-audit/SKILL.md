@@ -1,17 +1,18 @@
 ---
-name: produce-review-bundle
-description: Produce a standalone PsyNet experiment review bundle with review.json, REPORT.md, evidence artifacts, validation, rendering, and honest blockers. Use when asked to prepare a portable review bundle for an experiment outside the challenge-attempt workflow.
+name: produce-experiment-audit
+description: Produce a standalone PsyNet experiment audit with audit.json, REPORT.md, evidence artifacts, validation, rendering, and honest blockers. Use when asked to prepare a portable experiment audit for an experiment outside the challenge-attempt workflow.
 authors: [pmcharrison]
 ---
 
-# Produce a review bundle
+# Produce an experiment audit
 
 Use this skill when the user asks you to create, complete, validate, or hand off
-a standalone PsyNet experiment review bundle.
+a standalone PsyNet experiment audit.
 
-A review bundle is a portable `review/` folder for a standalone experiment. It
-uses the `psynet-review-bundle` CLI as its formal contract, but artifact
-collection is judgment-heavy and experiment-specific.
+An experiment audit is a portable `audit/` folder **inside the experiment
+directory**. Run the CLI from the experiment root so `./audit/` is created and
+`source_path` stays `.`. It uses the `psynet audit` CLI as its formal contract,
+but artifact collection is judgment-heavy and experiment-specific.
 
 ## Required reads
 
@@ -26,13 +27,16 @@ collection is judgment-heavy and experiment-specific.
 
 ## Workflow
 
-1. Initialize or inspect the bundle with `psynet-review-bundle init`.
+1. From the experiment directory, initialize with `psynet audit init`.
 2. Collect evidence using experiment-appropriate commands and scripts.
-3. Update `review/review.json` after each artifact changes.
+3. After each artifact file exists, prefer
+   `psynet audit mark-present <artifact_id>` (or add the artifact then mark it)
+   over hand-editing status fields. Update section markdown as needed.
 4. Write or prune the default section files (`PROMPT.md`, `PLAN.md`,
    `TIMELINE.md`, and `REPORT.md`) so the bundle shows the context that matters.
-5. Run `psynet-review-bundle validate` and fix structural problems.
-6. Run `psynet-review-bundle render` and share a live preview link when
+5. Run `psynet audit validate` and fix structural problems. A pass with blockers
+   means the packet is coherent, not that the experiment is ready.
+6. Run `psynet audit render` and share a live preview link when
    reviewing in Cursor Cloud.
 
 ## Bundle contract
@@ -40,8 +44,8 @@ collection is judgment-heavy and experiment-specific.
 The conventional bundle structure is:
 
 ```text
-review/
-  review.json
+audit/
+  audit.json
   PROMPT.md
   PLAN.md
   TIMELINE.md
@@ -52,16 +56,16 @@ review/
   logs/
 ```
 
-`review.json` is the machine-readable manifest. Markdown section files provide
-review context. `artifacts/`, `analyses/`, and `logs/` contain the source files
-that reviewers should inspect. Generated `review/site/` output is only a render
+`audit.json` is the machine-readable manifest. Markdown section files provide
+audit context. `artifacts/`, `analyses/`, and `logs/` contain the source files
+that reviewers should inspect. Generated `audit/site/` output is only a render
 target and should normally stay out of version control.
 
 Validation checks structure and internal consistency. Rendering should never be
 used to hide missing work: incomplete required artifacts must be represented by
-blockers in `review.json`.
+blockers in `audit.json`.
 
-## Required review questions
+## Required audit questions
 
 The completed bundle should let a reviewer answer:
 
@@ -76,12 +80,12 @@ The completed bundle should let a reviewer answer:
 ## Artifact workflow
 
 Artifact collection is intentionally outside the CLI. Use the commands that fit
-the experiment and record the outcome honestly in `review.json` and `REPORT.md`.
+the experiment and record the outcome honestly in `audit.json` and `REPORT.md`.
 The examples below are guidance, not required interfaces.
 
 ## Updating sections
 
-`review.json` uses an ordered `sections` array to decide what appears in the
+`audit.json` uses an ordered `sections` array to decide what appears in the
 rendered bundle. Default sections include prompt, plan, timeline, report,
 evidence, additional files, checks, and blockers.
 
@@ -103,7 +107,7 @@ has no participant UI. Good options include:
 - `artifacts/screenshots/manifest.json`: optional screenshot captions.
 
 Add each screenshot image that should appear in the rendered bundle as a
-`present` artifact in `review.json`; the caption manifest alone does not publish
+`present` artifact in `audit.json`; the caption manifest alone does not publish
 or render the screenshots.
 
 Keep participant-flow scripts with the experiment source, not only in the
@@ -137,7 +141,7 @@ psynet performance-test local \
   --n-bots 40 \
   --duration-minutes 5 \
   --time-factor 1.0 \
-  --json-output review/artifacts/performance.json
+  --json-output audit/artifacts/performance.json
 ```
 
 Adjust bot counts and duration to the experiment. Do not present a one-bot smoke
@@ -178,7 +182,7 @@ Use `logs/` for concise command logs that explain what ran or why a step failed.
 Do not commit real credentials, API tokens, or production secrets. If a log
 contains unsafe values, redact it before adding it to the bundle.
 
-## Updating `review.json`
+## Updating `audit.json`
 
 For every artifact that matters to review, add or update one manifest entry.
 Use `status: "present"` only when the path exists and the artifact is ready to
@@ -211,7 +215,7 @@ Example:
   "artifact_id": "performance_result",
   "severity": "warning",
   "reason": "psynet performance-test local failed because Redis was unavailable in the local environment.",
-  "next_step": "Start Redis and rerun the 40-bot performance test, saving review/artifacts/performance.json."
+  "next_step": "Start Redis and rerun the 40-bot performance test, saving audit/artifacts/performance.json."
 }
 ```
 
@@ -243,8 +247,8 @@ or "performance evidence is blocked by missing Redis."
 Before handoff, run:
 
 ```bash
-psynet-review-bundle validate
-psynet-review-bundle render
+psynet audit validate
+psynet audit render
 ```
 
 If the bundle is being inspected in Cursor Cloud, prefer hosting a live preview
@@ -258,17 +262,17 @@ Custom artifacts are allowed. Renderers should preserve unknown artifacts as
 additional files, so reviewers can inspect experiment-specific outputs without
 custom code.
 
-Prefer manifest fields and a small optional `review/style.css` for future
+Prefer manifest fields and a small optional `audit/style.css` for future
 customization before introducing custom templates. Keep the common review UI
 stable enough that standalone bundles and dashboard attempt reviews can share
 the same evidence renderer.
 
 ## Rules
 
-- Keep this skill as the operational source of truth for review-bundle contents.
+- Keep this skill as the operational source of truth for experiment-audit contents.
   Do not duplicate the workflow in docs or other skills.
 - Do not present missing, blocked, skipped, or not-applicable artifacts as
   passing evidence.
-- Prefer blockers in `review.json` and clear limitations in `REPORT.md` over
+- Prefer blockers in `audit.json` and clear limitations in `REPORT.md` over
   optimistic summaries.
 - Keep custom or production credentials out of review artifacts and logs.
