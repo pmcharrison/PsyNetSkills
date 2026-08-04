@@ -1,0 +1,14 @@
+[Config]
+title = Prisoner's Dilemma game (Chrome browser, about 5 minutes)
+description = In this study you will learn a two-choice game, complete two practice rounds, and then play 10 scored rounds with another participant. Your bonus depends on the points you earn in the scored rounds.
+contact_email_on_error = researcher@example.com
+organization_name = PsyNetSkills
+
+recruiter = generic
+currency = $
+wage_per_hour = 12.0
+
+[Prolific]
+auto_recruit = false
+base_payment = 0.75
+prolific_estimated_completion_minutes = 5
