@@ -9,8 +9,8 @@ description = "Validation and dashboard tooling for the PsyNetSkills workshop re
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
-    # Temporary heavy pin until PsyNet light-core lands; provides psynet.audit.
-    "psynet @ git+https://gitlab.com/PsyNetDev/PsyNet.git@c68f8560d7f79e8f001ead7b551e3661be10d58f",
+    # Temporary heavy pin until PsyNet light-core lands; includes audit + skills.
+    "psynet @ git+https://gitlab.com/PsyNetDev/PsyNet.git@1509d22c3d77e137922cbac9e89f65d71dfd124c",
     "pyyaml>=6.0.3",
 ]
 
