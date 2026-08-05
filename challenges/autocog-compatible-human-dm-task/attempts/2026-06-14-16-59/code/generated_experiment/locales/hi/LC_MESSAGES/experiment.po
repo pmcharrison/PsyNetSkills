@@ -1,0 +1,95 @@
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Language: hi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: experiment.py
+msgid "Option A"
+msgstr "विकल्प A"
+
+#: experiment.py
+msgid "Option B"
+msgstr "विकल्प B"
+
+#: experiment.py
+msgid "Choose Option A"
+msgstr "विकल्प A चुनें"
+
+#: experiment.py
+msgid "Choose Option B"
+msgstr "विकल्प B चुनें"
+
+#: experiment.py
+#, python-brace-format
+msgid "Rating {RATING_NUMBER}"
+msgstr "रेटिंग {RATING_NUMBER}"
+
+#: experiment.py
+msgid "Rating"
+msgstr "रेटिंग"
+
+#: experiment.py
+msgid "Validity"
+msgstr "वैधता"
+
+#: experiment.py
+msgid "Value"
+msgstr "मान"
+
+#: experiment.py
+#, python-brace-format
+msgid "Decision {TRIAL_NUMBER} of {TOTAL_TRIALS}"
+msgstr "{TOTAL_TRIALS} में से निर्णय {TRIAL_NUMBER}"
+
+#: experiment.py
+msgid "Please compare both options before choosing."
+msgstr "चुनने से पहले दोनों विकल्पों की तुलना करें।"
+
+#: experiment.py
+msgid "Welcome"
+msgstr "स्वागत है"
+
+#: experiment.py
+msgid "Welcome to this decision-making task."
+msgstr "इस निर्णय-निर्माण कार्य में आपका स्वागत है।"
+
+#: experiment.py
+msgid "You will compare two options described by numerical feature ratings."
+msgstr "आप संख्यात्मक विशेषता रेटिंग से वर्णित दो विकल्पों की तुलना करेंगे।"
+
+#: experiment.py
+msgid "Instructions"
+msgstr "निर्देश"
+
+#: experiment.py
+msgid "On each trial, compare Option A and Option B."
+msgstr "प्रत्येक ट्रायल में विकल्प A और विकल्प B की तुलना करें।"
+
+#: experiment.py
+msgid ""
+"Each row shows a rating, its validity from 0 to 1, and each option's value."
+msgstr ""
+"प्रत्येक पंक्ति एक रेटिंग, 0 से 1 तक उसकी वैधता, और प्रत्येक विकल्प का मान "
+"दिखाती है।"
+
+#: experiment.py
+msgid ""
+"Higher validities indicate ratings that are more predictive in the design."
+msgstr "अधिक वैधता वाली रेटिंग इस डिजाइन में अधिक पूर्वानुमानकारी हैं।"
+
+#: experiment.py
+msgid ""
+"Choose the option you would prefer. There are no right or wrong answers."
+msgstr "वह विकल्प चुनें जिसे आप पसंद करेंगे। कोई सही या गलत उत्तर नहीं है।"
+
+#: experiment.py
+msgid "Thank you"
+msgstr "धन्यवाद"
+
+#: experiment.py
+msgid "Thank you for completing the decision-making task."
+msgstr "निर्णय-निर्माण कार्य पूरा करने के लिए धन्यवाद।"

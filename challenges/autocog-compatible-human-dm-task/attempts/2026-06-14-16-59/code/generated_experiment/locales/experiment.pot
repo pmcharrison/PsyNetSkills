@@ -1,0 +1,92 @@
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: experiment.py:25
+msgid "Option A"
+msgstr ""
+
+#: experiment.py:27
+msgid "Option B"
+msgstr ""
+
+#: experiment.py:33
+msgid "Choose Option A"
+msgstr ""
+
+#: experiment.py:35
+msgid "Choose Option B"
+msgstr ""
+
+#: experiment.py:40
+#, python-brace-format
+msgid "Rating {RATING_NUMBER}"
+msgstr ""
+
+#: experiment.py:51
+msgid "Rating"
+msgstr ""
+
+#: experiment.py:52
+msgid "Validity"
+msgstr ""
+
+#: experiment.py:53
+msgid "Value"
+msgstr ""
+
+#: experiment.py:77
+#, python-brace-format
+msgid "Decision {TRIAL_NUMBER} of {TOTAL_TRIALS}"
+msgstr ""
+
+#: experiment.py:82
+msgid "Please compare both options before choosing."
+msgstr ""
+
+#: experiment.py:124
+msgid "Welcome"
+msgstr ""
+
+#: experiment.py:125
+msgid "Welcome to this decision-making task."
+msgstr ""
+
+#: experiment.py:128
+msgid "You will compare two options described by numerical feature ratings."
+msgstr ""
+
+#: experiment.py:136
+msgid "Instructions"
+msgstr ""
+
+#: experiment.py:137
+msgid "On each trial, compare Option A and Option B."
+msgstr ""
+
+#: experiment.py:140
+msgid ""
+"Each row shows a rating, its validity from 0 to 1, and each option's value."
+msgstr ""
+
+#: experiment.py:145
+msgid ""
+"Higher validities indicate ratings that are more predictive in the design."
+msgstr ""
+
+#: experiment.py:150
+msgid ""
+"Choose the option you would prefer. There are no right or wrong answers."
+msgstr ""
+
+#: experiment.py:159
+msgid "Thank you"
+msgstr ""
+
+#: experiment.py:160
+msgid "Thank you for completing the decision-making task."
+msgstr ""

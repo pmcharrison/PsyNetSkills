@@ -1,0 +1,19 @@
+{
+  "captions": {
+    "screenshots/en-01-ad.png": "English local participant ad page.",
+    "screenshots/en-02-welcome.png": "English welcome page.",
+    "screenshots/en-03-instructions.png": "English full instructions before trials.",
+    "screenshots/en-04-choice.png": "English side-by-side option choice page with rating rows, validities, and values.",
+    "screenshots/en-05-complete.png": "English completion/recruiter exit state.",
+    "screenshots/hi-01-ad.png": "Hindi local participant ad page.",
+    "screenshots/hi-02-welcome.png": "Hindi welcome page.",
+    "screenshots/hi-03-instructions.png": "Hindi full instructions before trials.",
+    "screenshots/hi-04-choice.png": "Hindi side-by-side option choice page with rating rows, validities, and values.",
+    "screenshots/hi-05-complete.png": "Hindi completion/recruiter exit state.",
+    "screenshots/de-01-ad.png": "German local participant ad page.",
+    "screenshots/de-02-welcome.png": "German welcome page.",
+    "screenshots/de-03-instructions.png": "German full instructions before trials.",
+    "screenshots/de-04-choice.png": "German side-by-side option choice page with rating rows, validities, and values.",
+    "screenshots/de-05-complete.png": "German completion/recruiter exit state."
+  }
+}

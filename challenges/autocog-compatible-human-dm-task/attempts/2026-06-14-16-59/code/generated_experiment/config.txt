@@ -1,0 +1,10 @@
+[Config]
+title = AutoCog-compatible human decision-making task
+description = Compare two options described by numerical feature ratings.
+contact_email_on_error = nobody@example.com
+organization_name = PsyNetSkills
+recruiter = generic
+currency = $
+wage_per_hour = 12.0
+locale = en
+supported_locales = ["en", "hi", "de"]
