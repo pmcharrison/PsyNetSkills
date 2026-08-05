@@ -1,9 +1,9 @@
 prime_affect,coded_target_response,congruency,prime_cultural_group,target_cultural_group,n,p_happy,mean_response_time_from_target_ms,note
-angry,angry,congruent,demo_a,demo_b,67,0.0,500.0,Workflow validation only; placeholder/bot data are not scientific evidence.
-angry,angry,congruent,demo_b,demo_b,150,0.0,500.0,Workflow validation only; placeholder/bot data are not scientific evidence.
-angry,happy,incongruent,demo_a,demo_a,68,1.0,500.0,Workflow validation only; placeholder/bot data are not scientific evidence.
-angry,happy,incongruent,demo_b,demo_a,67,1.0,500.0,Workflow validation only; placeholder/bot data are not scientific evidence.
-happy,angry,incongruent,demo_a,demo_b,67,0.0,500.0,Workflow validation only; placeholder/bot data are not scientific evidence.
+angry,angry,congruent,demo_a,demo_b,68,0.0,500.0,Workflow validation only; placeholder/bot data are not scientific evidence.
+angry,angry,congruent,demo_b,demo_b,146,0.0,500.0,Workflow validation only; placeholder/bot data are not scientific evidence.
+angry,happy,incongruent,demo_a,demo_a,69,1.0,500.0,Workflow validation only; placeholder/bot data are not scientific evidence.
+angry,happy,incongruent,demo_b,demo_a,69,1.0,500.0,Workflow validation only; placeholder/bot data are not scientific evidence.
+happy,angry,incongruent,demo_a,demo_b,68,0.0,500.0,Workflow validation only; placeholder/bot data are not scientific evidence.
 happy,angry,incongruent,demo_b,demo_b,68,0.0,500.0,Workflow validation only; placeholder/bot data are not scientific evidence.
-happy,happy,congruent,demo_a,demo_a,148,1.0,500.0,Workflow validation only; placeholder/bot data are not scientific evidence.
-happy,happy,congruent,demo_b,demo_a,67,1.0,500.0,Workflow validation only; placeholder/bot data are not scientific evidence.
+happy,happy,congruent,demo_a,demo_a,151,1.0,500.0,Workflow validation only; placeholder/bot data are not scientific evidence.
+happy,happy,congruent,demo_b,demo_a,69,1.0,500.0,Workflow validation only; placeholder/bot data are not scientific evidence.
