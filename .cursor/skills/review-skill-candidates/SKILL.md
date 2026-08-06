@@ -2,7 +2,7 @@
 name: review-skill-candidates
 description: Review unreviewed skill candidates, check overlap, approve or reject them, and route approved work through existing skill-creation procedures.
 authors: [haoyu-hu]
-review_status: unreviewed
+review_status: reviewed
 ---
 
 # Review skill candidates
