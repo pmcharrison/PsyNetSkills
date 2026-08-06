@@ -20,6 +20,19 @@ metadata, exports, app destruction, EC2 teardown, or operational failure triage.
 - Prefer command generation and readiness reports over live operations unless
   the task explicitly asks for execution.
 
+## Operations-plan challenges
+
+For mock or review-only deployment lifecycle challenges, keep the deliverable
+and evidence distinct from live operations:
+
+- State which validation commands were actually run.
+- Separately list prohibited live command families that were intentionally not
+  run, such as deployment, export, recruiter, SSH, cloud, destroy, credential, or
+  teardown commands.
+- When export lifecycle planning is central, include fictional export artifacts
+  specific enough to check: archive names, timestamps, expected file lists,
+  participant or row counts, sanity-check outputs, and known gaps.
+
 ## Readiness audit
 
 Check that the experiment folder has:

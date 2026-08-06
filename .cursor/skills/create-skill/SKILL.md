@@ -15,6 +15,9 @@ the skill tree.
 
 1. Identify the reusable behavior the skill should change. Prefer lessons that
    are likely to recur across challenges or PsyNet experiment implementations.
+   If the request comes from `skill-candidates.yaml`, first read
+   `review-skill-candidates/SKILL.md` and reuse the approved disposition and
+   overlap notes where they are still accurate.
 2. Use the `skill-overlap-review` skill to compare the proposed behavior against
    existing skills before creating a new one.
 3. Follow the overlap review's disposition:

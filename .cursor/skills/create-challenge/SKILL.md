@@ -30,6 +30,9 @@ Default introduction: I will help turn a prose challenge idea into a dashboard-r
    searching online. Verify any paper materials against real sources; do not
    invent citations, DOIs, URLs, summaries, or bibliographic details.
 8. Put any supporting public material in `challenges/<slug>/references/`.
+   For deployment, export, teardown, or operations-plan challenges, read
+   `psynet-deployment-ops/SKILL.md` and follow its guidance for mock operation
+   dossiers and export artifacts.
 9. Create `challenges/<slug>/attempts/.gitkeep`.
 10. Run `uv run psynetsk-validate` and the narrowest useful additional checks.
 11. Show the resulting text to the user and ask them to approve it; iterate if necessary.

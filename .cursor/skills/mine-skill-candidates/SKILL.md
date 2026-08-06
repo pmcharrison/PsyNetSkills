@@ -2,7 +2,7 @@
 name: mine-skill-candidates
 description: Mine challenge actions, learning notes, evaluations, and selected attempt evidence for reusable Agent Skill candidates without creating skills automatically.
 authors: [haoyu-hu]
-review_status: unreviewed
+review_status: reviewed
 ---
 
 # Mine skill candidates
@@ -33,8 +33,7 @@ for implementation after review.
 1. Define the mining scope and cost profile:
    - `open-actions-only` for a cheap first pass;
    - `open-actions-plus-evaluations` for stronger failure analysis;
-   - `balanced` for open actions plus a small solved-attempt sample;
-   - `deep` only when the user explicitly asks for broad historical coverage.
+   - `balanced` for open actions plus a small solved-attempt sample.
 2. Export dashboard data with `uv run psynetsk-export-dashboard-data` when the
    current `dashboard/data/psynetsk.json` is missing or stale.
 3. Build a structured corpus from stable source paths and IDs. Use
@@ -57,11 +56,13 @@ for implementation after review.
    - it can be expressed as a concise procedure;
    - it is not merely challenge-specific advice.
 8. Run `skill-overlap-review/SKILL.md` at candidate level. Classify likely
-   disposition as `new`, `extension`, `combination`, `pointer`, or `reject`.
-9. Write or update `skill-candidates.yaml` with each proposed candidate marked
-   `status: unreviewed`.
+   disposition as `new`, `extension`, `combination`, `pointer`, or
+   `replacement`.
+9. Write or update repository-root `skill-candidates.yaml` with each proposed
+   candidate marked `status: unreviewed`.
 10. Report candidates in priority order, placing urgent safety or repeated
-   blocker candidates before convenience improvements.
+   blocker candidates before convenience improvements, and hand off review to
+   `review-skill-candidates/SKILL.md`.
 
 ## Helper script
 
@@ -76,8 +77,8 @@ Useful options:
 - `--scope balanced` includes solved attempts as success-pattern sources.
 - `--json` emits machine-readable records for downstream clustering.
 
-The helper groups sources into `candidate-evidence`, `small-edit`, and
-`already-traced`. Start with `candidate-evidence`; review `small-edit` only when
+The helper groups sources into `candidate`, `small_edit`, and
+`already_traced`. Start with `candidate`; review `small_edit` only when
 many similar items point to the same reusable gap.
 
 ## Candidate schema
@@ -91,12 +92,13 @@ Use this shape for each candidate in `skill-candidates.yaml`:
 - `necessity`: why this deserves a skill-level intervention.
 - `trigger`: when future agents should use the skill.
 - `proposed_disposition`: `new`, `extension`, `combination`, `pointer`, or
-  `reject`.
+  `replacement`.
 - `triage`: `candidate`, `small_edit`, `already_traced`, or `deferred`.
 - `overlap_notes`: concise result from overlap review.
 - `evidence_sources`: action IDs, attempt paths, evaluation paths, or dashboard
   links.
 - `source_ids`: stable IDs already traced for this candidate.
+- `traced_sources`: optional extra source paths or IDs already considered.
 - `trace_status`: `unreviewed`, `traced`, or `sorted`.
 - `summary`: one paragraph of distilled rationale.
 - `review_notes`: optional reviewer comments.
@@ -116,6 +118,7 @@ Use this shape for each candidate in `skill-candidates.yaml`:
 
 ## Validation
 
-After writing or changing `skill-candidates.yaml`, run:
+After writing or changing `skill-candidates.yaml`, run the repository validator.
+It checks repository structure, not the full candidate schema:
 
 `uv run psynetsk-validate`
