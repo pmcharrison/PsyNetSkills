@@ -1,0 +1,14 @@
+[Config]
+title = Prisoner's Dilemma experiment
+description = Participants play six rounds of a repeated Prisoner's Dilemma against a computer partner, receive feedback after each round, and see the final outcome.
+contact_email_on_error = example@example.com
+organization_name = PsyNetSkills
+
+recruiter = generic
+currency = $
+wage_per_hour = 12.0
+
+[Prolific]
+auto_recruit = false
+prolific_estimated_completion_minutes = 4
+base_payment = 0.80
