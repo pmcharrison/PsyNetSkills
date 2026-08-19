@@ -27,7 +27,7 @@
       "kind": "performance",
       "path": "artifacts/performance.json",
       "required": true,
-      "status": "blocked",
+      "status": "present",
       "title": "Performance test result"
     },
     {
@@ -37,7 +37,7 @@
       "kind": "monitor_snapshot",
       "path": "artifacts/monitor.html",
       "required": true,
-      "status": "blocked",
+      "status": "present",
       "title": "Monitor snapshot"
     },
     {
@@ -47,7 +47,7 @@
       "kind": "data_export",
       "path": "artifacts/simulated_data.zip",
       "required": true,
-      "status": "blocked",
+      "status": "present",
       "title": "Simulated data export"
     },
     {
@@ -57,43 +57,38 @@
       "kind": "notebook",
       "path": "analyses/analysis.ipynb",
       "required": true,
-      "status": "blocked",
+      "status": "present",
       "title": "Analysis notebook"
     }
   ],
   "blockers": [
     {
       "artifact_id": "participant_video",
-      "next_step": "Record or explicitly mark participant video as not applicable.",
-      "reason": "Participant walkthrough has not been recorded yet.",
-      "severity": "error"
-    },
-    {
-      "artifact_id": "performance_result",
-      "next_step": "Run psynet performance-test local \u2026 --audit (or --audit <packet>).",
-      "reason": "Performance test has not been run yet.",
-      "severity": "error"
-    },
-    {
-      "artifact_id": "monitor_snapshot",
-      "next_step": "Capture a static PsyNet monitor snapshot at artifacts/monitor.html.",
-      "reason": "Monitor snapshot has not been captured yet.",
-      "severity": "error"
-    },
-    {
-      "artifact_id": "simulation_export",
-      "next_step": "Run psynet simulate, then zip data/simulated_data/ to artifacts/simulated_data.zip (simulate does not write the audit path).",
-      "reason": "Simulation export has not been produced yet.",
-      "severity": "error"
-    },
-    {
-      "artifact_id": "analysis_notebook",
-      "next_step": "Create and execute analyses/analysis.ipynb.",
-      "reason": "Analysis notebook has not been executed yet.",
+      "next_step": "Follow record-participant-video to capture welcome, three color trials, and the thank-you page.",
+      "reason": "Infrastructure dogfood prioritized functional test, simulation, analysis, performance smoke, and a dashboard snapshot. No headed Playwright participant.mp4 was recorded.",
       "severity": "error"
     }
   ],
-  "checks": [],
+  "checks": [
+    {
+      "detail": "8 serial bots completed 3 color ratings each after the dict-answer assertion fix.",
+      "id": "psynet_test_local",
+      "status": "pass",
+      "title": "psynet test local"
+    },
+    {
+      "detail": "Exported data/simulated_data with 24 ColorRatingTrial rows.",
+      "id": "psynet_simulate",
+      "status": "pass",
+      "title": "psynet simulate"
+    },
+    {
+      "detail": "1-minute / 4-bot smoke wrote artifacts/performance.json. Not a 40-bot/5-minute load test.",
+      "id": "performance_smoke",
+      "status": "pass",
+      "title": "performance-test local smoke"
+    }
+  ],
   "created_at": "2026-08-19T18:56:00Z",
   "environment": {
     "os": "linux",
@@ -106,7 +101,7 @@
     "psynetskills.challenge"
   ],
   "implementation": {
-    "summary": "TODO: Summarize the challenge attempt implementation."
+    "summary": "Welcome page, three ColorPrompt + RatingControl trials (red, green, blue), and a thank-you page. Local test, simulation, analysis notebook, performance smoke, and monitor snapshot collected. Participant video was not recorded."
   },
   "profile": "psynet.core",
   "render": {
@@ -201,5 +196,5 @@
       "title": "Checks"
     }
   ],
-  "updated_at": "2026-08-19T18:56:00Z"
+  "updated_at": "2026-08-19T19:04:23Z"
 }
