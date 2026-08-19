@@ -78,7 +78,4 @@ For PsyNet-owned skills, validate in `~/PsyNet` instead:
 python scripts/validate_agent_skills.py
 ```
 
-Dogfooding: see `references/workshop-trigger-evals.yaml` and
-`~/PsyNet/.cursor/skills/create-skill/references/trigger-evals.yaml`.
-
 See also: `docs/skills.md`, `skill-overlap-review`.

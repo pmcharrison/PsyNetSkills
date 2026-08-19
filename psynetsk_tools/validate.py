@@ -38,7 +38,6 @@ from psynetsk_tools.learnings import (
     learning_action_bullets,
 )
 from psynetsk_tools.timeline import TIMELINE_ENTRY_RE
-from psynetsk_tools.trigger_evals import validate_trigger_eval_file
 
 SKILLS_ROOT = Path(".cursor") / "skills"
 SKILL_NAME_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
@@ -506,21 +505,6 @@ def run_skills_ref_validate(skill_dir: Path) -> list[str]:
     return [f"{skill_dir}: skills-ref validate failed: {output or 'non-zero exit'}"]
 
 
-def validate_workshop_trigger_evals(root: Path) -> tuple[list[str], list[str]]:
-    """Validate create-skill trigger eval fixtures for workshop skills."""
-
-    skills_dir = root / SKILLS_ROOT
-    eval_file = skills_dir / "create-skill" / "references" / "workshop-trigger-evals.yaml"
-    if not eval_file.exists():
-        return [], []
-    skill_names = {
-        path.name
-        for path in skills_dir.iterdir()
-        if path.is_dir() and (path / "SKILL.md").exists()
-    }
-    return validate_trigger_eval_file(eval_file, skills_dir=skills_dir, skill_names=skill_names)
-
-
 def validate_skills(root: Path) -> list[str]:
     """Validate all skill folders."""
     problems: list[str] = []
@@ -703,8 +687,6 @@ def collect_repository_warnings(root: Path) -> list[str]:
 
     warnings: list[str] = []
     warnings.extend(collect_skill_warnings(root))
-    _, trigger_warnings = validate_workshop_trigger_evals(root)
-    warnings.extend(trigger_warnings)
     challenges_dir = root / "challenges"
     if not challenges_dir.exists():
         return warnings
@@ -893,8 +875,6 @@ def validate_repository(root: Path) -> list[str]:
     problems.extend(author_problems)
     problems.extend(validate_docs(root))
     problems.extend(validate_skills(root))
-    trigger_problems, _ = validate_workshop_trigger_evals(root)
-    problems.extend(trigger_problems)
     problems.extend(validate_challenges(root, registry))
     problems.extend(validate_actions_review(root))
     return problems
