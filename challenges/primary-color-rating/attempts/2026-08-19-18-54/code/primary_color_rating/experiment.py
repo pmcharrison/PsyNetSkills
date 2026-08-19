@@ -69,4 +69,9 @@ class Exp(psynet.experiment.Experiment):
         names = {trial.definition["color_name"] for trial in trials}
         assert names == {"red", "green", "blue"}
         for trial in trials:
-            assert trial.answer in {1, 2, 3, 4, 5, 6, 7}
+            # RatingControl unwraps to a scalar in some PsyNet paths; trial
+            # storage can still keep the {"rating": n} control payload.
+            answer = trial.answer
+            if isinstance(answer, dict):
+                answer = answer.get("rating")
+            assert answer in {1, 2, 3, 4, 5, 6, 7}
