@@ -127,9 +127,12 @@ Note the `cloud-agent-links` skill for sharing user review links.
      directory named `code`; Dallinger imports the experiment directory as a
      Python package, and `code` can collide with Python's standard-library
      module of the same name.
-   - When copying a minimal PsyNet demo into `code/`, include the standard
-     experiment support files needed by PsyNet local launch checks, especially
-     `.gitignore`, rather than copying only Python/config/test files.
+   - When creating a runnable experiment under `code/<experiment_slug>/`, follow
+     `~/PsyNet/.cursor/skills/experiment/psynet-experiment-implementation/SKILL.md`
+     Setup: copy the closest authored demo if helpful, then prefer
+     `psynet setup` (with `--psynet-source editable` when using the local
+     `~/PsyNet` checkout) rather than hand-writing boilerplate or copying only
+     Python/config files.
    - For cross-cultural, cross-national, multilingual, or international
      experiments, follow
      `~/PsyNet/.cursor/skills/experiment/prepare-for-translation/SKILL.md`
