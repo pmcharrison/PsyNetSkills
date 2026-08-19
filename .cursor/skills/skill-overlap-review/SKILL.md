@@ -6,9 +6,8 @@ authors: [haoyu-hu]
 
 # Review skill overlap
 
-Use this skill whenever creating or updating a PsyNetSkills Agent Skill, after
-identifying the proposed reusable behavior and before deciding whether to create
-a new skill file or edit an existing one.
+Review overlap before creating or updating a skill. For file structure,
+frontmatter, and progressive disclosure, follow `create-skill` first.
 
 ## Workflow
 
@@ -39,6 +38,9 @@ a new skill file or edit an existing one.
      too detailed for `SKILL.md`.
    - Replace duplicated text elsewhere with a concise pointer and the condition
      for reading or invoking the owner skill.
+   - Apply the progressive-disclosure rules in `create-skill` (frontmatter
+     `description` for when-to-use; no duplicate trigger paragraph in the body;
+     no “Misc.” dump sections).
 6. Tell the user about every overlap you found, including small pointer-level
    overlap, and state the resulting disposition.
 

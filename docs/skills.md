@@ -4,48 +4,58 @@ PsyNetSkills keeps workshop, challenge, evaluation, and dashboard skills in
 `.cursor/skills/`. General experiment-development skills are owned by PsyNet at
 `~/PsyNet/.cursor/skills/experiment/` and are copied into experiment
 repositories under `.cursor/skills/psynet/` by `psynet scripts update`.
-Each skill is a folder containing a `SKILL.md` file with Agent
-Skills-compatible YAML frontmatter.
 
-In the normal workflow, users should ask a Cursor Cloud Agent to create or update
-a skill from prose. The agent should use the `create-skill` skill, inspect the
-existing skill tree, and decide whether the lesson belongs in a new skill or an
-existing one. The details below are the specification that the agent and advanced
-manual contributors should follow.
+Each skill is a folder containing a `SKILL.md` file with Agent Skills-compatible
+YAML frontmatter.
 
-Agents should verify that the skills are registered before relying on them.
-Update PsyNet-owned skills in PsyNet, not in generated experiment copies or by
-reintroducing duplicate PsyNetSkills versions.
+Agents creating or revising skills should follow the **`create-skill`** skill.
+That skill is the canonical specification for structure, progressive
+disclosure, and overlap handling.
 
-## Required frontmatter
+## Frontmatter
 
 ```markdown
 ---
 name: psynet-experiment-implementation
-description: Explain what this skill does and when an agent should use it.
+description: Implement a PsyNet experiment end-to-end from a brief. Use when building or refactoring experiment.py, running local validation, or preparing audit evidence for handoff.
 authors: [pmcharrison]
 ---
 ```
 
-The `name` must match the folder name. Use lowercase letters, numbers, and
-hyphens only. `authors` must list one or more GitHub author keys from
-`authors.yaml`; see `docs/authors.md` for the registration workflow.
+| Field | Role |
+| --- | --- |
+| `name` | Stable id; must match the folder name (lowercase letters, numbers, hyphens). |
+| `description` | **When to use** — triggers and scope hints for skill discovery. Often loaded **without** opening the full `SKILL.md`. Max 1024 characters. |
+| `authors` | GitHub keys from `authors.yaml`; see `docs/authors.md`. |
 
-## Writing useful skills
+Put **when-to-use** in `description`, not in a repeated opening paragraph in the
+body. After the title, the body should start with scope, required reads, or
+workflow.
 
-Good skills capture PsyNet-specific knowledge that agents are likely to miss:
+## Progressive disclosure
 
-- Which PsyNet APIs and demos are relevant.
-- Which commands validate an experiment.
-- Which setup steps are needed before running an experiment.
-- Which common agent assumptions are wrong.
+| Layer | Location | Contents |
+| --- | --- | --- |
+| Routing | Frontmatter `description` | Triggers, task phrases |
+| Procedure skeleton | `SKILL.md` | Scope, required reads, numbered workflow, rules |
+| Operational detail | `references/` | Commands, schemas, platform notes, long checklists |
+| Templates & automation | `assets/`, `scripts/` | Copy/show scripts, examples, helper programs |
 
-Keep the main `SKILL.md` concise. If a skill needs detailed API notes, put them
-in `references/` and tell the agent when to read them.
+Keep `SKILL.md` concise (aim ≤80 lines). Move long sections to `references/` and
+link with **when to read** conditions. Avoid “Misc.” sections — use pointers or
+reference files instead.
+
+## Ownership
+
+- PsyNet experiment skills → edit in `~/PsyNet/.cursor/skills/experiment/`.
+- Workshop skills → edit in `.cursor/skills/`.
+- Do not fork PsyNet experiment skills back into PsyNetSkills; workshop skills
+  point to PsyNet when needed.
 
 ## Iterating on skills
 
-After each challenge attempt, read the attempt transcript, generated code,
-evidence, and evaluation. Add only reusable lessons back to the relevant skill.
-Avoid patching a skill for a single challenge unless the underlying issue is
-likely to recur.
+After challenge attempts, mine reusable lessons from transcripts, evidence, and
+evaluations. Use `skill-overlap-review` before adding text. Prefer updating an
+owner skill or adding a pointer over copying procedures.
+
+Run `uv run psynetsk-validate` after skill changes.
