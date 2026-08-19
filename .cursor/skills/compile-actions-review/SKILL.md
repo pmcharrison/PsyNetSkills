@@ -1,6 +1,6 @@
 ---
 name: compile-actions-review
-description: Regenerate the Actions dashboard review by grouping unresolved learning actions from historic challenge attempts into actions-review.yaml.
+description: Regenerate the Actions dashboard review by grouping unresolved learning actions from historic challenge attempts into actions-review.yaml. Use when refreshing the grouped actions review for the dashboard.
 ---
 
 # Compile the actions review

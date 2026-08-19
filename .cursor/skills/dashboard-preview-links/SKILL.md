@@ -1,6 +1,6 @@
 ---
 name: dashboard-preview-links
-description: Construct a link to the GitHub Pages preview for the current pull request.
+description: Construct a link to the GitHub Pages preview for the current pull request. Use when sharing the static dashboard preview URL for an open PR.
 ---
 
 # Dashboard preview links

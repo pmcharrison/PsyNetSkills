@@ -1,6 +1,6 @@
 ---
 name: prepare-dashboard-tunnel
-description: Start a live Hugo dashboard preview and expose it through a temporary public tunnel for user review.
+description: Start a live Hugo dashboard preview and expose it through a temporary public tunnel for user review. Use when the user needs a shareable link to review dashboard changes in Cursor Cloud.
 compatibility: Requires Hugo extended, uv sync, and network access for the public tunnel.
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: mine-skill-candidates
-description: Mine challenge actions, learning notes, evaluations, and selected attempt evidence for reusable Agent Skill candidates without creating skills automatically.
+description: Mine challenge actions, learning notes, evaluations, and selected attempt evidence for reusable Agent Skill candidates without creating skills automatically. Use when harvesting lessons from completed attempts for later skill review.
 review_status: unreviewed
 ---
 

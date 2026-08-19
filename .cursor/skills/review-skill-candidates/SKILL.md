@@ -1,6 +1,6 @@
 ---
 name: review-skill-candidates
-description: Review unreviewed skill candidates, check overlap, approve or reject them, and route approved work through existing skill-creation procedures.
+description: Review unreviewed skill candidates, check overlap, approve or reject them, and route approved work through existing skill-creation procedures. Use when triaging mined skill candidates from attempts or learning actions.
 review_status: unreviewed
 ---
 

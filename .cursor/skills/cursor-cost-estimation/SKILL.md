@@ -1,6 +1,6 @@
 ---
 name: cursor-cost-estimation
-description: Estimate and record Cursor agent run costs for PsyNetSkills challenge attempts from Cursor usage CSV exports.
+description: Estimate and record Cursor agent run costs for PsyNetSkills challenge attempts from Cursor usage CSV exports. Use when attributing attempt spend from usage CSV data.
 ---
 
 # Cursor cost estimation

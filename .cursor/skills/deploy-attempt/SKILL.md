@@ -1,6 +1,6 @@
 ---
 name: deploy-attempt
-description: Queue a protected GitHub Actions deployment for a PsyNetSkills attempt, deriving workflow inputs and handing the human reviewer the approval run link.
+description: Queue a protected GitHub Actions deployment for a PsyNetSkills attempt, deriving workflow inputs and handing the human reviewer the approval run link. Use when deploying attempt evidence to the protected deployment workflow.
 compatibility: Requires GitHub CLI with workflow dispatch access and an existing validated attempt folder.
 ---
 

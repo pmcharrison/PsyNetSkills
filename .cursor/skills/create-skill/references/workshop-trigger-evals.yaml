@@ -35,3 +35,35 @@
 - skill: cloud-agent-links
   query: "Export simulated participant data to CSV."
   should_trigger: false
+
+- skill: create-skill
+  query: "Turn this attempt learning into a new Agent Skill with overlap review."
+  should_trigger: true
+
+- skill: create-skill
+  query: "Run pytest on psynetsk_tools only."
+  should_trigger: false
+
+- skill: prepare-dashboard-tunnel
+  query: "Expose the Hugo dashboard through a public tunnel for review."
+  should_trigger: true
+
+- skill: prepare-dashboard-tunnel
+  query: "Build the static Hugo site to public/ without a tunnel."
+  should_trigger: false
+
+- skill: deploy-attempt
+  query: "Queue the protected GitHub Actions deployment for this attempt."
+  should_trigger: true
+
+- skill: deploy-attempt
+  query: "Deploy the PsyNet experiment to the Cornell SSH server."
+  should_trigger: false
+
+- skill: mine-skill-candidates
+  query: "Mine this attempt's LEARNINGS.md for reusable skill candidates."
+  should_trigger: true
+
+- skill: compile-actions-review
+  query: "Regenerate actions-review.yaml from open learning actions."
+  should_trigger: true

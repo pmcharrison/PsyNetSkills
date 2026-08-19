@@ -84,6 +84,10 @@ Trigger eval queries for description tuning:
 - PsyNet: `~/PsyNet/.cursor/skills/create-skill/references/trigger-evals.yaml`
 - Workshop: `.cursor/skills/create-skill/references/workshop-trigger-evals.yaml`
 
+`psynetsk-validate` and `python scripts/validate_agent_skills.py` check that each
+fixture references a real skill, that `should_trigger: true` queries overlap the
+skill `description`, and that near-miss queries do not over-match.
+
 After editing a high-traffic skill description, spot-check a few should-trigger
 and should-not-trigger queries manually.
 

@@ -1,6 +1,6 @@
 ---
 name: ai-writing-pattern-review
-description: Review participant writing for transparent AI-like prose patterns without treating the result as proof of AI use.
+description: Review participant writing for transparent AI-like prose patterns without treating the result as proof of AI use. Use when assessing whether free-text responses read like generic AI output during attempt evaluation.
 ---
 
 # AI writing pattern review
