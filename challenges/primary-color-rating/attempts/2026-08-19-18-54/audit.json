@@ -1,0 +1,205 @@
+{
+  "artifacts": [
+    {
+      "created_by": "agent",
+      "description": "Participant-facing walkthrough video.",
+      "id": "participant_video",
+      "kind": "video",
+      "path": "artifacts/participant.mp4",
+      "required": true,
+      "status": "blocked",
+      "title": "Participant walkthrough"
+    },
+    {
+      "created_by": "agent",
+      "description": "Manifest describing targeted participant-facing screenshots.",
+      "id": "screenshots",
+      "kind": "screenshot",
+      "path": "artifacts/screenshots/manifest.json",
+      "required": false,
+      "status": "missing",
+      "title": "Screenshot walkthrough"
+    },
+    {
+      "created_by": "agent",
+      "description": "PsyNet performance-test output.",
+      "id": "performance_result",
+      "kind": "performance",
+      "path": "artifacts/performance.json",
+      "required": true,
+      "status": "blocked",
+      "title": "Performance test result"
+    },
+    {
+      "created_by": "agent",
+      "description": "Static PsyNet monitor snapshot.",
+      "id": "monitor_snapshot",
+      "kind": "monitor_snapshot",
+      "path": "artifacts/monitor.html",
+      "required": true,
+      "status": "blocked",
+      "title": "Monitor snapshot"
+    },
+    {
+      "created_by": "agent",
+      "description": "Data export produced by simulated participants.",
+      "id": "simulation_export",
+      "kind": "data_export",
+      "path": "artifacts/simulated_data.zip",
+      "required": true,
+      "status": "blocked",
+      "title": "Simulated data export"
+    },
+    {
+      "created_by": "agent",
+      "description": "Executed notebook that reads the simulated export and summarizes results.",
+      "id": "analysis_notebook",
+      "kind": "notebook",
+      "path": "analyses/analysis.ipynb",
+      "required": true,
+      "status": "blocked",
+      "title": "Analysis notebook"
+    }
+  ],
+  "blockers": [
+    {
+      "artifact_id": "participant_video",
+      "next_step": "Record or explicitly mark participant video as not applicable.",
+      "reason": "Participant walkthrough has not been recorded yet.",
+      "severity": "error"
+    },
+    {
+      "artifact_id": "performance_result",
+      "next_step": "Run psynet performance-test local \u2026 --audit (or --audit <packet>).",
+      "reason": "Performance test has not been run yet.",
+      "severity": "error"
+    },
+    {
+      "artifact_id": "monitor_snapshot",
+      "next_step": "Capture a static PsyNet monitor snapshot at artifacts/monitor.html.",
+      "reason": "Monitor snapshot has not been captured yet.",
+      "severity": "error"
+    },
+    {
+      "artifact_id": "simulation_export",
+      "next_step": "Run psynet simulate, then zip data/simulated_data/ to artifacts/simulated_data.zip (simulate does not write the audit path).",
+      "reason": "Simulation export has not been produced yet.",
+      "severity": "error"
+    },
+    {
+      "artifact_id": "analysis_notebook",
+      "next_step": "Create and execute analyses/analysis.ipynb.",
+      "reason": "Analysis notebook has not been executed yet.",
+      "severity": "error"
+    }
+  ],
+  "checks": [],
+  "created_at": "2026-08-19T18:56:00Z",
+  "environment": {
+    "os": "linux",
+    "python_version": "3.13"
+  },
+  "experiment": {
+    "source_path": "code/primary_color_rating"
+  },
+  "extensions": [
+    "psynetskills.challenge"
+  ],
+  "implementation": {
+    "summary": "TODO: Summarize the challenge attempt implementation."
+  },
+  "profile": "psynet.core",
+  "render": {
+    "generator": "psynetsk challenge audit",
+    "site_path": "site"
+  },
+  "schema_version": "1.0",
+  "sections": [
+    {
+      "display": true,
+      "id": "challenge",
+      "kind": "markdown",
+      "path": "challenge/INSTRUCTIONS.md",
+      "title": "Challenge"
+    },
+    {
+      "display": true,
+      "id": "plan",
+      "kind": "markdown",
+      "path": "PLAN.md",
+      "title": "Plan"
+    },
+    {
+      "display": true,
+      "id": "evaluation",
+      "kind": "markdown",
+      "path": "EVALUATION.md",
+      "title": "Evaluation"
+    },
+    {
+      "display": true,
+      "id": "learnings",
+      "kind": "markdown",
+      "path": "LEARNINGS.md",
+      "title": "Learnings"
+    },
+    {
+      "display": true,
+      "id": "timeline",
+      "kind": "timeline",
+      "path": "TIMELINE.md",
+      "title": "Timeline"
+    },
+    {
+      "display": false,
+      "id": "report",
+      "kind": "markdown",
+      "path": "REPORT.md",
+      "title": "Report"
+    },
+    {
+      "display": true,
+      "id": "blockers",
+      "kind": "blockers",
+      "title": "Blockers"
+    },
+    {
+      "display": true,
+      "id": "evidence",
+      "kind": "evidence",
+      "title": "Evidence"
+    },
+    {
+      "display": true,
+      "id": "code_files",
+      "kind": "files",
+      "title": "All code files"
+    },
+    {
+      "display": true,
+      "id": "evidence_files",
+      "kind": "files",
+      "title": "All evidence files"
+    },
+    {
+      "display": true,
+      "id": "agent_metadata",
+      "kind": "json",
+      "path": "agent.json",
+      "title": "Agent metadata"
+    },
+    {
+      "display": true,
+      "id": "challenge_snapshot",
+      "kind": "files",
+      "title": "Challenge snapshot"
+    },
+    {
+      "display": true,
+      "id": "checks",
+      "kind": "checks",
+      "title": "Checks"
+    }
+  ],
+  "updated_at": "2026-08-19T18:56:00Z"
+}

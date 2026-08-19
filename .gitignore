@@ -31,4 +31,5 @@ dashboard/static/challenges/
 .DS_Store
 *.log
 !challenges/*/attempts/*/evidence/*.log
+!challenges/*/attempts/*/logs/*.log
 tmp/
