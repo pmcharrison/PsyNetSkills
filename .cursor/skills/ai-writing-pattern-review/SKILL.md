@@ -1,16 +1,14 @@
 ---
 name: ai-writing-pattern-review
 description: Review participant writing for transparent AI-like prose patterns without treating the result as proof of AI use.
-authors: [williambotticelli-wells]
 ---
 
 # AI writing pattern review
 
-Use this skill when asked to analyze participant writing, exported text
-responses, mock LLM-style writing, or writing-study outputs for possible
-AI-like prose patterns.
+Analyze participant writing, exported text responses, mock LLM-style writing, or
+writing-study outputs for possible AI-like prose patterns.
 
-## Required reads
+## Prerequisites
 
 - Read the PsyNet skill
   `~/PsyNet/.cursor/skills/experiment/psynet-participant-quality-telemetry/SKILL.md`

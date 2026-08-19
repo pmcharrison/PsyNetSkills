@@ -1,7 +1,6 @@
 ---
 name: skill-overlap-review
 description: Detect, prevent, and reorganize repeated guidance across PsyNetSkills Agent Skills before creating or updating a skill.
-authors: [haoyu-hu]
 ---
 
 # Review skill overlap
@@ -11,7 +10,7 @@ frontmatter, and progressive disclosure, follow `create-skill` first.
 
 ## Workflow
 
-1. Write down the proposed skill's trigger, owned behavior, required reads,
+1. Write down the proposed skill's trigger, owned behavior, prerequisites,
    outputs, and failure modes in a short scratch outline.
 2. Refresh the comparison target when possible:
    `git fetch origin main`, then compare against both the working tree and

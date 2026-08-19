@@ -1,15 +1,13 @@
 ---
 name: review-skill-candidates
 description: Review unreviewed skill candidates, check overlap, approve or reject them, and route approved work through existing skill-creation procedures.
-authors: [haoyu-hu]
 review_status: unreviewed
 ---
 
 # Review skill candidates
 
-Use this skill when the user asks to review, triage, approve, reject, or
-implement unreviewed skill candidates produced by `mine-skill-candidates`, or
-when they ask to list unreviewed draft skills.
+Review, triage, approve, reject, or implement unreviewed skill candidates produced
+by `mine-skill-candidates`, or list unreviewed draft skills.
 
 ## Goal
 

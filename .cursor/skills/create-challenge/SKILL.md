@@ -1,12 +1,10 @@
 ---
 name: create-challenge
 description: Create a PsyNetSkills challenge from a prose task description, including public instructions, optional private criteria, references, validation, and dashboard-ready structure. Use when asked to draft, design, add, or create a challenge in this repository.
-authors: [pmcharrison]
 ---
 
 # Create a challenge
 
-Use this skill when the user asks you to create a new PsyNetSkills challenge.
 The user should be able to describe the desired participant experience in prose;
 you are responsible for turning that description into the repository format.
 

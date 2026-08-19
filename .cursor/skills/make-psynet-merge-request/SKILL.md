@@ -1,13 +1,12 @@
 ---
 name: make-psynet-merge-request
 description: Create or verify merge requests against the upstream PsyNet GitLab repository from this workspace. Use when asked to send PsyNet changes upstream, check whether the agent has PsyNet MR privileges, or poll PsyNet CI for an MR.
-authors: [pmcharrison]
 ---
 
 # Make a PsyNet merge request
 
-Use this skill when the user asks you to create, test, or verify a merge request
-against `https://gitlab.com/PsyNetDev/PsyNet`.
+Work against `https://gitlab.com/PsyNetDev/PsyNet` in the local checkout at
+`~/PsyNet`.
 
 ## Prerequisites
 

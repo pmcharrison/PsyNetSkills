@@ -1,7 +1,6 @@
 ---
 name: dashboard-preview-links
 description: Construct a link to the GitHub Pages preview for the current pull request.
-authors: [pmcharrison]
 ---
 
 # Dashboard preview links

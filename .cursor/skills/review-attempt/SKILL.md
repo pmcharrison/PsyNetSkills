@@ -1,12 +1,9 @@
 ---
 name: review-attempt
 description: Review an existing attempt using the Cloud agent workflow.
-authors: [lucasgautheron, pmcharrison]
 ---
 
 # Review an attempt
-
-Use this skill when the user asks a Cloud agent to review an existing challenge attempt.
 
 ## Workflow
 

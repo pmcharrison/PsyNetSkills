@@ -1,12 +1,10 @@
 ---
 name: evaluate-attempt
 description: Evaluate a completed PsyNetSkills challenge attempt conversationally, using the attempt evidence, copied criteria, user score, and user feedback to update EVALUATION.md. Use when asked to review, score, assess, or evaluate an attempt.
-authors: [pmcharrison]
 ---
 
 # Evaluate an attempt
 
-Use this skill when the user asks you to evaluate a completed challenge attempt.
 Evaluation is conversational: the user provides judgment, score, and feedback;
 you organize that judgment into the repository's evaluation record.
 

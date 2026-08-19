@@ -1,14 +1,13 @@
 ---
 name: compile-actions-review
 description: Regenerate the Actions dashboard review by grouping unresolved learning actions from historic challenge attempts into actions-review.yaml.
-authors: [pmcharrison]
 ---
 
 # Compile the actions review
 
-Use this skill when asked to regenerate, refresh, compile, or update the Actions
-dashboard page, `actions-review.yaml`, unresolved action groupings, or the
-LLM-generated action review.
+Regenerate, refresh, compile, or update the Actions dashboard page,
+`actions-review.yaml`, unresolved action groupings, or the LLM-generated action
+review.
 
 ## Workflow
 

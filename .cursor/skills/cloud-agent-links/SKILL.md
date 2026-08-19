@@ -1,12 +1,11 @@
 ---
 name: cloud-agent-links
 description: Share links to help the user review generated content.
-authors: [pmcharrison]
 ---
 
 # Cloud agent links
 
-Use this skill to share links to help the user review generated content.
+Share links to help the user review generated content.
 
 ## Link format
 

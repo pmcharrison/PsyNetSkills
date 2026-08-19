@@ -1,12 +1,10 @@
 ---
 name: prepare-dashboard-tunnel
 description: Start a live Hugo dashboard preview and expose it through a temporary public tunnel for user review.
-authors: [pmcharrison]
+compatibility: Requires Hugo extended, uv sync, and network access for the public tunnel.
 ---
 
 # Prepare dashboard tunnel
-
-Use this skill to obtain a temporary public tunnel to the current dashboard build.
 
 ## Workflow
 

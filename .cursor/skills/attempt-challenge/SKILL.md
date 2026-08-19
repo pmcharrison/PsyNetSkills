@@ -1,13 +1,10 @@
 ---
 name: attempt-challenge
 description: Attempt a PsyNetSkills challenge by creating a timestamped attempt folder, implementing the task, collecting evidence, and preparing outputs for human evaluation. Use when asked to attempt, run, or solve a challenge in this repository.
-authors: [pmcharrison]
+compatibility: Requires editable PsyNet at ~/PsyNet, PostgreSQL, Redis, Heroku CLI, and local PsyNet/Dallinger defaults (no production credentials).
 ---
 
 # Attempt a challenge
-
-Use this skill when the user asks you to attempt a challenge in the
-PsyNetSkills repository.
 
 The user should only need to initiate the attempt, for example:
 `Attempt the <challenge-slug> challenge.` Do not ask for or rely on supplementary
@@ -15,7 +12,7 @@ implementation instructions at attempt time. If the public challenge
 instructions are insufficient, record that as an issue and recommend updating the
 challenge before starting a fresh attempt.
 
-## Required reads
+## Prerequisites
 
 - Read `references/challenge-audit-extension.md` before creating the attempt.
 - Read the PsyNet reference

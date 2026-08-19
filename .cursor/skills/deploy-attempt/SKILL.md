@@ -1,16 +1,16 @@
 ---
 name: deploy-attempt
 description: Queue a protected GitHub Actions deployment for a PsyNetSkills attempt, deriving workflow inputs and handing the human reviewer the approval run link.
-authors: [lucasgautheron]
+compatibility: Requires GitHub CLI with workflow dispatch access and an existing validated attempt folder.
 ---
 
 # Deploy an attempt
 
-Use this skill only when explicitly invoked as `/deploy-attempt` or when the
-user asks to deploy an existing PsyNetSkills attempt to the protected EC2
-deployment workflow.
+Only use when explicitly invoked as `/deploy-attempt` or when the user asks to
+deploy an existing PsyNetSkills attempt to the protected EC2 deployment
+workflow.
 
-## Required reads
+## Prerequisites
 
 - Read the PsyNet skill
   `~/PsyNet/.cursor/skills/experiment/psynet-deployment-ops/SKILL.md` before
