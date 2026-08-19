@@ -1610,6 +1610,7 @@ dependencies = [
 [package.dev-dependencies]
 dev = [
     { name = "pytest" },
+    { name = "skills-ref" },
 ]
 
 [package.metadata]
@@ -1619,7 +1620,10 @@ requires-dist = [
 ]
 
 [package.metadata.requires-dev]
-dev = [{ name = "pytest", specifier = ">=8" }]
+dev = [
+    { name = "pytest", specifier = ">=8" },
+    { name = "skills-ref", specifier = ">=0.1.1" },
+]
 
 [[package]]
 name = "ptyprocess"
@@ -2098,6 +2102,19 @@ wheels = [
 ]
 
 [[package]]
+name = "skills-ref"
+version = "0.1.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "click" },
+    { name = "strictyaml" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/23/42/943d3ba8b097af7068b7178563a5062ad8a977982f4a7b4f67facfc575e9/skills_ref-0.1.1.tar.gz", hash = "sha256:6b400ca6e0049be62dca0167ff943ba2745fd67efb37fbba4d0ee341fccd2695", size = 93519, upload-time = "2026-01-10T13:23:41.423Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/af/25/36a43c3a61fb6cc3984e6ad5e556929b8ae71c95eba615dae4cf2f427964/skills_ref-0.1.1-py3-none-any.whl", hash = "sha256:d35db5bb8de71ae301daf5ca9cb71f8a555e8c6f83a6d40e46a5bc09f8f461b5", size = 12918, upload-time = "2026-01-10T13:23:40.106Z" },
+]
+
+[[package]]
 name = "slack-sdk"
 version = "3.43.0"
 source = { registry = "https://pypi.org/simple" }
@@ -2164,6 +2181,18 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/8d/ad/4c587adf79865be268ee0b6bd52cfaa7a75d827a23ced072dc5ab554b4af/sshtunnel-0.4.0.tar.gz", hash = "sha256:e7cb0ea774db81bf91844db22de72a40aae8f7b0f9bb9ba0f666d474ef6bf9fc", size = 62716, upload-time = "2021-01-11T13:26:32.975Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/58/13/8476c4328dcadfe26f8bd7f3a1a03bf9ddb890a7e7b692f54a179bc525bf/sshtunnel-0.4.0-py2.py3-none-any.whl", hash = "sha256:98e54c26f726ab8bd42b47a3a21fca5c3e60f58956f0f70de2fb8ab0046d0606", size = 24729, upload-time = "2021-01-11T13:26:29.969Z" },
+]
+
+[[package]]
+name = "strictyaml"
+version = "1.7.3"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "python-dateutil" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/b3/08/efd28d49162ce89c2ad61a88bd80e11fb77bc9f6c145402589112d38f8af/strictyaml-1.7.3.tar.gz", hash = "sha256:22f854a5fcab42b5ddba8030a0e4be51ca89af0267961c8d6cfa86395586c407", size = 115206, upload-time = "2023-03-10T12:50:27.062Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/96/7c/a81ef5ef10978dd073a854e0fa93b5d8021d0594b639cc8f6453c3c78a1d/strictyaml-1.7.3-py3-none-any.whl", hash = "sha256:fb5c8a4edb43bebb765959e420f9b3978d7f1af88c80606c03fb420888f5d1c7", size = 123917, upload-time = "2023-03-10T12:50:17.242Z" },
 ]
 
 [[package]]

@@ -6,7 +6,9 @@ description: Detect, prevent, and reorganize repeated guidance across PsyNetSkil
 # Review skill overlap
 
 Review overlap before creating or updating a skill. For file structure,
-frontmatter, and progressive disclosure, follow `create-skill` first.
+frontmatter, and progressive disclosure, read
+`~/PsyNet/.cursor/skills/create-skill/SKILL.md` first, then the workshop
+`create-skill` addendum in this repository.
 
 ## Workflow
 
@@ -37,9 +39,9 @@ frontmatter, and progressive disclosure, follow `create-skill` first.
      too detailed for `SKILL.md`.
    - Replace duplicated text elsewhere with a concise pointer and the condition
      for reading or invoking the owner skill.
-   - Apply the progressive-disclosure rules in `create-skill` (frontmatter
-     `description` for when-to-use; no duplicate trigger paragraph in the body;
-     no “Misc.” dump sections).
+   - Apply the progressive-disclosure rules in the PsyNet `create-skill` spec
+     (frontmatter `description` for when-to-use; no duplicate trigger paragraph
+     in the body; no “Misc.” dump sections).
 6. Tell the user about every overlap you found, including small pointer-level
    overlap, and state the resulting disposition.
 

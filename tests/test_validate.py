@@ -100,6 +100,24 @@ def test_validate_repository_accepts_minimal_structure(tmp_path: Path) -> None:
     assert validate_repository(tmp_path) == []
 
 
+def test_validate_repository_rejects_review_status_on_other_skills(
+    tmp_path: Path,
+) -> None:
+    minimal_repo(tmp_path)
+    write(
+        tmp_path / ".cursor/skills/example-skill/SKILL.md",
+        "---\n"
+        "name: example-skill\n"
+        "description: Use when testing repository validation.\n"
+        "review_status: unreviewed\n"
+        "---\n",
+    )
+
+    problems = validate_repository(tmp_path)
+
+    assert any("review_status is only allowed" in problem for problem in problems)
+
+
 def test_validate_repository_rejects_oversized_skill_name(tmp_path: Path) -> None:
     minimal_repo(tmp_path)
     long_name = "a" * 65

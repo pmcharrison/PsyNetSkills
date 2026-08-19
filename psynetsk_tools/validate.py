@@ -46,8 +46,10 @@ SKILL_DESCRIPTION_MAX_LENGTH = 1024
 SKILL_COMPATIBILITY_MAX_LENGTH = 500
 SKILL_LINE_COUNT_WARNING = 250
 SKILL_REFERENCE_RE = re.compile(
-    r"(?<![\w./-])((?:(?P<skill>[a-z0-9-]+)/)?references/[A-Za-z0-9_.-]+\.md)"
+    r"(?<![\w./-])((?:(?P<skill>[a-z0-9-]+)/)?references/[A-Za-z0-9_.-]+\.(?:md|ya?ml|py))"
 )
+SKILL_CANDIDATE_SKILL_NAMES = {"mine-skill-candidates", "review-skill-candidates"}
+ALLOWED_REVIEW_STATUS = {"unreviewed"}
 PSYNET_AGENT_REQUIRED_FIELDS = {
     "checkout_path": str,
     "branch": str,
@@ -429,7 +431,12 @@ def referenced_skill_reference_paths(
         reference = Path(match.group(1))
         skill_name = match.group("skill")
         if skill_name:
-            paths.add(skills_dir / reference)
+            candidates = (
+                skills_dir / "experiment" / reference,
+                skills_dir / reference,
+            )
+            resolved = next((candidate for candidate in candidates if candidate.exists()), candidates[0])
+            paths.add(resolved)
         else:
             paths.add(current_skill_dir / reference)
     return paths
@@ -441,7 +448,15 @@ def validate_skill_references(skill_dir: Path, skills_dir: Path) -> list[str]:
     references_dir = skill_dir / "references"
     problems: list[str] = []
     skill_file = skill_dir / "SKILL.md"
-    reference_files = sorted(references_dir.glob("*.md")) if references_dir.exists() else []
+    reference_files = (
+        sorted(
+            path
+            for path in references_dir.iterdir()
+            if path.is_file() and path.suffix in {".md", ".yaml", ".yml", ".py"}
+        )
+        if references_dir.exists()
+        else []
+    )
     known_references = set(reference_files)
     reachable = {skill_file}
     queue = [skill_file]
@@ -470,6 +485,24 @@ def validate_skill_references(skill_dir: Path, skills_dir: Path) -> list[str]:
             )
 
     return problems
+
+
+def run_skills_ref_validate(skill_dir: Path) -> list[str]:
+    """Run the official skills-ref validator when available."""
+
+    try:
+        completed = subprocess.run(
+            ["skills-ref", "validate", str(skill_dir)],
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+    except FileNotFoundError:
+        return []
+    if completed.returncode == 0:
+        return []
+    output = (completed.stdout + completed.stderr).strip()
+    return [f"{skill_dir}: skills-ref validate failed: {output or 'non-zero exit'}"]
 
 
 def validate_skills(root: Path) -> list[str]:
@@ -519,7 +552,21 @@ def validate_skills(root: Path) -> list[str]:
                     f"{skill_file}: compatibility exceeds {SKILL_COMPATIBILITY_MAX_LENGTH} characters"
                 )
 
+        review_status = frontmatter.get("review_status")
+        if review_status is not None:
+            if name not in SKILL_CANDIDATE_SKILL_NAMES:
+                problems.append(
+                    f"{skill_file}: review_status is only allowed on "
+                    f"{sorted(SKILL_CANDIDATE_SKILL_NAMES)!r}"
+                )
+            elif review_status not in ALLOWED_REVIEW_STATUS:
+                problems.append(
+                    f"{skill_file}: review_status must be one of "
+                    f"{sorted(ALLOWED_REVIEW_STATUS)!r}"
+                )
+
         problems.extend(validate_skill_references(skill_dir, skills_dir))
+        problems.extend(run_skills_ref_validate(skill_dir))
 
     return problems
 

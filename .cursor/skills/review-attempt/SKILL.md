@@ -1,6 +1,6 @@
 ---
 name: review-attempt
-description: Review an existing attempt using the Cloud agent workflow.
+description: Review an existing PsyNetSkills challenge attempt using the Cloud agent workflow. Use when asked to inspect attempt evidence, code, or evaluation materials without re-implementing the challenge.
 ---
 
 # Review an attempt

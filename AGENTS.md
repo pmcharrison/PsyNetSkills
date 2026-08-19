@@ -80,6 +80,12 @@ repositories by `psynet scripts update`. If the session's attached skill
 metadata appears stale or incomplete, prefer these on-disk sources and note the
 mismatch briefly before proceeding.
 
+**Skill authoring:** the canonical Agent Skills format spec is
+`~/PsyNet/.cursor/skills/create-skill/SKILL.md`. The workshop `create-skill`
+skill adds overlap review, `psynetsk-validate`, and challenge/attempt author
+rules. After PsyNet experiment skills change, refresh experiment copies with
+`psynet scripts update`.
+
 ### System dependencies (not managed by `uv sync`)
 
 - **uv** — Python env and package management (`~/.local/bin` should be on `PATH`).

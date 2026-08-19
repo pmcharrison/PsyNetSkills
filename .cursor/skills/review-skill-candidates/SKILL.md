@@ -23,7 +23,8 @@ reject the candidate, or implement an approved change through `create-skill`.
 - Read the candidate's cited action IDs, `LEARNINGS.md`, `EVALUATION.md`, or
   dashboard source paths only as needed to verify the rationale.
 - Read `skill-overlap-review/SKILL.md` before deciding disposition.
-- Read `create-skill/SKILL.md` before implementing any approved skill change.
+- Read `~/PsyNet/.cursor/skills/create-skill/SKILL.md` and the workshop
+  `create-skill` addendum before implementing any approved skill change.
 
 ## Workflow
 

@@ -1,6 +1,6 @@
 ---
 name: cloud-agent-links
-description: Share links to help the user review generated content.
+description: Share links to help the user review generated content in Cursor Cloud or GitHub. Use when handing off dashboard previews, PR pages, attempt artifacts, or other review URLs after completing work.
 ---
 
 # Cloud agent links

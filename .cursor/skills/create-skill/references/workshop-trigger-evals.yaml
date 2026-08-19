@@ -1,0 +1,37 @@
+# Trigger eval queries for PsyNetSkills workshop skills.
+
+- skill: attempt-challenge
+  query: "Attempt the hello-world challenge and collect audit evidence."
+  should_trigger: true
+
+- skill: attempt-challenge
+  query: "Fix the Hugo dashboard CSS padding on the skills page."
+  should_trigger: false
+
+- skill: create-challenge
+  query: "Draft a new PsyNetSkills challenge from this participant brief."
+  should_trigger: true
+
+- skill: create-challenge
+  query: "Run psynet test local on hello_world."
+  should_trigger: false
+
+- skill: skill-overlap-review
+  query: "Before we add this lesson as a skill, check overlap with existing skills."
+  should_trigger: true
+
+- skill: evaluate-attempt
+  query: "Score this completed attempt and update EVALUATION.md from my feedback."
+  should_trigger: true
+
+- skill: evaluate-attempt
+  query: "Implement the experiment code for attempt 2026-06-01."
+  should_trigger: false
+
+- skill: cloud-agent-links
+  query: "Share preview links so I can review the dashboard changes in this PR."
+  should_trigger: true
+
+- skill: cloud-agent-links
+  query: "Export simulated participant data to CSV."
+  should_trigger: false
