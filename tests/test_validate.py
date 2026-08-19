@@ -3,6 +3,7 @@ from pathlib import Path
 
 from psynetsk_tools.validate import (
     EMPTY_LEARNINGS_PLACEHOLDER,
+    collect_repository_warnings,
     parse_evaluation_score,
     validate_agent_metadata,
     validate_evidence_video,
@@ -50,7 +51,6 @@ def minimal_repo(root: Path) -> None:
         "---\n"
         "name: example-skill\n"
         "description: Use when testing repository validation.\n"
-        "authors: [pmcharrison]\n"
         "---\n",
     )
     write(
@@ -100,6 +100,55 @@ def test_validate_repository_accepts_minimal_structure(tmp_path: Path) -> None:
     assert validate_repository(tmp_path) == []
 
 
+def test_validate_repository_rejects_oversized_skill_name(tmp_path: Path) -> None:
+    minimal_repo(tmp_path)
+    long_name = "a" * 65
+    skill_dir = tmp_path / ".cursor/skills" / long_name
+    write(
+        skill_dir / "SKILL.md",
+        f"---\nname: {long_name}\ndescription: Use when testing.\n---\n",
+    )
+
+    problems = validate_repository(tmp_path)
+
+    assert any("name exceeds 64 characters" in problem for problem in problems)
+
+
+def test_validate_repository_rejects_oversized_skill_compatibility(
+    tmp_path: Path,
+) -> None:
+    minimal_repo(tmp_path)
+    write(
+        tmp_path / ".cursor/skills/example-skill/SKILL.md",
+        "---\n"
+        "name: example-skill\n"
+        "description: Use when testing repository validation.\n"
+        f"compatibility: {'x' * 501}\n"
+        "---\n",
+    )
+
+    problems = validate_repository(tmp_path)
+
+    assert any("compatibility exceeds 500 characters" in problem for problem in problems)
+
+
+def test_collect_repository_warnings_for_oversized_skill(tmp_path: Path) -> None:
+    minimal_repo(tmp_path)
+    body = "\n".join(f"Line {index}." for index in range(260))
+    write(
+        tmp_path / ".cursor/skills/example-skill/SKILL.md",
+        "---\n"
+        "name: example-skill\n"
+        "description: Use when testing repository validation.\n"
+        "---\n\n"
+        f"{body}\n",
+    )
+
+    warnings = collect_repository_warnings(tmp_path)
+
+    assert any("consider splitting detail into references/" in warning for warning in warnings)
+
+
 def test_validate_repository_rejects_skill_name_mismatch(
     tmp_path: Path,
 ) -> None:
@@ -109,7 +158,6 @@ def test_validate_repository_rejects_skill_name_mismatch(
         "---\n"
         "name: other-skill\n"
         "description: Use when testing repository validation.\n"
-        "authors: [pmcharrison]\n"
         "---\n",
     )
 
@@ -141,7 +189,6 @@ def test_validate_repository_accepts_cited_skill_reference_chain(
         "---\n"
         "name: example-skill\n"
         "description: Use when testing repository validation.\n"
-        "authors: [pmcharrison]\n"
         "---\n\n"
         "Read `references/primary.md`.\n",
     )
@@ -166,7 +213,6 @@ def test_validate_repository_rejects_missing_skill_reference_path(
         "---\n"
         "name: example-skill\n"
         "description: Use when testing repository validation.\n"
-        "authors: [pmcharrison]\n"
         "---\n\n"
         "Read `references/missing.md`.\n",
     )

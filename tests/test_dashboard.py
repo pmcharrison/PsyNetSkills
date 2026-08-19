@@ -925,7 +925,6 @@ def test_collect_skills_uses_h1_title(tmp_path: Path) -> None:
         "---\n"
         "name: example-skill\n"
         "description: Use when testing dashboard generation.\n"
-        "authors: [pmcharrison]\n"
         "---\n\n"
         "# Example skill\n\n"
         "Use this skill when testing dashboard generation.\n",
@@ -935,7 +934,6 @@ def test_collect_skills_uses_h1_title(tmp_path: Path) -> None:
 
     assert skills[0].name == "example-skill"
     assert skills[0].title == "Example skill"
-    assert skills[0].authors[0].name == "Peter Harrison"
 
 
 def test_strip_challenge_frontmatter_removes_metadata() -> None:
@@ -978,7 +976,6 @@ def test_dashboard_data_reports_counts(tmp_path: Path) -> None:
         "---\n"
         "name: example-skill\n"
         "description: Use when testing dashboard generation.\n"
-        "authors: [pmcharrison]\n"
         "---\n\n"
         "# Example skill\n\n"
         "Use this skill when testing dashboard generation.\n",
@@ -992,7 +989,6 @@ def test_dashboard_data_reports_counts(tmp_path: Path) -> None:
 
     assert data["counts"] == {"skills": 1, "challenges": 1, "actions": 0}
     assert data["authors"][0]["id"] == "pmcharrison"
-    assert data["skills"][0]["authors"][0]["name"] == "Peter Harrison"
     assert data["challenges"][0]["authors"][0]["url"] == (
         "https://github.com/pmcharrison"
     )
@@ -1168,7 +1164,6 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
         "---\n"
         "name: example-skill\n"
         "description: Use when testing dashboard generation.\n"
-        "authors: [pmcharrison]\n"
         "---\n\n"
         "# Example skill\n\n"
         "Use this skill when testing dashboard generation.\n",

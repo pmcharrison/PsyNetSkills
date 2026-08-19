@@ -41,6 +41,10 @@ from psynetsk_tools.timeline import TIMELINE_ENTRY_RE
 
 SKILLS_ROOT = Path(".cursor") / "skills"
 SKILL_NAME_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
+SKILL_NAME_MAX_LENGTH = 64
+SKILL_DESCRIPTION_MAX_LENGTH = 1024
+SKILL_COMPATIBILITY_MAX_LENGTH = 500
+SKILL_LINE_COUNT_WARNING = 250
 SKILL_REFERENCE_RE = re.compile(
     r"(?<![\w./-])((?:(?P<skill>[a-z0-9-]+)/)?references/[A-Za-z0-9_.-]+\.md)"
 )
@@ -468,10 +472,7 @@ def validate_skill_references(skill_dir: Path, skills_dir: Path) -> list[str]:
     return problems
 
 
-def validate_skills(
-    root: Path,
-    registry: dict[str, Author] | None = None,
-) -> list[str]:
+def validate_skills(root: Path) -> list[str]:
     """Validate all skill folders."""
     problems: list[str] = []
     skills_dir = root / SKILLS_ROOT
@@ -497,14 +498,27 @@ def validate_skills(
             problems.append(f"{skill_file}: name must match folder {skill_dir.name!r}")
         elif not SKILL_NAME_RE.fullmatch(name):
             problems.append(f"{skill_file}: invalid skill name {name!r}")
+        elif len(name) > SKILL_NAME_MAX_LENGTH:
+            problems.append(
+                f"{skill_file}: name exceeds {SKILL_NAME_MAX_LENGTH} characters"
+            )
 
         if not isinstance(description, str) or not description:
             problems.append(f"{skill_file}: missing description")
-        elif len(description) > 1024:
-            problems.append(f"{skill_file}: description exceeds 1024 characters")
-        problems.extend(
-            validate_author_references(skill_file, frontmatter.get("authors"), registry)
-        )
+        elif len(description) > SKILL_DESCRIPTION_MAX_LENGTH:
+            problems.append(
+                f"{skill_file}: description exceeds {SKILL_DESCRIPTION_MAX_LENGTH} characters"
+            )
+
+        compatibility = frontmatter.get("compatibility")
+        if compatibility is not None:
+            if not isinstance(compatibility, str) or not compatibility.strip():
+                problems.append(f"{skill_file}: compatibility must be a non-empty string")
+            elif len(compatibility) > SKILL_COMPATIBILITY_MAX_LENGTH:
+                problems.append(
+                    f"{skill_file}: compatibility exceeds {SKILL_COMPATIBILITY_MAX_LENGTH} characters"
+                )
+
         problems.extend(validate_skill_references(skill_dir, skills_dir))
 
     return problems
@@ -600,10 +614,32 @@ def validate_attempt(
     return problems
 
 
+def collect_skill_warnings(root: Path) -> list[str]:
+    """Return soft warnings for oversized skill files."""
+
+    warnings: list[str] = []
+    skills_dir = root / SKILLS_ROOT
+    if not skills_dir.exists():
+        return warnings
+    for skill_dir in sorted(path for path in skills_dir.iterdir() if path.is_dir()):
+        skill_file = skill_dir / "SKILL.md"
+        if not skill_file.exists():
+            continue
+        line_count = len(skill_file.read_text(encoding="utf-8").splitlines())
+        if line_count > SKILL_LINE_COUNT_WARNING:
+            warnings.append(
+                f"{skill_file}: SKILL.md has {line_count} lines; "
+                f"consider splitting detail into references/ "
+                f"(warns above {SKILL_LINE_COUNT_WARNING})"
+            )
+    return warnings
+
+
 def collect_repository_warnings(root: Path) -> list[str]:
     """Collect non-fatal repository validation warnings."""
 
     warnings: list[str] = []
+    warnings.extend(collect_skill_warnings(root))
     challenges_dir = root / "challenges"
     if not challenges_dir.exists():
         return warnings
@@ -791,7 +827,7 @@ def validate_repository(root: Path) -> list[str]:
     registry, author_problems = validate_authors(root)
     problems.extend(author_problems)
     problems.extend(validate_docs(root))
-    problems.extend(validate_skills(root, registry))
+    problems.extend(validate_skills(root))
     problems.extend(validate_challenges(root, registry))
     problems.extend(validate_actions_review(root))
     return problems

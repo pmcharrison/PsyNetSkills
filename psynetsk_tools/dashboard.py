@@ -186,7 +186,6 @@ class Skill:
     name: str
     title: str
     description: str
-    authors: list[Author]
     path: str
     url: str
 
@@ -363,14 +362,9 @@ def write_frontmatter(
     return "\n".join(lines)
 
 
-def collect_skills(
-    root: Path,
-    author_registry: dict[str, Author] | None = None,
-) -> list[Skill]:
+def collect_skills(root: Path) -> list[Skill]:
     """Collect skill summaries."""
     skills: list[Skill] = []
-    if author_registry is None:
-        author_registry, _ = read_author_registry(root)
     skills_root = root / SKILLS_ROOT
     for skill_dir in sorted(skills_root.iterdir()):
         if not skill_dir.is_dir():
@@ -384,10 +378,6 @@ def collect_skills(
                 name=name,
                 title=title_from_markdown(body, name),
                 description=frontmatter.get("description", ""),
-                authors=resolve_authors(
-                    author_ids_from_value(frontmatter.get("authors")),
-                    author_registry,
-                ),
                 path=(SKILLS_ROOT / skill_dir.name / "SKILL.md").as_posix(),
                 url=f"skills/{name}/",
             )
@@ -1760,7 +1750,7 @@ def dashboard_data(
 ) -> dict[str, object]:
     """Return all structured data needed by the dashboard."""
     author_registry, _ = read_author_registry(root)
-    skills = collect_skills(root, author_registry)
+    skills = collect_skills(root)
     challenges = collect_challenges(root, author_registry, artifact_publications)
     actions = sorted_learning_actions_for_dashboard(
         collect_open_learning_actions(root, challenges),

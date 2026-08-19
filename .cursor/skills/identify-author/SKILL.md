@@ -1,13 +1,12 @@
 ---
 name: identify-author
-description: Identify or register the human author for skills, challenges, and attempts before writing author metadata. Use when creating or updating author-attributed repository artifacts.
-authors: [pmcharrison]
+description: Identify or register the human author for challenges and attempts before writing author metadata. Use when creating or updating author-attributed challenge or attempt records.
 ---
 
 # Identify an author
 
-Use this skill before writing `authors` metadata for a skill, challenge, or
-attempt.
+Identify the human author before writing `authors` metadata on a **challenge** or
+**attempt**. Skills do not carry author metadata.
 
 ## Workflow
 
@@ -22,7 +21,7 @@ attempt.
 6. Add the new author record to `authors.yaml` as
    `<github-id>: <Full Name>`.
 7. Reference the GitHub key in the artifact metadata:
-   - skills and challenges: `authors: [<github-id>]` in YAML frontmatter;
+   - challenges: `authors: [<github-id>]` in YAML frontmatter;
    - attempts: `"authors": ["<github-id>"]` in `agent.json`.
 
 ## Rules
