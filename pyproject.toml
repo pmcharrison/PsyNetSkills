@@ -9,8 +9,10 @@ description = "Validation and dashboard tooling for the PsyNetSkills workshop re
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
-    # Temporary heavy pin until PsyNet light-core lands; includes audit + skills.
-    "psynet @ git+https://gitlab.com/PsyNetDev/PsyNet.git@8e1807aaa14b1ecc2a206ace567ce1d7f5c85332",
+    # Pin to the open PsyNet MR tip (audit + managed experiment skills).
+    # Use the experiment extra: thin bootstrap core alone is not enough for
+    # workshop validate/pytest (needs Dallinger and audit render deps).
+    "psynet[experiment]",
     "pyyaml>=6.0.3",
 ]
 
@@ -24,6 +26,9 @@ psynetsk-migrate-attempt-audit = "psynetsk_tools.migrate_attempt_audit:main"
 dev = [
     "pytest>=8",
 ]
+
+[tool.uv.sources]
+psynet = { git = "https://gitlab.com/PsyNetDev/PsyNet.git", rev = "c353da542ae2ab42edee39266fafc169bdfe2eb5" }
 
 [tool.setuptools.packages.find]
 where = ["."]

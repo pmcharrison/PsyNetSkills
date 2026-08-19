@@ -76,7 +76,7 @@ Repository skills live in `.cursor/skills/`. At the start of each session,
 review the skills present in the checked-out repository and treat that directory
 as authoritative for workshop workflows. General PsyNet experiment skills live
 in `~/PsyNet/.cursor/skills/experiment/` and are copied into experiment
-repositories by `psynet update-scripts`. If the session's attached skill
+repositories by `psynet scripts update`. If the session's attached skill
 metadata appears stale or incomplete, prefer these on-disk sources and note the
 mismatch briefly before proceeding.
 

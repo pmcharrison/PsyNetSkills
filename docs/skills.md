@@ -3,7 +3,7 @@
 PsyNetSkills keeps workshop, challenge, evaluation, and dashboard skills in
 `.cursor/skills/`. General experiment-development skills are owned by PsyNet at
 `~/PsyNet/.cursor/skills/experiment/` and are copied into experiment
-repositories under `.cursor/skills/psynet/` by `psynet update-scripts`.
+repositories under `.cursor/skills/psynet/` by `psynet scripts update`.
 Each skill is a folder containing a `SKILL.md` file with Agent
 Skills-compatible YAML frontmatter.
 
