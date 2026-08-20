@@ -123,7 +123,7 @@ it helps reviewers understand what ran. If the full load test cannot run locally
 say so in `EVALUATION.md` rather than presenting a one-bot smoke test as
 complete performance evidence.
 `monitor.html` snapshots the PsyNet dashboard monitor view. `data.zip` contains
-exported experiment data. `simulated_data.zip` contains the `psynet simulate`
+exported experiment data. `simulated_data.zip` contains the `psynet simulate --audit`
 export used for analysis. `analyses/` contains the canonical
 `analysis.ipynb` notebook, which should read exported CSV data directly, show
 the data-wrangling code, display summary tables and plots inline, and provide a
