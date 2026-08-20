@@ -1,7 +1,7 @@
 # Secret evaluation criteria
 
 - The attempt must explicitly use or follow the
-  `psynet-participant-quality-telemetry` skill.
+  `participant-quality-telemetry` skill.
 - It must be runnable locally in PsyNet.
 - It must record timing, attention/comprehension, paste/focus or tab-switch, and
   at least one text-production telemetry signal.

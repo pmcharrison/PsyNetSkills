@@ -16,6 +16,7 @@ Read `~/PsyNet/.cursor/skills/create-skill/SKILL.md` for:
 - progressive disclosure and size budget
 - skill types (owner / combination / hub)
 - Agent Skills alignment (`compatibility`, no skill `authors`)
+- folder/`name` conventions (kebab-case, verb-object, no redundant `psynet-` prefix)
 
 If `~/PsyNet` is missing, clone it before authoring experiment-adjacent skills.
 

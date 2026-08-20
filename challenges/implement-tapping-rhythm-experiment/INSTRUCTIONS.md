@@ -21,9 +21,9 @@ logs, or production service configuration.
 
 Use the repository skills that match this task:
 
-- `psynet-tapping-experiments`
-- `psynet-simulated-participants`
-- `psynet-experiment-implementation`
+- `tapping-experiments`
+- `simulated-participants`
+- `experiment-implementation`
 - `psychophysics`
 - `record-participant-video`
 

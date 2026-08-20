@@ -125,7 +125,7 @@ candidates:
     proposed_disposition: extension
     triage: candidate
     overlap_notes: >-
-      Extends `psynet-experiment-implementation` and related backend guidance;
+      Extends `experiment-implementation` and related backend guidance;
       existing planning instructions cover `PLAN.md`, but not enough
       replication-specific fidelity checks.
     evidence_sources:
@@ -149,7 +149,7 @@ candidates:
       decisions about practice/calibration/response modality, and a stop-and-ask
       rule when core assets cannot be recreated at the requested fidelity.
     review_notes: >-
-      Approved as an extension to `psynet-experiment-implementation` planning
+      Approved as an extension to `experiment-implementation` planning
       guidance. The evidence shows scientific-validity risk rather than ordinary
       implementation polish, and the right fix is a replication-fidelity planning
       section rather than a separate skill.
@@ -170,8 +170,8 @@ candidates:
     proposed_disposition: pointer
     triage: deferred
     overlap_notes: >-
-      Mostly overlaps current `psynet-experiment-implementation` simulation and
-      analysis requirements plus the newly merged `psynet-simulated-participants`
+      Mostly overlaps current `experiment-implementation` simulation and
+      analysis requirements plus the newly merged `simulated-participants`
       skill from #269. Keep this deferred until those owner skills have been used
       on more attempts.
     evidence_sources:
@@ -202,8 +202,8 @@ candidates:
     review_notes: >-
       Deferred to avoid duplicating #269 and the existing analysis-notebook
       requirements. Reconsider only if future evaluations still show a gap after
-      agents follow `psynet-simulated-participants` and
-      `psynet-experiment-implementation`.
+      agents follow `simulated-participants` and
+      `experiment-implementation`.
 
   - id: simulated-profile-calibration-framing
     title: Simulated profile calibration and conservative framing
@@ -221,9 +221,9 @@ candidates:
     proposed_disposition: extension
     triage: candidate
     overlap_notes: >-
-      Implemented by #269 through the new `psynet-simulated-participants` skill,
-      with pointers from `psynet-experiment-implementation` and
-      `psynet-participant-quality-telemetry`.
+      Implemented by #269 through the new `simulated-participants` skill,
+      with pointers from `experiment-implementation` and
+      `participant-quality-telemetry`.
     evidence_sources:
       - challenges/simulated-participant-study-replication-loop/attempts/2026-06-11-14-12/EVALUATION.md
       - challenges/simulated-participant-study-replication-loop/attempts/2026-06-11-14-12/LEARNINGS.md
@@ -271,7 +271,7 @@ candidates:
     proposed_disposition: extension
     triage: candidate
     overlap_notes: >-
-      Extends `psynet-deployment-ops`; export/analysis and dashboard evidence
+      Extends `deployment-ops`; export/analysis and dashboard evidence
       pointers should stay concise and refer to existing data-processing owners
       where appropriate.
     evidence_sources:
@@ -300,7 +300,7 @@ candidates:
       authentication assumptions, and explicit uncertainty in audit or
       reconstruction reports.
     review_notes: >-
-      Approved as a focused extension to `psynet-deployment-ops`. The existing
+      Approved as a focused extension to `deployment-ops`. The existing
       skill already owns deployment safety, but the cited actions support a
       clearer monitoring/export evidence checklist for local debug, deployment
       audits, and teardown decisions.
@@ -318,7 +318,7 @@ candidates:
     proposed_disposition: extension
     triage: small_edit
     overlap_notes: >-
-      Belongs in `attempt-challenge` or `psynet-experiment-implementation`; do
+      Belongs in `attempt-challenge` or `experiment-implementation`; do
       not create a new skill.
     evidence_sources:
       - apply-participant-quality-telemetry-skill/2026-06-11-19-08/action-001
@@ -339,7 +339,7 @@ candidates:
       `dallinger constraints generate` where relevant.
     review_notes: >-
       Approved as an obvious small edit to `attempt-challenge` or
-      `psynet-experiment-implementation`, not a skill-level intervention. Keep it
+      `experiment-implementation`, not a skill-level intervention. Keep it
       as a concise setup-contract checklist.
 
   - id: package-safe-helper-imports
@@ -355,7 +355,7 @@ candidates:
     proposed_disposition: extension
     triage: small_edit
     overlap_notes: >-
-      Belongs in `psynet-experiment-implementation`; it should be a short
+      Belongs in `experiment-implementation`; it should be a short
       implementation note.
     evidence_sources:
       - audio-memory-sequence/2026-06-08-09-29/action-003
@@ -424,7 +424,7 @@ candidates:
     proposed_disposition: extension
     triage: small_edit
     overlap_notes: >-
-      Belongs in `psychophysics`, `psynet-experiment-implementation`, or
+      Belongs in `psychophysics`, `experiment-implementation`, or
       audio-specific guidance; do not create a separate generic skill.
     evidence_sources:
       - audio-memory-sequence/2026-06-08-09-29/action-001
@@ -445,6 +445,6 @@ candidates:
       simulation machinery are suitable.
     review_notes: >-
       Rejected as too broad and duplicative. `psychophysics` already covers
-      native controls and event-log timing, `psynet-simulated-participants`
+      native controls and event-log timing, `simulated-participants`
       covers simulation paths, and any remaining advice should be split into
       specific owner-skill edits.

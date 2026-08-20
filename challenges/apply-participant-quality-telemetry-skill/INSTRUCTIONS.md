@@ -5,7 +5,7 @@ difficulty: 7
 authors: [williambotticelli-wells]
 ---
 
-Use the `psynet-participant-quality-telemetry` skill to add participant-quality
+Use the `participant-quality-telemetry` skill to add participant-quality
 telemetry and conservative manual-review outputs to a small text-heavy PsyNet
 experiment. The implementation may adapt an existing local-only demo or create a
 compact new experiment, but it must run locally in PsyNet and must not depend on
@@ -41,7 +41,7 @@ certainty.
 
 ## Telemetry requirements
 
-Use the `psynet-participant-quality-telemetry` skill as the implementation
+Use the `participant-quality-telemetry` skill as the implementation
 guide. Record enough local telemetry to support participant-level manual review,
 including at minimum:
 
@@ -100,7 +100,7 @@ for manual review", "review-worthy signal", or "requires human inspection".
 Write a short report describing:
 
 - the PsyNet experiment and participant-facing flow;
-- how the `psynet-participant-quality-telemetry` skill informed the
+- how the `participant-quality-telemetry` skill informed the
   implementation;
 - the telemetry fields and where they are recorded;
 - the simulated participant profiles and their intended behaviors;

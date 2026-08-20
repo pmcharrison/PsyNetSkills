@@ -11,11 +11,11 @@ writing-study outputs for possible AI-like prose patterns.
 ## Prerequisites
 
 - Read the PsyNet skill
-  `~/PsyNet/.cursor/skills/experiment/psynet-participant-quality-telemetry/SKILL.md`
+  `~/PsyNet/.cursor/skills/experiment/participant-quality-telemetry/SKILL.md`
   when the writing comes from a PsyNet experiment or should be interpreted with
   telemetry.
 - Read
-  `~/PsyNet/.cursor/skills/experiment/psynet-simulated-participants/SKILL.md`
+  `~/PsyNet/.cursor/skills/experiment/simulated-participants/SKILL.md`
   when creating mock human, pasted, scripted, or LLM-style profile fixtures.
 - Read the experiment's consent, instructions, AI-use policy, and export schema
   before making participant-level interpretations.

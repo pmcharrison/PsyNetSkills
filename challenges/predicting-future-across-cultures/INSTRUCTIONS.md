@@ -41,7 +41,7 @@ Follow the `prepare-for-translation` skill. All participant-facing text must be 
 
 ## Implementation workflow
 
-Follow the `psynet-experiment-implementation` skill when preparing the attempt.
+Follow the `experiment-implementation` skill when preparing the attempt.
 
 ## Simulated participants and analysis
 

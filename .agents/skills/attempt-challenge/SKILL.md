@@ -24,7 +24,7 @@ challenge before starting a fresh attempt.
   cost conventions.
 - For experiment implementation challenges, also read and follow the PsyNet
   skill
-  `~/PsyNet/.cursor/skills/experiment/psynet-experiment-implementation/SKILL.md`
+  `~/PsyNet/.cursor/skills/experiment/experiment-implementation/SKILL.md`
   before implementing the experiment.
   That skill requires a `PLAN.md` and a human planning review before coding
   (skip the wait when infrastructure-testing or dogfooding the workflow; see
@@ -112,7 +112,7 @@ Note the `cloud-agent-links` skill for sharing user review links.
    Do not defer
    all evidence generation until a later packaging step.
    - For experiment implementation challenges, first follow
-     `~/PsyNet/.cursor/skills/experiment/psynet-experiment-implementation/SKILL.md`,
+     `~/PsyNet/.cursor/skills/experiment/experiment-implementation/SKILL.md`,
      including its `PLAN.md` human review step (skip the wait when
      infrastructure-testing or dogfooding; see that skill).
      For cloud agents, use `cloud-agent-links` skill for the handoff,
@@ -125,7 +125,7 @@ Note the `cloud-agent-links` skill for sharing user review links.
      Python package, and `code` can collide with Python's standard-library
      module of the same name.
    - When creating a runnable experiment under `code/<experiment_slug>/`, follow
-     `~/PsyNet/.cursor/skills/experiment/psynet-experiment-implementation/SKILL.md`
+     `~/PsyNet/.cursor/skills/experiment/experiment-implementation/SKILL.md`
      Setup: copy the closest authored demo if helpful, then prefer
      `psynet setup` (with `--psynet-source editable` when using the local
      `~/PsyNet` checkout) rather than hand-writing boilerplate or copying only
@@ -135,7 +135,7 @@ Note the `cloud-agent-links` skill for sharing user review links.
      `~/PsyNet/.cursor/skills/experiment/prepare-for-translation/SKILL.md`
      during this implementation step.
    - For experiment tests and validation, follow
-     `~/PsyNet/.cursor/skills/experiment/psynet-experiment-implementation/references/validation.md`
+     `~/PsyNet/.cursor/skills/experiment/experiment-implementation/references/validation.md`
      and the relevant PsyNet implementation skills.
    - Update `LEARNINGS.md` with any generalizable lessons you encounter.
      This should include mistakes you made when running tests,

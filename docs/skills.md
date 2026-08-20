@@ -39,7 +39,7 @@ skills under `.cursor/skills/psynet/`.
 
 | Field | Role |
 | --- | --- |
-| `name` | Stable id; must match folder name (max 64 characters). |
+| `name` | Stable id; must match folder name (kebab-case, max 64 characters). Prefer verb-object (`attempt-challenge`). Do not prefix PsyNet experiment skills with `psynet-`. |
 | `description` | **When to use** — triggers for skill discovery (max 1024 characters). |
 | `compatibility` | Optional environment requirements (max 500 characters). |
 
