@@ -1561,7 +1561,7 @@ wheels = [
 [[package]]
 name = "psynet"
 version = "13.4.0a0"
-source = { git = "https://gitlab.com/PsyNetDev/PsyNet.git?rev=dbb097bf43b93a885ffd5ffad3edec89f0e85b7c#dbb097bf43b93a885ffd5ffad3edec89f0e85b7c" }
+source = { git = "https://gitlab.com/PsyNetDev/PsyNet.git?rev=b0f593034c5a171649195104fa7c83a2bd549252#b0f593034c5a171649195104fa7c83a2bd549252" }
 dependencies = [
     { name = "click" },
 ]
@@ -1615,7 +1615,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "psynet", extras = ["experiment"], git = "https://gitlab.com/PsyNetDev/PsyNet.git?rev=dbb097bf43b93a885ffd5ffad3edec89f0e85b7c" },
+    { name = "psynet", extras = ["experiment"], git = "https://gitlab.com/PsyNetDev/PsyNet.git?rev=b0f593034c5a171649195104fa7c83a2bd549252" },
     { name = "pyyaml", specifier = ">=6.0.3" },
 ]
 

@@ -13,7 +13,7 @@ workflow.
 ## Prerequisites
 
 - Read the PsyNet skill
-  `~/PsyNet/.cursor/skills/experiment/deployment-ops/SKILL.md` before
+  `~/PsyNet/.cursor/skills/experiment/deploy-experiment/SKILL.md` before
   preparing the request. That skill owns deployment readiness, command patterns,
   credential safety, export records, and teardown guidance.
 - If the attempt was just created and its structure is unclear, read

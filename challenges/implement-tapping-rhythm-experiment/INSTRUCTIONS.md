@@ -22,8 +22,8 @@ logs, or production service configuration.
 Use the repository skills that match this task:
 
 - `tapping-experiments`
-- `simulated-participants`
-- `experiment-implementation`
+- `simulate-participants`
+- `implement-experiment`
 - `psychophysics`
 - `record-participant-video`
 
