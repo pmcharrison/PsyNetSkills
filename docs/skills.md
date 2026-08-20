@@ -44,12 +44,6 @@ skills under `.cursor/skills/psynet/`.
 Skills do **not** use `authors` frontmatter. Challenges and attempts do — see
 `docs/authors.md`.
 
-### Workshop-only extensions
-
-| Field | Allowed on | Values |
-| --- | --- | --- |
-| `review_status` | `mine-skill-candidates`, `review-skill-candidates` | `unreviewed` |
-
 ## Progressive disclosure
 
 | Layer | Location |

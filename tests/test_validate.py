@@ -100,7 +100,7 @@ def test_validate_repository_accepts_minimal_structure(tmp_path: Path) -> None:
     assert validate_repository(tmp_path) == []
 
 
-def test_validate_repository_rejects_review_status_on_other_skills(
+def test_validate_repository_rejects_review_status_on_skills(
     tmp_path: Path,
 ) -> None:
     minimal_repo(tmp_path)
@@ -115,7 +115,7 @@ def test_validate_repository_rejects_review_status_on_other_skills(
 
     problems = validate_repository(tmp_path)
 
-    assert any("review_status is only allowed" in problem for problem in problems)
+    assert any("review_status is not a skill frontmatter field" in problem for problem in problems)
 
 
 def test_validate_repository_rejects_oversized_skill_name(tmp_path: Path) -> None:

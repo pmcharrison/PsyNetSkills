@@ -48,8 +48,6 @@ SKILL_LINE_COUNT_WARNING = 250
 SKILL_REFERENCE_RE = re.compile(
     r"(?<![\w./-])((?:(?P<skill>[a-z0-9-]+)/)?references/[A-Za-z0-9_.-]+\.(?:md|ya?ml|py))"
 )
-SKILL_CANDIDATE_SKILL_NAMES = {"mine-skill-candidates", "review-skill-candidates"}
-ALLOWED_REVIEW_STATUS = {"unreviewed"}
 PSYNET_AGENT_REQUIRED_FIELDS = {
     "checkout_path": str,
     "branch": str,
@@ -552,18 +550,10 @@ def validate_skills(root: Path) -> list[str]:
                     f"{skill_file}: compatibility exceeds {SKILL_COMPATIBILITY_MAX_LENGTH} characters"
                 )
 
-        review_status = frontmatter.get("review_status")
-        if review_status is not None:
-            if name not in SKILL_CANDIDATE_SKILL_NAMES:
-                problems.append(
-                    f"{skill_file}: review_status is only allowed on "
-                    f"{sorted(SKILL_CANDIDATE_SKILL_NAMES)!r}"
-                )
-            elif review_status not in ALLOWED_REVIEW_STATUS:
-                problems.append(
-                    f"{skill_file}: review_status must be one of "
-                    f"{sorted(ALLOWED_REVIEW_STATUS)!r}"
-                )
+        if "review_status" in frontmatter:
+            problems.append(
+                f"{skill_file}: review_status is not a skill frontmatter field"
+            )
 
         problems.extend(validate_skill_references(skill_dir, skills_dir))
         problems.extend(run_skills_ref_validate(skill_dir))

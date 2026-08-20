@@ -1,7 +1,6 @@
 ---
 name: review-skill-candidates
 description: Review unreviewed skill candidates, check overlap, approve or reject them, and route approved work through existing skill-creation procedures. Use when triaging mined skill candidates from attempts or learning actions.
-review_status: unreviewed
 ---
 
 # Review skill candidates
@@ -18,8 +17,6 @@ reject the candidate, or implement an approved change through `create-skill`.
 ## Required reads
 
 - Read `skill-candidates.yaml` when it exists.
-- Read any `.cursor/skills/*/SKILL.md` files whose frontmatter has
-  `review_status: unreviewed`.
 - Read the candidate's cited action IDs, `LEARNINGS.md`, `EVALUATION.md`, or
   dashboard source paths only as needed to verify the rationale.
 - Read `skill-overlap-review/SKILL.md` before deciding disposition.
@@ -28,9 +25,7 @@ reject the candidate, or implement an approved change through `create-skill`.
 
 ## Workflow
 
-1. Collect review targets:
-   - candidates with `status: unreviewed` in `skill-candidates.yaml`;
-   - draft skills with `review_status: unreviewed` in frontmatter.
+1. Collect review targets from `skill-candidates.yaml` (`status: unreviewed`).
 2. Present a concise review queue grouped by urgency and proposed disposition.
 3. Skip or batch low-value items before deep review:
    - mark `triage: small_edit` items as `rejected`, `deferred`, or route them to
@@ -62,9 +57,6 @@ reject the candidate, or implement an approved change through `create-skill`.
    - keep review status separate from functional skill execution.
 8. If implementing, invoke `create-skill/SKILL.md`. Do not bypass author
    identification, overlap reporting, or validation.
-9. For draft skills with `review_status: unreviewed`, either remove the field or
-   change it to `reviewed` after reviewer approval. This metadata must not
-   affect whether the skill can be used.
 
 ## Review output
 

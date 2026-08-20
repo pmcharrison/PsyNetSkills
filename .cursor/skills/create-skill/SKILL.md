@@ -44,17 +44,6 @@ After PsyNet experiment skill changes land, refresh experiment checkouts with
    when appropriate.
 6. **Validate** (below).
 
-## Workshop extensions
-
-Optional frontmatter on skill-candidate workflows:
-
-```yaml
-review_status: unreviewed
-```
-
-Used by `mine-skill-candidates` / `review-skill-candidates`. Remove or clear after
-review.
-
 ## Rules
 
 - Do not add challenge-specific material to general skills unless the lesson
