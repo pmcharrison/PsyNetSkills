@@ -1,7 +1,7 @@
 mining_scope: balanced
 source_scan:
   generated_from: dashboard/data/psynetsk.json
-  helper_command: uv run python .cursor/skills/mine-skill-candidates/scripts/collect_sources.py --scope balanced
+  helper_command: uv run python .agents/skills/mine-skill-candidates/scripts/collect_sources.py --scope balanced
   focus:
     - planning/fidelity
     - run-attempt/manual testing

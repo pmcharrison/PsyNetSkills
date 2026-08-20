@@ -30,7 +30,7 @@ authors: [pmcharrison]
 }
 ```
 
-Agent Skills in `.cursor/skills/` do **not** carry `authors` metadata. Skill
+Agent Skills in `.agents/skills/` do **not** carry `authors` metadata. Skill
 history is tracked in git.
 
 Cursor, model, client, and runtime metadata are provenance, not authorship, and

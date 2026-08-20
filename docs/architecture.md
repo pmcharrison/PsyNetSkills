@@ -7,7 +7,7 @@ combines source artifacts, generated dashboard inputs, and validation tooling.
 ## Main directories
 
 ```text
-.cursor/skills/  Agent Skills-compatible folders, each with a SKILL.md file.
+.agents/skills/  Canonical Agent Skills tree (symlinked from .claude, .cursor, .github).
 challenges/      Challenge definitions, criteria, references, and attempts.
 dashboard/       Hugo site layouts, content mount, static CSS, and generated inputs.
 docs/            Detailed repository specifications for contributors and agents.
@@ -30,7 +30,7 @@ The dashboard is built from ordinary repository files:
 5. Hugo renders the final static site into `public/`.
 
 Generated dashboard inputs are ignored by Git. Source files such as `README.md`,
-`.cursor/skills/*/SKILL.md`, `challenges/*/INSTRUCTIONS.md`, and attempt
+`.agents/skills/*/SKILL.md`, `challenges/*/INSTRUCTIONS.md`, and attempt
 artifacts are the maintained state.
 
 The Actions tab is deterministic at build time. The maintained

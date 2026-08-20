@@ -176,10 +176,10 @@ safer workflow rather than committing or publishing them.
 
 ## Templates
 
-Use the files in `.cursor/skills/attempt-challenge/assets/attempt-template/` as
+Use the files in `.agents/skills/attempt-challenge/assets/attempt-template/` as
 the starting point for attempt metadata, timeline, learnings, and evaluation
 notes. Use
-`.cursor/skills/attempt-challenge/assets/attempt-template/LEARNING_CARD.md` when
+`.agents/skills/attempt-challenge/assets/attempt-template/LEARNING_CARD.md` when
 replacing the initialized `LEARNINGS.md` placeholder with concrete learning
 cards.
 

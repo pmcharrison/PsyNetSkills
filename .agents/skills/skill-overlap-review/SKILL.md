@@ -16,8 +16,8 @@ frontmatter, and progressive disclosure, read
    outputs, and failure modes in a short scratch outline.
 2. Refresh the comparison target when possible:
    `git fetch origin main`, then compare against both the working tree and
-   `origin/main` versions of `.cursor/skills/`.
-3. Read every existing `.cursor/skills/*/SKILL.md` and the PsyNet-owned
+   `origin/main` versions of `.agents/skills/`.
+3. Read every existing `.agents/skills/*/SKILL.md` and the PsyNet-owned
    experiment skills under
    `~/PsyNet/.cursor/skills/experiment/*/SKILL.md`. For plausible matches, also
    read their `references/` files when the main skill points to them.

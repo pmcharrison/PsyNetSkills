@@ -3,7 +3,7 @@
 The dashboard is a Hugo static site generated from repository files. It renders:
 
 - The public workflow overview from `README.md`.
-- Skill summaries from `.cursor/skills/*/SKILL.md`.
+- Skill summaries from `.agents/skills/*/SKILL.md`.
 - Challenge summaries from `challenges/*`.
 - Attempt histories and latest scores when evaluations exist.
 - Open learning-action counts from attempt `LEARNINGS.md` files.

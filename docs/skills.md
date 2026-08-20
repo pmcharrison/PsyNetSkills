@@ -1,9 +1,11 @@
 # Skills
 
 PsyNetSkills keeps workshop, challenge, evaluation, and dashboard skills in
-`.cursor/skills/`. Experiment-development skills are owned by PsyNet at
-`~/PsyNet/.cursor/skills/experiment/` and copied into experiment repositories
-under `.cursor/skills/psynet/` by `psynet scripts update`.
+`.agents/skills/`. Relative symlinks expose the same tree at `.claude/skills/`,
+`.cursor/skills/`, and `.github/skills/` so Claude Code, Cursor, Codex, and
+GitHub Copilot can discover them. Experiment-development skills are owned by
+PsyNet at `~/PsyNet/.cursor/skills/experiment/` and copied into experiment
+repositories under `.cursor/skills/psynet/` by `psynet scripts update`.
 
 Each skill uses [Agent Skills](https://agentskills.io/specification) YAML
 frontmatter in `SKILL.md`.

@@ -66,7 +66,7 @@ def render_example_skill_page(tmp_path: Path, workflow_context_data: dict) -> st
                     {
                         "description": "Use when testing dashboard templates.",
                         "name": "example-skill",
-                        "path": ".cursor/skills/example-skill/SKILL.md",
+                        "path": ".agents/skills/example-skill/SKILL.md",
                         "title": "Example skill",
                     },
                 ],
@@ -318,7 +318,7 @@ def test_edit_in_github_uses_default_branch_without_workflow_context(
 
     assert (
         'href="https://github.com/pmcharrison/PsyNetSkills/edit/main/'
-        '.cursor/skills/example-skill/SKILL.md"'
+        '.agents/skills/example-skill/SKILL.md"'
     ) in html
 
 
@@ -338,7 +338,7 @@ def test_edit_in_github_uses_pr_preview_branch(tmp_path: Path) -> None:
 
     assert (
         'href="https://github.com/pmcharrison/PsyNetSkills/edit/cursor%2Fexample/'
-        '.cursor/skills/example-skill/SKILL.md"'
+        '.agents/skills/example-skill/SKILL.md"'
     ) in html
 
 
@@ -683,7 +683,7 @@ def test_parse_learning_actions_accepts_optional_notes() -> None:
 
 def test_dashboard_data_reports_open_learning_actions(tmp_path: Path) -> None:
     write(
-        tmp_path / ".cursor/skills/example-skill/SKILL.md",
+        tmp_path / ".agents/skills/example-skill/SKILL.md",
         "---\n"
         "name: example-skill\n"
         "description: Use when testing dashboard generation.\n"
@@ -855,7 +855,7 @@ def test_export_dashboard_publishes_attempt_screenshots(tmp_path: Path) -> None:
     write(tmp_path / "authors.yaml", authors_yaml())
     write(tmp_path / "README.md", "# PsyNetSkills\n")
     write(
-        tmp_path / ".cursor/skills/example-skill/SKILL.md",
+        tmp_path / ".agents/skills/example-skill/SKILL.md",
         "---\n"
         "name: example-skill\n"
         "description: Use when testing dashboard generation.\n"
@@ -921,7 +921,7 @@ def test_collect_challenges_uses_agent_timestamp_for_example_attempt(
 def test_collect_skills_uses_h1_title(tmp_path: Path) -> None:
     write(tmp_path / "authors.yaml", authors_yaml())
     write(
-        tmp_path / ".cursor/skills/example-skill/SKILL.md",
+        tmp_path / ".agents/skills/example-skill/SKILL.md",
         "---\n"
         "name: example-skill\n"
         "description: Use when testing dashboard generation.\n"
@@ -972,7 +972,7 @@ def test_dashboard_data_reports_counts(tmp_path: Path) -> None:
     write(tmp_path / "authors.yaml", authors_yaml())
     write(tmp_path / "docs/index.md", "# Docs\n")
     write(
-        tmp_path / ".cursor/skills/example-skill/SKILL.md",
+        tmp_path / ".agents/skills/example-skill/SKILL.md",
         "---\n"
         "name: example-skill\n"
         "description: Use when testing dashboard generation.\n"
@@ -999,7 +999,7 @@ def test_dashboard_data_reports_counts(tmp_path: Path) -> None:
 def test_dashboard_data_reports_latest_attempts(tmp_path: Path) -> None:
     write(tmp_path / "authors.yaml", authors_yaml())
     write(
-        tmp_path / ".cursor/skills/example-skill/SKILL.md",
+        tmp_path / ".agents/skills/example-skill/SKILL.md",
         "---\n"
         "name: example-skill\n"
         "description: Use when testing dashboard generation.\n"
@@ -1046,7 +1046,7 @@ def test_export_dashboard_uses_configured_artifact_url_prefix(
     write(tmp_path / "authors.yaml", authors_yaml())
     write(tmp_path / "README.md", "# PsyNetSkills\n")
     write(
-        tmp_path / ".cursor/skills/example-skill/SKILL.md",
+        tmp_path / ".agents/skills/example-skill/SKILL.md",
         "---\n"
         "name: example-skill\n"
         "description: Use when testing dashboard generation.\n"
@@ -1109,7 +1109,7 @@ def test_export_dashboard_normalizes_old_preview_artifact_prefix(
     write(tmp_path / "authors.yaml", authors_yaml())
     write(tmp_path / "README.md", "# PsyNetSkills\n")
     write(
-        tmp_path / ".cursor/skills/example-skill/SKILL.md",
+        tmp_path / ".agents/skills/example-skill/SKILL.md",
         "---\n"
         "name: example-skill\n"
         "description: Use when testing dashboard generation.\n"
@@ -1160,7 +1160,7 @@ def test_export_dashboard_writes_hugo_inputs(tmp_path: Path) -> None:
     write(tmp_path / "docs/index.md", "# Introduction\n")
     write(tmp_path / "docs/skills.md", "# Skills\n")
     write(
-        tmp_path / ".cursor/skills/example-skill/SKILL.md",
+        tmp_path / ".agents/skills/example-skill/SKILL.md",
         "---\n"
         "name: example-skill\n"
         "description: Use when testing dashboard generation.\n"
@@ -1697,7 +1697,7 @@ def test_export_dashboard_deduplicates_hashed_artifacts(tmp_path: Path) -> None:
     write(tmp_path / "authors.yaml", authors_yaml())
     write(tmp_path / "README.md", "# PsyNetSkills\n")
     write(
-        tmp_path / ".cursor/skills/example-skill/SKILL.md",
+        tmp_path / ".agents/skills/example-skill/SKILL.md",
         "---\n"
         "name: example-skill\n"
         "description: Use when testing dashboard generation.\n"

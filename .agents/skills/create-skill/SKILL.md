@@ -23,7 +23,7 @@ If `~/PsyNet` is missing, clone it before authoring experiment-adjacent skills.
 
 | Skill kind | Edit here |
 | --- | --- |
-| Challenge, attempt, evaluation, dashboard, mining | `.cursor/skills/<skill-name>/` |
+| Challenge, attempt, evaluation, dashboard, mining | `.agents/skills/<skill-name>/` |
 | PsyNet experiment development | `~/PsyNet/.cursor/skills/experiment/<skill-name>/` |
 
 Do not copy PsyNet experiment skills into PsyNetSkills. Point to PsyNet paths.

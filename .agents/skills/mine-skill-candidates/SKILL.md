@@ -65,7 +65,7 @@ for implementation after review.
 
 Run from the repository root after dashboard export:
 
-`uv run python .cursor/skills/mine-skill-candidates/scripts/collect_sources.py --scope open-actions-only`
+`uv run python .agents/skills/mine-skill-candidates/scripts/collect_sources.py --scope open-actions-only`
 
 Useful options:
 

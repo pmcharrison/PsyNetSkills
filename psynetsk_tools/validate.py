@@ -39,7 +39,12 @@ from psynetsk_tools.learnings import (
 )
 from psynetsk_tools.timeline import TIMELINE_ENTRY_RE
 
-SKILLS_ROOT = Path(".cursor") / "skills"
+SKILLS_ROOT = Path(".agents") / "skills"
+SKILL_DISCOVERY_ALIASES = (
+    Path(".cursor") / "skills",
+    Path(".claude") / "skills",
+    Path(".github") / "skills",
+)
 SKILL_NAME_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 SKILL_NAME_MAX_LENGTH = 64
 SKILL_DESCRIPTION_MAX_LENGTH = 1024
@@ -503,9 +508,46 @@ def run_skills_ref_validate(skill_dir: Path) -> list[str]:
     return [f"{skill_dir}: skills-ref validate failed: {output or 'non-zero exit'}"]
 
 
+def validate_skill_discovery_aliases(root: Path) -> list[str]:
+    """Require client-specific skill paths to symlink to the canonical tree."""
+
+    problems: list[str] = []
+    canonical = root / SKILLS_ROOT
+    if not canonical.is_dir() or canonical.is_symlink():
+        return problems
+
+    try:
+        canonical_resolved = canonical.resolve()
+    except OSError as exc:
+        return [f"{canonical}: cannot resolve canonical skills directory: {exc}"]
+
+    for alias in SKILL_DISCOVERY_ALIASES:
+        alias_path = root / alias
+        if not alias_path.exists() and not alias_path.is_symlink():
+            problems.append(
+                f"{alias_path}: missing skill discovery alias; "
+                f"create a relative symlink to {SKILLS_ROOT.as_posix()}"
+            )
+            continue
+        if not alias_path.is_symlink():
+            problems.append(
+                f"{alias_path}: must be a relative symlink to {SKILLS_ROOT.as_posix()}"
+            )
+            continue
+        try:
+            if alias_path.resolve() != canonical_resolved:
+                problems.append(
+                    f"{alias_path}: symlink must resolve to {SKILLS_ROOT.as_posix()}"
+                )
+        except OSError as exc:
+            problems.append(f"{alias_path}: cannot resolve skill discovery alias: {exc}")
+    return problems
+
+
 def validate_skills(root: Path) -> list[str]:
     """Validate all skill folders."""
     problems: list[str] = []
+    problems.extend(validate_skill_discovery_aliases(root))
     skills_dir = root / SKILLS_ROOT
     if not skills_dir.exists():
         return [f"{skills_dir}: missing skills directory"]

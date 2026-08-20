@@ -39,7 +39,7 @@ workflow.
    - `<challenge>/<attempt>` when it maps to a standard attempt folder;
    - the current directory if it is inside one of those paths.
 2. Run the helper in plan mode first:
-   `python3 .cursor/skills/deploy-attempt/scripts/deploy_attempt.py <attempt>`
+   `python3 .agents/skills/deploy-attempt/scripts/deploy_attempt.py <attempt>`
 3. Check the derived values:
    - `attempt_ref`: current `git rev-parse HEAD`;
    - `attempt_path`: relative experiment directory;
@@ -49,7 +49,7 @@ workflow.
    - `dry_run`: `false` only when the user requested a real deploy request.
 4. If the user invoked `/deploy-attempt` and did not ask for plan-only mode,
    queue the protected workflow:
-   `python3 .cursor/skills/deploy-attempt/scripts/deploy_attempt.py <attempt> --request-deploy`
+   `python3 .agents/skills/deploy-attempt/scripts/deploy_attempt.py <attempt> --request-deploy`
 5. If the helper returns a workflow run URL, give the user that URL and tell them
    to open it, click `Review deployments`, select `attempt-deploy`, and approve
    or reject.
@@ -64,7 +64,7 @@ workflow.
 
 Run from the repository root:
 
-`python3 .cursor/skills/deploy-attempt/scripts/deploy_attempt.py <attempt>`
+`python3 .agents/skills/deploy-attempt/scripts/deploy_attempt.py <attempt>`
 
 Useful options:
 

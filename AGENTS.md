@@ -72,13 +72,31 @@ workflow rather than committing or publishing them.
 
 ### Skill registration
 
-Repository skills live in `.cursor/skills/`. At the start of each session,
-review the skills present in the checked-out repository and treat that directory
-as authoritative for workshop workflows. General PsyNet experiment skills live
-in `~/PsyNet/.cursor/skills/experiment/` and are copied into experiment
-repositories by `psynet scripts update`. If the session's attached skill
-metadata appears stale or incomplete, prefer these on-disk sources and note the
-mismatch briefly before proceeding.
+Workshop Agent Skills live in **`.agents/skills/`** (the cross-client
+[Agent Skills](https://agentskills.io/specification) discovery path). Relative
+symlinks keep the same tree visible to clients that scan a vendor-specific
+directory:
+
+| Path | Who scans it |
+| --- | --- |
+| `.agents/skills/` | Codex, Copilot, Cursor (canonical) |
+| `.claude/skills/` | Claude Code, Copilot |
+| `.cursor/skills/` | Cursor |
+| `.github/skills/` | GitHub Copilot |
+
+Edit files under `.agents/skills/` only. Do not copy skills into the alias
+directories. `psynetsk-validate` checks that the three aliases remain relative
+symlinks to `.agents/skills/`. Clone with symlink support enabled (`git clone`
+on Linux/macOS; on Windows, `core.symlinks=true` or Developer Mode).
+
+At the start of each session, review the skills in `.agents/skills/` and treat
+that tree as authoritative for workshop workflows.
+
+General PsyNet experiment skills still live in
+`~/PsyNet/.cursor/skills/experiment/` until PsyNet adopts the same layout; they
+are copied into experiment repositories by `psynet scripts update`. If the
+session's attached skill metadata appears stale or incomplete, prefer these
+on-disk sources and note the mismatch briefly before proceeding.
 
 **Skill authoring:** the canonical Agent Skills format spec is
 `~/PsyNet/.cursor/skills/create-skill/SKILL.md`. The workshop `create-skill`

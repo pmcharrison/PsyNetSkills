@@ -40,6 +40,18 @@ def agent_json() -> str:
     )
 
 
+def write_skill_discovery_aliases(root: Path) -> None:
+    canonical = root / ".agents" / "skills"
+    canonical.mkdir(parents=True, exist_ok=True)
+    for alias_parent in (".cursor", ".claude", ".github"):
+        parent = root / alias_parent
+        parent.mkdir(exist_ok=True)
+        alias = parent / "skills"
+        if alias.exists() or alias.is_symlink():
+            continue
+        alias.symlink_to(Path("..") / ".agents" / "skills")
+
+
 def minimal_repo(root: Path) -> None:
     write(
         root / "authors.yaml",
@@ -47,12 +59,13 @@ def minimal_repo(root: Path) -> None:
     )
     write(root / "docs/index.md", "# Docs\n")
     write(
-        root / ".cursor/skills/example-skill/SKILL.md",
+        root / ".agents/skills/example-skill/SKILL.md",
         "---\n"
         "name: example-skill\n"
         "description: Use when testing repository validation.\n"
         "---\n",
     )
+    write_skill_discovery_aliases(root)
     write(
         root / "challenges/example/INSTRUCTIONS.md",
         "---\n"
@@ -105,7 +118,7 @@ def test_validate_repository_rejects_review_status_on_skills(
 ) -> None:
     minimal_repo(tmp_path)
     write(
-        tmp_path / ".cursor/skills/example-skill/SKILL.md",
+        tmp_path / ".agents/skills/example-skill/SKILL.md",
         "---\n"
         "name: example-skill\n"
         "description: Use when testing repository validation.\n"
@@ -118,10 +131,21 @@ def test_validate_repository_rejects_review_status_on_skills(
     assert any("review_status is not a skill frontmatter field" in problem for problem in problems)
 
 
+def test_validate_repository_rejects_missing_skill_discovery_alias(
+    tmp_path: Path,
+) -> None:
+    minimal_repo(tmp_path)
+    (tmp_path / ".claude" / "skills").unlink()
+
+    problems = validate_repository(tmp_path)
+
+    assert any("missing skill discovery alias" in problem for problem in problems)
+
+
 def test_validate_repository_rejects_oversized_skill_name(tmp_path: Path) -> None:
     minimal_repo(tmp_path)
     long_name = "a" * 65
-    skill_dir = tmp_path / ".cursor/skills" / long_name
+    skill_dir = tmp_path / ".agents/skills" / long_name
     write(
         skill_dir / "SKILL.md",
         f"---\nname: {long_name}\ndescription: Use when testing.\n---\n",
@@ -137,7 +161,7 @@ def test_validate_repository_rejects_oversized_skill_compatibility(
 ) -> None:
     minimal_repo(tmp_path)
     write(
-        tmp_path / ".cursor/skills/example-skill/SKILL.md",
+        tmp_path / ".agents/skills/example-skill/SKILL.md",
         "---\n"
         "name: example-skill\n"
         "description: Use when testing repository validation.\n"
@@ -154,7 +178,7 @@ def test_collect_repository_warnings_for_oversized_skill(tmp_path: Path) -> None
     minimal_repo(tmp_path)
     body = "\n".join(f"Line {index}." for index in range(260))
     write(
-        tmp_path / ".cursor/skills/example-skill/SKILL.md",
+        tmp_path / ".agents/skills/example-skill/SKILL.md",
         "---\n"
         "name: example-skill\n"
         "description: Use when testing repository validation.\n"
@@ -172,7 +196,7 @@ def test_validate_repository_rejects_skill_name_mismatch(
 ) -> None:
     minimal_repo(tmp_path)
     write(
-        tmp_path / ".cursor/skills/example-skill/SKILL.md",
+        tmp_path / ".agents/skills/example-skill/SKILL.md",
         "---\n"
         "name: other-skill\n"
         "description: Use when testing repository validation.\n"
@@ -189,7 +213,7 @@ def test_validate_repository_rejects_uncited_skill_reference(
 ) -> None:
     minimal_repo(tmp_path)
     write(
-        tmp_path / ".cursor/skills/example-skill/references/details.md",
+        tmp_path / ".agents/skills/example-skill/references/details.md",
         "# Details\n",
     )
 
@@ -203,7 +227,7 @@ def test_validate_repository_accepts_cited_skill_reference_chain(
 ) -> None:
     minimal_repo(tmp_path)
     write(
-        tmp_path / ".cursor/skills/example-skill/SKILL.md",
+        tmp_path / ".agents/skills/example-skill/SKILL.md",
         "---\n"
         "name: example-skill\n"
         "description: Use when testing repository validation.\n"
@@ -211,11 +235,11 @@ def test_validate_repository_accepts_cited_skill_reference_chain(
         "Read `references/primary.md`.\n",
     )
     write(
-        tmp_path / ".cursor/skills/example-skill/references/primary.md",
+        tmp_path / ".agents/skills/example-skill/references/primary.md",
         "# Primary\n\nRead `references/secondary.md`.\n",
     )
     write(
-        tmp_path / ".cursor/skills/example-skill/references/secondary.md",
+        tmp_path / ".agents/skills/example-skill/references/secondary.md",
         "# Secondary\n",
     )
 
@@ -227,7 +251,7 @@ def test_validate_repository_rejects_missing_skill_reference_path(
 ) -> None:
     minimal_repo(tmp_path)
     write(
-        tmp_path / ".cursor/skills/example-skill/SKILL.md",
+        tmp_path / ".agents/skills/example-skill/SKILL.md",
         "---\n"
         "name: example-skill\n"
         "description: Use when testing repository validation.\n"
