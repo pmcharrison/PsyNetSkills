@@ -1,48 +1,80 @@
 # Skills
 
-Skills live in `.cursor/skills/`. Each skill is a folder containing a `SKILL.md` file
-with Agent Skills-compatible YAML frontmatter.
+PsyNetSkills keeps workshop, challenge, evaluation, and dashboard skills in
+`.agents/skills/`. Relative symlinks expose the same tree at `.claude/skills/`,
+`.cursor/skills/`, and `.github/skills/` so Claude Code, Cursor, Codex, and
+GitHub Copilot can discover them. Experiment-development skills are owned by
+PsyNet at `~/PsyNet/.cursor/skills/experiment/` and copied into experiment
+repositories under `.cursor/skills/psynet/` by `psynet scripts update`.
 
-In the normal workflow, users should ask a Cursor Cloud Agent to create or update
-a skill from prose. The agent should use the `create-skill` skill, inspect the
-existing skill tree, and decide whether the lesson belongs in a new skill or an
-existing one. The details below are the specification that the agent and advanced
-manual contributors should follow.
+Each skill uses [Agent Skills](https://agentskills.io/specification) YAML
+frontmatter in `SKILL.md`.
 
-Agents should verify that the skills are registered before relying on them. If
-an agent runtime expects skills in another location, symlink or copy
-`.cursor/skills/` to that required location rather than editing a duplicate
-skills tree.
+## Authoring spec (canonical)
 
-## Required frontmatter
+The **format spec** lives in PsyNet:
 
-```markdown
----
-name: psynet-experiment-implementation
-description: Explain what this skill does and when an agent should use it.
-authors: [pmcharrison]
----
+`~/PsyNet/.cursor/skills/create-skill/SKILL.md`
+
+The workshop **`create-skill`** skill in this repository is a router: read the
+PsyNet spec first, then follow the workshop workflow (overlap review,
+`psynetsk-validate`, challenge/attempt authors).
+
+Human-readable summary below; when in doubt, trust the PsyNet spec.
+
+## Propagation
+
+After PsyNet experiment skills change on `master`, refresh local experiment
+checkouts:
+
+```bash
+cd ~/PsyNet && git pull --ff-only origin master
+cd <experiment-dir> && psynet scripts update
 ```
 
-The `name` must match the folder name. Use lowercase letters, numbers, and
-hyphens only. `authors` must list one or more GitHub author keys from
-`authors.yaml`; see `docs/authors.md` for the registration workflow.
+Workshop agents with both checkouts should pull PsyNet before relying on copied
+skills under `.cursor/skills/psynet/`.
 
-## Writing useful skills
+## Frontmatter
 
-Good skills capture PsyNet-specific knowledge that agents are likely to miss:
+| Field | Role |
+| --- | --- |
+| `name` | Stable id; must match folder name (kebab-case, max 64 characters). Workflows use verb-object (`implement-experiment`); domain skills may stay nouns (`psychophysics`). Do not prefix PsyNet experiment skills with `psynet-`. |
+| `description` | **When to use** — triggers for skill discovery (max 1024 characters). |
+| `compatibility` | Optional environment requirements (max 500 characters). |
 
-- Which PsyNet APIs and demos are relevant.
-- Which commands validate an experiment.
-- Which setup steps are needed before running an experiment.
-- Which common agent assumptions are wrong.
+Skills do **not** use `authors` frontmatter. Challenges and attempts do — see
+`docs/authors.md`.
 
-Keep the main `SKILL.md` concise. If a skill needs detailed API notes, put them
-in `references/` and tell the agent when to read them.
+## Progressive disclosure
+
+| Layer | Location |
+| --- | --- |
+| Routing | Frontmatter `description`, optional `compatibility` |
+| Procedure skeleton | `SKILL.md` (scope, prerequisites, workflow, rules) |
+| Detail | `references/` |
+| Templates / scripts | `assets/`, `scripts/` |
+
+Owner skills aim for ≤100 lines; combination/hub skills ≤150 lines.
+`psynetsk-validate` warns above 250 lines.
+
+## Validation
+
+```bash
+uv run psynetsk-validate   # workshop skills + challenges + attempts
+```
+
+When `skills-ref` is installed (dev dependency), validation also runs
+`skills-ref validate` on each workshop skill.
+
+For PsyNet-owned skills:
+
+```bash
+cd ~/PsyNet && python scripts/validate_agent_skills.py
+```
 
 ## Iterating on skills
 
-After each challenge attempt, read the attempt transcript, generated code,
-evidence, and evaluation. Add only reusable lessons back to the relevant skill.
-Avoid patching a skill for a single challenge unless the underlying issue is
-likely to recur.
+After challenge attempts, mine reusable lessons. Run `skill-overlap-review`
+before adding text. Prefer updating an owner skill or adding a pointer over
+copying procedures.

@@ -16,27 +16,30 @@ display name. Profile links are derived from the GitHub key.
 
 ## References
 
-Skills and challenges reference author keys in YAML frontmatter:
+Challenges and attempts reference author keys:
 
 ```yaml
+# challenges/<slug>/INSTRUCTIONS.md frontmatter
 authors: [pmcharrison]
 ```
 
-Attempts reference the same keys in `agent.json`:
-
 ```json
+// attempts/<timestamp>/agent.json
 {
   "authors": ["pmcharrison"]
 }
 ```
+
+Agent Skills in `.agents/skills/` do **not** carry `authors` metadata. Skill
+history is tracked in git.
 
 Cursor, model, client, and runtime metadata are provenance, not authorship, and
 should stay in their existing metadata fields.
 
 ## Agent workflow
 
-When creating a skill, challenge, or attempt, use the `identify-author` skill to
-identify the human author before writing the metadata:
+When creating a challenge or attempt, use the `identify-author` skill to
+identify the human author before writing metadata:
 
 1. Read `authors.yaml`.
 2. Ask which GitHub username should be credited as author.

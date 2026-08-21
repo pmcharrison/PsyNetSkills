@@ -1,0 +1,89 @@
+==== PERFORMANCE SMOKE 2026-08-19T19:01:38Z ====
+▶ Starting experiment server...
+Server log: /tmp/psynet_server_c0_l5rjq.log
+⏳ Waiting for server to be ready... Ready!
+
+Bot output log: /tmp/psynet_bots_pja8culg.log
+[1m================================================================================[0m
+[1m⚡ PERFORMANCE TEST SUITE[0m
+Bots per test:        4
+Test duration:        1.0 min
+Bot start stagger:    ~0.1s
+Bot time factor:      1.0
+
+[1m================================================================================[0m
+[1mTEST 1/1: Running with 4 concurrent bots[0m
+
+▶ Starting load test with 4 concurrent bots for 1.0 minutes...
+🤖 Running: 1 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 0:59 left                                                                       🤖 Running: 2 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 0:58 left                                                                       🤖 Running: 3 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 0:58 left                                                                       🤖 Running: 4 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 0:58 left                                                                       🤖 Running: 4 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 0:56 left                                                                       🤖 Running: 4 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 0:54 left                                                                       🤖 Running: 4 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 0:52 left                                                                       🤖 Running: 4 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 0:50 left                                                                       🤖 Running: 4 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 0:48 left                                                                       🤖 Running: 4 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 0:46 left                                                                       🤖 Running: 4 | ✓ Completed: 1 | ✗ Errors: 0 | ⏱ Avg: 13.5s | ⏳ 0:44 left                                                                        🤖 Running: 4 | ✓ Completed: 1 | ✗ Errors: 0 | ⏱ Avg: 13.5s | ⏳ 0:42 left                                                                        🤖 Running: 4 | ✓ Completed: 1 | ✗ Errors: 0 | ⏱ Avg: 13.5s | ⏳ 0:40 left                                                                        🤖 Running: 4 | ✓ Completed: 1 | ✗ Errors: 0 | ⏱ Avg: 13.5s | ⏳ 0:38 left                                                                        🤖 Running: 4 | ✓ Completed: 1 | ✗ Errors: 0 | ⏱ Avg: 13.5s | ⏳ 0:36 left                                                                        🤖 Running: 4 | ✓ Completed: 1 | ✗ Errors: 0 | ⏱ Avg: 13.5s | ⏳ 0:34 left                                                                        🤖 Running: 4 | ✓ Completed: 1 | ✗ Errors: 0 | ⏱ Avg: 13.5s | ⏳ 0:32 left                                                                        🤖 Running: 4 | ✓ Completed: 1 | ✗ Errors: 0 | ⏱ Avg: 13.5s | ⏳ 0:30 left                                                                        🤖 Running: 3 | ✓ Completed: 2 | ✗ Errors: 0 | ⏱ Avg: 20.6s | ⏳ 0:28 left                                                                        🤖 Running: 4 | ✓ Completed: 2 | ✗ Errors: 0 | ⏱ Avg: 20.6s | ⏳ 0:28 left                                                                        🤖 Running: 4 | ✓ Completed: 2 | ✗ Errors: 0 | ⏱ Avg: 20.6s | ⏳ 0:26 left                                                                        🤖 Running: 4 | ✓ Completed: 2 | ✗ Errors: 0 | ⏱ Avg: 20.6s | ⏳ 0:24 left                                                                        🤖 Running: 4 | ✓ Completed: 2 | ✗ Errors: 0 | ⏱ Avg: 20.6s | ⏳ 0:22 left                                                                        🤖 Running: 4 | ✓ Completed: 2 | ✗ Errors: 0 | ⏱ Avg: 20.6s | ⏳ 0:20 left                                                                        🤖 Running: 4 | ✓ Completed: 2 | ✗ Errors: 0 | ⏱ Avg: 20.6s | ⏳ 0:18 left                                                                        🤖 Running: 4 | ✓ Completed: 2 | ✗ Errors: 0 | ⏱ Avg: 20.6s | ⏳ 0:16 left                                                                        🤖 Running: 4 | ✓ Completed: 2 | ✗ Errors: 0 | ⏱ Avg: 20.6s | ⏳ 0:14 left                                                                        🤖 Running: 4 | ✓ Completed: 2 | ✗ Errors: 0 | ⏱ Avg: 20.6s | ⏳ 0:12 left                                                                        🤖 Running: 4 | ✓ Completed: 2 | ✗ Errors: 0 | ⏱ Avg: 20.6s | ⏳ 0:10 left                                                                        🤖 Running: 4 | ✓ Completed: 2 | ✗ Errors: 0 | ⏱ Avg: 20.6s | ⏳ 0:08 left                                                                        🤖 Running: 4 | ✓ Completed: 3 | ✗ Errors: 0 | ⏱ Avg: 20.4s | ⏳ 0:07 left                                                                        🤖 Running: 4 | ✓ Completed: 3 | ✗ Errors: 0 | ⏱ Avg: 20.4s | ⏳ 0:04 left                                                                        🤖 Running: 4 | ✓ Completed: 4 | ✗ Errors: 0 | ⏱ Avg: 28.5s | ⏳ 0:04 left                                                                        🤖 Running: 4 | ✓ Completed: 4 | ✗ Errors: 0 | ⏱ Avg: 28.5s | ⏳ 0:02 left                                                                        🤖 Running: 4 | ✓ Completed: 4 | ✗ Errors: 0 | ⏱ Avg: 28.5s | ⏳ 0:00 left                                                                                                                                                      
+[92m✓ Test completed[0m
+[1mTEST RESULTS (n=4 bots)[0m
+
+[1m  BOT OUTCOMES[0m
+  ------------------------------------
+  Bots started                 8
+  Completed successfully       4
+  Completed with error         0
+  Timed out (still running)    4
+  Completion rate            [93m50%[0m
+
+[1m  BOT RUNTIMES[0m
+  ------------------------------------
+  Test duration            61.1s
+  Avg runtime              28.1s
+  Avg runtime (succeeded)  28.5s
+  Avg runtime (timed out)  27.8s
+
+[1m  BOT INIT TIMES (n=8):[0m
+  ------------------------------------
+  Median           1.304s
+  95th percentile  1.528s
+  Max              1.528s
+
+[1m  REQUEST METRICS[0m
+  ------------------------------------
+  Total requests          72
+  Request errors           0
+  Throughput      1.18 req/s
+
+[1m  RESPONSE TIMES (n=72)[0m
+  ------------------------------------
+  Median           0.105s
+  95th percentile  0.112s
+  99th percentile  0.116s
+  Max              0.116s
+  Mean             0.071s
+  Std dev          0.043s
+
+[1m  WAIT PAGE TIMES (n=4 pages)[0m
+  ------------------------------------
+  Median           0.0s
+  95th percentile  0.0s
+  Max              0.0s
+
+[1m  TRIALS PER BOT (n=4 bots succeeded)[0m
+  ------------------------------------
+  Min     3
+  Median  3
+  Max     3
+
+[1m  ASYNC PROCESS TIMES, 1 workers[0m
+  ------------------------------------
+  No completed async processes.
+
+
+[1mCUMULATIVE PERFORMANCE TEST SUMMARY
+[0m
+  Resp Med — median HTTP response time for key endpoints (/timeline, /response)
+  Q Med all — median queue delay across all async processes
+  vs base — ratio to the first (lowest bot-count) row, if multiple counts are run
+
+    || Bots    Succeeded    Requests    Req/s    Resp Med (s)  Q Med all (s)
+  ---------  -----------  ----------  -------  --------------  ---------------
+          4            4          72      1.2           0.105  N/A
+
+Bot output log: /tmp/psynet_bots_pja8culg.log
+Performance results (JSON): /workspace/challenges/primary-color-rating/attempts/2026-08-19-18-54/artifacts/performance.json
+✓ Performance test completed
+✓ Server stopped (log: /tmp/psynet_server_c0_l5rjq.log)
+==== EXIT 0 ====

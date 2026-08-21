@@ -18,23 +18,33 @@ timestamped names such as `2026-06-01-10-10` for real attempts, and use an
 Each attempt should contain:
 
 ```text
+audit.json
 challenge/
 agent.json
 code/
-evidence/
+artifacts/
+analyses/
+logs/
+PLAN.md
 TIMELINE.md
 LEARNINGS.md
 EVALUATION.md
 ```
+
+New attempts treat the **attempt root as a PsyNet audit packet** with
+`extensions: ["psynetskills.challenge"]`. Historic attempts may still use
+`evidence/` instead of `artifacts/` / `analyses/` / `logs/`; the dashboard
+dual-reads both layouts. See `docs/audit.md`.
 
 `challenge/` snapshots the original challenge at the time of the attempt,
 including optional `CRITERIA.md` when it exists.
 `agent.json` records human author keys plus model, Cursor version, relevant
 skill commit, attempt start/end time, Cursor conversation ID when available,
 PsyNet checkout metadata, and optional derived cost metadata. `code/` contains
-the generated implementation. `evidence/` contains the materials used to
-evaluate whether the implementation worked.
-Agents should create `agent.json` near the beginning of the attempt. If the
+the generated implementation. `artifacts/` (legacy: `evidence/`) contains the
+materials used to evaluate whether the implementation worked.
+Agents should create `agent.json` and `audit.json` near the beginning of the
+attempt. If the
 attempt pauses before implementation is complete, keep `ended_at` as `null`; the
 validator treats that explicit state as in progress and does not require
 completion-only artifacts such as implemented code, evidence, or a copied
@@ -57,20 +67,24 @@ PsyNet experiment. In the standard case this means a self-contained experiment
 directory with the generated `experiment.py`, dependency files, static assets,
 and any short notes needed to reproduce the run.
 
-The `evidence/` directory should provide enough material for a reviewer to judge
+The `artifacts/` directory (legacy attempts: `evidence/`) should provide enough
+material for a reviewer to judge
 both participant-facing behavior and technical health. Use this standard form
 unless the challenge needs something more specific:
 
 ```text
-evidence/
+artifacts/
 participant.mp4
 screenshots/
 performance.json
 monitor.html
 data.zip
 simulated_data.zip
-analyses/
+analyses/                 # preferred at attempt root: analyses/
 ```
+
+Prefer `analyses/` and `logs/` at the attempt root (audit layout). Legacy
+attempts may nest analyses under `evidence/analyses/`.
 
 `participant.mp4` records the participant experience when video is the right
 evidence format. Drive the flow with Playwright at a readable pace and use
@@ -86,7 +100,7 @@ Store the Playwright participant-flow test with the experiment code, typically
 under `code/<slug>/tests/participant-flow.spec.js`, and make it assert the
 behavior shown in the screenshots or recording.
 To override filename-derived screenshot captions on the dashboard, add
-`evidence/screenshots/manifest.json` with a `captions` object mapping screenshot
+`artifacts/screenshots/manifest.json` with a `captions` object mapping screenshot
 paths to concise review labels.
 
 For challenge attempts, treat `psynet test local` and `psynet performance-test
@@ -100,21 +114,36 @@ psynet performance-test local \
   --n-bots 40 \
   --duration-minutes 5 \
   --time-factor 1.0 \
-  --json-output ../../evidence/performance.json
+  --audit ../..
 ```
 
-Adjust the JSON output path if needed. Include a command log in `evidence/` when
+`--audit ../..` writes `artifacts/performance.json` on the attempt packet and
+marks `performance_result` present. Include a command log in `logs/` (or
+legacy `evidence/`) when
 it helps reviewers understand what ran. If the full load test cannot run locally,
 say so in `EVALUATION.md` rather than presenting a one-bot smoke test as
 complete performance evidence.
+
+From the same experiment directory, generate the simulation export with:
+
+```bash
+psynet simulate --audit ../..
+```
+
+Bare `--audit` looks for `audit.json` in the current directory or `./audit/`.
+Challenge packets live at the attempt root, so `--audit ../..` is required when
+the working directory is `code/<slug>/`. That writes `artifacts/simulated_data.zip`
+on the attempt packet and marks `simulation_export` present.
+
 `monitor.html` snapshots the PsyNet dashboard monitor view. `data.zip` contains
-exported experiment data. `simulated_data.zip` contains the `psynet simulate`
+exported experiment data. `simulated_data.zip` contains the `psynet simulate --audit ../..`
 export used for analysis. `analyses/` contains the canonical
 `analysis.ipynb` notebook, which should read exported CSV data directly, show
 the data-wrangling code, display summary tables and plots inline, and provide a
-short interpretation. The dashboard renders `evidence/analyses/analysis.ipynb`
+short interpretation. The dashboard renders `analyses/analysis.ipynb` (or legacy
+`evidence/analyses/analysis.ipynb`)
 prominently near the top of the attempt page and falls back to the first
-notebook in `evidence/analyses/` for older attempts.
+notebook in the analyses directory for older attempts.
 
 Experiment implementation attempts should also include `REPORT.md` at the
 attempt root. The report should summarize the implementation, simulation,
@@ -122,8 +151,9 @@ analysis, validation, and any findings. If simulation, analysis, or the report
 cannot be completed, explain the blocker in `EVALUATION.md` rather than treating
 the attempt as complete.
 
-The dashboard publishes `evidence/data.zip`, but it does not publish other ZIP
-files from attempt `evidence/`, generated `code/`, or attempt `challenge/`
+The dashboard publishes `artifacts/data.zip` (legacy `evidence/data.zip`), but it
+does not publish other ZIP
+files from attempt evidence trees, generated `code/`, or attempt `challenge/`
 snapshot directories. Those ZIPs remain listed with size metadata so reviewers
 know they exist, but the static dashboard omits the bytes to avoid duplicating
 large implementation bundles and top-level challenge reference assets.
@@ -134,7 +164,7 @@ the `#plan` anchor. Agents should share the preview URL with that anchor after a
 successful preview build. If the preview build is unavailable, paste the plan
 text into the chat so the reviewer can still approve or revise it.
 
-Command logs may also be included in `evidence/` when they help reviewers
+Command logs may also be included in `logs/` when they help reviewers
 understand what ran and what failed. Keep logs concise when practical, and do
 not include custom or real credentials in logs or other artifacts.
 

@@ -25,6 +25,12 @@ from psynetsk_tools.authors import (
     validate_authors,
     validate_yaml_mapping,
 )
+from psynetsk_tools.challenge_audit import (
+    attempt_uses_audit_layout,
+    evidence_video_roots,
+    read_attempt_audit_manifest,
+    validate_challenge_extension_manifest,
+)
 from psynetsk_tools.learnings import (
     LEARNING_ACTION_RE,
     is_learning_actions_heading,
@@ -33,10 +39,19 @@ from psynetsk_tools.learnings import (
 )
 from psynetsk_tools.timeline import TIMELINE_ENTRY_RE
 
-SKILLS_ROOT = Path(".cursor") / "skills"
+SKILLS_ROOT = Path(".agents") / "skills"
+SKILL_DISCOVERY_ALIASES = (
+    Path(".cursor") / "skills",
+    Path(".claude") / "skills",
+    Path(".github") / "skills",
+)
 SKILL_NAME_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
+SKILL_NAME_MAX_LENGTH = 64
+SKILL_DESCRIPTION_MAX_LENGTH = 1024
+SKILL_COMPATIBILITY_MAX_LENGTH = 500
+SKILL_LINE_COUNT_WARNING = 250
 SKILL_REFERENCE_RE = re.compile(
-    r"(?<![\w./-])((?:(?P<skill>[a-z0-9-]+)/)?references/[A-Za-z0-9_.-]+\.md)"
+    r"(?<![\w./-])((?:(?P<skill>[a-z0-9-]+)/)?references/[A-Za-z0-9_.-]+\.(?:md|ya?ml|py))"
 )
 PSYNET_AGENT_REQUIRED_FIELDS = {
     "checkout_path": str,
@@ -419,7 +434,12 @@ def referenced_skill_reference_paths(
         reference = Path(match.group(1))
         skill_name = match.group("skill")
         if skill_name:
-            paths.add(skills_dir / reference)
+            candidates = (
+                skills_dir / "experiment" / reference,
+                skills_dir / reference,
+            )
+            resolved = next((candidate for candidate in candidates if candidate.exists()), candidates[0])
+            paths.add(resolved)
         else:
             paths.add(current_skill_dir / reference)
     return paths
@@ -431,7 +451,15 @@ def validate_skill_references(skill_dir: Path, skills_dir: Path) -> list[str]:
     references_dir = skill_dir / "references"
     problems: list[str] = []
     skill_file = skill_dir / "SKILL.md"
-    reference_files = sorted(references_dir.glob("*.md")) if references_dir.exists() else []
+    reference_files = (
+        sorted(
+            path
+            for path in references_dir.iterdir()
+            if path.is_file() and path.suffix in {".md", ".yaml", ".yml", ".py"}
+        )
+        if references_dir.exists()
+        else []
+    )
     known_references = set(reference_files)
     reachable = {skill_file}
     queue = [skill_file]
@@ -462,12 +490,64 @@ def validate_skill_references(skill_dir: Path, skills_dir: Path) -> list[str]:
     return problems
 
 
-def validate_skills(
-    root: Path,
-    registry: dict[str, Author] | None = None,
-) -> list[str]:
+def run_skills_ref_validate(skill_dir: Path) -> list[str]:
+    """Run the official skills-ref validator when available."""
+
+    try:
+        completed = subprocess.run(
+            ["skills-ref", "validate", str(skill_dir)],
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+    except FileNotFoundError:
+        return []
+    if completed.returncode == 0:
+        return []
+    output = (completed.stdout + completed.stderr).strip()
+    return [f"{skill_dir}: skills-ref validate failed: {output or 'non-zero exit'}"]
+
+
+def validate_skill_discovery_aliases(root: Path) -> list[str]:
+    """Require client-specific skill paths to symlink to the canonical tree."""
+
+    problems: list[str] = []
+    canonical = root / SKILLS_ROOT
+    if not canonical.is_dir() or canonical.is_symlink():
+        return problems
+
+    try:
+        canonical_resolved = canonical.resolve()
+    except OSError as exc:
+        return [f"{canonical}: cannot resolve canonical skills directory: {exc}"]
+
+    for alias in SKILL_DISCOVERY_ALIASES:
+        alias_path = root / alias
+        if not alias_path.exists() and not alias_path.is_symlink():
+            problems.append(
+                f"{alias_path}: missing skill discovery alias; "
+                f"create a relative symlink to {SKILLS_ROOT.as_posix()}"
+            )
+            continue
+        if not alias_path.is_symlink():
+            problems.append(
+                f"{alias_path}: must be a relative symlink to {SKILLS_ROOT.as_posix()}"
+            )
+            continue
+        try:
+            if alias_path.resolve() != canonical_resolved:
+                problems.append(
+                    f"{alias_path}: symlink must resolve to {SKILLS_ROOT.as_posix()}"
+                )
+        except OSError as exc:
+            problems.append(f"{alias_path}: cannot resolve skill discovery alias: {exc}")
+    return problems
+
+
+def validate_skills(root: Path) -> list[str]:
     """Validate all skill folders."""
     problems: list[str] = []
+    problems.extend(validate_skill_discovery_aliases(root))
     skills_dir = root / SKILLS_ROOT
     if not skills_dir.exists():
         return [f"{skills_dir}: missing skills directory"]
@@ -491,17 +571,48 @@ def validate_skills(
             problems.append(f"{skill_file}: name must match folder {skill_dir.name!r}")
         elif not SKILL_NAME_RE.fullmatch(name):
             problems.append(f"{skill_file}: invalid skill name {name!r}")
+        elif len(name) > SKILL_NAME_MAX_LENGTH:
+            problems.append(
+                f"{skill_file}: name exceeds {SKILL_NAME_MAX_LENGTH} characters"
+            )
 
         if not isinstance(description, str) or not description:
             problems.append(f"{skill_file}: missing description")
-        elif len(description) > 1024:
-            problems.append(f"{skill_file}: description exceeds 1024 characters")
-        problems.extend(
-            validate_author_references(skill_file, frontmatter.get("authors"), registry)
-        )
+        elif len(description) > SKILL_DESCRIPTION_MAX_LENGTH:
+            problems.append(
+                f"{skill_file}: description exceeds {SKILL_DESCRIPTION_MAX_LENGTH} characters"
+            )
+
+        compatibility = frontmatter.get("compatibility")
+        if compatibility is not None:
+            if not isinstance(compatibility, str) or not compatibility.strip():
+                problems.append(f"{skill_file}: compatibility must be a non-empty string")
+            elif len(compatibility) > SKILL_COMPATIBILITY_MAX_LENGTH:
+                problems.append(
+                    f"{skill_file}: compatibility exceeds {SKILL_COMPATIBILITY_MAX_LENGTH} characters"
+                )
+
+        if "review_status" in frontmatter:
+            problems.append(
+                f"{skill_file}: review_status is not a skill frontmatter field"
+            )
+
         problems.extend(validate_skill_references(skill_dir, skills_dir))
+        problems.extend(run_skills_ref_validate(skill_dir))
 
     return problems
+
+
+def attempt_forward_cutover_warnings(attempt_dir: Path) -> list[str]:
+    """Return soft warnings for forward-only audit cutover."""
+
+    if attempt_is_in_progress(attempt_dir) and not attempt_uses_audit_layout(attempt_dir):
+        return [
+            f"{attempt_dir}: in-progress attempt is missing audit.json; "
+            "new attempts should initialize the attempt root as an audit packet "
+            "with extensions including psynetskills.challenge",
+        ]
+    return []
 
 
 def validate_attempt(
@@ -512,12 +623,30 @@ def validate_attempt(
     """Validate one challenge attempt folder."""
     problems: list[str] = []
     in_progress = attempt_is_in_progress(attempt_dir)
+    uses_audit = attempt_uses_audit_layout(attempt_dir)
     required = ["challenge", "agent.json", "EVALUATION.md"]
     if not in_progress:
-        required.extend(["code", "evidence"])
+        required.append("code")
+        if uses_audit:
+            required.append("artifacts")
+        else:
+            required.append("evidence")
     for name in required:
         if not (attempt_dir / name).exists():
             problems.append(f"{attempt_dir}: missing {name}")
+
+    if uses_audit:
+        try:
+            manifest = read_attempt_audit_manifest(attempt_dir)
+        except (OSError, ValueError, json.JSONDecodeError) as exc:
+            problems.append(f"{attempt_dir / 'audit.json'}: {exc}")
+            manifest = None
+        if manifest is not None:
+            problems.extend(
+                validate_challenge_extension_manifest(attempt_dir, manifest),
+            )
+            if not (attempt_dir / "PLAN.md").exists():
+                problems.append(f"{attempt_dir}: missing PLAN.md for audit-layout attempt")
 
     agent_file = attempt_dir / "agent.json"
     if agent_file.exists():
@@ -555,12 +684,55 @@ def validate_attempt(
     elif not attempt_dir.name.startswith("example-"):
         problems.append(f"{attempt_dir}: missing TIMELINE.md")
 
-    evidence_dir = attempt_dir / "evidence"
-    if evidence_dir.exists():
-        for video_file in sorted(evidence_dir.rglob("*.mp4")):
+    for evidence_root in evidence_video_roots(attempt_dir):
+        if not evidence_root.exists():
+            continue
+        for video_file in sorted(evidence_root.rglob("*.mp4")):
             problems.extend(validate_evidence_video(video_file))
 
     return problems
+
+
+def collect_skill_warnings(root: Path) -> list[str]:
+    """Return soft warnings for oversized skill files."""
+
+    warnings: list[str] = []
+    skills_dir = root / SKILLS_ROOT
+    if not skills_dir.exists():
+        return warnings
+    for skill_dir in sorted(path for path in skills_dir.iterdir() if path.is_dir()):
+        skill_file = skill_dir / "SKILL.md"
+        if not skill_file.exists():
+            continue
+        line_count = len(skill_file.read_text(encoding="utf-8").splitlines())
+        if line_count > SKILL_LINE_COUNT_WARNING:
+            warnings.append(
+                f"{skill_file}: SKILL.md has {line_count} lines; "
+                f"consider splitting detail into references/ "
+                f"(warns above {SKILL_LINE_COUNT_WARNING})"
+            )
+    return warnings
+
+
+def collect_repository_warnings(root: Path) -> list[str]:
+    """Collect non-fatal repository validation warnings."""
+
+    warnings: list[str] = []
+    warnings.extend(collect_skill_warnings(root))
+    challenges_dir = root / "challenges"
+    if not challenges_dir.exists():
+        return warnings
+    for challenge_dir in sorted(
+        path for path in challenges_dir.iterdir() if path.is_dir()
+    ):
+        attempts_dir = challenge_dir / "attempts"
+        if not attempts_dir.exists():
+            continue
+        for attempt_dir in sorted(
+            path for path in attempts_dir.iterdir() if path.is_dir()
+        ):
+            warnings.extend(attempt_forward_cutover_warnings(attempt_dir))
+    return warnings
 
 
 def validate_challenges(
@@ -734,7 +906,7 @@ def validate_repository(root: Path) -> list[str]:
     registry, author_problems = validate_authors(root)
     problems.extend(author_problems)
     problems.extend(validate_docs(root))
-    problems.extend(validate_skills(root, registry))
+    problems.extend(validate_skills(root))
     problems.extend(validate_challenges(root, registry))
     problems.extend(validate_actions_review(root))
     return problems
@@ -756,6 +928,9 @@ def build_parser() -> argparse.ArgumentParser:
 def main(argv: list[str] | None = None) -> int:
     """Run repository validation."""
     args = build_parser().parse_args(argv)
+    warnings = collect_repository_warnings(args.root)
+    for warning in warnings:
+        print(f"Warning: {warning}", file=sys.stderr)
     problems = validate_repository(args.root)
     if problems:
         for problem in problems:

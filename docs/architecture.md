@@ -7,13 +7,11 @@ combines source artifacts, generated dashboard inputs, and validation tooling.
 ## Main directories
 
 ```text
-.cursor/skills/  Agent Skills-compatible folders, each with a SKILL.md file.
+.agents/skills/  Canonical Agent Skills tree (symlinked from .claude, .cursor, .github).
 challenges/      Challenge definitions, criteria, references, and attempts.
 dashboard/       Hugo site layouts, content mount, static CSS, and generated inputs.
 docs/            Detailed repository specifications for contributors and agents.
-examples/        Example review bundle manifests and other lightweight fixtures.
 psynetsk_tools/  Python validation and dashboard export tools.
-schemas/         Draft machine-readable schemas for portable review bundle artifacts.
 tests/           Pytest coverage for repository tooling.
 public/          Generated Hugo output, ignored by default.
 ```
@@ -32,7 +30,7 @@ The dashboard is built from ordinary repository files:
 5. Hugo renders the final static site into `public/`.
 
 Generated dashboard inputs are ignored by Git. Source files such as `README.md`,
-`.cursor/skills/*/SKILL.md`, `challenges/*/INSTRUCTIONS.md`, and attempt
+`.agents/skills/*/SKILL.md`, `challenges/*/INSTRUCTIONS.md`, and attempt
 artifacts are the maintained state.
 
 The Actions tab is deterministic at build time. The maintained
@@ -52,3 +50,9 @@ PsyNet itself is expected at `~/PsyNet` when implementing experiments. PsyNet
 framework changes should be made in that checkout and submitted upstream; this
 repository should record only challenge definitions, attempts, evidence, skills,
 and documentation needed for the workshop loop.
+
+Experiment readiness audits (`psynet audit`, `psynet.audit`) live in the
+PsyNet checkout. Challenge attempts use the attempt root as an audit packet
+with the `psynetskills.challenge` extension; this repository depends on
+`psynet` for shared evidence HTML and dual-reads historic `evidence/`
+attempts.

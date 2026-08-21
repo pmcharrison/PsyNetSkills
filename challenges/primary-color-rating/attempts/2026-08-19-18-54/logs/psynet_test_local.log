@@ -1,0 +1,1014 @@
+==== PSYNET TEST LOCAL 2026-08-19T18:57:45Z ====
+Checking local PostgreSQL and Redis...
+  PostgreSQL: OK (reachable)
+  Redis: OK (responded to PING)
+============================= test session starts ==============================
+platform linux -- Python 3.13.14, pytest-9.1.1, pluggy-1.6.0
+rootdir: /workspace/challenges/primary-color-rating/attempts/2026-08-19-18-54/code/primary_color_rating
+configfile: pytest.ini
+plugins: mock-3.15.1, dallinger-12.2.1, psynet-13.4.0a0, timeout-2.4.0, dependency-0.6.1, Faker-40.28.1
+collected 1 item
+
+test.py::test_experiment[/workspace/challenges/primary-color-rating/attempts/2026-08-19-18-54/code/primary_color_rating] ERROR [100%]
+
+==================================== ERRORS ====================================
+_ ERROR at setup of test_experiment[/workspace/challenges/primary-color-rating/attempts/2026-08-19-18-54/code/primary_color_rating] _
+
+request = <SubRequest 'debug_experiment' for <Function test_experiment[/workspace/challenges/primary-color-rating/attempts/2026-08-19-18-54/code/primary_color_rating]>>
+env = {'SHELL': '/bin/bash', 'GIT_LFS_SKIP_SMUDGE': '1', '__CURSOR_SANDBOX_ENV_RESTORE': "builtin unset CURSOR_CONVERSATION_...N_ID='bc-f3d792a7-e069-53d8-ae5e-4d393474f83a'", 'DALLINGER_FORK_URL': 'https://github.com/pmcharrison/Dallinger', ...}
+clear_workers = None
+in_experiment_directory = '/workspace/challenges/primary-color-rating/attempts/2026-08-19-18-54/code/primary_color_rating'
+db_session = <sqlalchemy.orm.scoping.scoped_session object at 0x7f01db7438c0>
+skip_constraints_check = None
+
+    @pytest.fixture(scope="class")
+    def debug_experiment(
+        request,
+        env,
+        clear_workers,
+        in_experiment_directory,
+        db_session,
+        skip_constraints_check,
+    ):
+        """
+        This overrides the debug_experiment fixture in Dallinger to
+        use PsyNet debug instead. Note that we use legacy mode for now.
+        """
+        print(f"Launching experiment in directory '{in_experiment_directory}'...")
+        # db_session already reset the database for this test class. Brief pause so
+        # any lingering teardown from the previous class can finish before launch.
+        time.sleep(0.5)
+        kill_psynet_chrome_processes()
+        kill_chromedriver_processes()
+    
+        timeout = 60
+    
+        get_experiment()
+    
+        config = get_config()
+        if not config.ready:
+            config.load()
+    
+        p = pexpect.spawn(
+            "psynet",
+            ["debug", "local", "--legacy", "--no-browsers"],
+            env={
+                **env,
+                "dashboard_user": "test_admin",
+                "dashboard_password": "test_password",
+            },
+            encoding="utf-8",
+        )
+        patch_pexpect_error_reporter(p)
+        p.logfile = sys.stdout
+        p.timeout = timeout
+    
+        try:
+>           p.expect_exact("Experiment launch complete!", timeout=timeout)
+
+/home/ubuntu/PsyNet/psynet/pytest_psynet.py:492: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+.venv/lib/python3.13/site-packages/pexpect/spawnbase.py:432: in expect_exact
+    return exp.expect_loop(timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/pexpect/expect.py:181: in expect_loop
+    return self.timeout(e)
+           ^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <pexpect.expect.Expecter object at 0x7f01c92852b0>
+err = TIMEOUT('Timeout exceeded.')
+
+    def timeout(self, err=None):
+        spawn = self.spawn
+    
+        spawn.before = spawn._before.getvalue()
+        spawn.after = TIMEOUT
+        index = self.searcher.timeout_index
+        if index >= 0:
+            spawn.match = TIMEOUT
+            spawn.match_index = index
+            return index
+        else:
+            spawn.match = None
+            spawn.match_index = None
+            msg = str(spawn)
+            msg += '\nsearcher: %s' % self.searcher
+            if err is not None:
+                msg = str(err) + '\n' + msg
+    
+            exc = TIMEOUT(msg)
+            exc.__cause__ = None    # in Python 3.x we can use "raise exc from None"
+>           raise exc
+E           pexpect.exceptions.TIMEOUT: Timeout exceeded.
+E           <pexpect.pty_spawn.spawn object at 0x7f01c9284ec0>
+E           command: /workspace/challenges/primary-color-rating/attempts/2026-08-19-18-54/code/primary_color_rating/.venv/bin/psynet
+E           args: [b'/workspace/challenges/primary-color-rating/attempts/2026-08-19-18-54/code/primary_color_rating/.venv/bin/psynet', b'debug', b'local', b'--legacy', b'--no-browsers']
+E           buffer (last 2000 chars): 'xited with exit code null\r\n'
+E           before (last 2000 chars): "[DEP0060] DeprecationWarning: The `util._extend` API is deprecated. Please use Object.assign() instead.\r\n(Use `node --trace-deprecation ...` to show where the warning was created)\r\n6:57:56 PM web.1    |  [2026-08-19 18:57:56 +0000] [56876] [INFO] Starting gunicorn 26.0.0\r\n6:57:56 PM web.1    |  [2026-08-19 18:57:56 +0000] [56876] [ERROR] Connection in use: ('0.0.0.0', 5000)\r\n6:57:56 PM web.1    |  [2026-08-19 18:57:56 +0000] [56876] [ERROR] connection to ('0.0.0.0', 5000) failed: [Errno 98] Address already in use\r\n6:57:57 PM web.1    |  [2026-08-19 18:57:57 +0000] [56876] [ERROR] Connection in use: ('0.0.0.0', 5000)\r\n6:57:57 PM web.1    |  [2026-08-19 18:57:57 +0000] [56876] [ERROR] connection to ('0.0.0.0', 5000) failed: [Errno 98] Address already in use\r\n6:57:58 PM web.1    |  [2026-08-19 18:57:58 +0000] [56876] [ERROR] Connection in use: ('0.0.0.0', 5000)\r\n6:57:58 PM web.1    |  [2026-08-19 18:57:58 +0000] [56876] [ERROR] connection to ('0.0.0.0', 5000) failed: [Errno 98] Address already in use\r\n6:57:59 PM web.1    |  [2026-08-19 18:57:59 +0000] [56876] [ERROR] Connection in use: ('0.0.0.0', 5000)\r\n6:57:59 PM web.1    |  [2026-08-19 18:57:59 +0000] [56876] [ERROR] connection to ('0.0.0.0', 5000) failed: [Errno 98] Address already in use\r\n6:58:00 PM web.1    |  [2026-08-19 18:58:00 +0000] [56876] [ERROR] Connection in use: ('0.0.0.0', 5000)\r\n6:58:00 PM web.1    |  [2026-08-19 18:58:00 +0000] [56876] [ERROR] connection to ('0.0.0.0', 5000) failed: [Errno 98] Address already in use\r\n6:58:01 PM web.1    |  [2026-08-19 18:58:01 +0000] [56876] [ERROR] Can't connect to ('0.0.0.0', 5000)\r\n6:58:01 PM web.1    |  /workspace/challenges/primary-color-rating/attempts/2026-08-19-18-54/code/primary_color_rating/.venv/lib/python3.13/site-packages/gunicorn/sock.py:217: ResourceWarning: unclosed <socket object, fd=9, family=2, type=1, proto=0>\r\n6:58:01 PM web.1    |    time.sleep(1)\r\n[DONE] Killing all processes with signal  SIGINT\r\n6:58:01 PM web.1    Exited with exit code null\r\n"
+E           after: <class 'pexpect.exceptions.TIMEOUT'>
+E           match: None
+E           match_index: None
+E           exitstatus: None
+E           flag_eof: False
+E           pid: 56815
+E           child_fd: 19
+E           closed: False
+E           timeout: 60
+E           delimiter: <class 'pexpect.exceptions.EOF'>
+E           logfile: <EncodedFile name="<_io.FileIO name=9 mode='rb+' closefd=True>" mode='r+' encoding='utf-8'>
+E           logfile_read: None
+E           logfile_send: None
+E           maxread: 2000
+E           ignorecase: False
+E           searchwindowsize: None
+E           delaybeforesend: 0.05
+E           delayafterclose: 0.1
+E           delayafterterminate: 0.1
+E           searcher: searcher_string:
+E               0: 'Experiment launch complete!'
+
+.venv/lib/python3.13/site-packages/pexpect/expect.py:144: TIMEOUT
+---------------------------- Captured stdout setup -----------------------------
+Nothing to scaffold; experiment boilerplate is already present.
+Launching experiment in directory '/workspace/challenges/primary-color-rating/attempts/2026-08-19-18-54/code/primary_color_rating'...
+Checking local PostgreSQL and Redis...
+  PostgreSQL: OK (reachable)
+  Redis: OK (responded to PING)
+
+❯❯ Experiment directory size: 0.26 MB.
+Creating networks:   0%|                                 | 0/3 [00:00<?, ?it/s]Creating networks: 100%|███████████████████████| 3/3 [00:00<00:00, 4732.20it/s]
+Staging assets:   0%|                                    | 0/3 [00:00<?, ?it/s]Staging assets: 100%|████████████████████████| 3/3 [00:00<00:00, 142987.64it/s]
+✓ config.txt is PRESENT
+✓ experiment.py is PRESENT
+✓ Size OK at 0MB (max is 256MB)
+✓ experiment.py defines 1 experiment
+✓ no file conflicts
+
+
+❯❯ Experiment UID: 6003815a-0fa6-aaf4-1a62-36a39a8e0144
+Deployment temp directory: /tmp/tmp1_35tg41/6003815a-0fa6-aaf4-1a62-36a39a8e0144
+
+❯❯ Starting up the Heroku Local server...
+ ›   Warning: heroku update available from 11.5.0 to 11.10.0.
+
+❯❯ Server is running on http://localhost:5000. Press Ctrl+C to exit.
+
+❯❯ Launching the experiment...
+
+❯❯ Initial recruitment list:
+http://localhost:5000/ad?recruiter=hotair&assignmentId=CZFJ8S&hitId=EXGEN6&workerId=S3BCY6&mode=debug
+Additional details:
+
+Single recruitment link: http://localhost:5000/ad?recruiter=hotair&generate_tokens=1&mode=debug
+
+Recruitment requests will open browser windows automatically.
+
+❯❯ Experiment dashboard: http://localhost:5000/dashboard/
+
+❯❯ Dashboard user: test_admin password: test_password
+
+❯❯ Monitoring the Heroku Local server for recruitment or completion...
+(node:56867) [DEP0060] DeprecationWarning: The `util._extend` API is deprecated. Please use Object.assign() instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+6:57:56 PM web.1    |  [2026-08-19 18:57:56 +0000] [56876] [INFO] Starting gunicorn 26.0.0
+6:57:56 PM web.1    |  [2026-08-19 18:57:56 +0000] [56876] [ERROR] Connection in use: ('0.0.0.0', 5000)
+6:57:56 PM web.1    |  [2026-08-19 18:57:56 +0000] [56876] [ERROR] connection to ('0.0.0.0', 5000) failed: [Errno 98] Address already in use
+6:57:57 PM web.1    |  [2026-08-19 18:57:57 +0000] [56876] [ERROR] Connection in use: ('0.0.0.0', 5000)
+6:57:57 PM web.1    |  [2026-08-19 18:57:57 +0000] [56876] [ERROR] connection to ('0.0.0.0', 5000) failed: [Errno 98] Address already in use
+6:57:58 PM web.1    |  [2026-08-19 18:57:58 +0000] [56876] [ERROR] Connection in use: ('0.0.0.0', 5000)
+6:57:58 PM web.1    |  [2026-08-19 18:57:58 +0000] [56876] [ERROR] connection to ('0.0.0.0', 5000) failed: [Errno 98] Address already in use
+6:57:59 PM web.1    |  [2026-08-19 18:57:59 +0000] [56876] [ERROR] Connection in use: ('0.0.0.0', 5000)
+6:57:59 PM web.1    |  [2026-08-19 18:57:59 +0000] [56876] [ERROR] connection to ('0.0.0.0', 5000) failed: [Errno 98] Address already in use
+6:58:00 PM web.1    |  [2026-08-19 18:58:00 +0000] [56876] [ERROR] Connection in use: ('0.0.0.0', 5000)
+6:58:00 PM web.1    |  [2026-08-19 18:58:00 +0000] [56876] [ERROR] connection to ('0.0.0.0', 5000) failed: [Errno 98] Address already in use
+6:58:01 PM web.1    |  [2026-08-19 18:58:01 +0000] [56876] [ERROR] Can't connect to ('0.0.0.0', 5000)
+6:58:01 PM web.1    |  /workspace/challenges/primary-color-rating/attempts/2026-08-19-18-54/code/primary_color_rating/.venv/lib/python3.13/site-packages/gunicorn/sock.py:217: ResourceWarning: unclosed <socket object, fd=9, family=2, type=1, proto=0>
+6:58:01 PM web.1    |    time.sleep(1)
+[DONE] Killing all processes with signal  SIGINT
+6:58:01 PM web.1    Exited with exit code null
+^C
+❯❯ Completed debugging of experiment with id 6003815a-0fa6-aaf4-1a62-36a39a8e0144
+
+❯❯ Cleaning up local Heroku process...
+
+❯❯ Local Heroku process terminated.
+=========================== short test summary info ============================
+ERROR test.py::test_experiment[/workspace/challenges/primary-color-rating/attempts/2026-08-19-18-54/code/primary_color_rating]
+========================= 1 error in 63.04s (0:01:03) ==========================
+==== PSYNET TEST LOCAL RETRY 2026-08-19T18:59:11Z ====
+Checking local PostgreSQL and Redis...
+  PostgreSQL: OK (reachable)
+  Redis: OK (responded to PING)
+============================= test session starts ==============================
+platform linux -- Python 3.13.14, pytest-9.1.1, pluggy-1.6.0
+rootdir: /workspace/challenges/primary-color-rating/attempts/2026-08-19-18-54/code/primary_color_rating
+configfile: pytest.ini
+plugins: mock-3.15.1, dallinger-12.2.1, psynet-13.4.0a0, timeout-2.4.0, dependency-0.6.1, Faker-40.28.1
+collected 1 item
+
+test.py::test_experiment[/workspace/challenges/primary-color-rating/attempts/2026-08-19-18-54/code/primary_color_rating] 
+-------------------------------- live log call ---------------------------------
+INFO     psynet:experiment.py:1398 Testing experiment with 8 serial bot(s)...
+INFO     psynet:bot.py:74 Waiting for experiment launch to complete....
+INFO     psynet:bot.py:37 Initializing bot with worker ID 0d6ae1fa-0b95-4206-9d34-a10ebcb1c41e.
+INFO     psynet:bot.py:74 Waiting for experiment launch to complete....
+INFO     psynet:bot.py:37 Initializing bot with worker ID 37c86f36-f696-4aa4-b94a-4f437e5dea38.
+INFO     psynet:bot.py:74 Waiting for experiment launch to complete....
+INFO     psynet:bot.py:37 Initializing bot with worker ID aeb78493-e566-49fa-8433-dc29b39795d3.
+INFO     psynet:bot.py:74 Waiting for experiment launch to complete....
+INFO     psynet:bot.py:37 Initializing bot with worker ID 61a4b581-ad8b-4449-8c16-62d84515e1bb.
+INFO     psynet:bot.py:74 Waiting for experiment launch to complete....
+INFO     psynet:bot.py:37 Initializing bot with worker ID 4054b455-cb03-4696-91ad-ae4e976deb41.
+INFO     psynet:bot.py:74 Waiting for experiment launch to complete....
+INFO     psynet:bot.py:37 Initializing bot with worker ID fbf30c87-3753-4885-b2b7-a23e74eab41c.
+INFO     psynet:bot.py:74 Waiting for experiment launch to complete....
+INFO     psynet:bot.py:37 Initializing bot with worker ID 96944421-b0a1-4a9c-9a83-465170d3c0f2.
+INFO     psynet:bot.py:74 Waiting for experiment launch to complete....
+INFO     psynet:bot.py:37 Initializing bot with worker ID c7a5ad79-6e2e-4025-9729-dafe3792d948.
+INFO     psynet:participant.py:1125 ParticipantDriver 1 has finished the experiment (took 7 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 0.861 seconds).
+INFO     psynet:participant.py:1125 ParticipantDriver 2 has finished the experiment (took 7 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 0.815 seconds).
+INFO     psynet:participant.py:1125 ParticipantDriver 3 has finished the experiment (took 7 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 0.827 seconds).
+INFO     psynet:participant.py:1125 ParticipantDriver 4 has finished the experiment (took 7 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 0.824 seconds).
+INFO     psynet:participant.py:1125 ParticipantDriver 5 has finished the experiment (took 7 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 0.821 seconds).
+INFO     psynet:participant.py:1125 ParticipantDriver 6 has finished the experiment (took 7 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 0.822 seconds).
+INFO     psynet:participant.py:1125 ParticipantDriver 7 has finished the experiment (took 7 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 0.815 seconds).
+INFO     psynet:participant.py:1125 ParticipantDriver 8 has finished the experiment (took 7 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 0.814 seconds).
+ERROR    dallinger.db:db.py:112 Exception during scoped worker transaction, rolling back.
+Traceback (most recent call last):
+  File "/workspace/challenges/primary-color-rating/attempts/2026-08-19-18-54/code/primary_color_rating/.venv/lib/python3.13/site-packages/dallinger/db.py", line 105, in sessions_scope
+    yield session_
+  File "/home/ubuntu/PsyNet/psynet/db.py", line 31, in transaction
+    yield
+  File "/home/ubuntu/PsyNet/psynet/experiment.py", line 1407, in _test_experiment_serial
+    self.test_check_bots(bots)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/home/ubuntu/PsyNet/psynet/experiment.py", line 1444, in test_check_bots
+    self.test_check_bot(b)
+    ~~~~~~~~~~~~~~~~~~~^^^
+  File "/workspace/challenges/primary-color-rating/attempts/2026-08-19-18-54/code/primary_color_rating/experiment.py", line 72, in test_check_bot
+    assert trial.answer in {1, 2, 3, 4, 5, 6, 7}
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: unhashable type: 'dict'
+FAILED                                                                   [100%]
+
+=================================== FAILURES ===================================
+_ test_experiment[/workspace/challenges/primary-color-rating/attempts/2026-08-19-18-54/code/primary_color_rating] _
+
+launched_experiment = <dallinger_experiment.experiment.Exp object at 0x7f83ee7f3e00>
+
+    @pytest.mark.parametrize("experiment_directory", [experiment_dir], indirect=True)
+    def test_experiment(launched_experiment):
+        # NOTE:
+        # If pytest reports a failure and prints these lines in your traceback
+        # without printing the actual lines within `test_experiment` that raised the error,
+        # you may be suffering from a bug in PyCharm's test reporting. To fix this,
+        # we recommend either running the test externally (`psynet test local`)
+        # or editing your PyCharm run configuration to add `--tb=short` to your additional
+        # arguments. This should ensure that the full traceback is printed.
+>       launched_experiment.test_experiment()
+
+test.py:31: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/home/ubuntu/PsyNet/psynet/experiment.py:1348: in test_experiment
+    self._test_experiment_serial()
+/home/ubuntu/PsyNet/psynet/experiment.py:1407: in _test_experiment_serial
+    self.test_check_bots(bots)
+/home/ubuntu/PsyNet/psynet/experiment.py:1444: in test_check_bots
+    self.test_check_bot(b)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <dallinger_experiment.experiment.Exp object at 0x7f83ee7f3e00>
+bot = Participant-?-Bot, kwargs = {}
+
+    def test_check_bot(self, bot: Bot, **kwargs):
+        assert not bot.failed
+        trials = list(bot.alive_trials)
+        assert len(trials) == 3
+        names = {trial.definition["color_name"] for trial in trials}
+        assert names == {"red", "green", "blue"}
+        for trial in trials:
+>           assert trial.answer in {1, 2, 3, 4, 5, 6, 7}
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           TypeError: unhashable type: 'dict'
+
+experiment.py:72: TypeError
+---------------------------- Captured stdout setup -----------------------------
+Nothing to scaffold; experiment boilerplate is already present.
+Launching experiment in directory '/workspace/challenges/primary-color-rating/attempts/2026-08-19-18-54/code/primary_color_rating'...
+Checking local PostgreSQL and Redis...
+  PostgreSQL: OK (reachable)
+  Redis: OK (responded to PING)
+
+❯❯ Experiment directory size: 0.26 MB.
+Creating networks:   0%|                                 | 0/3 [00:00<?, ?it/s]Creating networks: 100%|███████████████████████| 3/3 [00:00<00:00, 3806.08it/s]
+Staging assets:   0%|                                    | 0/3 [00:00<?, ?it/s]Staging assets: 100%|████████████████████████| 3/3 [00:00<00:00, 146312.93it/s]
+✓ config.txt is PRESENT
+✓ experiment.py is PRESENT
+✓ Size OK at 0MB (max is 256MB)
+✓ experiment.py defines 1 experiment
+✓ no file conflicts
+
+
+❯❯ Experiment UID: 7c54f0ac-9ee5-8e03-a191-eb8879c70e7e
+Deployment temp directory: /tmp/tmp42bn4wd7/7c54f0ac-9ee5-8e03-a191-eb8879c70e7e
+
+❯❯ Starting up the Heroku Local server...
+ ›   Warning: heroku update available from 11.5.0 to 11.10.0.
+(node:57077) [DEP0060] DeprecationWarning: The `util._extend` API is deprecated. Please use Object.assign() instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+6:59:21 PM web.1    |  [2026-08-19 18:59:21 +0000] [57086] [INFO] Starting gunicorn 26.0.0
+
+❯❯ Server is running on http://localhost:5000. Press Ctrl+C to exit.
+
+❯❯ Launching the experiment...
+
+❯❯ Initial recruitment list:
+http://localhost:5000/ad?recruiter=hotair&assignmentId=UW6HVJ&hitId=K61R2E&workerId=GX77D9&mode=debug
+Additional details:
+
+Single recruitment link: http://localhost:5000/ad?recruiter=hotair&generate_tokens=1&mode=debug
+
+Recruitment requests will open browser windows automatically.
+
+❯❯ Experiment dashboard: http://localhost:5000/dashboard/
+
+❯❯ Dashboard user: test_admin password: test_password
+
+❯❯ Monitoring the Heroku Local server for recruitment or completion...
+6:59:21 PM web.1    |  [2026-08-19 18:59:21 +0000] [57086] [INFO] Listening at: http://0.0.0.0:5000 (57086)
+6:59:21 PM web.1    |  [2026-08-19 18:59:21 +0000] [57086] [INFO] Using worker: gevent
+6:59:21 PM web.1    |  2026-08-19 18:59:21,575 Ready.
+6:59:21 PM web.1    |  [2026-08-19 18:59:21 +0000] [57109] [INFO] Booting worker with pid: 57109
+6:59:21 PM web.1    |  [2026-08-19 18:59:21 +0000] [57086] [INFO] Control socket listening at /home/ubuntu/.gunicorn/gunicorn.ctl
+6:59:21 PM web.1    |  2026-08-19 18:59:21,661 A worker restarted (new pid: 57109). Please check the logs to find out why ⚠️
+6:59:22 PM web.1    |  2026-08-19 18:59:22,444 Launched experiment "Primary color rating" (`7ae72ea1-14b9-4371-981a-fbe714a56215`) locally
+6:59:22 PM web.1    |  2026-08-19 18:59:22,444 [1mExperiment dashboard[0m: http://localhost:5000/dashboard
+6:59:22 PM web.1    |  Username: `test_admin`
+6:59:22 PM web.1    |  Password: `test_password`
+6:59:22 PM web.1    |  2026-08-19 18:59:22,444 Experiment launch complete!
+6:59:22 PM web.1    |  2026-08-19 18:59:22,445 New participant requested: http://localhost:5000/ad?recruiter=hotair&assignmentId=UW6HVJ&hitId=K61R2E&workerId=GX77D9&mode=debug
+
+❯❯ new recruitment request!
+
+❯❯ New participant requested:: http://localhost:5000/ad?recruiter=hotair&assignmentId=UW6HVJ&hitId=K61R2E&workerId=GX77D9&mode=debug
+6:59:22 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:22 +0000] "POST /launch HTTP/1.1" 200 357 "-" "python-requests/2.34.2"
+------------------------------ Captured log call -------------------------------
+INFO     psynet:experiment.py:1398 Testing experiment with 8 serial bot(s)...
+INFO     psynet:bot.py:74 Waiting for experiment launch to complete....
+INFO     psynet:bot.py:37 Initializing bot with worker ID 0d6ae1fa-0b95-4206-9d34-a10ebcb1c41e.
+INFO     psynet:bot.py:74 Waiting for experiment launch to complete....
+INFO     psynet:bot.py:37 Initializing bot with worker ID 37c86f36-f696-4aa4-b94a-4f437e5dea38.
+INFO     psynet:bot.py:74 Waiting for experiment launch to complete....
+INFO     psynet:bot.py:37 Initializing bot with worker ID aeb78493-e566-49fa-8433-dc29b39795d3.
+INFO     psynet:bot.py:74 Waiting for experiment launch to complete....
+INFO     psynet:bot.py:37 Initializing bot with worker ID 61a4b581-ad8b-4449-8c16-62d84515e1bb.
+INFO     psynet:bot.py:74 Waiting for experiment launch to complete....
+INFO     psynet:bot.py:37 Initializing bot with worker ID 4054b455-cb03-4696-91ad-ae4e976deb41.
+INFO     psynet:bot.py:74 Waiting for experiment launch to complete....
+INFO     psynet:bot.py:37 Initializing bot with worker ID fbf30c87-3753-4885-b2b7-a23e74eab41c.
+INFO     psynet:bot.py:74 Waiting for experiment launch to complete....
+INFO     psynet:bot.py:37 Initializing bot with worker ID 96944421-b0a1-4a9c-9a83-465170d3c0f2.
+INFO     psynet:bot.py:74 Waiting for experiment launch to complete....
+INFO     psynet:bot.py:37 Initializing bot with worker ID c7a5ad79-6e2e-4025-9729-dafe3792d948.
+INFO     psynet:participant.py:1125 ParticipantDriver 1 has finished the experiment (took 7 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 0.861 seconds).
+INFO     psynet:participant.py:1125 ParticipantDriver 2 has finished the experiment (took 7 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 0.815 seconds).
+INFO     psynet:participant.py:1125 ParticipantDriver 3 has finished the experiment (took 7 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 0.827 seconds).
+INFO     psynet:participant.py:1125 ParticipantDriver 4 has finished the experiment (took 7 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 0.824 seconds).
+INFO     psynet:participant.py:1125 ParticipantDriver 5 has finished the experiment (took 7 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 0.821 seconds).
+INFO     psynet:participant.py:1125 ParticipantDriver 6 has finished the experiment (took 7 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 0.822 seconds).
+INFO     psynet:participant.py:1125 ParticipantDriver 7 has finished the experiment (took 7 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 0.815 seconds).
+INFO     psynet:participant.py:1125 ParticipantDriver 8 has finished the experiment (took 7 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 0.814 seconds).
+ERROR    dallinger.db:db.py:112 Exception during scoped worker transaction, rolling back.
+Traceback (most recent call last):
+  File "/workspace/challenges/primary-color-rating/attempts/2026-08-19-18-54/code/primary_color_rating/.venv/lib/python3.13/site-packages/dallinger/db.py", line 105, in sessions_scope
+    yield session_
+  File "/home/ubuntu/PsyNet/psynet/db.py", line 31, in transaction
+    yield
+  File "/home/ubuntu/PsyNet/psynet/experiment.py", line 1407, in _test_experiment_serial
+    self.test_check_bots(bots)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/home/ubuntu/PsyNet/psynet/experiment.py", line 1444, in test_check_bots
+    self.test_check_bot(b)
+    ~~~~~~~~~~~~~~~~~~~^^^
+  File "/workspace/challenges/primary-color-rating/attempts/2026-08-19-18-54/code/primary_color_rating/experiment.py", line 72, in test_check_bot
+    assert trial.answer in {1, 2, 3, 4, 5, 6, 7}
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: unhashable type: 'dict'
+--------------------------- Captured stdout teardown ---------------------------
+6:59:22 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:22 +0000] "GET /timeline?unique_id=0d6ae1fa-0b95-4206-9d34-a10ebcb1c41e%3Af9580d35-ec7d-4431-8e2e-123edbde148b HTTP/1.1" 200 75106 "-" "python-requests/2.34.2"
+6:59:22 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:22 +0000] "GET /dashboard/login HTTP/1.1" 200 5469 "-" "python-requests/2.34.2"
+6:59:22 PM web.1    |  /workspace/challenges/primary-color-rating/attempts/2026-08-19-18-54/code/primary_color_rating/.venv/lib/python3.13/site-packages/flask_login/login_manager.py:488: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+6:59:22 PM web.1    |    expires = datetime.utcnow() + duration
+6:59:22 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:22 +0000] "POST /dashboard/login HTTP/1.1" 302 219 "-" "python-requests/2.34.2"
+6:59:22 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:22 +0000] "GET /dashboard/index HTTP/1.1" 200 12585 "-" "python-requests/2.34.2"
+6:59:22 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:22 +0000] "GET /dashboard/index HTTP/1.1" 200 12455 "-" "python-requests/2.34.2"
+6:59:22 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:22 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.34.2"
+6:59:23 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:23 +0000] "GET /timeline?unique_id=37c86f36-f696-4aa4-b94a-4f437e5dea38%3Aab596822-789c-4df4-a441-a678bdfad4a1 HTTP/1.1" 200 75106 "-" "python-requests/2.34.2"
+6:59:23 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:23 +0000] "GET /participant_status/2 HTTP/1.1" 200 0 "-" "python-requests/2.34.2"
+6:59:23 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:23 +0000] "GET /timeline?unique_id=aeb78493-e566-49fa-8433-dc29b39795d3%3Acaf09edb-5667-4d20-b393-131f8ede368d HTTP/1.1" 200 75106 "-" "python-requests/2.34.2"
+6:59:23 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:23 +0000] "GET /participant_status/3 HTTP/1.1" 200 0 "-" "python-requests/2.34.2"
+6:59:23 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:23 +0000] "GET /timeline?unique_id=61a4b581-ad8b-4449-8c16-62d84515e1bb%3A455ce218-7698-42cb-a273-4ae296ed60e3 HTTP/1.1" 200 75106 "-" "python-requests/2.34.2"
+6:59:23 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:23 +0000] "GET /participant_status/4 HTTP/1.1" 200 0 "-" "python-requests/2.34.2"
+6:59:23 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:23 +0000] "GET /timeline?unique_id=4054b455-cb03-4696-91ad-ae4e976deb41%3A45b36f4f-26d4-4fc8-b4fc-d5f26b5461a4 HTTP/1.1" 200 75106 "-" "python-requests/2.34.2"
+6:59:23 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:23 +0000] "GET /participant_status/5 HTTP/1.1" 200 0 "-" "python-requests/2.34.2"
+6:59:23 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:23 +0000] "GET /timeline?unique_id=fbf30c87-3753-4885-b2b7-a23e74eab41c%3A69f8cbbb-9a50-4858-82f0-c37f2aca07bc HTTP/1.1" 200 75106 "-" "python-requests/2.34.2"
+6:59:23 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:23 +0000] "GET /participant_status/6 HTTP/1.1" 200 0 "-" "python-requests/2.34.2"
+6:59:23 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:23 +0000] "GET /timeline?unique_id=96944421-b0a1-4a9c-9a83-465170d3c0f2%3A764dcd79-d90f-4ef8-97fb-623796924480 HTTP/1.1" 200 75106 "-" "python-requests/2.34.2"
+6:59:23 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:23 +0000] "GET /participant_status/7 HTTP/1.1" 200 0 "-" "python-requests/2.34.2"
+6:59:23 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:23 +0000] "GET /timeline?unique_id=c7a5ad79-6e2e-4025-9729-dafe3792d948%3A02ca395b-0355-4bed-9f7e-791060cddf7f HTTP/1.1" 200 75106 "-" "python-requests/2.34.2"
+6:59:23 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:23 +0000] "GET /participant_status/8 HTTP/1.1" 200 0 "-" "python-requests/2.34.2"
+6:59:23 PM web.1    |  2026-08-19 18:59:23,745 Received a response from participant 1 on page 197660b0-1abb-3b78-2362-a57b6efdac40.
+6:59:23 PM web.1    |  2026-08-19 18:59:23,767 Preparing trial for participant 1.
+6:59:23 PM web.1    |  2026-08-19 18:59:23,768 Looking for networks for participant 1.
+6:59:23 PM web.1    |  2026-08-19 18:59:23,779 3 remain after applying custom network filters.
+6:59:23 PM web.1    |  2026-08-19 18:59:23,779 0 out of 3 networks are awaiting async processes (or have nodes awaiting async processes).
+6:59:23 PM web.1    |  2026-08-19 18:59:23,779 Task 'find_networks' took 0.011 s
+6:59:23 PM web.1    |  2026-08-19 18:59:23,779 Outcome: found 1 candidate network(s) for participant 1.
+6:59:23 PM web.1    |  2026-08-19 18:59:23,779 Selected node 1 from network 1 to give to participant 1.
+6:59:23 PM web.1    |  2026-08-19 18:59:23,787 Task 'prepare_trial' took 0.019 s
+6:59:23 PM web.1    |  2026-08-19 18:59:23,787 Task '_prepare_trial' took 0.019 s
+6:59:23 PM web.1    |  2026-08-19 18:59:23,790 Evaluating while_loop (Waiting for trial) condition: result = False
+6:59:23 PM web.1    |  2026-08-19 18:59:23,791 Evaluating while_loop (color_ratings__trial_loop) condition: result = True
+6:59:23 PM web.1    |  2026-08-19 18:59:23,792 Task 'advance_page' took 0.042 s
+6:59:23 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:23 +0000] "POST /response HTTP/1.1" 200 299 "-" "python-requests/2.34.2"
+6:59:23 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:23 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.34.2"
+6:59:23 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:23 +0000] "GET /timeline?unique_id=0d6ae1fa-0b95-4206-9d34-a10ebcb1c41e%3Af9580d35-ec7d-4431-8e2e-123edbde148b HTTP/1.1" 200 81687 "-" "python-requests/2.34.2"
+6:59:23 PM web.1    |  2026-08-19 18:59:23,914 Received a response from participant 1 on page 63e41261-f536-292e-ee49-49e9d8dfd86b.
+6:59:23 PM web.1    |  2026-08-19 18:59:23,918 Calling _finalize_trial.
+6:59:23 PM web.1    |  2026-08-19 18:59:23,922 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+6:59:23 PM web.1    |  2026-08-19 18:59:23,923 Allocating a performance reward of $0.00 to participant 1 for trial 1.
+6:59:23 PM web.1    |  2026-08-19 18:59:23,931 Preparing trial for participant 1.
+6:59:23 PM web.1    |  2026-08-19 18:59:23,931 Looking for networks for participant 1.
+6:59:23 PM web.1    |  2026-08-19 18:59:23,936 2 remain after applying custom network filters.
+6:59:23 PM web.1    |  2026-08-19 18:59:23,936 0 out of 2 networks are awaiting async processes (or have nodes awaiting async processes).
+6:59:23 PM web.1    |  2026-08-19 18:59:23,936 Outcome: found 1 candidate network(s) for participant 1.
+6:59:23 PM web.1    |  2026-08-19 18:59:23,936 Selected node 2 from network 2 to give to participant 1.
+6:59:23 PM web.1    |  2026-08-19 18:59:23,943 Evaluating while_loop (Waiting for trial) condition: result = False
+6:59:23 PM web.1    |  2026-08-19 18:59:23,943 Evaluating while_loop (color_ratings__trial_loop) condition: result = True
+6:59:23 PM web.1    |  2026-08-19 18:59:23,944 Task 'advance_page' took 0.026 s
+6:59:23 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:23 +0000] "POST /response HTTP/1.1" 200 299 "-" "python-requests/2.34.2"
+6:59:23 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:23 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.34.2"
+6:59:24 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:24 +0000] "GET /timeline?unique_id=0d6ae1fa-0b95-4206-9d34-a10ebcb1c41e%3Af9580d35-ec7d-4431-8e2e-123edbde148b HTTP/1.1" 200 81689 "-" "python-requests/2.34.2"
+6:59:24 PM web.1    |  2026-08-19 18:59:24,066 Received a response from participant 1 on page faf0e3da-73e7-aaac-2d7a-db02bf608783.
+6:59:24 PM web.1    |  2026-08-19 18:59:24,072 Calling _finalize_trial.
+6:59:24 PM web.1    |  2026-08-19 18:59:24,075 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+6:59:24 PM web.1    |  2026-08-19 18:59:24,076 Allocating a performance reward of $0.00 to participant 1 for trial 2.
+6:59:24 PM web.1    |  2026-08-19 18:59:24,079 Preparing trial for participant 1.
+6:59:24 PM web.1    |  2026-08-19 18:59:24,080 Looking for networks for participant 1.
+6:59:24 PM web.1    |  2026-08-19 18:59:24,084 1 remain after applying custom network filters.
+6:59:24 PM web.1    |  2026-08-19 18:59:24,084 0 out of 1 networks are awaiting async processes (or have nodes awaiting async processes).
+6:59:24 PM web.1    |  2026-08-19 18:59:24,084 Outcome: found 1 candidate network(s) for participant 1.
+6:59:24 PM web.1    |  2026-08-19 18:59:24,084 Selected node 3 from network 3 to give to participant 1.
+6:59:24 PM web.1    |  2026-08-19 18:59:24,093 Evaluating while_loop (Waiting for trial) condition: result = False
+6:59:24 PM web.1    |  2026-08-19 18:59:24,094 Evaluating while_loop (color_ratings__trial_loop) condition: result = True
+6:59:24 PM web.1    |  2026-08-19 18:59:24,094 Task 'advance_page' took 0.023 s
+6:59:24 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:24 +0000] "POST /response HTTP/1.1" 200 299 "-" "python-requests/2.34.2"
+6:59:24 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:24 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.34.2"
+6:59:24 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:24 +0000] "GET /timeline?unique_id=0d6ae1fa-0b95-4206-9d34-a10ebcb1c41e%3Af9580d35-ec7d-4431-8e2e-123edbde148b HTTP/1.1" 200 81689 "-" "python-requests/2.34.2"
+6:59:24 PM web.1    |  2026-08-19 18:59:24,214 Received a response from participant 1 on page 9b79dfab-e437-86b7-4ebe-3fe3a87f5768.
+6:59:24 PM web.1    |  2026-08-19 18:59:24,220 Calling _finalize_trial.
+6:59:24 PM web.1    |  2026-08-19 18:59:24,223 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+6:59:24 PM web.1    |  2026-08-19 18:59:24,224 Allocating a performance reward of $0.00 to participant 1 for trial 3.
+6:59:24 PM web.1    |  2026-08-19 18:59:24,228 Preparing trial for participant 1.
+6:59:24 PM web.1    |  2026-08-19 18:59:24,228 Looking for networks for participant 1.
+6:59:24 PM web.1    |  2026-08-19 18:59:24,228 N completed trials (3) >= N trials per participant (3), skipping forward
+6:59:24 PM web.1    |  2026-08-19 18:59:24,228 Outcome of find_networks: exit
+6:59:24 PM web.1    |  2026-08-19 18:59:24,230 Evaluating while_loop (Waiting for trial) condition: result = False
+6:59:24 PM web.1    |  2026-08-19 18:59:24,231 Evaluating while_loop (color_ratings__trial_loop) condition: result = False
+6:59:24 PM web.1    |  2026-08-19 18:59:24,231 Task 'advance_page' took 0.012 s
+6:59:24 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:24 +0000] "POST /response HTTP/1.1" 200 296 "-" "python-requests/2.34.2"
+6:59:24 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:24 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.34.2"
+6:59:24 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:24 +0000] "GET /timeline?unique_id=0d6ae1fa-0b95-4206-9d34-a10ebcb1c41e%3Af9580d35-ec7d-4431-8e2e-123edbde148b HTTP/1.1" 200 75018 "-" "python-requests/2.34.2"
+6:59:24 PM web.1    |  2026-08-19 18:59:24,349 Received a response from participant 1 on page dc6af765-fd33-6fbc-7c5d-e56828fb1430.
+6:59:24 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:24 +0000] "POST /response HTTP/1.1" 200 299 "-" "python-requests/2.34.2"
+6:59:24 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:24 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.34.2"
+6:59:24 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:24 +0000] "GET /timeline?unique_id=0d6ae1fa-0b95-4206-9d34-a10ebcb1c41e%3Af9580d35-ec7d-4431-8e2e-123edbde148b HTTP/1.1" 200 75388 "-" "python-requests/2.34.2"
+6:59:24 PM web.1    |  2026-08-19 18:59:24,482 Received a response from participant 1 on page 1995c5e3-969d-ce8a-a3df-599a358fdda2.
+6:59:24 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:24 +0000] "POST /response HTTP/1.1" 200 305 "-" "python-requests/2.34.2"
+6:59:24 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:24 +0000] "GET /participant_status/1 HTTP/1.1" 200 0 "-" "python-requests/2.34.2"
+6:59:24 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:24 +0000] "GET /timeline?unique_id=0d6ae1fa-0b95-4206-9d34-a10ebcb1c41e%3Af9580d35-ec7d-4431-8e2e-123edbde148b HTTP/1.1" 200 73479 "-" "python-requests/2.34.2"
+6:59:24 PM web.1    |  2026-08-19 18:59:24,607 Received a response from participant 2 on page ca89709a-1e5f-ad30-d81a-7d765feadb1a.
+6:59:24 PM web.1    |  2026-08-19 18:59:24,616 Preparing trial for participant 2.
+6:59:24 PM web.1    |  2026-08-19 18:59:24,617 Looking for networks for participant 2.
+6:59:24 PM web.1    |  2026-08-19 18:59:24,622 3 remain after applying custom network filters.
+6:59:24 PM web.1    |  2026-08-19 18:59:24,622 0 out of 3 networks are awaiting async processes (or have nodes awaiting async processes).
+6:59:24 PM web.1    |  2026-08-19 18:59:24,622 Outcome: found 1 candidate network(s) for participant 2.
+6:59:24 PM web.1    |  2026-08-19 18:59:24,622 Selected node 1 from network 1 to give to participant 2.
+6:59:24 PM web.1    |  2026-08-19 18:59:24,628 Evaluating while_loop (Waiting for trial) condition: result = False
+6:59:24 PM web.1    |  2026-08-19 18:59:24,628 Evaluating while_loop (color_ratings__trial_loop) condition: result = True
+6:59:24 PM web.1    |  2026-08-19 18:59:24,629 Task 'advance_page' took 0.019 s
+6:59:24 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:24 +0000] "POST /response HTTP/1.1" 200 299 "-" "python-requests/2.34.2"
+6:59:24 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:24 +0000] "GET /participant_status/2 HTTP/1.1" 200 0 "-" "python-requests/2.34.2"
+6:59:24 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:24 +0000] "GET /timeline?unique_id=37c86f36-f696-4aa4-b94a-4f437e5dea38%3Aab596822-789c-4df4-a441-a678bdfad4a1 HTTP/1.1" 200 81687 "-" "python-requests/2.34.2"
+6:59:24 PM web.1    |  2026-08-19 18:59:24,751 Received a response from participant 2 on page d8f38e56-2687-c0b8-ebe3-79c109be7cc9.
+6:59:24 PM web.1    |  2026-08-19 18:59:24,757 Calling _finalize_trial.
+6:59:24 PM web.1    |  2026-08-19 18:59:24,760 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+6:59:24 PM web.1    |  2026-08-19 18:59:24,761 Allocating a performance reward of $0.00 to participant 2 for trial 4.
+6:59:24 PM web.1    |  2026-08-19 18:59:24,765 Preparing trial for participant 2.
+6:59:24 PM web.1    |  2026-08-19 18:59:24,765 Looking for networks for participant 2.
+6:59:24 PM web.1    |  2026-08-19 18:59:24,769 2 remain after applying custom network filters.
+6:59:24 PM web.1    |  2026-08-19 18:59:24,769 0 out of 2 networks are awaiting async processes (or have nodes awaiting async processes).
+6:59:24 PM web.1    |  2026-08-19 18:59:24,769 Outcome: found 1 candidate network(s) for participant 2.
+6:59:24 PM web.1    |  2026-08-19 18:59:24,769 Selected node 3 from network 3 to give to participant 2.
+6:59:24 PM web.1    |  2026-08-19 18:59:24,775 Evaluating while_loop (Waiting for trial) condition: result = False
+6:59:24 PM web.1    |  2026-08-19 18:59:24,775 Evaluating while_loop (color_ratings__trial_loop) condition: result = True
+6:59:24 PM web.1    |  2026-08-19 18:59:24,776 Task 'advance_page' took 0.020 s
+6:59:24 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:24 +0000] "POST /response HTTP/1.1" 200 299 "-" "python-requests/2.34.2"
+6:59:24 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:24 +0000] "GET /participant_status/2 HTTP/1.1" 200 0 "-" "python-requests/2.34.2"
+6:59:24 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:24 +0000] "GET /timeline?unique_id=37c86f36-f696-4aa4-b94a-4f437e5dea38%3Aab596822-789c-4df4-a441-a678bdfad4a1 HTTP/1.1" 200 81689 "-" "python-requests/2.34.2"
+6:59:24 PM web.1    |  2026-08-19 18:59:24,896 Received a response from participant 2 on page b21930cb-f7f3-1c42-a58b-3f21a36ec80c.
+6:59:24 PM web.1    |  2026-08-19 18:59:24,901 Calling _finalize_trial.
+6:59:24 PM web.1    |  2026-08-19 18:59:24,904 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+6:59:24 PM web.1    |  2026-08-19 18:59:24,905 Allocating a performance reward of $0.00 to participant 2 for trial 5.
+6:59:24 PM web.1    |  2026-08-19 18:59:24,908 Preparing trial for participant 2.
+6:59:24 PM web.1    |  2026-08-19 18:59:24,908 Looking for networks for participant 2.
+6:59:24 PM web.1    |  2026-08-19 18:59:24,913 1 remain after applying custom network filters.
+6:59:24 PM web.1    |  2026-08-19 18:59:24,913 0 out of 1 networks are awaiting async processes (or have nodes awaiting async processes).
+6:59:24 PM web.1    |  2026-08-19 18:59:24,913 Outcome: found 1 candidate network(s) for participant 2.
+6:59:24 PM web.1    |  2026-08-19 18:59:24,913 Selected node 2 from network 2 to give to participant 2.
+6:59:24 PM web.1    |  2026-08-19 18:59:24,919 Evaluating while_loop (Waiting for trial) condition: result = False
+6:59:24 PM web.1    |  2026-08-19 18:59:24,919 Evaluating while_loop (color_ratings__trial_loop) condition: result = True
+6:59:24 PM web.1    |  2026-08-19 18:59:24,920 Task 'advance_page' took 0.019 s
+6:59:24 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:24 +0000] "POST /response HTTP/1.1" 200 299 "-" "python-requests/2.34.2"
+6:59:24 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:24 +0000] "GET /participant_status/2 HTTP/1.1" 200 0 "-" "python-requests/2.34.2"
+6:59:25 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:25 +0000] "GET /timeline?unique_id=37c86f36-f696-4aa4-b94a-4f437e5dea38%3Aab596822-789c-4df4-a441-a678bdfad4a1 HTTP/1.1" 200 81689 "-" "python-requests/2.34.2"
+6:59:25 PM web.1    |  2026-08-19 18:59:25,042 Received a response from participant 2 on page f80f802d-0c37-cbb9-a0da-507adb982534.
+6:59:25 PM web.1    |  2026-08-19 18:59:25,047 Calling _finalize_trial.
+6:59:25 PM web.1    |  2026-08-19 18:59:25,050 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+6:59:25 PM web.1    |  2026-08-19 18:59:25,051 Allocating a performance reward of $0.00 to participant 2 for trial 6.
+6:59:25 PM web.1    |  2026-08-19 18:59:25,054 Preparing trial for participant 2.
+6:59:25 PM web.1    |  2026-08-19 18:59:25,054 Looking for networks for participant 2.
+6:59:25 PM web.1    |  2026-08-19 18:59:25,054 N completed trials (3) >= N trials per participant (3), skipping forward
+6:59:25 PM web.1    |  2026-08-19 18:59:25,054 Outcome of find_networks: exit
+6:59:25 PM web.1    |  2026-08-19 18:59:25,057 Evaluating while_loop (Waiting for trial) condition: result = False
+6:59:25 PM web.1    |  2026-08-19 18:59:25,057 Evaluating while_loop (color_ratings__trial_loop) condition: result = False
+6:59:25 PM web.1    |  2026-08-19 18:59:25,057 Task 'advance_page' took 0.010 s
+6:59:25 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:25 +0000] "POST /response HTTP/1.1" 200 296 "-" "python-requests/2.34.2"
+6:59:25 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:25 +0000] "GET /participant_status/2 HTTP/1.1" 200 0 "-" "python-requests/2.34.2"
+6:59:25 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:25 +0000] "GET /timeline?unique_id=37c86f36-f696-4aa4-b94a-4f437e5dea38%3Aab596822-789c-4df4-a441-a678bdfad4a1 HTTP/1.1" 200 75018 "-" "python-requests/2.34.2"
+6:59:25 PM web.1    |  2026-08-19 18:59:25,174 Received a response from participant 2 on page 7a61c85c-d199-2dba-ec5d-fc846fed190b.
+6:59:25 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:25 +0000] "POST /response HTTP/1.1" 200 299 "-" "python-requests/2.34.2"
+6:59:25 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:25 +0000] "GET /participant_status/2 HTTP/1.1" 200 0 "-" "python-requests/2.34.2"
+6:59:25 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:25 +0000] "GET /timeline?unique_id=37c86f36-f696-4aa4-b94a-4f437e5dea38%3Aab596822-789c-4df4-a441-a678bdfad4a1 HTTP/1.1" 200 75388 "-" "python-requests/2.34.2"
+6:59:25 PM web.1    |  2026-08-19 18:59:25,298 Received a response from participant 2 on page 000eb789-f3c7-69a1-efc0-d2b607308d8e.
+6:59:25 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:25 +0000] "POST /response HTTP/1.1" 200 305 "-" "python-requests/2.34.2"
+6:59:25 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:25 +0000] "GET /participant_status/2 HTTP/1.1" 200 0 "-" "python-requests/2.34.2"
+6:59:25 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:25 +0000] "GET /timeline?unique_id=37c86f36-f696-4aa4-b94a-4f437e5dea38%3Aab596822-789c-4df4-a441-a678bdfad4a1 HTTP/1.1" 200 73479 "-" "python-requests/2.34.2"
+6:59:25 PM web.1    |  2026-08-19 18:59:25,424 Received a response from participant 3 on page 286ee2fc-89cf-0878-c791-bd13981d23a9.
+6:59:25 PM web.1    |  2026-08-19 18:59:25,432 Preparing trial for participant 3.
+6:59:25 PM web.1    |  2026-08-19 18:59:25,433 Looking for networks for participant 3.
+6:59:25 PM web.1    |  2026-08-19 18:59:25,437 3 remain after applying custom network filters.
+6:59:25 PM web.1    |  2026-08-19 18:59:25,437 0 out of 3 networks are awaiting async processes (or have nodes awaiting async processes).
+6:59:25 PM web.1    |  2026-08-19 18:59:25,437 Outcome: found 1 candidate network(s) for participant 3.
+6:59:25 PM web.1    |  2026-08-19 18:59:25,437 Selected node 2 from network 2 to give to participant 3.
+6:59:25 PM web.1    |  2026-08-19 18:59:25,443 Evaluating while_loop (Waiting for trial) condition: result = False
+6:59:25 PM web.1    |  2026-08-19 18:59:25,444 Evaluating while_loop (color_ratings__trial_loop) condition: result = True
+6:59:25 PM web.1    |  2026-08-19 18:59:25,444 Task 'advance_page' took 0.018 s
+6:59:25 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:25 +0000] "POST /response HTTP/1.1" 200 299 "-" "python-requests/2.34.2"
+6:59:25 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:25 +0000] "GET /participant_status/3 HTTP/1.1" 200 0 "-" "python-requests/2.34.2"
+6:59:25 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:25 +0000] "GET /timeline?unique_id=aeb78493-e566-49fa-8433-dc29b39795d3%3Acaf09edb-5667-4d20-b393-131f8ede368d HTTP/1.1" 200 81689 "-" "python-requests/2.34.2"
+6:59:25 PM web.1    |  2026-08-19 18:59:25,566 Received a response from participant 3 on page 85103b46-eadf-9fc9-6a8f-350ead864ba7.
+6:59:25 PM web.1    |  2026-08-19 18:59:25,570 Calling _finalize_trial.
+6:59:25 PM web.1    |  2026-08-19 18:59:25,573 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+6:59:25 PM web.1    |  2026-08-19 18:59:25,574 Allocating a performance reward of $0.00 to participant 3 for trial 7.
+6:59:25 PM web.1    |  2026-08-19 18:59:25,578 Preparing trial for participant 3.
+6:59:25 PM web.1    |  2026-08-19 18:59:25,578 Looking for networks for participant 3.
+6:59:25 PM web.1    |  2026-08-19 18:59:25,582 2 remain after applying custom network filters.
+6:59:25 PM web.1    |  2026-08-19 18:59:25,583 0 out of 2 networks are awaiting async processes (or have nodes awaiting async processes).
+6:59:25 PM web.1    |  2026-08-19 18:59:25,583 Outcome: found 1 candidate network(s) for participant 3.
+6:59:25 PM web.1    |  2026-08-19 18:59:25,583 Selected node 1 from network 1 to give to participant 3.
+6:59:25 PM web.1    |  2026-08-19 18:59:25,588 Evaluating while_loop (Waiting for trial) condition: result = False
+6:59:25 PM web.1    |  2026-08-19 18:59:25,589 Evaluating while_loop (color_ratings__trial_loop) condition: result = True
+6:59:25 PM web.1    |  2026-08-19 18:59:25,589 Task 'advance_page' took 0.019 s
+6:59:25 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:25 +0000] "POST /response HTTP/1.1" 200 299 "-" "python-requests/2.34.2"
+6:59:25 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:25 +0000] "GET /participant_status/3 HTTP/1.1" 200 0 "-" "python-requests/2.34.2"
+6:59:25 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:25 +0000] "GET /timeline?unique_id=aeb78493-e566-49fa-8433-dc29b39795d3%3Acaf09edb-5667-4d20-b393-131f8ede368d HTTP/1.1" 200 81687 "-" "python-requests/2.34.2"
+6:59:25 PM web.1    |  2026-08-19 18:59:25,710 Received a response from participant 3 on page 16ff0943-105e-9ebb-ed31-4d080655593f.
+6:59:25 PM web.1    |  2026-08-19 18:59:25,715 Calling _finalize_trial.
+6:59:25 PM web.1    |  2026-08-19 18:59:25,718 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+6:59:25 PM web.1    |  2026-08-19 18:59:25,719 Allocating a performance reward of $0.00 to participant 3 for trial 8.
+6:59:25 PM web.1    |  2026-08-19 18:59:25,723 Preparing trial for participant 3.
+6:59:25 PM web.1    |  2026-08-19 18:59:25,723 Looking for networks for participant 3.
+6:59:25 PM web.1    |  2026-08-19 18:59:25,728 1 remain after applying custom network filters.
+6:59:25 PM web.1    |  2026-08-19 18:59:25,728 0 out of 1 networks are awaiting async processes (or have nodes awaiting async processes).
+6:59:25 PM web.1    |  2026-08-19 18:59:25,728 Outcome: found 1 candidate network(s) for participant 3.
+6:59:25 PM web.1    |  2026-08-19 18:59:25,728 Selected node 3 from network 3 to give to participant 3.
+6:59:25 PM web.1    |  2026-08-19 18:59:25,733 Evaluating while_loop (Waiting for trial) condition: result = False
+6:59:25 PM web.1    |  2026-08-19 18:59:25,733 Evaluating while_loop (color_ratings__trial_loop) condition: result = True
+6:59:25 PM web.1    |  2026-08-19 18:59:25,734 Task 'advance_page' took 0.019 s
+6:59:25 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:25 +0000] "POST /response HTTP/1.1" 200 299 "-" "python-requests/2.34.2"
+6:59:25 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:25 +0000] "GET /participant_status/3 HTTP/1.1" 200 0 "-" "python-requests/2.34.2"
+6:59:25 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:25 +0000] "GET /timeline?unique_id=aeb78493-e566-49fa-8433-dc29b39795d3%3Acaf09edb-5667-4d20-b393-131f8ede368d HTTP/1.1" 200 81689 "-" "python-requests/2.34.2"
+6:59:25 PM web.1    |  2026-08-19 18:59:25,855 Received a response from participant 3 on page 76c12d27-c6b7-018b-5f68-df8383f4bb1d.
+6:59:25 PM web.1    |  2026-08-19 18:59:25,860 Calling _finalize_trial.
+6:59:25 PM web.1    |  2026-08-19 18:59:25,863 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+6:59:25 PM web.1    |  2026-08-19 18:59:25,864 Allocating a performance reward of $0.00 to participant 3 for trial 9.
+6:59:25 PM web.1    |  2026-08-19 18:59:25,868 Preparing trial for participant 3.
+6:59:25 PM web.1    |  2026-08-19 18:59:25,868 Looking for networks for participant 3.
+6:59:25 PM web.1    |  2026-08-19 18:59:25,868 N completed trials (3) >= N trials per participant (3), skipping forward
+6:59:25 PM web.1    |  2026-08-19 18:59:25,868 Outcome of find_networks: exit
+6:59:25 PM web.1    |  2026-08-19 18:59:25,870 Evaluating while_loop (Waiting for trial) condition: result = False
+6:59:25 PM web.1    |  2026-08-19 18:59:25,871 Evaluating while_loop (color_ratings__trial_loop) condition: result = False
+6:59:25 PM web.1    |  2026-08-19 18:59:25,871 Task 'advance_page' took 0.011 s
+6:59:25 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:25 +0000] "POST /response HTTP/1.1" 200 296 "-" "python-requests/2.34.2"
+6:59:25 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:25 +0000] "GET /participant_status/3 HTTP/1.1" 200 0 "-" "python-requests/2.34.2"
+6:59:25 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:25 +0000] "GET /timeline?unique_id=aeb78493-e566-49fa-8433-dc29b39795d3%3Acaf09edb-5667-4d20-b393-131f8ede368d HTTP/1.1" 200 75018 "-" "python-requests/2.34.2"
+6:59:25 PM web.1    |  2026-08-19 18:59:25,999 Received a response from participant 3 on page 3b834421-5ebc-2f4c-c1f1-6ba77ab6528d.
+6:59:26 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:26 +0000] "POST /response HTTP/1.1" 200 299 "-" "python-requests/2.34.2"
+6:59:26 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:26 +0000] "GET /participant_status/3 HTTP/1.1" 200 0 "-" "python-requests/2.34.2"
+6:59:26 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:26 +0000] "GET /timeline?unique_id=aeb78493-e566-49fa-8433-dc29b39795d3%3Acaf09edb-5667-4d20-b393-131f8ede368d HTTP/1.1" 200 75388 "-" "python-requests/2.34.2"
+6:59:26 PM web.1    |  2026-08-19 18:59:26,123 Received a response from participant 3 on page 07462fa1-ca7f-a54f-fc98-d8794d638e64.
+6:59:26 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:26 +0000] "POST /response HTTP/1.1" 200 305 "-" "python-requests/2.34.2"
+6:59:26 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:26 +0000] "GET /participant_status/3 HTTP/1.1" 200 0 "-" "python-requests/2.34.2"
+6:59:26 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:26 +0000] "GET /timeline?unique_id=aeb78493-e566-49fa-8433-dc29b39795d3%3Acaf09edb-5667-4d20-b393-131f8ede368d HTTP/1.1" 200 73479 "-" "python-requests/2.34.2"
+6:59:26 PM web.1    |  2026-08-19 18:59:26,252 Received a response from participant 4 on page 59f001c1-53c0-1376-72eb-4ca0c09024c3.
+6:59:26 PM web.1    |  2026-08-19 18:59:26,262 Preparing trial for participant 4.
+6:59:26 PM web.1    |  2026-08-19 18:59:26,262 Looking for networks for participant 4.
+6:59:26 PM web.1    |  2026-08-19 18:59:26,267 3 remain after applying custom network filters.
+6:59:26 PM web.1    |  2026-08-19 18:59:26,267 0 out of 3 networks are awaiting async processes (or have nodes awaiting async processes).
+6:59:26 PM web.1    |  2026-08-19 18:59:26,267 Outcome: found 1 candidate network(s) for participant 4.
+6:59:26 PM web.1    |  2026-08-19 18:59:26,267 Selected node 2 from network 2 to give to participant 4.
+6:59:26 PM web.1    |  2026-08-19 18:59:26,273 Evaluating while_loop (Waiting for trial) condition: result = False
+6:59:26 PM web.1    |  2026-08-19 18:59:26,273 Evaluating while_loop (color_ratings__trial_loop) condition: result = True
+6:59:26 PM web.1    |  2026-08-19 18:59:26,274 Task 'advance_page' took 0.019 s
+6:59:26 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:26 +0000] "POST /response HTTP/1.1" 200 299 "-" "python-requests/2.34.2"
+6:59:26 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:26 +0000] "GET /participant_status/4 HTTP/1.1" 200 0 "-" "python-requests/2.34.2"
+6:59:26 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:26 +0000] "GET /timeline?unique_id=61a4b581-ad8b-4449-8c16-62d84515e1bb%3A455ce218-7698-42cb-a273-4ae296ed60e3 HTTP/1.1" 200 81689 "-" "python-requests/2.34.2"
+6:59:26 PM web.1    |  2026-08-19 18:59:26,397 Received a response from participant 4 on page 9b93683d-e537-c707-476a-86713053aeca.
+6:59:26 PM web.1    |  2026-08-19 18:59:26,402 Calling _finalize_trial.
+6:59:26 PM web.1    |  2026-08-19 18:59:26,405 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+6:59:26 PM web.1    |  2026-08-19 18:59:26,406 Allocating a performance reward of $0.00 to participant 4 for trial 10.
+6:59:26 PM web.1    |  2026-08-19 18:59:26,409 Preparing trial for participant 4.
+6:59:26 PM web.1    |  2026-08-19 18:59:26,410 Looking for networks for participant 4.
+6:59:26 PM web.1    |  2026-08-19 18:59:26,414 2 remain after applying custom network filters.
+6:59:26 PM web.1    |  2026-08-19 18:59:26,414 0 out of 2 networks are awaiting async processes (or have nodes awaiting async processes).
+6:59:26 PM web.1    |  2026-08-19 18:59:26,414 Outcome: found 1 candidate network(s) for participant 4.
+6:59:26 PM web.1    |  2026-08-19 18:59:26,414 Selected node 1 from network 1 to give to participant 4.
+6:59:26 PM web.1    |  2026-08-19 18:59:26,420 Evaluating while_loop (Waiting for trial) condition: result = False
+6:59:26 PM web.1    |  2026-08-19 18:59:26,420 Evaluating while_loop (color_ratings__trial_loop) condition: result = True
+6:59:26 PM web.1    |  2026-08-19 18:59:26,421 Task 'advance_page' took 0.019 s
+6:59:26 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:26 +0000] "POST /response HTTP/1.1" 200 299 "-" "python-requests/2.34.2"
+6:59:26 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:26 +0000] "GET /participant_status/4 HTTP/1.1" 200 0 "-" "python-requests/2.34.2"
+6:59:26 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:26 +0000] "GET /timeline?unique_id=61a4b581-ad8b-4449-8c16-62d84515e1bb%3A455ce218-7698-42cb-a273-4ae296ed60e3 HTTP/1.1" 200 81687 "-" "python-requests/2.34.2"
+6:59:26 PM web.1    |  2026-08-19 18:59:26,542 Received a response from participant 4 on page b43087bf-2171-2068-12db-ec4b17787466.
+6:59:26 PM web.1    |  2026-08-19 18:59:26,547 Calling _finalize_trial.
+6:59:26 PM web.1    |  2026-08-19 18:59:26,550 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+6:59:26 PM web.1    |  2026-08-19 18:59:26,551 Allocating a performance reward of $0.00 to participant 4 for trial 11.
+6:59:26 PM web.1    |  2026-08-19 18:59:26,555 Preparing trial for participant 4.
+6:59:26 PM web.1    |  2026-08-19 18:59:26,555 Looking for networks for participant 4.
+6:59:26 PM web.1    |  2026-08-19 18:59:26,560 1 remain after applying custom network filters.
+6:59:26 PM web.1    |  2026-08-19 18:59:26,560 0 out of 1 networks are awaiting async processes (or have nodes awaiting async processes).
+6:59:26 PM web.1    |  2026-08-19 18:59:26,560 Outcome: found 1 candidate network(s) for participant 4.
+6:59:26 PM web.1    |  2026-08-19 18:59:26,560 Selected node 3 from network 3 to give to participant 4.
+6:59:26 PM web.1    |  2026-08-19 18:59:26,566 Evaluating while_loop (Waiting for trial) condition: result = False
+6:59:26 PM web.1    |  2026-08-19 18:59:26,566 Evaluating while_loop (color_ratings__trial_loop) condition: result = True
+6:59:26 PM web.1    |  2026-08-19 18:59:26,567 Task 'advance_page' took 0.020 s
+6:59:26 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:26 +0000] "POST /response HTTP/1.1" 200 299 "-" "python-requests/2.34.2"
+6:59:26 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:26 +0000] "GET /participant_status/4 HTTP/1.1" 200 0 "-" "python-requests/2.34.2"
+6:59:26 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:26 +0000] "GET /timeline?unique_id=61a4b581-ad8b-4449-8c16-62d84515e1bb%3A455ce218-7698-42cb-a273-4ae296ed60e3 HTTP/1.1" 200 81689 "-" "python-requests/2.34.2"
+6:59:26 PM web.1    |  2026-08-19 18:59:26,690 Received a response from participant 4 on page 511e42fa-0fb0-c6bd-dce1-f80520628a5d.
+6:59:26 PM web.1    |  2026-08-19 18:59:26,695 Calling _finalize_trial.
+6:59:26 PM web.1    |  2026-08-19 18:59:26,698 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+6:59:26 PM web.1    |  2026-08-19 18:59:26,699 Allocating a performance reward of $0.00 to participant 4 for trial 12.
+6:59:26 PM web.1    |  2026-08-19 18:59:26,703 Preparing trial for participant 4.
+6:59:26 PM web.1    |  2026-08-19 18:59:26,703 Looking for networks for participant 4.
+6:59:26 PM web.1    |  2026-08-19 18:59:26,703 N completed trials (3) >= N trials per participant (3), skipping forward
+6:59:26 PM web.1    |  2026-08-19 18:59:26,703 Outcome of find_networks: exit
+6:59:26 PM web.1    |  2026-08-19 18:59:26,705 Evaluating while_loop (Waiting for trial) condition: result = False
+6:59:26 PM web.1    |  2026-08-19 18:59:26,706 Evaluating while_loop (color_ratings__trial_loop) condition: result = False
+6:59:26 PM web.1    |  2026-08-19 18:59:26,706 Task 'advance_page' took 0.011 s
+6:59:26 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:26 +0000] "POST /response HTTP/1.1" 200 296 "-" "python-requests/2.34.2"
+6:59:26 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:26 +0000] "GET /participant_status/4 HTTP/1.1" 200 0 "-" "python-requests/2.34.2"
+6:59:26 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:26 +0000] "GET /timeline?unique_id=61a4b581-ad8b-4449-8c16-62d84515e1bb%3A455ce218-7698-42cb-a273-4ae296ed60e3 HTTP/1.1" 200 75018 "-" "python-requests/2.34.2"
+6:59:26 PM web.1    |  2026-08-19 18:59:26,824 Received a response from participant 4 on page c0417303-d2bc-8b18-1de9-f6d8e4e63a53.
+6:59:26 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:26 +0000] "POST /response HTTP/1.1" 200 299 "-" "python-requests/2.34.2"
+6:59:26 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:26 +0000] "GET /participant_status/4 HTTP/1.1" 200 0 "-" "python-requests/2.34.2"
+6:59:26 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:26 +0000] "GET /timeline?unique_id=61a4b581-ad8b-4449-8c16-62d84515e1bb%3A455ce218-7698-42cb-a273-4ae296ed60e3 HTTP/1.1" 200 75388 "-" "python-requests/2.34.2"
+6:59:26 PM web.1    |  2026-08-19 18:59:26,949 Received a response from participant 4 on page 29763d21-edbb-f2e1-c927-e1a77d659dfe.
+6:59:26 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:26 +0000] "POST /response HTTP/1.1" 200 305 "-" "python-requests/2.34.2"
+6:59:26 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:26 +0000] "GET /participant_status/4 HTTP/1.1" 200 0 "-" "python-requests/2.34.2"
+6:59:27 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:27 +0000] "GET /timeline?unique_id=61a4b581-ad8b-4449-8c16-62d84515e1bb%3A455ce218-7698-42cb-a273-4ae296ed60e3 HTTP/1.1" 200 73479 "-" "python-requests/2.34.2"
+6:59:27 PM web.1    |  2026-08-19 18:59:27,078 Received a response from participant 5 on page 4107056f-a67e-aad1-29c8-17b44fa0719c.
+6:59:27 PM web.1    |  2026-08-19 18:59:27,087 Preparing trial for participant 5.
+6:59:27 PM web.1    |  2026-08-19 18:59:27,087 Looking for networks for participant 5.
+6:59:27 PM web.1    |  2026-08-19 18:59:27,092 3 remain after applying custom network filters.
+6:59:27 PM web.1    |  2026-08-19 18:59:27,092 0 out of 3 networks are awaiting async processes (or have nodes awaiting async processes).
+6:59:27 PM web.1    |  2026-08-19 18:59:27,092 Outcome: found 1 candidate network(s) for participant 5.
+6:59:27 PM web.1    |  2026-08-19 18:59:27,092 Selected node 1 from network 1 to give to participant 5.
+6:59:27 PM web.1    |  2026-08-19 18:59:27,098 Evaluating while_loop (Waiting for trial) condition: result = False
+6:59:27 PM web.1    |  2026-08-19 18:59:27,099 Evaluating while_loop (color_ratings__trial_loop) condition: result = True
+6:59:27 PM web.1    |  2026-08-19 18:59:27,099 Task 'advance_page' took 0.019 s
+6:59:27 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:27 +0000] "POST /response HTTP/1.1" 200 299 "-" "python-requests/2.34.2"
+6:59:27 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:27 +0000] "GET /participant_status/5 HTTP/1.1" 200 0 "-" "python-requests/2.34.2"
+6:59:27 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:27 +0000] "GET /timeline?unique_id=4054b455-cb03-4696-91ad-ae4e976deb41%3A45b36f4f-26d4-4fc8-b4fc-d5f26b5461a4 HTTP/1.1" 200 81687 "-" "python-requests/2.34.2"
+6:59:27 PM web.1    |  2026-08-19 18:59:27,224 Received a response from participant 5 on page 8af5e40a-d60d-fc48-9ce7-6a61432e02eb.
+6:59:27 PM web.1    |  2026-08-19 18:59:27,230 Calling _finalize_trial.
+6:59:27 PM web.1    |  2026-08-19 18:59:27,233 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+6:59:27 PM web.1    |  2026-08-19 18:59:27,234 Allocating a performance reward of $0.00 to participant 5 for trial 13.
+6:59:27 PM web.1    |  2026-08-19 18:59:27,237 Preparing trial for participant 5.
+6:59:27 PM web.1    |  2026-08-19 18:59:27,238 Looking for networks for participant 5.
+6:59:27 PM web.1    |  2026-08-19 18:59:27,242 2 remain after applying custom network filters.
+6:59:27 PM web.1    |  2026-08-19 18:59:27,242 0 out of 2 networks are awaiting async processes (or have nodes awaiting async processes).
+6:59:27 PM web.1    |  2026-08-19 18:59:27,242 Outcome: found 1 candidate network(s) for participant 5.
+6:59:27 PM web.1    |  2026-08-19 18:59:27,242 Selected node 2 from network 2 to give to participant 5.
+6:59:27 PM web.1    |  2026-08-19 18:59:27,248 Evaluating while_loop (Waiting for trial) condition: result = False
+6:59:27 PM web.1    |  2026-08-19 18:59:27,248 Evaluating while_loop (color_ratings__trial_loop) condition: result = True
+6:59:27 PM web.1    |  2026-08-19 18:59:27,249 Task 'advance_page' took 0.020 s
+6:59:27 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:27 +0000] "POST /response HTTP/1.1" 200 299 "-" "python-requests/2.34.2"
+6:59:27 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:27 +0000] "GET /participant_status/5 HTTP/1.1" 200 0 "-" "python-requests/2.34.2"
+6:59:27 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:27 +0000] "GET /timeline?unique_id=4054b455-cb03-4696-91ad-ae4e976deb41%3A45b36f4f-26d4-4fc8-b4fc-d5f26b5461a4 HTTP/1.1" 200 81689 "-" "python-requests/2.34.2"
+6:59:27 PM web.1    |  2026-08-19 18:59:27,371 Received a response from participant 5 on page 408a80fc-c94b-a6ca-8e0a-1443290e791c.
+6:59:27 PM web.1    |  2026-08-19 18:59:27,375 Calling _finalize_trial.
+6:59:27 PM web.1    |  2026-08-19 18:59:27,379 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+6:59:27 PM web.1    |  2026-08-19 18:59:27,380 Allocating a performance reward of $0.00 to participant 5 for trial 14.
+6:59:27 PM web.1    |  2026-08-19 18:59:27,383 Preparing trial for participant 5.
+6:59:27 PM web.1    |  2026-08-19 18:59:27,383 Looking for networks for participant 5.
+6:59:27 PM web.1    |  2026-08-19 18:59:27,388 1 remain after applying custom network filters.
+6:59:27 PM web.1    |  2026-08-19 18:59:27,388 0 out of 1 networks are awaiting async processes (or have nodes awaiting async processes).
+6:59:27 PM web.1    |  2026-08-19 18:59:27,388 Outcome: found 1 candidate network(s) for participant 5.
+6:59:27 PM web.1    |  2026-08-19 18:59:27,388 Selected node 3 from network 3 to give to participant 5.
+6:59:27 PM web.1    |  2026-08-19 18:59:27,395 Evaluating while_loop (Waiting for trial) condition: result = False
+6:59:27 PM web.1    |  2026-08-19 18:59:27,396 Evaluating while_loop (color_ratings__trial_loop) condition: result = True
+6:59:27 PM web.1    |  2026-08-19 18:59:27,396 Task 'advance_page' took 0.021 s
+6:59:27 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:27 +0000] "POST /response HTTP/1.1" 200 299 "-" "python-requests/2.34.2"
+6:59:27 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:27 +0000] "GET /participant_status/5 HTTP/1.1" 200 0 "-" "python-requests/2.34.2"
+6:59:27 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:27 +0000] "GET /timeline?unique_id=4054b455-cb03-4696-91ad-ae4e976deb41%3A45b36f4f-26d4-4fc8-b4fc-d5f26b5461a4 HTTP/1.1" 200 81689 "-" "python-requests/2.34.2"
+6:59:27 PM web.1    |  2026-08-19 18:59:27,518 Received a response from participant 5 on page f93d9fbe-3c3b-e8cc-fa8c-542f9ed9440f.
+6:59:27 PM web.1    |  2026-08-19 18:59:27,522 Calling _finalize_trial.
+6:59:27 PM web.1    |  2026-08-19 18:59:27,525 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+6:59:27 PM web.1    |  2026-08-19 18:59:27,526 Allocating a performance reward of $0.00 to participant 5 for trial 15.
+6:59:27 PM web.1    |  2026-08-19 18:59:27,530 Preparing trial for participant 5.
+6:59:27 PM web.1    |  2026-08-19 18:59:27,530 Looking for networks for participant 5.
+6:59:27 PM web.1    |  2026-08-19 18:59:27,530 N completed trials (3) >= N trials per participant (3), skipping forward
+6:59:27 PM web.1    |  2026-08-19 18:59:27,530 Outcome of find_networks: exit
+6:59:27 PM web.1    |  2026-08-19 18:59:27,532 Evaluating while_loop (Waiting for trial) condition: result = False
+6:59:27 PM web.1    |  2026-08-19 18:59:27,532 Evaluating while_loop (color_ratings__trial_loop) condition: result = False
+6:59:27 PM web.1    |  2026-08-19 18:59:27,533 Task 'advance_page' took 0.011 s
+6:59:27 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:27 +0000] "POST /response HTTP/1.1" 200 296 "-" "python-requests/2.34.2"
+6:59:27 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:27 +0000] "GET /participant_status/5 HTTP/1.1" 200 0 "-" "python-requests/2.34.2"
+6:59:27 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:27 +0000] "GET /timeline?unique_id=4054b455-cb03-4696-91ad-ae4e976deb41%3A45b36f4f-26d4-4fc8-b4fc-d5f26b5461a4 HTTP/1.1" 200 75018 "-" "python-requests/2.34.2"
+6:59:27 PM web.1    |  2026-08-19 18:59:27,651 Received a response from participant 5 on page 69b40cff-1b0f-7c01-9bd5-6b15e39835e1.
+6:59:27 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:27 +0000] "POST /response HTTP/1.1" 200 299 "-" "python-requests/2.34.2"
+6:59:27 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:27 +0000] "GET /participant_status/5 HTTP/1.1" 200 0 "-" "python-requests/2.34.2"
+6:59:27 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:27 +0000] "GET /timeline?unique_id=4054b455-cb03-4696-91ad-ae4e976deb41%3A45b36f4f-26d4-4fc8-b4fc-d5f26b5461a4 HTTP/1.1" 200 75388 "-" "python-requests/2.34.2"
+6:59:27 PM web.1    |  2026-08-19 18:59:27,775 Received a response from participant 5 on page 6b28253b-b5da-0754-e1ee-ee88decaab69.
+6:59:27 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:27 +0000] "POST /response HTTP/1.1" 200 305 "-" "python-requests/2.34.2"
+6:59:27 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:27 +0000] "GET /participant_status/5 HTTP/1.1" 200 0 "-" "python-requests/2.34.2"
+6:59:27 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:27 +0000] "GET /timeline?unique_id=4054b455-cb03-4696-91ad-ae4e976deb41%3A45b36f4f-26d4-4fc8-b4fc-d5f26b5461a4 HTTP/1.1" 200 73479 "-" "python-requests/2.34.2"
+6:59:27 PM web.1    |  2026-08-19 18:59:27,901 Received a response from participant 6 on page 8c197e1e-2a2a-e587-6357-bc9d2017fe3c.
+6:59:27 PM web.1    |  2026-08-19 18:59:27,912 Preparing trial for participant 6.
+6:59:27 PM web.1    |  2026-08-19 18:59:27,912 Looking for networks for participant 6.
+6:59:27 PM web.1    |  2026-08-19 18:59:27,916 3 remain after applying custom network filters.
+6:59:27 PM web.1    |  2026-08-19 18:59:27,916 0 out of 3 networks are awaiting async processes (or have nodes awaiting async processes).
+6:59:27 PM web.1    |  2026-08-19 18:59:27,916 Outcome: found 1 candidate network(s) for participant 6.
+6:59:27 PM web.1    |  2026-08-19 18:59:27,916 Selected node 1 from network 1 to give to participant 6.
+6:59:27 PM web.1    |  2026-08-19 18:59:27,922 Evaluating while_loop (Waiting for trial) condition: result = False
+6:59:27 PM web.1    |  2026-08-19 18:59:27,923 Evaluating while_loop (color_ratings__trial_loop) condition: result = True
+6:59:27 PM web.1    |  2026-08-19 18:59:27,923 Task 'advance_page' took 0.018 s
+6:59:27 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:27 +0000] "POST /response HTTP/1.1" 200 299 "-" "python-requests/2.34.2"
+6:59:27 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:27 +0000] "GET /participant_status/6 HTTP/1.1" 200 0 "-" "python-requests/2.34.2"
+6:59:28 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:28 +0000] "GET /timeline?unique_id=fbf30c87-3753-4885-b2b7-a23e74eab41c%3A69f8cbbb-9a50-4858-82f0-c37f2aca07bc HTTP/1.1" 200 81687 "-" "python-requests/2.34.2"
+6:59:28 PM web.1    |  2026-08-19 18:59:28,043 Received a response from participant 6 on page c16899fa-ff89-d32c-5226-627895b77c24.
+6:59:28 PM web.1    |  2026-08-19 18:59:28,048 Calling _finalize_trial.
+6:59:28 PM web.1    |  2026-08-19 18:59:28,051 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+6:59:28 PM web.1    |  2026-08-19 18:59:28,052 Allocating a performance reward of $0.00 to participant 6 for trial 16.
+6:59:28 PM web.1    |  2026-08-19 18:59:28,056 Preparing trial for participant 6.
+6:59:28 PM web.1    |  2026-08-19 18:59:28,056 Looking for networks for participant 6.
+6:59:28 PM web.1    |  2026-08-19 18:59:28,062 2 remain after applying custom network filters.
+6:59:28 PM web.1    |  2026-08-19 18:59:28,062 0 out of 2 networks are awaiting async processes (or have nodes awaiting async processes).
+6:59:28 PM web.1    |  2026-08-19 18:59:28,062 Outcome: found 1 candidate network(s) for participant 6.
+6:59:28 PM web.1    |  2026-08-19 18:59:28,062 Selected node 3 from network 3 to give to participant 6.
+6:59:28 PM web.1    |  2026-08-19 18:59:28,068 Evaluating while_loop (Waiting for trial) condition: result = False
+6:59:28 PM web.1    |  2026-08-19 18:59:28,069 Evaluating while_loop (color_ratings__trial_loop) condition: result = True
+6:59:28 PM web.1    |  2026-08-19 18:59:28,069 Task 'advance_page' took 0.021 s
+6:59:28 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:28 +0000] "POST /response HTTP/1.1" 200 299 "-" "python-requests/2.34.2"
+6:59:28 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:28 +0000] "GET /participant_status/6 HTTP/1.1" 200 0 "-" "python-requests/2.34.2"
+6:59:28 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:28 +0000] "GET /timeline?unique_id=fbf30c87-3753-4885-b2b7-a23e74eab41c%3A69f8cbbb-9a50-4858-82f0-c37f2aca07bc HTTP/1.1" 200 81689 "-" "python-requests/2.34.2"
+6:59:28 PM web.1    |  2026-08-19 18:59:28,190 Received a response from participant 6 on page 898f835e-da00-3fae-e495-a03b024d1767.
+6:59:28 PM web.1    |  2026-08-19 18:59:28,195 Calling _finalize_trial.
+6:59:28 PM web.1    |  2026-08-19 18:59:28,198 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+6:59:28 PM web.1    |  2026-08-19 18:59:28,199 Allocating a performance reward of $0.00 to participant 6 for trial 17.
+6:59:28 PM web.1    |  2026-08-19 18:59:28,203 Preparing trial for participant 6.
+6:59:28 PM web.1    |  2026-08-19 18:59:28,203 Looking for networks for participant 6.
+6:59:28 PM web.1    |  2026-08-19 18:59:28,208 1 remain after applying custom network filters.
+6:59:28 PM web.1    |  2026-08-19 18:59:28,208 0 out of 1 networks are awaiting async processes (or have nodes awaiting async processes).
+6:59:28 PM web.1    |  2026-08-19 18:59:28,208 Outcome: found 1 candidate network(s) for participant 6.
+6:59:28 PM web.1    |  2026-08-19 18:59:28,208 Selected node 2 from network 2 to give to participant 6.
+6:59:28 PM web.1    |  2026-08-19 18:59:28,214 Evaluating while_loop (Waiting for trial) condition: result = False
+6:59:28 PM web.1    |  2026-08-19 18:59:28,215 Evaluating while_loop (color_ratings__trial_loop) condition: result = True
+6:59:28 PM web.1    |  2026-08-19 18:59:28,215 Task 'advance_page' took 0.021 s
+6:59:28 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:28 +0000] "POST /response HTTP/1.1" 200 299 "-" "python-requests/2.34.2"
+6:59:28 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:28 +0000] "GET /participant_status/6 HTTP/1.1" 200 0 "-" "python-requests/2.34.2"
+6:59:28 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:28 +0000] "GET /timeline?unique_id=fbf30c87-3753-4885-b2b7-a23e74eab41c%3A69f8cbbb-9a50-4858-82f0-c37f2aca07bc HTTP/1.1" 200 81689 "-" "python-requests/2.34.2"
+6:59:28 PM web.1    |  2026-08-19 18:59:28,340 Received a response from participant 6 on page 6e0b572a-13dd-5def-a773-376f6221af1b.
+6:59:28 PM web.1    |  2026-08-19 18:59:28,345 Calling _finalize_trial.
+6:59:28 PM web.1    |  2026-08-19 18:59:28,348 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+6:59:28 PM web.1    |  2026-08-19 18:59:28,349 Allocating a performance reward of $0.00 to participant 6 for trial 18.
+6:59:28 PM web.1    |  2026-08-19 18:59:28,353 Preparing trial for participant 6.
+6:59:28 PM web.1    |  2026-08-19 18:59:28,353 Looking for networks for participant 6.
+6:59:28 PM web.1    |  2026-08-19 18:59:28,353 N completed trials (3) >= N trials per participant (3), skipping forward
+6:59:28 PM web.1    |  2026-08-19 18:59:28,353 Outcome of find_networks: exit
+6:59:28 PM web.1    |  2026-08-19 18:59:28,355 Evaluating while_loop (Waiting for trial) condition: result = False
+6:59:28 PM web.1    |  2026-08-19 18:59:28,356 Evaluating while_loop (color_ratings__trial_loop) condition: result = False
+6:59:28 PM web.1    |  2026-08-19 18:59:28,356 Task 'advance_page' took 0.012 s
+6:59:28 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:28 +0000] "POST /response HTTP/1.1" 200 296 "-" "python-requests/2.34.2"
+6:59:28 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:28 +0000] "GET /participant_status/6 HTTP/1.1" 200 0 "-" "python-requests/2.34.2"
+6:59:28 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:28 +0000] "GET /timeline?unique_id=fbf30c87-3753-4885-b2b7-a23e74eab41c%3A69f8cbbb-9a50-4858-82f0-c37f2aca07bc HTTP/1.1" 200 75018 "-" "python-requests/2.34.2"
+6:59:28 PM web.1    |  2026-08-19 18:59:28,473 Received a response from participant 6 on page 3f6c4bfe-8b63-9f0c-8aca-27a44c67d382.
+6:59:28 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:28 +0000] "POST /response HTTP/1.1" 200 299 "-" "python-requests/2.34.2"
+6:59:28 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:28 +0000] "GET /participant_status/6 HTTP/1.1" 200 0 "-" "python-requests/2.34.2"
+6:59:28 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:28 +0000] "GET /timeline?unique_id=fbf30c87-3753-4885-b2b7-a23e74eab41c%3A69f8cbbb-9a50-4858-82f0-c37f2aca07bc HTTP/1.1" 200 75388 "-" "python-requests/2.34.2"
+6:59:28 PM web.1    |  2026-08-19 18:59:28,598 Received a response from participant 6 on page 2ebdc4b7-99e3-ca54-7592-c369c19bcaa1.
+6:59:28 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:28 +0000] "POST /response HTTP/1.1" 200 305 "-" "python-requests/2.34.2"
+6:59:28 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:28 +0000] "GET /participant_status/6 HTTP/1.1" 200 0 "-" "python-requests/2.34.2"
+6:59:28 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:28 +0000] "GET /timeline?unique_id=fbf30c87-3753-4885-b2b7-a23e74eab41c%3A69f8cbbb-9a50-4858-82f0-c37f2aca07bc HTTP/1.1" 200 73479 "-" "python-requests/2.34.2"
+6:59:28 PM web.1    |  2026-08-19 18:59:28,725 Received a response from participant 7 on page 9a00fdf6-7a77-d1bd-baf3-a57f951126b5.
+6:59:28 PM web.1    |  2026-08-19 18:59:28,734 Preparing trial for participant 7.
+6:59:28 PM web.1    |  2026-08-19 18:59:28,734 Looking for networks for participant 7.
+6:59:28 PM web.1    |  2026-08-19 18:59:28,738 3 remain after applying custom network filters.
+6:59:28 PM web.1    |  2026-08-19 18:59:28,739 0 out of 3 networks are awaiting async processes (or have nodes awaiting async processes).
+6:59:28 PM web.1    |  2026-08-19 18:59:28,739 Outcome: found 1 candidate network(s) for participant 7.
+6:59:28 PM web.1    |  2026-08-19 18:59:28,739 Selected node 3 from network 3 to give to participant 7.
+6:59:28 PM web.1    |  2026-08-19 18:59:28,744 Evaluating while_loop (Waiting for trial) condition: result = False
+6:59:28 PM web.1    |  2026-08-19 18:59:28,745 Evaluating while_loop (color_ratings__trial_loop) condition: result = True
+6:59:28 PM web.1    |  2026-08-19 18:59:28,745 Task 'advance_page' took 0.017 s
+6:59:28 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:28 +0000] "POST /response HTTP/1.1" 200 299 "-" "python-requests/2.34.2"
+6:59:28 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:28 +0000] "GET /participant_status/7 HTTP/1.1" 200 0 "-" "python-requests/2.34.2"
+6:59:28 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:28 +0000] "GET /timeline?unique_id=96944421-b0a1-4a9c-9a83-465170d3c0f2%3A764dcd79-d90f-4ef8-97fb-623796924480 HTTP/1.1" 200 81689 "-" "python-requests/2.34.2"
+6:59:28 PM web.1    |  2026-08-19 18:59:28,866 Received a response from participant 7 on page 909dfe8e-6eaf-e401-1d3d-a6dcb4e9caec.
+6:59:28 PM web.1    |  2026-08-19 18:59:28,872 Calling _finalize_trial.
+6:59:28 PM web.1    |  2026-08-19 18:59:28,875 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+6:59:28 PM web.1    |  2026-08-19 18:59:28,876 Allocating a performance reward of $0.00 to participant 7 for trial 19.
+6:59:28 PM web.1    |  2026-08-19 18:59:28,879 Preparing trial for participant 7.
+6:59:28 PM web.1    |  2026-08-19 18:59:28,879 Looking for networks for participant 7.
+6:59:28 PM web.1    |  2026-08-19 18:59:28,884 2 remain after applying custom network filters.
+6:59:28 PM web.1    |  2026-08-19 18:59:28,884 0 out of 2 networks are awaiting async processes (or have nodes awaiting async processes).
+6:59:28 PM web.1    |  2026-08-19 18:59:28,884 Outcome: found 1 candidate network(s) for participant 7.
+6:59:28 PM web.1    |  2026-08-19 18:59:28,884 Selected node 1 from network 1 to give to participant 7.
+6:59:28 PM web.1    |  2026-08-19 18:59:28,890 Evaluating while_loop (Waiting for trial) condition: result = False
+6:59:28 PM web.1    |  2026-08-19 18:59:28,890 Evaluating while_loop (color_ratings__trial_loop) condition: result = True
+6:59:28 PM web.1    |  2026-08-19 18:59:28,891 Task 'advance_page' took 0.019 s
+6:59:28 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:28 +0000] "POST /response HTTP/1.1" 200 299 "-" "python-requests/2.34.2"
+6:59:28 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:28 +0000] "GET /participant_status/7 HTTP/1.1" 200 0 "-" "python-requests/2.34.2"
+6:59:29 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:29 +0000] "GET /timeline?unique_id=96944421-b0a1-4a9c-9a83-465170d3c0f2%3A764dcd79-d90f-4ef8-97fb-623796924480 HTTP/1.1" 200 81687 "-" "python-requests/2.34.2"
+6:59:29 PM web.1    |  2026-08-19 18:59:29,010 Received a response from participant 7 on page 122fe345-24a6-5e7b-f549-15700269d5da.
+6:59:29 PM web.1    |  2026-08-19 18:59:29,015 Calling _finalize_trial.
+6:59:29 PM web.1    |  2026-08-19 18:59:29,017 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+6:59:29 PM web.1    |  2026-08-19 18:59:29,019 Allocating a performance reward of $0.00 to participant 7 for trial 20.
+6:59:29 PM web.1    |  2026-08-19 18:59:29,022 Preparing trial for participant 7.
+6:59:29 PM web.1    |  2026-08-19 18:59:29,022 Looking for networks for participant 7.
+6:59:29 PM web.1    |  2026-08-19 18:59:29,027 1 remain after applying custom network filters.
+6:59:29 PM web.1    |  2026-08-19 18:59:29,027 0 out of 1 networks are awaiting async processes (or have nodes awaiting async processes).
+6:59:29 PM web.1    |  2026-08-19 18:59:29,027 Outcome: found 1 candidate network(s) for participant 7.
+6:59:29 PM web.1    |  2026-08-19 18:59:29,027 Selected node 2 from network 2 to give to participant 7.
+6:59:29 PM web.1    |  2026-08-19 18:59:29,033 Evaluating while_loop (Waiting for trial) condition: result = False
+6:59:29 PM web.1    |  2026-08-19 18:59:29,033 Evaluating while_loop (color_ratings__trial_loop) condition: result = True
+6:59:29 PM web.1    |  2026-08-19 18:59:29,034 Task 'advance_page' took 0.019 s
+6:59:29 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:29 +0000] "POST /response HTTP/1.1" 200 299 "-" "python-requests/2.34.2"
+6:59:29 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:29 +0000] "GET /participant_status/7 HTTP/1.1" 200 0 "-" "python-requests/2.34.2"
+6:59:29 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:29 +0000] "GET /timeline?unique_id=96944421-b0a1-4a9c-9a83-465170d3c0f2%3A764dcd79-d90f-4ef8-97fb-623796924480 HTTP/1.1" 200 81689 "-" "python-requests/2.34.2"
+6:59:29 PM web.1    |  2026-08-19 18:59:29,155 Received a response from participant 7 on page b8c719e9-2c10-ef4a-4820-f25c8b66e3a8.
+6:59:29 PM web.1    |  2026-08-19 18:59:29,160 Calling _finalize_trial.
+6:59:29 PM web.1    |  2026-08-19 18:59:29,164 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+6:59:29 PM web.1    |  2026-08-19 18:59:29,165 Allocating a performance reward of $0.00 to participant 7 for trial 21.
+6:59:29 PM web.1    |  2026-08-19 18:59:29,169 Preparing trial for participant 7.
+6:59:29 PM web.1    |  2026-08-19 18:59:29,169 Looking for networks for participant 7.
+6:59:29 PM web.1    |  2026-08-19 18:59:29,169 N completed trials (3) >= N trials per participant (3), skipping forward
+6:59:29 PM web.1    |  2026-08-19 18:59:29,169 Outcome of find_networks: exit
+6:59:29 PM web.1    |  2026-08-19 18:59:29,171 Evaluating while_loop (Waiting for trial) condition: result = False
+6:59:29 PM web.1    |  2026-08-19 18:59:29,172 Evaluating while_loop (color_ratings__trial_loop) condition: result = False
+6:59:29 PM web.1    |  2026-08-19 18:59:29,172 Task 'advance_page' took 0.012 s
+6:59:29 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:29 +0000] "POST /response HTTP/1.1" 200 296 "-" "python-requests/2.34.2"
+6:59:29 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:29 +0000] "GET /participant_status/7 HTTP/1.1" 200 0 "-" "python-requests/2.34.2"
+6:59:29 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:29 +0000] "GET /timeline?unique_id=96944421-b0a1-4a9c-9a83-465170d3c0f2%3A764dcd79-d90f-4ef8-97fb-623796924480 HTTP/1.1" 200 75018 "-" "python-requests/2.34.2"
+6:59:29 PM web.1    |  2026-08-19 18:59:29,291 Received a response from participant 7 on page ec7993f9-3a6b-2943-1edc-78fb911739d9.
+6:59:29 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:29 +0000] "POST /response HTTP/1.1" 200 299 "-" "python-requests/2.34.2"
+6:59:29 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:29 +0000] "GET /participant_status/7 HTTP/1.1" 200 0 "-" "python-requests/2.34.2"
+6:59:29 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:29 +0000] "GET /timeline?unique_id=96944421-b0a1-4a9c-9a83-465170d3c0f2%3A764dcd79-d90f-4ef8-97fb-623796924480 HTTP/1.1" 200 75388 "-" "python-requests/2.34.2"
+6:59:29 PM web.1    |  2026-08-19 18:59:29,415 Received a response from participant 7 on page 9e7b27c0-2924-a6a7-b0a7-c1fb2aee29cd.
+6:59:29 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:29 +0000] "POST /response HTTP/1.1" 200 305 "-" "python-requests/2.34.2"
+6:59:29 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:29 +0000] "GET /participant_status/7 HTTP/1.1" 200 0 "-" "python-requests/2.34.2"
+6:59:29 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:29 +0000] "GET /timeline?unique_id=96944421-b0a1-4a9c-9a83-465170d3c0f2%3A764dcd79-d90f-4ef8-97fb-623796924480 HTTP/1.1" 200 73479 "-" "python-requests/2.34.2"
+6:59:29 PM web.1    |  2026-08-19 18:59:29,542 Received a response from participant 8 on page 18303c4f-bfb1-b620-b483-1c4fc9c02cba.
+6:59:29 PM web.1    |  2026-08-19 18:59:29,551 Preparing trial for participant 8.
+6:59:29 PM web.1    |  2026-08-19 18:59:29,552 Looking for networks for participant 8.
+6:59:29 PM web.1    |  2026-08-19 18:59:29,556 3 remain after applying custom network filters.
+6:59:29 PM web.1    |  2026-08-19 18:59:29,556 0 out of 3 networks are awaiting async processes (or have nodes awaiting async processes).
+6:59:29 PM web.1    |  2026-08-19 18:59:29,556 Outcome: found 1 candidate network(s) for participant 8.
+6:59:29 PM web.1    |  2026-08-19 18:59:29,556 Selected node 2 from network 2 to give to participant 8.
+6:59:29 PM web.1    |  2026-08-19 18:59:29,562 Evaluating while_loop (Waiting for trial) condition: result = False
+6:59:29 PM web.1    |  2026-08-19 18:59:29,563 Evaluating while_loop (color_ratings__trial_loop) condition: result = True
+6:59:29 PM web.1    |  2026-08-19 18:59:29,563 Task 'advance_page' took 0.018 s
+6:59:29 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:29 +0000] "POST /response HTTP/1.1" 200 299 "-" "python-requests/2.34.2"
+6:59:29 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:29 +0000] "GET /participant_status/8 HTTP/1.1" 200 0 "-" "python-requests/2.34.2"
+6:59:29 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:29 +0000] "GET /timeline?unique_id=c7a5ad79-6e2e-4025-9729-dafe3792d948%3A02ca395b-0355-4bed-9f7e-791060cddf7f HTTP/1.1" 200 81689 "-" "python-requests/2.34.2"
+6:59:29 PM web.1    |  2026-08-19 18:59:29,685 Received a response from participant 8 on page a6cd4a68-9bbb-f58a-11cf-855aba3e67d5.
+6:59:29 PM web.1    |  2026-08-19 18:59:29,690 Calling _finalize_trial.
+6:59:29 PM web.1    |  2026-08-19 18:59:29,693 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+6:59:29 PM web.1    |  2026-08-19 18:59:29,694 Allocating a performance reward of $0.00 to participant 8 for trial 22.
+6:59:29 PM web.1    |  2026-08-19 18:59:29,697 Preparing trial for participant 8.
+6:59:29 PM web.1    |  2026-08-19 18:59:29,697 Looking for networks for participant 8.
+6:59:29 PM web.1    |  2026-08-19 18:59:29,702 2 remain after applying custom network filters.
+6:59:29 PM web.1    |  2026-08-19 18:59:29,702 0 out of 2 networks are awaiting async processes (or have nodes awaiting async processes).
+6:59:29 PM web.1    |  2026-08-19 18:59:29,703 Outcome: found 1 candidate network(s) for participant 8.
+6:59:29 PM web.1    |  2026-08-19 18:59:29,703 Selected node 3 from network 3 to give to participant 8.
+6:59:29 PM web.1    |  2026-08-19 18:59:29,708 Evaluating while_loop (Waiting for trial) condition: result = False
+6:59:29 PM web.1    |  2026-08-19 18:59:29,708 Evaluating while_loop (color_ratings__trial_loop) condition: result = True
+6:59:29 PM web.1    |  2026-08-19 18:59:29,709 Task 'advance_page' took 0.019 s
+6:59:29 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:29 +0000] "POST /response HTTP/1.1" 200 299 "-" "python-requests/2.34.2"
+6:59:29 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:29 +0000] "GET /participant_status/8 HTTP/1.1" 200 0 "-" "python-requests/2.34.2"
+6:59:29 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:29 +0000] "GET /timeline?unique_id=c7a5ad79-6e2e-4025-9729-dafe3792d948%3A02ca395b-0355-4bed-9f7e-791060cddf7f HTTP/1.1" 200 81689 "-" "python-requests/2.34.2"
+6:59:29 PM web.1    |  2026-08-19 18:59:29,830 Received a response from participant 8 on page 47502eba-5426-7fc0-6fea-9dfefdb32281.
+6:59:29 PM web.1    |  2026-08-19 18:59:29,834 Calling _finalize_trial.
+6:59:29 PM web.1    |  2026-08-19 18:59:29,837 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+6:59:29 PM web.1    |  2026-08-19 18:59:29,838 Allocating a performance reward of $0.00 to participant 8 for trial 23.
+6:59:29 PM web.1    |  2026-08-19 18:59:29,842 Preparing trial for participant 8.
+6:59:29 PM web.1    |  2026-08-19 18:59:29,842 Looking for networks for participant 8.
+6:59:29 PM web.1    |  2026-08-19 18:59:29,847 1 remain after applying custom network filters.
+6:59:29 PM web.1    |  2026-08-19 18:59:29,847 0 out of 1 networks are awaiting async processes (or have nodes awaiting async processes).
+6:59:29 PM web.1    |  2026-08-19 18:59:29,847 Outcome: found 1 candidate network(s) for participant 8.
+6:59:29 PM web.1    |  2026-08-19 18:59:29,847 Selected node 1 from network 1 to give to participant 8.
+6:59:29 PM web.1    |  2026-08-19 18:59:29,852 Evaluating while_loop (Waiting for trial) condition: result = False
+6:59:29 PM web.1    |  2026-08-19 18:59:29,853 Evaluating while_loop (color_ratings__trial_loop) condition: result = True
+6:59:29 PM web.1    |  2026-08-19 18:59:29,853 Task 'advance_page' took 0.019 s
+6:59:29 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:29 +0000] "POST /response HTTP/1.1" 200 299 "-" "python-requests/2.34.2"
+6:59:29 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:29 +0000] "GET /participant_status/8 HTTP/1.1" 200 0 "-" "python-requests/2.34.2"
+6:59:29 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:29 +0000] "GET /timeline?unique_id=c7a5ad79-6e2e-4025-9729-dafe3792d948%3A02ca395b-0355-4bed-9f7e-791060cddf7f HTTP/1.1" 200 81687 "-" "python-requests/2.34.2"
+6:59:29 PM web.1    |  2026-08-19 18:59:29,975 Received a response from participant 8 on page 4bf4b782-7d7a-e734-33bf-c6642d2b3b2f.
+6:59:29 PM web.1    |  2026-08-19 18:59:29,980 Calling _finalize_trial.
+6:59:29 PM web.1    |  2026-08-19 18:59:29,983 Checking if we should run async_post_trial... no need, as no async_post_trial method is defined.
+6:59:29 PM web.1    |  2026-08-19 18:59:29,983 Allocating a performance reward of $0.00 to participant 8 for trial 24.
+6:59:29 PM web.1    |  2026-08-19 18:59:29,987 Preparing trial for participant 8.
+6:59:29 PM web.1    |  2026-08-19 18:59:29,987 Looking for networks for participant 8.
+6:59:29 PM web.1    |  2026-08-19 18:59:29,987 N completed trials (3) >= N trials per participant (3), skipping forward
+6:59:29 PM web.1    |  2026-08-19 18:59:29,987 Outcome of find_networks: exit
+6:59:29 PM web.1    |  2026-08-19 18:59:29,990 Evaluating while_loop (Waiting for trial) condition: result = False
+6:59:29 PM web.1    |  2026-08-19 18:59:29,990 Evaluating while_loop (color_ratings__trial_loop) condition: result = False
+6:59:29 PM web.1    |  2026-08-19 18:59:29,990 Task 'advance_page' took 0.011 s
+6:59:29 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:29 +0000] "POST /response HTTP/1.1" 200 296 "-" "python-requests/2.34.2"
+6:59:29 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:29 +0000] "GET /participant_status/8 HTTP/1.1" 200 0 "-" "python-requests/2.34.2"
+6:59:30 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:30 +0000] "GET /timeline?unique_id=c7a5ad79-6e2e-4025-9729-dafe3792d948%3A02ca395b-0355-4bed-9f7e-791060cddf7f HTTP/1.1" 200 75018 "-" "python-requests/2.34.2"
+6:59:30 PM web.1    |  2026-08-19 18:59:30,106 Received a response from participant 8 on page 9609186a-08b7-73aa-556c-c2e3ed139fe1.
+6:59:30 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:30 +0000] "POST /response HTTP/1.1" 200 299 "-" "python-requests/2.34.2"
+6:59:30 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:30 +0000] "GET /participant_status/8 HTTP/1.1" 200 0 "-" "python-requests/2.34.2"
+6:59:30 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:30 +0000] "GET /timeline?unique_id=c7a5ad79-6e2e-4025-9729-dafe3792d948%3A02ca395b-0355-4bed-9f7e-791060cddf7f HTTP/1.1" 200 75388 "-" "python-requests/2.34.2"
+6:59:30 PM web.1    |  2026-08-19 18:59:30,230 Received a response from participant 8 on page e1483bdd-2fe3-dbfd-685f-03f362d5ad1d.
+6:59:30 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:30 +0000] "POST /response HTTP/1.1" 200 305 "-" "python-requests/2.34.2"
+6:59:30 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:30 +0000] "GET /participant_status/8 HTTP/1.1" 200 0 "-" "python-requests/2.34.2"
+6:59:30 PM web.1    |  127.0.0.1 - - [19/Aug/2026:18:59:30 +0000] "GET /timeline?unique_id=c7a5ad79-6e2e-4025-9729-dafe3792d948%3A02ca395b-0355-4bed-9f7e-791060cddf7f HTTP/1.1" 200 73479 "-" "python-requests/2.34.2"
+^C
+❯❯ Completed debugging of experiment with id 7c54f0ac-9ee5-8e03-a191-eb8879c70e7e
+
+❯❯ Cleaning up local Heroku process...
+
+❯❯ Local Heroku process terminated.
+
+❯❯ Found 1 remaining PsyNet worker process(es), terminating them now.
+=========================== short test summary info ============================
+FAILED test.py::test_experiment[/workspace/challenges/primary-color-rating/attempts/2026-08-19-18-54/code/primary_color_rating]
+============================== 1 failed in 15.20s ==============================
+==== EXIT 1 ====
+==== PSYNET TEST LOCAL AFTER ASSERT FIX 2026-08-19T18:59:54Z ====
+Checking local PostgreSQL and Redis...
+  PostgreSQL: OK (reachable)
+  Redis: OK (responded to PING)
+============================= test session starts ==============================
+platform linux -- Python 3.13.14, pytest-9.1.1, pluggy-1.6.0
+rootdir: /workspace/challenges/primary-color-rating/attempts/2026-08-19-18-54/code/primary_color_rating
+configfile: pytest.ini
+plugins: mock-3.15.1, dallinger-12.2.1, psynet-13.4.0a0, timeout-2.4.0, dependency-0.6.1, Faker-40.28.1
+collected 1 item
+
+test.py::test_experiment[/workspace/challenges/primary-color-rating/attempts/2026-08-19-18-54/code/primary_color_rating] 
+-------------------------------- live log call ---------------------------------
+INFO     psynet:experiment.py:1398 Testing experiment with 8 serial bot(s)...
+INFO     psynet:bot.py:74 Waiting for experiment launch to complete....
+INFO     psynet:bot.py:37 Initializing bot with worker ID 7da805e5-5ab4-4235-87cb-f4d4f79816cb.
+INFO     psynet:bot.py:74 Waiting for experiment launch to complete....
+INFO     psynet:bot.py:37 Initializing bot with worker ID d1bb0159-72d4-4adc-b604-ee2aaa80fa96.
+INFO     psynet:bot.py:74 Waiting for experiment launch to complete....
+INFO     psynet:bot.py:37 Initializing bot with worker ID 677a2242-bea5-4ec5-8a9a-d94fb6a99f3d.
+INFO     psynet:bot.py:74 Waiting for experiment launch to complete....
+INFO     psynet:bot.py:37 Initializing bot with worker ID ac3e9c27-81a6-4cdf-be1f-3dcdc9a8f1cb.
+INFO     psynet:bot.py:74 Waiting for experiment launch to complete....
+INFO     psynet:bot.py:37 Initializing bot with worker ID b073db48-53bc-4462-926f-1f37efd101f8.
+INFO     psynet:bot.py:74 Waiting for experiment launch to complete....
+INFO     psynet:bot.py:37 Initializing bot with worker ID ca1e42ed-052b-4b6a-9ea6-7c7ce784f86a.
+INFO     psynet:bot.py:74 Waiting for experiment launch to complete....
+INFO     psynet:bot.py:37 Initializing bot with worker ID 5a7a5704-a957-464e-a42d-729853b7d3db.
+INFO     psynet:bot.py:74 Waiting for experiment launch to complete....
+INFO     psynet:bot.py:37 Initializing bot with worker ID d45e21bc-f653-4614-b6d4-038cec6abc4b.
+INFO     psynet:participant.py:1125 ParticipantDriver 1 has finished the experiment (took 7 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 0.882 seconds).
+INFO     psynet:participant.py:1125 ParticipantDriver 2 has finished the experiment (took 7 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 0.806 seconds).
+INFO     psynet:participant.py:1125 ParticipantDriver 3 has finished the experiment (took 7 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 0.806 seconds).
+INFO     psynet:participant.py:1125 ParticipantDriver 4 has finished the experiment (took 7 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 0.809 seconds).
+INFO     psynet:participant.py:1125 ParticipantDriver 5 has finished the experiment (took 7 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 0.804 seconds).
+INFO     psynet:participant.py:1125 ParticipantDriver 6 has finished the experiment (took 7 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 0.808 seconds).
+INFO     psynet:participant.py:1125 ParticipantDriver 7 has finished the experiment (took 7 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 0.818 seconds).
+INFO     psynet:participant.py:1125 ParticipantDriver 8 has finished the experiment (took 7 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 0.819 seconds).
+INFO     psynet:experiment.py:1374 Mean HTTP request duration: 0.067 seconds
+PASSED                                                                   [100%]
+
+============================== 1 passed in 14.97s ==============================
+==== EXIT 0 ====

@@ -49,13 +49,13 @@ Agents should not ask users to type these values manually. Use the helper from
 the `/deploy-attempt` skill to derive defaults:
 
 ```bash
-python3 .cursor/skills/deploy-attempt/scripts/deploy_attempt.py <attempt>
+python3 .agents/skills/deploy-attempt/scripts/deploy_attempt.py <attempt>
 ```
 
 To queue a real deployment request, the agent runs:
 
 ```bash
-python3 .cursor/skills/deploy-attempt/scripts/deploy_attempt.py <attempt> --request-deploy
+python3 .agents/skills/deploy-attempt/scripts/deploy_attempt.py <attempt> --request-deploy
 ```
 
 The helper triggers the workflow when its GitHub token has permission, then

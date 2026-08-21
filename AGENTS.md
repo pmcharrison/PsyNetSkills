@@ -57,6 +57,12 @@ refresh the local PsyNet checkout with
 record the resulting checkout under the standard `psynet` object in the
 attempt's `agent.json`.
 
+When the work needs `psynet audit`, use a PsyNet revision that includes the
+audit CLI (see this repo's `pyproject.toml` pin). Audit is part of core PsyNet
+(no optional extra). Do not assume older `master` checkouts have `psynet audit`
+until that feature is merged; do not reset to `master` mid-audit work if it
+would drop the CLI.
+
 Challenge and experiment work in this repository must not use custom or real
 service credentials. Use only local, ephemeral PsyNet/Dallinger dashboard
 defaults. Do not configure real AWS credentials, Prolific API tokens, or other
@@ -66,11 +72,37 @@ workflow rather than committing or publishing them.
 
 ### Skill registration
 
-Repository skills live in `.cursor/skills/`. At the start of each session,
-review the skills present in the checked-out repository and treat that directory
-as the authoritative source for the current skill set. If the session's attached
-skill metadata appears stale or incomplete, prefer the repository skills on disk
-and note the mismatch briefly before proceeding.
+Workshop Agent Skills live in **`.agents/skills/`** (the cross-client
+[Agent Skills](https://agentskills.io/specification) discovery path). Relative
+symlinks keep the same tree visible to clients that scan a vendor-specific
+directory:
+
+| Path | Who scans it |
+| --- | --- |
+| `.agents/skills/` | Codex, Copilot, Cursor (canonical) |
+| `.claude/skills/` | Claude Code, Copilot |
+| `.cursor/skills/` | Cursor |
+| `.github/skills/` | GitHub Copilot |
+
+Edit files under `.agents/skills/` only. Do not copy skills into the alias
+directories. `psynetsk-validate` checks that the three aliases remain relative
+symlinks to `.agents/skills/`. Clone with symlink support enabled (`git clone`
+on Linux/macOS; on Windows, `core.symlinks=true` or Developer Mode).
+
+At the start of each session, review the skills in `.agents/skills/` and treat
+that tree as authoritative for workshop workflows.
+
+General PsyNet experiment skills still live in
+`~/PsyNet/.cursor/skills/experiment/` until PsyNet adopts the same layout; they
+are copied into experiment repositories by `psynet scripts update`. If the
+session's attached skill metadata appears stale or incomplete, prefer these
+on-disk sources and note the mismatch briefly before proceeding.
+
+**Skill authoring:** the canonical Agent Skills format spec is
+`~/PsyNet/.cursor/skills/create-skill/SKILL.md`. The workshop `create-skill`
+skill adds overlap review, `psynetsk-validate`, and challenge/attempt author
+rules. After PsyNet experiment skills change, refresh experiment copies with
+`psynet scripts update`.
 
 ### System dependencies (not managed by `uv sync`)
 
@@ -89,9 +121,10 @@ and note the mismatch briefly before proceeding.
   locally with npm and commit `package.json`/`package-lock.json`.
 
 For Cursor Cloud participant recordings with browser audio, use the
-`record-participant-video` skill as the operational source of truth. It covers
-the PulseAudio null-sink setup, browser routing, ffmpeg capture command, and
-audio verification checks.
+PsyNet skill
+`~/PsyNet/.cursor/skills/experiment/record-participant-video/SKILL.md` as the
+operational source of truth. It covers the PulseAudio null-sink setup, browser
+routing, ffmpeg capture command, and audio verification checks.
 
 ### Standard commands
 
