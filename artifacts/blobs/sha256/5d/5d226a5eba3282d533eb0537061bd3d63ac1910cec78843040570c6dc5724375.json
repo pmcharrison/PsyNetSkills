@@ -1,0 +1,15 @@
+{
+  "adaptive": {
+    "n_participants": 30,
+    "mean_absolute_error": 0.28264,
+    "median_absolute_error": 0.251575,
+    "mean_selected_length": 10.203333
+  },
+  "nonadaptive": {
+    "n_participants": 30,
+    "mean_absolute_error": 0.291266,
+    "median_absolute_error": 0.181627,
+    "mean_selected_length": 11.2
+  },
+  "adaptive_minus_nonadaptive_mae": -0.008626
+}

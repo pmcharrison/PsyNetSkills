@@ -1,0 +1,30 @@
+.animal-choice-counter {
+  margin-bottom: 0.5rem;
+}
+
+.animal-choice-question {
+  margin-bottom: 1rem;
+}
+
+.animal-choice-help {
+  margin-bottom: 1.25rem;
+}
+
+.animal-choice-label {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.animal-choice-icon {
+  height: 72px;
+  width: 72px;
+}
+
+@media (max-width: 600px) {
+  .animal-choice-icon {
+    height: 56px;
+    width: 56px;
+  }
+}

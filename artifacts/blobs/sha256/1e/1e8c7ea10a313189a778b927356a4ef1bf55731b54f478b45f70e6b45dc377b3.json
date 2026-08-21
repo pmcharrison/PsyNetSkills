@@ -1,0 +1,36 @@
+{
+  "row_count": 6,
+  "participant_count": 2,
+  "participants": {
+    "1": {
+      "colors_by_trial_id": [
+        "red",
+        "green",
+        "blue"
+      ],
+      "ratings_by_trial_id": [
+        3,
+        5,
+        7
+      ],
+      "complete": true,
+      "ratings_in_range": true
+    },
+    "2": {
+      "colors_by_trial_id": [
+        "red",
+        "green",
+        "blue"
+      ],
+      "ratings_by_trial_id": [
+        3,
+        5,
+        7
+      ],
+      "complete": true,
+      "ratings_in_range": true
+    }
+  },
+  "all_participants_complete": true,
+  "all_ratings_in_range": true
+}

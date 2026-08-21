@@ -1,0 +1,88 @@
+msgid ""
+msgstr ""
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: experiment.py
+msgid "Welcome"
+msgstr "Willkommen"
+
+#: experiment.py
+msgid "Welcome to this decision-making task."
+msgstr "Willkommen zu dieser Entscheidungsaufgabe."
+
+#: experiment.py
+msgid "You will compare two options described by numerical feature ratings."
+msgstr "Sie vergleichen zwei Optionen, die durch numerische Merkmalsbewertungen beschrieben werden."
+
+#: experiment.py
+msgid "Instructions"
+msgstr "Anleitung"
+
+#: experiment.py
+msgid "On each trial, compare Option A and Option B."
+msgstr "Vergleichen Sie in jedem Durchgang Option A und Option B."
+
+#: experiment.py
+msgid "Each row shows a feature, its validity from 0 to 1, and each option's rating."
+msgstr "Jede Zeile zeigt ein Merkmal, seine Validität von 0 bis 1 und die Bewertung jeder Option."
+
+#: experiment.py
+msgid "Higher validities indicate features that are more predictive in the design."
+msgstr "Höhere Validitäten kennzeichnen Merkmale, die in diesem Design aussagekräftiger sind."
+
+#: experiment.py
+msgid "Choose the option you would prefer. There are no right or wrong answers."
+msgstr "Wählen Sie die Option, die Sie bevorzugen würden. Es gibt keine richtigen oder falschen Antworten."
+
+#: experiment.py
+#, python-brace-format
+msgid "Decision {TRIAL_NUMBER} of {TOTAL_TRIALS}"
+msgstr "Entscheidung {TRIAL_NUMBER} von {TOTAL_TRIALS}"
+
+#: experiment.py
+msgid "Please compare both options before choosing."
+msgstr "Bitte vergleichen Sie beide Optionen, bevor Sie wählen."
+
+#: experiment.py
+msgid "Rating"
+msgstr "Bewertung"
+
+#: experiment.py
+#, python-brace-format
+msgid "Rating {RATING_NUMBER}"
+msgstr "Bewertung {RATING_NUMBER}"
+
+#: experiment.py
+msgid "Validity"
+msgstr "Validität"
+
+#: experiment.py
+msgid "Value"
+msgstr "Wert"
+
+#: experiment.py
+msgid "Option A"
+msgstr "Option A"
+
+#: experiment.py
+msgid "Option B"
+msgstr "Option B"
+
+#: experiment.py
+msgid "Choose Option A"
+msgstr "Option A wählen"
+
+#: experiment.py
+msgid "Choose Option B"
+msgstr "Option B wählen"
+
+#: experiment.py
+msgid "Thank you"
+msgstr "Vielen Dank"
+
+#: experiment.py
+msgid "Thank you for completing the decision-making task."
+msgstr "Vielen Dank, dass Sie die Entscheidungsaufgabe abgeschlossen haben."

@@ -1,0 +1,4 @@
+$ python challenges/export-before-teardown-safety/attempts/2026-06-10-00-29/code/validate_plan.py
+validated export-before-teardown plan
+deployments_checked=3
+destructive_commands_ordered_after_export_gates=true

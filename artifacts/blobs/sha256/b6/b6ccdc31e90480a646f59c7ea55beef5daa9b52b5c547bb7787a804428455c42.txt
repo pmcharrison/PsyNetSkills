@@ -1,0 +1,9 @@
+[Config]
+title = Local participant telemetry demo
+description = A local PsyNet demonstration that records response telemetry for cautious manual data-quality review. No real recruitment, production services, or real participant data are used.
+contact_email_on_error = local-demo@example.invalid
+organization_name = PsyNetSkills local demo
+
+recruiter = generic
+currency = $
+wage_per_hour = 12.0

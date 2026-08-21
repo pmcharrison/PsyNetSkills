@@ -1,0 +1,8 @@
+[Config]
+title = Open-ended STEP tagging demo
+description = Listen to short local demo clips and add emotion or affect tags. Cint/Lucid recruitment parameters live in experiment.py with a mock-only local qualification file until real deployment targets are chosen.
+contact_email_on_error = test@example.com
+organization_name = PsyNetSkills
+
+[Prolific]
+auto_recruit = false

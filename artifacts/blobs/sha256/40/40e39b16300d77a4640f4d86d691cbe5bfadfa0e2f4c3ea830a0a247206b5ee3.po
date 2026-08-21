@@ -1,0 +1,167 @@
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Language: he\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: experiment.py
+msgid "year"
+msgstr "שנה"
+
+#: experiment.py
+msgid "years"
+msgstr "שנים"
+
+#: experiment.py
+msgid "minute"
+msgstr "דקה"
+
+#: experiment.py
+msgid "minutes"
+msgstr "דקות"
+
+#: experiment.py
+msgid "line"
+msgstr "שורה"
+
+#: experiment.py
+msgid "lines"
+msgstr "שורות"
+
+#: experiment.py
+msgid "Life spans"
+msgstr "תוחלת חיים"
+
+#: experiment.py
+msgid "Lengths of marriages"
+msgstr "משך נישואים"
+
+#: experiment.py
+msgid "Movie run times"
+msgstr "אורכי סרטים"
+
+#: experiment.py
+msgid "Poem lengths"
+msgstr "אורכי שירים"
+
+#: experiment.py
+msgid "Waiting times"
+msgstr "זמני המתנה"
+
+#: experiment.py
+#, python-brace-format
+msgid ""
+"Insurance agencies employ actuaries to make predictions about people's life "
+"spans, the age at which they will die. If you were assessing an insurance "
+"case for an {T_PAST}-year-old man, what would you predict for his total life"
+" span?"
+msgstr ""
+"חברות ביטוח מעסיקות אקטוארים כדי לחזות את משך חייהם של אנשים, כלומר את הגיל "
+"שבו ימותו. אם היית מעריך תיק ביטוח של גבר בן {T_PAST}, מה היית חוזה כמשך "
+"חייו הכולל?"
+
+#: experiment.py
+#, python-brace-format
+msgid ""
+"A friend is telling you about an acquaintance whom you do not know. In "
+"passing, he happens to mention that this person has been married for "
+"{T_PAST} {UNIT}. How long do you think this person's marriage will last in "
+"total?"
+msgstr ""
+"חבר מספר לך על מכר שאינך מכיר. תוך כדי שיחה הוא מזכיר שהאדם הזה נשוי כבר "
+"{T_PAST} {UNIT}. כמה זמן לדעתך יימשכו הנישואים של האדם הזה בסך הכול?"
+
+#: experiment.py
+#, python-brace-format
+msgid ""
+"If you made a surprise visit to a friend and found that they had been "
+"watching a movie for {T_PAST} {UNIT}, what would you predict for the total "
+"length of the movie?"
+msgstr ""
+"אם היית מגיע לביקור פתע אצל חבר ומגלה שהוא צופה בסרט כבר {T_PAST} {UNIT}, מה"
+" היית חוזה כאורך הכולל של הסרט?"
+
+#: experiment.py
+#, python-brace-format
+msgid ""
+"If your friend read you her favorite line of poetry and told you it was line"
+" {T_PAST} of a poem, what would you predict for the total length of the "
+"poem?"
+msgstr ""
+"אם חברה הייתה מקריאה לך את השורה האהובה עליה משיר ואומרת לך שזו שורה "
+"{T_PAST} בשיר, מה היית חוזה כאורך הכולל של השיר?"
+
+#: experiment.py
+#, python-brace-format
+msgid ""
+"If you were calling a telephone box office to book tickets and had been on "
+"hold for {T_PAST} {UNIT}, what would you predict for the total time you "
+"would be on hold?"
+msgstr ""
+"אם היית מתקשר לקופת כרטיסים טלפונית כדי להזמין כרטיסים וממתין על הקו כבר "
+"{T_PAST} {UNIT}, מה היית חוזה כזמן ההמתנה הכולל?"
+
+#: experiment.py
+msgid "Please enter a finite number."
+msgstr "נא להזין מספר סופי."
+
+#: experiment.py
+#, python-brace-format
+msgid "Your prediction must be at least {T_PAST} {UNIT}."
+msgstr "התחזית שלך חייבת להיות לפחות {T_PAST} {UNIT}"
+
+#: experiment.py
+#, python-brace-format
+msgid "Question {POSITION} of 5"
+msgstr "שאלה {POSITION} מתוך 5"
+
+#: experiment.py
+#, python-brace-format
+msgid "Observed so far: {T_PAST} {UNIT}."
+msgstr "נצפה עד כה: {T_PAST} {UNIT}."
+
+#: experiment.py
+msgid "Please enter your intuitive prediction for the total value."
+msgstr "נא להזין את התחזית האינטואיטיבית שלך לערך הכולל."
+
+#: experiment.py
+msgid "Predicting everyday futures"
+msgstr "חיזוי עתידים יומיומיים"
+
+#: experiment.py
+msgid ""
+"Each question asks you to predict a duration or quantity from a single piece"
+" of information."
+msgstr "כל שאלה מבקשת ממך לחזות משך או כמות על סמך פיסת מידע אחת."
+
+#: experiment.py
+msgid ""
+"Please read each question and enter your prediction in the box below it. We "
+"are interested in your intuitions, so please do not make complicated "
+"calculations."
+msgstr ""
+"נא לקרוא כל שאלה ולהזין את התחזית שלך בתיבה שמתחתיה. אנו מתעניינים "
+"באינטואיציות שלך, לכן נא לא לבצע חישובים מסובכים."
+
+#: experiment.py
+msgid "You will answer one question from each of five everyday categories."
+msgstr "תענה על שאלה אחת מכל אחת מחמש קטגוריות יומיומיות."
+
+#: experiment.py
+msgid "Thank you"
+msgstr "תודה"
+
+#: experiment.py
+msgid ""
+"This study concerns how people make everyday predictions under uncertainty "
+"from limited information."
+msgstr ""
+"מחקר זה עוסק באופן שבו אנשים עושים תחזיות יומיומיות בתנאי אי-ודאות ממידע "
+"מוגבל."
+
+#: experiment.py
+msgid "Your responses have been recorded."
+msgstr "התשובות שלך נשמרו."

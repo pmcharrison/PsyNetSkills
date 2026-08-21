@@ -1,0 +1,65 @@
+ffmpeg version 6.1.1-3ubuntu5 Copyright (c) 2000-2023 the FFmpeg developers
+  built with gcc 13 (Ubuntu 13.2.0-23ubuntu3)
+  configuration: --prefix=/usr --extra-version=3ubuntu5 --toolchain=hardened --libdir=/usr/lib/x86_64-linux-gnu --incdir=/usr/include/x86_64-linux-gnu --arch=amd64 --enable-gpl --disable-stripping --disable-omx --enable-gnutls --enable-libaom --enable-libass --enable-libbs2b --enable-libcaca --enable-libcdio --enable-libcodec2 --enable-libdav1d --enable-libflite --enable-libfontconfig --enable-libfreetype --enable-libfribidi --enable-libglslang --enable-libgme --enable-libgsm --enable-libharfbuzz --enable-libmp3lame --enable-libmysofa --enable-libopenjpeg --enable-libopenmpt --enable-libopus --enable-librubberband --enable-libshine --enable-libsnappy --enable-libsoxr --enable-libspeex --enable-libtheora --enable-libtwolame --enable-libvidstab --enable-libvorbis --enable-libvpx --enable-libwebp --enable-libx265 --enable-libxml2 --enable-libxvid --enable-libzimg --enable-openal --enable-opencl --enable-opengl --disable-sndio --enable-libvpl --disable-libmfx --enable-libdc1394 --enable-libdrm --enable-libiec61883 --enable-chromaprint --enable-frei0r --enable-ladspa --enable-libbluray --enable-libjack --enable-libpulse --enable-librabbitmq --enable-librist --enable-libsrt --enable-libssh --enable-libsvtav1 --enable-libx264 --enable-libzmq --enable-libzvbi --enable-lv2 --enable-sdl2 --enable-libplacebo --enable-librav1e --enable-pocketsphinx --enable-librsvg --enable-libjxl --enable-shared
+  libavutil      58. 29.100 / 58. 29.100
+  libavcodec     60. 31.102 / 60. 31.102
+  libavformat    60. 16.100 / 60. 16.100
+  libavdevice    60.  3.100 / 60.  3.100
+  libavfilter     9. 12.100 /  9. 12.100
+  libswscale      7.  5.100 /  7.  5.100
+  libswresample   4. 12.100 /  4. 12.100
+  libpostproc    57.  3.100 / 57.  3.100
+[x11grab @ 0x560a74039680] Stream #0: not enough frames to estimate rate; consider increasing probesize
+Input #0, x11grab, from ':96':
+  Duration: N/A, start: 1780915929.416485, bitrate: 884736 kb/s
+  Stream #0:0: Video: rawvideo (BGR[0] / 0x524742), bgr0, 1280x720, 884736 kb/s, 30 fps, 1000k tbr, 1000k tbn
+[aist#1:0/pcm_s16le @ 0x560a74049ec0] Guessed Channel Layout: stereo
+Input #1, pulse, from 'psynet_sync_probe.monitor':
+  Duration: N/A, start: 1780915930.731086, bitrate: 1536 kb/s
+  Stream #1:0: Audio: pcm_s16le, 48000 Hz, 2 channels, s16, 1536 kb/s
+Adjusted ts offset for Input #1 by 1314601 us to sync with Input #0.
+Stream mapping:
+  Stream #0:0 -> #0:0 (rawvideo (native) -> h264 (libx264))
+  Stream #1:0 -> #0:1 (pcm_s16le (native) -> aac (native))
+Press [q] to stop, [?] for help
+[libx264 @ 0x560a7404b300] using cpu capabilities: MMX2 SSE2Fast SSSE3 SSE4.2 AVX FMA3 BMI2 AVX2 AVX512
+[libx264 @ 0x560a7404b300] profile Constrained Baseline, level 3.1, 4:2:0, 8-bit
+[libx264 @ 0x560a7404b300] 264 - core 164 r3108 31e19f9 - H.264/MPEG-4 AVC codec - Copyleft 2003-2023 - http://www.videolan.org/x264.html - options: cabac=0 ref=1 deblock=0:0:0 analyse=0:0 me=dia subme=0 psy=1 psy_rd=1.00:0.00 mixed_ref=0 me_range=16 chroma_me=1 trellis=0 8x8dct=0 cqm=0 deadzone=21,11 fast_pskip=1 chroma_qp_offset=0 threads=4 lookahead_threads=4 sliced_threads=1 slices=4 nr=0 decimate=1 interlaced=0 bluray_compat=0 constrained_intra=0 bframes=0 weightp=0 keyint=250 keyint_min=25 scenecut=0 intra_refresh=0 rc=crf mbtree=0 crf=23.0 qcomp=0.60 qpmin=0 qpmax=69 qpstep=4 ip_ratio=1.40 aq=0
+Output #0, mp4, to 'evidence/sync_probe_xvfb_isync.mp4':
+  Metadata:
+    encoder         : Lavf60.16.100
+  Stream #0:0: Video: h264 (avc1 / 0x31637661), yuv420p(tv, progressive), 1280x720, q=2-31, 30 fps, 15360 tbn
+    Metadata:
+      encoder         : Lavc60.31.102 libx264
+    Side data:
+      cpb: bitrate max/min/avg: 0/0/0 buffer size: 0 vbv_delay: N/A
+  Stream #0:1: Audio: aac (LC) (mp4a / 0x6134706D), 48000 Hz, stereo, fltp, 128 kb/s
+    Metadata:
+      encoder         : Lavc60.31.102 aac
+frame=    0 fps=0.0 q=0.0 size=       0kB time=N/A bitrate=N/A speed=N/A    
+frame=   67 fps=0.0 q=13.0 size=       0kB time=00:00:02.20 bitrate=   0.2kbits/s dup=59 drop=47 speed=4.15x    
+frame=   91 fps= 88 q=13.0 size=       0kB time=00:00:03.03 bitrate=   0.1kbits/s dup=59 drop=57 speed=2.94x    
+frame=  107 fps= 70 q=13.0 size=       0kB time=00:00:03.53 bitrate=   0.1kbits/s dup=59 drop=57 speed= 2.3x    
+frame=  121 fps= 59 q=13.0 size=       0kB time=00:00:04.00 bitrate=   0.1kbits/s dup=59 drop=57 speed=1.97x    
+frame=  136 fps= 53 q=13.0 size=       0kB time=00:00:04.50 bitrate=   0.1kbits/s dup=59 drop=57 speed=1.77x    
+frame=  151 fps= 50 q=13.0 size=       0kB time=00:00:05.03 bitrate=   0.1kbits/s dup=59 drop=57 speed=1.65x    
+frame=  166 fps= 47 q=13.0 size=       0kB time=00:00:05.51 bitrate=   0.1kbits/s dup=59 drop=57 speed=1.56x    
+frame=  181 fps= 45 q=13.0 size=       0kB time=00:00:06.00 bitrate=   0.1kbits/s dup=59 drop=57 speed=1.48x    
+frame=  196 fps= 43 q=13.0 size=       0kB time=00:00:06.50 bitrate=   0.1kbits/s dup=59 drop=57 speed=1.43x    
+frame=  212 fps= 42 q=13.0 size=       0kB time=00:00:07.03 bitrate=   0.1kbits/s dup=59 drop=57 speed=1.39x    
+frame=  227 fps= 41 q=13.0 size=       0kB time=00:00:07.53 bitrate=   0.1kbits/s dup=59 drop=57 speed=1.36x    
+frame=  241 fps= 40 q=13.0 size=       0kB time=00:00:08.01 bitrate=   0.0kbits/s dup=59 drop=57 speed=1.32x    
+frame=  258 fps= 39 q=13.0 size=       0kB time=00:00:08.60 bitrate=   0.0kbits/s dup=59 drop=57 speed=1.31x    
+frame=  273 fps= 39 q=13.0 size=       0kB time=00:00:09.10 bitrate=   0.0kbits/s dup=59 drop=57 speed=1.29x    
+[out#0/mp4 @ 0x560a74049b40] video:83kB audio:14kB subtitle:0kB other streams:0kB global headers:0kB muxing overhead: 10.253156%
+frame=  278 fps= 38 q=13.0 Lsize=     107kB time=00:00:09.27 bitrate=  94.4kbits/s dup=59 drop=57 speed=1.28x    
+[libx264 @ 0x560a7404b300] frame I:2     Avg QP:15.00  size:  3256
+[libx264 @ 0x560a7404b300] frame P:276   Avg QP:13.24  size:   284
+[libx264 @ 0x560a7404b300] mb I  I16..4: 100.0%  0.0%  0.0%
+[libx264 @ 0x560a7404b300] mb P  I16..4:  4.1%  0.0%  0.0%  P16..4:  0.1%  0.0%  0.0%  0.0%  0.0%    skip:95.9%
+[libx264 @ 0x560a7404b300] coded y,uvDC,uvAC intra: 0.3% 0.2% 0.2% inter: 0.0% 0.0% 0.0%
+[libx264 @ 0x560a7404b300] i16 v,h,dc,p: 89%  3%  8%  0%
+[libx264 @ 0x560a7404b300] i8c dc,h,v,p: 98%  2%  0%  0%
+[libx264 @ 0x560a7404b300] kb/s:73.22
+[aac @ 0x560a74050d80] Qavg: 61592.703
+Exiting normally, received signal 2.

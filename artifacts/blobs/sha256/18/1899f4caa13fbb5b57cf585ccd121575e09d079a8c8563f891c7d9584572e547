@@ -1,0 +1,14 @@
+__pycache__/
+.pytest_cache/
+.deploy/
+.idea/
+.dallingerconfig
+data/
+env/
+.venv/
+server.log
+static/assets
+*.db
+*.sqlite
+*.log
+source_code.zip

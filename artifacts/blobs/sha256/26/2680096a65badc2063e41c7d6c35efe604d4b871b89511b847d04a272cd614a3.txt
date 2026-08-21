@@ -1,0 +1,14 @@
+[Config]
+title = Common pool resource management experiment
+description = Participants manage a shared common-pool resource in synchronous groups of three.
+contact_email_on_error = example@example.com
+organization_name = PsyNetSkills
+
+recruiter = generic
+currency = $
+wage_per_hour = 12.0
+
+[Prolific]
+auto_recruit = false
+prolific_estimated_completion_minutes = 8
+base_payment = 1.60

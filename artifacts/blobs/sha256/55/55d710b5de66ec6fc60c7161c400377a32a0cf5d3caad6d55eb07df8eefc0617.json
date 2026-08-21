@@ -1,0 +1,12 @@
+{
+  "source": "evidence/simulated_data.zip:simulated_data/regular/data/Bot.csv",
+  "completed_participants": 10,
+  "profile_distribution": {
+    "normal_rgb": 5,
+    "random": 5
+  },
+  "all_completed": true,
+  "profile_stable_for_all_participants": true,
+  "all_participants_have_7_color_trials": true,
+  "all_responses_in_range": true
+}

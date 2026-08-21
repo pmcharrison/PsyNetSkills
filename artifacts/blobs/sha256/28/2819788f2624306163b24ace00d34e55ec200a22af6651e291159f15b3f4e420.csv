@@ -1,0 +1,7 @@
+participant_id,profile_label,n_responses,failed_check_count,paste_total,focus_event_total,visibility_event_total,median_latency_ms,very_short_latency_count,sparse_text_production_count,generic_probe_count,missing_telemetry_count,flag_for_manual_review,review_language,reasons
+P001,attentive_human_like,8,0,0,0,0,28000,0,0,0,0,False,No review-worthy signal in this local fixture.,
+P002,inattentive,8,1,0,32,24,65000,0,0,0,0,True,Review-worthy in-study signal; do not automatically reject or claim AI use.,failed checks: attention_color
+P003,paste_heavy,8,0,24,8,8,12000,0,0,0,0,True,Review-worthy in-study signal; do not automatically reject or claim AI use.,high paste count: 24
+P004,fast_low_effort,8,2,0,0,0,2800,8,0,0,0,True,Review-worthy in-study signal; do not automatically reject or claim AI use.,"failed checks: attention_color, comprehension_source; very short response latencies on 8 pages"
+P005,mock_llm_assisted,8,0,8,16,16,7000,0,0,3,0,True,Review-worthy in-study signal; do not automatically reject or claim AI use.,"high paste count: 8; probe response needs inspection: probe_strategy, probe_assistance, probe_confidence"
+P006,browser_agent_like,8,0,0,0,0,1500,8,7,0,0,True,Review-worthy in-study signal; do not automatically reject or claim AI use.,"very short response latencies on 8 pages; sparse text-production telemetry: task_river_garden, task_library_hours, task_bike_racks, comprehension_source, probe_strategy, probe_assistance, probe_confidence"

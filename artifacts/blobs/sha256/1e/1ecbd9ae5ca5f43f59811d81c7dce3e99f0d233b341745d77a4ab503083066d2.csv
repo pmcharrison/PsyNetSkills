@@ -1,0 +1,43 @@
+id,duration,time,unique_id,method,endpoint,params,class
+1,0.0033960090004256926,2026-06-09 18:06:38,,GET,/ad,"{'recruiter': 'hotair', 'generate_tokens': '1', 'mode': 'debug'}",Request
+2,0.05057605999900261,2026-06-09 18:06:38,,GET,/ad,"{'recruiter': 'hotair', 'mode': 'debug', 'hitId': 'IWR3BI', 'assignmentId': '8EC00U', 'workerId': '5XGLQ1'}",Request
+3,0.000476399996841792,2026-06-09 18:06:38,,GET,/ad,"{'recruiter': 'hotair', 'generate_tokens': '1', 'mode': 'debug'}",Request
+4,0.0402549119971809,2026-06-09 18:06:38,,GET,/ad,"{'recruiter': 'hotair', 'mode': 'debug', 'hitId': 'WIMOTS', 'assignmentId': 'YRKS1Y', 'workerId': '6V2VBU'}",Request
+5,0.04064295699936338,2026-06-09 18:06:39,,GET,/consent,"{'recruiter': 'hotair', 'mode': 'debug', 'hitId': 'IWR3BI', 'assignmentId': '8EC00U', 'workerId': '5XGLQ1'}",Request
+6,0.03121961600118084,2026-06-09 18:06:39,,GET,/consent,"{'recruiter': 'hotair', 'mode': 'debug', 'hitId': 'WIMOTS', 'assignmentId': 'YRKS1Y', 'workerId': '6V2VBU'}",Request
+7,0.013964926001790445,2026-06-09 18:06:40,,GET,/start,"{'recruiter': 'hotair', 'mode': 'debug', 'hitId': 'IWR3BI', 'assignmentId': '8EC00U', 'workerId': '5XGLQ1'}",Request
+8,0.022494990000268444,2026-06-09 18:06:40,,GET,/start,"{'recruiter': 'hotair', 'mode': 'debug', 'hitId': 'WIMOTS', 'assignmentId': 'YRKS1Y', 'workerId': '6V2VBU'}",Request
+9,0.3151773110002978,2026-06-09 18:06:40,5XGLQ1:8EC00U,GET,/timeline,{'unique_id': '5XGLQ1:8EC00U'},Request
+10,0.13401135100139072,2026-06-09 18:06:40,6V2VBU:YRKS1Y,GET,/timeline,{'unique_id': '6V2VBU:YRKS1Y'},Request
+11,0.027074947000073735,2026-06-09 18:06:41,,POST,/response,{},Request
+12,0.029055511004116852,2026-06-09 18:06:41,,POST,/response,{},Request
+13,0.12030607699853135,2026-06-09 18:06:41,5XGLQ1:8EC00U,GET,/timeline,{'unique_id': '5XGLQ1:8EC00U'},Request
+14,0.12013235400081612,2026-06-09 18:06:41,6V2VBU:YRKS1Y,GET,/timeline,{'unique_id': '6V2VBU:YRKS1Y'},Request
+15,0.014008975005708635,2026-06-09 18:06:42,,POST,/response,{},Request
+16,0.12515084699407453,2026-06-09 18:06:42,5XGLQ1:8EC00U,GET,/timeline,{'unique_id': '5XGLQ1:8EC00U'},Request
+17,0.017650604000664316,2026-06-09 18:06:42,,POST,/response,{},Request
+18,0.12158805700164521,2026-06-09 18:06:42,6V2VBU:YRKS1Y,GET,/timeline,{'unique_id': '6V2VBU:YRKS1Y'},Request
+19,0.03697489999467507,2026-06-09 18:06:43,,POST,/response,{},Request
+20,0.03136076599912485,2026-06-09 18:06:43,,POST,/response,{},Request
+21,0.1220659659957164,2026-06-09 18:06:43,5XGLQ1:8EC00U,GET,/timeline,{'unique_id': '5XGLQ1:8EC00U'},Request
+22,0.1169675159981125,2026-06-09 18:06:43,6V2VBU:YRKS1Y,GET,/timeline,{'unique_id': '6V2VBU:YRKS1Y'},Request
+23,0.07231492699793307,2026-06-09 18:06:44,,POST,/response,{},Request
+24,0.06763911799498601,2026-06-09 18:06:44,,POST,/response,{},Request
+25,0.13560782699642004,2026-06-09 18:06:44,6V2VBU:YRKS1Y,GET,/timeline,{'unique_id': '6V2VBU:YRKS1Y'},Request
+26,0.2314590340029099,2026-06-09 18:06:44,5XGLQ1:8EC00U,GET,/timeline,{'unique_id': '5XGLQ1:8EC00U'},Request
+27,0.047775530998478644,2026-06-09 18:07:45,,POST,/response,{},Request
+28,0.032493220998730976,2026-06-09 18:07:45,,POST,/response,{},Request
+29,0.1368497209987254,2026-06-09 18:07:45,6V2VBU:YRKS1Y,GET,/timeline,{'unique_id': '6V2VBU:YRKS1Y'},Request
+30,0.11451052199845435,2026-06-09 18:07:45,5XGLQ1:8EC00U,GET,/timeline,{'unique_id': '5XGLQ1:8EC00U'},Request
+31,0.050459336998756044,2026-06-09 18:07:46,,POST,/response,{},Request
+32,0.03833206799754407,2026-06-09 18:07:46,,POST,/response,{},Request
+33,0.16341169100633124,2026-06-09 18:07:46,6V2VBU:YRKS1Y,GET,/timeline,{'unique_id': '6V2VBU:YRKS1Y'},Request
+34,0.27692191299865954,2026-06-09 18:07:46,5XGLQ1:8EC00U,GET,/timeline,{'unique_id': '5XGLQ1:8EC00U'},Request
+35,0.038611122996371705,2026-06-09 18:07:51,,POST,/response,{},Request
+36,0.02883605399983935,2026-06-09 18:07:51,,POST,/response,{},Request
+37,0.13483408199681435,2026-06-09 18:07:51,6V2VBU:YRKS1Y,GET,/timeline,{'unique_id': '6V2VBU:YRKS1Y'},Request
+38,0.13001718300074572,2026-06-09 18:07:51,5XGLQ1:8EC00U,GET,/timeline,{'unique_id': '5XGLQ1:8EC00U'},Request
+39,0.07344363599986536,2026-06-09 18:07:52,,POST,/response,{},Request
+40,0.05866355000034673,2026-06-09 18:07:52,,POST,/response,{},Request
+41,0.14429336199827958,2026-06-09 18:07:52,5XGLQ1:8EC00U,GET,/timeline,{'unique_id': '5XGLQ1:8EC00U'},Request
+42,0.28621672200097237,2026-06-09 18:07:52,6V2VBU:YRKS1Y,GET,/timeline,{'unique_id': '6V2VBU:YRKS1Y'},Request

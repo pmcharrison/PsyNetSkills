@@ -1,0 +1,10 @@
+__pycache__/
+.pytest_cache/
+.dallinger/
+local_config.txt
+data/
+source_code.zip
+node_modules/
+test-results/
+playwright-report/
+*.pyc

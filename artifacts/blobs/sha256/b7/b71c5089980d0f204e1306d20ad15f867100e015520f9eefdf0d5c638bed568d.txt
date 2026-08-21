@@ -1,0 +1,14 @@
+[Config]
+title = Similarity, discrimination, and identification (Chrome browser, 10 minutes to complete)
+description = This experiment asks you to judge simple colored circles. Please use a Chrome browser in incognito mode.
+contact_email_on_error = researcher@example.com
+organization_name = PsyNetSkills
+
+recruiter = generic
+currency = $
+wage_per_hour = 12.0
+
+[Prolific]
+auto_recruit = false
+prolific_estimated_completion_minutes = 10
+base_payment = 2.00

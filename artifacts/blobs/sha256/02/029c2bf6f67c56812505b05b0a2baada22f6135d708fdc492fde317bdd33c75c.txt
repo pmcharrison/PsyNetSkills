@@ -1,0 +1,14 @@
+[Config]
+title = Adaptive memory testing experiment
+description = Memorize and recall digit strings across 10 trials. String length adapts to estimate memory ability efficiently.
+contact_email_on_error = example@example.com
+organization_name = PsyNetSkills
+
+recruiter = generic
+currency = $
+wage_per_hour = 12.0
+
+[Prolific]
+auto_recruit = false
+prolific_estimated_completion_minutes = 3
+base_payment = 0.60

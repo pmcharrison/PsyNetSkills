@@ -1,0 +1,38 @@
+============================= test session starts ==============================
+platform linux -- Python 3.13.13, pytest-9.0.3, pluggy-1.6.0
+rootdir: /workspace/challenges/visual-priors-serial-reproduction/attempts/2026-06-10-12-35/code/visual_priors_serial_reproduction
+configfile: pytest.ini
+plugins: anyio-4.13.0, dallinger-12.2.0, Faker-40.15.0, psynet-13.3.0a0, dependency-0.6.0, mock-3.14.1, test-groups-1.2.1, timeout-2.4.0
+collected 1 item
+
+test.py::test_experiment[/workspace/challenges/visual-priors-serial-reproduction/attempts/2026-06-10-12-35/code/visual_priors_serial_reproduction] 
+-------------------------------- live log call ---------------------------------
+INFO     psynet:experiment.py:1393 Testing experiment with 8 serial bot(s)...
+INFO     psynet:bot.py:74 Waiting for experiment launch to complete....
+INFO     psynet:bot.py:37 Initializing bot with worker ID 9e548e1d-e210-48a8-ab6d-35475090d0e7.
+INFO     psynet:bot.py:74 Waiting for experiment launch to complete....
+INFO     psynet:bot.py:37 Initializing bot with worker ID ce0c0ccd-e55e-4dbf-a719-8ffb4691722a.
+INFO     psynet:bot.py:74 Waiting for experiment launch to complete....
+INFO     psynet:bot.py:37 Initializing bot with worker ID 544ccfa3-dd2a-44af-88c9-f4b34b59ade8.
+INFO     psynet:bot.py:74 Waiting for experiment launch to complete....
+INFO     psynet:bot.py:37 Initializing bot with worker ID 82f0c686-295c-44ce-a767-fd81ed44ff5d.
+INFO     psynet:bot.py:74 Waiting for experiment launch to complete....
+INFO     psynet:bot.py:37 Initializing bot with worker ID b5e03eb2-2047-4773-be16-59dfde7cf57d.
+INFO     psynet:bot.py:74 Waiting for experiment launch to complete....
+INFO     psynet:bot.py:37 Initializing bot with worker ID 7dec7319-0336-49df-b2d5-0cfcb3a19d3d.
+INFO     psynet:bot.py:74 Waiting for experiment launch to complete....
+INFO     psynet:bot.py:37 Initializing bot with worker ID 47c5385b-5b94-417a-9bd6-0fd4a6a95e16.
+INFO     psynet:bot.py:74 Waiting for experiment launch to complete....
+INFO     psynet:bot.py:37 Initializing bot with worker ID e184b876-b610-4d92-a8d1-b55e1bf594a2.
+INFO     psynet:participant.py:1125 ParticipantDriver 1 has finished the experiment (took 13 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 1.575 seconds).
+INFO     psynet:participant.py:1125 ParticipantDriver 2 has finished the experiment (took 13 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 1.555 seconds).
+INFO     psynet:participant.py:1125 ParticipantDriver 3 has finished the experiment (took 13 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 1.557 seconds).
+INFO     psynet:participant.py:1125 ParticipantDriver 4 has finished the experiment (took 13 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 1.594 seconds).
+INFO     psynet:participant.py:1125 ParticipantDriver 5 has finished the experiment (took 13 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 1.554 seconds).
+INFO     psynet:participant.py:1125 ParticipantDriver 6 has finished the experiment (took 13 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 1.546 seconds).
+INFO     psynet:participant.py:1125 ParticipantDriver 7 has finished the experiment (took 13 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 1.532 seconds).
+INFO     psynet:participant.py:1125 ParticipantDriver 8 has finished the experiment (took 13 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 1.536 seconds).
+INFO     psynet:experiment.py:1369 Mean HTTP request duration: 0.060 seconds
+PASSED                                                                   [100%]
+
+============================== 1 passed in 22.64s ==============================

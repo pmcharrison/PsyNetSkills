@@ -1,0 +1,8 @@
+[Config]
+title = Ferry Market Unity experiment
+description = Participants consent, read instructions, play a Unity WebGL Ferry Market game, and finish after game completion.
+contact_email_on_error = local@example.invalid
+organization_name = PsyNetSkills
+recruiter = generic
+currency = $
+wage_per_hour = 12.0

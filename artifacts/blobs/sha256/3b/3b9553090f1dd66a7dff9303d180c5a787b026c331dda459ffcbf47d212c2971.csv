@@ -1,0 +1,13 @@
+probe_id,set_size,probe_present,answer,n,probability
+blue,4.0,True,1,1,1.0
+green,3.0,False,3,1,1.0
+green,3.0,True,1,1,1.0
+green,4.0,False,4,1,1.0
+green,5.0,True,3,1,1.0
+orange,3.0,False,3,1,1.0
+orange,3.0,True,3,1,1.0
+orange,5.0,False,5,1,1.0
+purple,4.0,False,4,1,1.0
+purple,5.0,False,5,1,1.0
+purple,5.0,True,1,1,1.0
+yellow,4.0,True,3,1,1.0

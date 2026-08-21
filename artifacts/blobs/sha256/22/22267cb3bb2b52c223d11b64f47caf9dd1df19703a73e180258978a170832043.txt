@@ -1,0 +1,9 @@
+[Config]
+title = Simple visual discrimination experiment
+description = Decide whether pairs of colored circles are the same or different.
+contact_email_on_error = support@example.com
+organization_name = PsyNetSkills
+
+recruiter = generic
+currency = $
+wage_per_hour = 12.0

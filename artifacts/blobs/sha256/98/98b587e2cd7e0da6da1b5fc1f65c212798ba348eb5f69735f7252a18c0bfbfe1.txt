@@ -1,0 +1,9 @@
+[Config]
+# title, description, recruiter, payment, and contact settings are defined in
+# experiment.py so local tests and deployments use a single source of truth.
+
+[Prolific]
+# recruiter = prolific
+# auto_recruit = false
+# prolific_estimated_completion_minutes = 11
+# base_payment = 2.25

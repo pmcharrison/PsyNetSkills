@@ -1,0 +1,7 @@
+stimulus_id,culture,description,audio_path
+andean_pulse,Andean,Layered sine tones with a rising pulse,data/audio/andean_pulse.wav
+andean_lull,Andean,Soft paired tones with slow amplitude movement,data/audio/andean_lull.wav
+west_african_bright,West African,Bright interlocking synthetic pulse,data/audio/west_african_bright.wav
+west_african_low,West African,Low synthetic ostinato with gentle syncopation,data/audio/west_african_low.wav
+east_asian_clear,East Asian,Clear pentatonic-like synthetic motif,data/audio/east_asian_clear.wav
+east_asian_dark,East Asian,Darker synthetic motif with slower contour,data/audio/east_asian_dark.wav

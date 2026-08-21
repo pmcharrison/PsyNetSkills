@@ -1,0 +1,34 @@
+Archive:  evidence/data.zip
+  Length      Date    Time    Name
+---------  ---------- -----   ----
+        0  2026-06-08 10:01   anonymous/
+        0  2026-06-08 10:01   regular/
+     6804  2026-06-08 10:01   source_code.zip
+        0  2026-06-08 10:01   anonymous/data/
+    14999  2026-06-08 10:01   anonymous/database.zip
+     1401  2026-06-08 10:01   anonymous/data/StaticNetwork.csv
+      370  2026-06-08 10:01   anonymous/data/AssetTrial.csv
+     5057  2026-06-08 10:01   anonymous/data/CachedAsset.csv
+    14470  2026-06-08 10:01   anonymous/data/ToneSequenceTrial.csv
+      671  2026-06-08 10:01   anonymous/data/ChainTrialMakerState.csv
+     2452  2026-06-08 10:01   anonymous/data/Request.csv
+     2716  2026-06-08 10:01   anonymous/data/Participant.csv
+     1406  2026-06-08 10:01   anonymous/data/StaticNode.csv
+    15428  2026-06-08 10:01   anonymous/data/Response.csv
+      357  2026-06-08 10:01   anonymous/data/AssetNode.csv
+     8379  2026-06-08 10:01   anonymous/data/ExperimentConfig.csv
+        0  2026-06-08 10:01   regular/data/
+    15012  2026-06-08 10:01   regular/database.zip
+     1401  2026-06-08 10:01   regular/data/StaticNetwork.csv
+      370  2026-06-08 10:01   regular/data/AssetTrial.csv
+     5057  2026-06-08 10:01   regular/data/CachedAsset.csv
+    14470  2026-06-08 10:01   regular/data/ToneSequenceTrial.csv
+      671  2026-06-08 10:01   regular/data/ChainTrialMakerState.csv
+     2452  2026-06-08 10:01   regular/data/Request.csv
+     2780  2026-06-08 10:01   regular/data/Participant.csv
+     1406  2026-06-08 10:01   regular/data/StaticNode.csv
+    15506  2026-06-08 10:01   regular/data/Response.csv
+      357  2026-06-08 10:01   regular/data/AssetNode.csv
+     8379  2026-06-08 10:01   regular/data/ExperimentConfig.csv
+---------                     -------
+   142371                     29 files

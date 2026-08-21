@@ -1,0 +1,48 @@
+{% extends "timeline-page.html" %}
+
+{% block main_body %}
+<div class="card">
+    <div class="card-body">
+        {{ content_html | safe }}
+        <p class="text-muted mt-3">
+            This page will continue automatically in
+            <span id="timed-info-countdown">{{ time_limit }}</span> seconds.
+        </p>
+        <button id="timed-info-next" class="btn btn-primary">
+            {{ button_text }}
+        </button>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+(function () {
+    var remaining = {{ time_limit }};
+    var countdown = document.getElementById("timed-info-countdown");
+    var button = document.getElementById("timed-info-next");
+    var submitted = false;
+
+    function submit(timedOut) {
+        if (submitted) return;
+        submitted = true;
+        button.disabled = true;
+        psynet.nextPage({timed_out: timedOut});
+    }
+
+    button.onclick = function () {
+        submit(false);
+    };
+
+    var interval = setInterval(function () {
+        remaining -= 1;
+        countdown.textContent = remaining;
+        if (remaining <= 0) {
+            clearInterval(interval);
+            submit(true);
+        }
+    }, 1000);
+})();
+</script>
+{% endblock %}

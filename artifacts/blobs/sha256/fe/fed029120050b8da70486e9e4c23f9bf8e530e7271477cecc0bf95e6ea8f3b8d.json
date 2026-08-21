@@ -1,0 +1,8 @@
+{
+  "scripts": {
+    "participant-flow": "playwright test tests/participant-flow.spec.js --project=chromium"
+  },
+  "devDependencies": {
+    "@playwright/test": "latest"
+  }
+}

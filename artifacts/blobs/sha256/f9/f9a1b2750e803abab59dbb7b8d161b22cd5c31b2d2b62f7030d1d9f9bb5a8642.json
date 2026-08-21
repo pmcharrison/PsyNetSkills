@@ -1,0 +1,10 @@
+{
+  "captions": {
+    "01_intro.png": "Introductory page explaining the three visual tasks and response options.",
+    "02_discrimination_instructions.png": "Block 1 instructions for the same/different task.",
+    "03_similarity_trial.png": "Block 2 similarity-rating trial with neutral gray progress bar, colored-circle pair, and 1-5 keyboard/mouse response buttons.",
+    "04_identification_probe.png": "Block 3 identification trial with centered probe and numbered response buttons.",
+    "05_completion.png": "Participant completion page after the full 30-trial battery.",
+    "06_monitor_dashboard.png": "Local PsyNet dashboard snapshot after the scripted participant flow."
+  }
+}

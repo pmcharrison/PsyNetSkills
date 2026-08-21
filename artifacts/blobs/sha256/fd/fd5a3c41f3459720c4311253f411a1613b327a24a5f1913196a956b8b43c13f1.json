@@ -1,0 +1,227 @@
+[
+  {
+    "sentence_id": "s01",
+    "sentence_text": "I love you",
+    "repetition_level": 0,
+    "n_presentations": 1,
+    "audio_path": "data/audio/s01_rep0.wav",
+    "duration_sec": 0.965,
+    "pause_ms": 350,
+    "tts": {
+      "engine": "espeak-ng",
+      "voice": "en-us",
+      "rate": "155",
+      "pitch": "50"
+    }
+  },
+  {
+    "sentence_id": "s01",
+    "sentence_text": "I love you",
+    "repetition_level": 1,
+    "n_presentations": 2,
+    "audio_path": "data/audio/s01_rep1.wav",
+    "duration_sec": 2.28,
+    "pause_ms": 350,
+    "tts": {
+      "engine": "espeak-ng",
+      "voice": "en-us",
+      "rate": "155",
+      "pitch": "50"
+    }
+  },
+  {
+    "sentence_id": "s01",
+    "sentence_text": "I love you",
+    "repetition_level": 2,
+    "n_presentations": 3,
+    "audio_path": "data/audio/s01_rep2.wav",
+    "duration_sec": 3.595,
+    "pause_ms": 350,
+    "tts": {
+      "engine": "espeak-ng",
+      "voice": "en-us",
+      "rate": "155",
+      "pitch": "50"
+    }
+  },
+  {
+    "sentence_id": "s01",
+    "sentence_text": "I love you",
+    "repetition_level": 3,
+    "n_presentations": 4,
+    "audio_path": "data/audio/s01_rep3.wav",
+    "duration_sec": 4.91,
+    "pause_ms": 350,
+    "tts": {
+      "engine": "espeak-ng",
+      "voice": "en-us",
+      "rate": "155",
+      "pitch": "50"
+    }
+  },
+  {
+    "sentence_id": "s01",
+    "sentence_text": "I love you",
+    "repetition_level": 4,
+    "n_presentations": 5,
+    "audio_path": "data/audio/s01_rep4.wav",
+    "duration_sec": 6.225,
+    "pause_ms": 350,
+    "tts": {
+      "engine": "espeak-ng",
+      "voice": "en-us",
+      "rate": "155",
+      "pitch": "50"
+    }
+  },
+  {
+    "sentence_id": "s09",
+    "sentence_text": "how fast does a Zamboni go?",
+    "repetition_level": 0,
+    "n_presentations": 1,
+    "audio_path": "data/audio/s09_rep0.wav",
+    "duration_sec": 2.217,
+    "pause_ms": 350,
+    "tts": {
+      "engine": "espeak-ng",
+      "voice": "en-us",
+      "rate": "155",
+      "pitch": "50"
+    }
+  },
+  {
+    "sentence_id": "s09",
+    "sentence_text": "how fast does a Zamboni go?",
+    "repetition_level": 1,
+    "n_presentations": 2,
+    "audio_path": "data/audio/s09_rep1.wav",
+    "duration_sec": 4.784,
+    "pause_ms": 350,
+    "tts": {
+      "engine": "espeak-ng",
+      "voice": "en-us",
+      "rate": "155",
+      "pitch": "50"
+    }
+  },
+  {
+    "sentence_id": "s09",
+    "sentence_text": "how fast does a Zamboni go?",
+    "repetition_level": 2,
+    "n_presentations": 3,
+    "audio_path": "data/audio/s09_rep2.wav",
+    "duration_sec": 7.351,
+    "pause_ms": 350,
+    "tts": {
+      "engine": "espeak-ng",
+      "voice": "en-us",
+      "rate": "155",
+      "pitch": "50"
+    }
+  },
+  {
+    "sentence_id": "s09",
+    "sentence_text": "how fast does a Zamboni go?",
+    "repetition_level": 3,
+    "n_presentations": 4,
+    "audio_path": "data/audio/s09_rep3.wav",
+    "duration_sec": 9.918,
+    "pause_ms": 350,
+    "tts": {
+      "engine": "espeak-ng",
+      "voice": "en-us",
+      "rate": "155",
+      "pitch": "50"
+    }
+  },
+  {
+    "sentence_id": "s09",
+    "sentence_text": "how fast does a Zamboni go?",
+    "repetition_level": 4,
+    "n_presentations": 5,
+    "audio_path": "data/audio/s09_rep4.wav",
+    "duration_sec": 12.485,
+    "pause_ms": 350,
+    "tts": {
+      "engine": "espeak-ng",
+      "voice": "en-us",
+      "rate": "155",
+      "pitch": "50"
+    }
+  },
+  {
+    "sentence_id": "s18",
+    "sentence_text": "I will head to the department store tomorrow",
+    "repetition_level": 0,
+    "n_presentations": 1,
+    "audio_path": "data/audio/s18_rep0.wav",
+    "duration_sec": 2.802,
+    "pause_ms": 350,
+    "tts": {
+      "engine": "espeak-ng",
+      "voice": "en-us",
+      "rate": "155",
+      "pitch": "50"
+    }
+  },
+  {
+    "sentence_id": "s18",
+    "sentence_text": "I will head to the department store tomorrow",
+    "repetition_level": 1,
+    "n_presentations": 2,
+    "audio_path": "data/audio/s18_rep1.wav",
+    "duration_sec": 5.955,
+    "pause_ms": 350,
+    "tts": {
+      "engine": "espeak-ng",
+      "voice": "en-us",
+      "rate": "155",
+      "pitch": "50"
+    }
+  },
+  {
+    "sentence_id": "s18",
+    "sentence_text": "I will head to the department store tomorrow",
+    "repetition_level": 2,
+    "n_presentations": 3,
+    "audio_path": "data/audio/s18_rep2.wav",
+    "duration_sec": 9.107,
+    "pause_ms": 350,
+    "tts": {
+      "engine": "espeak-ng",
+      "voice": "en-us",
+      "rate": "155",
+      "pitch": "50"
+    }
+  },
+  {
+    "sentence_id": "s18",
+    "sentence_text": "I will head to the department store tomorrow",
+    "repetition_level": 3,
+    "n_presentations": 4,
+    "audio_path": "data/audio/s18_rep3.wav",
+    "duration_sec": 12.259,
+    "pause_ms": 350,
+    "tts": {
+      "engine": "espeak-ng",
+      "voice": "en-us",
+      "rate": "155",
+      "pitch": "50"
+    }
+  },
+  {
+    "sentence_id": "s18",
+    "sentence_text": "I will head to the department store tomorrow",
+    "repetition_level": 4,
+    "n_presentations": 5,
+    "audio_path": "data/audio/s18_rep4.wav",
+    "duration_sec": 15.411,
+    "pause_ms": 350,
+    "tts": {
+      "engine": "espeak-ng",
+      "voice": "en-us",
+      "rate": "155",
+      "pitch": "50"
+    }
+  }
+]

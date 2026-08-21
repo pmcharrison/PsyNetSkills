@@ -1,0 +1,15 @@
+[Config]
+title = Similarity, discrimination, and identification retry
+description = Participants judge same-different color pairs, rate pairwise similarity, perform multi-item identification, and complete color-vision and demographic measures.
+contact_email_on_error = researcher@example.com
+organization_name = PsyNetSkills
+
+recruiter = generic
+currency = $
+wage_per_hour = 12.0
+show_progress_bar = false
+
+[Prolific]
+auto_recruit = false
+prolific_estimated_completion_minutes = 6
+base_payment = 1.20

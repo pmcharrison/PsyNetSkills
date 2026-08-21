@@ -1,0 +1,8 @@
+{
+  "captions": {
+    "01-ad-page.png": "Debug recruitment/ad landing page before entering the participant flow.",
+    "02-study-page.png": "Representative study page showing a generated digit string and selected length.",
+    "03-recall-page.png": "Recall page with one-line digit entry after the study page.",
+    "04-completion.png": "Completion page after 10 adaptive memory trials."
+  }
+}

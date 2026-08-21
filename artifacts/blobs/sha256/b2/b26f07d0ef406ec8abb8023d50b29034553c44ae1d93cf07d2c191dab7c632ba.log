@@ -1,0 +1,43 @@
+============================= test session starts ==============================
+platform linux -- Python 3.13.13, pytest-9.0.3, pluggy-1.6.0
+rootdir: /workspace/challenges/translate-static-experiment/attempts/2026-06-10-00-45/code/static_translation
+configfile: pytest.ini
+plugins: anyio-4.13.0, dallinger-12.2.0, Faker-40.15.0, psynet-13.3.0a0, dependency-0.6.0, mock-3.14.1, test-groups-1.2.1, timeout-2.4.0
+collected 1 item
+
+test.py::test_experiment[/workspace/challenges/translate-static-experiment/attempts/2026-06-10-00-45/code/static_translation] 
+-------------------------------- live log call ---------------------------------
+INFO     psynet:experiment.py:1393 Testing experiment with 2 serial bot(s)...
+INFO     psynet:bot.py:74 Waiting for experiment launch to complete....
+INFO     psynet:bot.py:37 Initializing bot with worker ID 6deeeb51-3ed3-4178-bcf5-7a3825d2ba02.
+INFO     psynet:main.py:2300 Preparing trial for participant 1.
+INFO     psynet:chain.py:1777 Looking for networks for participant 1.
+INFO     psynet:chain.py:1850 12 remain after applying custom network filters.
+INFO     psynet:chain.py:1864 0 out of 12 networks are awaiting async processes (or have nodes awaiting async processes).
+INFO     psynet:utils.py:1144 Task 'find_networks' took 0.014 s
+INFO     psynet:main.py:2310 Outcome: found 1 candidate network(s) for participant 1.
+INFO     psynet:main.py:2323 Selected node 1 from network 1 to give to participant 1.
+INFO     psynet:utils.py:1144 Task 'prepare_trial' took 0.023 s
+INFO     psynet:utils.py:1144 Task '_prepare_trial' took 0.023 s
+INFO     psynet:timeline.py:2168 Evaluating while_loop (Waiting for trial) condition: result = False
+INFO     psynet:timeline.py:2168 Evaluating while_loop (animals__trial_loop) condition: result = True
+INFO     psynet:utils.py:1144 Task 'advance_page' took 0.063 s
+INFO     psynet:bot.py:74 Waiting for experiment launch to complete....
+INFO     psynet:bot.py:37 Initializing bot with worker ID 0d794a60-d08e-4389-a837-11889d9dfdf5.
+INFO     psynet:main.py:2300 Preparing trial for participant 2.
+INFO     psynet:chain.py:1777 Looking for networks for participant 2.
+INFO     psynet:chain.py:1850 12 remain after applying custom network filters.
+INFO     psynet:chain.py:1864 0 out of 12 networks are awaiting async processes (or have nodes awaiting async processes).
+INFO     psynet:main.py:2310 Outcome: found 1 candidate network(s) for participant 2.
+INFO     psynet:main.py:2323 Selected node 5 from network 5 to give to participant 2.
+INFO     psynet:utils.py:1144 Task 'prepare_trial' took 0.012 s
+INFO     psynet:utils.py:1144 Task '_prepare_trial' took 0.012 s
+INFO     psynet:timeline.py:2168 Evaluating while_loop (Waiting for trial) condition: result = False
+INFO     psynet:timeline.py:2168 Evaluating while_loop (animals__trial_loop) condition: result = True
+INFO     psynet:utils.py:1144 Task 'advance_page' took 0.033 s
+INFO     psynet:participant.py:1125 ParticipantDriver 1 has finished the experiment (took 12 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 1.983 seconds).
+INFO     psynet:participant.py:1125 ParticipantDriver 2 has finished the experiment (took 12 page(s), progress = 100%, total WaitPage time = 0.000 seconds, total experiment time = 1.920 seconds).
+INFO     psynet:experiment.py:1369 Mean HTTP request duration: 0.081 seconds
+PASSED                                                                   [100%]
+
+============================== 1 passed in 14.03s ==============================

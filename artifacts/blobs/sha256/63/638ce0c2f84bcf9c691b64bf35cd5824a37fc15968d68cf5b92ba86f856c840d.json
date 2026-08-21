@@ -1,0 +1,11 @@
+{
+  "captions": {
+    "01-begin.png": "Debug landing page before starting the participant flow.",
+    "02-proceed.png": "PsyNet transition page before the experiment timeline starts.",
+    "03-welcome.png": "Welcome page with the animal choice experiment title.",
+    "04-instructions.png": "Instructions explaining two questions and three animal choices.",
+    "05-trial-companion.png": "First trial with randomized animal buttons and keyboard hints.",
+    "06-trial-community-respect.png": "Second trial with randomized animal buttons and keyboard hints.",
+    "07-completion.png": "Thank-you page after exactly two choice trials."
+  }
+}

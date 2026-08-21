@@ -1,0 +1,15 @@
+{
+  "name": "ferry_market_unity",
+  "version": "1.0.0",
+  "description": "Browser automation for the Ferry Market Unity participant flow.",
+  "main": "scripts/participant_flow.js",
+  "scripts": {
+    "participant-flow": "node scripts/participant_flow.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "playwright-core": "^1.60.0"
+  }
+}

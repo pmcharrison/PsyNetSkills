@@ -1,0 +1,8 @@
+{
+  "captions": {
+    "01_instructions.png": "Participant instructions explain numbered arrays, probe matching, and keyboard or mouse responses.",
+    "02_numbered_array.png": "Timed numbered colored-circle array around fixation.",
+    "03_probe_response.png": "Probe display with numbered response buttons after the blank delay.",
+    "04_completion.png": "Participant flow reached the recruiter exit page after ten trials."
+  }
+}

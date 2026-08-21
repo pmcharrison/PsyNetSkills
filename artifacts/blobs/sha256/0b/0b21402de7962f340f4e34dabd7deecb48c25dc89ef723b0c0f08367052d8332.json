@@ -1,0 +1,13 @@
+{
+  "name": "audio_memory_sequence",
+  "version": "1.0.0",
+  "description": "Playwright participant-flow helper for the audio memory sequence attempt.",
+  "type": "module",
+  "scripts": {
+    "participant-flow": "node scripts/playwright_participant_flow.mjs"
+  },
+  "private": true,
+  "devDependencies": {
+    "@playwright/test": "^1.60.0"
+  }
+}

@@ -1,0 +1,388 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    
+    
+      <meta name="description" content="Page author: @pmcharrison">
+    
+    <title>Produce a review bundle | PsyNetSkills</title>
+    <link rel="stylesheet" href="/PsyNetSkills/css/chroma.css">
+    <link rel="stylesheet" href="/PsyNetSkills/css/site.css">
+  </head>
+  <body>
+    <header class="site-header">
+      <nav class="primary-nav" aria-label="Main navigation">
+        <span class="nav-links">
+          <a
+            
+            href="/PsyNetSkills/"
+          >PsyNetSkills</a>
+          <a
+            aria-current="page" class="current"
+            href="/PsyNetSkills/skills/"
+          >Skills</a>
+          <a
+            
+            href="/PsyNetSkills/challenges/"
+          >Challenges</a>
+          <a
+            
+            href="/PsyNetSkills/attempts/"
+          >Attempts</a>
+          <a
+            
+            href="/PsyNetSkills/actions/"
+          >Actions</a>
+        </span>
+        
+
+
+
+
+
+
+
+        <span class="nav-actions">
+          
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+  
+
+<a
+  class="workflow-status-link workflow-status-unknown workflow-freshness-current"
+  href="https://github.com/pmcharrison/PsyNetSkills/actions/workflows/pages.yml?query=branch%3Amain"
+  target="_blank"
+  rel="noopener noreferrer"
+  aria-label="Checking pages.yml workflow status for main."
+  aria-describedby="workflow-status-popover"
+  data-workflow-status
+  data-enabled="true"
+  data-owner="pmcharrison"
+  data-repo="PsyNetSkills"
+  data-workflow="pages.yml"
+  data-branch="main"
+  data-rendered-sha="9eddd9ef498cff09c020a841f6d6a91e7ca9602b"
+  data-mode="production"
+  data-poll-ms="90000"
+  data-hidden-poll-ms="300000"
+>
+  <span class="workflow-status-icon" aria-hidden="true">?</span>
+  <span class="workflow-freshness-badge" aria-hidden="true">!</span>
+  <span class="workflow-status-popover" id="workflow-status-popover" role="tooltip" hidden>
+    <span>Checking pages.yml workflow status for main.</span>
+  </span>
+  <span class="visually-hidden">Workflow status</span>
+</a>
+
+          
+            <a class="github-nav-link" href="https://github.com/pmcharrison/PsyNetSkills" aria-label="PsyNetSkills on GitHub" target="_blank" rel="noopener noreferrer">
+              <svg class="github-nav-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+                <path d="M8 0C3.58 0 0 3.69 0 8.25c0 3.64 2.29 6.73 5.47 7.82.4.08.55-.18.55-.4v-1.4c-2.23.5-2.7-1.1-2.7-1.1-.36-.95-.89-1.2-.89-1.2-.73-.52.06-.51.06-.51.8.06 1.23.85 1.23.85.72 1.27 1.88.9 2.34.69.07-.53.28-.9.51-1.11-1.78-.21-3.64-.92-3.64-4.08 0-.9.31-1.64.82-2.22-.08-.21-.36-1.05.08-2.19 0 0 .67-.22 2.2.85A7.4 7.4 0 0 1 8 3.98c.68 0 1.36.09 2 .27 1.52-1.07 2.19-.85 2.19-.85.44 1.14.16 1.98.08 2.19.51.58.82 1.32.82 2.22 0 3.17-1.87 3.87-3.65 4.07.29.26.54.76.54 1.53v2.26c0 .22.15.48.55.4A8.2 8.2 0 0 0 16 8.25C16 3.69 12.42 0 8 0Z" />
+              </svg>
+            </a>
+          
+        </span>
+      </nav>
+    </header>
+    <main>
+      
+  
+  
+  
+  
+    
+  
+
+  <article class="prose">
+    
+    <div class="page-heading">
+      <h1>Produce a review bundle</h1>
+      
+
+
+
+
+
+
+  
+
+
+  <p class="page-actions">
+    <a class="edit-source-link" href="https://github.com/pmcharrison/PsyNetSkills/edit/main/.cursor/skills/produce-review-bundle/SKILL.md">
+      Edit in GitHub
+    </a>
+  </p>
+
+
+    </div>
+    <p>Produce a standalone PsyNet experiment review bundle with review.json, REPORT.md, evidence artifacts, validation, rendering, and honest blockers. Use when asked to prepare a portable review bundle for an experiment outside the challenge-attempt workflow.</p>
+    
+      <p>
+        <strong>Author:</strong>
+        <a href="https://github.com/pmcharrison">Peter Harrison</a>
+      </p>
+    
+    <p><strong>Source:</strong> <code>.cursor/skills/produce-review-bundle/SKILL.md</code></p>
+    <p>Use this skill when the user asks you to create, complete, validate, or hand off
+a standalone PsyNet experiment review bundle.</p>
+<p>A review bundle is a portable <code>review/</code> folder for a standalone experiment. It
+uses the <code>psynet-review-bundle</code> CLI as its formal contract, but artifact
+collection is judgment-heavy and experiment-specific.</p>
+<h2 id="required-reads">Required reads</h2>
+<ul>
+<li>If you need participant screenshots or video, read
+<code>record-participant-video/SKILL.md</code>; that skill owns Playwright, screenshot,
+ffmpeg, audio, and video constraints.</li>
+<li>If you need to implement or modify the experiment before review, read
+<code>psynet-experiment-implementation/SKILL.md</code>; that skill owns experiment
+planning, simulation, analysis, and reporting patterns.</li>
+<li>If you need to share a live preview, use <code>cloud-agent-links/SKILL.md</code> and the
+relevant tunnel skill instead of recording a screen walkthrough by default.</li>
+</ul>
+<h2 id="workflow">Workflow</h2>
+<ol>
+<li>Initialize or inspect the bundle with <code>psynet-review-bundle init</code>.</li>
+<li>Collect evidence using experiment-appropriate commands and scripts.</li>
+<li>Update <code>review/review.json</code> after each artifact changes.</li>
+<li>Write or prune the default section files (<code>PROMPT.md</code>, <code>PLAN.md</code>,
+<code>TIMELINE.md</code>, and <code>REPORT.md</code>) so the bundle shows the context that matters.</li>
+<li>Run <code>psynet-review-bundle validate</code> and fix structural problems.</li>
+<li>Run <code>psynet-review-bundle render</code> and share a live preview link when
+reviewing in Cursor Cloud.</li>
+</ol>
+<h2 id="bundle-contract">Bundle contract</h2>
+<p>The conventional bundle structure is:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">review/
+</span></span><span class="line"><span class="cl">  review.json
+</span></span><span class="line"><span class="cl">  PROMPT.md
+</span></span><span class="line"><span class="cl">  PLAN.md
+</span></span><span class="line"><span class="cl">  TIMELINE.md
+</span></span><span class="line"><span class="cl">  REPORT.md
+</span></span><span class="line"><span class="cl">  artifacts/
+</span></span><span class="line"><span class="cl">    screenshots/
+</span></span><span class="line"><span class="cl">  analyses/
+</span></span><span class="line"><span class="cl">  logs/
+</span></span></code></pre></div><p><code>review.json</code> is the machine-readable manifest. Markdown section files provide
+review context. <code>artifacts/</code>, <code>analyses/</code>, and <code>logs/</code> contain the source files
+that reviewers should inspect. Generated <code>review/site/</code> output is only a render
+target and should normally stay out of version control.</p>
+<p>Validation checks structure and internal consistency. Rendering should never be
+used to hide missing work: incomplete required artifacts must be represented by
+blockers in <code>review.json</code>.</p>
+<h2 id="required-review-questions">Required review questions</h2>
+<p>The completed bundle should let a reviewer answer:</p>
+<ol>
+<li>What experiment was implemented?</li>
+<li>What commands, scripts, or manual procedures validated it?</li>
+<li>Which artifacts demonstrate participant flow, data export, analysis, and
+technical health?</li>
+<li>Which expected artifacts are missing, blocked, or intentionally not
+applicable?</li>
+<li>How can the reviewer reproduce or extend the checks?</li>
+</ol>
+<h2 id="artifact-workflow">Artifact workflow</h2>
+<p>Artifact collection is intentionally outside the CLI. Use the commands that fit
+the experiment and record the outcome honestly in <code>review.json</code> and <code>REPORT.md</code>.
+The examples below are guidance, not required interfaces.</p>
+<h2 id="updating-sections">Updating sections</h2>
+<p><code>review.json</code> uses an ordered <code>sections</code> array to decide what appears in the
+rendered bundle. Default sections include prompt, plan, timeline, report,
+evidence, additional files, checks, and blockers.</p>
+<ul>
+<li>Remove a section when it is not relevant.</li>
+<li>Set <code>display: false</code> when the section should remain in the manifest but stay
+hidden from the default page.</li>
+<li>Use <code>kind: &quot;markdown&quot;</code> with <code>path</code> for Markdown context files.</li>
+<li>Use <code>kind: &quot;evidence&quot;</code>, <code>files</code>, <code>checks</code>, or <code>blockers</code> for generated
+sections.</li>
+</ul>
+<h3 id="participant-flow">Participant flow</h3>
+<p>Collect at least one concise participant-facing artifact unless the experiment
+has no participant UI. Good options include:</p>
+<ul>
+<li><code>artifacts/participant.mp4</code>: a short walkthrough video recorded from a browser.</li>
+<li><code>artifacts/screenshots/*.png</code>: targeted screenshots of instructions,
+representative trials, validation errors, feedback, and completion.</li>
+<li><code>artifacts/screenshots/manifest.json</code>: optional screenshot captions.</li>
+</ul>
+<p>Add each screenshot image that should appear in the rendered bundle as a
+<code>present</code> artifact in <code>review.json</code>; the caption manifest alone does not publish
+or render the screenshots.</p>
+<p>Keep participant-flow scripts with the experiment source, not only in the
+bundle. For Playwright-based checks, make the script assert the behavior that
+the screenshots or recording show.</p>
+<h3 id="local-test-and-simulation-evidence">Local test and simulation evidence</h3>
+<p>Run the fastest meaningful local functional check, for example:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">psynet <span class="nb">test</span> <span class="nb">local</span>
+</span></span></code></pre></div><p>For simulated data, use a command appropriate to the experiment, for example:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">psynet simulate --n-bots <span class="m">12</span>
+</span></span></code></pre></div><p>Save the exported simulated data as <code>artifacts/simulated_data.zip</code> or document
+why simulation is blocked or not applicable.</p>
+<h3 id="performance-evidence">Performance evidence</h3>
+<p>Run a load or performance check when the experiment is intended for multiple
+participants or has nontrivial server-side work. A typical command is:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">psynet performance-test <span class="nb">local</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl">  --n-bots <span class="m">40</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl">  --duration-minutes <span class="m">5</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl">  --time-factor 1.0 <span class="se">\
+</span></span></span><span class="line"><span class="cl">  --json-output review/artifacts/performance.json
+</span></span></code></pre></div><p>Adjust bot counts and duration to the experiment. Do not present a one-bot smoke
+test as performance evidence; mark the performance artifact blocked if a real
+load check cannot run.</p>
+<h3 id="monitor-and-data-export">Monitor and data export</h3>
+<p>Capture a static monitor snapshot when it helps reviewers inspect networks,
+nodes, trials, or participant state. Save it as <code>artifacts/monitor.html</code>.</p>
+<p>Export real or simulated data as appropriate. The common filenames are:</p>
+<ul>
+<li><code>artifacts/data.zip</code>: exported data from a real or local debug run.</li>
+<li><code>artifacts/simulated_data.zip</code>: exported data produced by simulated
+participants.</li>
+</ul>
+<p>If the experiment cannot produce one of these exports, record a blocker or mark
+the artifact as not applicable with a clear reason.</p>
+<h3 id="analysis">Analysis</h3>
+<p>Place the main analysis under <code>analyses/</code>, conventionally
+<code>analyses/analysis.ipynb</code>. The notebook or equivalent analysis should:</p>
+<ul>
+<li>Read exported files directly from the bundle.</li>
+<li>Show data-loading and data-cleaning code.</li>
+<li>Display summary tables or plots relevant to the experiment.</li>
+<li>Include a short interpretation that distinguishes validation evidence from
+scientific conclusions.</li>
+</ul>
+<p>If a notebook is not the right format, use another analysis artifact and record
+it with <code>kind: &quot;other&quot;</code> or a more specific existing kind.</p>
+<h3 id="logs">Logs</h3>
+<p>Use <code>logs/</code> for concise command logs that explain what ran or why a step failed.
+Do not commit real credentials, API tokens, or production secrets. If a log
+contains unsafe values, redact it before adding it to the bundle.</p>
+<h2 id="updating-reviewjson">Updating <code>review.json</code></h2>
+<p>For every artifact that matters to review, add or update one manifest entry.
+Use <code>status: &quot;present&quot;</code> only when the path exists and the artifact is ready to
+inspect. Use:</p>
+<ul>
+<li><code>missing</code> when no attempt has been made yet.</li>
+<li><code>blocked</code> when a real attempt failed or cannot proceed.</li>
+<li><code>not_applicable</code> when the experiment design makes the artifact unnecessary.</li>
+</ul>
+<p>Required artifacts must either be present or have a matching blocker. Optional
+artifacts may be missing, but <code>REPORT.md</code> should still explain important gaps.</p>
+<p>Use stable artifact IDs such as <code>participant_video</code>, <code>performance_result</code>,
+<code>monitor_snapshot</code>, <code>simulation_export</code>, and <code>analysis_notebook</code>. For custom
+artifacts, use lowercase snake case and add a clear title and description.</p>
+<h2 id="documenting-blockers">Documenting blockers</h2>
+<p>A blocker should say:</p>
+<ol>
+<li>Which artifact or check it affects.</li>
+<li>What was attempted.</li>
+<li>What failed or why the artifact is not applicable.</li>
+<li>The next concrete step.</li>
+</ol>
+<p>Example:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;artifact_id&#34;</span><span class="p">:</span> <span class="s2">&#34;performance_result&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;severity&#34;</span><span class="p">:</span> <span class="s2">&#34;warning&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;reason&#34;</span><span class="p">:</span> <span class="s2">&#34;psynet performance-test local failed because Redis was unavailable in the local environment.&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;next_step&#34;</span><span class="p">:</span> <span class="s2">&#34;Start Redis and rerun the 40-bot performance test, saving review/artifacts/performance.json.&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>Do not convert a failed or skipped check into a passing check. A complete bundle
+can include blockers, but it must not imply that blocked work succeeded.</p>
+<h2 id="writing-section-files">Writing section files</h2>
+<p><code>PROMPT.md</code> should capture the original user prompt or experiment brief when
+available. <code>PLAN.md</code> should capture the implementation plan. <code>TIMELINE.md</code>
+should record notable implementation and evidence events.</p>
+<p><code>REPORT.md</code> should be concise and explicit. Include:</p>
+<ul>
+<li>A short description of the implemented experiment.</li>
+<li>The validation commands or manual procedures that ran.</li>
+<li>The artifact inventory and where to find the most important evidence.</li>
+<li>A summary of data export and analysis results.</li>
+<li>Known blockers, missing artifacts, or limitations.</li>
+<li>Any reviewer instructions, such as which preview page or notebook cells to
+inspect first.</li>
+</ul>
+<p>Avoid broad claims such as &ldquo;fully validated&rdquo; unless every required artifact and
+check is present. Prefer concrete statements like &ldquo;local functional test passed&rdquo;
+or &ldquo;performance evidence is blocked by missing Redis.&rdquo;</p>
+<h2 id="rendering-and-handoff">Rendering and handoff</h2>
+<p>Before handoff, run:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">psynet-review-bundle validate
+</span></span><span class="line"><span class="cl">psynet-review-bundle render
+</span></span></code></pre></div><p>If the bundle is being inspected in Cursor Cloud, prefer hosting a live preview
+of the rendered site and sharing a temporary tunnel link. A zip archive or PR
+diff can supplement the live preview, but the manifest and report remain the
+source of truth.</p>
+<h2 id="custom-artifacts-and-future-styling">Custom artifacts and future styling</h2>
+<p>Custom artifacts are allowed. Renderers should preserve unknown artifacts as
+additional files, so reviewers can inspect experiment-specific outputs without
+custom code.</p>
+<p>Prefer manifest fields and a small optional <code>review/style.css</code> for future
+customization before introducing custom templates. Keep the common review UI
+stable enough that standalone bundles and dashboard attempt reviews can share
+the same evidence renderer.</p>
+<h2 id="rules">Rules</h2>
+<ul>
+<li>Keep this skill as the operational source of truth for review-bundle contents.
+Do not duplicate the workflow in docs or other skills.</li>
+<li>Do not present missing, blocked, skipped, or not-applicable artifacts as
+passing evidence.</li>
+<li>Prefer blockers in <code>review.json</code> and clear limitations in <code>REPORT.md</code> over
+optimistic summaries.</li>
+<li>Keep custom or production credentials out of review artifacts and logs.</li>
+</ul>
+
+  </article>
+
+    </main>
+    
+      
+
+
+
+  <section class="comments" aria-label="Comments">
+    <script
+      src="https://giscus.app/client.js"
+      data-repo="pmcharrison/PsyNetSkills"
+      data-repo-id="R_kgDOSw3rlA"
+      data-category="Announcements"
+      data-category-id="DIC_kwDOSw3rlM4C-xgp"
+      data-mapping="pathname"
+      data-strict="1"
+      data-reactions-enabled="1"
+      data-emit-metadata="0"
+      data-input-position="bottom"
+      data-theme="light"
+      data-lang="en"
+      crossorigin="anonymous"
+      async
+    ></script>
+  </section>
+
+
+    
+    <footer>
+    </footer>
+    <script src="/PsyNetSkills/js/workflow-status.js" defer></script>
+    <script src="/PsyNetSkills/js/actions-copy.js" defer></script>
+    <script src="/PsyNetSkills/js/screenshot-gallery.js" defer></script>
+  </body>
+</html>

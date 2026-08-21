@@ -1,0 +1,6 @@
+__pycache__
+.deploy
+.venv
+env
+server.log
+source_code.zip

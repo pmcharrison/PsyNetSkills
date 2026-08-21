@@ -1,0 +1,14 @@
+[Config]
+title = Open-ended STEP tagging experiment
+description = Listen to short music clips, add native-language emotion tags, rate tags from other participants, and flag invalid tags.
+contact_email_on_error = no-reply@example.invalid
+organization_name = PsyNetSkills
+
+recruiter = generic
+currency = $
+wage_per_hour = 12.0
+
+[Prolific]
+auto_recruit = false
+prolific_estimated_completion_minutes = 8
+base_payment = 1.60

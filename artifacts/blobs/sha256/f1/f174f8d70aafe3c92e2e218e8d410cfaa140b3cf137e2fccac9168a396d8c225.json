@@ -1,0 +1,8 @@
+{
+  "scripts": {
+    "participant-flow": "playwright test tests/participant-flow.spec.js --browser=chromium --reporter=line"
+  },
+  "devDependencies": {
+    "@playwright/test": "latest"
+  }
+}

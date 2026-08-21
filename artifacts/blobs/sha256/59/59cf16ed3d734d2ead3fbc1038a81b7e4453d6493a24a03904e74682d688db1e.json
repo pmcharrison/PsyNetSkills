@@ -1,0 +1,8 @@
+{
+  "captions": {
+    "01-instructions.png": "Instructions explain the same/different color task and F/J keyboard shortcuts.",
+    "02-trial-response-disabled.png": "Response buttons are visible but disabled during the timed fixation/stimulus/blank sequence.",
+    "03-trial-response-enabled.png": "Same/Different response prompt is active after the blank interval.",
+    "04-completion.png": "Participant reaches the completion page after 10 trials."
+  }
+}

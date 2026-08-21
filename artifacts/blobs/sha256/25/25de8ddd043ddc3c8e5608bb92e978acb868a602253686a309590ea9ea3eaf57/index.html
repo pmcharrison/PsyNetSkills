@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <base href="./">
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>Experiment Monitoring -  Dashboard</title>
+        
+          <link rel="stylesheet" href="./static/css/bootstrap.min.css" type="text/css">
+          <link rel="stylesheet" href="./static/css/dashboard.css" type="text/css">
+          
+    <script src="https://use.fontawesome.com/ffb1fe552d.js"></script>
+    <link href="./static/vis@4.17.0/dist/vis-network.min.css" rel="stylesheet"
+          type="text/css"/>
+
+        
+        
+        
+    
+        <style>
+          body { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; margin: 1rem; }
+          .container { max-width: none; }
+          #dashboard-navigation, #logout { display: none; }
+          #monitor-wrapper { display: flex; gap: 1rem; align-items: flex-start; }
+          #sidebar { flex: 0 0 18rem; }
+          #timeline-wrapper, #timeline, main { flex: 1 1 auto; min-width: 0; }
+          table { border-collapse: collapse; width: 100%; }
+          th, td { border: 1px solid #d0d7de; padding: 0.4rem; text-align: left; vertical-align: top; }
+          button { border: 1px solid #d0d7de; border-radius: 0.35rem; background: #f6f8fa; padding: 0.3rem 0.6rem; }
+        </style>
+    </head>
+    <body>
+      <div class="container">
+        
+          <nav id="dashboard-navigation">
+            <ul class="nav nav-tabs">
+              
+                
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Config</a>
+                  </li>
+                
+              
+                
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Deployments</a>
+                  </li>
+                
+              
+                
+                <li class="nav-item">
+                  <a class="nav-link dropdown-toggle active" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Monitor</a>
+                  <div class="dropdown-menu">
+                    
+                      <a class="dropdown-item" href="#">Monitoring</a>
+                    
+                      <a class="dropdown-item" href="#">Timeline</a>
+                    
+                      <a class="dropdown-item" href="#">Resources</a>
+                    
+                      <a class="dropdown-item" href="#">Participants</a>
+                    
+                      <a class="dropdown-item" href="#">Logger</a>
+                    
+                      <a class="dropdown-item" href="#">Errors</a>
+                    
+                  </div>
+                </li>
+                
+              
+                
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Basic data</a>
+                  </li>
+                
+              
+                
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Export</a>
+                  </li>
+                
+              
+                
+                <li class="nav-item">
+                  <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Database</a>
+                  <div class="dropdown-menu">
+                    
+                      <a class="dropdown-item" href="#">AssetNode</a>
+                    
+                      <a class="dropdown-item" href="#">AssetTrial</a>
+                    
+                      <a class="dropdown-item" href="#">CachedAsset</a>
+                    
+                      <a class="dropdown-item" href="#">ChainTrialMakerState</a>
+                    
+                      <a class="dropdown-item" href="#">ExperimentConfig</a>
+                    
+                      <a class="dropdown-item" href="#">ExperimentStatus</a>
+                    
+                      <a class="dropdown-item" href="#">Participant</a>
+                    
+                      <a class="dropdown-item" href="#">Request</a>
+                    
+                      <a class="dropdown-item" href="#">Response</a>
+                    
+                      <a class="dropdown-item" href="#">StaticNetwork</a>
+                    
+                      <a class="dropdown-item" href="#">StaticNode</a>
+                    
+                      <a class="dropdown-item" href="#">ToneSequenceTrial</a>
+                    
+                  </div>
+                </li>
+                
+              
+                
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Development</a>
+                  </li>
+                
+              
+            </ul>
+          </nav>
+          
+        
+        
+          
+          
+        
+        
+        
+    <h1>Experiment Monitoring</h1>
+    <div id="monitor-wrapper" class="d-flex justify-content-between align-items-stretch">
+        <main class="flex-fill">
+            <div style="display: -ms-flexbox; display: flex; -ms-flex-wrap: wrap; flex-wrap: wrap;">
+                    <div class="form-group">
+                        <label for="sortBy">Sort networks by</label>
+                        <div class="input-group mb-3">
+                            <select class="form-control" id="sortBy">
+                                <option value="network_id">Network ID</option>
+                                <option value="n_pending_infos">Number of pending infos</option>
+                                <option value="n_completed_infos">Number of completed infos</option>
+                                <option value="n_failed_infos">Number of failed infos</option>
+                                <option value="n_alive_nodes">Number of completed nodes</option>
+                                <option value="n_failed_nodes">Number of failed nodes</option>
+                            </select>
+                            <div class="input-group-append">
+                                <div class="btn-group btn-group-toggle" id="order" data-toggle="buttons">
+
+                                    <label class="btn btn-secondary active">
+                                        <input type="radio" name="options" checked>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                             fill="currentColor"
+                                             class="bi bi-arrow-down" viewBox="0 0 16 16">
+                                            <path fill-rule="evenodd"
+                                                  d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1z"/>
+                                        </svg>
+                                    </label>
+                                    <label class="btn btn-secondary">
+                                        <input type="radio" name="options">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                             fill="currentColor"
+                                             class="bi bi-arrow-up" viewBox="0 0 16 16">
+                                            <path fill-rule="evenodd"
+                                                  d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z"/>
+                                        </svg>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                <div id="search-container" class="mx-auto row">
+                    <div class="form-group pr-3">
+                        <label for="max-networks">Number of networks</label>
+                        <input type="number" min="1" class="form-control" id="max-networks"
+                               placeholder="Networks to print">
+                    </div>
+                    <div class="form-group">
+                        <label for="search">Freetext search</label>
+                        <input type="text" class="form-control" id="search" placeholder="Search networks">
+                    </div>
+                </div>
+                <div>
+                    <div class="form-group">
+
+                        <label></label>
+                        <div>
+                            <a class="text-primary" data-toggle="collapse" href="#statistics" role="button"
+                               aria-expanded="false" aria-controls="statistics">
+                                Experiment Statistics
+                            </a>
+                            <a class="text-secondary" data-toggle="collapse" href="#advanced-filter"
+                               role="button" aria-expanded="false" aria-controls="advanced-filter">
+                                Advanced Filter
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="collapse p-3 bg-light" id="statistics">
+                <h4>Statistics</h4>
+                <div class="row">
+                    
+                        <div class="col">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Participants</h5>
+                                    <p class="card-text"><span class="nowrap"><span class="statistics-key">working</span>: <span class="statistics-value">1</span></span></p>
+                                </div>
+                            </div>
+                        </div>
+                    
+                        <div class="col">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Networks</h5>
+                                    <p class="card-text"><span class="nowrap"><span class="statistics-key">default</span>: <span class="statistics-value"><span class="statistics-value no-failures">4 total, 0 failed (0.0%)</span></span></span></p>
+                                </div>
+                            </div>
+                        </div>
+                    
+                        <div class="col">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Nodes</h5>
+                                    <p class="card-text"><span class="statistics-value no-failures">4 total, 0 failed (0.0%)</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    
+                        <div class="col">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Trials</h5>
+                                    <p class="card-text"><span class="statistics-value no-failures">4 total, 0 failed (0.0%)</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    
+                </div>
+
+            </div>
+            <div class="collapse p-3  bg-light" id="advanced-filter">
+            <h4>Advanced Filter</h4>
+                <form>
+                    
+                        <fieldset id="network-ids">
+                            <h5>Network IDs</h5>
+                            
+                                <div class="field p-1">
+                                    <input class="network-input" id="val-1" type="checkbox" name="network_ids"
+                                           value="1" checked />
+                                    <label for="val-1">1</label>
+                                </div>
+                            
+                                <div class="field p-1">
+                                    <input class="network-input" id="val-2" type="checkbox" name="network_ids"
+                                           value="2" checked />
+                                    <label for="val-2">2</label>
+                                </div>
+                            
+                                <div class="field p-1">
+                                    <input class="network-input" id="val-3" type="checkbox" name="network_ids"
+                                           value="3" checked />
+                                    <label for="val-3">3</label>
+                                </div>
+                            
+                                <div class="field p-1">
+                                    <input class="network-input" id="val-4" type="checkbox" name="network_ids"
+                                           value="4" checked />
+                                    <label for="val-4">4</label>
+                                </div>
+                            
+                        </fieldset>
+                </form>
+                <form method="GET">
+
+                    <div class="reload-onclick">
+                        <input name="collapsed"
+                               type="checkbox" />
+                        <label for="transformations">Collapse (networks and sources only)</label>
+                    </div>
+                    <div class="reload-onclick">
+                        <input name="transformations"
+                               type="checkbox" />
+                        <label for="transformations">Show transformations</label>
+                    </div>
+                </form>
+            </div>
+
+            <section id="mynetwork">
+            </section>
+            <section id="details-pane">
+                <div id="element-details">
+                </div>
+            </section>
+        </main>
+    </div>
+
+        <footer>
+          
+          
+        </footer>
+      </div>
+      
+    
+      <script src="./static/scripts/jquery-3.7.1.min.js"></script>
+      <script src="./static/scripts/popper.min.js"></script>
+      <script src="./static/scripts/bootstrap.min.js"></script>
+      <script src="./static/scripts/clipboard.min.js"></script>
+      
+    <script>
+        $('.reload-onclick').on('change', function () {
+            $(this).parents('form').submit();
+        });
+        window.templateGlobals = function () {
+            // Values inscribed by Jinja2 when this template is rendered.
+            const network_structure = {"networks": [{"vars": "{}", "id": 1, "creation_time": "2026-06-08 09:59:16", "failed": false, "failed_reason": null, "time_of_death": null, "type": "StaticNetwork", "max_size": 1, "full": false, "role": "default", "n_pending_infos": 0, "n_completed_infos": 1, "n_failed_infos": 0, "n_alive_nodes": 1, "n_failed_nodes": 0, "trial_maker_id": "tone_sequences", "module_id": "tone_sequences", "target_n_trials": 1000000, "participant_group": "default", "sync_group_type": null, "sync_group_id": null, "participant_id": null, "async_post_grow_network_required": false, "async_post_grow_network_requested": false, "async_post_grow_network_complete": false, "async_post_grow_network_failed": false, "id_within_participant": null, "n_all_trials": 1, "n_alive_trials": 1, "n_failed_trials": 0, "n_completed_trials": 1, "n_all_nodes": 1, "chain_type": "across", "head_id": 1, "trials_per_node": 1000000, "definition": "{}", "context": null, "block": "default", "class": "StaticNetwork", "object_type": "Network"}, {"vars": "{}", "id": 2, "creation_time": "2026-06-08 09:59:16", "failed": false, "failed_reason": null, "time_of_death": null, "type": "StaticNetwork", "max_size": 1, "full": false, "role": "default", "n_pending_infos": 0, "n_completed_infos": 1, "n_failed_infos": 0, "n_alive_nodes": 1, "n_failed_nodes": 0, "trial_maker_id": "tone_sequences", "module_id": "tone_sequences", "target_n_trials": 1000000, "participant_group": "default", "sync_group_type": null, "sync_group_id": null, "participant_id": null, "async_post_grow_network_required": false, "async_post_grow_network_requested": false, "async_post_grow_network_complete": false, "async_post_grow_network_failed": false, "id_within_participant": null, "n_all_trials": 1, "n_alive_trials": 1, "n_failed_trials": 0, "n_completed_trials": 1, "n_all_nodes": 1, "chain_type": "across", "head_id": 2, "trials_per_node": 1000000, "definition": "{}", "context": null, "block": "default", "class": "StaticNetwork", "object_type": "Network"}, {"vars": "{}", "id": 3, "creation_time": "2026-06-08 09:59:16", "failed": false, "failed_reason": null, "time_of_death": null, "type": "StaticNetwork", "max_size": 1, "full": false, "role": "default", "n_pending_infos": 0, "n_completed_infos": 1, "n_failed_infos": 0, "n_alive_nodes": 1, "n_failed_nodes": 0, "trial_maker_id": "tone_sequences", "module_id": "tone_sequences", "target_n_trials": 1000000, "participant_group": "default", "sync_group_type": null, "sync_group_id": null, "participant_id": null, "async_post_grow_network_required": false, "async_post_grow_network_requested": false, "async_post_grow_network_complete": false, "async_post_grow_network_failed": false, "id_within_participant": null, "n_all_trials": 1, "n_alive_trials": 1, "n_failed_trials": 0, "n_completed_trials": 1, "n_all_nodes": 1, "chain_type": "across", "head_id": 3, "trials_per_node": 1000000, "definition": "{}", "context": null, "block": "default", "class": "StaticNetwork", "object_type": "Network"}, {"vars": "{}", "id": 4, "creation_time": "2026-06-08 09:59:16", "failed": false, "failed_reason": null, "time_of_death": null, "type": "StaticNetwork", "max_size": 1, "full": false, "role": "default", "n_pending_infos": 0, "n_completed_infos": 1, "n_failed_infos": 0, "n_alive_nodes": 1, "n_failed_nodes": 0, "trial_maker_id": "tone_sequences", "module_id": "tone_sequences", "target_n_trials": 1000000, "participant_group": "default", "sync_group_type": null, "sync_group_id": null, "participant_id": null, "async_post_grow_network_required": false, "async_post_grow_network_requested": false, "async_post_grow_network_complete": false, "async_post_grow_network_failed": false, "id_within_participant": null, "n_all_trials": 1, "n_alive_trials": 1, "n_failed_trials": 0, "n_completed_trials": 1, "n_all_nodes": 1, "chain_type": "across", "head_id": 4, "trials_per_node": 1000000, "definition": "{}", "context": null, "block": "default", "class": "StaticNetwork", "object_type": "Network"}], "nodes": [{"vars": "{}", "id": 1, "creation_time": "2026-06-08 09:59:16", "failed": false, "failed_reason": null, "time_of_death": null, "type": "TrialSource", "network_id": 1, "participant_id": null, "trial_maker_id": "tone_sequences", "module_id": "tone_sequences", "module_state_id": null, "is_global": null, "on_deploy_complete": true, "async_on_deploy_required": false, "async_on_deploy_requested": false, "async_on_deploy_complete": false, "async_on_deploy_failed": false, "key": null, "degree": 0, "target_n_trials": 1000000, "can_spawn": false, "child_id": null, "parent_id": null, "seed": "{}", "definition": "{'trial_number': 1, 'sequence': ['low', 'medium', 'high']}", "context": null, "participant_group": "default", "block": "default", "propagate_failure": false, "n_viable_trials": 1, "class": "StaticNode", "object_type": "Node"}, {"vars": "{}", "id": 2, "creation_time": "2026-06-08 09:59:16", "failed": false, "failed_reason": null, "time_of_death": null, "type": "TrialSource", "network_id": 2, "participant_id": null, "trial_maker_id": "tone_sequences", "module_id": "tone_sequences", "module_state_id": null, "is_global": null, "on_deploy_complete": true, "async_on_deploy_required": false, "async_on_deploy_requested": false, "async_on_deploy_complete": false, "async_on_deploy_failed": false, "key": null, "degree": 0, "target_n_trials": 1000000, "can_spawn": false, "child_id": null, "parent_id": null, "seed": "{}", "definition": "{'trial_number': 2, 'sequence': ['high', 'medium', 'low']}", "context": null, "participant_group": "default", "block": "default", "propagate_failure": false, "n_viable_trials": 1, "class": "StaticNode", "object_type": "Node"}, {"vars": "{}", "id": 3, "creation_time": "2026-06-08 09:59:16", "failed": false, "failed_reason": null, "time_of_death": null, "type": "TrialSource", "network_id": 3, "participant_id": null, "trial_maker_id": "tone_sequences", "module_id": "tone_sequences", "module_state_id": null, "is_global": null, "on_deploy_complete": true, "async_on_deploy_required": false, "async_on_deploy_requested": false, "async_on_deploy_complete": false, "async_on_deploy_failed": false, "key": null, "degree": 0, "target_n_trials": 1000000, "can_spawn": false, "child_id": null, "parent_id": null, "seed": "{}", "definition": "{'trial_number': 3, 'sequence': ['medium', 'low', 'medium', 'high']}", "context": null, "participant_group": "default", "block": "default", "propagate_failure": false, "n_viable_trials": 1, "class": "StaticNode", "object_type": "Node"}, {"vars": "{}", "id": 4, "creation_time": "2026-06-08 09:59:16", "failed": false, "failed_reason": null, "time_of_death": null, "type": "TrialSource", "network_id": 4, "participant_id": null, "trial_maker_id": "tone_sequences", "module_id": "tone_sequences", "module_state_id": null, "is_global": null, "on_deploy_complete": true, "async_on_deploy_required": false, "async_on_deploy_requested": false, "async_on_deploy_complete": false, "async_on_deploy_failed": false, "key": null, "degree": 0, "target_n_trials": 1000000, "can_spawn": false, "child_id": null, "parent_id": null, "seed": "{}", "definition": "{'trial_number': 4, 'sequence': ['low', 'high', 'medium', 'low']}", "context": null, "participant_group": "default", "block": "default", "propagate_failure": false, "n_viable_trials": 1, "class": "StaticNode", "object_type": "Node"}], "vectors": [], "infos": [{"_initial_assets": "{'sequence_audio': Asset-4-CachedAsset}", "vars": "{}", "id": 1, "creation_time": "2026-06-08 09:59:36", "failed": false, "failed_reason": null, "time_of_death": null, "type": "ToneSequenceTrial", "origin_id": 4, "network_id": 4, "contents": null, "complete": true, "node_id": 4, "participant_id": 1, "module_state_id": 1, "trial_maker_id": "tone_sequences", "definition": "{'trial_number': 4, 'sequence': ['low', 'high', 'medium', 'low']}", "finalized": true, "is_repeat_trial": false, "score": 1.0, "performance_reward": 0.0, "parent_trial_id": null, "answer": "{'target_sequence': ['low', 'high', 'medium', 'low'], 'participant_response': ['low', 'high', 'medium', 'low'], 'event_log': [{'eventType': 'trialConstruct', 'localTime': '2026-06-08T09:59:36.391Z', 'info': None}, {'eventType': 'trialPrepare', 'localTime': '2026-06-08T09:59:36.409Z', 'info': None}, {'eventType': 'trialStart', 'localTime': '2026-06-08T09:59:36.409Z', 'info': None}, {'eventType': 'promptStart', 'localTime': '2026-06-08T09:59:36.410Z', 'info': None}, {'eventType': 'audioFinished: prompt', 'localTime': '2026-06-08T09:59:38.568Z', 'info': None}, {'eventType': 'promptEnd', 'localTime': '2026-06-08T09:59:38.568Z', 'info': None}, {'eventType': 'responseEnable', 'localTime': '2026-06-08T09:59:38.568Z', 'info': None}, {'eventType': 'trialFinish', 'localTime': '2026-06-08T09:59:38.568Z', 'info': None}, {'eventType': 'submitEnable', 'localTime': '2026-06-08T09:59:38.568Z', 'info': None}, {'eventType': 'trialFinished', 'localTime': '2026-06-08T09:59:38.568Z', 'info': None}, {'eventType': 'pushButtonClicked', 'localTime': '2026-06-08T09:59:38.899Z', 'info': {'buttonId': 'low'}}, {'eventType': 'pushButtonClicked', 'localTime': '2026-06-08T09:59:39.483Z', 'info': {'buttonId': 'high'}}, {'eventType': 'pushButtonClicked', 'localTime': '2026-06-08T09:59:40.064Z', 'info': {'buttonId': 'medium'}}, {'eventType': 'pushButtonClicked', 'localTime': '2026-06-08T09:59:40.648Z', 'info': {'buttonId': 'low'}}]}", "propagate_failure": true, "response_id": 2, "repeat_trial_index": null, "n_repeat_trials": null, "time_taken": 4.865, "time_credit_before_trial": 8.0, "time_credit_after_trial": 20.0, "time_credit_from_trial": 12.0, "progress_before_trial": 0.13114754098360656, "progress_after_trial": 0.3278688524590164, "async_post_trial_required": false, "async_post_trial_requested": false, "async_post_trial_complete": false, "async_post_trial_failed": false, "block_position": 0, "block": "default", "class": "ToneSequenceTrial", "object_type": "Info", "trial_number": 4, "sequence": "['low', 'high', 'medium', 'low']", "target_sequence": "['low', 'high', 'medium', 'low']", "participant_response": "['low', 'high', 'medium', 'low']", "event_log": "[{'eventType': 'trialConstruct', 'localTime': '2026-06-08T09:59:36.391Z', 'info': None}, {'eventType': 'trialPrepare', 'localTime': '2026-06-08T09:59:36.409Z', 'info': None}, {'eventType': 'trialStart', 'localTime': '2026-06-08T09:59:36.409Z', 'info': None}, {'eventType': 'promptStart', 'localTime': '2026-06-08T09:59:36.410Z', 'info': None}, {'eventType': 'audioFinished: prompt', 'localTime': '2026-06-08T09:59:38.568Z', 'info': None}, {'eventType': 'promptEnd', 'localTime': '2026-06-08T09:59:38.568Z', 'info': None}, {'eventType': 'responseEnable', 'localTime': '2026-06-08T09:59:38.568Z', 'info': None}, {'eventType': 'trialFinish', 'localTime': '2026-06-08T09:59:38.568Z', 'info': None}, {'eventType': 'submitEnable', 'localTime': '2026-06-08T09:59:38.568Z', 'info': None}, {'eventType': 'trialFinished', 'localTime': '2026-06-08T09:59:38.568Z', 'info': None}, {'eventType': 'pushButtonClicked', 'localTime': '2026-06-08T09:59:38.899Z', 'info': {'buttonId': 'low'}}, {'eventType': 'pushButtonClicked', 'localTime': '2026-06-08T09:59:39.483Z', 'info': {'buttonId': 'high'}}, {'eventType': 'pushButtonClicked', 'localTime': '2026-06-08T09:59:40.064Z', 'info': {'buttonId': 'medium'}}, {'eventType': 'pushButtonClicked', 'localTime': '2026-06-08T09:59:40.648Z', 'info': {'buttonId': 'low'}}]"}, {"_initial_assets": "{'sequence_audio': Asset-3-CachedAsset}", "vars": "{}", "id": 2, "creation_time": "2026-06-08 09:59:41", "failed": false, "failed_reason": null, "time_of_death": null, "type": "ToneSequenceTrial", "origin_id": 3, "network_id": 3, "contents": null, "complete": true, "node_id": 3, "participant_id": 1, "module_state_id": 1, "trial_maker_id": "tone_sequences", "definition": "{'trial_number': 3, 'sequence': ['medium', 'low', 'medium', 'high']}", "finalized": true, "is_repeat_trial": false, "score": 1.0, "performance_reward": 0.0, "parent_trial_id": null, "answer": "{'target_sequence': ['medium', 'low', 'medium', 'high'], 'participant_response': ['medium', 'low', 'medium', 'high'], 'event_log': [{'eventType': 'trialConstruct', 'localTime': '2026-06-08T09:59:41.483Z', 'info': None}, {'eventType': 'trialPrepare', 'localTime': '2026-06-08T09:59:41.491Z', 'info': None}, {'eventType': 'trialStart', 'localTime': '2026-06-08T09:59:41.491Z', 'info': None}, {'eventType': 'promptStart', 'localTime': '2026-06-08T09:59:41.491Z', 'info': None}, {'eventType': 'audioFinished: prompt', 'localTime': '2026-06-08T09:59:43.657Z', 'info': None}, {'eventType': 'promptEnd', 'localTime': '2026-06-08T09:59:43.657Z', 'info': None}, {'eventType': 'responseEnable', 'localTime': '2026-06-08T09:59:43.657Z', 'info': None}, {'eventType': 'trialFinish', 'localTime': '2026-06-08T09:59:43.658Z', 'info': None}, {'eventType': 'submitEnable', 'localTime': '2026-06-08T09:59:43.658Z', 'info': None}, {'eventType': 'trialFinished', 'localTime': '2026-06-08T09:59:43.658Z', 'info': None}, {'eventType': 'pushButtonClicked', 'localTime': '2026-06-08T09:59:44.681Z', 'info': {'buttonId': 'medium'}}, {'eventType': 'pushButtonClicked', 'localTime': '2026-06-08T09:59:45.266Z', 'info': {'buttonId': 'low'}}, {'eventType': 'pushButtonClicked', 'localTime': '2026-06-08T09:59:45.846Z', 'info': {'buttonId': 'medium'}}, {'eventType': 'pushButtonClicked', 'localTime': '2026-06-08T09:59:46.412Z', 'info': {'buttonId': 'high'}}]}", "propagate_failure": true, "response_id": 3, "repeat_trial_index": null, "n_repeat_trials": null, "time_taken": 5.522, "time_credit_before_trial": 20.0, "time_credit_after_trial": 32.0, "time_credit_from_trial": 12.0, "progress_before_trial": 0.3278688524590164, "progress_after_trial": 0.5245901639344263, "async_post_trial_required": false, "async_post_trial_requested": false, "async_post_trial_complete": false, "async_post_trial_failed": false, "block_position": 0, "block": "default", "class": "ToneSequenceTrial", "object_type": "Info", "trial_number": 3, "sequence": "['medium', 'low', 'medium', 'high']", "target_sequence": "['medium', 'low', 'medium', 'high']", "participant_response": "['medium', 'low', 'medium', 'high']", "event_log": "[{'eventType': 'trialConstruct', 'localTime': '2026-06-08T09:59:41.483Z', 'info': None}, {'eventType': 'trialPrepare', 'localTime': '2026-06-08T09:59:41.491Z', 'info': None}, {'eventType': 'trialStart', 'localTime': '2026-06-08T09:59:41.491Z', 'info': None}, {'eventType': 'promptStart', 'localTime': '2026-06-08T09:59:41.491Z', 'info': None}, {'eventType': 'audioFinished: prompt', 'localTime': '2026-06-08T09:59:43.657Z', 'info': None}, {'eventType': 'promptEnd', 'localTime': '2026-06-08T09:59:43.657Z', 'info': None}, {'eventType': 'responseEnable', 'localTime': '2026-06-08T09:59:43.657Z', 'info': None}, {'eventType': 'trialFinish', 'localTime': '2026-06-08T09:59:43.658Z', 'info': None}, {'eventType': 'submitEnable', 'localTime': '2026-06-08T09:59:43.658Z', 'info': None}, {'eventType': 'trialFinished', 'localTime': '2026-06-08T09:59:43.658Z', 'info': None}, {'eventType': 'pushButtonClicked', 'localTime': '2026-06-08T09:59:44.681Z', 'info': {'buttonId': 'medium'}}, {'eventType': 'pushButtonClicked', 'localTime': '2026-06-08T09:59:45.266Z', 'info': {'buttonId': 'low'}}, {'eventType': 'pushButtonClicked', 'localTime': '2026-06-08T09:59:45.846Z', 'info': {'buttonId': 'medium'}}, {'eventType': 'pushButtonClicked', 'localTime': '2026-06-08T09:59:46.412Z', 'info': {'buttonId': 'high'}}]"}, {"_initial_assets": "{'sequence_audio': Asset-2-CachedAsset}", "vars": "{}", "id": 3, "creation_time": "2026-06-08 09:59:47", "failed": false, "failed_reason": null, "time_of_death": null, "type": "ToneSequenceTrial", "origin_id": 2, "network_id": 2, "contents": null, "complete": true, "node_id": 2, "participant_id": 1, "module_state_id": 1, "trial_maker_id": "tone_sequences", "definition": "{'trial_number': 2, 'sequence': ['high', 'medium', 'low']}", "finalized": true, "is_repeat_trial": false, "score": 1.0, "performance_reward": 0.0, "parent_trial_id": null, "answer": "{'target_sequence': ['high', 'medium', 'low'], 'participant_response': ['high', 'medium', 'low'], 'event_log': [{'eventType': 'trialConstruct', 'localTime': '2026-06-08T09:59:47.231Z', 'info': None}, {'eventType': 'trialPrepare', 'localTime': '2026-06-08T09:59:47.239Z', 'info': None}, {'eventType': 'trialStart', 'localTime': '2026-06-08T09:59:47.239Z', 'info': None}, {'eventType': 'promptStart', 'localTime': '2026-06-08T09:59:47.239Z', 'info': None}, {'eventType': 'audioFinished: prompt', 'localTime': '2026-06-08T09:59:48.825Z', 'info': None}, {'eventType': 'promptEnd', 'localTime': '2026-06-08T09:59:48.825Z', 'info': None}, {'eventType': 'responseEnable', 'localTime': '2026-06-08T09:59:48.825Z', 'info': None}, {'eventType': 'trialFinish', 'localTime': '2026-06-08T09:59:48.826Z', 'info': None}, {'eventType': 'submitEnable', 'localTime': '2026-06-08T09:59:48.826Z', 'info': None}, {'eventType': 'trialFinished', 'localTime': '2026-06-08T09:59:48.826Z', 'info': None}, {'eventType': 'pushButtonClicked', 'localTime': '2026-06-08T09:59:50.431Z', 'info': {'buttonId': 'high'}}, {'eventType': 'pushButtonClicked', 'localTime': '2026-06-08T09:59:51.014Z', 'info': {'buttonId': 'medium'}}, {'eventType': 'pushButtonClicked', 'localTime': '2026-06-08T09:59:51.596Z', 'info': {'buttonId': 'low'}}]}", "propagate_failure": true, "response_id": 4, "repeat_trial_index": null, "n_repeat_trials": null, "time_taken": 4.959, "time_credit_before_trial": 32.0, "time_credit_after_trial": 44.0, "time_credit_from_trial": 12.0, "progress_before_trial": 0.5245901639344263, "progress_after_trial": 0.7213114754098361, "async_post_trial_required": false, "async_post_trial_requested": false, "async_post_trial_complete": false, "async_post_trial_failed": false, "block_position": 0, "block": "default", "class": "ToneSequenceTrial", "object_type": "Info", "trial_number": 2, "sequence": "['high', 'medium', 'low']", "target_sequence": "['high', 'medium', 'low']", "participant_response": "['high', 'medium', 'low']", "event_log": "[{'eventType': 'trialConstruct', 'localTime': '2026-06-08T09:59:47.231Z', 'info': None}, {'eventType': 'trialPrepare', 'localTime': '2026-06-08T09:59:47.239Z', 'info': None}, {'eventType': 'trialStart', 'localTime': '2026-06-08T09:59:47.239Z', 'info': None}, {'eventType': 'promptStart', 'localTime': '2026-06-08T09:59:47.239Z', 'info': None}, {'eventType': 'audioFinished: prompt', 'localTime': '2026-06-08T09:59:48.825Z', 'info': None}, {'eventType': 'promptEnd', 'localTime': '2026-06-08T09:59:48.825Z', 'info': None}, {'eventType': 'responseEnable', 'localTime': '2026-06-08T09:59:48.825Z', 'info': None}, {'eventType': 'trialFinish', 'localTime': '2026-06-08T09:59:48.826Z', 'info': None}, {'eventType': 'submitEnable', 'localTime': '2026-06-08T09:59:48.826Z', 'info': None}, {'eventType': 'trialFinished', 'localTime': '2026-06-08T09:59:48.826Z', 'info': None}, {'eventType': 'pushButtonClicked', 'localTime': '2026-06-08T09:59:50.431Z', 'info': {'buttonId': 'high'}}, {'eventType': 'pushButtonClicked', 'localTime': '2026-06-08T09:59:51.014Z', 'info': {'buttonId': 'medium'}}, {'eventType': 'pushButtonClicked', 'localTime': '2026-06-08T09:59:51.596Z', 'info': {'buttonId': 'low'}}]"}, {"_initial_assets": "{'sequence_audio': Asset-1-CachedAsset}", "vars": "{}", "id": 4, "creation_time": "2026-06-08 09:59:52", "failed": false, "failed_reason": null, "time_of_death": null, "type": "ToneSequenceTrial", "origin_id": 1, "network_id": 1, "contents": null, "complete": true, "node_id": 1, "participant_id": 1, "module_state_id": 1, "trial_maker_id": "tone_sequences", "definition": "{'trial_number': 1, 'sequence': ['low', 'medium', 'high']}", "finalized": true, "is_repeat_trial": false, "score": 1.0, "performance_reward": 0.0, "parent_trial_id": null, "answer": "{'target_sequence': ['low', 'medium', 'high'], 'participant_response': ['low', 'medium', 'high'], 'event_log': [{'eventType': 'trialConstruct', 'localTime': '2026-06-08T09:59:52.415Z', 'info': None}, {'eventType': 'trialPrepare', 'localTime': '2026-06-08T09:59:52.421Z', 'info': None}, {'eventType': 'trialStart', 'localTime': '2026-06-08T09:59:52.421Z', 'info': None}, {'eventType': 'promptStart', 'localTime': '2026-06-08T09:59:52.421Z', 'info': None}, {'eventType': 'audioFinished: prompt', 'localTime': '2026-06-08T09:59:54.012Z', 'info': None}, {'eventType': 'promptEnd', 'localTime': '2026-06-08T09:59:54.012Z', 'info': None}, {'eventType': 'responseEnable', 'localTime': '2026-06-08T09:59:54.012Z', 'info': None}, {'eventType': 'trialFinish', 'localTime': '2026-06-08T09:59:54.012Z', 'info': None}, {'eventType': 'submitEnable', 'localTime': '2026-06-08T09:59:54.012Z', 'info': None}, {'eventType': 'trialFinished', 'localTime': '2026-06-08T09:59:54.012Z', 'info': None}, {'eventType': 'pushButtonClicked', 'localTime': '2026-06-08T09:59:55.613Z', 'info': {'buttonId': 'low'}}, {'eventType': 'pushButtonClicked', 'localTime': '2026-06-08T09:59:56.199Z', 'info': {'buttonId': 'medium'}}, {'eventType': 'pushButtonClicked', 'localTime': '2026-06-08T09:59:56.780Z', 'info': {'buttonId': 'high'}}]}", "propagate_failure": true, "response_id": 5, "repeat_trial_index": null, "n_repeat_trials": null, "time_taken": 4.956, "time_credit_before_trial": 44.0, "time_credit_after_trial": 56.0, "time_credit_from_trial": 12.0, "progress_before_trial": 0.7213114754098361, "progress_after_trial": 0.9180327868852459, "async_post_trial_required": false, "async_post_trial_requested": false, "async_post_trial_complete": false, "async_post_trial_failed": false, "block_position": 0, "block": "default", "class": "ToneSequenceTrial", "object_type": "Info", "trial_number": 1, "sequence": "['low', 'medium', 'high']", "target_sequence": "['low', 'medium', 'high']", "participant_response": "['low', 'medium', 'high']", "event_log": "[{'eventType': 'trialConstruct', 'localTime': '2026-06-08T09:59:52.415Z', 'info': None}, {'eventType': 'trialPrepare', 'localTime': '2026-06-08T09:59:52.421Z', 'info': None}, {'eventType': 'trialStart', 'localTime': '2026-06-08T09:59:52.421Z', 'info': None}, {'eventType': 'promptStart', 'localTime': '2026-06-08T09:59:52.421Z', 'info': None}, {'eventType': 'audioFinished: prompt', 'localTime': '2026-06-08T09:59:54.012Z', 'info': None}, {'eventType': 'promptEnd', 'localTime': '2026-06-08T09:59:54.012Z', 'info': None}, {'eventType': 'responseEnable', 'localTime': '2026-06-08T09:59:54.012Z', 'info': None}, {'eventType': 'trialFinish', 'localTime': '2026-06-08T09:59:54.012Z', 'info': None}, {'eventType': 'submitEnable', 'localTime': '2026-06-08T09:59:54.012Z', 'info': None}, {'eventType': 'trialFinished', 'localTime': '2026-06-08T09:59:54.012Z', 'info': None}, {'eventType': 'pushButtonClicked', 'localTime': '2026-06-08T09:59:55.613Z', 'info': {'buttonId': 'low'}}, {'eventType': 'pushButtonClicked', 'localTime': '2026-06-08T09:59:56.199Z', 'info': {'buttonId': 'medium'}}, {'eventType': 'pushButtonClicked', 'localTime': '2026-06-08T09:59:56.780Z', 'info': {'buttonId': 'high'}}]"}], "participants": [{"vars": "{'__Waiting for trial__loop_start_time__loop_start_time': '2026-06-08T09:59:57.368520', '__tone_sequences__trial_loop__loop_start_time__loop_start_time': '2026-06-08T09:59:36.097394'}", "id": 1, "creation_time": "2026-06-08 09:59:34", "failed": false, "failed_reason": null, "time_of_death": null, "type": "Participant", "fingerprint_hash": "c7745c5b6683d923c3291c31e87d6e36", "recruiter_id": "hotair", "worker_id": "WORKER1780912769963997143", "assignment_id": "ASSIGN1780912769963997143", "unique_id": "WORKER1780912769963997143:ASSIGN1780912769963997143", "hit_id": "HIT1780912769963997143", "mode": "debug", "end_time": null, "base_pay": null, "bonus": null, "entry_information": "{'recruiter': 'hotair'}", "status": "working", "elt_id": "['successful_end', 1, 1]", "elt_id_max": "[2, 2, 2]", "time_credit": 61.0, "estimated_max_time_credit": 61.0, "progress": 1.0, "time_credit_fixes": "[]", "progress_fixes": "[1.0]", "page_uuid": "c11b4772-4464-bab2-c3b8-0ef4a08ce96d", "page_count": 7, "aborted": false, "complete": false, "pending_redirect": null, "answer": "[{'eventType': 'trialConstruct', 'localTime': '2026-06-08T09:59:52.415Z', 'info': None}, {'eventType': 'trialPrepare', 'localTime': '2026-06-08T09:59:52.421Z', 'info': None}, {'eventType': 'trialStart', 'localTime': '2026-06-08T09:59:52.421Z', 'info': None}, {'eventType': 'promptStart', 'localTime': '2026-06-08T09:59:52.421Z', 'info': None}, {'eventType': 'audioFinished: prompt', 'localTime': '2026-06-08T09:59:54.012Z', 'info': None}, {'eventType': 'promptEnd', 'localTime': '2026-06-08T09:59:54.012Z', 'info': None}, {'eventType': 'responseEnable', 'localTime': '2026-06-08T09:59:54.012Z', 'info': None}, {'eventType': 'trialFinish', 'localTime': '2026-06-08T09:59:54.012Z', 'info': None}, {'eventType': 'submitEnable', 'localTime': '2026-06-08T09:59:54.012Z', 'info': None}, {'eventType': 'trialFinished', 'localTime': '2026-06-08T09:59:54.012Z', 'info': None}, {'eventType': 'pushButtonClicked', 'localTime': '2026-06-08T09:59:55.613Z', 'info': {'buttonId': 'low'}}, {'eventType': 'pushButtonClicked', 'localTime': '2026-06-08T09:59:56.199Z', 'info': {'buttonId': 'medium'}}, {'eventType': 'pushButtonClicked', 'localTime': '2026-06-08T09:59:56.780Z', 'info': {'buttonId': 'high'}}]", "answer_accumulators": "[]", "sequences": "[]", "branch_log": "[['init_participant', False]]", "for_loops": "{}", "failure_tags": "[]", "base_payment": 0.1, "performance_reward": 0.0, "unpaid_bonus": 0.0, "total_wait_page_time": 0.0, "client_ip_address": "127.0.0.1", "answer_is_fresh": false, "browser_platform": "Chrome 148.0.0.0 on Linux 64-bit", "module_state_id": null, "current_trial_id": null, "trial_status": "exit", "awaited_async_code_block_process_id": null, "class": "Participant", "object_type": "Participant", "aborted_modules": "[]", "started_modules": "['tone_sequences']", "finished_modules": "['tone_sequences']", "module_id": null}], "trans": []};
+            const vis_options = {};
+            return {
+                network_structure: network_structure,
+                vis_options: vis_options
+            };
+        };
+    </script>
+    <script src="../../../../monitor-static/vis@4.17.0/dist/vis.min.js"></script>
+    <script src="./static/scripts/network-monitor.js"></script>
+
+
+      
+      
+    </body>
+</html>

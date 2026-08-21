@@ -1,0 +1,11 @@
+__pycache__/
+.pytest_cache/
+.venv/
+*.pyc
+*.log
+.deploy/
+exports/
+local.db
+dump.rdb
+source_code.zip
+static/

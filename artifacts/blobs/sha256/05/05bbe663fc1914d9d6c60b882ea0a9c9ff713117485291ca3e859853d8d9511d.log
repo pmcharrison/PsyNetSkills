@@ -1,0 +1,4 @@
+Trial 1: low - medium - high -> data/generated_tones/sequence_01.wav
+Trial 2: high - medium - low -> data/generated_tones/sequence_02.wav
+Trial 3: medium - low - medium - high -> data/generated_tones/sequence_03.wav
+Trial 4: low - high - medium - low -> data/generated_tones/sequence_04.wav

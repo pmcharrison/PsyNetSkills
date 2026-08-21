@@ -1,0 +1,3 @@
+,condition,n_trials,mean_accuracy,median_reaction_time
+0,different,6,1.0,1.0750000000000002
+1,same,6,1.0,0.95

@@ -1,0 +1,12 @@
+{
+  "name": "simple-visual-similarity-evidence",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Playwright participant-flow evidence for the simple visual similarity experiment.",
+  "scripts": {
+    "test": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.49.0"
+  }
+}

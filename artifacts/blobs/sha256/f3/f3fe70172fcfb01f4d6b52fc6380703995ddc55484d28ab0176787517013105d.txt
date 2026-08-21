@@ -1,0 +1,9 @@
+[Config]
+title = Collaborative SVG vibe coding local demo
+description = Guide a code generator to recreate a reference animal image as SVG, then rate SVG similarity.
+contact_email_on_error = local@example.com
+organization_name = PsyNetSkills
+
+recruiter = generic
+currency = $
+wage_per_hour = 12.0

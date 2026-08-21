@@ -1,0 +1,17 @@
+{
+  "n_trials": 21,
+  "stimuli": [
+    "red",
+    "orange",
+    "yellow",
+    "green",
+    "blue",
+    "purple"
+  ],
+  "outputs": [
+    "similarity_rating_heatmap.csv",
+    "reaction_time_heatmap.csv",
+    "similarity_rating_heatmap.html",
+    "reaction_time_heatmap.html"
+  ]
+}

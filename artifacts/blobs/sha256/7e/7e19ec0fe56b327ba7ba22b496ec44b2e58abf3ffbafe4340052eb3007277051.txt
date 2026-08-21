@@ -1,0 +1,11 @@
+[Config]
+title = Participant quality telemetry text task
+description = Local-only text task for demonstrating conservative participant-quality telemetry review.
+contact_email_on_error = local@example.invalid
+organization_name = PsyNetSkills local attempt
+
+recruiter = generic
+currency = $
+wage_per_hour = 12.0
+show_reward = false
+show_progress_bar = true

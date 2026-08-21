@@ -1,0 +1,16 @@
+{
+  "captions": {
+    "01_he_instructions.png": "he: localized instructions page",
+    "02_he_trial.png": "he: representative prediction trial",
+    "03_he_validation.png": "he: validation rejects a prediction below t_past",
+    "04_he_debrief.png": "he: localized debrief page",
+    "01_en_instructions.png": "en: localized instructions page",
+    "02_en_trial.png": "en: representative prediction trial",
+    "03_en_validation.png": "en: validation rejects a prediction below t_past",
+    "04_en_debrief.png": "en: localized debrief page",
+    "01_it_instructions.png": "it: localized instructions page",
+    "02_it_trial.png": "it: representative prediction trial",
+    "03_it_validation.png": "it: validation rejects a prediction below t_past",
+    "04_it_debrief.png": "it: localized debrief page"
+  }
+}

@@ -1,0 +1,9 @@
+[Config]
+title = Rock paper scissors with chat deliberation
+description = Participants deliberate in a group chat for one minute before each rock-paper-scissors decision.
+contact_email_on_error = support@example.invalid
+organization_name = PsyNetSkills
+
+recruiter = generic
+currency = $
+wage_per_hour = 12.0

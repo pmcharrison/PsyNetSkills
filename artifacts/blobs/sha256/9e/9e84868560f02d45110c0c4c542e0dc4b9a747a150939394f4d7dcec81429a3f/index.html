@@ -1,0 +1,117 @@
+{% macro telemetry_text(params) %}
+
+<div class="telemetry-text-control" data-trial-id="{{ params.trial_id }}">
+  <textarea
+    id="telemetry-text-input"
+    class="form-control"
+    rows="{{ params.rows }}"
+    aria-label="Open text response"
+    placeholder="Type your response here. If you paste, paste only text you wrote yourself."
+  ></textarea>
+  <p class="text-muted mt-2">
+    This page records timing, focus/visibility changes, paste events, and text-production counts for manual quality review.
+  </p>
+</div>
+
+<script>
+(function() {
+  const input = document.getElementById("telemetry-text-input");
+  const trialId = "{{ params.trial_id }}";
+  const trialType = "{{ params.trial_type }}";
+  const stimulusId = "{{ params.stimulus_id }}";
+  const pageLoadTime = new Date(performance.timeOrigin || Date.now()).toISOString();
+  const trialStartPerformance = performance.now();
+  const trialStartTime = new Date().toISOString();
+  const focusEvents = [];
+  const visibilityEvents = [];
+  const pasteEvents = [];
+  const textGrowth = [];
+  let keydownCount = 0;
+  let editCount = 0;
+  let lastSampleLength = 0;
+
+  function elapsedMs() {
+    return Math.round(performance.now() - trialStartPerformance);
+  }
+
+  function sampleTextGrowth(reason) {
+    const length = input.value.length;
+    if (length !== lastSampleLength || reason !== "input") {
+      textGrowth.push({
+        trial_id: trialId,
+        elapsed_ms: elapsedMs(),
+        length: length,
+        reason: reason
+      });
+      lastSampleLength = length;
+    }
+  }
+
+  window.addEventListener("focus", function() {
+    focusEvents.push({trial_id: trialId, event: "focus", elapsed_ms: elapsedMs(), time: new Date().toISOString()});
+  });
+  window.addEventListener("blur", function() {
+    focusEvents.push({trial_id: trialId, event: "blur", elapsed_ms: elapsedMs(), time: new Date().toISOString()});
+  });
+  document.addEventListener("visibilitychange", function() {
+    visibilityEvents.push({
+      trial_id: trialId,
+      state: document.visibilityState,
+      elapsed_ms: elapsedMs(),
+      time: new Date().toISOString()
+    });
+  });
+  input.addEventListener("paste", function(event) {
+    const pastedText = (event.clipboardData || window.clipboardData).getData("text") || "";
+    pasteEvents.push({
+      trial_id: trialId,
+      elapsed_ms: elapsedMs(),
+      time: new Date().toISOString(),
+      text_length: pastedText.length
+    });
+  });
+  input.addEventListener("keydown", function() {
+    keydownCount += 1;
+  });
+  input.addEventListener("input", function() {
+    editCount += 1;
+    sampleTextGrowth("input");
+  });
+  sampleTextGrowth("page_load");
+
+  psynet.stageResponse = function() {
+    const submissionTime = new Date().toISOString();
+    const telemetry = {
+      trial_id: trialId,
+      trial_type: trialType,
+      stimulus_id: stimulusId,
+      source: "browser",
+      page_load_time: pageLoadTime,
+      trial_start_time: trialStartTime,
+      submission_time: submissionTime,
+      response_latency_ms: elapsedMs(),
+      focus_event_count: focusEvents.length,
+      focus_events: focusEvents,
+      visibility_event_count: visibilityEvents.length,
+      visibility_events: visibilityEvents,
+      paste_count: pasteEvents.length,
+      paste_events: pasteEvents,
+      keydown_count: keydownCount,
+      edit_count: editCount,
+      text_growth_sample_count: textGrowth.length,
+      text_growth: textGrowth
+    };
+    psynet.response.staged.rawAnswer = {
+      response_text: input.value,
+      trial_id: trialId,
+      trial_type: trialType,
+      stimulus_id: stimulusId
+    };
+    psynet.response.staged.metadata = {
+      telemetry: telemetry
+    };
+  };
+})();
+</script>
+
+{% endmacro %}

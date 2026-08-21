@@ -1,0 +1,8 @@
+{
+  "captions": {
+    "screenshots/01-instructions.png": "Instruction page explaining the 10 adaptive digit-recall trials.",
+    "screenshots/02-study-trial.png": "Representative study page showing the digit string to memorize.",
+    "screenshots/03-recall-trial.png": "Representative recall page with copy/paste blocked text input.",
+    "screenshots/04-completion.png": "Completion state after the participant finishes the task."
+  }
+}

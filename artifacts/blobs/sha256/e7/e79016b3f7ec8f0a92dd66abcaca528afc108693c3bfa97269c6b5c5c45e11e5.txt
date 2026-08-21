@@ -1,0 +1,9 @@
+[Config]
+title = Speech-to-song versus prose-to-lyrics (Chrome browser, about 8 minutes)
+description = This local challenge experiment asks participants to judge whether repeated text and audio stimuli seem more like speech or song.
+contact_email_on_error = local@example.com
+organization_name = PsyNetSkills
+
+recruiter = generic
+currency = $
+wage_per_hour = 12.0

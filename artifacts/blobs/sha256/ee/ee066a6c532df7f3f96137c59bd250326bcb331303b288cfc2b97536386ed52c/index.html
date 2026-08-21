@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <base href="./">
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>Experiment Monitoring -  Dashboard</title>
+        
+          <link rel="stylesheet" href="./static/css/bootstrap.min.css" type="text/css">
+          <link rel="stylesheet" href="./static/css/dashboard.css" type="text/css">
+          
+    <script src="https://use.fontawesome.com/ffb1fe552d.js"></script>
+    <link href="./static/vis@4.17.0/dist/vis-network.min.css" rel="stylesheet"
+          type="text/css"/>
+
+        
+        
+        
+    
+        <style>
+          body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            margin: 1rem;
+          }
+          .container { max-width: none; }
+          #dashboard-navigation, #logout { display: none; }
+          #monitor-wrapper { display: flex; gap: 1rem; align-items: flex-start; }
+          #sidebar { flex: 0 0 18rem; }
+          #timeline-wrapper, #timeline, main { flex: 1 1 auto; min-width: 0; }
+          table { border-collapse: collapse; width: 100%; }
+          th, td {
+            border: 1px solid #d0d7de;
+            padding: 0.4rem;
+            text-align: left;
+            vertical-align: top;
+          }
+          button {
+            border: 1px solid #d0d7de;
+            border-radius: 0.35rem;
+            background: #f6f8fa;
+            padding: 0.3rem 0.6rem;
+          }
+        </style>
+    </head>
+    <body>
+      <div class="container">
+        
+          <nav id="dashboard-navigation">
+            <ul class="nav nav-tabs">
+              
+                
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Config</a>
+                  </li>
+                
+              
+                
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Deployments</a>
+                  </li>
+                
+              
+                
+                <li class="nav-item">
+                  <a class="nav-link dropdown-toggle active" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Monitor</a>
+                  <div class="dropdown-menu">
+                    
+                      <a class="dropdown-item" href="#">Monitoring</a>
+                    
+                      <a class="dropdown-item" href="#">Timeline</a>
+                    
+                      <a class="dropdown-item" href="#">Resources</a>
+                    
+                      <a class="dropdown-item" href="#">Participants</a>
+                    
+                      <a class="dropdown-item" href="#">Logger</a>
+                    
+                      <a class="dropdown-item" href="#">Errors</a>
+                    
+                  </div>
+                </li>
+                
+              
+                
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Basic data</a>
+                  </li>
+                
+              
+                
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Export</a>
+                  </li>
+                
+              
+                
+                <li class="nav-item">
+                  <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Database</a>
+                  <div class="dropdown-menu">
+                    
+                      <a class="dropdown-item" href="#">ChainTrialMakerState</a>
+                    
+                      <a class="dropdown-item" href="#">ChatMessage</a>
+                    
+                      <a class="dropdown-item" href="#">ChatRoomMember</a>
+                    
+                      <a class="dropdown-item" href="#">ExperimentConfig</a>
+                    
+                      <a class="dropdown-item" href="#">ExperimentStatus</a>
+                    
+                      <a class="dropdown-item" href="#">Participant</a>
+                    
+                      <a class="dropdown-item" href="#">ParticipantLinkBarrier</a>
+                    
+                      <a class="dropdown-item" href="#">ParticipantLinkSyncGroup</a>
+                    
+                      <a class="dropdown-item" href="#">Request</a>
+                    
+                      <a class="dropdown-item" href="#">Response</a>
+                    
+                      <a class="dropdown-item" href="#">RockPaperScissorsTrial</a>
+                    
+                      <a class="dropdown-item" href="#">SimpleSyncGroup</a>
+                    
+                      <a class="dropdown-item" href="#">StaticNetwork</a>
+                    
+                      <a class="dropdown-item" href="#">StaticNode</a>
+                    
+                  </div>
+                </li>
+                
+              
+                
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Development</a>
+                  </li>
+                
+              
+            </ul>
+          </nav>
+          
+          <a id="logout" class="btn btn-primary" href="#">Logout</a>
+          
+        
+        
+          
+          
+        
+        
+        
+    <h1>Experiment Monitoring</h1>
+    <div id="monitor-wrapper" class="d-flex justify-content-between align-items-stretch">
+        <main class="flex-fill">
+            <div style="display: -ms-flexbox; display: flex; -ms-flex-wrap: wrap; flex-wrap: wrap;">
+                    <div class="form-group">
+                        <label for="sortBy">Sort networks by</label>
+                        <div class="input-group mb-3">
+                            <select class="form-control" id="sortBy">
+                                <option value="network_id">Network ID</option>
+                                <option value="n_pending_infos">Number of pending infos</option>
+                                <option value="n_completed_infos">Number of completed infos</option>
+                                <option value="n_failed_infos">Number of failed infos</option>
+                                <option value="n_alive_nodes">Number of completed nodes</option>
+                                <option value="n_failed_nodes">Number of failed nodes</option>
+                            </select>
+                            <div class="input-group-append">
+                                <div class="btn-group btn-group-toggle" id="order" data-toggle="buttons">
+
+                                    <label class="btn btn-secondary active">
+                                        <input type="radio" name="options" checked>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                             fill="currentColor"
+                                             class="bi bi-arrow-down" viewBox="0 0 16 16">
+                                            <path fill-rule="evenodd"
+                                                  d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1z"/>
+                                        </svg>
+                                    </label>
+                                    <label class="btn btn-secondary">
+                                        <input type="radio" name="options">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                             fill="currentColor"
+                                             class="bi bi-arrow-up" viewBox="0 0 16 16">
+                                            <path fill-rule="evenodd"
+                                                  d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z"/>
+                                        </svg>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                <div id="search-container" class="mx-auto row">
+                    <div class="form-group pr-3">
+                        <label for="max-networks">Number of networks</label>
+                        <input type="number" min="1" class="form-control" id="max-networks"
+                               placeholder="Networks to print">
+                    </div>
+                    <div class="form-group">
+                        <label for="search">Freetext search</label>
+                        <input type="text" class="form-control" id="search" placeholder="Search networks">
+                    </div>
+                </div>
+                <div>
+                    <div class="form-group">
+
+                        <label></label>
+                        <div>
+                            <a class="text-primary" data-toggle="collapse" href="#statistics" role="button"
+                               aria-expanded="false" aria-controls="statistics">
+                                Experiment Statistics
+                            </a>
+                            <a class="text-secondary" data-toggle="collapse" href="#advanced-filter"
+                               role="button" aria-expanded="false" aria-controls="advanced-filter">
+                                Advanced Filter
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="collapse p-3 bg-light" id="statistics">
+                <h4>Statistics</h4>
+                <div class="row">
+                    
+                        <div class="col">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Participants</h5>
+                                    <p class="card-text"><span class="nowrap"><span class="statistics-key">working</span>: <span class="statistics-value">2</span></span></p>
+                                </div>
+                            </div>
+                        </div>
+                    
+                        <div class="col">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Networks</h5>
+                                    <p class="card-text"><span class="nowrap"><span class="statistics-key">default</span>: <span class="statistics-value"><span class="statistics-value no-failures">3 total, 0 failed (0.0%)</span></span></span></p>
+                                </div>
+                            </div>
+                        </div>
+                    
+                        <div class="col">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Nodes</h5>
+                                    <p class="card-text"><span class="statistics-value no-failures">3 total, 0 failed (0.0%)</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    
+                        <div class="col">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Trials</h5>
+                                    <p class="card-text"><span class="statistics-value no-failures">2 total, 0 failed (0.0%)</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    
+                </div>
+
+            </div>
+            <div class="collapse p-3  bg-light" id="advanced-filter">
+            <h4>Advanced Filter</h4>
+                <form>
+                    
+                        <fieldset id="network-ids">
+                            <h5>Network IDs</h5>
+                            
+                                <div class="field p-1">
+                                    <input class="network-input" id="val-1" type="checkbox" name="network_ids"
+                                           value="1" checked />
+                                    <label for="val-1">1</label>
+                                </div>
+                            
+                                <div class="field p-1">
+                                    <input class="network-input" id="val-2" type="checkbox" name="network_ids"
+                                           value="2" checked />
+                                    <label for="val-2">2</label>
+                                </div>
+                            
+                                <div class="field p-1">
+                                    <input class="network-input" id="val-3" type="checkbox" name="network_ids"
+                                           value="3" checked />
+                                    <label for="val-3">3</label>
+                                </div>
+                            
+                        </fieldset>
+                </form>
+                <form method="GET">
+
+                    <div class="reload-onclick">
+                        <input name="collapsed"
+                               type="checkbox" />
+                        <label for="transformations">Collapse (networks and sources only)</label>
+                    </div>
+                    <div class="reload-onclick">
+                        <input name="transformations"
+                               type="checkbox" />
+                        <label for="transformations">Show transformations</label>
+                    </div>
+                </form>
+            </div>
+
+            <section id="mynetwork">
+            </section>
+            <section id="details-pane">
+                <div id="element-details">
+                </div>
+            </section>
+        </main>
+    </div>
+
+        <footer>
+          
+          
+        </footer>
+      </div>
+      
+    
+      <script src="./static/scripts/jquery-3.7.1.min.js"></script>
+      <script src="./static/scripts/popper.min.js"></script>
+      <script src="./static/scripts/bootstrap.min.js"></script>
+      <script src="./static/scripts/clipboard.min.js"></script>
+      
+    <script>
+        $('.reload-onclick').on('change', function () {
+            $(this).parents('form').submit();
+        });
+        window.templateGlobals = function () {
+            // Values inscribed by Jinja2 when this template is rendered.
+            const network_structure = {"networks": [{"vars": "{}", "id": 1, "creation_time": "2026-06-09 18:06:07", "failed": false, "failed_reason": null, "time_of_death": null, "type": "StaticNetwork", "max_size": 1, "full": false, "role": "default", "n_pending_infos": 0, "n_completed_infos": 2, "n_failed_infos": 0, "n_alive_nodes": 1, "n_failed_nodes": 0, "trial_maker_id": "rock_paper_scissors", "module_id": "rock_paper_scissors", "target_n_trials": 1000000, "participant_group": "default", "sync_group_type": "rock_paper_scissors", "sync_group_id": null, "participant_id": null, "async_post_grow_network_required": false, "async_post_grow_network_requested": false, "async_post_grow_network_complete": false, "async_post_grow_network_failed": false, "id_within_participant": null, "n_all_trials": 2, "n_alive_trials": 2, "n_failed_trials": 0, "n_completed_trials": 2, "n_all_nodes": 1, "chain_type": "across", "head_id": 1, "trials_per_node": 1000000, "definition": "{}", "context": null, "block": "default", "class": "StaticNetwork", "object_type": "Network"}, {"vars": "{}", "id": 2, "creation_time": "2026-06-09 18:06:07", "failed": false, "failed_reason": null, "time_of_death": null, "type": "StaticNetwork", "max_size": 1, "full": false, "role": "default", "n_pending_infos": 0, "n_completed_infos": 0, "n_failed_infos": 0, "n_alive_nodes": 1, "n_failed_nodes": 0, "trial_maker_id": "rock_paper_scissors", "module_id": "rock_paper_scissors", "target_n_trials": 1000000, "participant_group": "default", "sync_group_type": "rock_paper_scissors", "sync_group_id": null, "participant_id": null, "async_post_grow_network_required": false, "async_post_grow_network_requested": false, "async_post_grow_network_complete": false, "async_post_grow_network_failed": false, "id_within_participant": null, "n_all_trials": 0, "n_alive_trials": 0, "n_failed_trials": 0, "n_completed_trials": 0, "n_all_nodes": 1, "chain_type": "across", "head_id": 2, "trials_per_node": 1000000, "definition": "{}", "context": null, "block": "default", "class": "StaticNetwork", "object_type": "Network"}, {"vars": "{}", "id": 3, "creation_time": "2026-06-09 18:06:07", "failed": false, "failed_reason": null, "time_of_death": null, "type": "StaticNetwork", "max_size": 1, "full": false, "role": "default", "n_pending_infos": 0, "n_completed_infos": 0, "n_failed_infos": 0, "n_alive_nodes": 1, "n_failed_nodes": 0, "trial_maker_id": "rock_paper_scissors", "module_id": "rock_paper_scissors", "target_n_trials": 1000000, "participant_group": "default", "sync_group_type": "rock_paper_scissors", "sync_group_id": null, "participant_id": null, "async_post_grow_network_required": false, "async_post_grow_network_requested": false, "async_post_grow_network_complete": false, "async_post_grow_network_failed": false, "id_within_participant": null, "n_all_trials": 0, "n_alive_trials": 0, "n_failed_trials": 0, "n_completed_trials": 0, "n_all_nodes": 1, "chain_type": "across", "head_id": 3, "trials_per_node": 1000000, "definition": "{}", "context": null, "block": "default", "class": "StaticNetwork", "object_type": "Network"}], "nodes": [{"vars": "{}", "id": 1, "creation_time": "2026-06-09 18:06:07", "failed": false, "failed_reason": null, "time_of_death": null, "type": "TrialSource", "network_id": 1, "participant_id": null, "trial_maker_id": "rock_paper_scissors", "module_id": "rock_paper_scissors", "module_state_id": null, "is_global": null, "on_deploy_complete": true, "async_on_deploy_required": false, "async_on_deploy_requested": false, "async_on_deploy_complete": false, "async_on_deploy_failed": false, "key": null, "degree": 0, "target_n_trials": 1000000, "can_spawn": false, "child_id": null, "parent_id": null, "seed": "{}", "definition": "{'color': 'red'}", "context": null, "participant_group": "default", "block": "default", "propagate_failure": false, "n_viable_trials": 2, "class": "StaticNode", "object_type": "Node"}, {"vars": "{}", "id": 2, "creation_time": "2026-06-09 18:06:07", "failed": false, "failed_reason": null, "time_of_death": null, "type": "TrialSource", "network_id": 2, "participant_id": null, "trial_maker_id": "rock_paper_scissors", "module_id": "rock_paper_scissors", "module_state_id": null, "is_global": null, "on_deploy_complete": true, "async_on_deploy_required": false, "async_on_deploy_requested": false, "async_on_deploy_complete": false, "async_on_deploy_failed": false, "key": null, "degree": 0, "target_n_trials": 1000000, "can_spawn": false, "child_id": null, "parent_id": null, "seed": "{}", "definition": "{'color': 'green'}", "context": null, "participant_group": "default", "block": "default", "propagate_failure": false, "n_viable_trials": 0, "class": "StaticNode", "object_type": "Node"}, {"vars": "{}", "id": 3, "creation_time": "2026-06-09 18:06:07", "failed": false, "failed_reason": null, "time_of_death": null, "type": "TrialSource", "network_id": 3, "participant_id": null, "trial_maker_id": "rock_paper_scissors", "module_id": "rock_paper_scissors", "module_state_id": null, "is_global": null, "on_deploy_complete": true, "async_on_deploy_required": false, "async_on_deploy_requested": false, "async_on_deploy_complete": false, "async_on_deploy_failed": false, "key": null, "degree": 0, "target_n_trials": 1000000, "can_spawn": false, "child_id": null, "parent_id": null, "seed": "{}", "definition": "{'color': 'blue'}", "context": null, "participant_group": "default", "block": "default", "propagate_failure": false, "n_viable_trials": 0, "class": "StaticNode", "object_type": "Node"}], "vectors": [], "infos": [{"_initial_assets": "{}", "vars": "{}", "id": 1, "creation_time": "2026-06-09 18:06:43", "failed": false, "failed_reason": null, "time_of_death": null, "type": "RockPaperScissorsTrial", "origin_id": 1, "network_id": 1, "contents": null, "complete": true, "node_id": 1, "participant_id": 1, "module_state_id": 1, "trial_maker_id": "rock_paper_scissors", "definition": "{'color': 'red'}", "finalized": true, "is_repeat_trial": false, "score": null, "performance_reward": 0.0, "parent_trial_id": null, "answer": "{'wait': None, 'deliberation': '{\"room_id\":\"rps_deliberation_group_1_node_1\",\"duration_seconds\":60,\"completed_by\":\"timer\"}', 'wait_1': None, 'choose_action': 'rock', 'wait_2': None}", "propagate_failure": true, "response_id": 16, "repeat_trial_index": null, "n_repeat_trials": null, "time_taken": 66.51599999999999, "time_credit_before_trial": 1.5, "time_credit_after_trial": null, "time_credit_from_trial": null, "progress_before_trial": 0.02030456852791878, "progress_after_trial": null, "async_post_trial_required": false, "async_post_trial_requested": false, "async_post_trial_complete": false, "async_post_trial_failed": false, "block_position": 0, "block": "default", "class": "RockPaperScissorsTrial", "object_type": "Info", "color": "red", "wait": null, "deliberation": "{\"room_id\":\"rps_deliberation_group_1_node_1\",\"duration_seconds\":60,\"completed_by\":\"timer\"}", "wait_1": null, "choose_action": "rock", "wait_2": null}, {"_initial_assets": "{}", "vars": "{}", "id": 2, "creation_time": "2026-06-09 18:06:43", "failed": false, "failed_reason": null, "time_of_death": null, "type": "RockPaperScissorsTrial", "origin_id": 1, "network_id": 1, "contents": null, "complete": true, "node_id": 1, "participant_id": 2, "module_state_id": 2, "trial_maker_id": "rock_paper_scissors", "definition": "{'color': 'red'}", "finalized": true, "is_repeat_trial": false, "score": null, "performance_reward": 0.0, "parent_trial_id": null, "answer": "{'wait': None, 'deliberation': '{\"room_id\":\"rps_deliberation_group_1_node_1\",\"duration_seconds\":60,\"completed_by\":\"timer\"}', 'wait_1': None, 'choose_action': 'paper', 'wait_2': None}", "propagate_failure": true, "response_id": 15, "repeat_trial_index": null, "n_repeat_trials": null, "time_taken": 66.508, "time_credit_before_trial": 1.5, "time_credit_after_trial": null, "time_credit_from_trial": null, "progress_before_trial": 0.02030456852791878, "progress_after_trial": null, "async_post_trial_required": false, "async_post_trial_requested": false, "async_post_trial_complete": false, "async_post_trial_failed": false, "block_position": 0, "block": "default", "class": "RockPaperScissorsTrial", "object_type": "Info", "color": "red", "wait": null, "deliberation": "{\"room_id\":\"rps_deliberation_group_1_node_1\",\"duration_seconds\":60,\"completed_by\":\"timer\"}", "wait_1": null, "choose_action": "paper", "wait_2": null}], "participants": [{"vars": "{'__barrier:rock_paper_scissors_grouper__loop_start_time__loop_start_time': '2026-06-09T18:06:40.429595', '__barrier:init_participant__loop_start_time__loop_start_time': '2026-06-09T18:06:41.604848', '__barrier:prepare_trial__loop_start_time__loop_start_time': '2026-06-09T18:06:42.596518', '__Waiting for trial__loop_start_time__loop_start_time': '2026-06-09T18:06:43.507430', '__rock_paper_scissors__trial_loop__loop_start_time__loop_start_time': '2026-06-09T18:06:43.507847', '__barrier:wait_for_trial__loop_start_time__loop_start_time': '2026-06-09T18:06:43.518059', 'rps_deliberation_rounds': [{'trial_id': 1, 'node_id': 1, 'color': 'red', 'sync_group_id': 1, 'group_participant_ids': [2, 1], 'room_id': 'rps_deliberation_group_1_node_1', 'duration_seconds': 60, 'started_at': '2026-06-09T18:06:44.564468+00:00', 'closed_at': '2026-06-09T18:07:45.084186+00:00', 'game_released_at': '2026-06-09T18:07:45.084186+00:00', 'released_participant_ids': [2, 1]}], '__barrier:finished_deliberation__loop_start_time__loop_start_time': '2026-06-09T18:07:45.044103', 'last_action': 'rock', '__barrier:finished_trial__loop_start_time__loop_start_time': '2026-06-09T18:07:51.173189', 'last_trial': {'action_self': 'rock', 'action_other': 'paper', 'score': -1}, '__wait_while__loop_start_time__loop_start_time': '2026-06-09T18:07:52.231040'}", "id": 1, "creation_time": "2026-06-09 18:06:40", "failed": false, "failed_reason": null, "time_of_death": null, "type": "Participant", "fingerprint_hash": "22d5c056df37cb741b403fe6cd8ed228", "recruiter_id": "hotair", "worker_id": "5XGLQ1", "assignment_id": "8EC00U", "unique_id": "5XGLQ1:8EC00U", "hit_id": "IWR3BI", "mode": "debug", "end_time": null, "base_pay": null, "bonus": null, "entry_information": "{'recruiter': 'hotair'}", "status": "working", "elt_id": "['main', 224, 1]", "elt_id_max": "[105, 105, 2]", "time_credit": 68.0, "estimated_max_time_credit": 295.5, "progress": 0.34179357021996615, "time_credit_fixes": "[]", "progress_fixes": "[1.0, 0.34179357021996615, 0.34179357021996615]", "page_uuid": "cb6b716d-5c57-0faf-1f05-92b844191d51", "page_count": 9, "aborted": false, "complete": false, "pending_redirect": null, "answer": "{'wait': None, 'deliberation': '{\"room_id\":\"rps_deliberation_group_1_node_1\",\"duration_seconds\":60,\"completed_by\":\"timer\"}', 'wait_1': None, 'choose_action': 'rock', 'wait_2': None}", "answer_accumulators": "[]", "sequences": "[]", "branch_log": "[['joined_an_existing_group', False], ['init_participant', True]]", "for_loops": "{}", "failure_tags": "[]", "base_payment": 0.1, "performance_reward": 0.0, "unpaid_bonus": 0.0, "total_wait_page_time": 3.0, "client_ip_address": "127.0.0.1", "answer_is_fresh": true, "browser_platform": "Chrome 148.0.0.0 on Linux 64-bit", "module_state_id": 1, "current_trial_id": 1, "trial_status": "available", "awaited_async_code_block_process_id": null, "class": "Participant", "object_type": "Participant", "aborted_modules": "[]", "started_modules": "['rock_paper_scissors']", "finished_modules": "[]", "module_id": "rock_paper_scissors", "rps_deliberation_rounds": "[{'trial_id': 1, 'node_id': 1, 'color': 'red', 'sync_group_id': 1, 'group_participant_ids': [2, 1], 'room_id': 'rps_deliberation_group_1_node_1', 'duration_seconds': 60, 'started_at': '2026-06-09T18:06:44.564468+00:00', 'closed_at': '2026-06-09T18:07:45.084186+00:00', 'game_released_at': '2026-06-09T18:07:45.084186+00:00', 'released_participant_ids': [2, 1]}]", "last_action": "rock", "last_trial": "{'action_self': 'rock', 'action_other': 'paper', 'score': -1}"}, {"vars": "{'__barrier:rock_paper_scissors_grouper__loop_start_time__loop_start_time': '2026-06-09T18:06:40.735904', '__barrier:init_participant__loop_start_time__loop_start_time': '2026-06-09T18:06:41.637674', '__barrier:prepare_trial__loop_start_time__loop_start_time': '2026-06-09T18:06:42.746675', '__Waiting for trial__loop_start_time__loop_start_time': '2026-06-09T18:06:43.546881', '__rock_paper_scissors__trial_loop__loop_start_time__loop_start_time': '2026-06-09T18:06:43.547275', '__barrier:wait_for_trial__loop_start_time__loop_start_time': '2026-06-09T18:06:43.557306', 'rps_deliberation_rounds': [{'trial_id': 2, 'node_id': 1, 'color': 'red', 'sync_group_id': 1, 'group_participant_ids': [2, 1], 'room_id': 'rps_deliberation_group_1_node_1', 'duration_seconds': 60, 'started_at': '2026-06-09T18:06:44.491982+00:00', 'closed_at': '2026-06-09T18:07:45.084186+00:00', 'game_released_at': '2026-06-09T18:07:45.084186+00:00', 'released_participant_ids': [2, 1]}], '__barrier:finished_deliberation__loop_start_time__loop_start_time': '2026-06-09T18:07:45.001134', 'last_action': 'paper', '__barrier:finished_trial__loop_start_time__loop_start_time': '2026-06-09T18:07:51.139495', 'last_trial': {'action_self': 'paper', 'action_other': 'rock', 'score': 1}, '__wait_while__loop_start_time__loop_start_time': '2026-06-09T18:07:52.168496'}", "id": 2, "creation_time": "2026-06-09 18:06:40", "failed": false, "failed_reason": null, "time_of_death": null, "type": "Participant", "fingerprint_hash": "22d5c056df37cb741b403fe6cd8ed228", "recruiter_id": "hotair", "worker_id": "6V2VBU", "assignment_id": "YRKS1Y", "unique_id": "6V2VBU:YRKS1Y", "hit_id": "WIMOTS", "mode": "debug", "end_time": null, "base_pay": null, "bonus": null, "entry_information": "{'recruiter': 'hotair'}", "status": "working", "elt_id": "['main', 224, 1]", "elt_id_max": "[105, 105, 2]", "time_credit": 68.0, "estimated_max_time_credit": 295.5, "progress": 0.34179357021996615, "time_credit_fixes": "[]", "progress_fixes": "[1.0, 0.34179357021996615, 0.34179357021996615]", "page_uuid": "2cc192bf-6f07-0013-faa7-f1025c989e32", "page_count": 9, "aborted": false, "complete": false, "pending_redirect": null, "answer": "{'wait': None, 'deliberation': '{\"room_id\":\"rps_deliberation_group_1_node_1\",\"duration_seconds\":60,\"completed_by\":\"timer\"}', 'wait_1': None, 'choose_action': 'paper', 'wait_2': None}", "answer_accumulators": "[]", "sequences": "[]", "branch_log": "[['joined_an_existing_group', False], ['init_participant', True]]", "for_loops": "{}", "failure_tags": "[]", "base_payment": 0.1, "performance_reward": 0.0, "unpaid_bonus": 0.0, "total_wait_page_time": 3.0, "client_ip_address": "127.0.0.1", "answer_is_fresh": true, "browser_platform": "Chrome 148.0.0.0 on Linux 64-bit", "module_state_id": 2, "current_trial_id": 2, "trial_status": "available", "awaited_async_code_block_process_id": null, "class": "Participant", "object_type": "Participant", "aborted_modules": "[]", "started_modules": "['rock_paper_scissors']", "finished_modules": "[]", "module_id": "rock_paper_scissors", "rps_deliberation_rounds": "[{'trial_id': 2, 'node_id': 1, 'color': 'red', 'sync_group_id': 1, 'group_participant_ids': [2, 1], 'room_id': 'rps_deliberation_group_1_node_1', 'duration_seconds': 60, 'started_at': '2026-06-09T18:06:44.491982+00:00', 'closed_at': '2026-06-09T18:07:45.084186+00:00', 'game_released_at': '2026-06-09T18:07:45.084186+00:00', 'released_participant_ids': [2, 1]}]", "last_action": "paper", "last_trial": "{'action_self': 'paper', 'action_other': 'rock', 'score': 1}"}], "trans": []};
+            const vis_options = {};
+            return {
+                network_structure: network_structure,
+                vis_options: vis_options
+            };
+        };
+    </script>
+    <script src="../../../../monitor-static/vis@4.17.0/dist/vis.min.js"></script>
+    <script src="./static/scripts/network-monitor.js"></script>
+
+
+      
+      
+    </body>
+</html>

@@ -1,0 +1,13 @@
+# This file follows the standard PsyNet experiment template.
+env/
+.venv/
+.deploy/
+server.log
+static/assets
+source_code.zip
+.idea
+__pycache__
+*.DS_Store
+develop/
+deploy/
+deploy_logs/

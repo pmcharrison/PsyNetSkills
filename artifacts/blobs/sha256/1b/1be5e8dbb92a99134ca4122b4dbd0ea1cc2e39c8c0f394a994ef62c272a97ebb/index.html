@@ -1,0 +1,370 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <base href="./">
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>Config -  Dashboard</title>
+        
+          <link rel="stylesheet" href="./static/css/bootstrap.min.css" type="text/css">
+          <link rel="stylesheet" href="./static/css/dashboard.css" type="text/css">
+          
+          
+        
+        
+        
+    
+        <style>
+          body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            margin: 1rem;
+          }
+          .container { max-width: none; }
+          #dashboard-navigation, #logout { display: none; }
+          #monitor-wrapper { display: flex; gap: 1rem; align-items: flex-start; }
+          #sidebar { flex: 0 0 18rem; }
+          #timeline-wrapper, #timeline, main { flex: 1 1 auto; min-width: 0; }
+          table { border-collapse: collapse; width: 100%; }
+          th, td {
+            border: 1px solid #d0d7de;
+            padding: 0.4rem;
+            text-align: left;
+            vertical-align: top;
+          }
+          button {
+            border: 1px solid #d0d7de;
+            border-radius: 0.35rem;
+            background: #f6f8fa;
+            padding: 0.3rem 0.6rem;
+          }
+        </style>
+    </head>
+    <body>
+      <div class="container">
+        
+          <nav id="dashboard-navigation">
+            <ul class="nav nav-tabs">
+              
+                
+                  <li class="nav-item">
+                    <a class="nav-link active" href="#">Config</a>
+                  </li>
+                
+              
+                
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Deployments</a>
+                  </li>
+                
+              
+                
+                <li class="nav-item">
+                  <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Monitor</a>
+                  <div class="dropdown-menu">
+                    
+                      <a class="dropdown-item" href="#">Monitoring</a>
+                    
+                      <a class="dropdown-item" href="#">Timeline</a>
+                    
+                      <a class="dropdown-item" href="#">Resources</a>
+                    
+                      <a class="dropdown-item" href="#">Participants</a>
+                    
+                      <a class="dropdown-item" href="#">Logger</a>
+                    
+                      <a class="dropdown-item" href="#">Errors</a>
+                    
+                  </div>
+                </li>
+                
+              
+                
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Basic data</a>
+                  </li>
+                
+              
+                
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Export</a>
+                  </li>
+                
+              
+                
+                <li class="nav-item">
+                  <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Database</a>
+                  <div class="dropdown-menu">
+                    
+                      <a class="dropdown-item" href="#">AssetNode</a>
+                    
+                      <a class="dropdown-item" href="#">AssetTrial</a>
+                    
+                      <a class="dropdown-item" href="#">ChainTrialMakerState</a>
+                    
+                      <a class="dropdown-item" href="#">ExperimentAsset</a>
+                    
+                      <a class="dropdown-item" href="#">ExperimentConfig</a>
+                    
+                      <a class="dropdown-item" href="#">ExperimentStatus</a>
+                    
+                      <a class="dropdown-item" href="#">MaskedPrimingTrial</a>
+                    
+                      <a class="dropdown-item" href="#">Notification</a>
+                    
+                      <a class="dropdown-item" href="#">Participant</a>
+                    
+                      <a class="dropdown-item" href="#">Request</a>
+                    
+                      <a class="dropdown-item" href="#">Response</a>
+                    
+                      <a class="dropdown-item" href="#">StaticNetwork</a>
+                    
+                      <a class="dropdown-item" href="#">StaticNode</a>
+                    
+                  </div>
+                </li>
+                
+              
+                
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Development</a>
+                  </li>
+                
+              
+            </ul>
+          </nav>
+          
+        
+        
+          
+          
+        
+        
+        
+<h1>Experiment Configuration</h1>
+<p>The active <a href="https://dallinger.readthedocs.io/en/latest/configuration.html">configuration</a>,
+    assembled from your configuration files, Dallinger defaults, and any explicit overrides.
+</p>
+
+<table class="table table-sm table-striped">
+    <thead class="thead-dark">
+        <tr><th>Key</th><th>Active Value</th></tr>
+    </thead>
+    <tbody>
+    
+        <tr><th>allow_mobile_devices</th><td>False </td></tr>
+    
+        <tr><th>allow_repeat_worker_ids</th><td>False </td></tr>
+    
+        <tr><th>assign_qualifications</th><td>True </td></tr>
+    
+        <tr><th>auto_recruit</th><td>False  
+    <div class="custom-control custom-switch form-switch">
+
+        <input type="checkbox" class="custom-control-input form-check-input" id="auto_recruit"
+                
+        >
+    </div>
+ </td></tr>
+    
+        <tr><th>aws_region</th><td>us-east-1 </td></tr>
+    
+        <tr><th>base_payment</th><td>0.1 </td></tr>
+    
+        <tr><th>base_port</th><td>5000 </td></tr>
+    
+        <tr><th>big_base_payment</th><td>False </td></tr>
+    
+        <tr><th>check_dallinger_version</th><td>False </td></tr>
+    
+        <tr><th>check_participant_opened_devtools</th><td>False </td></tr>
+    
+        <tr><th>chrome-path</th><td>/Applications/Google Chrome.app/Contents/MacOS/Google Chrome </td></tr>
+    
+        <tr><th>clock_on</th><td>True </td></tr>
+    
+        <tr><th>color_mode</th><td>light </td></tr>
+    
+        <tr><th>contact_email_on_error</th><td>researcher@example.invalid </td></tr>
+    
+        <tr><th>currency</th><td>$ </td></tr>
+    
+        <tr><th>dallinger_develop_directory</th><td>/tmp/dallinger_develop </td></tr>
+    
+        <tr><th>dallinger_email_address</th><td>dallinger@mailinator.com </td></tr>
+    
+        <tr><th>default_translator</th><td>chat_gpt </td></tr>
+    
+        <tr><th>description</th><td>Classify ambiguous facial expressions following masked emotional primes. Local demonstration only. </td></tr>
+    
+        <tr><th>disable_browser_autotranslate</th><td>True </td></tr>
+    
+        <tr><th>disable_when_duration_exceeded</th><td>False </td></tr>
+    
+        <tr><th>docker_volumes</th><td>${HOME}/psynet-data/assets:/psynet-data/assets </td></tr>
+    
+        <tr><th>docker_worker_cpu_shares</th><td>1024 </td></tr>
+    
+        <tr><th>duration</th><td>100000000.0 </td></tr>
+    
+        <tr><th>ec2_default_pem</th><td>dallinger </td></tr>
+    
+        <tr><th>ec2_default_security_group</th><td>dallinger </td></tr>
+    
+        <tr><th>enable_global_experiment_registry</th><td>False </td></tr>
+    
+        <tr><th>experimenter_name</th><td>unknown </td></tr>
+    
+        <tr><th>force_google_chrome</th><td>True </td></tr>
+    
+        <tr><th>force_incognito_mode</th><td>False </td></tr>
+    
+        <tr><th>heroku_app_id_root</th><td>79afdcaf-3ef6-2dd1-daad-7bcc410da3a4 </td></tr>
+    
+        <tr><th>host</th><td>0.0.0.0 </td></tr>
+    
+        <tr><th>id</th><td>79afdcaf-3ef6-2dd1-daad-7bcc410da3a4 </td></tr>
+    
+        <tr><th>initial_recruitment_size</th><td>1 </td></tr>
+    
+        <tr><th>label</th><td>cross_cultural_masked_affective_priming </td></tr>
+    
+        <tr><th>language</th><td>en </td></tr>
+    
+        <tr><th>leave_comments_on_every_page</th><td>False </td></tr>
+    
+        <tr><th>lock_table_when_creating_participant</th><td>False </td></tr>
+    
+        <tr><th>logfile</th><td>/workspace/challenges/cross-cultural-masked-affective-priming/attempts/2026-06-11-12-46/code/cross_cultural_masked_affective_priming/server.log </td></tr>
+    
+        <tr><th>loglevel</th><td>1 </td></tr>
+    
+        <tr><th>loglevel_worker</th><td>1 </td></tr>
+    
+        <tr><th>min_accumulated_reward_for_abort</th><td>0.2 </td></tr>
+    
+        <tr><th>min_browser_version</th><td>80.0 </td></tr>
+    
+        <tr><th>minimal_disk_space_danger_gb</th><td>2.0 </td></tr>
+    
+        <tr><th>minimal_disk_space_warning_gb</th><td>5.0 </td></tr>
+    
+        <tr><th>mode</th><td>debug </td></tr>
+    
+        <tr><th>mute_same_warning_for_n_hours</th><td>1.0 </td></tr>
+    
+        <tr><th>needs_internet_access</th><td>True </td></tr>
+    
+        <tr><th>notifier</th><td>logger </td></tr>
+    
+        <tr><th>num_dynos_web</th><td>1 </td></tr>
+    
+        <tr><th>num_dynos_worker</th><td>1 </td></tr>
+    
+        <tr><th>openai_default_model</th><td>gpt-4o </td></tr>
+    
+        <tr><th>openai_default_temperature</th><td>0 </td></tr>
+    
+        <tr><th>organization_name</th><td>PsyNetSkills </td></tr>
+    
+        <tr><th>port</th><td>5000 </td></tr>
+    
+        <tr><th>prolific_api_version</th><td>v1 </td></tr>
+    
+        <tr><th>prolific_completion_config</th><td>{} </td></tr>
+    
+        <tr><th>prolific_enable_return_for_bonus</th><td>True </td></tr>
+    
+        <tr><th>prolific_estimated_completion_minutes</th><td>0 </td></tr>
+    
+        <tr><th>prolific_is_custom_screening</th><td>False </td></tr>
+    
+        <tr><th>prolific_recruitment_config</th><td>{} </td></tr>
+    
+        <tr><th>protected_routes</th><td>[&#34;/network/&lt;network_id&gt;&#34;, &#34;/question/&lt;participant_id&gt;&#34;, &#34;/node/&lt;int:node_id&gt;/neighbors&#34;, &#34;/node/&lt;participant_id&gt;&#34;, &#34;/node/&lt;int:node_id&gt;/vectors&#34;, &#34;/node/&lt;int:node_id&gt;/connect/&lt;int:other_node_id&gt;&#34;, &#34;/info/&lt;int:node_id&gt;/&lt;int:info_id&gt;&#34;, &#34;/node/&lt;int:node_id&gt;/infos&#34;, &#34;/node/&lt;int:node_id&gt;/received_infos&#34;, &#34;/tracking_event/&lt;int:node_id&gt;&#34;, &#34;/info/&lt;int:node_id&gt;&#34;, &#34;/node/&lt;int:node_id&gt;/transmissions&#34;, &#34;/node/&lt;int:node_id&gt;/transmit&#34;, &#34;/node/&lt;int:node_id&gt;/transformations&#34;, &#34;/transformation/&lt;int:node_id&gt;/&lt;int:info_in_id&gt;/&lt;int:info_out_id&gt;&#34;] </td></tr>
+    
+        <tr><th>recruiter</th><td>generic </td></tr>
+    
+        <tr><th>redis_size</th><td>premium-0 </td></tr>
+    
+        <tr><th>replay</th><td>False </td></tr>
+    
+        <tr><th>resource_danger_pct</th><td>0.95 </td></tr>
+    
+        <tr><th>resource_warning_pct</th><td>0.9 </td></tr>
+    
+        <tr><th>sentry</th><td>False </td></tr>
+    
+        <tr><th>show_abort_button</th><td>False </td></tr>
+    
+        <tr><th>show_footer</th><td>True </td></tr>
+    
+        <tr><th>show_progress_bar</th><td>True </td></tr>
+    
+        <tr><th>show_reward</th><td>True </td></tr>
+    
+        <tr><th>smtp_host</th><td>smtp.gmail.com:587 </td></tr>
+    
+        <tr><th>smtp_username</th><td>??? </td></tr>
+    
+        <tr><th>supported_locales</th><td>[] </td></tr>
+    
+        <tr><th>threads</th><td>1 </td></tr>
+    
+        <tr><th>title</th><td>Cross-cultural masked affective priming demo </td></tr>
+    
+        <tr><th>us_only</th><td>False </td></tr>
+    
+        <tr><th>wage_per_hour</th><td>12.0 </td></tr>
+    
+        <tr><th>webdriver_type</th><td>chrome_headless </td></tr>
+    
+        <tr><th>whimsical</th><td>True </td></tr>
+    
+        <tr><th>window_height</th><td>768 </td></tr>
+    
+        <tr><th>window_width</th><td>1024 </td></tr>
+    
+        <tr><th>worker_multiplier</th><td>1.5 </td></tr>
+    
+    </tbody>
+</table>
+
+        <footer>
+          
+          
+        </footer>
+      </div>
+      
+    
+      <script src="./static/scripts/jquery-3.7.1.min.js"></script>
+      <script src="./static/scripts/popper.min.js"></script>
+      <script src="./static/scripts/bootstrap.min.js"></script>
+      <script src="./static/scripts/clipboard.min.js"></script>
+      
+    <script>
+        $('#panel-triggers input').on('change', function () {
+            let id = this.id.replace("-trigger", "");
+            $('#' + id).toggle();
+        });
+
+        $('#auto_recruit').on('change', function () {
+            let auto_recruit = this.checked ? 1 : 0
+            $.ajax({
+                type: "POST",
+                url: "/dashboard/auto_recruit/" + auto_recruit,
+                success: function (){
+
+                    location.reload()
+                },
+                error: function (e){
+                    alert('Something went wrong' + e)
+                }
+            });
+        });
+    </script>
+
+      
+      
+    </body>
+</html>

@@ -1,0 +1,13 @@
+vars,id,creation_time,failed,failed_reason,time_of_death,barrier_id,barrier_class,participant_id,arrival_time,departure_time,released,type,class,object_type
+{},1,2026-06-09 18:06:40,False,,,rock_paper_scissors_grouper,"{""py/type"": ""psynet.sync.SimpleGrouper""}",1,2026-06-09 18:06:40,2026-06-09 18:06:41,True,ParticipantLinkBarrier,ParticipantLinkBarrier,ParticipantLinkBarrier
+{},2,2026-06-09 18:06:40,False,,,rock_paper_scissors_grouper,"{""py/type"": ""psynet.sync.SimpleGrouper""}",2,2026-06-09 18:06:40,2026-06-09 18:06:41,True,ParticipantLinkBarrier,ParticipantLinkBarrier,ParticipantLinkBarrier
+{},3,2026-06-09 18:06:41,False,,,init_participant,"{""py/type"": ""psynet.sync.GroupBarrier""}",1,2026-06-09 18:06:41,2026-06-09 18:06:42,True,ParticipantLinkBarrier,ParticipantLinkBarrier,ParticipantLinkBarrier
+{},4,2026-06-09 18:06:41,False,,,init_participant,"{""py/type"": ""psynet.sync.GroupBarrier""}",2,2026-06-09 18:06:41,2026-06-09 18:06:42,True,ParticipantLinkBarrier,ParticipantLinkBarrier,ParticipantLinkBarrier
+{},5,2026-06-09 18:06:42,False,,,prepare_trial,"{""py/type"": ""psynet.sync.GroupBarrier""}",1,2026-06-09 18:06:42,2026-06-09 18:06:43,True,ParticipantLinkBarrier,ParticipantLinkBarrier,ParticipantLinkBarrier
+{},6,2026-06-09 18:06:42,False,,,prepare_trial,"{""py/type"": ""psynet.sync.GroupBarrier""}",2,2026-06-09 18:06:42,2026-06-09 18:06:43,True,ParticipantLinkBarrier,ParticipantLinkBarrier,ParticipantLinkBarrier
+{},7,2026-06-09 18:06:43,False,,,wait_for_trial,"{""py/type"": ""psynet.sync.GroupBarrier""}",1,2026-06-09 18:06:43,2026-06-09 18:06:43,True,ParticipantLinkBarrier,ParticipantLinkBarrier,ParticipantLinkBarrier
+{},8,2026-06-09 18:06:43,False,,,wait_for_trial,"{""py/type"": ""psynet.sync.GroupBarrier""}",2,2026-06-09 18:06:43,2026-06-09 18:06:43,True,ParticipantLinkBarrier,ParticipantLinkBarrier,ParticipantLinkBarrier
+{},9,2026-06-09 18:07:45,False,,,finished_deliberation,"{""py/type"": ""psynet.sync.GroupBarrier""}",2,2026-06-09 18:07:44,2026-06-09 18:07:45,True,ParticipantLinkBarrier,ParticipantLinkBarrier,ParticipantLinkBarrier
+{},10,2026-06-09 18:07:45,False,,,finished_deliberation,"{""py/type"": ""psynet.sync.GroupBarrier""}",1,2026-06-09 18:07:45,2026-06-09 18:07:45,True,ParticipantLinkBarrier,ParticipantLinkBarrier,ParticipantLinkBarrier
+{},11,2026-06-09 18:07:51,False,,,finished_trial,"{""py/type"": ""psynet.sync.GroupBarrier""}",2,2026-06-09 18:07:51,2026-06-09 18:07:51,True,ParticipantLinkBarrier,ParticipantLinkBarrier,ParticipantLinkBarrier
+{},12,2026-06-09 18:07:51,False,,,finished_trial,"{""py/type"": ""psynet.sync.GroupBarrier""}",1,2026-06-09 18:07:51,2026-06-09 18:07:51,True,ParticipantLinkBarrier,ParticipantLinkBarrier,ParticipantLinkBarrier

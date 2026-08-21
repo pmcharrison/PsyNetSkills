@@ -1,0 +1,14 @@
+[Config]
+title = Visual similarity rating (Chrome browser, ~2 minutes to complete)
+description = In this study you will see pairs of colored circles and rate how similar they look. Please use a Chrome browser in incognito mode.
+contact_email_on_error = experimenter@example.com
+organization_name = PsyNetSkills
+
+recruiter = generic
+currency = $
+wage_per_hour = 12.0
+
+[Prolific]
+auto_recruit = false
+prolific_estimated_completion_minutes = 2
+base_payment = 0.34

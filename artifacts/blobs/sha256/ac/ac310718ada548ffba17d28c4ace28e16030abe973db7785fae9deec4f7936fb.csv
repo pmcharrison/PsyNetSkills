@@ -1,0 +1,15 @@
+vars,creation_time,local_key,trial_id,asset_id,type,class,object_type
+{},2026-06-15 10:11:01,async_post_trial,1,4,AssetTrial,AssetTrial,AssetTrial
+{},2026-06-15 10:11:01,async_post_trial,2,1,AssetTrial,AssetTrial,AssetTrial
+{},2026-06-15 10:11:01,async_post_trial,3,2,AssetTrial,AssetTrial,AssetTrial
+{},2026-06-15 10:11:01,async_post_trial,4,3,AssetTrial,AssetTrial,AssetTrial
+{},2026-06-15 10:11:01,async_post_trial,5,5,AssetTrial,AssetTrial,AssetTrial
+{},2026-06-15 10:11:02,async_post_trial,6,8,AssetTrial,AssetTrial,AssetTrial
+{},2026-06-15 10:11:01,async_post_trial,7,6,AssetTrial,AssetTrial,AssetTrial
+{},2026-06-15 10:11:01,async_post_trial,8,7,AssetTrial,AssetTrial,AssetTrial
+{},2026-06-15 10:11:02,async_post_trial,9,9,AssetTrial,AssetTrial,AssetTrial
+{},2026-06-15 10:11:02,async_post_trial,10,10,AssetTrial,AssetTrial,AssetTrial
+{},2026-06-15 10:11:03,async_post_trial,11,11,AssetTrial,AssetTrial,AssetTrial
+{},2026-06-15 10:11:04,async_post_trial,12,12,AssetTrial,AssetTrial,AssetTrial
+{},2026-06-15 10:11:04,async_post_trial,13,13,AssetTrial,AssetTrial,AssetTrial
+{},2026-06-15 10:11:05,async_post_trial,14,14,AssetTrial,AssetTrial,AssetTrial

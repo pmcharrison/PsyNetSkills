@@ -1,0 +1,19 @@
+participant=P1CREATE step=1 body='Application ID: e1e4e8ba-b7ae-ca92-7ab6-c416270488d8.\nThanks for your interest in this experiment.\nBy clicking the follo'
+participant=P1CREATE step=2 body='To proceed, click the button below.\nNext'
+participant=P1CREATE step=3 body='Create a portfolio website with AI assistance\nCreate a concise portfolio website for a fictional creative technologist. '
+participant=P1CREATE step=4 body='11%\nCreate the first website version.\nNext\nReward: $0.03'
+participant=P1CREATE step=5 body="100%\nThat's the end of the experiment! You will receive a reward of $0.20 for the time you spent on the experiment. You "
+participant=P2IMPROVE step=1 body='Application ID: e1e4e8ba-b7ae-ca92-7ab6-c416270488d8.\nThanks for your interest in this experiment.\nBy clicking the follo'
+participant=P2IMPROVE step=2 body='To proceed, click the button below.\nNext'
+participant=P2IMPROVE step=3 body='Improve the previous portfolio website\nOriginal task: Create a concise portfolio website for a fictional creative techno'
+participant=P2IMPROVE step=4 body='11%\nWebsite from the previous round\nNext\nReward: $0.03'
+participant=P2IMPROVE step=5 body='33%\nDo you have suggestions that could improve the previous website?\nYes\nNo, but I can still suggest a direction\nNext\nRe'
+participant=P2IMPROVE step=6 body='44%\nTell the AI how to improve this website.\nNext\nReward: $0.13'
+participant=P2IMPROVE step=7 body="100%\nThat's the end of the experiment! You will receive a reward of $0.30 for the time you spent on the experiment. You "
+participant=P3COMPARE step=1 body='Application ID: e1e4e8ba-b7ae-ca92-7ab6-c416270488d8.\nThanks for your interest in this experiment.\nBy clicking the follo'
+participant=P3COMPARE step=2 body='To proceed, click the button below.\nNext'
+participant=P3COMPARE step=3 body='Compare recent portfolio websites\nChoose which recent website is better. Your choice determines which version is carried'
+participant=P3COMPARE step=4 body='11%\nPrevious round\nTwo rounds earlier\nNext\nReward: $0.03'
+participant=P3COMPARE step=5 body='39%\nFirst inspect both recent websites, then choose which one should be carried forward.\nPrevious round\nTwo rounds earli'
+participant=P3COMPARE step=6 body='50%\nTell the AI how to improve the website you selected.\nNext\nReward: $0.15'
+participant=P3COMPARE step=7 body="100%\nThat's the end of the experiment! You will receive a reward of $0.32 for the time you spent on the experiment. You "

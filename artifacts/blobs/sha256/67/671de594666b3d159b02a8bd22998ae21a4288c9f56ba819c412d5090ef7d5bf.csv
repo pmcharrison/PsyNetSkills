@@ -1,0 +1,9 @@
+,block_name,answer,n,label
+0,multi_item_identification,1,363,multi_item_identification / 1
+1,multi_item_identification,2,121,multi_item_identification / 2
+2,multi_item_identification,3,121,multi_item_identification / 3
+3,multi_item_identification,4,121,multi_item_identification / 4
+4,same_different_discrimination,different,726,same_different_discrimination / different
+5,same_different_discrimination,same,726,same_different_discrimination / same
+6,similarity_judgment,3,1815,similarity_judgment / 3
+7,similarity_judgment,6,726,similarity_judgment / 6

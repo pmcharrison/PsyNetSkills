@@ -1,0 +1,10 @@
+env/
+.venv/
+.deploy/
+server.log
+static/assets
+source_code.zip
+dump.rdb
+__pycache__
+*.pyc
+*.DS_Store

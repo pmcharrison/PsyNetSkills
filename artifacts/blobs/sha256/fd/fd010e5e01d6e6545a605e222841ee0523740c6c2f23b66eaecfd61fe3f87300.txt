@@ -1,0 +1,9 @@
+[Config]
+title = Single chord emotion replication (Chrome browser, 18 minutes to complete)
+description = Listen to isolated single chords and rate the emotional qualities they seem to convey. Please use a recent Chrome browser in an incognito window and wear headphones.
+contact_email_on_error = replication@example.com
+organization_name = PsyNetSkills
+
+recruiter = generic
+currency = $
+wage_per_hour = 12.0

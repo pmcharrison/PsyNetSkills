@@ -1,0 +1,74 @@
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: experiment.py
+msgid "cats"
+msgstr "los gatos"
+
+#: experiment.py
+msgid "dogs"
+msgstr "los perros"
+
+#: experiment.py
+msgid "fish"
+msgstr "los peces"
+
+#: experiment.py
+msgid "ponies"
+msgstr "los ponis"
+
+#: experiment.py
+msgid "Finish"
+msgstr "Terminar"
+
+#: experiment.py
+#, python-brace-format
+msgid "Trial {TRIAL_NUMBER}"
+msgstr "Ensayo {TRIAL_NUMBER}"
+
+#: experiment.py
+#, python-brace-format
+msgid "Repeat trial {REPEAT_INDEX} out of {REPEAT_TOTAL}"
+msgstr "Ensayo repetido {REPEAT_INDEX} de {REPEAT_TOTAL}"
+
+#: experiment.py
+#, python-brace-format
+msgid "Block {BLOCK}"
+msgstr "Bloque {BLOCK}"
+
+#: experiment.py
+#, python-brace-format
+msgid "How much do you like {ANIMAL}?"
+msgstr "¿Cuánto te gustan {ANIMAL}?"
+
+#: experiment.py
+#, python-brace-format
+msgid ""
+"You can also use the keys {KEY_A}, {KEY_S}, and {KEY_D} on your keyboard."
+msgstr ""
+"También puedes usar las teclas {KEY_A}, {KEY_S} y {KEY_D} en tu teclado."
+
+#: experiment.py
+#, python-brace-format
+msgid "Not at all ({KEY_A})"
+msgstr "Nada ({KEY_A})"
+
+#: experiment.py
+#, python-brace-format
+msgid "A little ({KEY_S})"
+msgstr "Un poco ({KEY_S})"
+
+#: experiment.py
+#, python-brace-format
+msgid "Very much ({KEY_D})"
+msgstr "Mucho ({KEY_D})"
+
+#: experiment.py
+#, python-brace-format
+msgid "You finished the animal questions! Your score was {SCORE}."
+msgstr "¡Terminaste las preguntas sobre animales! Tu puntuación fue {SCORE}."

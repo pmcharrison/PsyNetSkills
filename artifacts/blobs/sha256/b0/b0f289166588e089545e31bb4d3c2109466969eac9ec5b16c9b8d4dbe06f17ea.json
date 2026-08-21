@@ -1,0 +1,11 @@
+{
+  "captions": {
+    "screenshots/01-ad-page.png": "PsyNet recruitment page with the Begin Experiment button.",
+    "screenshots/02-consent-page.png": "Local debug consent page before entering the task.",
+    "screenshots/03-welcome-page.png": "Welcome page explaining the short color-rating task.",
+    "screenshots/04-red-rating.png": "First rating trial showing the red color swatch.",
+    "screenshots/05-green-rating.png": "Second rating trial showing the green color swatch.",
+    "screenshots/06-blue-rating.png": "Third rating trial showing the blue color swatch.",
+    "screenshots/07-thank-you-page.png": "Thank-you page after all three ratings are submitted."
+  }
+}

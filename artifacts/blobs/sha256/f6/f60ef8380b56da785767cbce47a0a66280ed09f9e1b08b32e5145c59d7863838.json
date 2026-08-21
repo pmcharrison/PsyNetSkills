@@ -1,0 +1,622 @@
+{
+  "completed": false,
+  "actions": [
+    {
+      "at": "2026-06-10T00:25:59.983Z",
+      "event": "goto",
+      "url": "http://127.0.0.1:5000/ad?generate_tokens=true&recruiter=hotair"
+    },
+    {
+      "at": "2026-06-10T00:26:00.141Z",
+      "event": "browser-console",
+      "type": "warning",
+      "text": "[.WebGL-0x126c00121400]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+    },
+    {
+      "at": "2026-06-10T00:26:00.220Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "Browser check finished"
+    },
+    {
+      "at": "2026-06-10T00:26:00.357Z",
+      "event": "browser-console",
+      "type": "warning",
+      "text": "[.WebGL-0x126c00125c00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+    },
+    {
+      "at": "2026-06-10T00:26:00.358Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "Browser check finished"
+    },
+    {
+      "at": "2026-06-10T00:26:00.369Z",
+      "event": "click",
+      "label": "advance toward Unity canvas",
+      "selector": "text=/Begin Experiment/i"
+    },
+    {
+      "at": "2026-06-10T00:26:03.374Z",
+      "event": "browser-console",
+      "type": "warning",
+      "text": "The resource http://127.0.0.1:5000/static/css/fonts/inter.css was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally."
+    },
+    {
+      "at": "2026-06-10T00:26:04.481Z",
+      "event": "browser-console",
+      "type": "warning",
+      "text": "[.WebGL-0x126c00120200]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+    },
+    {
+      "at": "2026-06-10T00:26:04.493Z",
+      "event": "click",
+      "label": "advance toward Unity canvas",
+      "selector": "text=/Next/i"
+    },
+    {
+      "at": "2026-06-10T00:26:04.508Z",
+      "event": "browser-console",
+      "type": "warning",
+      "text": "[.WebGL-0x126c00127a00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)"
+    },
+    {
+      "at": "2026-06-10T00:26:04.542Z",
+      "event": "browser-console",
+      "type": "error",
+      "text": "Failed to load resource: the server responded with a status of 404 (NOT FOUND)"
+    },
+    {
+      "at": "2026-06-10T00:26:04.831Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "Initialising page..."
+    },
+    {
+      "at": "2026-06-10T00:26:04.834Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "Browser check finished"
+    },
+    {
+      "at": "2026-06-10T00:26:04.868Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "LOG (DEBUG) at 12:26:04 AM: trialConstruct"
+    },
+    {
+      "at": "2026-06-10T00:26:04.901Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "LOG (DEBUG) at 12:26:04 AM: trialPrepare"
+    },
+    {
+      "at": "2026-06-10T00:26:04.901Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "LOG (DEBUG) at 12:26:04 AM: trialStart"
+    },
+    {
+      "at": "2026-06-10T00:26:04.906Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "LOG (DEBUG) at 12:26:04 AM: responseEnable"
+    },
+    {
+      "at": "2026-06-10T00:26:04.906Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "LOG (DEBUG) at 12:26:04 AM: submitEnable"
+    },
+    {
+      "at": "2026-06-10T00:26:05.580Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "LOG (DEBUG) at 12:26:05 AM: Response was successfully received."
+    },
+    {
+      "at": "2026-06-10T00:26:05.580Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "LOG (DEBUG) at 12:26:05 AM: Response received successfully."
+    },
+    {
+      "at": "2026-06-10T00:26:05.616Z",
+      "event": "click",
+      "label": "advance toward Unity canvas",
+      "selector": "text=/I agree/i"
+    },
+    {
+      "at": "2026-06-10T00:26:05.801Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "Initialising page..."
+    },
+    {
+      "at": "2026-06-10T00:26:05.804Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "Browser check finished"
+    },
+    {
+      "at": "2026-06-10T00:26:05.829Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "LOG (DEBUG) at 12:26:05 AM: trialConstruct"
+    },
+    {
+      "at": "2026-06-10T00:26:05.830Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "LOG (DEBUG) at 12:26:05 AM: trialPrepare"
+    },
+    {
+      "at": "2026-06-10T00:26:05.830Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "LOG (DEBUG) at 12:26:05 AM: trialStart"
+    },
+    {
+      "at": "2026-06-10T00:26:05.835Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "LOG (DEBUG) at 12:26:05 AM: responseEnable"
+    },
+    {
+      "at": "2026-06-10T00:26:05.835Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "LOG (DEBUG) at 12:26:05 AM: submitEnable"
+    },
+    {
+      "at": "2026-06-10T00:26:08.815Z",
+      "event": "browser-console",
+      "type": "warning",
+      "text": "The resource http://127.0.0.1:5000/static/css/fonts/inter.css was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally."
+    },
+    {
+      "at": "2026-06-10T00:26:09.728Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "LOG (DEBUG) at 12:26:09 AM: Response was successfully received."
+    },
+    {
+      "at": "2026-06-10T00:26:09.728Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "LOG (DEBUG) at 12:26:09 AM: Response received successfully."
+    },
+    {
+      "at": "2026-06-10T00:26:09.770Z",
+      "event": "click",
+      "label": "advance toward Unity canvas",
+      "selector": "text=/Next/i"
+    },
+    {
+      "at": "2026-06-10T00:26:09.907Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "Initialising page..."
+    },
+    {
+      "at": "2026-06-10T00:26:09.907Z",
+      "event": "browser-console",
+      "type": "warning",
+      "text": "Config option \"companyName\" is missing or empty. Falling back to default value: \"Unity\". Consider updating your WebGL template to include the missing config option."
+    },
+    {
+      "at": "2026-06-10T00:26:09.907Z",
+      "event": "browser-console",
+      "type": "warning",
+      "text": "Config option \"productName\" is missing or empty. Falling back to default value: \"WebGL Player\". Consider updating your WebGL template to include the missing config option."
+    },
+    {
+      "at": "2026-06-10T00:26:09.908Z",
+      "event": "browser-console",
+      "type": "warning",
+      "text": "Config option \"productVersion\" is missing or empty. Falling back to default value: \"1.0\". Consider updating your WebGL template to include the missing config option."
+    },
+    {
+      "at": "2026-06-10T00:26:09.948Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "Browser check finished"
+    },
+    {
+      "at": "2026-06-10T00:26:09.972Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "LOG (DEBUG) at 12:26:09 AM: trialConstruct"
+    },
+    {
+      "at": "2026-06-10T00:26:10.026Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "LOG (DEBUG) at 12:26:10 AM: trialPrepare"
+    },
+    {
+      "at": "2026-06-10T00:26:10.028Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "LOG (DEBUG) at 12:26:10 AM: trialStart"
+    },
+    {
+      "at": "2026-06-10T00:26:10.115Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "LOG (DEBUG) at 12:26:10 AM: responseEnable"
+    },
+    {
+      "at": "2026-06-10T00:26:10.116Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "LOG (DEBUG) at 12:26:10 AM: submitEnable"
+    },
+    {
+      "at": "2026-06-10T00:26:10.223Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "[UnityMemory] Configuration Parameters - Can be set up in boot.config\n"
+    },
+    {
+      "at": "2026-06-10T00:26:10.223Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "    \"memorysetup-allocator-temp-initial-block-size-main=262144\"\n"
+    },
+    {
+      "at": "2026-06-10T00:26:10.224Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "    \"memorysetup-allocator-temp-initial-block-size-worker=262144\"\n"
+    },
+    {
+      "at": "2026-06-10T00:26:10.224Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "    \"memorysetup-temp-allocator-size-nav-mesh-worker=65536\"\n"
+    },
+    {
+      "at": "2026-06-10T00:26:10.224Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "    \"memorysetup-temp-allocator-size-audio-worker=65536\"\n"
+    },
+    {
+      "at": "2026-06-10T00:26:10.224Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "    \"memorysetup-temp-allocator-size-background-worker=32768\"\n"
+    },
+    {
+      "at": "2026-06-10T00:26:10.224Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "    \"memorysetup-bucket-allocator-granularity=16\"\n"
+    },
+    {
+      "at": "2026-06-10T00:26:10.224Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "    \"memorysetup-bucket-allocator-bucket-count=8\"\n"
+    },
+    {
+      "at": "2026-06-10T00:26:10.224Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "    \"memorysetup-bucket-allocator-block-size=4194304\"\n"
+    },
+    {
+      "at": "2026-06-10T00:26:10.224Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "    \"memorysetup-bucket-allocator-block-count=1\"\n"
+    },
+    {
+      "at": "2026-06-10T00:26:10.224Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "    \"memorysetup-main-allocator-block-size=16777216\"\n"
+    },
+    {
+      "at": "2026-06-10T00:26:10.224Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "    \"memorysetup-thread-allocator-block-size=16777216\"\n"
+    },
+    {
+      "at": "2026-06-10T00:26:10.224Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "    \"memorysetup-gfx-main-allocator-block-size=16777216\"\n"
+    },
+    {
+      "at": "2026-06-10T00:26:10.224Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "    \"memorysetup-gfx-thread-allocator-block-size=16777216\"\n"
+    },
+    {
+      "at": "2026-06-10T00:26:10.224Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "    \"memorysetup-cache-allocator-block-size=4194304\"\n"
+    },
+    {
+      "at": "2026-06-10T00:26:10.224Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "    \"memorysetup-typetree-allocator-block-size=2097152\"\n"
+    },
+    {
+      "at": "2026-06-10T00:26:10.224Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "    \"memorysetup-profiler-bucket-allocator-granularity=16\"\n"
+    },
+    {
+      "at": "2026-06-10T00:26:10.224Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "    \"memorysetup-profiler-bucket-allocator-bucket-count=8\"\n"
+    },
+    {
+      "at": "2026-06-10T00:26:10.224Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "    \"memorysetup-profiler-bucket-allocator-block-size=4194304\"\n"
+    },
+    {
+      "at": "2026-06-10T00:26:10.224Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "    \"memorysetup-profiler-bucket-allocator-block-count=1\"\n"
+    },
+    {
+      "at": "2026-06-10T00:26:10.224Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "    \"memorysetup-profiler-allocator-block-size=16777216\"\n"
+    },
+    {
+      "at": "2026-06-10T00:26:10.224Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "    \"memorysetup-profiler-editor-allocator-block-size=1048576\"\n"
+    },
+    {
+      "at": "2026-06-10T00:26:10.225Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "    \"memorysetup-temp-allocator-size-main=4194304\"\n"
+    },
+    {
+      "at": "2026-06-10T00:26:10.225Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "    \"memorysetup-job-temp-allocator-block-size=2097152\"\n"
+    },
+    {
+      "at": "2026-06-10T00:26:10.225Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "    \"memorysetup-job-temp-allocator-block-size-background=1048576\"\n"
+    },
+    {
+      "at": "2026-06-10T00:26:10.225Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "    \"memorysetup-job-temp-allocator-reduction-small-platforms=262144\"\n"
+    },
+    {
+      "at": "2026-06-10T00:26:10.270Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "[Physics::Module] Initialized fallback backend.\n"
+    },
+    {
+      "at": "2026-06-10T00:26:10.270Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "[Physics::Module] Id: 0xdecafbad\n"
+    },
+    {
+      "at": "2026-06-10T00:26:10.272Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "Loading player data from data.unity3d\n"
+    },
+    {
+      "at": "2026-06-10T00:26:10.277Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "Initialize engine version: 6000.3.7f1 (696ec25a53d1)\n"
+    },
+    {
+      "at": "2026-06-10T00:26:10.278Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "Creating WebGL 2.0 context."
+    },
+    {
+      "at": "2026-06-10T00:26:10.294Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "Renderer: WebKit WebGL\n"
+    },
+    {
+      "at": "2026-06-10T00:26:10.294Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "Vendor:   WebKit\n"
+    },
+    {
+      "at": "2026-06-10T00:26:10.295Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "Version:  OpenGL ES 3.0 (WebGL 2.0 (OpenGL ES 3.0 Chromium))\n"
+    },
+    {
+      "at": "2026-06-10T00:26:10.295Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "GLES:     3\n"
+    },
+    {
+      "at": "2026-06-10T00:26:10.295Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": " EXT_clip_control EXT_color_buffer_float EXT_color_buffer_half_float EXT_conservative_depth EXT_depth_clamp EXT_float_blend EXT_polygon_offset_clamp EXT_texture_compression_bptc EXT_texture_compression_rgtc EXT_texture_filter_anisotropic EXT_texture_mirror_clamp_to_edge NV_shader_noperspective_interpolation OES_draw_buffers_indexed OES_sample_variables OES_shader_multisample_interpolation OES_texture_float_linear OVR_multiview2 WEBGL_clip_cull_distance WEBGL_compressed_texture_astc WEBGL_compressed_texture_etc WEBGL_compressed_texture_etc1 WEBGL_compressed_texture_s3tc WEBGL_compressed_texture_s3tc_srgb WEBGL_debug_renderer_info WEBGL_debug_shaders WEBGL_lose_context WEBGL_multi_draw WEBGL_polygon_mode WEBGL_stencil_texturing GL_EXT_clip_control GL_EXT_color_buffer_float GL_EXT_color_buffer_half_float GL_EXT_conservative_depth GL_EXT_depth_clamp GL_EXT_float_blend GL_EXT_polygon_offset_clamp GL_EXT_texture_compression_bptc GL_EXT_texture_compression_rgtc GL_EXT_texture_filter_anisotropic GL_EXT_texture_mirro\n"
+    },
+    {
+      "at": "2026-06-10T00:26:10.295Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "r_clamp_to_edge GL_NV_shader_noperspective_interpolation GL_OES_draw_buffers_indexed GL_OES_sample_variables GL_OES_shader_multisample_interpolation GL_OES_texture_float_linear GL_OVR_multiview2 GL_WEBGL_clip_cull_distance GL_WEBGL_compressed_texture_astc GL_WEBGL_compressed_texture_etc GL_WEBGL_compressed_texture_etc1 GL_WEBGL_compressed_texture_s3tc GL_WEBGL_compressed_texture_s3tc_srgb GL_WEBGL_debug_renderer_info GL_WEBGL_debug_shaders GL_WEBGL_lose_context GL_WEBGL_multi_draw GL_WEBGL_polygon_mode GL_WEBGL_stencil_texturing\n"
+    },
+    {
+      "at": "2026-06-10T00:26:10.303Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "OPENGL LOG: Creating OpenGL ES 3.0 graphics device ; Context level  <OpenGL ES 3.0> ; Context handle 1\n"
+    },
+    {
+      "at": "2026-06-10T00:26:10.343Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "[Physics::Module] Selected backend.\n"
+    },
+    {
+      "at": "2026-06-10T00:26:10.343Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "[Physics::Module] Name: PhysX\n"
+    },
+    {
+      "at": "2026-06-10T00:26:10.343Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "[Physics::Module] Id: 0xf2b8ea05\n"
+    },
+    {
+      "at": "2026-06-10T00:26:10.343Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "[Physics::Module] SDK Version: 4.1.2\n"
+    },
+    {
+      "at": "2026-06-10T00:26:10.343Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "[Physics::Module] Integration Version: 1.0.0\n"
+    },
+    {
+      "at": "2026-06-10T00:26:10.343Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "[Physics::Module] Threading Mode: Single-Threaded\n"
+    },
+    {
+      "at": "2026-06-10T00:26:10.358Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "Input Manager initialize...\n"
+    },
+    {
+      "at": "2026-06-10T00:26:10.469Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "Trying to get length of sound which is not loaded yet."
+    },
+    {
+      "at": "2026-06-10T00:26:10.469Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "Trying to get length of sound which is not loaded yet."
+    },
+    {
+      "at": "2026-06-10T00:26:10.471Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "Trying to get length of sound which is not loaded yet."
+    },
+    {
+      "at": "2026-06-10T00:26:10.471Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "Trying to get length of sound which is not loaded yet."
+    },
+    {
+      "at": "2026-06-10T00:26:10.471Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "Trying to get length of sound which is not loaded yet."
+    },
+    {
+      "at": "2026-06-10T00:26:10.471Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "Trying to get length of sound which is not loaded yet."
+    },
+    {
+      "at": "2026-06-10T00:26:10.606Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "UnloadTime: 1.300000 ms\n"
+    },
+    {
+      "at": "2026-06-10T00:26:10.647Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "Audio context resumed after 0.331 seconds."
+    },
+    {
+      "at": "2026-06-10T00:26:10.859Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "[UnityCache] 'http://127.0.0.1:5000/static/scripts/Build/WebGL.data?random=8j8b6' successfully downloaded and stored in the browser cache"
+    },
+    {
+      "at": "2026-06-10T00:26:12.687Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "Init: participantId: 3, assignmentId: WQDS9S, uniqueId: SEC9FG:WQDS9S\n"
+    },
+    {
+      "at": "2026-06-10T00:26:12.688Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "GetPage: participantId: 3, assignmentId: WQDS9S, uniqueId: SEC9FG:WQDS9S\n"
+    },
+    {
+      "at": "2026-06-10T00:26:22.166Z",
+      "event": "press",
+      "key": "Enter",
+      "label": "fallback advance"
+    },
+    {
+      "at": "2026-06-10T00:26:23.502Z",
+      "event": "unity-canvas-visible"
+    },
+    {
+      "at": "2026-06-10T00:26:27.878Z",
+      "event": "canvas-click",
+      "label": "focus canvas",
+      "x": 0.5,
+      "y": 0.5
+    },
+    {
+      "at": "2026-06-10T00:27:15.551Z",
+      "event": "drive-to-ferry",
+      "label": "hold up with 10 percent side taps",
+      "steps": 300,
+      "forwardPresses": 300,
+      "sidePresses": 30
+    },
+    {
+      "at": "2026-06-10T00:30:15.555Z",
+      "event": "completion-timeout",
+      "timeoutMs": 180000
+    }
+  ]
+}
