@@ -114,10 +114,11 @@ psynet performance-test local \
   --n-bots 40 \
   --duration-minutes 5 \
   --time-factor 1.0 \
-  --json-output ../../artifacts/performance.json
+  --audit ../..
 ```
 
-Adjust the JSON output path if needed. Include a command log in `logs/` (or
+`--audit ../..` writes `artifacts/performance.json` on the attempt packet and
+marks `performance_result` present. Include a command log in `logs/` (or
 legacy `evidence/`) when
 it helps reviewers understand what ran. If the full load test cannot run locally,
 say so in `EVALUATION.md` rather than presenting a one-bot smoke test as

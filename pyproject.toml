@@ -29,7 +29,7 @@ dev = [
 ]
 
 [tool.uv.sources]
-psynet = { git = "https://gitlab.com/PsyNetDev/PsyNet.git", rev = "9d55f3d8b677a704da5e4b3587c08000d4780d00" }
+psynet = { git = "https://gitlab.com/PsyNetDev/PsyNet.git", rev = "b344530951e0ca8c2be6c509fa0b7609fa112d28" }
 
 [tool.setuptools.packages.find]
 where = ["."]
