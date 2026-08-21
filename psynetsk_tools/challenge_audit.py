@@ -273,7 +273,7 @@ def challenge_audit_manifest(
             starter_blocker(
                 "performance_result",
                 "Performance test has not been run yet.",
-                "Run psynet performance-test local … --audit (or --audit <packet>).",
+                "From code/<slug>/, run psynet performance-test local --n-bots 40 --duration-minutes 5 --audit ../..",
             ),
             starter_blocker(
                 "monitor_snapshot",
@@ -283,7 +283,7 @@ def challenge_audit_manifest(
             starter_blocker(
                 "simulation_export",
                 "Simulation export has not been produced yet.",
-                "Run psynet simulate --audit (or --audit <packet>).",
+                "From code/<slug>/, run psynet simulate --audit ../..",
             ),
             starter_blocker(
                 "analysis_notebook",

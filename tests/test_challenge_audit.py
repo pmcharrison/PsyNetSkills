@@ -65,6 +65,14 @@ def test_init_challenge_attempt_audit_writes_extension_manifest(tmp_path: Path) 
     assert "challenge" in section_ids
     assert "evaluation" in section_ids
     assert "learnings" in section_ids
+    blockers = {
+        blocker["artifact_id"]: blocker["next_step"]
+        for blocker in manifest["blockers"]
+    }
+    assert "../.." in blockers["simulation_export"]
+    assert "psynet simulate --audit ../.." in blockers["simulation_export"]
+    assert "../.." in blockers["performance_result"]
+    assert "psynet performance-test local" in blockers["performance_result"]
 
 
 def test_collect_attempt_evidence_files_dual_reads_layouts(tmp_path: Path) -> None:

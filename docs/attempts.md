@@ -123,8 +123,20 @@ legacy `evidence/`) when
 it helps reviewers understand what ran. If the full load test cannot run locally,
 say so in `EVALUATION.md` rather than presenting a one-bot smoke test as
 complete performance evidence.
+
+From the same experiment directory, generate the simulation export with:
+
+```bash
+psynet simulate --audit ../..
+```
+
+Bare `--audit` looks for `audit.json` in the current directory or `./audit/`.
+Challenge packets live at the attempt root, so `--audit ../..` is required when
+the working directory is `code/<slug>/`. That writes `artifacts/simulated_data.zip`
+on the attempt packet and marks `simulation_export` present.
+
 `monitor.html` snapshots the PsyNet dashboard monitor view. `data.zip` contains
-exported experiment data. `simulated_data.zip` contains the `psynet simulate --audit`
+exported experiment data. `simulated_data.zip` contains the `psynet simulate --audit ../..`
 export used for analysis. `analyses/` contains the canonical
 `analysis.ipynb` notebook, which should read exported CSV data directly, show
 the data-wrangling code, display summary tables and plots inline, and provide a

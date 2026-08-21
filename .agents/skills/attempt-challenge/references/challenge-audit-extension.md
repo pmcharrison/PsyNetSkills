@@ -28,6 +28,11 @@ The generated manifest declares:
 It also creates `artifacts/`, `analyses/`, and `logs/`. New attempts must not
 create the legacy `evidence/` directory.
 
+PsyNet experiment commands run from `code/<slug>/`. From there, pass
+`--audit ../..` so `--audit` writes into this attempt packet. Bare `--audit`
+only works when the current directory already contains `audit.json` or
+`./audit/audit.json`.
+
 ## Extension contract
 
 The extension adds workshop sections, using only core audit section kinds:
