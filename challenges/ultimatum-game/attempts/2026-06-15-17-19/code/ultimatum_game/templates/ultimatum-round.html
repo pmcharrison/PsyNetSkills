@@ -1,0 +1,287 @@
+{% extends "timeline-page.html" %}
+
+{% block stylesheets %}
+{{ super() }}
+<style>
+    #ultimatum-game {
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    #ultimatum-status {
+        min-height: 170px;
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        padding: 1rem;
+        background: #fafafa;
+    }
+
+    .coin-button {
+        min-width: 4rem;
+        margin: 0.25rem;
+    }
+
+    #decision-controls,
+    #offer-controls,
+    #result-card {
+        display: none;
+    }
+</style>
+{% endblock %}
+
+{% block main_body %}
+<div id="ultimatum-game">
+    <h2 id="round-heading"></h2>
+    <p id="role-summary" class="lead"></p>
+    <div id="ultimatum-status" class="mb-3">
+        <h4 id="state-title">Connecting...</h4>
+        <p id="state-message">Opening the live connection.</p>
+        <p class="text-muted mb-0" id="timer-message"></p>
+    </div>
+
+    <div id="offer-controls" class="mb-3">
+        <p>Choose how many of the 10 coins to offer to the responder.</p>
+        <div id="offer-buttons"></div>
+    </div>
+
+    <div id="decision-controls" class="mb-3">
+        <p id="decision-offer"></p>
+        <button id="accept-button" class="btn btn-success btn-lg me-2">Accept</button>
+        <button id="reject-button" class="btn btn-danger btn-lg">Reject</button>
+    </div>
+
+    <div id="result-card" class="alert alert-info"></div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+(function () {
+    var ROUND = psynet.var["ultimatum_round"];
+    var CHANNEL = psynet.var["ultimatum_channel"];
+    var ENDOWMENT = psynet.var["endowment"];
+    var FEEDBACK_SECONDS = psynet.var["feedback_seconds"];
+    var MY_ID = String(dallinger.identity.participantId);
+    var decisionTimer = null;
+    var countdownTimer = null;
+    var secondsLeft = ROUND.decision_timeout_seconds;
+    var resolved = false;
+    var submitted = false;
+    var socket = null;
+
+    var heading = document.getElementById("round-heading");
+    var roleSummary = document.getElementById("role-summary");
+    var stateTitle = document.getElementById("state-title");
+    var stateMessage = document.getElementById("state-message");
+    var timerMessage = document.getElementById("timer-message");
+    var offerControls = document.getElementById("offer-controls");
+    var offerButtons = document.getElementById("offer-buttons");
+    var decisionControls = document.getElementById("decision-controls");
+    var decisionOffer = document.getElementById("decision-offer");
+    var resultCard = document.getElementById("result-card");
+
+    heading.textContent = ROUND.scored ? "Scored round " + ROUND.display_round : "Timeout demonstration round";
+    roleSummary.textContent = "Your role this round: " + ROUND.role + ".";
+
+    buildOfferButtons();
+    openSocket();
+
+    if (ROUND.role === "proposer") {
+        showProposerControls();
+    } else {
+        showWaitingForProposal();
+    }
+
+    function openSocket() {
+        var wsScheme = location.protocol === "https:" ? "wss://" : "ws://";
+        socket = new ReconnectingWebSocket(
+            wsScheme + location.host + "/chat?channel=" + CHANNEL
+            + "&worker_id=" + dallinger.identity.workerId
+            + "&participant_id=" + MY_ID
+        );
+
+        socket.onopen = function () {
+            send({type: "join_round"});
+        };
+
+        socket.onmessage = function (event) {
+            if (event.data.indexOf(CHANNEL + ":") !== 0) return;
+            var msg;
+            try {
+                msg = JSON.parse(event.data.slice(CHANNEL.length + 1));
+            } catch (e) {
+                return;
+            }
+            if (String(msg.group_id) !== String(ROUND.group_id)) return;
+            if (Number(msg.round_index) !== Number(ROUND.round_index)) return;
+
+            if (msg.type === "state" && msg.phase === "proposal_submitted") {
+                handleProposalSubmitted(msg.offer);
+            } else if (msg.type === "result") {
+                handleResult(msg);
+            }
+        };
+    }
+
+    function send(payload) {
+        payload.round_index = ROUND.round_index;
+        payload.group_id = ROUND.group_id;
+        payload.sender = MY_ID;
+        socket.send(CHANNEL + ":" + JSON.stringify(payload));
+    }
+
+    function buildOfferButtons() {
+        for (var offer = 0; offer <= ENDOWMENT; offer++) {
+            var button = document.createElement("button");
+            button.className = "btn btn-outline-primary coin-button";
+            button.textContent = String(offer);
+            (function (value) {
+                button.onclick = function () {
+                    if (resolved) return;
+                    clearDecisionTimer();
+                    disableOfferButtons();
+                    send({type: "proposal", offer: value});
+                    stateTitle.textContent = "Proposal submitted";
+                    stateMessage.textContent = "Waiting for the responder's decision.";
+                    timerMessage.textContent = "";
+                };
+            })(offer);
+            offerButtons.appendChild(button);
+        }
+    }
+
+    function showProposerControls() {
+        stateTitle.textContent = "Make your offer";
+        stateMessage.textContent = "Select how many coins to offer to the responder.";
+        offerControls.style.display = "block";
+        decisionControls.style.display = "none";
+        startDecisionTimer("proposer");
+    }
+
+    function showWaitingForProposal() {
+        stateTitle.textContent = "Waiting for proposal";
+        stateMessage.textContent = "The proposer is choosing how many coins to offer you.";
+        offerControls.style.display = "none";
+        decisionControls.style.display = "none";
+        timerMessage.textContent = "You will decide after the proposal arrives.";
+    }
+
+    function handleProposalSubmitted(offer) {
+        if (resolved) return;
+        if (ROUND.role === "responder") {
+            stateTitle.textContent = "Respond to the proposal";
+            stateMessage.textContent = "The proposer offered you " + offer + " coin(s).";
+            decisionOffer.textContent = "Accept to earn " + offer
+                + " coin(s), while the proposer earns " + (ENDOWMENT - offer)
+                + ". Reject for both players to earn 0.";
+            decisionControls.style.display = "block";
+            startDecisionTimer("responder");
+        } else {
+            stateTitle.textContent = "Proposal delivered";
+            stateMessage.textContent = "The responder has received your offer of "
+                + offer + " coin(s).";
+        }
+    }
+
+    document.getElementById("accept-button").onclick = function () {
+        submitDecision("accept");
+    };
+
+    document.getElementById("reject-button").onclick = function () {
+        submitDecision("reject");
+    };
+
+    function submitDecision(decision) {
+        if (resolved) return;
+        clearDecisionTimer();
+        decisionControls.style.display = "none";
+        send({type: "decision", decision: decision});
+        stateTitle.textContent = "Decision submitted";
+        stateMessage.textContent = "Waiting for synchronized feedback.";
+        timerMessage.textContent = "";
+    }
+
+    function startDecisionTimer(stage) {
+        clearDecisionTimer();
+        secondsLeft = ROUND.decision_timeout_seconds;
+        timerMessage.textContent = secondsLeft + " seconds remaining.";
+        countdownTimer = setInterval(function () {
+            secondsLeft -= 1;
+            timerMessage.textContent = secondsLeft + " seconds remaining.";
+        }, 1000);
+        decisionTimer = setTimeout(function () {
+            if (resolved) return;
+            clearDecisionTimer();
+            offerControls.style.display = "none";
+            decisionControls.style.display = "none";
+            stateTitle.textContent = "Timed out";
+            stateMessage.textContent = "The round is being skipped because a timed decision was not submitted.";
+            send({type: "timeout", stage: stage});
+        }, ROUND.decision_timeout_seconds * 1000);
+    }
+
+    function clearDecisionTimer() {
+        if (decisionTimer) clearTimeout(decisionTimer);
+        if (countdownTimer) clearInterval(countdownTimer);
+        decisionTimer = null;
+        countdownTimer = null;
+    }
+
+    function disableOfferButtons() {
+        Array.prototype.forEach.call(
+            offerButtons.querySelectorAll("button"),
+            function (button) {
+                button.disabled = true;
+            }
+        );
+    }
+
+    function handleResult(msg) {
+        if (resolved) return;
+        resolved = true;
+        clearDecisionTimer();
+        offerControls.style.display = "none";
+        decisionControls.style.display = "none";
+        stateTitle.textContent = msg.skipped ? "Round skipped" : "Round complete";
+        stateMessage.textContent = msg.skipped
+            ? "No coins were awarded because a timed decision was not submitted."
+            : "Both participants have received the synchronized result.";
+        timerMessage.textContent = "";
+        renderResult(msg);
+        setTimeout(function () {
+            finish(msg);
+        }, FEEDBACK_SECONDS * 1000);
+    }
+
+    function renderResult(msg) {
+        var personal = msg.participants[MY_ID];
+        var lines = [];
+        if (msg.skipped) {
+            lines.push("Skipped due to " + msg.timeout_stage + " timeout.");
+        } else {
+            lines.push("Proposal: responder receives " + msg.offer + " coin(s).");
+            lines.push("Responder decision: " + msg.decision + ".");
+            lines.push("Proposer payoff: " + msg.proposer_payoff + "; responder payoff: " + msg.responder_payoff + ".");
+        }
+        lines.push("Your payoff this round: " + personal.own_payoff + " coin(s).");
+        lines.push("Your cumulative score: " + personal.own_total + " coin(s) after "
+            + personal.counted_rounds + " counted scored round(s).");
+        resultCard.innerHTML = lines.map(function (line) {
+            return "<p class='mb-1'>" + line + "</p>";
+        }).join("");
+        resultCard.style.display = "block";
+    }
+
+    function finish(msg) {
+        if (submitted) return;
+        submitted = true;
+        psynet.nextPage({
+            round_index: ROUND.round_index,
+            role: ROUND.role,
+            result: msg
+        });
+    }
+})();
+</script>
+{% endblock %}
