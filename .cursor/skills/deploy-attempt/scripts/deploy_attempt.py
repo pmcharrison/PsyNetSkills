@@ -187,7 +187,17 @@ def dispatch(repo: str, workflow_ref: str, inputs: dict[str, str]) -> dict[str, 
         check=False,
     )
     if process.returncode != 0:
-        print(process.stderr.strip(), file=sys.stderr)
+        stderr = process.stderr.strip()
+        print(stderr, file=sys.stderr)
+        if "Resource not accessible by integration" in stderr:
+            print(
+                "\nWorkflow dispatch was not queued because this GitHub token "
+                "cannot create workflow_dispatch events. Grant the dispatching "
+                "identity Actions/workflows write permission, or have a human "
+                "run the workflow from the printed GitHub URL and inputs. This "
+                "is separate from AWS credentials and Environment secrets.",
+                file=sys.stderr,
+            )
         raise SystemExit(process.returncode)
     if not process.stdout.strip():
         return {}
@@ -227,7 +237,7 @@ def main() -> int:
     print("Workflow dispatched.")
     if result.get("html_url"):
         print(f"Run URL: {result['html_url']}")
-        print("Human approval: open the run, click Review deployments, select attempt-deploy, then approve or reject.")
+        print("Open the run to monitor the automatic deploy job.")
     else:
         print(f"Workflow URL: https://github.com/{repo}/actions/workflows/{WORKFLOW}")
     return 0
