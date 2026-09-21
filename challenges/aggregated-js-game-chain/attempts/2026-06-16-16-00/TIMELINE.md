@@ -1,0 +1,49 @@
+# Timeline
+
+- T+00:00:00 [agent-start] Started autonomous challenge attempt setup.
+- T+00:00:20 [agent] Read public challenge instructions and repository attempt workflow.
+- T+00:01:15 [agent] Read experiment implementation, validation, simulation, evidence, author-identification, and cloud-link skills.
+- T+00:02:10 [agent] Inspected public `discovery-chains` reference files listed by the challenge.
+- T+00:03:00 [agent] Refreshed `~/PsyNet` from `origin/master` and recorded checkout metadata.
+- T+00:04:30 [agent] Explored PsyNet chain APIs and demos for multi-trial generation aggregation patterns.
+- T+00:06:00 [agent] Created attempt scaffold, challenge snapshot, in-progress metadata, and `PLAN.md`.
+- T+00:06:15 [agent] Authorship is pending; `agent.json` keeps `authors` empty until the human author GitHub username is provided.
+- T+00:06:30 [agent-stop] Paused before implementation for required human review of `PLAN.md`.
+- T+01:47:00 [manual] User approved `PLAN.md` and answered review questions: compact evidence uses `easy`, aggregation keeps full-run rank/sample behavior, and audit records stay in PsyNet object variables.
+- T+01:47:30 [agent-start] Resumed autonomous implementation work after plan approval.
+- T+02:03:00 [agent] Implemented first runnable PsyNet experiment scaffold under `code/discovery_game/`, including compact/full configuration, chain aggregation, bot responses, and participant-facing JavaScript.
+- T+02:04:00 [agent] Generated `constraints.txt` from the experiment requirements.
+- T+02:08:00 [agent] Initial `psynet test local` found the standard PsyNet `test.py` entrypoint was missing; added it before rerunning validation.
+- T+02:12:00 [agent] `psynet test local` then exposed a custom page template lookup issue; changed the page to load `templates/discovery-game.html`.
+- T+02:16:00 [agent] `psynet test local` then exposed a custom page validation bug; changed validation to inspect the formatted PsyNet response answer.
+- T+02:20:00 [agent] `psynet test local` passed for the compact three-generation bot run.
+- T+02:24:00 [agent] Ran `psynet simulate`, exported `evidence/simulated_data.zip`, and wrote aggregation inspection evidence.
+- T+02:29:00 [agent] Ran `psynet performance-test local` with 40 bots for five minutes and saved `evidence/performance.json`.
+- T+02:32:00 [agent] Created and executed `evidence/analyses/analysis.ipynb`.
+- T+02:43:00 [agent] Collected participant screenshots and regenerated `evidence/participant.mp4` after video review found the first recording too fast.
+- T+02:46:00 [agent] Computer-use manual verification confirmed the later-generation message-reading, notebook, strategy-summary, movement, and pickup flow.
+- T+02:48:00 [agent] Saved `evidence/monitor.html` from the local PsyNet dashboard.
+- T+02:50:00 [agent] Re-ran `python experiment.py`, `psynet test local`, `psynet simulate`, and notebook execution against the final code revision.
+- T+02:51:00 [agent] Wrote `REPORT.md`, updated `LEARNINGS.md`, and left `EVALUATION.md` ready for human scoring.
+- T+02:51:30 [agent-stop] Implementation and first-pass evidence collection complete; attempt remains metadata-open pending human author GitHub username.
+- T+02:58:00 [manual] User noticed the participant front end had reimplemented the JavaScript game rather than injecting the actual upstream JavaScript files.
+- T+02:58:20 [agent-start] Resumed implementation to vendor the upstream `discovery-chains` HTML, JavaScript, CSS, and image assets.
+- T+03:08:00 [agent] Replaced the custom browser game with upstream-derived base/after templates plus thin PsyNet config and submission adapters.
+- T+03:14:00 [agent] Re-ran `python experiment.py`, `psynet test local`, `psynet simulate`, notebook execution, and performance testing against the upstream-adapter revision.
+- T+03:21:00 [agent] Regenerated participant screenshots and video with the upstream UI; video review found broken fused-crystal image paths.
+- T+03:23:00 [agent] Fixed relative upstream image paths for dynamically created fused crystals in the PsyNet adapter.
+- T+03:26:00 [agent] Regenerated participant video and video review confirmed the upstream UI stages and fixed crystal icons.
+- T+03:29:00 [agent] Re-ran final `python experiment.py` and `psynet test local` against the corrected upstream-adapter revision.
+- T+03:38:00 [manual] User reported being stuck after harvesting all visible crystals with actions remaining.
+- T+03:38:30 [agent-start] Resumed implementation to fix the exhausted-board end condition.
+- T+03:41:00 [agent] Added an adapter-level board-exhaustion finish check and a finish button that appears when no crystals remain and the participant is not carrying an item.
+- T+03:45:00 [agent] Re-ran `python experiment.py`, `psynet test local`, and Playwright participant flow including an explicit exhausted-board regression.
+- T+21:37:00 [manual] User requested participant-randomized item locations, darker grid lines, removal of source-note text, action-progress bar, export-analysis CSV script, and notebook demonstration.
+- T+21:37:30 [agent-start] Resumed implementation to apply the requested feedback.
+- T+21:47:00 [agent] Added participant-specific layout seeds, CSS grid/progress changes, and export/analysis tooling.
+- T+22:02:00 [agent] Re-ran `python experiment.py`, `psynet test local`, `psynet simulate`, derived CSV generation, analysis notebooks, performance test, and Playwright participant evidence.
+- T+22:12:00 [agent] Video review confirmed upstream UI, removed attribution text, dark grid lines, changing action progress bar, and unclipped strategy summary.
+- T+24:02:00 [manual] User requested removal of excess grid bars, original-style grid borders, hidden PsyNet progress bar, and a fresh three-generation simulation plus analysis outputs.
+- T+24:03:00 [agent-start] Resumed implementation for final UI/export feedback.
+- T+24:25:00 [agent] Simulated three complete compact generations and reran export-derived CSV analysis plus both notebooks.
+- T+24:36:00 [agent] Iterated on the gameplay layout after video review, ending with a stable single action-progress label/bar, no PsyNet progress during gameplay, no grid overflow bars, and an immediately visible strategy summary.
