@@ -1,5 +1,23 @@
 # [PsyNetSkills](https://pmcharrison.github.io/PsyNetSkills/)
 
+> [!IMPORTANT]
+> **This repository is frozen.** The agent skills now ship with
+> [PsyNet](https://gitlab.com/PsyNetDev/PsyNet) itself. We are no longer
+> accepting changes here, and the skills in this repository may fall behind
+> the current version of PsyNet.
+>
+> - **Using the skills:** run `psynet scripts update` in your experiment
+>   directory. This installs the skills that match your PsyNet version under
+>   `.cursor/skills/psynet/`, and refreshes them whenever you update PsyNet.
+>   If you copied skills from this repository into an experiment, delete those
+>   copies and use the installed ones instead.
+> - **Contributing:** the skill sources live in
+>   [`.cursor/skills/experiment/`](https://gitlab.com/PsyNetDev/PsyNet/-/tree/master/.cursor/skills/experiment)
+>   in the PsyNet repository. Please open merge requests there.
+> - **Documentation:** see the [PsyNet documentation](https://psynetdev.gitlab.io/PsyNet/).
+>
+> The challenges, attempts and dashboard below stay available for reference.
+
 The repository is maintained by Peter Harrison (pmch2@cam.ac.uk),
 feel free to ask him questions by email or on Slack.
 
