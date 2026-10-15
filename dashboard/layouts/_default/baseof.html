@@ -51,6 +51,13 @@
       </nav>
     </header>
     <main>
+      {{ if not .IsHome }}
+        <p class="notice notice-important" role="note">
+          <strong>This repository is frozen.</strong>
+          The agent skills now ship with PsyNet.
+          <a href="{{ site.Home.RelPermalink }}">Read more</a>.
+        </p>
+      {{ end }}
       {{ block "main" . }}{{ end }}
     </main>
     {{ if or .IsHome (and .IsPage (in (slice "skills" "actions" "challenges") .Section)) (and (eq .Section "challenges") .Params.challenge) }}
