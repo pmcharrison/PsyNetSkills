@@ -1,5 +1,5 @@
 ---
-name: process-dyadic-experiment-data
+name: basic-data-dyadic-experiment
 description: Use this skill when a PsyNet experiment has two participants interacting across rounds and the user needs exported or simulated data converted into a clean analysis dataset.
 authors: [eandrade-lotero]
 ---

@@ -35,6 +35,23 @@ a {
   color: var(--link);
 }
 
+.notice {
+  background: var(--warning-background);
+  border: 1px solid var(--warning-border);
+  border-left-width: 4px;
+  border-radius: 6px;
+  margin: 0 0 1.5rem;
+  padding: 0.75rem 1rem;
+}
+
+.notice > :first-child {
+  margin-top: 0;
+}
+
+.notice > :last-child {
+  margin-bottom: 0;
+}
+
 .site-header {
   align-items: baseline;
   margin-bottom: 2rem;
