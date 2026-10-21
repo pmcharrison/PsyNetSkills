@@ -1,0 +1,14 @@
+[Config]
+title = Similarity, discrimination, and identification experiment
+description = Judge colored circles in same-different, similarity, and multi-item identification tasks.
+contact_email_on_error = psynetsk@example.invalid
+organization_name = PsyNetSkills
+
+recruiter = generic
+currency = $
+wage_per_hour = 12.0
+
+[Prolific]
+auto_recruit = false
+prolific_estimated_completion_minutes = 8
+base_payment = 1.60
