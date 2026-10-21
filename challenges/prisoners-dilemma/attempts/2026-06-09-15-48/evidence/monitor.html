@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>Experiment Monitoring -  Dashboard</title>
+        
+          <link rel="stylesheet" href="/static/css/bootstrap.min.css" type="text/css">
+          <link rel="stylesheet" href="/static/css/dashboard.css" type="text/css">
+          
+    <script src="https://use.fontawesome.com/ffb1fe552d.js"></script>
+    <link href="/static/vis@4.17.0/dist/vis-network.min.css" rel="stylesheet"
+          type="text/css"/>
+
+        
+        
+        
+    </head>
+    <body>
+      <div class="container">
+        
+          <nav id="dashboard-navigation">
+            <ul class="nav nav-tabs">
+              
+                
+                  <li class="nav-item">
+                    <a class="nav-link" href="/dashboard/index">Config</a>
+                  </li>
+                
+              
+                
+                  <li class="nav-item">
+                    <a class="nav-link" href="/dashboard/deployments">Deployments</a>
+                  </li>
+                
+              
+                
+                <li class="nav-item">
+                  <a class="nav-link dropdown-toggle active" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Monitor</a>
+                  <div class="dropdown-menu">
+                    
+                      <a class="dropdown-item" href="/dashboard/monitoring">Monitoring</a>
+                    
+                      <a class="dropdown-item" href="/dashboard/timeline">Timeline</a>
+                    
+                      <a class="dropdown-item" href="/dashboard/resources">Resources</a>
+                    
+                      <a class="dropdown-item" href="/dashboard/participants">Participants</a>
+                    
+                      <a class="dropdown-item" href="/dashboard/logger">Logger</a>
+                    
+                      <a class="dropdown-item" href="/dashboard/errors">Errors</a>
+                    
+                  </div>
+                </li>
+                
+              
+                
+                  <li class="nav-item">
+                    <a class="nav-link" href="/dashboard/data">Basic data</a>
+                  </li>
+                
+              
+                
+                  <li class="nav-item">
+                    <a class="nav-link" href="/dashboard/export">Export</a>
+                  </li>
+                
+              
+                
+                <li class="nav-item">
+                  <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Database</a>
+                  <div class="dropdown-menu">
+                    
+                      <a class="dropdown-item" href="/dashboard/database?table=experiment&amp;polymorphic_identity=psynet.experiment.ExperimentConfig">ExperimentConfig</a>
+                    
+                      <a class="dropdown-item" href="/dashboard/database?table=experiment_status&amp;polymorphic_identity=psynet.experiment.ExperimentStatus">ExperimentStatus</a>
+                    
+                      <a class="dropdown-item" href="/dashboard/database?table=notification&amp;polymorphic_identity=None">Notification</a>
+                    
+                      <a class="dropdown-item" href="/dashboard/database?table=participant&amp;polymorphic_identity=psynet.participant.Participant">Participant</a>
+                    
+                      <a class="dropdown-item" href="/dashboard/database?table=request&amp;polymorphic_identity=psynet.experiment.Request">Request</a>
+                    
+                      <a class="dropdown-item" href="/dashboard/database?table=response&amp;polymorphic_identity=psynet.timeline.Response">Response</a>
+                    
+                  </div>
+                </li>
+                
+              
+                
+                  <li class="nav-item">
+                    <a class="nav-link" href="/dashboard/develop">Development</a>
+                  </li>
+                
+              
+            </ul>
+          </nav>
+          
+        
+        
+          
+          
+        
+        
+        
+    <h1>Experiment Monitoring</h1>
+    <div id="monitor-wrapper" class="d-flex justify-content-between align-items-stretch">
+        <main class="flex-fill">
+            <div style="display: -ms-flexbox; display: flex; -ms-flex-wrap: wrap; flex-wrap: wrap;">
+                    <div class="form-group">
+                        <label for="sortBy">Sort networks by</label>
+                        <div class="input-group mb-3">
+                            <select class="form-control" id="sortBy">
+                                <option value="network_id">Network ID</option>
+                                <option value="n_pending_infos">Number of pending infos</option>
+                                <option value="n_completed_infos">Number of completed infos</option>
+                                <option value="n_failed_infos">Number of failed infos</option>
+                                <option value="n_alive_nodes">Number of completed nodes</option>
+                                <option value="n_failed_nodes">Number of failed nodes</option>
+                            </select>
+                            <div class="input-group-append">
+                                <div class="btn-group btn-group-toggle" id="order" data-toggle="buttons">
+
+                                    <label class="btn btn-secondary active">
+                                        <input type="radio" name="options" checked>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                             fill="currentColor"
+                                             class="bi bi-arrow-down" viewBox="0 0 16 16">
+                                            <path fill-rule="evenodd"
+                                                  d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1z"/>
+                                        </svg>
+                                    </label>
+                                    <label class="btn btn-secondary">
+                                        <input type="radio" name="options">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                             fill="currentColor"
+                                             class="bi bi-arrow-up" viewBox="0 0 16 16">
+                                            <path fill-rule="evenodd"
+                                                  d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z"/>
+                                        </svg>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                <div id="search-container" class="mx-auto row">
+                    <div class="form-group pr-3">
+                        <label for="max-networks">Number of networks</label>
+                        <input type="number" min="1" class="form-control" id="max-networks"
+                               placeholder="Networks to print">
+                    </div>
+                    <div class="form-group">
+                        <label for="search">Freetext search</label>
+                        <input type="text" class="form-control" id="search" placeholder="Search networks">
+                    </div>
+                </div>
+                <div>
+                    <div class="form-group">
+
+                        <label></label>
+                        <div>
+                            <a class="text-primary" data-toggle="collapse" href="#statistics" role="button"
+                               aria-expanded="false" aria-controls="statistics">
+                                Experiment Statistics
+                            </a>
+                            <a class="text-secondary" data-toggle="collapse" href="#advanced-filter"
+                               role="button" aria-expanded="false" aria-controls="advanced-filter">
+                                Advanced Filter
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="collapse p-3 bg-light" id="statistics">
+                <h4>Statistics</h4>
+                <div class="row">
+                    
+                        <div class="col">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Participants</h5>
+                                    <p class="card-text"><span class="nowrap"><span class="statistics-key">approved</span>: <span class="statistics-value">1</span></span></p>
+                                </div>
+                            </div>
+                        </div>
+                    
+                        <div class="col">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Networks</h5>
+                                    <p class="card-text"></p>
+                                </div>
+                            </div>
+                        </div>
+                    
+                        <div class="col">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Nodes</h5>
+                                    <p class="card-text">0 total, 0 failed (0.0%)</p>
+                                </div>
+                            </div>
+                        </div>
+                    
+                        <div class="col">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Trials</h5>
+                                    <p class="card-text">0 total, 0 failed (0.0%)</p>
+                                </div>
+                            </div>
+                        </div>
+                    
+                </div>
+
+            </div>
+            <div class="collapse p-3  bg-light" id="advanced-filter">
+            <h4>Advanced Filter</h4>
+                <form>
+                    
+                        <fieldset id="network-ids">
+                            <h5>Network IDs</h5>
+                            
+                        </fieldset>
+                </form>
+                <form method="GET">
+
+                    <div class="reload-onclick">
+                        <input name="collapsed"
+                               type="checkbox" />
+                        <label for="transformations">Collapse (networks and sources only)</label>
+                    </div>
+                    <div class="reload-onclick">
+                        <input name="transformations"
+                               type="checkbox" />
+                        <label for="transformations">Show transformations</label>
+                    </div>
+                </form>
+            </div>
+
+            <section id="mynetwork">
+            </section>
+            <section id="details-pane">
+                <div id="element-details">
+                </div>
+            </section>
+        </main>
+    </div>
+
+        <footer>
+          
+          
+        </footer>
+      </div>
+      
+    
+      <script src="/static/scripts/jquery-3.7.1.min.js"></script>
+      <script src="/static/scripts/popper.min.js"></script>
+      <script src="/static/scripts/bootstrap.min.js"></script>
+      <script src="/static/scripts/clipboard.min.js"></script>
+      
+    <script>
+        $('.reload-onclick').on('change', function () {
+            $(this).parents('form').submit();
+        });
+        window.templateGlobals = function () {
+            // Values inscribed by Jinja2 when this template is rendered.
+            const network_structure = {"networks": [], "nodes": [], "vectors": [], "infos": [], "participants": [{"vars": "{'history': [{'round': 1, 'player': 'Cooperate', 'partner': 'Cooperate', 'player_points': 3, 'partner_points': 3}, {'round': 2, 'player': 'Defect', 'partner': 'Cooperate', 'player_points': 5, 'partner_points': 0}, {'round': 3, 'player': 'Cooperate', 'partner': 'Defect', 'player_points': 0, 'partner_points': 5}, {'round': 4, 'player': 'Cooperate', 'partner': 'Cooperate', 'player_points': 3, 'partner_points': 3}, {'round': 5, 'player': 'Defect', 'partner': 'Cooperate', 'player_points': 5, 'partner_points': 0}, {'round': 6, 'player': 'Cooperate', 'partner': 'Defect', 'player_points': 0, 'partner_points': 5}], 'player_score': 16, 'partner_score': 16, 'last_player_choice': 'Cooperate'}", "id": 1, "creation_time": "2026-06-09 16:37:41", "failed": false, "failed_reason": null, "time_of_death": null, "type": "Participant", "fingerprint_hash": "6980479badda5b5bb98f249ae639658d", "recruiter_id": "hotair", "worker_id": "FXSGPM", "assignment_id": "NXLE21", "unique_id": "FXSGPM:NXLE21", "hit_id": "UDG3MM", "mode": "debug", "end_time": "2026-06-09 16:38:06", "base_pay": 0.8, "bonus": null, "entry_information": "{'recruiter': 'hotair'}", "status": "approved", "elt_id": "['successful_end', 3, 1]", "elt_id_max": "[2, 2, 2]", "time_credit": 165.0, "estimated_max_time_credit": 165.0, "progress": 1.0, "time_credit_fixes": "[]", "progress_fixes": "[1.0]", "page_uuid": "8eb20d66-68b5-e51d-0c38-9e0c1174534e", "page_count": 17, "aborted": false, "complete": true, "pending_redirect": null, "answer": "Finish", "answer_accumulators": "[]", "sequences": "[]", "branch_log": "[]", "for_loops": "{}", "failure_tags": "[]", "base_payment": 0.8, "performance_reward": 0.0, "unpaid_bonus": 0.0, "total_wait_page_time": 0.0, "client_ip_address": "127.0.0.1", "answer_is_fresh": true, "browser_platform": "Chrome 148.0.0.0 on Linux 64-bit", "module_state_id": null, "current_trial_id": null, "trial_status": null, "awaited_async_code_block_process_id": null, "class": "Participant", "object_type": "Participant", "aborted_modules": "[]", "started_modules": "[]", "finished_modules": "[]", "module_id": null, "history": "[{'round': 1, 'player': 'Cooperate', 'partner': 'Cooperate', 'player_points': 3, 'partner_points': 3}, {'round': 2, 'player': 'Defect', 'partner': 'Cooperate', 'player_points': 5, 'partner_points': 0}, {'round': 3, 'player': 'Cooperate', 'partner': 'Defect', 'player_points': 0, 'partner_points': 5}, {'round': 4, 'player': 'Cooperate', 'partner': 'Cooperate', 'player_points': 3, 'partner_points': 3}, {'round': 5, 'player': 'Defect', 'partner': 'Cooperate', 'player_points': 5, 'partner_points': 0}, {'round': 6, 'player': 'Cooperate', 'partner': 'Defect', 'player_points': 0, 'partner_points': 5}]", "player_score": 16, "partner_score": 16, "last_player_choice": "Cooperate"}], "trans": []};
+            const vis_options = {};
+            return {
+                network_structure: network_structure,
+                vis_options: vis_options
+            };
+        };
+    </script>
+    <script src="/static/vis@4.17.0/dist/vis.min.js"></script>
+    <script src="/static/scripts/network-monitor.js"></script>
+
+
+      
+      
+    </body>
+</html>

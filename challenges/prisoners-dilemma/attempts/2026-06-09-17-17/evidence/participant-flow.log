@@ -1,0 +1,64 @@
+opening: http://127.0.0.1:5000/ad?generate_tokens=true&recruiter=hotair
+saw: Thanks for your interest
+clicked: Begin Experiment
+after begin url: http://127.0.0.1:5000/consent?recruiter=hotair&hitId=B9UPFN&assignmentId=6MYIY0&workerId=UNW5G9
+after begin body: To proceed, click the button below. | Next
+clicked: Next
+saw: Repeated Prisoner's Dilemma
+saw: Morgan starts by cooperating
+clicked: Next
+saw: Rule check
+selected: Morgan defects for the rest of the game
+choice submitted
+saw: Payoff check
+selected: 5
+choice submitted
+saw: Round 1 of 8
+selected: Cooperate
+choice submitted
+saw: Round 1 feedback
+clicked: Next
+saw: Round 2 of 8
+selected: Cooperate
+choice submitted
+saw: Round 2 feedback
+clicked: Next
+saw: Round 3 of 8
+selected: Defect
+choice submitted
+saw: Round 3 feedback
+clicked: Next
+saw: Round 4 of 8
+selected: Cooperate
+choice submitted
+saw: Round 4 feedback
+clicked: Next
+saw: Round 5 of 8
+selected: Defect
+choice submitted
+saw: Round 5 feedback
+clicked: Next
+saw: Round 6 of 8
+selected: Defect
+choice submitted
+saw: Round 6 feedback
+clicked: Next
+saw: Round 7 of 8
+selected: Cooperate
+choice submitted
+saw: Round 7 feedback
+clicked: Next
+saw: Round 8 of 8
+selected: Cooperate
+choice submitted
+saw: Round 8 feedback
+clicked: Next
+saw: Outcome of the game
+saw: Final score: you 13, Morgan 23.
+clicked: Next
+after final submit url: http://127.0.0.1:5000/timeline?unique_id=UNW5G9:6MYIY0
+after final submit body: 100% | That's the end of the experiment! You will receive a reward of $0.73 for the time you spent on the experiment. You have also been awarded a performance reward of $0.00! Thank you for taking part. | Please click "Finish" to finalize the session. | Finish | Reward: $0.73
+clicked: Finish
+after finish url: http://127.0.0.1:5000/recruiter-exit?participant_id=1
+after finish body: HotAirRecruiter | You're finished! | Below is information you may need to receive compensation for your participation. | Assignment ID 6MYIY0 | Base Pay 1.0 | Bonus None | HIT ID B9UPFN
+participant flow completed
