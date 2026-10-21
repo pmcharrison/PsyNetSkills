@@ -1,0 +1,14 @@
+[Config]
+title = Adaptive musical preference experiment
+description = Listen to pairs of synthesized musical patterns and choose which one you prefer. The task adapts later pairings based on earlier choices.
+contact_email_on_error = noreply@example.com
+organization_name = PsyNetSkills
+
+recruiter = generic
+currency = $
+wage_per_hour = 12.0
+
+[Prolific]
+auto_recruit = false
+prolific_estimated_completion_minutes = 3
+base_payment = 0.60
