@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title> -  Dashboard</title>
+        
+          <link rel="stylesheet" href="/static/css/bootstrap.min.css" type="text/css">
+          <link rel="stylesheet" href="/static/css/dashboard.css" type="text/css">
+          
+    <style>
+        .dev-tools-section {
+            margin-top: 30px;
+            margin-bottom: 30px;
+        }
+    </style>
+
+        
+        
+        
+    </head>
+    <body>
+      <div class="container">
+        
+          <nav id="dashboard-navigation">
+            <ul class="nav nav-tabs">
+              
+                
+                  <li class="nav-item">
+                    <a class="nav-link" href="/dashboard/index">Config</a>
+                  </li>
+                
+              
+                
+                  <li class="nav-item">
+                    <a class="nav-link" href="/dashboard/deployments">Deployments</a>
+                  </li>
+                
+              
+                
+                <li class="nav-item">
+                  <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Monitor</a>
+                  <div class="dropdown-menu">
+                    
+                      <a class="dropdown-item" href="/dashboard/monitoring">Monitoring</a>
+                    
+                      <a class="dropdown-item" href="/dashboard/timeline">Timeline</a>
+                    
+                      <a class="dropdown-item" href="/dashboard/resources">Resources</a>
+                    
+                      <a class="dropdown-item" href="/dashboard/participants">Participants</a>
+                    
+                      <a class="dropdown-item" href="/dashboard/logger">Logger</a>
+                    
+                      <a class="dropdown-item" href="/dashboard/errors">Errors</a>
+                    
+                  </div>
+                </li>
+                
+              
+                
+                  <li class="nav-item">
+                    <a class="nav-link" href="/dashboard/data">Basic data</a>
+                  </li>
+                
+              
+                
+                  <li class="nav-item">
+                    <a class="nav-link" href="/dashboard/export">Export</a>
+                  </li>
+                
+              
+                
+                <li class="nav-item">
+                  <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Database</a>
+                  <div class="dropdown-menu">
+                    
+                      <a class="dropdown-item" href="/dashboard/database?table=asset_node&amp;polymorphic_identity=psynet.asset.AssetNode">AssetNode</a>
+                    
+                      <a class="dropdown-item" href="/dashboard/database?table=asset_trial&amp;polymorphic_identity=psynet.asset.AssetTrial">AssetTrial</a>
+                    
+                      <a class="dropdown-item" href="/dashboard/database?table=module_state&amp;polymorphic_identity=psynet.trial.chain.ChainTrialMakerState">ChainTrialMakerState</a>
+                    
+                      <a class="dropdown-item" href="/dashboard/database?table=info&amp;polymorphic_identity=psynet.prescreen.ColorBlindnessTrial">ColorBlindnessTrial</a>
+                    
+                      <a class="dropdown-item" href="/dashboard/database?table=experiment&amp;polymorphic_identity=psynet.experiment.ExperimentConfig">ExperimentConfig</a>
+                    
+                      <a class="dropdown-item" href="/dashboard/database?table=experiment_status&amp;polymorphic_identity=psynet.experiment.ExperimentStatus">ExperimentStatus</a>
+                    
+                      <a class="dropdown-item" href="/dashboard/database?table=asset&amp;polymorphic_identity=psynet.asset.ExternalAsset">ExternalAsset</a>
+                    
+                      <a class="dropdown-item" href="/dashboard/database?table=info&amp;polymorphic_identity=dallinger_experiment.experiment.IdentificationTrial">IdentificationTrial</a>
+                    
+                      <a class="dropdown-item" href="/dashboard/database?table=module_state&amp;polymorphic_identity=psynet.timeline.ModuleState">ModuleState</a>
+                    
+                      <a class="dropdown-item" href="/dashboard/database?table=participant&amp;polymorphic_identity=psynet.participant.Participant">Participant</a>
+                    
+                      <a class="dropdown-item" href="/dashboard/database?table=request&amp;polymorphic_identity=psynet.experiment.Request">Request</a>
+                    
+                      <a class="dropdown-item" href="/dashboard/database?table=response&amp;polymorphic_identity=psynet.timeline.Response">Response</a>
+                    
+                      <a class="dropdown-item" href="/dashboard/database?table=info&amp;polymorphic_identity=dallinger_experiment.experiment.SameDifferentTrial">SameDifferentTrial</a>
+                    
+                      <a class="dropdown-item" href="/dashboard/database?table=info&amp;polymorphic_identity=dallinger_experiment.experiment.SimilarityTrial">SimilarityTrial</a>
+                    
+                      <a class="dropdown-item" href="/dashboard/database?table=network&amp;polymorphic_identity=psynet.trial.static.StaticNetwork">StaticNetwork</a>
+                    
+                      <a class="dropdown-item" href="/dashboard/database?table=node&amp;polymorphic_identity=psynet.trial.static.StaticNode">StaticNode</a>
+                    
+                  </div>
+                </li>
+                
+              
+                
+                  <li class="nav-item">
+                    <a class="nav-link active" href="/dashboard/develop">Development</a>
+                  </li>
+                
+              
+            </ul>
+          </nav>
+          
+        
+        
+          
+          
+        
+        
+        
+    <h1>Development Mode Tools</h1>
+
+    <div class="dev-tools-section">
+        <p>
+            You can update your experiment code while the experiment is running;
+            if you refresh the browser, you should be able to see your changes.
+        </p>
+        <p>
+            <strong>Note:</strong>
+            Certain files (in particular, JS scripts) are cached by the browser,
+            and so might not be updated by an ordinary refresh.
+            In such cases you may need to force the browser to do a non-cached refresh.
+            The shortcut for this is typically Cmd-Shift-R (Mac) or Ctrl-Shift-R (Linux, Windows).
+        </p>
+    </div>
+
+    <div class="dev-tools-section">
+        <button id="new-participant" class="btn btn-primary" onclick="handleNewParticipant()">New participant</button>
+        
+            <button id="init-db" class="btn btn-danger" onclick="handleInitDB()">Reset database</button>
+        
+    </div>
+
+    <div class="dev-tools-section">
+        <h2>Messages</h2>
+
+        <pre id="messages"></pre>
+    </div>
+
+
+        <footer>
+          
+          
+        </footer>
+      </div>
+      
+      <script src="/static/scripts/jquery-3.7.1.min.js"></script>
+      <script src="/static/scripts/popper.min.js"></script>
+      <script src="/static/scripts/bootstrap.min.js"></script>
+      <script src="/static/scripts/clipboard.min.js"></script>
+      
+      
+    <script type="text/javascript">
+        function log(data) {
+            let messages = $("#messages");
+            let time = new Date().toLocaleTimeString();
+            let text = JSON.stringify(data, null, 4)
+            messages.append("\n" + time + " - " + text);
+        }
+
+        function handleNewParticipant() {
+            let url = "/ad?generate_tokens=true&recruiter=hotair&source=dashboard";
+            log("Recruiting new participant...");
+            // Use origin to avoid propagating any credentials in window.location.href.
+            let participantUrl = new URL(url, window.location.origin);
+            window.open(participantUrl.toString(), "_blank").focus();
+        }
+
+        function handleInitDB() {
+            if (confirm("Are you sure you want to reset the database? All existing data will be lost.")) {
+                log("Initializing database reset...");
+                $.ajax({
+                    type: "POST",
+                    url: "/dashboard/init_db",
+                    success: log
+                });
+            }
+        }
+    </script>
+
+    </body>
+</html>
