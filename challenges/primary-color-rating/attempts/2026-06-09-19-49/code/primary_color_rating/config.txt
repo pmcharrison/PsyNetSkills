@@ -1,0 +1,14 @@
+[Config]
+title = Primary color rating experiment
+description = In this short experiment, you will rate how pleasant red, green, and blue are on a scale from 1 to 7. Please use a Chrome browser in incognito mode.
+contact_email_on_error = XXX@gmail.com
+organization_name = XXX
+
+recruiter = generic
+currency = $
+wage_per_hour = 12.0
+
+[Prolific]
+auto_recruit = false
+prolific_estimated_completion_minutes = 2
+base_payment = 0.34
