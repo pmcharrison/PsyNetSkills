@@ -1,0 +1,10 @@
+{
+  "name": "audio-memory-sequence-participant-flow",
+  "private": true,
+  "scripts": {
+    "participant-flow": "node participant_flow.js"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.52.0"
+  }
+}
