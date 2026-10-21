@@ -1,0 +1,118 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: open-ended-step-tagging\n"
+"PO-Revision-Date: 2026-06-10 00:00+0000\n"
+"Last-Translator: Cursor Cloud Agent\n"
+"Language-Team: Korean\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ko\n"
+
+#: experiment.py:128
+msgid "Describe the emotion in this music"
+msgstr "이 음악의 감정을 설명하세요"
+
+#: experiment.py:132
+msgid ""
+"Nobody has added tags for this clip yet. Add one or more native-language "
+"emotion or affect words that describe what the music expresses."
+msgstr ""
+"아직 이 클립에 태그를 추가한 사람이 없습니다. 음악이 표현하는 감정이나 정서적 "
+"특징을 나타내는 모국어 단어를 하나 이상 추가하세요."
+
+#: experiment.py:137
+msgid ""
+"Press Enter after each tag. Tags must be single words, no longer than 15 "
+"characters, and must not be genre labels or lyrics."
+msgstr ""
+"각 태그를 입력한 뒤 Enter 키를 누르세요. 태그는 한 단어여야 하고 15자를 넘지 "
+"않아야 하며 장르명이나 가사여서는 안 됩니다."
+
+#: experiment.py:149
+msgid "Rate and refine the current tags"
+msgstr "현재 태그를 평가하고 다듬기"
+
+#: experiment.py:153
+msgid "First rate every visible tag for how well it describes the clip."
+msgstr "먼저 보이는 모든 태그가 이 클립을 얼마나 잘 설명하는지 평가하세요."
+
+#: experiment.py:158
+msgid ""
+"Click the flag icon for typos, irrelevant terms, genre labels, copied "
+"lyrics, or non-emotion descriptors."
+msgstr ""
+"오타, 관련 없는 단어, 장르명, 복사한 가사, 또는 감정 설명이 아닌 태그에는 "
+"깃발 아이콘을 클릭하세요."
+
+#: experiment.py:163
+msgid "Then add any missing single-word emotion tags in your native language."
+msgstr "그다음 빠진 감정 태그가 있으면 모국어의 한 단어로 추가하세요."
+
+#: experiment.py:173
+msgid "Completed tags"
+msgstr "완료된 태그"
+
+#: experiment.py:174
+msgid "Rate existing tags"
+msgstr "기존 태그 평가하기"
+
+#: experiment.py:175
+msgid "Type more tags"
+msgstr "태그 더 입력하기"
+
+#: experiment.py:176
+msgid "Add emotion tags"
+msgstr "감정 태그 추가하기"
+
+#: experiment.py:177
+msgid "Next"
+msgstr "다음"
+
+#: experiment.py:186
+msgid "Please rate or flag every visible tag."
+msgstr "보이는 모든 태그를 평가하거나 신고하세요."
+
+#: experiment.py:187
+msgid "Please add at least one emotion tag."
+msgstr "감정 태그를 하나 이상 추가하세요."
+
+#: experiment.py:188
+msgid "Please submit or delete the text still in the tag field."
+msgstr "태그 입력란에 남아 있는 텍스트를 제출하거나 삭제하세요."
+
+#: experiment.py:189
+msgid "Tags should be single words; remove spaces before submitting."
+msgstr "태그는 한 단어여야 합니다. 제출하기 전에 공백을 제거하세요."
+
+#: experiment.py:216
+msgid "Open-ended music emotion tagging"
+msgstr "개방형 음악 감정 태깅"
+
+#: experiment.py:219
+msgid ""
+"You will hear short 15-second music clips. For each clip, describe the "
+"emotions or affective qualities that the music expresses."
+msgstr ""
+"15초 길이의 짧은 음악 클립을 듣게 됩니다. 각 클립에 대해 음악이 표현하는 "
+"감정이나 정서적 특징을 설명하세요."
+
+#: experiment.py:223
+msgid "Use single-word tags in your native language."
+msgstr "모국어의 한 단어 태그를 사용하세요."
+
+#: experiment.py:224
+msgid "Do not enter genre labels, artist names, or lyrics."
+msgstr "장르명, 아티스트 이름, 가사는 입력하지 마세요."
+
+#: experiment.py:227
+msgid ""
+"Flag existing tags that are typos, irrelevant, lyrics, genre labels, or not "
+"valid emotion descriptors."
+msgstr ""
+"오타, 관련 없는 내용, 가사, 장르명, 또는 유효한 감정 설명이 아닌 기존 태그는 "
+"신고하세요."
+
+#: experiment.py:261
+msgid "Thank you. Your tags, ratings, and flags have been saved for review."
+msgstr "감사합니다. 태그, 평가, 신고 내용이 검토를 위해 저장되었습니다."

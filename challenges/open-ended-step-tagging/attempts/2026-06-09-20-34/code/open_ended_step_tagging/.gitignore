@@ -17,6 +17,7 @@ source_code.zip
 # IDE, Python, and OS cache files
 .idea
 __pycache__
+locales/*/LC_MESSAGES/*.mo
 *.DS_Store
 
 # Legacy PsyNet output folders

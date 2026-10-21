@@ -3,6 +3,8 @@ title = Open-ended STEP tagging experiment
 description = Listen to short music clips, add native-language emotion tags, rate tags from other participants, and flag invalid tags.
 contact_email_on_error = no-reply@example.invalid
 organization_name = PsyNetSkills
+locale = en
+supported_locales = ["en", "pt", "ko"]
 
 recruiter = generic
 currency = $

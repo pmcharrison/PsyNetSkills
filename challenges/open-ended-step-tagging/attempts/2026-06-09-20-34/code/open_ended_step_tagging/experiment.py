@@ -10,12 +10,16 @@ from copy import deepcopy
 from pathlib import Path
 
 import psynet.experiment
+from dominate import tags
 from markupsafe import Markup
 from psynet.asset import asset
 from psynet.page import InfoPage, VolumeCalibration
 from psynet.timeline import Timeline
 from psynet.trial.main import TrialNetwork
+from psynet.utils import get_translator
 from step import StepTag
+
+_ = get_translator(namespace="experiment")
 
 MANIFEST_PATH = Path("data/stimuli.csv")
 TARGET_CULTURE = os.environ.get("TARGET_CULTURE", "US")
@@ -119,33 +123,58 @@ class EmotionAudioStepTag(StepTag):
     @classmethod
     def get_jinja_translations(cls):
         instructions_without_tags = Markup(
-            """
-            <h3>Describe the emotion in this music</h3>
-            <div class="alert alert-primary" role="alert">
-                Nobody has added tags for this clip yet. Add one or more native-language
-                emotion or affect words that describe what the music expresses.
-                Press <kbd>enter</kbd> after each tag. Tags must be single words,
-                no longer than 15 characters, and must not be genre labels or lyrics.
-            </div>
-            """
+            str(
+                tags.div(
+                    tags.h3(_("Describe the emotion in this music")),
+                    tags.div(
+                        tags.p(
+                            _(
+                                "Nobody has added tags for this clip yet. Add one or more native-language emotion or affect words that describe what the music expresses."
+                            )
+                        ),
+                        tags.p(
+                            _(
+                                "Press Enter after each tag. Tags must be single words, no longer than 15 characters, and must not be genre labels or lyrics."
+                            )
+                        ),
+                        cls="alert alert-primary",
+                        role="alert",
+                    ),
+                ),
+            )
         )
         instructions_with_tags = Markup(
-            """
-            <h3>Rate and refine the current tags</h3>
-            <div class="alert alert-primary" role="alert">
-                First rate every visible tag for how well it describes the clip.
-                Click the flag icon for typos, irrelevant terms, genre labels,
-                copied lyrics, or non-emotion descriptors. Then add any missing
-                single-word emotion tags in your native language.
-            </div>
-            """
+            str(
+                tags.div(
+                    tags.h3(_("Rate and refine the current tags")),
+                    tags.div(
+                        tags.p(
+                            _(
+                                "First rate every visible tag for how well it describes the clip."
+                            )
+                        ),
+                        tags.p(
+                            _(
+                                "Click the flag icon for typos, irrelevant terms, genre labels, copied lyrics, or non-emotion descriptors."
+                            )
+                        ),
+                        tags.p(
+                            _(
+                                "Then add any missing single-word emotion tags in your native language."
+                            )
+                        ),
+                        cls="alert alert-primary",
+                        role="alert",
+                    ),
+                ),
+            )
         )
         return {
-            "title_frozen": "Completed tags",
-            "title_unfrozen": "Rate existing tags",
-            "type_more": "Type more tags",
-            "title_tags": "Add emotion tags",
-            "next": "Next",
+            "title_frozen": _("Completed tags"),
+            "title_unfrozen": _("Rate existing tags"),
+            "type_more": _("Type more tags"),
+            "title_tags": _("Add emotion tags"),
+            "next": _("Next"),
             "instructions_without_tags": instructions_without_tags,
             "instructions_with_tags": instructions_with_tags,
         }
@@ -154,10 +183,10 @@ class EmotionAudioStepTag(StepTag):
     def get_javascript_translations(cls):
         return {
             "translations": {
-                "rate_all_tags": "Please rate or flag every visible tag.",
-                "specify_one_tag": "Please add at least one emotion tag.",
-                "cannot_submit": "Please submit or delete the text still in the tag field.",
-                "whitespaces": "Tags should be single words; remove spaces before submitting.",
+                "rate_all_tags": _("Please rate or flag every visible tag."),
+                "specify_one_tag": _("Please add at least one emotion tag."),
+                "cannot_submit": _("Please submit or delete the text still in the tag field."),
+                "whitespaces": _("Tags should be single words; remove spaces before submitting."),
             }
         }
 
@@ -182,17 +211,25 @@ class EmotionAudioStepTag(StepTag):
 def introduction():
     return InfoPage(
         Markup(
-            """
-            <h3>Open-ended music emotion tagging</h3>
-            <p>You will hear short 15-second music clips. For each clip, describe
-            the emotions or affective qualities that the music expresses.</p>
-            <ul>
-              <li>Use single-word tags in your native language.</li>
-              <li>Do not enter genre labels, artist names, or lyrics.</li>
-              <li>Flag existing tags that are typos, irrelevant, lyrics, genre labels,
-              or not valid emotion descriptors.</li>
-            </ul>
-            """
+            str(
+                tags.div(
+                    tags.h3(_("Open-ended music emotion tagging")),
+                    tags.p(
+                        _(
+                            "You will hear short 15-second music clips. For each clip, describe the emotions or affective qualities that the music expresses."
+                        )
+                    ),
+                    tags.ul(
+                        tags.li(_("Use single-word tags in your native language.")),
+                        tags.li(_("Do not enter genre labels, artist names, or lyrics.")),
+                        tags.li(
+                            _(
+                                "Flag existing tags that are typos, irrelevant, lyrics, genre labels, or not valid emotion descriptors."
+                            )
+                        ),
+                    ),
+                ),
+            )
         ),
         time_estimate=15,
     )
@@ -221,7 +258,7 @@ class Exp(psynet.experiment.Experiment):
             show_instructions=False,
         ),
         InfoPage(
-            "Thank you. Your tags, ratings, and flags have been saved for review.",
+            _("Thank you. Your tags, ratings, and flags have been saved for review."),
             time_estimate=5,
         ),
     )
