@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>Experiment Monitoring -  Dashboard</title>
+        
+          <link rel="stylesheet" href="/static/css/bootstrap.min.css" type="text/css">
+          <link rel="stylesheet" href="/static/css/dashboard.css" type="text/css">
+          
+    <script src="https://use.fontawesome.com/ffb1fe552d.js"></script>
+    <link href="/static/vis@4.17.0/dist/vis-network.min.css" rel="stylesheet"
+          type="text/css"/>
+
+        
+        
+        
+    </head>
+    <body>
+      <div class="container">
+        
+          <nav id="dashboard-navigation">
+            <ul class="nav nav-tabs">
+              
+                
+                  <li class="nav-item">
+                    <a class="nav-link" href="/dashboard/index">Config</a>
+                  </li>
+                
+              
+                
+                  <li class="nav-item">
+                    <a class="nav-link" href="/dashboard/deployments">Deployments</a>
+                  </li>
+                
+              
+                
+                <li class="nav-item">
+                  <a class="nav-link dropdown-toggle active" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Monitor</a>
+                  <div class="dropdown-menu">
+                    
+                      <a class="dropdown-item" href="/dashboard/monitoring">Monitoring</a>
+                    
+                      <a class="dropdown-item" href="/dashboard/timeline">Timeline</a>
+                    
+                      <a class="dropdown-item" href="/dashboard/resources">Resources</a>
+                    
+                      <a class="dropdown-item" href="/dashboard/participants">Participants</a>
+                    
+                      <a class="dropdown-item" href="/dashboard/logger">Logger</a>
+                    
+                      <a class="dropdown-item" href="/dashboard/errors">Errors</a>
+                    
+                  </div>
+                </li>
+                
+              
+                
+                  <li class="nav-item">
+                    <a class="nav-link" href="/dashboard/data">Basic data</a>
+                  </li>
+                
+              
+                
+                  <li class="nav-item">
+                    <a class="nav-link" href="/dashboard/export">Export</a>
+                  </li>
+                
+              
+                
+                <li class="nav-item">
+                  <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Database</a>
+                  <div class="dropdown-menu">
+                    
+                      <a class="dropdown-item" href="/dashboard/database?table=asset_trial&amp;polymorphic_identity=psynet.asset.AssetTrial">AssetTrial</a>
+                    
+                      <a class="dropdown-item" href="/dashboard/database?table=module_state&amp;polymorphic_identity=psynet.trial.chain.ChainTrialMakerState">ChainTrialMakerState</a>
+                    
+                      <a class="dropdown-item" href="/dashboard/database?table=vector&amp;polymorphic_identity=psynet.trial.chain.ChainVector">ChainVector</a>
+                    
+                      <a class="dropdown-item" href="/dashboard/database?table=experiment&amp;polymorphic_identity=psynet.experiment.ExperimentConfig">ExperimentConfig</a>
+                    
+                      <a class="dropdown-item" href="/dashboard/database?table=experiment_status&amp;polymorphic_identity=psynet.experiment.ExperimentStatus">ExperimentStatus</a>
+                    
+                      <a class="dropdown-item" href="/dashboard/database?table=network&amp;polymorphic_identity=psynet.trial.mcmcp.MCMCPNetwork">MCMCPNetwork</a>
+                    
+                      <a class="dropdown-item" href="/dashboard/database?table=module_state&amp;polymorphic_identity=psynet.timeline.ModuleState">ModuleState</a>
+                    
+                      <a class="dropdown-item" href="/dashboard/database?table=notification&amp;polymorphic_identity=None">Notification</a>
+                    
+                      <a class="dropdown-item" href="/dashboard/database?table=asset&amp;polymorphic_identity=psynet.asset.OnDemandAsset">OnDemandAsset</a>
+                    
+                      <a class="dropdown-item" href="/dashboard/database?table=participant&amp;polymorphic_identity=psynet.participant.Participant">Participant</a>
+                    
+                      <a class="dropdown-item" href="/dashboard/database?table=node&amp;polymorphic_identity=dallinger_experiment.experiment.PreferenceNode">PreferenceNode</a>
+                    
+                      <a class="dropdown-item" href="/dashboard/database?table=info&amp;polymorphic_identity=dallinger_experiment.experiment.PreferenceTrial">PreferenceTrial</a>
+                    
+                      <a class="dropdown-item" href="/dashboard/database?table=request&amp;polymorphic_identity=psynet.experiment.Request">Request</a>
+                    
+                      <a class="dropdown-item" href="/dashboard/database?table=response&amp;polymorphic_identity=psynet.timeline.Response">Response</a>
+                    
+                  </div>
+                </li>
+                
+              
+                
+                  <li class="nav-item">
+                    <a class="nav-link" href="/dashboard/develop">Development</a>
+                  </li>
+                
+              
+            </ul>
+          </nav>
+          
+          <a id="logout" class="btn btn-primary" href="/dashboard/logout">Logout</a>
+          
+        
+        
+          
+          
+        
+        
+        
+    <h1>Experiment Monitoring</h1>
+    <div id="monitor-wrapper" class="d-flex justify-content-between align-items-stretch">
+        <main class="flex-fill">
+            <div style="display: -ms-flexbox; display: flex; -ms-flex-wrap: wrap; flex-wrap: wrap;">
+                    <div class="form-group">
+                        <label for="sortBy">Sort networks by</label>
+                        <div class="input-group mb-3">
+                            <select class="form-control" id="sortBy">
+                                <option value="network_id">Network ID</option>
+                                <option value="n_pending_infos">Number of pending infos</option>
+                                <option value="n_completed_infos">Number of completed infos</option>
+                                <option value="n_failed_infos">Number of failed infos</option>
+                                <option value="n_alive_nodes">Number of completed nodes</option>
+                                <option value="n_failed_nodes">Number of failed nodes</option>
+                            </select>
+                            <div class="input-group-append">
+                                <div class="btn-group btn-group-toggle" id="order" data-toggle="buttons">
+
+                                    <label class="btn btn-secondary active">
+                                        <input type="radio" name="options" checked>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                             fill="currentColor"
+                                             class="bi bi-arrow-down" viewBox="0 0 16 16">
+                                            <path fill-rule="evenodd"
+                                                  d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1z"/>
+                                        </svg>
+                                    </label>
+                                    <label class="btn btn-secondary">
+                                        <input type="radio" name="options">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                             fill="currentColor"
+                                             class="bi bi-arrow-up" viewBox="0 0 16 16">
+                                            <path fill-rule="evenodd"
+                                                  d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z"/>
+                                        </svg>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                <div id="search-container" class="mx-auto row">
+                    <div class="form-group pr-3">
+                        <label for="max-networks">Number of networks</label>
+                        <input type="number" min="1" class="form-control" id="max-networks"
+                               placeholder="Networks to print">
+                    </div>
+                    <div class="form-group">
+                        <label for="search">Freetext search</label>
+                        <input type="text" class="form-control" id="search" placeholder="Search networks">
+                    </div>
+                </div>
+                <div>
+                    <div class="form-group">
+
+                        <label></label>
+                        <div>
+                            <a class="text-primary" data-toggle="collapse" href="#statistics" role="button"
+                               aria-expanded="false" aria-controls="statistics">
+                                Experiment Statistics
+                            </a>
+                            <a class="text-secondary" data-toggle="collapse" href="#advanced-filter"
+                               role="button" aria-expanded="false" aria-controls="advanced-filter">
+                                Advanced Filter
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="collapse p-3 bg-light" id="statistics">
+                <h4>Statistics</h4>
+                <div class="row">
+                    
+                        <div class="col">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Participants</h5>
+                                    <p class="card-text"><span class="nowrap"><span class="statistics-key">approved</span>: <span class="statistics-value">1</span></span></p>
+                                </div>
+                            </div>
+                        </div>
+                    
+                        <div class="col">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Networks</h5>
+                                    <p class="card-text"><span class="nowrap"><span class="statistics-key">default</span>: <span class="statistics-value"><span class="statistics-value no-failures">2 total, 0 failed (0.0%)</span></span></span></p>
+                                </div>
+                            </div>
+                        </div>
+                    
+                        <div class="col">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Nodes</h5>
+                                    <p class="card-text"><span class="statistics-value no-failures">14 total, 0 failed (0.0%)</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    
+                        <div class="col">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Trials</h5>
+                                    <p class="card-text"><span class="statistics-value no-failures">12 total, 0 failed (0.0%)</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    
+                </div>
+
+            </div>
+            <div class="collapse p-3  bg-light" id="advanced-filter">
+            <h4>Advanced Filter</h4>
+                <form>
+                    
+                        <fieldset id="network-ids">
+                            <h5>Network IDs</h5>
+                            
+                                <div class="field p-1">
+                                    <input class="network-input" id="val-1" type="checkbox" name="network_ids"
+                                           value="1" checked />
+                                    <label for="val-1">1</label>
+                                </div>
+                            
+                                <div class="field p-1">
+                                    <input class="network-input" id="val-2" type="checkbox" name="network_ids"
+                                           value="2" checked />
+                                    <label for="val-2">2</label>
+                                </div>
+                            
+                        </fieldset>
+                </form>
+                <form method="GET">
+
+                    <div class="reload-onclick">
+                        <input name="collapsed"
+                               type="checkbox" />
+                        <label for="transformations">Collapse (networks and sources only)</label>
+                    </div>
+                    <div class="reload-onclick">
+                        <input name="transformations"
+                               type="checkbox" />
+                        <label for="transformations">Show transformations</label>
+                    </div>
+                </form>
+            </div>
+
+            <section id="mynetwork">
+            </section>
+            <section id="details-pane">
+                <div id="element-details">
+                </div>
+            </section>
+        </main>
+    </div>
+
+        <footer>
+          
+          
+        </footer>
+      </div>
+      
+    
+      <script src="/static/scripts/jquery-3.7.1.min.js"></script>
+      <script src="/static/scripts/popper.min.js"></script>
+      <script src="/static/scripts/bootstrap.min.js"></script>
+      <script src="/static/scripts/clipboard.min.js"></script>
+      
+    <script>
+        $('.reload-onclick').on('change', function () {
+            $(this).parents('form').submit();
+        });
+        window.templateGlobals = function () {
+            // Values inscribed by Jinja2 when this template is rendered.
+            const network_structure = {"networks": [{"vars": "{}", "id": 1, "creation_time": "2026-06-09 20:42:47", "failed": false, "failed_reason": null, "time_of_death": null, "type": "MCMCPNetwork", "max_size": 6, "full": true, "role": "default", "n_pending_infos": 0, "n_completed_infos": 6, "n_failed_infos": 0, "n_alive_nodes": 7, "n_failed_nodes": 0, "trial_maker_id": "adaptive_music", "module_id": "adaptive_music", "target_n_trials": 6, "participant_group": "default", "sync_group_type": null, "sync_group_id": null, "participant_id": 1, "async_post_grow_network_required": false, "async_post_grow_network_requested": false, "async_post_grow_network_complete": false, "async_post_grow_network_failed": false, "id_within_participant": 0, "n_all_trials": 6, "n_alive_trials": 6, "n_failed_trials": 0, "n_completed_trials": 6, "n_all_nodes": 7, "chain_type": "within", "head_id": 13, "trials_per_node": 1, "definition": "{}", "context": "{'chain_index': 0}", "block": "default", "class": "MCMCPNetwork", "object_type": "Network"}, {"vars": "{}", "id": 2, "creation_time": "2026-06-09 20:42:47", "failed": false, "failed_reason": null, "time_of_death": null, "type": "MCMCPNetwork", "max_size": 6, "full": true, "role": "default", "n_pending_infos": 0, "n_completed_infos": 6, "n_failed_infos": 0, "n_alive_nodes": 7, "n_failed_nodes": 0, "trial_maker_id": "adaptive_music", "module_id": "adaptive_music", "target_n_trials": 6, "participant_group": "default", "sync_group_type": null, "sync_group_id": null, "participant_id": 1, "async_post_grow_network_required": false, "async_post_grow_network_requested": false, "async_post_grow_network_complete": false, "async_post_grow_network_failed": false, "id_within_participant": 1, "n_all_trials": 6, "n_alive_trials": 6, "n_failed_trials": 0, "n_completed_trials": 6, "n_all_nodes": 7, "chain_type": "within", "head_id": 14, "trials_per_node": 1, "definition": "{}", "context": "{'chain_index': 1}", "block": "default", "class": "MCMCPNetwork", "object_type": "Network"}], "nodes": [{"vars": "{}", "id": 1, "creation_time": "2026-06-09 20:42:47", "failed": false, "failed_reason": null, "time_of_death": null, "type": "TrialSource", "network_id": 1, "participant_id": 1, "trial_maker_id": "adaptive_music", "module_id": "adaptive_music", "module_state_id": null, "is_global": null, "on_deploy_complete": true, "async_on_deploy_required": false, "async_on_deploy_requested": false, "async_on_deploy_complete": false, "async_on_deploy_failed": false, "key": null, "degree": 0, "target_n_trials": 1, "can_spawn": true, "child_id": 3, "parent_id": null, "seed": "{'tempo': 84, 'brightness': 1}", "definition": "{'current_state': {'tempo': 84, 'brightness': 1}, 'proposal': {'tempo': 96, 'brightness': 1}}", "context": "{'chain_index': 0}", "participant_group": "default", "block": "default", "propagate_failure": false, "n_viable_trials": 1, "class": "PreferenceNode", "object_type": "Node"}, {"vars": "{}", "id": 2, "creation_time": "2026-06-09 20:42:47", "failed": false, "failed_reason": null, "time_of_death": null, "type": "TrialSource", "network_id": 2, "participant_id": 1, "trial_maker_id": "adaptive_music", "module_id": "adaptive_music", "module_state_id": null, "is_global": null, "on_deploy_complete": true, "async_on_deploy_required": false, "async_on_deploy_requested": false, "async_on_deploy_complete": false, "async_on_deploy_failed": false, "key": null, "degree": 0, "target_n_trials": 1, "can_spawn": true, "child_id": 4, "parent_id": null, "seed": "{'tempo': 144, 'brightness': 5}", "definition": "{'current_state': {'tempo': 144, 'brightness': 5}, 'proposal': {'tempo': 132, 'brightness': 4}}", "context": "{'chain_index': 1}", "participant_group": "default", "block": "default", "propagate_failure": false, "n_viable_trials": 1, "class": "PreferenceNode", "object_type": "Node"}, {"vars": "{}", "id": 3, "creation_time": "2026-06-09 20:43:15", "failed": false, "failed_reason": null, "time_of_death": null, "type": "PreferenceNode", "network_id": 1, "participant_id": 1, "trial_maker_id": "adaptive_music", "module_id": "adaptive_music", "module_state_id": null, "is_global": null, "on_deploy_complete": true, "async_on_deploy_required": false, "async_on_deploy_requested": false, "async_on_deploy_complete": false, "async_on_deploy_failed": false, "key": null, "degree": 1, "target_n_trials": 1, "can_spawn": true, "child_id": 6, "parent_id": 1, "seed": "{'tempo': 96, 'brightness': 1}", "definition": "{'current_state': {'tempo': 96, 'brightness': 1}, 'proposal': {'tempo': 108, 'brightness': 2}}", "context": "{'chain_index': 0}", "participant_group": "default", "block": "default", "propagate_failure": true, "n_viable_trials": 1, "class": "PreferenceNode", "object_type": "Node"}, {"vars": "{}", "id": 4, "creation_time": "2026-06-09 20:43:44", "failed": false, "failed_reason": null, "time_of_death": null, "type": "PreferenceNode", "network_id": 2, "participant_id": 1, "trial_maker_id": "adaptive_music", "module_id": "adaptive_music", "module_state_id": null, "is_global": null, "on_deploy_complete": true, "async_on_deploy_required": false, "async_on_deploy_requested": false, "async_on_deploy_complete": false, "async_on_deploy_failed": false, "key": null, "degree": 1, "target_n_trials": 1, "can_spawn": true, "child_id": 5, "parent_id": 2, "seed": "{'tempo': 144, 'brightness': 5}", "definition": "{'current_state': {'tempo': 144, 'brightness': 5}, 'proposal': {'tempo': 132, 'brightness': 4}}", "context": "{'chain_index': 1}", "participant_group": "default", "block": "default", "propagate_failure": true, "n_viable_trials": 1, "class": "PreferenceNode", "object_type": "Node"}, {"vars": "{}", "id": 5, "creation_time": "2026-06-09 20:44:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "PreferenceNode", "network_id": 2, "participant_id": 1, "trial_maker_id": "adaptive_music", "module_id": "adaptive_music", "module_state_id": null, "is_global": null, "on_deploy_complete": true, "async_on_deploy_required": false, "async_on_deploy_requested": false, "async_on_deploy_complete": false, "async_on_deploy_failed": false, "key": null, "degree": 2, "target_n_trials": 1, "can_spawn": true, "child_id": 8, "parent_id": 4, "seed": "{'tempo': 144, 'brightness': 5}", "definition": "{'current_state': {'tempo': 144, 'brightness': 5}, 'proposal': {'tempo': 120, 'brightness': 4}}", "context": "{'chain_index': 1}", "participant_group": "default", "block": "default", "propagate_failure": true, "n_viable_trials": 1, "class": "PreferenceNode", "object_type": "Node"}, {"vars": "{}", "id": 6, "creation_time": "2026-06-09 20:45:09", "failed": false, "failed_reason": null, "time_of_death": null, "type": "PreferenceNode", "network_id": 1, "participant_id": 1, "trial_maker_id": "adaptive_music", "module_id": "adaptive_music", "module_state_id": null, "is_global": null, "on_deploy_complete": true, "async_on_deploy_required": false, "async_on_deploy_requested": false, "async_on_deploy_complete": false, "async_on_deploy_failed": false, "key": null, "degree": 2, "target_n_trials": 1, "can_spawn": true, "child_id": 7, "parent_id": 3, "seed": "{'tempo': 96, 'brightness': 1}", "definition": "{'current_state': {'tempo': 96, 'brightness': 1}, 'proposal': {'tempo': 120, 'brightness': 2}}", "context": "{'chain_index': 0}", "participant_group": "default", "block": "default", "propagate_failure": true, "n_viable_trials": 1, "class": "PreferenceNode", "object_type": "Node"}, {"vars": "{}", "id": 7, "creation_time": "2026-06-09 20:45:43", "failed": false, "failed_reason": null, "time_of_death": null, "type": "PreferenceNode", "network_id": 1, "participant_id": 1, "trial_maker_id": "adaptive_music", "module_id": "adaptive_music", "module_state_id": null, "is_global": null, "on_deploy_complete": true, "async_on_deploy_required": false, "async_on_deploy_requested": false, "async_on_deploy_complete": false, "async_on_deploy_failed": false, "key": null, "degree": 3, "target_n_trials": 1, "can_spawn": true, "child_id": 9, "parent_id": 6, "seed": "{'tempo': 120, 'brightness': 2}", "definition": "{'current_state': {'tempo': 120, 'brightness': 2}, 'proposal': {'tempo': 144, 'brightness': 3}}", "context": "{'chain_index': 0}", "participant_group": "default", "block": "default", "propagate_failure": true, "n_viable_trials": 1, "class": "PreferenceNode", "object_type": "Node"}, {"vars": "{}", "id": 8, "creation_time": "2026-06-09 20:46:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "PreferenceNode", "network_id": 2, "participant_id": 1, "trial_maker_id": "adaptive_music", "module_id": "adaptive_music", "module_state_id": null, "is_global": null, "on_deploy_complete": true, "async_on_deploy_required": false, "async_on_deploy_requested": false, "async_on_deploy_complete": false, "async_on_deploy_failed": false, "key": null, "degree": 3, "target_n_trials": 1, "can_spawn": true, "child_id": 10, "parent_id": 5, "seed": "{'tempo': 144, 'brightness': 5}", "definition": "{'current_state': {'tempo': 144, 'brightness': 5}, 'proposal': {'tempo': 120, 'brightness': 5}}", "context": "{'chain_index': 1}", "participant_group": "default", "block": "default", "propagate_failure": true, "n_viable_trials": 1, "class": "PreferenceNode", "object_type": "Node"}, {"vars": "{}", "id": 9, "creation_time": "2026-06-09 20:47:12", "failed": false, "failed_reason": null, "time_of_death": null, "type": "PreferenceNode", "network_id": 1, "participant_id": 1, "trial_maker_id": "adaptive_music", "module_id": "adaptive_music", "module_state_id": null, "is_global": null, "on_deploy_complete": true, "async_on_deploy_required": false, "async_on_deploy_requested": false, "async_on_deploy_complete": false, "async_on_deploy_failed": false, "key": null, "degree": 4, "target_n_trials": 1, "can_spawn": true, "child_id": 12, "parent_id": 7, "seed": "{'tempo': 120, 'brightness': 2}", "definition": "{'current_state': {'tempo': 120, 'brightness': 2}, 'proposal': {'tempo': 108, 'brightness': 1}}", "context": "{'chain_index': 0}", "participant_group": "default", "block": "default", "propagate_failure": true, "n_viable_trials": 1, "class": "PreferenceNode", "object_type": "Node"}, {"vars": "{}", "id": 10, "creation_time": "2026-06-09 20:47:50", "failed": false, "failed_reason": null, "time_of_death": null, "type": "PreferenceNode", "network_id": 2, "participant_id": 1, "trial_maker_id": "adaptive_music", "module_id": "adaptive_music", "module_state_id": null, "is_global": null, "on_deploy_complete": true, "async_on_deploy_required": false, "async_on_deploy_requested": false, "async_on_deploy_complete": false, "async_on_deploy_failed": false, "key": null, "degree": 4, "target_n_trials": 1, "can_spawn": true, "child_id": 11, "parent_id": 8, "seed": "{'tempo': 120, 'brightness': 5}", "definition": "{'current_state': {'tempo': 120, 'brightness': 5}, 'proposal': {'tempo': 144, 'brightness': 5}}", "context": "{'chain_index': 1}", "participant_group": "default", "block": "default", "propagate_failure": true, "n_viable_trials": 1, "class": "PreferenceNode", "object_type": "Node"}, {"vars": "{}", "id": 11, "creation_time": "2026-06-09 20:48:30", "failed": false, "failed_reason": null, "time_of_death": null, "type": "PreferenceNode", "network_id": 2, "participant_id": 1, "trial_maker_id": "adaptive_music", "module_id": "adaptive_music", "module_state_id": null, "is_global": null, "on_deploy_complete": true, "async_on_deploy_required": false, "async_on_deploy_requested": false, "async_on_deploy_complete": false, "async_on_deploy_failed": false, "key": null, "degree": 5, "target_n_trials": 1, "can_spawn": true, "child_id": 14, "parent_id": 10, "seed": "{'tempo': 120, 'brightness': 5}", "definition": "{'current_state': {'tempo': 120, 'brightness': 5}, 'proposal': {'tempo': 144, 'brightness': 5}}", "context": "{'chain_index': 1}", "participant_group": "default", "block": "default", "propagate_failure": true, "n_viable_trials": 1, "class": "PreferenceNode", "object_type": "Node"}, {"vars": "{}", "id": 12, "creation_time": "2026-06-09 20:49:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "PreferenceNode", "network_id": 1, "participant_id": 1, "trial_maker_id": "adaptive_music", "module_id": "adaptive_music", "module_state_id": null, "is_global": null, "on_deploy_complete": true, "async_on_deploy_required": false, "async_on_deploy_requested": false, "async_on_deploy_complete": false, "async_on_deploy_failed": false, "key": null, "degree": 5, "target_n_trials": 1, "can_spawn": true, "child_id": 13, "parent_id": 9, "seed": "{'tempo': 120, 'brightness': 2}", "definition": "{'current_state': {'tempo': 120, 'brightness': 2}, 'proposal': {'tempo': 120, 'brightness': 1}}", "context": "{'chain_index': 0}", "participant_group": "default", "block": "default", "propagate_failure": true, "n_viable_trials": 1, "class": "PreferenceNode", "object_type": "Node"}, {"vars": "{}", "id": 13, "creation_time": "2026-06-09 20:50:18", "failed": false, "failed_reason": null, "time_of_death": null, "type": "PreferenceNode", "network_id": 1, "participant_id": 1, "trial_maker_id": "adaptive_music", "module_id": "adaptive_music", "module_state_id": null, "is_global": null, "on_deploy_complete": true, "async_on_deploy_required": false, "async_on_deploy_requested": false, "async_on_deploy_complete": false, "async_on_deploy_failed": false, "key": null, "degree": 6, "target_n_trials": 1, "can_spawn": false, "child_id": null, "parent_id": 12, "seed": "{'tempo': 120, 'brightness': 1}", "definition": "{'current_state': {'tempo': 120, 'brightness': 1}, 'proposal': {'tempo': 108, 'brightness': 2}}", "context": "{'chain_index': 0}", "participant_group": "default", "block": "default", "propagate_failure": true, "n_viable_trials": 0, "class": "PreferenceNode", "object_type": "Node"}, {"vars": "{}", "id": 14, "creation_time": "2026-06-09 20:51:00", "failed": false, "failed_reason": null, "time_of_death": null, "type": "PreferenceNode", "network_id": 2, "participant_id": 1, "trial_maker_id": "adaptive_music", "module_id": "adaptive_music", "module_state_id": null, "is_global": null, "on_deploy_complete": true, "async_on_deploy_required": false, "async_on_deploy_requested": false, "async_on_deploy_complete": false, "async_on_deploy_failed": false, "key": null, "degree": 6, "target_n_trials": 1, "can_spawn": false, "child_id": null, "parent_id": 11, "seed": "{'tempo': 144, 'brightness': 5}", "definition": "{'current_state': {'tempo': 144, 'brightness': 5}, 'proposal': {'tempo': 132, 'brightness': 4}}", "context": "{'chain_index': 1}", "participant_group": "default", "block": "default", "propagate_failure": true, "n_viable_trials": 0, "class": "PreferenceNode", "object_type": "Node"}], "vectors": [{"vars": "{}", "id": 1, "creation_time": "2026-06-09 20:43:15", "failed": false, "failed_reason": null, "time_of_death": null, "type": "ChainVector", "origin_id": 1, "destination_id": 3, "network_id": 1, "class": "ChainVector", "object_type": "Vector"}, {"vars": "{}", "id": 2, "creation_time": "2026-06-09 20:43:44", "failed": false, "failed_reason": null, "time_of_death": null, "type": "ChainVector", "origin_id": 2, "destination_id": 4, "network_id": 2, "class": "ChainVector", "object_type": "Vector"}, {"vars": "{}", "id": 3, "creation_time": "2026-06-09 20:44:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "ChainVector", "origin_id": 4, "destination_id": 5, "network_id": 2, "class": "ChainVector", "object_type": "Vector"}, {"vars": "{}", "id": 4, "creation_time": "2026-06-09 20:45:09", "failed": false, "failed_reason": null, "time_of_death": null, "type": "ChainVector", "origin_id": 3, "destination_id": 6, "network_id": 1, "class": "ChainVector", "object_type": "Vector"}, {"vars": "{}", "id": 5, "creation_time": "2026-06-09 20:45:43", "failed": false, "failed_reason": null, "time_of_death": null, "type": "ChainVector", "origin_id": 6, "destination_id": 7, "network_id": 1, "class": "ChainVector", "object_type": "Vector"}, {"vars": "{}", "id": 6, "creation_time": "2026-06-09 20:46:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "ChainVector", "origin_id": 5, "destination_id": 8, "network_id": 2, "class": "ChainVector", "object_type": "Vector"}, {"vars": "{}", "id": 7, "creation_time": "2026-06-09 20:47:12", "failed": false, "failed_reason": null, "time_of_death": null, "type": "ChainVector", "origin_id": 7, "destination_id": 9, "network_id": 1, "class": "ChainVector", "object_type": "Vector"}, {"vars": "{}", "id": 8, "creation_time": "2026-06-09 20:47:50", "failed": false, "failed_reason": null, "time_of_death": null, "type": "ChainVector", "origin_id": 8, "destination_id": 10, "network_id": 2, "class": "ChainVector", "object_type": "Vector"}, {"vars": "{}", "id": 9, "creation_time": "2026-06-09 20:48:30", "failed": false, "failed_reason": null, "time_of_death": null, "type": "ChainVector", "origin_id": 10, "destination_id": 11, "network_id": 2, "class": "ChainVector", "object_type": "Vector"}, {"vars": "{}", "id": 10, "creation_time": "2026-06-09 20:49:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "ChainVector", "origin_id": 9, "destination_id": 12, "network_id": 1, "class": "ChainVector", "object_type": "Vector"}, {"vars": "{}", "id": 11, "creation_time": "2026-06-09 20:50:18", "failed": false, "failed_reason": null, "time_of_death": null, "type": "ChainVector", "origin_id": 12, "destination_id": 13, "network_id": 1, "class": "ChainVector", "object_type": "Vector"}, {"vars": "{}", "id": 12, "creation_time": "2026-06-09 20:51:00", "failed": false, "failed_reason": null, "time_of_death": null, "type": "ChainVector", "origin_id": 11, "destination_id": 14, "network_id": 2, "class": "ChainVector", "object_type": "Vector"}], "infos": [{"_initial_assets": "{'pair_audio': Asset-1-OnDemandAsset}", "vars": "{}", "id": 1, "creation_time": "2026-06-09 20:42:47", "failed": false, "failed_reason": null, "time_of_death": null, "type": "PreferenceTrial", "origin_id": 1, "network_id": 1, "contents": null, "complete": true, "node_id": 1, "participant_id": 1, "module_state_id": 2, "trial_maker_id": "adaptive_music", "definition": "{'current_state': {'tempo': 84, 'brightness': 1}, 'proposal': {'tempo': 96, 'brightness': 1}, 'ordered': [{'role': 'proposal', 'value': {'tempo': 96, 'brightness': 1}}, {'role': 'current_state', 'value': {'tempo': 84, 'brightness': 1}}]}", "finalized": true, "is_repeat_trial": false, "score": null, "performance_reward": 0.0, "parent_trial_id": null, "answer": "{'position': 0, 'role': 'proposal', 'value': {'tempo': 96, 'brightness': 1}}", "propagate_failure": true, "response_id": 3, "repeat_trial_index": null, "n_repeat_trials": null, "time_taken": 27.462, "time_credit_before_trial": 44.0, "time_credit_after_trial": 56.0, "time_credit_from_trial": 12.0, "progress_before_trial": 0.22110552763819094, "progress_after_trial": 0.2814070351758794, "async_post_trial_required": false, "async_post_trial_requested": false, "async_post_trial_complete": false, "async_post_trial_failed": false, "block_position": 0, "block": "default", "class": "PreferenceTrial", "object_type": "Info", "first_stimulus": "{'tempo': 96, 'brightness': 1}", "second_stimulus": "{'tempo': 84, 'brightness': 1}", "current_state": "{'tempo': 84, 'brightness': 1}", "proposal": "{'tempo': 96, 'brightness': 1}", "ordered": "[{'role': 'proposal', 'value': {'tempo': 96, 'brightness': 1}}, {'role': 'current_state', 'value': {'tempo': 84, 'brightness': 1}}]", "position": 0, "role": "proposal", "value": "{'tempo': 96, 'brightness': 1}"}, {"_initial_assets": "{'pair_audio': Asset-2-OnDemandAsset}", "vars": "{}", "id": 2, "creation_time": "2026-06-09 20:43:15", "failed": false, "failed_reason": null, "time_of_death": null, "type": "PreferenceTrial", "origin_id": 2, "network_id": 2, "contents": null, "complete": true, "node_id": 2, "participant_id": 1, "module_state_id": 2, "trial_maker_id": "adaptive_music", "definition": "{'current_state': {'tempo': 144, 'brightness': 5}, 'proposal': {'tempo': 132, 'brightness': 4}, 'ordered': [{'role': 'proposal', 'value': {'tempo': 132, 'brightness': 4}}, {'role': 'current_state', 'value': {'tempo': 144, 'brightness': 5}}]}", "finalized": true, "is_repeat_trial": false, "score": null, "performance_reward": 0.0, "parent_trial_id": null, "answer": "{'position': 1, 'role': 'current_state', 'value': {'tempo': 144, 'brightness': 5}}", "propagate_failure": true, "response_id": 4, "repeat_trial_index": null, "n_repeat_trials": null, "time_taken": 29.305, "time_credit_before_trial": 56.0, "time_credit_after_trial": 68.0, "time_credit_from_trial": 12.0, "progress_before_trial": 0.2814070351758794, "progress_after_trial": 0.3417085427135678, "async_post_trial_required": false, "async_post_trial_requested": false, "async_post_trial_complete": false, "async_post_trial_failed": false, "block_position": 0, "block": "default", "class": "PreferenceTrial", "object_type": "Info", "first_stimulus": "{'tempo': 132, 'brightness': 4}", "second_stimulus": "{'tempo': 144, 'brightness': 5}", "current_state": "{'tempo': 144, 'brightness': 5}", "proposal": "{'tempo': 132, 'brightness': 4}", "ordered": "[{'role': 'proposal', 'value': {'tempo': 132, 'brightness': 4}}, {'role': 'current_state', 'value': {'tempo': 144, 'brightness': 5}}]", "position": 1, "role": "current_state", "value": "{'tempo': 144, 'brightness': 5}"}, {"_initial_assets": "{'pair_audio': Asset-3-OnDemandAsset}", "vars": "{}", "id": 3, "creation_time": "2026-06-09 20:43:44", "failed": false, "failed_reason": null, "time_of_death": null, "type": "PreferenceTrial", "origin_id": 4, "network_id": 2, "contents": null, "complete": true, "node_id": 4, "participant_id": 1, "module_state_id": 2, "trial_maker_id": "adaptive_music", "definition": "{'current_state': {'tempo': 144, 'brightness': 5}, 'proposal': {'tempo': 132, 'brightness': 4}, 'ordered': [{'role': 'current_state', 'value': {'tempo': 144, 'brightness': 5}}, {'role': 'proposal', 'value': {'tempo': 132, 'brightness': 4}}]}", "finalized": true, "is_repeat_trial": false, "score": null, "performance_reward": 0.0, "parent_trial_id": null, "answer": "{'position': 0, 'role': 'current_state', 'value': {'tempo': 144, 'brightness': 5}}", "propagate_failure": true, "response_id": 5, "repeat_trial_index": null, "n_repeat_trials": null, "time_taken": 52.832, "time_credit_before_trial": 68.0, "time_credit_after_trial": 80.0, "time_credit_from_trial": 12.0, "progress_before_trial": 0.3417085427135678, "progress_after_trial": 0.40201005025125625, "async_post_trial_required": false, "async_post_trial_requested": false, "async_post_trial_complete": false, "async_post_trial_failed": false, "block_position": 0, "block": "default", "class": "PreferenceTrial", "object_type": "Info", "first_stimulus": "{'tempo': 144, 'brightness': 5}", "second_stimulus": "{'tempo': 132, 'brightness': 4}", "current_state": "{'tempo': 144, 'brightness': 5}", "proposal": "{'tempo': 132, 'brightness': 4}", "ordered": "[{'role': 'current_state', 'value': {'tempo': 144, 'brightness': 5}}, {'role': 'proposal', 'value': {'tempo': 132, 'brightness': 4}}]", "position": 0, "role": "current_state", "value": "{'tempo': 144, 'brightness': 5}"}, {"_initial_assets": "{'pair_audio': Asset-4-OnDemandAsset}", "vars": "{}", "id": 4, "creation_time": "2026-06-09 20:44:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "PreferenceTrial", "origin_id": 3, "network_id": 1, "contents": null, "complete": true, "node_id": 3, "participant_id": 1, "module_state_id": 2, "trial_maker_id": "adaptive_music", "definition": "{'current_state': {'tempo': 96, 'brightness': 1}, 'proposal': {'tempo': 108, 'brightness': 2}, 'ordered': [{'role': 'proposal', 'value': {'tempo': 108, 'brightness': 2}}, {'role': 'current_state', 'value': {'tempo': 96, 'brightness': 1}}]}", "finalized": true, "is_repeat_trial": false, "score": null, "performance_reward": 0.0, "parent_trial_id": null, "answer": "{'position': 1, 'role': 'current_state', 'value': {'tempo': 96, 'brightness': 1}}", "propagate_failure": true, "response_id": 6, "repeat_trial_index": null, "n_repeat_trials": null, "time_taken": 31.449, "time_credit_before_trial": 80.0, "time_credit_after_trial": 92.0, "time_credit_from_trial": 12.0, "progress_before_trial": 0.40201005025125625, "progress_after_trial": 0.46231155778894467, "async_post_trial_required": false, "async_post_trial_requested": false, "async_post_trial_complete": false, "async_post_trial_failed": false, "block_position": 0, "block": "default", "class": "PreferenceTrial", "object_type": "Info", "first_stimulus": "{'tempo': 108, 'brightness': 2}", "second_stimulus": "{'tempo': 96, 'brightness': 1}", "current_state": "{'tempo': 96, 'brightness': 1}", "proposal": "{'tempo': 108, 'brightness': 2}", "ordered": "[{'role': 'proposal', 'value': {'tempo': 108, 'brightness': 2}}, {'role': 'current_state', 'value': {'tempo': 96, 'brightness': 1}}]", "position": 1, "role": "current_state", "value": "{'tempo': 96, 'brightness': 1}"}, {"_initial_assets": "{'pair_audio': Asset-5-OnDemandAsset}", "vars": "{}", "id": 5, "creation_time": "2026-06-09 20:45:09", "failed": false, "failed_reason": null, "time_of_death": null, "type": "PreferenceTrial", "origin_id": 6, "network_id": 1, "contents": null, "complete": true, "node_id": 6, "participant_id": 1, "module_state_id": 2, "trial_maker_id": "adaptive_music", "definition": "{'current_state': {'tempo': 96, 'brightness': 1}, 'proposal': {'tempo': 120, 'brightness': 2}, 'ordered': [{'role': 'proposal', 'value': {'tempo': 120, 'brightness': 2}}, {'role': 'current_state', 'value': {'tempo': 96, 'brightness': 1}}]}", "finalized": true, "is_repeat_trial": false, "score": null, "performance_reward": 0.0, "parent_trial_id": null, "answer": "{'position': 0, 'role': 'proposal', 'value': {'tempo': 120, 'brightness': 2}}", "propagate_failure": true, "response_id": 7, "repeat_trial_index": null, "n_repeat_trials": null, "time_taken": 33.815, "time_credit_before_trial": 92.0, "time_credit_after_trial": 104.0, "time_credit_from_trial": 12.0, "progress_before_trial": 0.46231155778894467, "progress_after_trial": 0.5226130653266331, "async_post_trial_required": false, "async_post_trial_requested": false, "async_post_trial_complete": false, "async_post_trial_failed": false, "block_position": 0, "block": "default", "class": "PreferenceTrial", "object_type": "Info", "first_stimulus": "{'tempo': 120, 'brightness': 2}", "second_stimulus": "{'tempo': 96, 'brightness': 1}", "current_state": "{'tempo': 96, 'brightness': 1}", "proposal": "{'tempo': 120, 'brightness': 2}", "ordered": "[{'role': 'proposal', 'value': {'tempo': 120, 'brightness': 2}}, {'role': 'current_state', 'value': {'tempo': 96, 'brightness': 1}}]", "position": 0, "role": "proposal", "value": "{'tempo': 120, 'brightness': 2}"}, {"_initial_assets": "{'pair_audio': Asset-6-OnDemandAsset}", "vars": "{}", "id": 6, "creation_time": "2026-06-09 20:45:43", "failed": false, "failed_reason": null, "time_of_death": null, "type": "PreferenceTrial", "origin_id": 5, "network_id": 2, "contents": null, "complete": true, "node_id": 5, "participant_id": 1, "module_state_id": 2, "trial_maker_id": "adaptive_music", "definition": "{'current_state': {'tempo': 144, 'brightness': 5}, 'proposal': {'tempo': 120, 'brightness': 4}, 'ordered': [{'role': 'proposal', 'value': {'tempo': 120, 'brightness': 4}}, {'role': 'current_state', 'value': {'tempo': 144, 'brightness': 5}}]}", "finalized": true, "is_repeat_trial": false, "score": null, "performance_reward": 0.0, "parent_trial_id": null, "answer": "{'position': 1, 'role': 'current_state', 'value': {'tempo': 144, 'brightness': 5}}", "propagate_failure": true, "response_id": 8, "repeat_trial_index": null, "n_repeat_trials": null, "time_taken": 53.794, "time_credit_before_trial": 104.0, "time_credit_after_trial": 116.0, "time_credit_from_trial": 12.0, "progress_before_trial": 0.5226130653266331, "progress_after_trial": 0.5829145728643216, "async_post_trial_required": false, "async_post_trial_requested": false, "async_post_trial_complete": false, "async_post_trial_failed": false, "block_position": 0, "block": "default", "class": "PreferenceTrial", "object_type": "Info", "first_stimulus": "{'tempo': 120, 'brightness': 4}", "second_stimulus": "{'tempo': 144, 'brightness': 5}", "current_state": "{'tempo': 144, 'brightness': 5}", "proposal": "{'tempo': 120, 'brightness': 4}", "ordered": "[{'role': 'proposal', 'value': {'tempo': 120, 'brightness': 4}}, {'role': 'current_state', 'value': {'tempo': 144, 'brightness': 5}}]", "position": 1, "role": "current_state", "value": "{'tempo': 144, 'brightness': 5}"}, {"_initial_assets": "{'pair_audio': Asset-7-OnDemandAsset}", "vars": "{}", "id": 7, "creation_time": "2026-06-09 20:46:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "PreferenceTrial", "origin_id": 7, "network_id": 1, "contents": null, "complete": true, "node_id": 7, "participant_id": 1, "module_state_id": 2, "trial_maker_id": "adaptive_music", "definition": "{'current_state': {'tempo': 120, 'brightness': 2}, 'proposal': {'tempo': 144, 'brightness': 3}, 'ordered': [{'role': 'current_state', 'value': {'tempo': 120, 'brightness': 2}}, {'role': 'proposal', 'value': {'tempo': 144, 'brightness': 3}}]}", "finalized": true, "is_repeat_trial": false, "score": null, "performance_reward": 0.0, "parent_trial_id": null, "answer": "{'position': 0, 'role': 'current_state', 'value': {'tempo': 120, 'brightness': 2}}", "propagate_failure": true, "response_id": 9, "repeat_trial_index": null, "n_repeat_trials": null, "time_taken": 34.391, "time_credit_before_trial": 116.0, "time_credit_after_trial": 128.0, "time_credit_from_trial": 12.0, "progress_before_trial": 0.5829145728643216, "progress_after_trial": 0.6432160804020101, "async_post_trial_required": false, "async_post_trial_requested": false, "async_post_trial_complete": false, "async_post_trial_failed": false, "block_position": 0, "block": "default", "class": "PreferenceTrial", "object_type": "Info", "first_stimulus": "{'tempo': 120, 'brightness': 2}", "second_stimulus": "{'tempo': 144, 'brightness': 3}", "current_state": "{'tempo': 120, 'brightness': 2}", "proposal": "{'tempo': 144, 'brightness': 3}", "ordered": "[{'role': 'current_state', 'value': {'tempo': 120, 'brightness': 2}}, {'role': 'proposal', 'value': {'tempo': 144, 'brightness': 3}}]", "position": 0, "role": "current_state", "value": "{'tempo': 120, 'brightness': 2}"}, {"_initial_assets": "{'pair_audio': Asset-8-OnDemandAsset}", "vars": "{}", "id": 8, "creation_time": "2026-06-09 20:47:12", "failed": false, "failed_reason": null, "time_of_death": null, "type": "PreferenceTrial", "origin_id": 8, "network_id": 2, "contents": null, "complete": true, "node_id": 8, "participant_id": 1, "module_state_id": 2, "trial_maker_id": "adaptive_music", "definition": "{'current_state': {'tempo': 144, 'brightness': 5}, 'proposal': {'tempo': 120, 'brightness': 5}, 'ordered': [{'role': 'current_state', 'value': {'tempo': 144, 'brightness': 5}}, {'role': 'proposal', 'value': {'tempo': 120, 'brightness': 5}}]}", "finalized": true, "is_repeat_trial": false, "score": null, "performance_reward": 0.0, "parent_trial_id": null, "answer": "{'position': 1, 'role': 'proposal', 'value': {'tempo': 120, 'brightness': 5}}", "propagate_failure": true, "response_id": 10, "repeat_trial_index": null, "n_repeat_trials": null, "time_taken": 37.518, "time_credit_before_trial": 128.0, "time_credit_after_trial": 140.0, "time_credit_from_trial": 12.0, "progress_before_trial": 0.6432160804020101, "progress_after_trial": 0.7035175879396985, "async_post_trial_required": false, "async_post_trial_requested": false, "async_post_trial_complete": false, "async_post_trial_failed": false, "block_position": 0, "block": "default", "class": "PreferenceTrial", "object_type": "Info", "first_stimulus": "{'tempo': 144, 'brightness': 5}", "second_stimulus": "{'tempo': 120, 'brightness': 5}", "current_state": "{'tempo': 144, 'brightness': 5}", "proposal": "{'tempo': 120, 'brightness': 5}", "ordered": "[{'role': 'current_state', 'value': {'tempo': 144, 'brightness': 5}}, {'role': 'proposal', 'value': {'tempo': 120, 'brightness': 5}}]", "position": 1, "role": "proposal", "value": "{'tempo': 120, 'brightness': 5}"}, {"_initial_assets": "{'pair_audio': Asset-9-OnDemandAsset}", "vars": "{}", "id": 9, "creation_time": "2026-06-09 20:47:50", "failed": false, "failed_reason": null, "time_of_death": null, "type": "PreferenceTrial", "origin_id": 10, "network_id": 2, "contents": null, "complete": true, "node_id": 10, "participant_id": 1, "module_state_id": 2, "trial_maker_id": "adaptive_music", "definition": "{'current_state': {'tempo': 120, 'brightness': 5}, 'proposal': {'tempo': 144, 'brightness': 5}, 'ordered': [{'role': 'current_state', 'value': {'tempo': 120, 'brightness': 5}}, {'role': 'proposal', 'value': {'tempo': 144, 'brightness': 5}}]}", "finalized": true, "is_repeat_trial": false, "score": null, "performance_reward": 0.0, "parent_trial_id": null, "answer": "{'position': 0, 'role': 'current_state', 'value': {'tempo': 120, 'brightness': 5}}", "propagate_failure": true, "response_id": 11, "repeat_trial_index": null, "n_repeat_trials": null, "time_taken": 39.692, "time_credit_before_trial": 140.0, "time_credit_after_trial": 152.0, "time_credit_from_trial": 12.0, "progress_before_trial": 0.7035175879396985, "progress_after_trial": 0.763819095477387, "async_post_trial_required": false, "async_post_trial_requested": false, "async_post_trial_complete": false, "async_post_trial_failed": false, "block_position": 0, "block": "default", "class": "PreferenceTrial", "object_type": "Info", "first_stimulus": "{'tempo': 120, 'brightness': 5}", "second_stimulus": "{'tempo': 144, 'brightness': 5}", "current_state": "{'tempo': 120, 'brightness': 5}", "proposal": "{'tempo': 144, 'brightness': 5}", "ordered": "[{'role': 'current_state', 'value': {'tempo': 120, 'brightness': 5}}, {'role': 'proposal', 'value': {'tempo': 144, 'brightness': 5}}]", "position": 0, "role": "current_state", "value": "{'tempo': 120, 'brightness': 5}"}, {"_initial_assets": "{'pair_audio': Asset-10-OnDemandAsset}", "vars": "{}", "id": 10, "creation_time": "2026-06-09 20:48:30", "failed": false, "failed_reason": null, "time_of_death": null, "type": "PreferenceTrial", "origin_id": 9, "network_id": 1, "contents": null, "complete": true, "node_id": 9, "participant_id": 1, "module_state_id": 2, "trial_maker_id": "adaptive_music", "definition": "{'current_state': {'tempo': 120, 'brightness': 2}, 'proposal': {'tempo': 108, 'brightness': 1}, 'ordered': [{'role': 'proposal', 'value': {'tempo': 108, 'brightness': 1}}, {'role': 'current_state', 'value': {'tempo': 120, 'brightness': 2}}]}", "finalized": true, "is_repeat_trial": false, "score": null, "performance_reward": 0.0, "parent_trial_id": null, "answer": "{'position': 1, 'role': 'current_state', 'value': {'tempo': 120, 'brightness': 2}}", "propagate_failure": true, "response_id": 12, "repeat_trial_index": null, "n_repeat_trials": null, "time_taken": 66.713, "time_credit_before_trial": 152.0, "time_credit_after_trial": 164.0, "time_credit_from_trial": 12.0, "progress_before_trial": 0.763819095477387, "progress_after_trial": 0.8241206030150755, "async_post_trial_required": false, "async_post_trial_requested": false, "async_post_trial_complete": false, "async_post_trial_failed": false, "block_position": 0, "block": "default", "class": "PreferenceTrial", "object_type": "Info", "first_stimulus": "{'tempo': 108, 'brightness': 1}", "second_stimulus": "{'tempo': 120, 'brightness': 2}", "current_state": "{'tempo': 120, 'brightness': 2}", "proposal": "{'tempo': 108, 'brightness': 1}", "ordered": "[{'role': 'proposal', 'value': {'tempo': 108, 'brightness': 1}}, {'role': 'current_state', 'value': {'tempo': 120, 'brightness': 2}}]", "position": 1, "role": "current_state", "value": "{'tempo': 120, 'brightness': 2}"}, {"_initial_assets": "{'pair_audio': Asset-11-OnDemandAsset}", "vars": "{}", "id": 11, "creation_time": "2026-06-09 20:49:37", "failed": false, "failed_reason": null, "time_of_death": null, "type": "PreferenceTrial", "origin_id": 12, "network_id": 1, "contents": null, "complete": true, "node_id": 12, "participant_id": 1, "module_state_id": 2, "trial_maker_id": "adaptive_music", "definition": "{'current_state': {'tempo': 120, 'brightness': 2}, 'proposal': {'tempo': 120, 'brightness': 1}, 'ordered': [{'role': 'proposal', 'value': {'tempo': 120, 'brightness': 1}}, {'role': 'current_state', 'value': {'tempo': 120, 'brightness': 2}}]}", "finalized": true, "is_repeat_trial": false, "score": null, "performance_reward": 0.0, "parent_trial_id": null, "answer": "{'position': 0, 'role': 'proposal', 'value': {'tempo': 120, 'brightness': 1}}", "propagate_failure": true, "response_id": 13, "repeat_trial_index": null, "n_repeat_trials": null, "time_taken": 40.916, "time_credit_before_trial": 164.0, "time_credit_after_trial": 176.0, "time_credit_from_trial": 12.0, "progress_before_trial": 0.8241206030150755, "progress_after_trial": 0.884422110552764, "async_post_trial_required": false, "async_post_trial_requested": false, "async_post_trial_complete": false, "async_post_trial_failed": false, "block_position": 0, "block": "default", "class": "PreferenceTrial", "object_type": "Info", "first_stimulus": "{'tempo': 120, 'brightness': 1}", "second_stimulus": "{'tempo': 120, 'brightness': 2}", "current_state": "{'tempo': 120, 'brightness': 2}", "proposal": "{'tempo': 120, 'brightness': 1}", "ordered": "[{'role': 'proposal', 'value': {'tempo': 120, 'brightness': 1}}, {'role': 'current_state', 'value': {'tempo': 120, 'brightness': 2}}]", "position": 0, "role": "proposal", "value": "{'tempo': 120, 'brightness': 1}"}, {"_initial_assets": "{'pair_audio': Asset-12-OnDemandAsset}", "vars": "{}", "id": 12, "creation_time": "2026-06-09 20:50:18", "failed": false, "failed_reason": null, "time_of_death": null, "type": "PreferenceTrial", "origin_id": 11, "network_id": 2, "contents": null, "complete": true, "node_id": 11, "participant_id": 1, "module_state_id": 2, "trial_maker_id": "adaptive_music", "definition": "{'current_state': {'tempo': 120, 'brightness': 5}, 'proposal': {'tempo': 144, 'brightness': 5}, 'ordered': [{'role': 'current_state', 'value': {'tempo': 120, 'brightness': 5}}, {'role': 'proposal', 'value': {'tempo': 144, 'brightness': 5}}]}", "finalized": true, "is_repeat_trial": false, "score": null, "performance_reward": 0.0, "parent_trial_id": null, "answer": "{'position': 1, 'role': 'proposal', 'value': {'tempo': 144, 'brightness': 5}}", "propagate_failure": true, "response_id": 14, "repeat_trial_index": null, "n_repeat_trials": null, "time_taken": 42.356, "time_credit_before_trial": 176.0, "time_credit_after_trial": 188.0, "time_credit_from_trial": 12.0, "progress_before_trial": 0.884422110552764, "progress_after_trial": 0.9447236180904522, "async_post_trial_required": false, "async_post_trial_requested": false, "async_post_trial_complete": false, "async_post_trial_failed": false, "block_position": 0, "block": "default", "class": "PreferenceTrial", "object_type": "Info", "first_stimulus": "{'tempo': 120, 'brightness': 5}", "second_stimulus": "{'tempo': 144, 'brightness': 5}", "current_state": "{'tempo': 120, 'brightness': 5}", "proposal": "{'tempo': 144, 'brightness': 5}", "ordered": "[{'role': 'current_state', 'value': {'tempo': 120, 'brightness': 5}}, {'role': 'proposal', 'value': {'tempo': 144, 'brightness': 5}}]", "position": 1, "role": "proposal", "value": "{'tempo': 144, 'brightness': 5}"}], "participants": [{"vars": "{'main_consent': True, '__wait_while__loop_start_time__loop_start_time': '2026-06-09T20:42:47.362457', '__Waiting for trial__loop_start_time__loop_start_time': '2026-06-09T20:51:00.919814', '__adaptive_music__trial_loop__loop_start_time__loop_start_time': '2026-06-09T20:42:47.421245'}", "id": 1, "creation_time": "2026-06-09 20:42:31", "failed": false, "failed_reason": null, "time_of_death": null, "type": "Participant", "fingerprint_hash": "22d5c056df37cb741b403fe6cd8ed228", "recruiter_id": "hotair", "worker_id": "RECWORK3", "assignment_id": "REC003", "unique_id": "RECWORK3:REC003", "hit_id": "HIT003", "mode": "debug", "end_time": "2026-06-09 20:51:42", "base_pay": 0.8, "bonus": null, "entry_information": "{'recruiter': 'hotair'}", "status": "approved", "elt_id": "['successful_end', 3, 1]", "elt_id_max": "[2, 2, 2]", "time_credit": 199.0, "estimated_max_time_credit": 199.0, "progress": 1.0, "time_credit_fixes": "[]", "progress_fixes": "[1.0]", "page_uuid": "98eb9373-421c-2a58-f87f-4cf8a09de068", "page_count": 18, "aborted": false, "complete": true, "pending_redirect": null, "answer": "Finish", "answer_accumulators": "[]", "sequences": "[]", "branch_log": "[['main_consent_conditional', False], ['init_participant', False]]", "for_loops": "{}", "failure_tags": "[]", "base_payment": 0.8, "performance_reward": 0.0, "unpaid_bonus": 0.0, "total_wait_page_time": 0.0, "client_ip_address": "127.0.0.1", "answer_is_fresh": true, "browser_platform": "Chrome 148.0.0.0 on Linux 64-bit", "module_state_id": null, "current_trial_id": null, "trial_status": "exit", "awaited_async_code_block_process_id": null, "class": "Participant", "object_type": "Participant", "aborted_modules": "[]", "started_modules": "['main_consent', 'adaptive_music']", "finished_modules": "['main_consent', 'adaptive_music']", "module_id": null, "main_consent": true}], "trans": []};
+            const vis_options = {};
+            return {
+                network_structure: network_structure,
+                vis_options: vis_options
+            };
+        };
+    </script>
+    <script src="/static/vis@4.17.0/dist/vis.min.js"></script>
+    <script src="/static/scripts/network-monitor.js"></script>
+
+
+      
+      
+    </body>
+</html>
