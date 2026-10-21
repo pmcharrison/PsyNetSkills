@@ -1,0 +1,10 @@
+[Config]
+title = Static video recording S3 demo
+description = Static trials with direct browser-to-S3 video recording.
+contact_email_on_error = XXX@gmail.com
+organization_name = XXX
+
+recruiter = generic
+currency = $
+wage_per_hour = 12.0
+base_payment = 0.34

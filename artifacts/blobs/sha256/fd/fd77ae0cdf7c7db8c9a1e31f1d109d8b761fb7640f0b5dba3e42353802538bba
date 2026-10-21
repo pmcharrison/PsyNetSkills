@@ -1,0 +1,15 @@
+env/
+.venv/
+.deploy/
+server.log
+static/assets
+source_code.zip
+.idea
+__pycache__
+*.DS_Store
+node_modules/
+playwright-report/
+test-results/
+develop/
+deploy/
+deploy_logs/

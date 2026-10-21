@@ -1,0 +1,120 @@
+{
+  "zip_path": "data.zip",
+  "n_trials": 9,
+  "stimuli": {
+    "brazil_warm": {
+      "n_trials_with_answers": 2,
+      "accepted_new_tags": [
+        "joyful",
+        "calm",
+        "uplifting",
+        "cheerful"
+      ],
+      "rejected_new_tags": [],
+      "tags": {
+        "joyful": {
+          "ratings": [
+            5
+          ],
+          "n_flags": 0,
+          "is_flagged": false,
+          "is_frozen": false,
+          "is_new": false
+        },
+        "calm": {
+          "ratings": [
+            0
+          ],
+          "n_flags": 1,
+          "is_flagged": true,
+          "is_frozen": false,
+          "is_new": false
+        },
+        "uplifting": {
+          "ratings": [
+            4
+          ],
+          "n_flags": 0,
+          "is_flagged": false,
+          "is_frozen": false,
+          "is_new": false
+        },
+        "cheerful": {
+          "ratings": [],
+          "n_flags": 0,
+          "is_flagged": false,
+          "is_frozen": false,
+          "is_new": true
+        }
+      }
+    },
+    "brazil_calm": {
+      "n_trials_with_answers": 1,
+      "accepted_new_tags": [
+        "tense",
+        "dramatic"
+      ],
+      "rejected_new_tags": [],
+      "tags": {
+        "tense": {
+          "ratings": [],
+          "n_flags": 0,
+          "is_flagged": false,
+          "is_frozen": false,
+          "is_new": true
+        },
+        "dramatic": {
+          "ratings": [],
+          "n_flags": 0,
+          "is_flagged": false,
+          "is_frozen": false,
+          "is_new": true
+        }
+      }
+    },
+    "korea_tense": {
+      "n_trials_with_answers": 2,
+      "accepted_new_tags": [
+        "peaceful",
+        "relaxing"
+      ],
+      "rejected_new_tags": [],
+      "tags": {
+        "peaceful": {
+          "ratings": [
+            4
+          ],
+          "n_flags": 0,
+          "is_flagged": false,
+          "is_frozen": false,
+          "is_new": false
+        },
+        "relaxing": {
+          "ratings": [
+            4
+          ],
+          "n_flags": 0,
+          "is_flagged": false,
+          "is_frozen": false,
+          "is_new": false
+        }
+      }
+    },
+    "us_melancholy": {
+      "n_trials_with_answers": 1,
+      "accepted_new_tags": [
+        "energetic"
+      ],
+      "rejected_new_tags": [],
+      "tags": {
+        "energetic": {
+          "ratings": [],
+          "n_flags": 0,
+          "is_flagged": false,
+          "is_frozen": false,
+          "is_new": true
+        }
+      }
+    }
+  }
+}

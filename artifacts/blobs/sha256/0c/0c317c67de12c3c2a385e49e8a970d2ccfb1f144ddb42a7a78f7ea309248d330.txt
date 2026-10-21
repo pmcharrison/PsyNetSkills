@@ -1,0 +1,9 @@
+[Config]
+title = Visual priors serial reproduction
+description = Brief spatial memory task in which dot-location reproductions propagate through serial chains.
+contact_email_on_error = noreply@example.com
+organization_name = PsyNetSkills
+
+recruiter = generic
+currency = $
+wage_per_hour = 12.0

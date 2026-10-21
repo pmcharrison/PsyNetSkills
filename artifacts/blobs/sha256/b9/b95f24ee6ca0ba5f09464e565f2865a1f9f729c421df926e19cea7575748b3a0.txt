@@ -1,0 +1,14 @@
+[Config]
+title = Portfolio website chain
+description = Participants collaboratively create and improve a portfolio website by writing instructions for an AI model.
+contact_email_on_error = researcher@example.test
+organization_name = PsyNetSkills
+
+recruiter = generic
+currency = $
+wage_per_hour = 12.0
+
+[Prolific]
+auto_recruit = false
+prolific_estimated_completion_minutes = 5
+base_payment = 1.00

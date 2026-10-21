@@ -1,0 +1,4 @@
+vars,creation_time,local_key,node_id,asset_id,type,class,object_type
+{},2026-06-11 07:30:52,stimulus_audio,1,1,AssetNode,AssetNode,AssetNode
+{},2026-06-11 07:30:52,stimulus_audio,2,2,AssetNode,AssetNode,AssetNode
+{},2026-06-11 07:30:52,stimulus_audio,3,3,AssetNode,AssetNode,AssetNode

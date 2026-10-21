@@ -1,0 +1,461 @@
+Bot output log: /tmp/psynet_bots_yf0z7fu5.log
+[1m================================================================================[0m
+[1m⚡ PERFORMANCE TEST SUITE[0m
+Bots per test:        40
+Test duration:        5.0 min
+Bot start stagger:    ~0.1s
+Bot time factor:      1.0
+
+[1m================================================================================[0m
+[1mTEST 1/1: Running with 40 concurrent bots[0m
+
+▶ Starting load test with 40 concurrent bots for 5.0 minutes...
+
+
+🤖 Running: 1 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 4:59 left
+                                                                       
+🤖 Running: 2 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 4:58 left
+                                                                       
+🤖 Running: 3 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 4:58 left
+                                                                       
+🤖 Running: 4 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 4:58 left
+                                                                       
+🤖 Running: 5 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 4:58 left
+                                                                       
+🤖 Running: 6 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 4:57 left
+                                                                       
+🤖 Running: 7 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 4:57 left
+                                                                       
+🤖 Running: 8 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 4:57 left
+                                                                       
+🤖 Running: 9 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 4:57 left
+                                                                       
+🤖 Running: 10 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 4:56 left
+                                                                        
+🤖 Running: 11 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 4:56 left
+                                                                        
+🤖 Running: 12 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 4:56 left
+                                                                        
+🤖 Running: 13 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 4:55 left
+                                                                        
+🤖 Running: 14 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 4:55 left
+                                                                        
+🤖 Running: 15 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 4:55 left
+                                                                        
+🤖 Running: 16 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 4:55 left
+                                                                        
+🤖 Running: 17 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 4:54 left
+                                                                        
+🤖 Running: 18 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 4:54 left
+                                                                        
+🤖 Running: 19 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 4:54 left
+                                                                        
+🤖 Running: 20 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 4:53 left
+                                                                        
+🤖 Running: 21 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 4:53 left
+                                                                        
+🤖 Running: 22 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 4:53 left
+                                                                        
+🤖 Running: 23 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 4:52 left
+                                                                        
+🤖 Running: 24 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 4:52 left
+                                                                        
+🤖 Running: 25 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 4:52 left
+                                                                        
+🤖 Running: 26 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 4:51 left
+                                                                        
+🤖 Running: 27 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 4:51 left
+                                                                        
+🤖 Running: 28 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 4:51 left
+                                                                        
+🤖 Running: 29 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 4:50 left
+                                                                        
+🤖 Running: 30 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 4:50 left
+                                                                        
+🤖 Running: 31 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 4:49 left
+                                                                        
+🤖 Running: 32 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 4:49 left
+                                                                        
+🤖 Running: 33 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 4:49 left
+                                                                        
+🤖 Running: 34 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 4:48 left
+                                                                        
+🤖 Running: 35 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 4:48 left
+                                                                        
+🤖 Running: 36 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 4:48 left
+                                                                        
+🤖 Running: 37 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 4:47 left
+                                                                        
+🤖 Running: 38 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 4:47 left
+                                                                        
+🤖 Running: 39 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 4:46 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 4:46 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 4:44 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 4:42 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 4:40 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 4:38 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 4:36 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 4:34 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 4:32 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 4:30 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 4:28 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 4:26 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 4:24 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 4:22 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 4:20 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 4:18 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 4:16 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 4:14 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 4:12 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 4:10 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 4:08 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 4:06 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 4:04 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 4:02 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 4:00 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 3:58 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 3:56 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 3:54 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 3:52 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 3:50 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 3:48 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 3:46 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 3:44 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 3:42 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 3:40 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 3:38 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 3:36 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 3:34 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 3:32 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 3:30 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 3:28 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 3:26 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 3:24 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 3:22 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 3:20 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 3:18 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 3:15 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 3:13 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 3:11 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 3:09 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 3:07 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 3:05 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 3:03 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 3:01 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 2:59 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 2:57 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 2:55 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 2:53 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 2:51 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 2:49 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 2:47 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 2:45 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 2:43 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 2:41 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 2:39 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 2:37 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 2:35 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 2:33 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 2:31 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 2:29 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 2:27 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 2:25 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 2:23 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 2:21 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 2:19 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 2:17 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 2:15 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 2:13 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 2:11 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 2:09 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 2:07 left
+                                                                        
+🤖 Running: 40 | ✓ Completed: 0 | ✗ Errors: 0 | ⏱ Avg: 0.0s | ⏳ 2:05 left
+                                                                        
+🤖 Running: 39 | ✓ Completed: 1 | ✗ Errors: 0 | ⏱ Avg: 160.1s | ⏳ 2:03 left
+                                                                          
+🤖 Running: 40 | ✓ Completed: 1 | ✗ Errors: 0 | ⏱ Avg: 160.1s | ⏳ 2:03 left
+                                                                          
+🤖 Running: 39 | ✓ Completed: 2 | ✗ Errors: 0 | ⏱ Avg: 161.7s | ⏳ 2:01 left
+                                                                          
+🤖 Running: 40 | ✓ Completed: 2 | ✗ Errors: 0 | ⏱ Avg: 161.7s | ⏳ 2:01 left
+                                                                          
+🤖 Running: 40 | ✓ Completed: 2 | ✗ Errors: 0 | ⏱ Avg: 161.7s | ⏳ 1:59 left
+                                                                          
+🤖 Running: 40 | ✓ Completed: 2 | ✗ Errors: 0 | ⏱ Avg: 161.7s | ⏳ 1:57 left
+                                                                          
+🤖 Running: 40 | ✓ Completed: 2 | ✗ Errors: 0 | ⏱ Avg: 161.7s | ⏳ 1:55 left
+                                                                          
+🤖 Running: 40 | ✓ Completed: 2 | ✗ Errors: 0 | ⏱ Avg: 161.7s | ⏳ 1:53 left
+                                                                          
+🤖 Running: 40 | ✓ Completed: 2 | ✗ Errors: 0 | ⏱ Avg: 161.7s | ⏳ 1:51 left
+                                                                          
+🤖 Running: 40 | ✓ Completed: 2 | ✗ Errors: 0 | ⏱ Avg: 161.7s | ⏳ 1:49 left
+                                                                          
+🤖 Running: 40 | ✓ Completed: 2 | ✗ Errors: 0 | ⏱ Avg: 161.7s | ⏳ 1:47 left
+                                                                          
+🤖 Running: 40 | ✓ Completed: 2 | ✗ Errors: 0 | ⏱ Avg: 161.7s | ⏳ 1:45 left
+                                                                          
+🤖 Running: 40 | ✓ Completed: 2 | ✗ Errors: 0 | ⏱ Avg: 161.7s | ⏳ 1:43 left
+                                                                          
+🤖 Running: 40 | ✓ Completed: 2 | ✗ Errors: 0 | ⏱ Avg: 161.7s | ⏳ 1:41 left
+                                                                          
+🤖 Running: 40 | ✓ Completed: 2 | ✗ Errors: 0 | ⏱ Avg: 161.7s | ⏳ 1:39 left
+                                                                          
+🤖 Running: 40 | ✓ Completed: 2 | ✗ Errors: 0 | ⏱ Avg: 161.7s | ⏳ 1:37 left
+                                                                          
+🤖 Running: 40 | ✓ Completed: 2 | ✗ Errors: 0 | ⏱ Avg: 161.7s | ⏳ 1:35 left
+                                                                          
+🤖 Running: 40 | ✓ Completed: 2 | ✗ Errors: 0 | ⏱ Avg: 161.7s | ⏳ 1:33 left
+                                                                          
+🤖 Running: 40 | ✓ Completed: 2 | ✗ Errors: 0 | ⏱ Avg: 161.7s | ⏳ 1:31 left
+                                                                          
+🤖 Running: 40 | ✓ Completed: 2 | ✗ Errors: 0 | ⏱ Avg: 161.7s | ⏳ 1:29 left
+                                                                          
+🤖 Running: 40 | ✓ Completed: 2 | ✗ Errors: 0 | ⏱ Avg: 161.7s | ⏳ 1:27 left
+                                                                          
+🤖 Running: 40 | ✓ Completed: 2 | ✗ Errors: 0 | ⏱ Avg: 161.7s | ⏳ 1:25 left
+                                                                          
+🤖 Running: 40 | ✓ Completed: 2 | ✗ Errors: 0 | ⏱ Avg: 161.7s | ⏳ 1:23 left
+                                                                          
+🤖 Running: 40 | ✓ Completed: 2 | ✗ Errors: 0 | ⏱ Avg: 161.7s | ⏳ 1:21 left
+                                                                          
+🤖 Running: 40 | ✓ Completed: 2 | ✗ Errors: 0 | ⏱ Avg: 161.7s | ⏳ 1:19 left
+                                                                          
+🤖 Running: 40 | ✓ Completed: 2 | ✗ Errors: 0 | ⏱ Avg: 161.7s | ⏳ 1:17 left
+                                                                          
+🤖 Running: 40 | ✓ Completed: 2 | ✗ Errors: 0 | ⏱ Avg: 161.7s | ⏳ 1:15 left
+                                                                          
+🤖 Running: 40 | ✓ Completed: 2 | ✗ Errors: 0 | ⏱ Avg: 161.7s | ⏳ 1:13 left
+                                                                          
+🤖 Running: 40 | ✓ Completed: 2 | ✗ Errors: 0 | ⏱ Avg: 161.7s | ⏳ 1:11 left
+                                                                          
+🤖 Running: 40 | ✓ Completed: 2 | ✗ Errors: 0 | ⏱ Avg: 161.7s | ⏳ 1:09 left
+                                                                          
+🤖 Running: 40 | ✓ Completed: 3 | ✗ Errors: 0 | ⏱ Avg: 180.2s | ⏳ 1:09 left
+                                                                          
+🤖 Running: 40 | ✓ Completed: 3 | ✗ Errors: 0 | ⏱ Avg: 180.2s | ⏳ 1:06 left
+                                                                          
+🤖 Running: 39 | ✓ Completed: 4 | ✗ Errors: 0 | ⏱ Avg: 190.5s | ⏳ 1:04 left
+                                                                          
+🤖 Running: 40 | ✓ Completed: 4 | ✗ Errors: 0 | ⏱ Avg: 190.5s | ⏳ 1:04 left
+                                                                          
+🤖 Running: 40 | ✓ Completed: 5 | ✗ Errors: 0 | ⏱ Avg: 196.3s | ⏳ 1:02 left
+                                                                          
+🤖 Running: 40 | ✓ Completed: 5 | ✗ Errors: 0 | ⏱ Avg: 196.3s | ⏳ 1:00 left
+                                                                          
+🤖 Running: 40 | ✓ Completed: 5 | ✗ Errors: 0 | ⏱ Avg: 196.3s | ⏳ 0:58 left
+                                                                          
+🤖 Running: 40 | ✓ Completed: 5 | ✗ Errors: 0 | ⏱ Avg: 196.3s | ⏳ 0:56 left
+                                                                          
+🤖 Running: 40 | ✓ Completed: 6 | ✗ Errors: 0 | ⏱ Avg: 210.5s | ⏳ 0:55 left
+                                                                          
+🤖 Running: 40 | ✓ Completed: 6 | ✗ Errors: 0 | ⏱ Avg: 210.5s | ⏳ 0:53 left
+                                                                          
+🤖 Running: 40 | ✓ Completed: 6 | ✗ Errors: 0 | ⏱ Avg: 210.5s | ⏳ 0:51 left
+                                                                          
+🤖 Running: 40 | ✓ Completed: 6 | ✗ Errors: 0 | ⏱ Avg: 210.5s | ⏳ 0:49 left
+                                                                          
+🤖 Running: 40 | ✓ Completed: 6 | ✗ Errors: 0 | ⏱ Avg: 210.5s | ⏳ 0:47 left
+                                                                          
+🤖 Running: 40 | ✓ Completed: 6 | ✗ Errors: 0 | ⏱ Avg: 210.5s | ⏳ 0:45 left
+                                                                          
+🤖 Running: 40 | ✓ Completed: 6 | ✗ Errors: 0 | ⏱ Avg: 210.5s | ⏳ 0:43 left
+                                                                          
+🤖 Running: 40 | ✓ Completed: 7 | ✗ Errors: 0 | ⏱ Avg: 226.6s | ⏳ 0:42 left
+                                                                          
+🤖 Running: 40 | ✓ Completed: 7 | ✗ Errors: 0 | ⏱ Avg: 226.6s | ⏳ 0:40 left
+                                                                          
+🤖 Running: 40 | ✓ Completed: 7 | ✗ Errors: 0 | ⏱ Avg: 226.6s | ⏳ 0:38 left
+                                                                          
+🤖 Running: 40 | ✓ Completed: 7 | ✗ Errors: 0 | ⏱ Avg: 226.6s | ⏳ 0:36 left
+                                                                          
+🤖 Running: 40 | ✓ Completed: 8 | ✗ Errors: 0 | ⏱ Avg: 233.3s | ⏳ 0:35 left
+                                                                          
+🤖 Running: 40 | ✓ Completed: 8 | ✗ Errors: 0 | ⏱ Avg: 233.3s | ⏳ 0:33 left
+                                                                          
+🤖 Running: 40 | ✓ Completed: 8 | ✗ Errors: 0 | ⏱ Avg: 233.3s | ⏳ 0:31 left
+                                                                          
+🤖 Running: 40 | ✓ Completed: 8 | ✗ Errors: 0 | ⏱ Avg: 233.3s | ⏳ 0:29 left
+                                                                          
+🤖 Running: 40 | ✓ Completed: 8 | ✗ Errors: 0 | ⏱ Avg: 233.3s | ⏳ 0:27 left
+                                                                          
+🤖 Running: 40 | ✓ Completed: 8 | ✗ Errors: 0 | ⏱ Avg: 233.3s | ⏳ 0:25 left
+                                                                          
+🤖 Running: 40 | ✓ Completed: 8 | ✗ Errors: 0 | ⏱ Avg: 233.3s | ⏳ 0:23 left
+                                                                          
+🤖 Running: 40 | ✓ Completed: 8 | ✗ Errors: 0 | ⏱ Avg: 233.3s | ⏳ 0:21 left
+                                                                          
+🤖 Running: 40 | ✓ Completed: 8 | ✗ Errors: 0 | ⏱ Avg: 233.3s | ⏳ 0:19 left
+                                                                          
+🤖 Running: 40 | ✓ Completed: 8 | ✗ Errors: 0 | ⏱ Avg: 233.3s | ⏳ 0:17 left
+                                                                          
+🤖 Running: 40 | ✓ Completed: 8 | ✗ Errors: 0 | ⏱ Avg: 233.3s | ⏳ 0:15 left
+                                                                          
+🤖 Running: 40 | ✓ Completed: 8 | ✗ Errors: 0 | ⏱ Avg: 233.3s | ⏳ 0:13 left
+                                                                          
+🤖 Running: 40 | ✓ Completed: 8 | ✗ Errors: 0 | ⏱ Avg: 233.3s | ⏳ 0:11 left
+                                                                          
+🤖 Running: 40 | ✓ Completed: 8 | ✗ Errors: 0 | ⏱ Avg: 233.3s | ⏳ 0:09 left
+                                                                          
+🤖 Running: 40 | ✓ Completed: 9 | ✗ Errors: 0 | ⏱ Avg: 243.9s | ⏳ 0:08 left
+                                                                          
+🤖 Running: 40 | ✓ Completed: 9 | ✗ Errors: 0 | ⏱ Avg: 243.9s | ⏳ 0:06 left
+                                                                          
+🤖 Running: 40 | ✓ Completed: 9 | ✗ Errors: 0 | ⏱ Avg: 243.9s | ⏳ 0:04 left
+                                                                          
+🤖 Running: 40 | ✓ Completed: 10 | ✗ Errors: 0 | ⏱ Avg: 256.5s | ⏳ 0:03 left
+                                                                           
+🤖 Running: 40 | ✓ Completed: 10 | ✗ Errors: 0 | ⏱ Avg: 256.5s | ⏳ 0:01 left
+                                                                           
+🤖 Running: 40 | ✓ Completed: 10 | ✗ Errors: 0 | ⏱ Avg: 256.5s | ⏳ 0:00 left
+                                                                                                                                                      
+[92m✓ Test completed[0m
+[1mTEST RESULTS (n=40 bots)[0m
+
+[1m  BOT OUTCOMES[0m
+  ------------------------------------
+  Bots started                50
+  Completed successfully      10
+  Completed with error         0
+  Timed out (still running)   40
+  Completion rate            [93m20%[0m
+
+[1m  BOT RUNTIMES[0m
+  ------------------------------------
+  Test duration            304.8s
+  Avg runtime              228.7s
+  Avg runtime (succeeded)  163.3s
+  Avg runtime (failed)     221.3s
+  Avg runtime (timed out)  230.2s
+
+[1m  BOT INIT TIMES (n=50):[0m
+  ------------------------------------
+  Median            6.505s
+  95th percentile  11.792s
+  Max              12.156s
+
+[1m  REQUEST METRICS[0m
+  ------------------------------------
+  Total requests         4489
+  Request errors            0
+  Throughput      14.73 req/s
+
+[1m  RESPONSE TIMES (n=4489)[0m
+  ------------------------------------
+  Median           0.108s
+  95th percentile  0.867s
+  99th percentile  1.266s
+  Max              6.099s
+  Mean             0.240s
+  Std dev          0.343s
+
+[1m  WAIT PAGE TIMES (n=10 pages)[0m
+  ------------------------------------
+  Median           17.0s
+  95th percentile  29.0s
+  Max              29.0s
+
+[1m  TRIALS PER BOT (n=10 bots succeeded)[0m
+  ------------------------------------
+  Min     0
+  Median  0
+  Max     0
+
+[1m  ASYNC PROCESS TIMES, 1 workers[0m
+  ------------------------------------
+  No completed async processes.
+
+
+[1mCUMULATIVE PERFORMANCE TEST SUMMARY
+[0m
+  Resp P95 — P95 HTTP response time for key endpoints (/timeline, /response)
+  Q P95 all — P95 queue delay across all async processes
+  vs base — ratio to the first (lowest bot-count) row, if multiple counts are run
+
+    || Bots    Succeeded    Requests    Req/s    Resp P95 (s)  Q P95 all (s)
+  ---------  -----------  ----------  -------  --------------  ---------------
+         40           10        4489     14.7           0.867  N/A
+
+Bot output log: /tmp/psynet_bots_yf0z7fu5.log
+Performance results (JSON): /workspace/challenges/ultimatum-game/attempts/2026-06-09-21-32/evidence/performance.json

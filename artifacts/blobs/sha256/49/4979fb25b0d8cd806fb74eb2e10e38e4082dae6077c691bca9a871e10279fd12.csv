@@ -1,0 +1,13 @@
+vars,id,creation_time,failed,failed_reason,time_of_death,type,network_id,participant_id,trial_maker_id,module_id,module_state_id,is_global,on_deploy_complete,async_on_deploy_required,async_on_deploy_requested,async_on_deploy_complete,async_on_deploy_failed,key,degree,target_n_trials,can_spawn,child_id,parent_id,seed,definition,context,participant_group,block,propagate_failure,n_viable_trials,class,object_type
+{},1,2026-06-14 14:31:10,False,,,TrialSource,1,,animals,animals,,,True,False,False,False,False,,0,1000000,False,,,{},"{""animal"": ""cats""}",,default,A,False,0,StaticNode,Node
+{},2,2026-06-14 14:31:10,False,,,TrialSource,2,,animals,animals,,,True,False,False,False,False,,0,1000000,False,,,{},"{""animal"": ""cats""}",,default,B,False,0,StaticNode,Node
+{},3,2026-06-14 14:31:10,False,,,TrialSource,3,,animals,animals,,,True,False,False,False,False,,0,1000000,False,,,{},"{""animal"": ""cats""}",,default,C,False,0,StaticNode,Node
+{},4,2026-06-14 14:31:10,False,,,TrialSource,4,,animals,animals,,,True,False,False,False,False,,0,1000000,False,,,{},"{""animal"": ""dogs""}",,default,A,False,0,StaticNode,Node
+{},5,2026-06-14 14:31:10,False,,,TrialSource,5,,animals,animals,,,True,False,False,False,False,,0,1000000,False,,,{},"{""animal"": ""dogs""}",,default,B,False,0,StaticNode,Node
+{},6,2026-06-14 14:31:10,False,,,TrialSource,6,,animals,animals,,,True,False,False,False,False,,0,1000000,False,,,{},"{""animal"": ""dogs""}",,default,C,False,0,StaticNode,Node
+{},7,2026-06-14 14:31:10,False,,,TrialSource,7,,animals,animals,,,True,False,False,False,False,,0,1000000,False,,,{},"{""animal"": ""fish""}",,default,A,False,0,StaticNode,Node
+{},8,2026-06-14 14:31:10,False,,,TrialSource,8,,animals,animals,,,True,False,False,False,False,,0,1000000,False,,,{},"{""animal"": ""fish""}",,default,B,False,0,StaticNode,Node
+{},9,2026-06-14 14:31:10,False,,,TrialSource,9,,animals,animals,,,True,False,False,False,False,,0,1000000,False,,,{},"{""animal"": ""fish""}",,default,C,False,0,StaticNode,Node
+{},10,2026-06-14 14:31:10,False,,,TrialSource,10,,animals,animals,,,True,False,False,False,False,,0,1000000,False,,,{},"{""animal"": ""ponies""}",,default,A,False,0,StaticNode,Node
+{},11,2026-06-14 14:31:10,False,,,TrialSource,11,,animals,animals,,,True,False,False,False,False,,0,1000000,False,,,{},"{""animal"": ""ponies""}",,default,B,False,0,StaticNode,Node
+{},12,2026-06-14 14:31:10,False,,,TrialSource,12,,animals,animals,,,True,False,False,False,False,,0,1000000,False,,,{},"{""animal"": ""ponies""}",,default,C,False,0,StaticNode,Node

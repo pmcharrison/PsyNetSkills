@@ -1,0 +1,3 @@
+vars,id,creation_time,failed,failed_reason,time_of_death,participant_id,type,class,object_type,test
+"{""test"": ""123""}",1,2026-06-15 10:11:01,False,,,2,Coin,Coin,Coin,123
+"{""test"": ""123""}",2,2026-06-15 10:11:05,False,,,1,Coin,Coin,Coin,123

@@ -1,0 +1,9 @@
+[Config]
+title = Simple multi-item identification experiment (Chrome browser, about 3 minutes)
+description = In this experiment you briefly view numbered colored circles and identify which original item matches or best resembles a later probe. Please use a Chrome browser in incognito mode.
+contact_email_on_error = researcher@example.com
+organization_name = PsyNetSkills
+
+recruiter = generic
+currency = $
+wage_per_hour = 12.0

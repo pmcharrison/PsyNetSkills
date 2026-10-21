@@ -1,0 +1,227 @@
+{% macro melody_edit_control(config) %}
+<div class="melody-editor">
+    <div class="melody-controls">
+        <button type="button" id="play-melody" class="melody-button">Play melody</button>
+        <button type="button" id="reset-melody" class="melody-button secondary">Cancel changes</button>
+        <span id="edit-info" class="edit-info"></span>
+    </div>
+    <div class="sequencer" id="sequencer" aria-label="Melody step sequencer"></div>
+</div>
+
+<script>
+(function () {
+    const pitchLabels = {{ config.pitch_labels | tojson | safe }};
+    const pitchColors = {{ config.pitch_colors | tojson | safe }};
+    const prefillMelody = {{ config.prefill_melody | tojson | safe }};
+    const maxEdits = Number({{ config.num_edits }});
+    const melodyLength = Number({{ config.melody_length }});
+    const rowPitches = [2, 1, 0];
+
+    let melody = prefillMelody.map((slot) => Array.isArray(slot) ? slot.slice() : []);
+    const initialMelody = melody.map((slot) => slot.slice());
+    let audioContext = null;
+
+    function frequencyForPitch(pitch) {
+        return [261.63, 293.66, 329.63][pitch];
+    }
+
+    function diffCount(a, b) {
+        let count = 0;
+        for (let i = 0; i < melodyLength; i++) {
+            for (let pitch = 0; pitch < pitchLabels.length; pitch++) {
+                if (a[i].includes(pitch) !== b[i].includes(pitch)) count += 1;
+            }
+        }
+        return count;
+    }
+
+    function responseData() {
+        return { edit: melody.map((slot) => slot.slice()) };
+    }
+
+    function render() {
+        const sequencer = document.getElementById("sequencer");
+        sequencer.innerHTML = "";
+
+        const corner = document.createElement("div");
+        corner.className = "axis-label corner";
+        sequencer.appendChild(corner);
+
+        for (let slot = 0; slot < melodyLength; slot++) {
+            const label = document.createElement("div");
+            label.className = "axis-label slot-label";
+            label.textContent = String(slot + 1);
+            sequencer.appendChild(label);
+        }
+
+        rowPitches.forEach((pitch) => {
+            const rowLabel = document.createElement("div");
+            rowLabel.className = "axis-label pitch-label";
+            rowLabel.textContent = pitchLabels[pitch];
+            rowLabel.style.color = pitchColors[pitch];
+            sequencer.appendChild(rowLabel);
+
+            for (let slot = 0; slot < melodyLength; slot++) {
+                const cell = document.createElement("button");
+                cell.type = "button";
+                cell.className = "note-cell";
+                cell.dataset.pitch = String(pitch);
+                cell.dataset.slot = String(slot);
+                cell.style.setProperty("--pitch-color", pitchColors[pitch]);
+                cell.setAttribute("aria-label", pitchLabels[pitch] + " slot " + (slot + 1));
+                if (melody[slot].includes(pitch)) cell.classList.add("active");
+                cell.addEventListener("click", () => toggleNote(slot, pitch));
+                sequencer.appendChild(cell);
+            }
+        });
+
+        updateInfo();
+    }
+
+    function toggleNote(slot, pitch) {
+        const candidate = melody.map((notes) => notes.slice());
+        if (candidate[slot].includes(pitch)) {
+            candidate[slot] = candidate[slot].filter((note) => note !== pitch);
+        } else {
+            candidate[slot].push(pitch);
+            candidate[slot].sort();
+        }
+        if (diffCount(candidate, initialMelody) > maxEdits) {
+            const cell = document.querySelector(`.note-cell[data-slot="${slot}"][data-pitch="${pitch}"]`);
+            if (cell) {
+                cell.classList.add("hit-limit");
+                setTimeout(() => cell.classList.remove("hit-limit"), 250);
+            }
+            return;
+        }
+        melody = candidate;
+        render();
+    }
+
+    function updateInfo() {
+        const remaining = Math.max(0, maxEdits - diffCount(melody, initialMelody));
+        document.getElementById("edit-info").textContent = `Edits remaining: ${remaining} / ${maxEdits}`;
+    }
+
+    function playMelody() {
+        audioContext = audioContext || new (window.AudioContext || window.webkitAudioContext)();
+        const start = audioContext.currentTime + 0.04;
+        const step = 0.24;
+        melody.forEach((notes, slot) => {
+            notes.forEach((pitch) => {
+                const oscillator = audioContext.createOscillator();
+                const gain = audioContext.createGain();
+                oscillator.type = "sine";
+                oscillator.frequency.value = frequencyForPitch(pitch);
+                gain.gain.setValueAtTime(0.0001, start + slot * step);
+                gain.gain.exponentialRampToValueAtTime(0.12, start + slot * step + 0.02);
+                gain.gain.exponentialRampToValueAtTime(0.0001, start + (slot + 0.82) * step);
+                oscillator.connect(gain).connect(audioContext.destination);
+                oscillator.start(start + slot * step);
+                oscillator.stop(start + (slot + 0.9) * step);
+            });
+        });
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        render();
+        document.getElementById("play-melody").addEventListener("click", playMelody);
+        document.getElementById("reset-melody").addEventListener("click", function () {
+            melody = initialMelody.map((slot) => slot.slice());
+            render();
+        });
+
+        psynet.stageResponse = function () {
+            psynet.response.staged.rawAnswer = responseData();
+        };
+
+        retrieveResponse = function () {
+            return { rawAnswer: responseData() };
+        };
+    });
+})();
+</script>
+
+<style>
+    .melody-editor {
+        max-width: 680px;
+        margin: 0 auto;
+        padding: 18px;
+        background: #f8f9fa;
+        border-radius: 12px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
+        text-align: center;
+    }
+
+    .melody-controls {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        margin-bottom: 14px;
+    }
+
+    .melody-button {
+        border: none;
+        border-radius: 7px;
+        color: #fff;
+        background: #2f80ed;
+        padding: 8px 14px;
+        cursor: pointer;
+        font-weight: 600;
+    }
+
+    .melody-button.secondary {
+        background: #6c757d;
+    }
+
+    .edit-info {
+        color: #333;
+        font-size: 14px;
+    }
+
+    .sequencer {
+        display: grid;
+        grid-template-columns: 46px repeat(9, 46px);
+        grid-template-rows: 24px repeat(3, 46px);
+        gap: 5px;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .axis-label {
+        font-weight: 700;
+        text-align: center;
+    }
+
+    .pitch-label {
+        text-align: right;
+        padding-right: 6px;
+    }
+
+    .note-cell {
+        width: 44px;
+        height: 44px;
+        border: 2px solid #d0d5dd;
+        border-radius: 8px;
+        background: #fff;
+        cursor: pointer;
+        transition: transform 100ms ease, background 100ms ease, box-shadow 100ms ease;
+    }
+
+    .note-cell:hover {
+        transform: scale(0.96);
+        box-shadow: inset 0 0 0 2px var(--pitch-color);
+    }
+
+    .note-cell.active {
+        background: var(--pitch-color);
+        border-color: var(--pitch-color);
+    }
+
+    .note-cell.hit-limit {
+        box-shadow: 0 0 0 3px #dc3545 inset;
+    }
+</style>
+{% endmacro %}

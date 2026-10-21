@@ -1,0 +1,7 @@
+Command:
+
+psynet performance-test local --n-bots 40 --duration-minutes 5 --time-factor 1.0 --json-output /workspace/challenges/adaptive-realtime-prisoners-dilemma/attempts/2026-06-30-14-24/evidence/performance.json
+
+Result:
+
+The command completed and wrote `evidence/performance.json`.

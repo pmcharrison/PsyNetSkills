@@ -1,0 +1,3 @@
+vars,creation_time,failed,failed_reason,time_of_death,id,node_id,participant_id,room_id,content,receive_time,type,class,object_type
+{},2026-06-09 18:06:45,False,,,1,1,1,rps_deliberation_group_1_node_1,Let's coordinate: I will choose rock.,2026-06-09 18:06:45,ChatMessage,ChatMessage,ChatMessage
+{},2026-06-09 18:06:46,False,,,2,1,2,rps_deliberation_group_1_node_1,Got it. I will choose paper so we can verify scoring.,2026-06-09 18:06:46,ChatMessage,ChatMessage,ChatMessage

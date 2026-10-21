@@ -1,0 +1,14 @@
+[Config]
+title = Similarity, discrimination, and identification experiment
+description = Participants judge same-different pairs, rate color similarity, complete a short multi-item identification task, and then complete color-vision and demographic measures.
+contact_email_on_error = researcher@example.com
+organization_name = PsyNetSkills
+
+recruiter = generic
+currency = $
+wage_per_hour = 12.0
+
+[Prolific]
+auto_recruit = false
+prolific_estimated_completion_minutes = 12
+base_payment = 2.40

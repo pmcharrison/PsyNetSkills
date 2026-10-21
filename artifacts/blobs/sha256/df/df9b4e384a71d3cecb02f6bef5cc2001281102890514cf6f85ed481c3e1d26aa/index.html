@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+        <base href="./">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Gibbs bot profile monitor</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/vis-network/styles/vis-network.min.css">
+  <style>
+    #monitor-wrapper { gap: 1rem; }
+    #mynetwork { height: 720px; border: 1px solid #dee2e6; border-radius: .25rem; background: #f8f9fa; margin-bottom: 1rem; }
+    #details-pane { border: 1px solid #dee2e6; border-radius: .25rem; padding: 1rem; margin-bottom: 1rem; background: #fff; }
+    aside#sidebar { width: 320px; min-width: 280px; }
+    .sidebar-pane { border: 1px solid #dee2e6; border-radius: .25rem; margin-bottom: 1rem; padding: .75rem; background: #f8f9fa; }
+    .profile-pill { border-radius: 999px; color: white; display: inline-block; font-size: .78rem; font-weight: 700; padding: .12rem .5rem; }
+    .curated-table th { width: 12rem; color: #495057; }
+    .curated-card { border-left: 5px solid #dee2e6; padding: .75rem 1rem; margin: .75rem 0; background: #f8f9fa; }
+    .network-expander { border: 1px solid #dee2e6; border-radius: .25rem; margin: .5rem 0; padding: .5rem .75rem; background: #fff; }
+  </style>
+
+        <style>
+          body { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; margin: 1rem; }
+          .container { max-width: none; }
+          #dashboard-navigation, #logout { display: none; }
+          #monitor-wrapper { display: flex; gap: 1rem; align-items: flex-start; }
+          #sidebar { flex: 0 0 18rem; }
+          #timeline-wrapper, #timeline, main { flex: 1 1 auto; min-width: 0; }
+          table { border-collapse: collapse; width: 100%; }
+          th, td { border: 1px solid #d0d7de; padding: 0.4rem; text-align: left; vertical-align: top; }
+          button { border: 1px solid #d0d7de; border-radius: 0.35rem; background: #f6f8fa; padding: 0.3rem 0.6rem; }
+        </style>
+    </head>
+<body>
+  <div class="container">
+    <nav id="dashboard-navigation"></nav>
+    <h1>Gibbs bot profile simulation monitor</h1>
+    <p>Profile-colored monitor dashboard generated from the simulated export. Participant nodes are labeled with their assigned bot profile.</p>
+    <div id="monitor-wrapper" class="d-flex justify-content-between align-items-stretch">
+      <main class="flex-fill">
+        <section id="monitor-controls"></section>
+        <section id="statistics" class="collapse show p-3 bg-light"><h2>Observed profile distribution</h2><table class="table table-sm"><thead><tr><th>Profile</th><th>Completed participants</th><th>Completed color trials</th></tr></thead><tbody><tr><td><span class="profile-pill" style="background:#4e79a7">normal_rgb</span></td><td>5</td><td>35</td></tr><tr><td><span class="profile-pill" style="background:#f28e2b">random</span></td><td>5</td><td>35</td></tr></tbody></table><p>Target distribution: 5 random bots and 5 normal_rgb bots. Observed distribution matches the target.</p></section>
+        <section id="advanced-filter" class="collapse show p-3 bg-light"><p>Profiles shown: random and normal_rgb.</p></section>
+        <section id="mynetwork"></section>
+        <section id="details-pane">
+          <h2>Details</h2>
+          <div id="element-details"><h4>Profile: normal_rgb</h4><p><span class="profile-pill" style="background:#4e79a7">normal_rgb</span></p><table class="table table-sm curated-table"><tr><th>Completed participants</th><td>5</td></tr><tr><th>Completed color trials</th><td>35</td></tr></table></div>
+        </section>
+        <section id="summary-accordion"><div class="network-expander"><h3>Gibbs task preservation</h3><p>The monitor summarizes bot profile scheduling while the experiment retains the original target-word, RGB slider, Gibbs group, and across-chain trial structure.</p></div></section>
+      </main>
+      <aside id="sidebar"><div class="sidebar-pane"><h3>Profile colors</h3><p><span class="profile-pill" style="background:#4e79a7">normal_rgb</span> 5 participants</p><p><span class="profile-pill" style="background:#f28e2b">random</span> 5 participants</p></div><div class="sidebar-pane"><h3>Selection</h3><p>Click a profile or participant node to inspect profile metadata and completed color-trial counts.</p></div></aside>
+    </div>
+  </div>
+  <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+  <script>
+    const graphNodes = [{"id": "profile-normal_rgb", "label": "normal_rgb\n5 bots", "detailId": "profile-normal_rgb", "title": "Profile: normal_rgb; completed participants: 5", "shape": "box", "color": {"background": "#4e79a7", "border": "#333333"}, "font": {"color": "#ffffff"}}, {"id": "profile-random", "label": "random\n5 bots", "detailId": "profile-random", "title": "Profile: random; completed participants: 5", "shape": "box", "color": {"background": "#f28e2b", "border": "#333333"}, "font": {"color": "#ffffff"}}, {"id": "participant-1", "label": "P1\nnormal_rgb", "detailId": "detail-1", "title": "Participant 1 \u2014 profile: normal_rgb", "color": {"background": "#4e79a7", "border": "#333333"}, "font": {"color": "#ffffff"}}, {"id": "participant-2", "label": "P2\nrandom", "detailId": "detail-2", "title": "Participant 2 \u2014 profile: random", "color": {"background": "#f28e2b", "border": "#333333"}, "font": {"color": "#ffffff"}}, {"id": "participant-3", "label": "P3\nnormal_rgb", "detailId": "detail-3", "title": "Participant 3 \u2014 profile: normal_rgb", "color": {"background": "#4e79a7", "border": "#333333"}, "font": {"color": "#ffffff"}}, {"id": "participant-4", "label": "P4\nnormal_rgb", "detailId": "detail-4", "title": "Participant 4 \u2014 profile: normal_rgb", "color": {"background": "#4e79a7", "border": "#333333"}, "font": {"color": "#ffffff"}}, {"id": "participant-5", "label": "P5\nrandom", "detailId": "detail-5", "title": "Participant 5 \u2014 profile: random", "color": {"background": "#f28e2b", "border": "#333333"}, "font": {"color": "#ffffff"}}, {"id": "participant-6", "label": "P6\nrandom", "detailId": "detail-6", "title": "Participant 6 \u2014 profile: random", "color": {"background": "#f28e2b", "border": "#333333"}, "font": {"color": "#ffffff"}}, {"id": "participant-7", "label": "P7\nrandom", "detailId": "detail-7", "title": "Participant 7 \u2014 profile: random", "color": {"background": "#f28e2b", "border": "#333333"}, "font": {"color": "#ffffff"}}, {"id": "participant-8", "label": "P8\nrandom", "detailId": "detail-8", "title": "Participant 8 \u2014 profile: random", "color": {"background": "#f28e2b", "border": "#333333"}, "font": {"color": "#ffffff"}}, {"id": "participant-9", "label": "P9\nnormal_rgb", "detailId": "detail-9", "title": "Participant 9 \u2014 profile: normal_rgb", "color": {"background": "#4e79a7", "border": "#333333"}, "font": {"color": "#ffffff"}}, {"id": "participant-10", "label": "P10\nnormal_rgb", "detailId": "detail-10", "title": "Participant 10 \u2014 profile: normal_rgb", "color": {"background": "#4e79a7", "border": "#333333"}, "font": {"color": "#ffffff"}}];
+    const graphEdges = [{"from": "profile-normal_rgb", "to": "participant-1", "arrows": "to", "color": {"color": "#4e79a7"}}, {"from": "profile-random", "to": "participant-2", "arrows": "to", "color": {"color": "#f28e2b"}}, {"from": "profile-normal_rgb", "to": "participant-3", "arrows": "to", "color": {"color": "#4e79a7"}}, {"from": "profile-normal_rgb", "to": "participant-4", "arrows": "to", "color": {"color": "#4e79a7"}}, {"from": "profile-random", "to": "participant-5", "arrows": "to", "color": {"color": "#f28e2b"}}, {"from": "profile-random", "to": "participant-6", "arrows": "to", "color": {"color": "#f28e2b"}}, {"from": "profile-random", "to": "participant-7", "arrows": "to", "color": {"color": "#f28e2b"}}, {"from": "profile-random", "to": "participant-8", "arrows": "to", "color": {"color": "#f28e2b"}}, {"from": "profile-normal_rgb", "to": "participant-9", "arrows": "to", "color": {"color": "#4e79a7"}}, {"from": "profile-normal_rgb", "to": "participant-10", "arrows": "to", "color": {"color": "#4e79a7"}}];
+    const detailHtmlById = {"profile-normal_rgb": "<h4>Profile: normal_rgb</h4><p><span class=\"profile-pill\" style=\"background:#4e79a7\">normal_rgb</span></p><table class=\"table table-sm curated-table\"><tr><th>Completed participants</th><td>5</td></tr><tr><th>Completed color trials</th><td>35</td></tr></table>", "profile-random": "<h4>Profile: random</h4><p><span class=\"profile-pill\" style=\"background:#f28e2b\">random</span></p><table class=\"table table-sm curated-table\"><tr><th>Completed participants</th><td>5</td></tr><tr><th>Completed color trials</th><td>35</td></tr></table>", "detail-1": "<h4>Participant 1</h4><p><span class=\"profile-pill\" style=\"background:#4e79a7\">normal_rgb</span></p><table class=\"table table-sm curated-table\"><tr><th>Gibbs group</th><td>B</td></tr><tr><th>Completed color trials</th><td>7</td></tr><tr><th>Targets</th><td>banana, carrot, rock, tree</td></tr><tr><th>Response range</th><td>105-218</td></tr></table>", "detail-2": "<h4>Participant 2</h4><p><span class=\"profile-pill\" style=\"background:#f28e2b\">random</span></p><table class=\"table table-sm curated-table\"><tr><th>Gibbs group</th><td>A</td></tr><tr><th>Completed color trials</th><td>7</td></tr><tr><th>Targets</th><td>banana, carrot, rock, tree</td></tr><tr><th>Response range</th><td>9-248</td></tr></table>", "detail-3": "<h4>Participant 3</h4><p><span class=\"profile-pill\" style=\"background:#4e79a7\">normal_rgb</span></p><table class=\"table table-sm curated-table\"><tr><th>Gibbs group</th><td>B</td></tr><tr><th>Completed color trials</th><td>7</td></tr><tr><th>Targets</th><td>banana, carrot, rock, tree</td></tr><tr><th>Response range</th><td>36-235</td></tr></table>", "detail-4": "<h4>Participant 4</h4><p><span class=\"profile-pill\" style=\"background:#4e79a7\">normal_rgb</span></p><table class=\"table table-sm curated-table\"><tr><th>Gibbs group</th><td>A</td></tr><tr><th>Completed color trials</th><td>7</td></tr><tr><th>Targets</th><td>banana, carrot, rock, tree</td></tr><tr><th>Response range</th><td>0-255</td></tr></table>", "detail-5": "<h4>Participant 5</h4><p><span class=\"profile-pill\" style=\"background:#f28e2b\">random</span></p><table class=\"table table-sm curated-table\"><tr><th>Gibbs group</th><td>B</td></tr><tr><th>Completed color trials</th><td>7</td></tr><tr><th>Targets</th><td>banana, carrot, rock, tree</td></tr><tr><th>Response range</th><td>3-182</td></tr></table>", "detail-6": "<h4>Participant 6</h4><p><span class=\"profile-pill\" style=\"background:#f28e2b\">random</span></p><table class=\"table table-sm curated-table\"><tr><th>Gibbs group</th><td>A</td></tr><tr><th>Completed color trials</th><td>7</td></tr><tr><th>Targets</th><td>banana, carrot, rock, tree</td></tr><tr><th>Response range</th><td>20-199</td></tr></table>", "detail-7": "<h4>Participant 7</h4><p><span class=\"profile-pill\" style=\"background:#f28e2b\">random</span></p><table class=\"table table-sm curated-table\"><tr><th>Gibbs group</th><td>B</td></tr><tr><th>Completed color trials</th><td>7</td></tr><tr><th>Targets</th><td>banana, carrot, rock, tree</td></tr><tr><th>Response range</th><td>0-233</td></tr></table>", "detail-8": "<h4>Participant 8</h4><p><span class=\"profile-pill\" style=\"background:#f28e2b\">random</span></p><table class=\"table table-sm curated-table\"><tr><th>Gibbs group</th><td>A</td></tr><tr><th>Completed color trials</th><td>7</td></tr><tr><th>Targets</th><td>banana, carrot, rock, tree</td></tr><tr><th>Response range</th><td>7-237</td></tr></table>", "detail-9": "<h4>Participant 9</h4><p><span class=\"profile-pill\" style=\"background:#4e79a7\">normal_rgb</span></p><table class=\"table table-sm curated-table\"><tr><th>Gibbs group</th><td>B</td></tr><tr><th>Completed color trials</th><td>7</td></tr><tr><th>Targets</th><td>banana, carrot, rock, tree</td></tr><tr><th>Response range</th><td>136-255</td></tr></table>", "detail-10": "<h4>Participant 10</h4><p><span class=\"profile-pill\" style=\"background:#4e79a7\">normal_rgb</span></p><table class=\"table table-sm curated-table\"><tr><th>Gibbs group</th><td>A</td></tr><tr><th>Completed color trials</th><td>7</td></tr><tr><th>Targets</th><td>banana, carrot, rock, tree</td></tr><tr><th>Response range</th><td>0-230</td></tr></table>"};
+
+    function renderMonitor() {
+      const data = {
+        nodes: new vis.DataSet(graphNodes),
+        edges: new vis.DataSet(graphEdges)
+      };
+      const options = {"layout": {"hierarchical": {"enabled": true, "direction": "LR", "sortMethod": "directed"}}, "nodes": {"shape": "dot", "size": 22}, "edges": {"smooth": true}, "physics": {"enabled": false}};
+      const network = new vis.Network(document.getElementById("mynetwork"), data, options);
+      network.on("select", (params) => {
+        if (!params.nodes.length) return;
+        const node = data.nodes.get(params.nodes[0]);
+        document.getElementById("element-details").innerHTML =
+          detailHtmlById[node.detailId] || "Select a profile or participant node.";
+      });
+    }
+
+    window.addEventListener("load", renderMonitor);
+  </script>
+</body>
+</html>

@@ -1,0 +1,299 @@
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Language: hi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: experiment.py
+msgid "Which apartment would you rent?"
+msgstr "आप कौन-सा अपार्टमेंट किराए पर लेंगे?"
+
+#: experiment.py
+msgid "Apartment A"
+msgstr "अपार्टमेंट A"
+
+#: experiment.py
+msgid "Close to the city center"
+msgstr "शहर के केंद्र के पास"
+
+#: experiment.py
+msgid "Small balcony"
+msgstr "छोटी बालकनी"
+
+#: experiment.py
+msgid "Higher monthly rent"
+msgstr "अधिक मासिक किराया"
+
+#: experiment.py
+msgid "Apartment B"
+msgstr "अपार्टमेंट B"
+
+#: experiment.py
+msgid "Quiet neighborhood"
+msgstr "शांत मोहल्ला"
+
+#: experiment.py
+msgid "Spacious living room"
+msgstr "विशाल बैठक कक्ष"
+
+#: experiment.py
+msgid "Long commute to work"
+msgstr "काम पर जाने के लिए लंबा सफ़र"
+
+#: experiment.py
+msgid "Lower monthly rent"
+msgstr "कम मासिक किराया"
+
+#: experiment.py
+msgid "Which job offer would you accept?"
+msgstr "आप कौन-सा नौकरी का प्रस्ताव स्वीकार करेंगे?"
+
+#: experiment.py
+msgid "Job A"
+msgstr "नौकरी A"
+
+#: experiment.py
+msgid "Higher salary"
+msgstr "अधिक वेतन"
+
+#: experiment.py
+msgid "Frequent overtime"
+msgstr "बार-बार ओवरटाइम"
+
+#: experiment.py
+msgid "Prestigious company"
+msgstr "प्रतिष्ठित कंपनी"
+
+#: experiment.py
+msgid "Few opportunities to learn new skills"
+msgstr "नए कौशल सीखने के कम अवसर"
+
+#: experiment.py
+msgid "Job B"
+msgstr "नौकरी B"
+
+#: experiment.py
+msgid "Flexible working hours"
+msgstr "लचीले काम के घंटे"
+
+#: experiment.py
+msgid "Supportive colleagues"
+msgstr "सहयोगी सहकर्मी"
+
+#: experiment.py
+msgid "Which restaurant would you go to for dinner?"
+msgstr "आप रात के खाने के लिए किस रेस्तरां में जाएँगे?"
+
+#: experiment.py
+msgid "Restaurant A"
+msgstr "रेस्तरां A"
+
+#: experiment.py
+msgid "Traditional local cuisine"
+msgstr "पारंपरिक स्थानीय व्यंजन"
+
+#: experiment.py
+msgid "Often fully booked"
+msgstr "अक्सर पूरी तरह बुक रहता है"
+
+#: experiment.py
+msgid "Restaurant B"
+msgstr "रेस्तरां B"
+
+#: experiment.py
+msgid "International menu"
+msgstr "अंतरराष्ट्रीय मेन्यू"
+
+#: experiment.py
+msgid "Quick service"
+msgstr "तेज़ सेवा"
+
+#: experiment.py
+msgid "Average reviews"
+msgstr "औसत समीक्षाएँ"
+
+#: experiment.py
+msgid "Which vacation would you book?"
+msgstr "आप कौन-सी छुट्टियाँ बुक करेंगे?"
+
+#: experiment.py
+msgid "Vacation A"
+msgstr "छुट्टी A"
+
+#: experiment.py
+msgid "Beach resort"
+msgstr "समुद्र तट रिसॉर्ट"
+
+#: experiment.py
+msgid "All meals included"
+msgstr "सभी भोजन शामिल"
+
+#: experiment.py
+msgid "Crowded in high season"
+msgstr "पीक सीज़न में भीड़भाड़"
+
+#: experiment.py
+msgid "Short flight"
+msgstr "छोटी उड़ान"
+
+#: experiment.py
+msgid "Limited cultural activities"
+msgstr "सीमित सांस्कृतिक गतिविधियाँ"
+
+#: experiment.py
+msgid "Vacation B"
+msgstr "छुट्टी B"
+
+#: experiment.py
+msgid "Mountain hiking"
+msgstr "पहाड़ों में हाइकिंग"
+
+#: experiment.py
+msgid "Quiet surroundings"
+msgstr "शांत वातावरण"
+
+#: experiment.py
+msgid "Unpredictable weather"
+msgstr "अनिश्चित मौसम"
+
+#: experiment.py
+msgid "Which phone would you buy?"
+msgstr "आप कौन-सा फ़ोन खरीदेंगे?"
+
+#: experiment.py
+msgid "Phone A"
+msgstr "फ़ोन A"
+
+#: experiment.py
+msgid "Excellent camera"
+msgstr "उत्कृष्ट कैमरा"
+
+#: experiment.py
+msgid "Expensive"
+msgstr "महँगा"
+
+#: experiment.py
+msgid "Large screen"
+msgstr "बड़ी स्क्रीन"
+
+#: experiment.py
+msgid "Phone B"
+msgstr "फ़ोन B"
+
+#: experiment.py
+msgid "Affordable price"
+msgstr "किफ़ायती कीमत"
+
+#: experiment.py
+msgid "Long battery life"
+msgstr "लंबी बैटरी लाइफ़"
+
+#: experiment.py
+msgid "Slower processor"
+msgstr "धीमा प्रोसेसर"
+
+#: experiment.py
+msgid "Compact size"
+msgstr "कॉम्पैक्ट आकार"
+
+#: experiment.py
+msgid "Water resistant"
+msgstr "पानी से सुरक्षित"
+
+#: experiment.py
+msgid "How would you spend your free Saturday?"
+msgstr "आप अपना खाली शनिवार कैसे बिताएँगे?"
+
+#: experiment.py
+msgid "Plan A"
+msgstr "योजना A"
+
+#: experiment.py
+msgid "Picnic in the park with friends"
+msgstr "दोस्तों के साथ पार्क में पिकनिक"
+
+#: experiment.py
+msgid "Depends on good weather"
+msgstr "अच्छे मौसम पर निर्भर"
+
+#: experiment.py
+msgid "Plan B"
+msgstr "योजना B"
+
+#: experiment.py
+msgid "Visit to a museum"
+msgstr "संग्रहालय की सैर"
+
+#: experiment.py
+msgid "Entrance fee required"
+msgstr "प्रवेश शुल्क आवश्यक"
+
+#: experiment.py
+msgid "Indoor activity"
+msgstr "घर के अंदर की गतिविधि"
+
+#: experiment.py
+msgid "New special exhibition"
+msgstr "नई विशेष प्रदर्शनी"
+
+#: experiment.py
+msgid "On each trial you will see two options side by side."
+msgstr "हर ट्रायल में आपको दो विकल्प साथ-साथ दिखाई देंगे।"
+
+#: experiment.py
+msgid "Each option is described by a list of features."
+msgstr "हर विकल्प का वर्णन विशेषताओं की एक सूची से किया गया है।"
+
+#: experiment.py
+msgid "Read the features of both options carefully."
+msgstr "दोनों विकल्पों की विशेषताओं को ध्यान से पढ़ें।"
+
+#: experiment.py
+msgid "Then click the button of the option you would choose."
+msgstr "फिर उस विकल्प के बटन पर क्लिक करें जिसे आप चुनेंगे।"
+
+#: experiment.py
+msgid ""
+"There are no right or wrong answers; we are interested in your personal "
+"preferences."
+msgstr ""
+"कोई सही या गलत उत्तर नहीं है; हम आपकी व्यक्तिगत पसंद में रुचि रखते हैं।"
+
+#: experiment.py
+msgid "Welcome!"
+msgstr "स्वागत है!"
+
+#: experiment.py
+msgid "Thank you for joining this study on decision making."
+msgstr "निर्णय लेने पर इस अध्ययन में शामिल होने के लिए धन्यवाद।"
+
+#: experiment.py
+msgid "Press 'Next' to continue."
+msgstr "जारी रखने के लिए 'अगला' दबाएँ।"
+
+#: experiment.py
+msgid "Instructions"
+msgstr "निर्देश"
+
+#: experiment.py
+msgid "Press 'Next' to start the experiment."
+msgstr "प्रयोग शुरू करने के लिए 'अगला' दबाएँ।"
+
+#: experiment.py
+msgid "Thank you!"
+msgstr "धन्यवाद!"
+
+#: experiment.py
+msgid "You have completed all the choices."
+msgstr "आपने सभी चुनाव पूरे कर लिए हैं।"
+
+#: experiment.py
+msgid "Your responses have been recorded."
+msgstr "आपके उत्तर दर्ज कर लिए गए हैं।"
+
+#: experiment.py
+msgid "Instructions (click to expand)"
+msgstr "निर्देश (विस्तार के लिए क्लिक करें)"

@@ -1,0 +1,16 @@
+{
+  "name": "primary_color_rating",
+  "version": "1.0.0",
+  "description": "Playwright evidence for the primary color rating PsyNet challenge attempt.",
+  "main": "index.js",
+  "scripts": {
+    "participant-flow": "playwright test tests/participant-flow.spec.js",
+    "record-participant-flow": "node scripts/record-participant-flow.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.60.0"
+  }
+}

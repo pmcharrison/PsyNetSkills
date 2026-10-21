@@ -1,0 +1,5 @@
+.deploy
+.venv
+env
+__pycache__
+server.log

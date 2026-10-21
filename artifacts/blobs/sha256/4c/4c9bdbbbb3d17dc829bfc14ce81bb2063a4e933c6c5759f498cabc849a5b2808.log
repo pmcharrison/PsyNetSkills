@@ -1,0 +1,16 @@
+============================= test session starts ==============================
+platform linux -- Python 3.13.13, pytest-9.0.3, pluggy-1.6.0
+rootdir: /workspace
+configfile: pyproject.toml
+testpaths: tests
+collected 65 items
+
+tests/test_cursor_costs.py ....                                          [  6%]
+tests/test_dashboard.py .....................                            [ 38%]
+tests/test_giscus.py .                                                   [ 40%]
+tests/test_pr_preview_cleanup.py .....                                   [ 47%]
+tests/test_pr_preview_redirect.py ....                                   [ 53%]
+tests/test_timeline.py ..                                                [ 56%]
+tests/test_validate.py ............................                      [100%]
+
+============================== 65 passed in 0.29s ==============================

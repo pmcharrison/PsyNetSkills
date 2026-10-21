@@ -1,0 +1,2 @@
+psynet@git+https://gitlab.com/PsyNetDev/PsyNet@bd50a55faed0bd3679df9de00997f951e1e3b467#egg=psynet
+pyro-ppl

@@ -1,0 +1,14 @@
+{
+  "run_id": "revised",
+  "revision": "revised",
+  "created_at": "2026-06-11T14:19:20+00:00",
+  "seed": 578,
+  "n_participants_per_profile": 3,
+  "profiles": {
+    "psynet_bot_rule": "Rule-following PsyNet bot profile that selects the target answer.",
+    "scripted_noisy": "Scripted inattentive profile with stochastic guesses and long response times.",
+    "mock_llm_memory_limited": "Prompt-style mock LLM profile with limited ordered memory.",
+    "semantic_bias": "Scripted profile that overweights semantically related alternatives."
+  },
+  "export_format": "PsyNet-style local simulation export"
+}

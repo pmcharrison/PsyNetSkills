@@ -1,0 +1,15 @@
+[Config]
+title = Melody market experiment (Chrome browser, about 11 minutes to complete)
+description = Compose short melodies that compete in a shared rolling market. Please use Chrome in an incognito window.
+contact_email_on_error = computational.audition@gmail.com
+organization_name = Cornell Computational Cognition Lab
+
+recruiter = generic
+currency = $
+wage_per_hour = 12.0
+show_reward = false
+
+[Prolific]
+auto_recruit = false
+prolific_estimated_completion_minutes = 11
+base_payment = 2.25

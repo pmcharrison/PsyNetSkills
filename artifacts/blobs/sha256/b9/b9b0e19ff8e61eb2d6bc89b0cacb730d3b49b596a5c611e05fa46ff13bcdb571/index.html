@@ -1,0 +1,59 @@
+{% macro survey_js(params) %}
+<div id="surveyContainer"></div>
+
+<link href="{{ url_for('static', filename='scripts/survey-jquery/defaultV2.min.css') }}" type="text/css" rel="stylesheet">
+
+<script>
+var survey;
+
+function initSurvey() {
+    Survey.StylesManager.applyTheme("defaultV2");
+    const surveyJson = {{ params.design | tojson }};
+    survey = new Survey.Model(surveyJson);
+    survey.focusFirstQuestionAutomatic = false;
+
+    {% if params.use_psynet_next_button %}
+    survey.showNavigationButtons = false;
+
+    psynet.stageResponse = () => {
+        let success = survey.completeLastPage();
+        if (!success) {
+            throw new Error("The participant failed SurveyJS validation checks.");
+        }
+    };
+    {% endif %}
+
+    function handleSurveyCompletion(sender, options) {
+        options.allowComplete = false;
+        options.allowCompleting = false;
+        asyncPostResults(sender);
+    }
+
+    async function asyncPostResults(sender) {
+        survey.onCompleting.remove(handleSurveyCompletion);
+        $("#main-body").hide();
+        const success = await psynet.nextPage(JSON.stringify(sender.data));
+        if (success) {
+            sender.doComplete();
+        } else {
+            $("#main-body").show();
+            survey.onCompleting.add(handleSurveyCompletion);
+        }
+    }
+
+    survey.onAfterRenderPage.add(() => {
+        $(".sd-navigation__complete-btn").addClass("submit");
+        if (!psynet.trial.events.submitEnable.happened) {
+            $(".sd-navigation__complete-btn").attr("disabled", true);
+        }
+    });
+    survey.onCompleting.add(handleSurveyCompletion);
+
+    $(function() {
+        $("#surveyContainer").Survey({ model: survey });
+    });
+}
+
+document.addEventListener("DOMContentLoaded", initSurvey);
+</script>
+{% endmacro %}

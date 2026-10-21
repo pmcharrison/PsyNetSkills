@@ -1,0 +1,51 @@
+{
+  "python_experiment": {
+    "command": "python experiment.py",
+    "log": "evidence/python_experiment.log",
+    "status": "passed"
+  },
+  "psynet_test_local": {
+    "command": "psynet test local",
+    "log": "evidence/psynet_test_local.log",
+    "status": "passed",
+    "result": "2 passed, 3 warnings"
+  },
+  "performance_test": {
+    "command": "PYTHONPATH=\"$HOME/PsyNet\" psynet performance-test local --n-bots 40 --duration-minutes 5 --time-factor 1.0 --json-output ../../evidence/performance.json",
+    "json": "evidence/performance.json",
+    "log": "evidence/performance-test.log",
+    "status": "completed",
+    "result": {
+      "n_bots": 40,
+      "duration_minutes": 5.0,
+      "time_factor": 1.0,
+      "bots_started": 203,
+      "bots_succeeded": 164,
+      "bots_incomplete": 37,
+      "bot_errors": 0,
+      "requests": 2660,
+      "requests_per_second": 8.726,
+      "median_response_time_seconds": 0.104,
+      "p95_response_time_seconds": 0.286
+    }
+  },
+  "participant_video": {
+    "path": "evidence/participant.mp4",
+    "capture_log": "evidence/ffmpeg_participant.log",
+    "postprocess_log": "evidence/ffmpeg_participant_xvfb_postdelay_2080.log",
+    "ffprobe_log": "evidence/ffprobe_participant.log",
+    "volumedetect_log": "evidence/volumedetect_participant.log",
+    "audio_segments_log": "evidence/audio_segments_xvfb_postdelay_2080.log",
+    "sync_probe_uncorrected_analysis": "evidence/sync_probe_analysis.log",
+    "sync_probe_corrected_analysis": "evidence/sync_probe_postdelay_2080_analysis.log",
+    "duration_seconds": 36.8,
+    "audio_delay_ms": 2080,
+    "audio_mean_volume_db": -20.1,
+    "audio_max_volume_db": -9.1
+  },
+  "dashboard_evidence": {
+    "monitor_snapshot": "evidence/monitor.html",
+    "data_export": "evidence/data.zip",
+    "data_listing": "evidence/data_zip_listing.log"
+  }
+}

@@ -1,0 +1,12 @@
+[Config]
+title = Curiosity discovery demo (Chrome browser, 2 minutes to complete)
+description = Read short facts and rate how curious you are to learn more. This local demonstration uses only generic/local recruitment.
+contact_email_on_error = XXX@gmail.com
+organization_name = PsyNetSkills
+
+recruiter = generic
+currency = $
+wage_per_hour = 12.0
+
+[Prolific]
+auto_recruit = false

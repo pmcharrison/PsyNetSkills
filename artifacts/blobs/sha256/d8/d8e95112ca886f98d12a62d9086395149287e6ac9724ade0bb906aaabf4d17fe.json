@@ -1,0 +1,8 @@
+{
+  "captions": {
+    "00_instructions.png": "Participant instructions for the two-phase speech/song judgment task.",
+    "01_text_trial.png": "Representative text-phase prose-to-lyrics trial with the 0-6 response scale.",
+    "02_audio_trial.png": "Representative audio-phase speech-to-song trial with identical repeated audio and the matched 0-6 response scale.",
+    "03_completion.png": "Completion page after the scripted participant flow finished all 15 text and 15 audio trials."
+  }
+}

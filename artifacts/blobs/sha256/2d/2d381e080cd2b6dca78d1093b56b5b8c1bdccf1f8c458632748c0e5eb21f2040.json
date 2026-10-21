@@ -1,0 +1,56 @@
+[
+  {
+    "participant_id": "P001",
+    "worker_id": "local-attentive_human_like",
+    "assignment_id": "assignment-001",
+    "profile_label": "attentive_human_like",
+    "profile_note": "Careful responses, checks passed, no paste or focus events.",
+    "ai_use_acknowledgement": "I will answer without AI assistance and will disclose any outside help.",
+    "source": "local_simulation"
+  },
+  {
+    "participant_id": "P002",
+    "worker_id": "local-inattentive",
+    "assignment_id": "assignment-002",
+    "profile_label": "inattentive",
+    "profile_note": "Distracted local mock participant with focus changes and a failed attention check.",
+    "ai_use_acknowledgement": "I will answer without AI assistance and will disclose any outside help.",
+    "source": "local_simulation"
+  },
+  {
+    "participant_id": "P003",
+    "worker_id": "local-paste_heavy",
+    "assignment_id": "assignment-003",
+    "profile_label": "paste_heavy",
+    "profile_note": "Local mock participant who pastes substantial text into task responses.",
+    "ai_use_acknowledgement": "I will answer without AI assistance and will disclose any outside help.",
+    "source": "local_simulation"
+  },
+  {
+    "participant_id": "P004",
+    "worker_id": "local-fast_low_effort",
+    "assignment_id": "assignment-004",
+    "profile_label": "fast_low_effort",
+    "profile_note": "Very short responses and very low latencies.",
+    "ai_use_acknowledgement": "I will answer without AI assistance and will disclose any outside help.",
+    "source": "local_simulation"
+  },
+  {
+    "participant_id": "P005",
+    "worker_id": "local-mock_llm_assisted",
+    "assignment_id": "assignment-005",
+    "profile_label": "mock_llm_assisted",
+    "profile_note": "Polished, generic wording with a disclosure probe indicating AI assistance.",
+    "ai_use_acknowledgement": "I will answer without AI assistance and will disclose any outside help.",
+    "source": "local_simulation"
+  },
+  {
+    "participant_id": "P006",
+    "worker_id": "local-browser_agent_like",
+    "assignment_id": "assignment-006",
+    "profile_label": "browser_agent_like",
+    "profile_note": "Automated-looking local mock with near-zero keydown telemetry.",
+    "ai_use_acknowledgement": "I will answer without AI assistance and will disclose any outside help.",
+    "source": "local_simulation"
+  }
+]

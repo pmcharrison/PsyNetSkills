@@ -1,0 +1,7 @@
+__pycache__/
+.pytest_cache/
+.dallinger/
+local_config.txt
+data/
+source_code.zip
+*.pyc

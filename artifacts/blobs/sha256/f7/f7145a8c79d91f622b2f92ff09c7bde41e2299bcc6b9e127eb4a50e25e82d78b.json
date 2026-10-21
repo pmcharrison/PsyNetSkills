@@ -1,0 +1,22 @@
+[
+  {
+    "trial_number": 1,
+    "sequence": ["low", "medium", "high"],
+    "audio_path": "data/generated_tones/sequence_01.wav"
+  },
+  {
+    "trial_number": 2,
+    "sequence": ["high", "medium", "low"],
+    "audio_path": "data/generated_tones/sequence_02.wav"
+  },
+  {
+    "trial_number": 3,
+    "sequence": ["medium", "low", "medium", "high"],
+    "audio_path": "data/generated_tones/sequence_03.wav"
+  },
+  {
+    "trial_number": 4,
+    "sequence": ["low", "high", "medium", "low"],
+    "audio_path": "data/generated_tones/sequence_04.wav"
+  }
+]

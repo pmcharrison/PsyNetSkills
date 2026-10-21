@@ -1,0 +1,169 @@
+{% macro emotion_trajectory_control(params) %}
+<style>
+  .emotion-control-panel {
+    max-width: 850px;
+    margin: 0 auto 1.5rem auto;
+    text-align: left;
+  }
+  .emotion-slider-row {
+    margin: 1.4rem 0;
+  }
+  .emotion-slider-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    color: #555;
+  }
+  .emotion-slider-title {
+    font-weight: 700;
+    margin-bottom: 0.3rem;
+  }
+  .emotion-status {
+    border: 1px solid #d8dee4;
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+    background: #f6f8fa;
+  }
+</style>
+
+<div class="emotion-control-panel">
+  <div class="emotion-status" id="emotion-status">
+    Audio will start automatically. Move the sliders continuously to describe the emotion in the sound, not your own mood.
+  </div>
+  {% for dimension in params.dimensions %}
+  <div class="emotion-slider-row">
+    <div class="emotion-slider-title">
+      {{ dimension.title }}: <span id="emotion-value-{{ dimension.name }}">0.00</span>
+    </div>
+    <input
+      id="emotion-slider-{{ dimension.name }}"
+      class="form-range emotion-slider"
+      type="range"
+      min="{{ dimension.min_value }}"
+      max="{{ dimension.max_value }}"
+      step="{{ dimension.step }}"
+      value="{{ dimension.start_value }}"
+      aria-label="{{ dimension.title }}"
+    >
+    <div class="emotion-slider-labels">
+      <span>{{ dimension.min_label }}</span>
+      <span>{{ dimension.max_label }}</span>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+<script>
+  const emotionTrajectoryConfig = {{ params.js_config | tojson }};
+  let emotionSamples = [];
+  let emotionSampleIndex = 0;
+  let emotionStartedAtMs = null;
+  let emotionStartedAtIso = null;
+  let emotionEndedAtIso = null;
+  let emotionSamplingTimer = null;
+  let emotionPromptFinished = false;
+
+  function emotionElapsedMs() {
+    if (emotionStartedAtMs === null) {
+      return 0;
+    }
+    return Math.max(0, performance.now() - emotionStartedAtMs);
+  }
+
+  function updateEmotionReadouts() {
+    for (const dimension of emotionTrajectoryConfig.dimensions) {
+      const slider = document.getElementById(`emotion-slider-${dimension.name}`);
+      const readout = document.getElementById(`emotion-value-${dimension.name}`);
+      readout.textContent = Number(slider.value).toFixed(2);
+    }
+  }
+
+  function collectEmotionSample(sampleSource) {
+    const elapsedMs = emotionElapsedMs();
+    const localTime = new Date().toISOString();
+    for (const dimension of emotionTrajectoryConfig.dimensions) {
+      const slider = document.getElementById(`emotion-slider-${dimension.name}`);
+      emotionSamples.push({
+        sample_index: emotionSampleIndex,
+        elapsed_time_ms: Number(elapsedMs.toFixed(1)),
+        dimension: dimension.name,
+        rating_value: Number(slider.value),
+        sample_source: sampleSource,
+        browser_local_time: localTime,
+      });
+      emotionSampleIndex += 1;
+    }
+    document.getElementById("emotion-status").textContent =
+      `Recording ratings: ${emotionSamples.length} trajectory rows, elapsed ${(elapsedMs / 1000).toFixed(1)} s.`;
+  }
+
+  function startEmotionSampling() {
+    if (emotionStartedAtMs !== null) {
+      return;
+    }
+    emotionStartedAtMs = performance.now();
+    emotionStartedAtIso = new Date().toISOString();
+    updateEmotionReadouts();
+    collectEmotionSample("prompt_start");
+    emotionSamplingTimer = setInterval(
+      () => collectEmotionSample("interval"),
+      emotionTrajectoryConfig.sample_interval_ms
+    );
+  }
+
+  function stopEmotionSampling() {
+    if (emotionPromptFinished) {
+      return;
+    }
+    emotionPromptFinished = true;
+    emotionEndedAtIso = new Date().toISOString();
+    if (emotionSamplingTimer !== null) {
+      clearInterval(emotionSamplingTimer);
+      emotionSamplingTimer = null;
+    }
+    collectEmotionSample("prompt_end");
+    for (const dimension of emotionTrajectoryConfig.dimensions) {
+      document.getElementById(`emotion-slider-${dimension.name}`).disabled = true;
+    }
+    document.getElementById("emotion-status").textContent =
+      `Rating window complete. Sliders are locked and you may continue. Recorded ${emotionSamples.length} trajectory rows.`;
+  }
+
+  for (const dimension of emotionTrajectoryConfig.dimensions) {
+    const slider = document.getElementById(`emotion-slider-${dimension.name}`);
+    slider.addEventListener("input", () => {
+      updateEmotionReadouts();
+      if (emotionStartedAtMs !== null && !emotionPromptFinished) {
+        collectEmotionSample("slider_input");
+      }
+    });
+  }
+
+  psynet.trial.onEvent("trialConstruct", updateEmotionReadouts);
+  psynet.trial.onEvent("promptStart", startEmotionSampling);
+  psynet.trial.onEvent("promptEnd", stopEmotionSampling);
+  psynet.trial.onEvent("trialStop", () => {
+    if (emotionSamplingTimer !== null) {
+      clearInterval(emotionSamplingTimer);
+    }
+  });
+
+  retrieveResponse = function() {
+    if (!emotionPromptFinished) {
+      collectEmotionSample("early_submit_attempt");
+    }
+    return {
+      rawAnswer: JSON.stringify({
+        started_at: emotionStartedAtIso,
+        ended_at: emotionEndedAtIso,
+        sample_interval_ms: emotionTrajectoryConfig.sample_interval_ms,
+        samples: emotionSamples,
+      }),
+      metadata: {
+        sampling_policy: emotionTrajectoryConfig,
+        n_trajectory_rows: emotionSamples.length,
+      }
+    };
+  };
+</script>
+{% endmacro %}

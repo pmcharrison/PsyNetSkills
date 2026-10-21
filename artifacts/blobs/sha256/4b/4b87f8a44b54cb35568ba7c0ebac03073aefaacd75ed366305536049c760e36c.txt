@@ -1,0 +1,4 @@
+S3/AWS environment key names found:
+- none
+
+No secret values were printed. The attempt did not use custom or production credentials.

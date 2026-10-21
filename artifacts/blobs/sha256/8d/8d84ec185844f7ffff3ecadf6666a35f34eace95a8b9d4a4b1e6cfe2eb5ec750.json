@@ -1,0 +1,15 @@
+{
+  "name": "simple_visual_discrimination",
+  "version": "1.0.0",
+  "description": "This PsyNet experiment implements a 10-trial same-different color discrimination task.",
+  "main": "index.js",
+  "scripts": {
+    "test:participant": "playwright test tests/participant-flow.spec.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.60.0"
+  }
+}

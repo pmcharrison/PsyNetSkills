@@ -1,0 +1,15 @@
+{
+  "name": "real_time_synchronous_game",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "participant-flow": "node scripts/run_participant_flow.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@playwright/test": "^1.60.0"
+  }
+}

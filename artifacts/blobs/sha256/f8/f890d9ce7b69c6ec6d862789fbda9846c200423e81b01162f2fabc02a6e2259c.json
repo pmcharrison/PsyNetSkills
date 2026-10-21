@@ -1,0 +1,232 @@
+{
+  "timings_ms": {
+    "fixation": 500,
+    "forward_mask": 100,
+    "prime": 50,
+    "backward_mask": 100,
+    "target_display": 3000,
+    "inter_trial": 250
+  },
+  "trials": [
+    {
+      "trial_id": "practice_01_happy_demo_a_happy_demo_a",
+      "block": "practice",
+      "prime_id": "prime_happy_demo_a",
+      "prime_affect": "happy",
+      "prime_cultural_group": "demo_a",
+      "target_id": "target_neutral_happy_coded_demo_a",
+      "target_ambiguity": "50-50 neutral demonstration target",
+      "target_cultural_group": "demo_a",
+      "coded_target_response": "happy",
+      "mask_id": "mask_checker",
+      "congruency": "congruent",
+      "timings_ms": {
+        "fixation": 500,
+        "forward_mask": 100,
+        "prime": 50,
+        "backward_mask": 100,
+        "target_display": 3000,
+        "inter_trial": 250
+      },
+      "stimulus_note": "Generated neutral placeholder; replace with validated ambiguous/neutral face stimuli for real research."
+    },
+    {
+      "trial_id": "practice_02_angry_demo_b_angry_demo_b",
+      "block": "practice",
+      "prime_id": "prime_angry_demo_b",
+      "prime_affect": "angry",
+      "prime_cultural_group": "demo_b",
+      "target_id": "target_neutral_angry_coded_demo_b",
+      "target_ambiguity": "50-50 neutral demonstration target",
+      "target_cultural_group": "demo_b",
+      "coded_target_response": "angry",
+      "mask_id": "mask_checker",
+      "congruency": "congruent",
+      "timings_ms": {
+        "fixation": 500,
+        "forward_mask": 100,
+        "prime": 50,
+        "backward_mask": 100,
+        "target_display": 3000,
+        "inter_trial": 250
+      },
+      "stimulus_note": "Generated neutral placeholder; replace with validated ambiguous/neutral face stimuli for real research."
+    },
+    {
+      "trial_id": "main_01_happy_demo_a_happy_demo_a",
+      "block": "main",
+      "prime_id": "prime_happy_demo_a",
+      "prime_affect": "happy",
+      "prime_cultural_group": "demo_a",
+      "target_id": "target_neutral_happy_coded_demo_a",
+      "target_ambiguity": "50-50 neutral demonstration target",
+      "target_cultural_group": "demo_a",
+      "coded_target_response": "happy",
+      "mask_id": "mask_checker",
+      "congruency": "congruent",
+      "timings_ms": {
+        "fixation": 500,
+        "forward_mask": 100,
+        "prime": 50,
+        "backward_mask": 100,
+        "target_display": 3000,
+        "inter_trial": 250
+      },
+      "stimulus_note": "Generated neutral placeholder; replace with validated ambiguous/neutral face stimuli for real research."
+    },
+    {
+      "trial_id": "main_02_angry_demo_a_happy_demo_a",
+      "block": "main",
+      "prime_id": "prime_angry_demo_a",
+      "prime_affect": "angry",
+      "prime_cultural_group": "demo_a",
+      "target_id": "target_neutral_happy_coded_demo_a",
+      "target_ambiguity": "50-50 neutral demonstration target",
+      "target_cultural_group": "demo_a",
+      "coded_target_response": "happy",
+      "mask_id": "mask_checker",
+      "congruency": "incongruent",
+      "timings_ms": {
+        "fixation": 500,
+        "forward_mask": 100,
+        "prime": 50,
+        "backward_mask": 100,
+        "target_display": 3000,
+        "inter_trial": 250
+      },
+      "stimulus_note": "Generated neutral placeholder; replace with validated ambiguous/neutral face stimuli for real research."
+    },
+    {
+      "trial_id": "main_03_angry_demo_a_angry_demo_b",
+      "block": "main",
+      "prime_id": "prime_angry_demo_a",
+      "prime_affect": "angry",
+      "prime_cultural_group": "demo_a",
+      "target_id": "target_neutral_angry_coded_demo_b",
+      "target_ambiguity": "50-50 neutral demonstration target",
+      "target_cultural_group": "demo_b",
+      "coded_target_response": "angry",
+      "mask_id": "mask_checker",
+      "congruency": "congruent",
+      "timings_ms": {
+        "fixation": 500,
+        "forward_mask": 100,
+        "prime": 50,
+        "backward_mask": 100,
+        "target_display": 3000,
+        "inter_trial": 250
+      },
+      "stimulus_note": "Generated neutral placeholder; replace with validated ambiguous/neutral face stimuli for real research."
+    },
+    {
+      "trial_id": "main_04_happy_demo_a_angry_demo_b",
+      "block": "main",
+      "prime_id": "prime_happy_demo_a",
+      "prime_affect": "happy",
+      "prime_cultural_group": "demo_a",
+      "target_id": "target_neutral_angry_coded_demo_b",
+      "target_ambiguity": "50-50 neutral demonstration target",
+      "target_cultural_group": "demo_b",
+      "coded_target_response": "angry",
+      "mask_id": "mask_checker",
+      "congruency": "incongruent",
+      "timings_ms": {
+        "fixation": 500,
+        "forward_mask": 100,
+        "prime": 50,
+        "backward_mask": 100,
+        "target_display": 3000,
+        "inter_trial": 250
+      },
+      "stimulus_note": "Generated neutral placeholder; replace with validated ambiguous/neutral face stimuli for real research."
+    },
+    {
+      "trial_id": "main_05_happy_demo_b_happy_demo_a",
+      "block": "main",
+      "prime_id": "prime_happy_demo_b",
+      "prime_affect": "happy",
+      "prime_cultural_group": "demo_b",
+      "target_id": "target_neutral_happy_coded_demo_a",
+      "target_ambiguity": "50-50 neutral demonstration target",
+      "target_cultural_group": "demo_a",
+      "coded_target_response": "happy",
+      "mask_id": "mask_checker",
+      "congruency": "congruent",
+      "timings_ms": {
+        "fixation": 500,
+        "forward_mask": 100,
+        "prime": 50,
+        "backward_mask": 100,
+        "target_display": 3000,
+        "inter_trial": 250
+      },
+      "stimulus_note": "Generated neutral placeholder; replace with validated ambiguous/neutral face stimuli for real research."
+    },
+    {
+      "trial_id": "main_06_angry_demo_b_happy_demo_a",
+      "block": "main",
+      "prime_id": "prime_angry_demo_b",
+      "prime_affect": "angry",
+      "prime_cultural_group": "demo_b",
+      "target_id": "target_neutral_happy_coded_demo_a",
+      "target_ambiguity": "50-50 neutral demonstration target",
+      "target_cultural_group": "demo_a",
+      "coded_target_response": "happy",
+      "mask_id": "mask_checker",
+      "congruency": "incongruent",
+      "timings_ms": {
+        "fixation": 500,
+        "forward_mask": 100,
+        "prime": 50,
+        "backward_mask": 100,
+        "target_display": 3000,
+        "inter_trial": 250
+      },
+      "stimulus_note": "Generated neutral placeholder; replace with validated ambiguous/neutral face stimuli for real research."
+    },
+    {
+      "trial_id": "main_07_angry_demo_b_angry_demo_b",
+      "block": "main",
+      "prime_id": "prime_angry_demo_b",
+      "prime_affect": "angry",
+      "prime_cultural_group": "demo_b",
+      "target_id": "target_neutral_angry_coded_demo_b",
+      "target_ambiguity": "50-50 neutral demonstration target",
+      "target_cultural_group": "demo_b",
+      "coded_target_response": "angry",
+      "mask_id": "mask_checker",
+      "congruency": "congruent",
+      "timings_ms": {
+        "fixation": 500,
+        "forward_mask": 100,
+        "prime": 50,
+        "backward_mask": 100,
+        "target_display": 3000,
+        "inter_trial": 250
+      },
+      "stimulus_note": "Generated neutral placeholder; replace with validated ambiguous/neutral face stimuli for real research."
+    },
+    {
+      "trial_id": "main_08_happy_demo_b_angry_demo_b",
+      "block": "main",
+      "prime_id": "prime_happy_demo_b",
+      "prime_affect": "happy",
+      "prime_cultural_group": "demo_b",
+      "target_id": "target_neutral_angry_coded_demo_b",
+      "target_ambiguity": "50-50 neutral demonstration target",
+      "target_cultural_group": "demo_b",
+      "coded_target_response": "angry",
+      "mask_id": "mask_checker",
+      "congruency": "incongruent",
+      "timings_ms": {
+        "fixation": 500,
+        "forward_mask": 100,
+        "prime": 50,
+        "backward_mask": 100,
+        "target_display": 3000,
+        "inter_trial": 250
+      },
+      "stimulus_note": "Generated neutral placeholder; replace with validated ambiguous/neutral face stimuli for real research."
+    }
+  ]
+}

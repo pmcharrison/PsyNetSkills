@@ -1,0 +1,8 @@
+{
+  "captions": {
+    "evidence/screenshots/01-instructions.png": "Participant instructions describe the 10-trial exact digit recall task.",
+    "evidence/screenshots/02-digit-display.png": "A generated digit string is displayed briefly before recall.",
+    "evidence/screenshots/03-recall-input.png": "The target string is hidden and the participant enters a memory response.",
+    "evidence/screenshots/04-completion.png": "The participant flow reaches completion / recruiter exit."
+  }
+}

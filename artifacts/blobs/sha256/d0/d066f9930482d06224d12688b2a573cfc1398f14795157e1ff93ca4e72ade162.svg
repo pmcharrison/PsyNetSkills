@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-label="Bird">
+  <rect width="120" height="120" rx="18" fill="#ecfeff"/>
+  <circle cx="62" cy="63" r="34" fill="#38bdf8" stroke="#075985" stroke-width="4"/>
+  <circle cx="77" cy="48" r="18" fill="#7dd3fc" stroke="#075985" stroke-width="4"/>
+  <circle cx="82" cy="44" r="4" fill="#1f2937"/>
+  <path d="M93 50 L111 57 L93 64 Z" fill="#f59e0b" stroke="#92400e" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M43 62 C28 65 20 78 20 91 C37 88 50 80 56 67 Z" fill="#0ea5e9" stroke="#075985" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M53 96 L48 109 M67 96 L72 109" stroke="#92400e" stroke-width="4" stroke-linecap="round"/>
+  <path d="M42 109 H54 M66 109 H78" stroke="#92400e" stroke-width="4" stroke-linecap="round"/>
+</svg>

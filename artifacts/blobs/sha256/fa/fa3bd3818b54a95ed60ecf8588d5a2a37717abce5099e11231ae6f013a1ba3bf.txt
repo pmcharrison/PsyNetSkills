@@ -1,0 +1,16 @@
+[Config]
+title = Real-time synchronous pixel game (Chrome browser, about 20 minutes)
+description = This experiment demonstrates a real-time synchronous grid game with turn-taking, timers, private signals, and group heatmaps.
+contact_email_on_error = research@example.com
+organization_name = PsyNetSkills
+
+recruiter = generic
+currency = $
+wage_per_hour = 12.0
+
+pixel_game_group_size = 2
+pixel_game_grid_size = 8
+pixel_game_n_rounds = 64
+pixel_game_low_probability = 0.33
+pixel_game_high_probability = 0.67
+pixel_game_turn_seconds = 8

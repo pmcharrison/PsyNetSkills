@@ -1,0 +1,13 @@
+$ uv run psynetsk-validate
+Validation passed.
+
+$ uv run pytest
+41 passed in 0.15s
+
+$ uv run psynetsk-export-dashboard-data
+Dashboard data written to dashboard
+
+$ hugo --source dashboard --destination ../public --cleanDestinationDir
+Pages: 39
+Static files: 424
+Build completed successfully.

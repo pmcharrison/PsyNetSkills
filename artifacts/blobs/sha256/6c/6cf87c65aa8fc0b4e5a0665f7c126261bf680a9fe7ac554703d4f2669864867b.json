@@ -1,0 +1,2596 @@
+{
+  "trials": [
+    {
+      "trial_id": "ide_3_0",
+      "set_size": 3,
+      "probe_condition": "identification",
+      "stimuli": [
+        {
+          "item_number": 1,
+          "stimulus_id": "s3_0_1",
+          "features": {
+            "hue": 57.0,
+            "radius": 22
+          },
+          "color": "#d1ca43",
+          "position": {
+            "x": 240.0,
+            "y": 87.0
+          }
+        },
+        {
+          "item_number": 2,
+          "stimulus_id": "s3_0_2",
+          "features": {
+            "hue": 147.0,
+            "radius": 22
+          },
+          "color": "#43d183",
+          "position": {
+            "x": 342.2,
+            "y": 264.0
+          }
+        },
+        {
+          "item_number": 3,
+          "stimulus_id": "s3_0_3",
+          "features": {
+            "hue": 237.0,
+            "radius": 22
+          },
+          "color": "#434ad1",
+          "position": {
+            "x": 137.8,
+            "y": 264.0
+          }
+        }
+      ],
+      "probe": {
+        "stimulus_id": "s3_0_1",
+        "features": {
+          "hue": 57.0,
+          "radius": 22
+        },
+        "color": "#d1ca43",
+        "source_item_number": 1
+      },
+      "correct_response": "1",
+      "nearest_item_number": 1
+    },
+    {
+      "trial_id": "ide_3_1",
+      "set_size": 3,
+      "probe_condition": "identification",
+      "stimuli": [
+        {
+          "item_number": 1,
+          "stimulus_id": "s3_1_1",
+          "features": {
+            "hue": 104.0,
+            "radius": 22
+          },
+          "color": "#69d143",
+          "position": {
+            "x": 240.0,
+            "y": 87.0
+          }
+        },
+        {
+          "item_number": 2,
+          "stimulus_id": "s3_1_2",
+          "features": {
+            "hue": 194.0,
+            "radius": 22
+          },
+          "color": "#43b0d1",
+          "position": {
+            "x": 342.2,
+            "y": 264.0
+          }
+        },
+        {
+          "item_number": 3,
+          "stimulus_id": "s3_1_3",
+          "features": {
+            "hue": 284.0,
+            "radius": 22
+          },
+          "color": "#ab43d1",
+          "position": {
+            "x": 137.8,
+            "y": 264.0
+          }
+        }
+      ],
+      "probe": {
+        "stimulus_id": "s3_1_2",
+        "features": {
+          "hue": 194.0,
+          "radius": 22
+        },
+        "color": "#43b0d1",
+        "source_item_number": 2
+      },
+      "correct_response": "2",
+      "nearest_item_number": 2
+    },
+    {
+      "trial_id": "ide_3_2",
+      "set_size": 3,
+      "probe_condition": "identification",
+      "stimuli": [
+        {
+          "item_number": 1,
+          "stimulus_id": "s3_2_1",
+          "features": {
+            "hue": 151.0,
+            "radius": 22
+          },
+          "color": "#43d18c",
+          "position": {
+            "x": 240.0,
+            "y": 87.0
+          }
+        },
+        {
+          "item_number": 2,
+          "stimulus_id": "s3_2_2",
+          "features": {
+            "hue": 241.0,
+            "radius": 22
+          },
+          "color": "#4543d1",
+          "position": {
+            "x": 342.2,
+            "y": 264.0
+          }
+        },
+        {
+          "item_number": 3,
+          "stimulus_id": "s3_2_3",
+          "features": {
+            "hue": 331.0,
+            "radius": 22
+          },
+          "color": "#d14388",
+          "position": {
+            "x": 137.8,
+            "y": 264.0
+          }
+        }
+      ],
+      "probe": {
+        "stimulus_id": "s3_2_3",
+        "features": {
+          "hue": 331.0,
+          "radius": 22
+        },
+        "color": "#d14388",
+        "source_item_number": 3
+      },
+      "correct_response": "3",
+      "nearest_item_number": 3
+    },
+    {
+      "trial_id": "ide_3_3",
+      "set_size": 3,
+      "probe_condition": "identification",
+      "stimuli": [
+        {
+          "item_number": 1,
+          "stimulus_id": "s3_3_1",
+          "features": {
+            "hue": 198.0,
+            "radius": 22
+          },
+          "color": "#43a6d1",
+          "position": {
+            "x": 240.0,
+            "y": 87.0
+          }
+        },
+        {
+          "item_number": 2,
+          "stimulus_id": "s3_3_2",
+          "features": {
+            "hue": 288.0,
+            "radius": 22
+          },
+          "color": "#b543d1",
+          "position": {
+            "x": 342.2,
+            "y": 264.0
+          }
+        },
+        {
+          "item_number": 3,
+          "stimulus_id": "s3_3_3",
+          "features": {
+            "hue": 18.0,
+            "radius": 22
+          },
+          "color": "#d16e43",
+          "position": {
+            "x": 137.8,
+            "y": 264.0
+          }
+        }
+      ],
+      "probe": {
+        "stimulus_id": "s3_3_1",
+        "features": {
+          "hue": 198.0,
+          "radius": 22
+        },
+        "color": "#43a6d1",
+        "source_item_number": 1
+      },
+      "correct_response": "1",
+      "nearest_item_number": 1
+    },
+    {
+      "trial_id": "ide_3_4",
+      "set_size": 3,
+      "probe_condition": "identification",
+      "stimuli": [
+        {
+          "item_number": 1,
+          "stimulus_id": "s3_4_1",
+          "features": {
+            "hue": 245.0,
+            "radius": 22
+          },
+          "color": "#4f43d1",
+          "position": {
+            "x": 240.0,
+            "y": 87.0
+          }
+        },
+        {
+          "item_number": 2,
+          "stimulus_id": "s3_4_2",
+          "features": {
+            "hue": 335.0,
+            "radius": 22
+          },
+          "color": "#d1437e",
+          "position": {
+            "x": 342.2,
+            "y": 264.0
+          }
+        },
+        {
+          "item_number": 3,
+          "stimulus_id": "s3_4_3",
+          "features": {
+            "hue": 65.0,
+            "radius": 22
+          },
+          "color": "#c5d143",
+          "position": {
+            "x": 137.8,
+            "y": 264.0
+          }
+        }
+      ],
+      "probe": {
+        "stimulus_id": "s3_4_2",
+        "features": {
+          "hue": 335.0,
+          "radius": 22
+        },
+        "color": "#d1437e",
+        "source_item_number": 2
+      },
+      "correct_response": "2",
+      "nearest_item_number": 2
+    },
+    {
+      "trial_id": "ide_3_5",
+      "set_size": 3,
+      "probe_condition": "identification",
+      "stimuli": [
+        {
+          "item_number": 1,
+          "stimulus_id": "s3_5_1",
+          "features": {
+            "hue": 292.0,
+            "radius": 22
+          },
+          "color": "#be43d1",
+          "position": {
+            "x": 240.0,
+            "y": 87.0
+          }
+        },
+        {
+          "item_number": 2,
+          "stimulus_id": "s3_5_2",
+          "features": {
+            "hue": 22.0,
+            "radius": 22
+          },
+          "color": "#d17743",
+          "position": {
+            "x": 342.2,
+            "y": 264.0
+          }
+        },
+        {
+          "item_number": 3,
+          "stimulus_id": "s3_5_3",
+          "features": {
+            "hue": 112.0,
+            "radius": 22
+          },
+          "color": "#56d143",
+          "position": {
+            "x": 137.8,
+            "y": 264.0
+          }
+        }
+      ],
+      "probe": {
+        "stimulus_id": "s3_5_3",
+        "features": {
+          "hue": 112.0,
+          "radius": 22
+        },
+        "color": "#56d143",
+        "source_item_number": 3
+      },
+      "correct_response": "3",
+      "nearest_item_number": 3
+    },
+    {
+      "trial_id": "gen_3_0",
+      "set_size": 3,
+      "probe_condition": "generalization",
+      "stimuli": [
+        {
+          "item_number": 1,
+          "stimulus_id": "s3_0_1",
+          "features": {
+            "hue": 57.0,
+            "radius": 22
+          },
+          "color": "#d1ca43",
+          "position": {
+            "x": 240.0,
+            "y": 87.0
+          }
+        },
+        {
+          "item_number": 2,
+          "stimulus_id": "s3_0_2",
+          "features": {
+            "hue": 147.0,
+            "radius": 22
+          },
+          "color": "#43d183",
+          "position": {
+            "x": 342.2,
+            "y": 264.0
+          }
+        },
+        {
+          "item_number": 3,
+          "stimulus_id": "s3_0_3",
+          "features": {
+            "hue": 237.0,
+            "radius": 22
+          },
+          "color": "#434ad1",
+          "position": {
+            "x": 137.8,
+            "y": 264.0
+          }
+        }
+      ],
+      "probe": {
+        "stimulus_id": "g3_0",
+        "features": {
+          "hue": 109.2,
+          "radius": 22
+        },
+        "color": "#5dd143",
+        "source_item_number": null,
+        "between_item_numbers": [
+          1,
+          2
+        ]
+      },
+      "correct_response": null,
+      "nearest_item_number": 2
+    },
+    {
+      "trial_id": "gen_3_1",
+      "set_size": 3,
+      "probe_condition": "generalization",
+      "stimuli": [
+        {
+          "item_number": 1,
+          "stimulus_id": "s3_1_1",
+          "features": {
+            "hue": 104.0,
+            "radius": 22
+          },
+          "color": "#69d143",
+          "position": {
+            "x": 240.0,
+            "y": 87.0
+          }
+        },
+        {
+          "item_number": 2,
+          "stimulus_id": "s3_1_2",
+          "features": {
+            "hue": 194.0,
+            "radius": 22
+          },
+          "color": "#43b0d1",
+          "position": {
+            "x": 342.2,
+            "y": 264.0
+          }
+        },
+        {
+          "item_number": 3,
+          "stimulus_id": "s3_1_3",
+          "features": {
+            "hue": 284.0,
+            "radius": 22
+          },
+          "color": "#ab43d1",
+          "position": {
+            "x": 137.8,
+            "y": 264.0
+          }
+        }
+      ],
+      "probe": {
+        "stimulus_id": "g3_1",
+        "features": {
+          "hue": 246.2,
+          "radius": 22
+        },
+        "color": "#5243d1",
+        "source_item_number": null,
+        "between_item_numbers": [
+          2,
+          3
+        ]
+      },
+      "correct_response": null,
+      "nearest_item_number": 3
+    },
+    {
+      "trial_id": "gen_3_2",
+      "set_size": 3,
+      "probe_condition": "generalization",
+      "stimuli": [
+        {
+          "item_number": 1,
+          "stimulus_id": "s3_2_1",
+          "features": {
+            "hue": 151.0,
+            "radius": 22
+          },
+          "color": "#43d18c",
+          "position": {
+            "x": 240.0,
+            "y": 87.0
+          }
+        },
+        {
+          "item_number": 2,
+          "stimulus_id": "s3_2_2",
+          "features": {
+            "hue": 241.0,
+            "radius": 22
+          },
+          "color": "#4543d1",
+          "position": {
+            "x": 342.2,
+            "y": 264.0
+          }
+        },
+        {
+          "item_number": 3,
+          "stimulus_id": "s3_2_3",
+          "features": {
+            "hue": 331.0,
+            "radius": 22
+          },
+          "color": "#d14388",
+          "position": {
+            "x": 137.8,
+            "y": 264.0
+          }
+        }
+      ],
+      "probe": {
+        "stimulus_id": "g3_2",
+        "features": {
+          "hue": 75.4,
+          "radius": 22
+        },
+        "color": "#add143",
+        "source_item_number": null,
+        "between_item_numbers": [
+          3,
+          1
+        ]
+      },
+      "correct_response": null,
+      "nearest_item_number": 1
+    },
+    {
+      "trial_id": "gen_3_3",
+      "set_size": 3,
+      "probe_condition": "generalization",
+      "stimuli": [
+        {
+          "item_number": 1,
+          "stimulus_id": "s3_3_1",
+          "features": {
+            "hue": 198.0,
+            "radius": 22
+          },
+          "color": "#43a6d1",
+          "position": {
+            "x": 240.0,
+            "y": 87.0
+          }
+        },
+        {
+          "item_number": 2,
+          "stimulus_id": "s3_3_2",
+          "features": {
+            "hue": 288.0,
+            "radius": 22
+          },
+          "color": "#b543d1",
+          "position": {
+            "x": 342.2,
+            "y": 264.0
+          }
+        },
+        {
+          "item_number": 3,
+          "stimulus_id": "s3_3_3",
+          "features": {
+            "hue": 18.0,
+            "radius": 22
+          },
+          "color": "#d16e43",
+          "position": {
+            "x": 137.8,
+            "y": 264.0
+          }
+        }
+      ],
+      "probe": {
+        "stimulus_id": "g3_3",
+        "features": {
+          "hue": 250.2,
+          "radius": 22
+        },
+        "color": "#5b43d1",
+        "source_item_number": null,
+        "between_item_numbers": [
+          1,
+          2
+        ]
+      },
+      "correct_response": null,
+      "nearest_item_number": 2
+    },
+    {
+      "trial_id": "gen_3_4",
+      "set_size": 3,
+      "probe_condition": "generalization",
+      "stimuli": [
+        {
+          "item_number": 1,
+          "stimulus_id": "s3_4_1",
+          "features": {
+            "hue": 245.0,
+            "radius": 22
+          },
+          "color": "#4f43d1",
+          "position": {
+            "x": 240.0,
+            "y": 87.0
+          }
+        },
+        {
+          "item_number": 2,
+          "stimulus_id": "s3_4_2",
+          "features": {
+            "hue": 335.0,
+            "radius": 22
+          },
+          "color": "#d1437e",
+          "position": {
+            "x": 342.2,
+            "y": 264.0
+          }
+        },
+        {
+          "item_number": 3,
+          "stimulus_id": "s3_4_3",
+          "features": {
+            "hue": 65.0,
+            "radius": 22
+          },
+          "color": "#c5d143",
+          "position": {
+            "x": 137.8,
+            "y": 264.0
+          }
+        }
+      ],
+      "probe": {
+        "stimulus_id": "g3_4",
+        "features": {
+          "hue": 27.2,
+          "radius": 22
+        },
+        "color": "#d18343",
+        "source_item_number": null,
+        "between_item_numbers": [
+          2,
+          3
+        ]
+      },
+      "correct_response": null,
+      "nearest_item_number": 3
+    },
+    {
+      "trial_id": "gen_3_5",
+      "set_size": 3,
+      "probe_condition": "generalization",
+      "stimuli": [
+        {
+          "item_number": 1,
+          "stimulus_id": "s3_5_1",
+          "features": {
+            "hue": 292.0,
+            "radius": 22
+          },
+          "color": "#be43d1",
+          "position": {
+            "x": 240.0,
+            "y": 87.0
+          }
+        },
+        {
+          "item_number": 2,
+          "stimulus_id": "s3_5_2",
+          "features": {
+            "hue": 22.0,
+            "radius": 22
+          },
+          "color": "#d17743",
+          "position": {
+            "x": 342.2,
+            "y": 264.0
+          }
+        },
+        {
+          "item_number": 3,
+          "stimulus_id": "s3_5_3",
+          "features": {
+            "hue": 112.0,
+            "radius": 22
+          },
+          "color": "#56d143",
+          "position": {
+            "x": 137.8,
+            "y": 264.0
+          }
+        }
+      ],
+      "probe": {
+        "stimulus_id": "g3_5",
+        "features": {
+          "hue": 216.4,
+          "radius": 22
+        },
+        "color": "#437bd1",
+        "source_item_number": null,
+        "between_item_numbers": [
+          3,
+          1
+        ]
+      },
+      "correct_response": null,
+      "nearest_item_number": 1
+    },
+    {
+      "trial_id": "ide_4_0",
+      "set_size": 4,
+      "probe_condition": "identification",
+      "stimuli": [
+        {
+          "item_number": 1,
+          "stimulus_id": "s4_0_1",
+          "features": {
+            "hue": 76.0,
+            "radius": 22
+          },
+          "color": "#abd143",
+          "position": {
+            "x": 240.0,
+            "y": 87.0
+          }
+        },
+        {
+          "item_number": 2,
+          "stimulus_id": "s4_0_2",
+          "features": {
+            "hue": 148.0,
+            "radius": 22
+          },
+          "color": "#43d185",
+          "position": {
+            "x": 358.0,
+            "y": 205.0
+          }
+        },
+        {
+          "item_number": 3,
+          "stimulus_id": "s4_0_3",
+          "features": {
+            "hue": 220.0,
+            "radius": 22
+          },
+          "color": "#4372d1",
+          "position": {
+            "x": 240.0,
+            "y": 323.0
+          }
+        },
+        {
+          "item_number": 4,
+          "stimulus_id": "s4_0_4",
+          "features": {
+            "hue": 292.0,
+            "radius": 22
+          },
+          "color": "#be43d1",
+          "position": {
+            "x": 122.0,
+            "y": 205.0
+          }
+        }
+      ],
+      "probe": {
+        "stimulus_id": "s4_0_1",
+        "features": {
+          "hue": 76.0,
+          "radius": 22
+        },
+        "color": "#abd143",
+        "source_item_number": 1
+      },
+      "correct_response": "1",
+      "nearest_item_number": 1
+    },
+    {
+      "trial_id": "ide_4_1",
+      "set_size": 4,
+      "probe_condition": "identification",
+      "stimuli": [
+        {
+          "item_number": 1,
+          "stimulus_id": "s4_1_1",
+          "features": {
+            "hue": 123.0,
+            "radius": 22
+          },
+          "color": "#43d14a",
+          "position": {
+            "x": 240.0,
+            "y": 87.0
+          }
+        },
+        {
+          "item_number": 2,
+          "stimulus_id": "s4_1_2",
+          "features": {
+            "hue": 195.0,
+            "radius": 22
+          },
+          "color": "#43aed1",
+          "position": {
+            "x": 358.0,
+            "y": 205.0
+          }
+        },
+        {
+          "item_number": 3,
+          "stimulus_id": "s4_1_3",
+          "features": {
+            "hue": 267.0,
+            "radius": 22
+          },
+          "color": "#8343d1",
+          "position": {
+            "x": 240.0,
+            "y": 323.0
+          }
+        },
+        {
+          "item_number": 4,
+          "stimulus_id": "s4_1_4",
+          "features": {
+            "hue": 339.0,
+            "radius": 22
+          },
+          "color": "#d14375",
+          "position": {
+            "x": 122.0,
+            "y": 205.0
+          }
+        }
+      ],
+      "probe": {
+        "stimulus_id": "s4_1_2",
+        "features": {
+          "hue": 195.0,
+          "radius": 22
+        },
+        "color": "#43aed1",
+        "source_item_number": 2
+      },
+      "correct_response": "2",
+      "nearest_item_number": 2
+    },
+    {
+      "trial_id": "ide_4_2",
+      "set_size": 4,
+      "probe_condition": "identification",
+      "stimuli": [
+        {
+          "item_number": 1,
+          "stimulus_id": "s4_2_1",
+          "features": {
+            "hue": 170.0,
+            "radius": 22
+          },
+          "color": "#43d1b9",
+          "position": {
+            "x": 240.0,
+            "y": 87.0
+          }
+        },
+        {
+          "item_number": 2,
+          "stimulus_id": "s4_2_2",
+          "features": {
+            "hue": 242.0,
+            "radius": 22
+          },
+          "color": "#4843d1",
+          "position": {
+            "x": 358.0,
+            "y": 205.0
+          }
+        },
+        {
+          "item_number": 3,
+          "stimulus_id": "s4_2_3",
+          "features": {
+            "hue": 314.0,
+            "radius": 22
+          },
+          "color": "#d143b0",
+          "position": {
+            "x": 240.0,
+            "y": 323.0
+          }
+        },
+        {
+          "item_number": 4,
+          "stimulus_id": "s4_2_4",
+          "features": {
+            "hue": 26.0,
+            "radius": 22
+          },
+          "color": "#d18143",
+          "position": {
+            "x": 122.0,
+            "y": 205.0
+          }
+        }
+      ],
+      "probe": {
+        "stimulus_id": "s4_2_3",
+        "features": {
+          "hue": 314.0,
+          "radius": 22
+        },
+        "color": "#d143b0",
+        "source_item_number": 3
+      },
+      "correct_response": "3",
+      "nearest_item_number": 3
+    },
+    {
+      "trial_id": "ide_4_3",
+      "set_size": 4,
+      "probe_condition": "identification",
+      "stimuli": [
+        {
+          "item_number": 1,
+          "stimulus_id": "s4_3_1",
+          "features": {
+            "hue": 217.0,
+            "radius": 22
+          },
+          "color": "#4379d1",
+          "position": {
+            "x": 240.0,
+            "y": 87.0
+          }
+        },
+        {
+          "item_number": 2,
+          "stimulus_id": "s4_3_2",
+          "features": {
+            "hue": 289.0,
+            "radius": 22
+          },
+          "color": "#b743d1",
+          "position": {
+            "x": 358.0,
+            "y": 205.0
+          }
+        },
+        {
+          "item_number": 3,
+          "stimulus_id": "s4_3_3",
+          "features": {
+            "hue": 1.0,
+            "radius": 22
+          },
+          "color": "#d14543",
+          "position": {
+            "x": 240.0,
+            "y": 323.0
+          }
+        },
+        {
+          "item_number": 4,
+          "stimulus_id": "s4_3_4",
+          "features": {
+            "hue": 73.0,
+            "radius": 22
+          },
+          "color": "#b2d143",
+          "position": {
+            "x": 122.0,
+            "y": 205.0
+          }
+        }
+      ],
+      "probe": {
+        "stimulus_id": "s4_3_4",
+        "features": {
+          "hue": 73.0,
+          "radius": 22
+        },
+        "color": "#b2d143",
+        "source_item_number": 4
+      },
+      "correct_response": "4",
+      "nearest_item_number": 4
+    },
+    {
+      "trial_id": "ide_4_4",
+      "set_size": 4,
+      "probe_condition": "identification",
+      "stimuli": [
+        {
+          "item_number": 1,
+          "stimulus_id": "s4_4_1",
+          "features": {
+            "hue": 264.0,
+            "radius": 22
+          },
+          "color": "#7c43d1",
+          "position": {
+            "x": 240.0,
+            "y": 87.0
+          }
+        },
+        {
+          "item_number": 2,
+          "stimulus_id": "s4_4_2",
+          "features": {
+            "hue": 336.0,
+            "radius": 22
+          },
+          "color": "#d1437c",
+          "position": {
+            "x": 358.0,
+            "y": 205.0
+          }
+        },
+        {
+          "item_number": 3,
+          "stimulus_id": "s4_4_3",
+          "features": {
+            "hue": 48.0,
+            "radius": 22
+          },
+          "color": "#d1b543",
+          "position": {
+            "x": 240.0,
+            "y": 323.0
+          }
+        },
+        {
+          "item_number": 4,
+          "stimulus_id": "s4_4_4",
+          "features": {
+            "hue": 120.0,
+            "radius": 22
+          },
+          "color": "#43d143",
+          "position": {
+            "x": 122.0,
+            "y": 205.0
+          }
+        }
+      ],
+      "probe": {
+        "stimulus_id": "s4_4_1",
+        "features": {
+          "hue": 264.0,
+          "radius": 22
+        },
+        "color": "#7c43d1",
+        "source_item_number": 1
+      },
+      "correct_response": "1",
+      "nearest_item_number": 1
+    },
+    {
+      "trial_id": "ide_4_5",
+      "set_size": 4,
+      "probe_condition": "identification",
+      "stimuli": [
+        {
+          "item_number": 1,
+          "stimulus_id": "s4_5_1",
+          "features": {
+            "hue": 311.0,
+            "radius": 22
+          },
+          "color": "#d143b7",
+          "position": {
+            "x": 240.0,
+            "y": 87.0
+          }
+        },
+        {
+          "item_number": 2,
+          "stimulus_id": "s4_5_2",
+          "features": {
+            "hue": 23.0,
+            "radius": 22
+          },
+          "color": "#d17943",
+          "position": {
+            "x": 358.0,
+            "y": 205.0
+          }
+        },
+        {
+          "item_number": 3,
+          "stimulus_id": "s4_5_3",
+          "features": {
+            "hue": 95.0,
+            "radius": 22
+          },
+          "color": "#7ed143",
+          "position": {
+            "x": 240.0,
+            "y": 323.0
+          }
+        },
+        {
+          "item_number": 4,
+          "stimulus_id": "s4_5_4",
+          "features": {
+            "hue": 167.0,
+            "radius": 22
+          },
+          "color": "#43d1b2",
+          "position": {
+            "x": 122.0,
+            "y": 205.0
+          }
+        }
+      ],
+      "probe": {
+        "stimulus_id": "s4_5_2",
+        "features": {
+          "hue": 23.0,
+          "radius": 22
+        },
+        "color": "#d17943",
+        "source_item_number": 2
+      },
+      "correct_response": "2",
+      "nearest_item_number": 2
+    },
+    {
+      "trial_id": "gen_4_0",
+      "set_size": 4,
+      "probe_condition": "generalization",
+      "stimuli": [
+        {
+          "item_number": 1,
+          "stimulus_id": "s4_0_1",
+          "features": {
+            "hue": 76.0,
+            "radius": 22
+          },
+          "color": "#abd143",
+          "position": {
+            "x": 240.0,
+            "y": 87.0
+          }
+        },
+        {
+          "item_number": 2,
+          "stimulus_id": "s4_0_2",
+          "features": {
+            "hue": 148.0,
+            "radius": 22
+          },
+          "color": "#43d185",
+          "position": {
+            "x": 358.0,
+            "y": 205.0
+          }
+        },
+        {
+          "item_number": 3,
+          "stimulus_id": "s4_0_3",
+          "features": {
+            "hue": 220.0,
+            "radius": 22
+          },
+          "color": "#4372d1",
+          "position": {
+            "x": 240.0,
+            "y": 323.0
+          }
+        },
+        {
+          "item_number": 4,
+          "stimulus_id": "s4_0_4",
+          "features": {
+            "hue": 292.0,
+            "radius": 22
+          },
+          "color": "#be43d1",
+          "position": {
+            "x": 122.0,
+            "y": 205.0
+          }
+        }
+      ],
+      "probe": {
+        "stimulus_id": "g4_0",
+        "features": {
+          "hue": 117.76,
+          "radius": 22
+        },
+        "color": "#48d143",
+        "source_item_number": null,
+        "between_item_numbers": [
+          1,
+          2
+        ]
+      },
+      "correct_response": null,
+      "nearest_item_number": 2
+    },
+    {
+      "trial_id": "gen_4_1",
+      "set_size": 4,
+      "probe_condition": "generalization",
+      "stimuli": [
+        {
+          "item_number": 1,
+          "stimulus_id": "s4_1_1",
+          "features": {
+            "hue": 123.0,
+            "radius": 22
+          },
+          "color": "#43d14a",
+          "position": {
+            "x": 240.0,
+            "y": 87.0
+          }
+        },
+        {
+          "item_number": 2,
+          "stimulus_id": "s4_1_2",
+          "features": {
+            "hue": 195.0,
+            "radius": 22
+          },
+          "color": "#43aed1",
+          "position": {
+            "x": 358.0,
+            "y": 205.0
+          }
+        },
+        {
+          "item_number": 3,
+          "stimulus_id": "s4_1_3",
+          "features": {
+            "hue": 267.0,
+            "radius": 22
+          },
+          "color": "#8343d1",
+          "position": {
+            "x": 240.0,
+            "y": 323.0
+          }
+        },
+        {
+          "item_number": 4,
+          "stimulus_id": "s4_1_4",
+          "features": {
+            "hue": 339.0,
+            "radius": 22
+          },
+          "color": "#d14375",
+          "position": {
+            "x": 122.0,
+            "y": 205.0
+          }
+        }
+      ],
+      "probe": {
+        "stimulus_id": "g4_1",
+        "features": {
+          "hue": 236.76,
+          "radius": 22
+        },
+        "color": "#434bd1",
+        "source_item_number": null,
+        "between_item_numbers": [
+          2,
+          3
+        ]
+      },
+      "correct_response": null,
+      "nearest_item_number": 3
+    },
+    {
+      "trial_id": "gen_4_2",
+      "set_size": 4,
+      "probe_condition": "generalization",
+      "stimuli": [
+        {
+          "item_number": 1,
+          "stimulus_id": "s4_2_1",
+          "features": {
+            "hue": 170.0,
+            "radius": 22
+          },
+          "color": "#43d1b9",
+          "position": {
+            "x": 240.0,
+            "y": 87.0
+          }
+        },
+        {
+          "item_number": 2,
+          "stimulus_id": "s4_2_2",
+          "features": {
+            "hue": 242.0,
+            "radius": 22
+          },
+          "color": "#4843d1",
+          "position": {
+            "x": 358.0,
+            "y": 205.0
+          }
+        },
+        {
+          "item_number": 3,
+          "stimulus_id": "s4_2_3",
+          "features": {
+            "hue": 314.0,
+            "radius": 22
+          },
+          "color": "#d143b0",
+          "position": {
+            "x": 240.0,
+            "y": 323.0
+          }
+        },
+        {
+          "item_number": 4,
+          "stimulus_id": "s4_2_4",
+          "features": {
+            "hue": 26.0,
+            "radius": 22
+          },
+          "color": "#d18143",
+          "position": {
+            "x": 122.0,
+            "y": 205.0
+          }
+        }
+      ],
+      "probe": {
+        "stimulus_id": "g4_2",
+        "features": {
+          "hue": 355.76,
+          "radius": 22
+        },
+        "color": "#d1434d",
+        "source_item_number": null,
+        "between_item_numbers": [
+          3,
+          4
+        ]
+      },
+      "correct_response": null,
+      "nearest_item_number": 4
+    },
+    {
+      "trial_id": "gen_4_3",
+      "set_size": 4,
+      "probe_condition": "generalization",
+      "stimuli": [
+        {
+          "item_number": 1,
+          "stimulus_id": "s4_3_1",
+          "features": {
+            "hue": 217.0,
+            "radius": 22
+          },
+          "color": "#4379d1",
+          "position": {
+            "x": 240.0,
+            "y": 87.0
+          }
+        },
+        {
+          "item_number": 2,
+          "stimulus_id": "s4_3_2",
+          "features": {
+            "hue": 289.0,
+            "radius": 22
+          },
+          "color": "#b743d1",
+          "position": {
+            "x": 358.0,
+            "y": 205.0
+          }
+        },
+        {
+          "item_number": 3,
+          "stimulus_id": "s4_3_3",
+          "features": {
+            "hue": 1.0,
+            "radius": 22
+          },
+          "color": "#d14543",
+          "position": {
+            "x": 240.0,
+            "y": 323.0
+          }
+        },
+        {
+          "item_number": 4,
+          "stimulus_id": "s4_3_4",
+          "features": {
+            "hue": 73.0,
+            "radius": 22
+          },
+          "color": "#b2d143",
+          "position": {
+            "x": 122.0,
+            "y": 205.0
+          }
+        }
+      ],
+      "probe": {
+        "stimulus_id": "g4_3",
+        "features": {
+          "hue": 156.52,
+          "radius": 22
+        },
+        "color": "#43d199",
+        "source_item_number": null,
+        "between_item_numbers": [
+          4,
+          1
+        ]
+      },
+      "correct_response": null,
+      "nearest_item_number": 1
+    },
+    {
+      "trial_id": "gen_4_4",
+      "set_size": 4,
+      "probe_condition": "generalization",
+      "stimuli": [
+        {
+          "item_number": 1,
+          "stimulus_id": "s4_4_1",
+          "features": {
+            "hue": 264.0,
+            "radius": 22
+          },
+          "color": "#7c43d1",
+          "position": {
+            "x": 240.0,
+            "y": 87.0
+          }
+        },
+        {
+          "item_number": 2,
+          "stimulus_id": "s4_4_2",
+          "features": {
+            "hue": 336.0,
+            "radius": 22
+          },
+          "color": "#d1437c",
+          "position": {
+            "x": 358.0,
+            "y": 205.0
+          }
+        },
+        {
+          "item_number": 3,
+          "stimulus_id": "s4_4_3",
+          "features": {
+            "hue": 48.0,
+            "radius": 22
+          },
+          "color": "#d1b543",
+          "position": {
+            "x": 240.0,
+            "y": 323.0
+          }
+        },
+        {
+          "item_number": 4,
+          "stimulus_id": "s4_4_4",
+          "features": {
+            "hue": 120.0,
+            "radius": 22
+          },
+          "color": "#43d143",
+          "position": {
+            "x": 122.0,
+            "y": 205.0
+          }
+        }
+      ],
+      "probe": {
+        "stimulus_id": "g4_4",
+        "features": {
+          "hue": 305.76,
+          "radius": 22
+        },
+        "color": "#d143c3",
+        "source_item_number": null,
+        "between_item_numbers": [
+          1,
+          2
+        ]
+      },
+      "correct_response": null,
+      "nearest_item_number": 2
+    },
+    {
+      "trial_id": "gen_4_5",
+      "set_size": 4,
+      "probe_condition": "generalization",
+      "stimuli": [
+        {
+          "item_number": 1,
+          "stimulus_id": "s4_5_1",
+          "features": {
+            "hue": 311.0,
+            "radius": 22
+          },
+          "color": "#d143b7",
+          "position": {
+            "x": 240.0,
+            "y": 87.0
+          }
+        },
+        {
+          "item_number": 2,
+          "stimulus_id": "s4_5_2",
+          "features": {
+            "hue": 23.0,
+            "radius": 22
+          },
+          "color": "#d17943",
+          "position": {
+            "x": 358.0,
+            "y": 205.0
+          }
+        },
+        {
+          "item_number": 3,
+          "stimulus_id": "s4_5_3",
+          "features": {
+            "hue": 95.0,
+            "radius": 22
+          },
+          "color": "#7ed143",
+          "position": {
+            "x": 240.0,
+            "y": 323.0
+          }
+        },
+        {
+          "item_number": 4,
+          "stimulus_id": "s4_5_4",
+          "features": {
+            "hue": 167.0,
+            "radius": 22
+          },
+          "color": "#43d1b2",
+          "position": {
+            "x": 122.0,
+            "y": 205.0
+          }
+        }
+      ],
+      "probe": {
+        "stimulus_id": "g4_5",
+        "features": {
+          "hue": 64.76,
+          "radius": 22
+        },
+        "color": "#c6d143",
+        "source_item_number": null,
+        "between_item_numbers": [
+          2,
+          3
+        ]
+      },
+      "correct_response": null,
+      "nearest_item_number": 3
+    },
+    {
+      "trial_id": "ide_5_0",
+      "set_size": 5,
+      "probe_condition": "identification",
+      "stimuli": [
+        {
+          "item_number": 1,
+          "stimulus_id": "s5_0_1",
+          "features": {
+            "hue": 95.0,
+            "radius": 22
+          },
+          "color": "#7ed143",
+          "position": {
+            "x": 240.0,
+            "y": 87.0
+          }
+        },
+        {
+          "item_number": 2,
+          "stimulus_id": "s5_0_2",
+          "features": {
+            "hue": 155.0,
+            "radius": 22
+          },
+          "color": "#43d196",
+          "position": {
+            "x": 352.2,
+            "y": 168.5
+          }
+        },
+        {
+          "item_number": 3,
+          "stimulus_id": "s5_0_3",
+          "features": {
+            "hue": 215.0,
+            "radius": 22
+          },
+          "color": "#437ed1",
+          "position": {
+            "x": 309.4,
+            "y": 300.5
+          }
+        },
+        {
+          "item_number": 4,
+          "stimulus_id": "s5_0_4",
+          "features": {
+            "hue": 275.0,
+            "radius": 22
+          },
+          "color": "#9643d1",
+          "position": {
+            "x": 170.6,
+            "y": 300.5
+          }
+        },
+        {
+          "item_number": 5,
+          "stimulus_id": "s5_0_5",
+          "features": {
+            "hue": 335.0,
+            "radius": 22
+          },
+          "color": "#d1437e",
+          "position": {
+            "x": 127.8,
+            "y": 168.5
+          }
+        }
+      ],
+      "probe": {
+        "stimulus_id": "s5_0_1",
+        "features": {
+          "hue": 95.0,
+          "radius": 22
+        },
+        "color": "#7ed143",
+        "source_item_number": 1
+      },
+      "correct_response": "1",
+      "nearest_item_number": 1
+    },
+    {
+      "trial_id": "ide_5_1",
+      "set_size": 5,
+      "probe_condition": "identification",
+      "stimuli": [
+        {
+          "item_number": 1,
+          "stimulus_id": "s5_1_1",
+          "features": {
+            "hue": 142.0,
+            "radius": 22
+          },
+          "color": "#43d177",
+          "position": {
+            "x": 240.0,
+            "y": 87.0
+          }
+        },
+        {
+          "item_number": 2,
+          "stimulus_id": "s5_1_2",
+          "features": {
+            "hue": 202.0,
+            "radius": 22
+          },
+          "color": "#439dd1",
+          "position": {
+            "x": 352.2,
+            "y": 168.5
+          }
+        },
+        {
+          "item_number": 3,
+          "stimulus_id": "s5_1_3",
+          "features": {
+            "hue": 262.0,
+            "radius": 22
+          },
+          "color": "#7743d1",
+          "position": {
+            "x": 309.4,
+            "y": 300.5
+          }
+        },
+        {
+          "item_number": 4,
+          "stimulus_id": "s5_1_4",
+          "features": {
+            "hue": 322.0,
+            "radius": 22
+          },
+          "color": "#d1439d",
+          "position": {
+            "x": 170.6,
+            "y": 300.5
+          }
+        },
+        {
+          "item_number": 5,
+          "stimulus_id": "s5_1_5",
+          "features": {
+            "hue": 22.0,
+            "radius": 22
+          },
+          "color": "#d17743",
+          "position": {
+            "x": 127.8,
+            "y": 168.5
+          }
+        }
+      ],
+      "probe": {
+        "stimulus_id": "s5_1_2",
+        "features": {
+          "hue": 202.0,
+          "radius": 22
+        },
+        "color": "#439dd1",
+        "source_item_number": 2
+      },
+      "correct_response": "2",
+      "nearest_item_number": 2
+    },
+    {
+      "trial_id": "ide_5_2",
+      "set_size": 5,
+      "probe_condition": "identification",
+      "stimuli": [
+        {
+          "item_number": 1,
+          "stimulus_id": "s5_2_1",
+          "features": {
+            "hue": 189.0,
+            "radius": 22
+          },
+          "color": "#43bcd1",
+          "position": {
+            "x": 240.0,
+            "y": 87.0
+          }
+        },
+        {
+          "item_number": 2,
+          "stimulus_id": "s5_2_2",
+          "features": {
+            "hue": 249.0,
+            "radius": 22
+          },
+          "color": "#5843d1",
+          "position": {
+            "x": 352.2,
+            "y": 168.5
+          }
+        },
+        {
+          "item_number": 3,
+          "stimulus_id": "s5_2_3",
+          "features": {
+            "hue": 309.0,
+            "radius": 22
+          },
+          "color": "#d143bc",
+          "position": {
+            "x": 309.4,
+            "y": 300.5
+          }
+        },
+        {
+          "item_number": 4,
+          "stimulus_id": "s5_2_4",
+          "features": {
+            "hue": 9.0,
+            "radius": 22
+          },
+          "color": "#d15843",
+          "position": {
+            "x": 170.6,
+            "y": 300.5
+          }
+        },
+        {
+          "item_number": 5,
+          "stimulus_id": "s5_2_5",
+          "features": {
+            "hue": 69.0,
+            "radius": 22
+          },
+          "color": "#bcd143",
+          "position": {
+            "x": 127.8,
+            "y": 168.5
+          }
+        }
+      ],
+      "probe": {
+        "stimulus_id": "s5_2_3",
+        "features": {
+          "hue": 309.0,
+          "radius": 22
+        },
+        "color": "#d143bc",
+        "source_item_number": 3
+      },
+      "correct_response": "3",
+      "nearest_item_number": 3
+    },
+    {
+      "trial_id": "ide_5_3",
+      "set_size": 5,
+      "probe_condition": "identification",
+      "stimuli": [
+        {
+          "item_number": 1,
+          "stimulus_id": "s5_3_1",
+          "features": {
+            "hue": 236.0,
+            "radius": 22
+          },
+          "color": "#434cd1",
+          "position": {
+            "x": 240.0,
+            "y": 87.0
+          }
+        },
+        {
+          "item_number": 2,
+          "stimulus_id": "s5_3_2",
+          "features": {
+            "hue": 296.0,
+            "radius": 22
+          },
+          "color": "#c843d1",
+          "position": {
+            "x": 352.2,
+            "y": 168.5
+          }
+        },
+        {
+          "item_number": 3,
+          "stimulus_id": "s5_3_3",
+          "features": {
+            "hue": 356.0,
+            "radius": 22
+          },
+          "color": "#d1434c",
+          "position": {
+            "x": 309.4,
+            "y": 300.5
+          }
+        },
+        {
+          "item_number": 4,
+          "stimulus_id": "s5_3_4",
+          "features": {
+            "hue": 56.0,
+            "radius": 22
+          },
+          "color": "#d1c843",
+          "position": {
+            "x": 170.6,
+            "y": 300.5
+          }
+        },
+        {
+          "item_number": 5,
+          "stimulus_id": "s5_3_5",
+          "features": {
+            "hue": 116.0,
+            "radius": 22
+          },
+          "color": "#4cd143",
+          "position": {
+            "x": 127.8,
+            "y": 168.5
+          }
+        }
+      ],
+      "probe": {
+        "stimulus_id": "s5_3_4",
+        "features": {
+          "hue": 56.0,
+          "radius": 22
+        },
+        "color": "#d1c843",
+        "source_item_number": 4
+      },
+      "correct_response": "4",
+      "nearest_item_number": 4
+    },
+    {
+      "trial_id": "ide_5_4",
+      "set_size": 5,
+      "probe_condition": "identification",
+      "stimuli": [
+        {
+          "item_number": 1,
+          "stimulus_id": "s5_4_1",
+          "features": {
+            "hue": 283.0,
+            "radius": 22
+          },
+          "color": "#a943d1",
+          "position": {
+            "x": 240.0,
+            "y": 87.0
+          }
+        },
+        {
+          "item_number": 2,
+          "stimulus_id": "s5_4_2",
+          "features": {
+            "hue": 343.0,
+            "radius": 22
+          },
+          "color": "#d1436b",
+          "position": {
+            "x": 352.2,
+            "y": 168.5
+          }
+        },
+        {
+          "item_number": 3,
+          "stimulus_id": "s5_4_3",
+          "features": {
+            "hue": 43.0,
+            "radius": 22
+          },
+          "color": "#d1a943",
+          "position": {
+            "x": 309.4,
+            "y": 300.5
+          }
+        },
+        {
+          "item_number": 4,
+          "stimulus_id": "s5_4_4",
+          "features": {
+            "hue": 103.0,
+            "radius": 22
+          },
+          "color": "#6bd143",
+          "position": {
+            "x": 170.6,
+            "y": 300.5
+          }
+        },
+        {
+          "item_number": 5,
+          "stimulus_id": "s5_4_5",
+          "features": {
+            "hue": 163.0,
+            "radius": 22
+          },
+          "color": "#43d1a9",
+          "position": {
+            "x": 127.8,
+            "y": 168.5
+          }
+        }
+      ],
+      "probe": {
+        "stimulus_id": "s5_4_5",
+        "features": {
+          "hue": 163.0,
+          "radius": 22
+        },
+        "color": "#43d1a9",
+        "source_item_number": 5
+      },
+      "correct_response": "5",
+      "nearest_item_number": 5
+    },
+    {
+      "trial_id": "ide_5_5",
+      "set_size": 5,
+      "probe_condition": "identification",
+      "stimuli": [
+        {
+          "item_number": 1,
+          "stimulus_id": "s5_5_1",
+          "features": {
+            "hue": 330.0,
+            "radius": 22
+          },
+          "color": "#d1438a",
+          "position": {
+            "x": 240.0,
+            "y": 87.0
+          }
+        },
+        {
+          "item_number": 2,
+          "stimulus_id": "s5_5_2",
+          "features": {
+            "hue": 30.0,
+            "radius": 22
+          },
+          "color": "#d18a43",
+          "position": {
+            "x": 352.2,
+            "y": 168.5
+          }
+        },
+        {
+          "item_number": 3,
+          "stimulus_id": "s5_5_3",
+          "features": {
+            "hue": 90.0,
+            "radius": 22
+          },
+          "color": "#8ad143",
+          "position": {
+            "x": 309.4,
+            "y": 300.5
+          }
+        },
+        {
+          "item_number": 4,
+          "stimulus_id": "s5_5_4",
+          "features": {
+            "hue": 150.0,
+            "radius": 22
+          },
+          "color": "#43d18a",
+          "position": {
+            "x": 170.6,
+            "y": 300.5
+          }
+        },
+        {
+          "item_number": 5,
+          "stimulus_id": "s5_5_5",
+          "features": {
+            "hue": 210.0,
+            "radius": 22
+          },
+          "color": "#438ad1",
+          "position": {
+            "x": 127.8,
+            "y": 168.5
+          }
+        }
+      ],
+      "probe": {
+        "stimulus_id": "s5_5_1",
+        "features": {
+          "hue": 330.0,
+          "radius": 22
+        },
+        "color": "#d1438a",
+        "source_item_number": 1
+      },
+      "correct_response": "1",
+      "nearest_item_number": 1
+    },
+    {
+      "trial_id": "gen_5_0",
+      "set_size": 5,
+      "probe_condition": "generalization",
+      "stimuli": [
+        {
+          "item_number": 1,
+          "stimulus_id": "s5_0_1",
+          "features": {
+            "hue": 95.0,
+            "radius": 22
+          },
+          "color": "#7ed143",
+          "position": {
+            "x": 240.0,
+            "y": 87.0
+          }
+        },
+        {
+          "item_number": 2,
+          "stimulus_id": "s5_0_2",
+          "features": {
+            "hue": 155.0,
+            "radius": 22
+          },
+          "color": "#43d196",
+          "position": {
+            "x": 352.2,
+            "y": 168.5
+          }
+        },
+        {
+          "item_number": 3,
+          "stimulus_id": "s5_0_3",
+          "features": {
+            "hue": 215.0,
+            "radius": 22
+          },
+          "color": "#437ed1",
+          "position": {
+            "x": 309.4,
+            "y": 300.5
+          }
+        },
+        {
+          "item_number": 4,
+          "stimulus_id": "s5_0_4",
+          "features": {
+            "hue": 275.0,
+            "radius": 22
+          },
+          "color": "#9643d1",
+          "position": {
+            "x": 170.6,
+            "y": 300.5
+          }
+        },
+        {
+          "item_number": 5,
+          "stimulus_id": "s5_0_5",
+          "features": {
+            "hue": 335.0,
+            "radius": 22
+          },
+          "color": "#d1437e",
+          "position": {
+            "x": 127.8,
+            "y": 168.5
+          }
+        }
+      ],
+      "probe": {
+        "stimulus_id": "g5_0",
+        "features": {
+          "hue": 129.8,
+          "radius": 22
+        },
+        "color": "#43d15a",
+        "source_item_number": null,
+        "between_item_numbers": [
+          1,
+          2
+        ]
+      },
+      "correct_response": null,
+      "nearest_item_number": 2
+    },
+    {
+      "trial_id": "gen_5_1",
+      "set_size": 5,
+      "probe_condition": "generalization",
+      "stimuli": [
+        {
+          "item_number": 1,
+          "stimulus_id": "s5_1_1",
+          "features": {
+            "hue": 142.0,
+            "radius": 22
+          },
+          "color": "#43d177",
+          "position": {
+            "x": 240.0,
+            "y": 87.0
+          }
+        },
+        {
+          "item_number": 2,
+          "stimulus_id": "s5_1_2",
+          "features": {
+            "hue": 202.0,
+            "radius": 22
+          },
+          "color": "#439dd1",
+          "position": {
+            "x": 352.2,
+            "y": 168.5
+          }
+        },
+        {
+          "item_number": 3,
+          "stimulus_id": "s5_1_3",
+          "features": {
+            "hue": 262.0,
+            "radius": 22
+          },
+          "color": "#7743d1",
+          "position": {
+            "x": 309.4,
+            "y": 300.5
+          }
+        },
+        {
+          "item_number": 4,
+          "stimulus_id": "s5_1_4",
+          "features": {
+            "hue": 322.0,
+            "radius": 22
+          },
+          "color": "#d1439d",
+          "position": {
+            "x": 170.6,
+            "y": 300.5
+          }
+        },
+        {
+          "item_number": 5,
+          "stimulus_id": "s5_1_5",
+          "features": {
+            "hue": 22.0,
+            "radius": 22
+          },
+          "color": "#d17743",
+          "position": {
+            "x": 127.8,
+            "y": 168.5
+          }
+        }
+      ],
+      "probe": {
+        "stimulus_id": "g5_1",
+        "features": {
+          "hue": 236.8,
+          "radius": 22
+        },
+        "color": "#434ad1",
+        "source_item_number": null,
+        "between_item_numbers": [
+          2,
+          3
+        ]
+      },
+      "correct_response": null,
+      "nearest_item_number": 3
+    },
+    {
+      "trial_id": "gen_5_2",
+      "set_size": 5,
+      "probe_condition": "generalization",
+      "stimuli": [
+        {
+          "item_number": 1,
+          "stimulus_id": "s5_2_1",
+          "features": {
+            "hue": 189.0,
+            "radius": 22
+          },
+          "color": "#43bcd1",
+          "position": {
+            "x": 240.0,
+            "y": 87.0
+          }
+        },
+        {
+          "item_number": 2,
+          "stimulus_id": "s5_2_2",
+          "features": {
+            "hue": 249.0,
+            "radius": 22
+          },
+          "color": "#5843d1",
+          "position": {
+            "x": 352.2,
+            "y": 168.5
+          }
+        },
+        {
+          "item_number": 3,
+          "stimulus_id": "s5_2_3",
+          "features": {
+            "hue": 309.0,
+            "radius": 22
+          },
+          "color": "#d143bc",
+          "position": {
+            "x": 309.4,
+            "y": 300.5
+          }
+        },
+        {
+          "item_number": 4,
+          "stimulus_id": "s5_2_4",
+          "features": {
+            "hue": 9.0,
+            "radius": 22
+          },
+          "color": "#d15843",
+          "position": {
+            "x": 170.6,
+            "y": 300.5
+          }
+        },
+        {
+          "item_number": 5,
+          "stimulus_id": "s5_2_5",
+          "features": {
+            "hue": 69.0,
+            "radius": 22
+          },
+          "color": "#bcd143",
+          "position": {
+            "x": 127.8,
+            "y": 168.5
+          }
+        }
+      ],
+      "probe": {
+        "stimulus_id": "g5_2",
+        "features": {
+          "hue": 343.8,
+          "radius": 22
+        },
+        "color": "#d14369",
+        "source_item_number": null,
+        "between_item_numbers": [
+          3,
+          4
+        ]
+      },
+      "correct_response": null,
+      "nearest_item_number": 4
+    },
+    {
+      "trial_id": "gen_5_3",
+      "set_size": 5,
+      "probe_condition": "generalization",
+      "stimuli": [
+        {
+          "item_number": 1,
+          "stimulus_id": "s5_3_1",
+          "features": {
+            "hue": 236.0,
+            "radius": 22
+          },
+          "color": "#434cd1",
+          "position": {
+            "x": 240.0,
+            "y": 87.0
+          }
+        },
+        {
+          "item_number": 2,
+          "stimulus_id": "s5_3_2",
+          "features": {
+            "hue": 296.0,
+            "radius": 22
+          },
+          "color": "#c843d1",
+          "position": {
+            "x": 352.2,
+            "y": 168.5
+          }
+        },
+        {
+          "item_number": 3,
+          "stimulus_id": "s5_3_3",
+          "features": {
+            "hue": 356.0,
+            "radius": 22
+          },
+          "color": "#d1434c",
+          "position": {
+            "x": 309.4,
+            "y": 300.5
+          }
+        },
+        {
+          "item_number": 4,
+          "stimulus_id": "s5_3_4",
+          "features": {
+            "hue": 56.0,
+            "radius": 22
+          },
+          "color": "#d1c843",
+          "position": {
+            "x": 170.6,
+            "y": 300.5
+          }
+        },
+        {
+          "item_number": 5,
+          "stimulus_id": "s5_3_5",
+          "features": {
+            "hue": 116.0,
+            "radius": 22
+          },
+          "color": "#4cd143",
+          "position": {
+            "x": 127.8,
+            "y": 168.5
+          }
+        }
+      ],
+      "probe": {
+        "stimulus_id": "g5_3",
+        "features": {
+          "hue": 90.8,
+          "radius": 22
+        },
+        "color": "#88d143",
+        "source_item_number": null,
+        "between_item_numbers": [
+          4,
+          5
+        ]
+      },
+      "correct_response": null,
+      "nearest_item_number": 5
+    },
+    {
+      "trial_id": "gen_5_4",
+      "set_size": 5,
+      "probe_condition": "generalization",
+      "stimuli": [
+        {
+          "item_number": 1,
+          "stimulus_id": "s5_4_1",
+          "features": {
+            "hue": 283.0,
+            "radius": 22
+          },
+          "color": "#a943d1",
+          "position": {
+            "x": 240.0,
+            "y": 87.0
+          }
+        },
+        {
+          "item_number": 2,
+          "stimulus_id": "s5_4_2",
+          "features": {
+            "hue": 343.0,
+            "radius": 22
+          },
+          "color": "#d1436b",
+          "position": {
+            "x": 352.2,
+            "y": 168.5
+          }
+        },
+        {
+          "item_number": 3,
+          "stimulus_id": "s5_4_3",
+          "features": {
+            "hue": 43.0,
+            "radius": 22
+          },
+          "color": "#d1a943",
+          "position": {
+            "x": 309.4,
+            "y": 300.5
+          }
+        },
+        {
+          "item_number": 4,
+          "stimulus_id": "s5_4_4",
+          "features": {
+            "hue": 103.0,
+            "radius": 22
+          },
+          "color": "#6bd143",
+          "position": {
+            "x": 170.6,
+            "y": 300.5
+          }
+        },
+        {
+          "item_number": 5,
+          "stimulus_id": "s5_4_5",
+          "features": {
+            "hue": 163.0,
+            "radius": 22
+          },
+          "color": "#43d1a9",
+          "position": {
+            "x": 127.8,
+            "y": 168.5
+          }
+        }
+      ],
+      "probe": {
+        "stimulus_id": "g5_4",
+        "features": {
+          "hue": 232.6,
+          "radius": 22
+        },
+        "color": "#4354d1",
+        "source_item_number": null,
+        "between_item_numbers": [
+          5,
+          1
+        ]
+      },
+      "correct_response": null,
+      "nearest_item_number": 1
+    },
+    {
+      "trial_id": "gen_5_5",
+      "set_size": 5,
+      "probe_condition": "generalization",
+      "stimuli": [
+        {
+          "item_number": 1,
+          "stimulus_id": "s5_5_1",
+          "features": {
+            "hue": 330.0,
+            "radius": 22
+          },
+          "color": "#d1438a",
+          "position": {
+            "x": 240.0,
+            "y": 87.0
+          }
+        },
+        {
+          "item_number": 2,
+          "stimulus_id": "s5_5_2",
+          "features": {
+            "hue": 30.0,
+            "radius": 22
+          },
+          "color": "#d18a43",
+          "position": {
+            "x": 352.2,
+            "y": 168.5
+          }
+        },
+        {
+          "item_number": 3,
+          "stimulus_id": "s5_5_3",
+          "features": {
+            "hue": 90.0,
+            "radius": 22
+          },
+          "color": "#8ad143",
+          "position": {
+            "x": 309.4,
+            "y": 300.5
+          }
+        },
+        {
+          "item_number": 4,
+          "stimulus_id": "s5_5_4",
+          "features": {
+            "hue": 150.0,
+            "radius": 22
+          },
+          "color": "#43d18a",
+          "position": {
+            "x": 170.6,
+            "y": 300.5
+          }
+        },
+        {
+          "item_number": 5,
+          "stimulus_id": "s5_5_5",
+          "features": {
+            "hue": 210.0,
+            "radius": 22
+          },
+          "color": "#438ad1",
+          "position": {
+            "x": 127.8,
+            "y": 168.5
+          }
+        }
+      ],
+      "probe": {
+        "stimulus_id": "g5_5",
+        "features": {
+          "hue": 4.8,
+          "radius": 22
+        },
+        "color": "#d14e43",
+        "source_item_number": null,
+        "between_item_numbers": [
+          1,
+          2
+        ]
+      },
+      "correct_response": null,
+      "nearest_item_number": 2
+    }
+  ]
+}

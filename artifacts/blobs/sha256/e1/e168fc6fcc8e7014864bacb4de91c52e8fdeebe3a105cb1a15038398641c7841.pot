@@ -1,0 +1,151 @@
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: experiment.py:83
+msgid "year"
+msgstr ""
+
+#: experiment.py:83
+msgid "years"
+msgstr ""
+
+#: experiment.py:85
+msgid "minute"
+msgstr ""
+
+#: experiment.py:85
+msgid "minutes"
+msgstr ""
+
+#: experiment.py:87
+msgid "line"
+msgstr ""
+
+#: experiment.py:87
+msgid "lines"
+msgstr ""
+
+#: experiment.py:93
+msgid "Life spans"
+msgstr ""
+
+#: experiment.py:94
+msgid "Lengths of marriages"
+msgstr ""
+
+#: experiment.py:95
+msgid "Movie run times"
+msgstr ""
+
+#: experiment.py:96
+msgid "Poem lengths"
+msgstr ""
+
+#: experiment.py:97
+msgid "Waiting times"
+msgstr ""
+
+#: experiment.py:106
+#, python-brace-format
+msgid ""
+"Insurance agencies employ actuaries to make predictions about people's life "
+"spans, the age at which they will die. If you were assessing an insurance "
+"case for an {T_PAST}-year-old man, what would you predict for his total life"
+" span?"
+msgstr ""
+
+#: experiment.py:109
+#, python-brace-format
+msgid ""
+"A friend is telling you about an acquaintance whom you do not know. In "
+"passing, he happens to mention that this person has been married for "
+"{T_PAST} {UNIT}. How long do you think this person's marriage will last in "
+"total?"
+msgstr ""
+
+#: experiment.py:112
+#, python-brace-format
+msgid ""
+"If you made a surprise visit to a friend and found that they had been "
+"watching a movie for {T_PAST} {UNIT}, what would you predict for the total "
+"length of the movie?"
+msgstr ""
+
+#: experiment.py:115
+#, python-brace-format
+msgid ""
+"If your friend read you her favorite line of poetry and told you it was line"
+" {T_PAST} of a poem, what would you predict for the total length of the "
+"poem?"
+msgstr ""
+
+#: experiment.py:118
+#, python-brace-format
+msgid ""
+"If you were calling a telephone box office to book tickets and had been on "
+"hold for {T_PAST} {UNIT}, what would you predict for the total time you "
+"would be on hold?"
+msgstr ""
+
+#: experiment.py:156
+msgid "Please enter a finite number."
+msgstr ""
+
+#: experiment.py:161
+#, python-brace-format
+msgid "Your prediction must be at least {T_PAST} {UNIT}."
+msgstr ""
+
+#: experiment.py:195
+#, python-brace-format
+msgid "Question {POSITION} of 5"
+msgstr ""
+
+#: experiment.py:201
+#, python-brace-format
+msgid "Observed so far: {T_PAST} {UNIT}."
+msgstr ""
+
+#: experiment.py:206
+msgid "Please enter your intuitive prediction for the total value."
+msgstr ""
+
+#: experiment.py:280
+msgid "Predicting everyday futures"
+msgstr ""
+
+#: experiment.py:283
+msgid ""
+"Each question asks you to predict a duration or quantity from a single piece"
+" of information."
+msgstr ""
+
+#: experiment.py:288
+msgid ""
+"Please read each question and enter your prediction in the box below it. We "
+"are interested in your intuitions, so please do not make complicated "
+"calculations."
+msgstr ""
+
+#: experiment.py:291
+msgid "You will answer one question from each of five everyday categories."
+msgstr ""
+
+#: experiment.py:306
+msgid "Thank you"
+msgstr ""
+
+#: experiment.py:309
+msgid ""
+"This study concerns how people make everyday predictions under uncertainty "
+"from limited information."
+msgstr ""
+
+#: experiment.py:312
+msgid "Your responses have been recorded."
+msgstr ""

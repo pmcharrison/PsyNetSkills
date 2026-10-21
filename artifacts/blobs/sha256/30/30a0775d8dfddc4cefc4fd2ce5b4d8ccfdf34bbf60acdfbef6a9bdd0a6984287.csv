@@ -1,0 +1,3 @@
+is_same,n,accuracy,mean_rt
+False,9,1.0,1.4000000000000001
+True,6,1.0,1.175

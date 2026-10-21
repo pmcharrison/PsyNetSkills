@@ -1,0 +1,627 @@
+{
+  "completed": false,
+  "actions": [
+    {
+      "at": "2026-06-10T01:53:59.586Z",
+      "event": "goto",
+      "url": "http://127.0.0.1:5000/ad?generate_tokens=true&recruiter=hotair"
+    },
+    {
+      "at": "2026-06-10T01:54:00.156Z",
+      "event": "browser-console",
+      "type": "warning",
+      "text": "[.WebGL-0x158c000e9400]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+    },
+    {
+      "at": "2026-06-10T01:54:00.280Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "Browser check finished"
+    },
+    {
+      "at": "2026-06-10T01:54:00.599Z",
+      "event": "click",
+      "label": "advance toward Unity canvas",
+      "selector": "text=/Begin Experiment/i"
+    },
+    {
+      "at": "2026-06-10T01:54:00.668Z",
+      "event": "browser-console",
+      "type": "warning",
+      "text": "[.WebGL-0x158c01978000]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+    },
+    {
+      "at": "2026-06-10T01:54:00.697Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "Browser check finished"
+    },
+    {
+      "at": "2026-06-10T01:54:03.716Z",
+      "event": "browser-console",
+      "type": "warning",
+      "text": "The resource http://127.0.0.1:5000/static/css/fonts/inter.css was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally."
+    },
+    {
+      "at": "2026-06-10T01:54:04.922Z",
+      "event": "click",
+      "label": "advance toward Unity canvas",
+      "selector": "text=/Next/i"
+    },
+    {
+      "at": "2026-06-10T01:54:05.000Z",
+      "event": "browser-console",
+      "type": "warning",
+      "text": "[.WebGL-0x158c0197a400]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+    },
+    {
+      "at": "2026-06-10T01:54:05.093Z",
+      "event": "browser-console",
+      "type": "warning",
+      "text": "[.WebGL-0x158c0197b000]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)"
+    },
+    {
+      "at": "2026-06-10T01:54:05.177Z",
+      "event": "browser-console",
+      "type": "error",
+      "text": "Failed to load resource: the server responded with a status of 404 (NOT FOUND)"
+    },
+    {
+      "at": "2026-06-10T01:54:06.131Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "Initialising page..."
+    },
+    {
+      "at": "2026-06-10T01:54:06.177Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "Browser check finished"
+    },
+    {
+      "at": "2026-06-10T01:54:06.227Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "LOG (DEBUG) at 1:54:06 AM: trialConstruct"
+    },
+    {
+      "at": "2026-06-10T01:54:06.275Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "LOG (DEBUG) at 1:54:06 AM: trialPrepare"
+    },
+    {
+      "at": "2026-06-10T01:54:06.275Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "LOG (DEBUG) at 1:54:06 AM: trialStart"
+    },
+    {
+      "at": "2026-06-10T01:54:06.288Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "LOG (DEBUG) at 1:54:06 AM: responseEnable"
+    },
+    {
+      "at": "2026-06-10T01:54:06.288Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "LOG (DEBUG) at 1:54:06 AM: submitEnable"
+    },
+    {
+      "at": "2026-06-10T01:54:06.335Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "LOG (DEBUG) at 1:54:06 AM: Response was successfully received."
+    },
+    {
+      "at": "2026-06-10T01:54:06.335Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "LOG (DEBUG) at 1:54:06 AM: Response received successfully."
+    },
+    {
+      "at": "2026-06-10T01:54:06.365Z",
+      "event": "click",
+      "label": "advance toward Unity canvas",
+      "selector": "text=/I agree/i"
+    },
+    {
+      "at": "2026-06-10T01:54:07.110Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "Initialising page..."
+    },
+    {
+      "at": "2026-06-10T01:54:07.128Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "Browser check finished"
+    },
+    {
+      "at": "2026-06-10T01:54:07.139Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "LOG (DEBUG) at 1:54:07 AM: trialConstruct"
+    },
+    {
+      "at": "2026-06-10T01:54:07.143Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "LOG (DEBUG) at 1:54:07 AM: trialPrepare"
+    },
+    {
+      "at": "2026-06-10T01:54:07.143Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "LOG (DEBUG) at 1:54:07 AM: trialStart"
+    },
+    {
+      "at": "2026-06-10T01:54:07.157Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "LOG (DEBUG) at 1:54:07 AM: responseEnable"
+    },
+    {
+      "at": "2026-06-10T01:54:07.157Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "LOG (DEBUG) at 1:54:07 AM: submitEnable"
+    },
+    {
+      "at": "2026-06-10T01:54:10.165Z",
+      "event": "browser-console",
+      "type": "warning",
+      "text": "The resource http://127.0.0.1:5000/static/css/fonts/inter.css was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally."
+    },
+    {
+      "at": "2026-06-10T01:54:10.858Z",
+      "event": "click",
+      "label": "advance toward Unity canvas",
+      "selector": "text=/Next/i"
+    },
+    {
+      "at": "2026-06-10T01:54:10.947Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "LOG (DEBUG) at 1:54:10 AM: Response was successfully received."
+    },
+    {
+      "at": "2026-06-10T01:54:10.947Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "LOG (DEBUG) at 1:54:10 AM: Response received successfully."
+    },
+    {
+      "at": "2026-06-10T01:54:11.701Z",
+      "event": "browser-console",
+      "type": "warning",
+      "text": "Config option \"companyName\" is missing or empty. Falling back to default value: \"Unity\". Consider updating your WebGL template to include the missing config option."
+    },
+    {
+      "at": "2026-06-10T01:54:11.702Z",
+      "event": "browser-console",
+      "type": "warning",
+      "text": "Config option \"productName\" is missing or empty. Falling back to default value: \"WebGL Player\". Consider updating your WebGL template to include the missing config option."
+    },
+    {
+      "at": "2026-06-10T01:54:11.702Z",
+      "event": "browser-console",
+      "type": "warning",
+      "text": "Config option \"productVersion\" is missing or empty. Falling back to default value: \"1.0\". Consider updating your WebGL template to include the missing config option."
+    },
+    {
+      "at": "2026-06-10T01:54:11.731Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "Initialising page..."
+    },
+    {
+      "at": "2026-06-10T01:54:11.914Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "Browser check finished"
+    },
+    {
+      "at": "2026-06-10T01:54:11.922Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "LOG (DEBUG) at 1:54:11 AM: trialConstruct"
+    },
+    {
+      "at": "2026-06-10T01:54:12.027Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "LOG (DEBUG) at 1:54:12 AM: trialPrepare"
+    },
+    {
+      "at": "2026-06-10T01:54:12.300Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "LOG (DEBUG) at 1:54:12 AM: trialStart"
+    },
+    {
+      "at": "2026-06-10T01:54:12.502Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "LOG (DEBUG) at 1:54:12 AM: responseEnable"
+    },
+    {
+      "at": "2026-06-10T01:54:12.502Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "LOG (DEBUG) at 1:54:12 AM: submitEnable"
+    },
+    {
+      "at": "2026-06-10T01:54:12.681Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "[UnityMemory] Configuration Parameters - Can be set up in boot.config\n"
+    },
+    {
+      "at": "2026-06-10T01:54:12.681Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "    \"memorysetup-allocator-temp-initial-block-size-main=262144\"\n"
+    },
+    {
+      "at": "2026-06-10T01:54:12.697Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "    \"memorysetup-allocator-temp-initial-block-size-worker=262144\"\n"
+    },
+    {
+      "at": "2026-06-10T01:54:12.697Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "    \"memorysetup-temp-allocator-size-nav-mesh-worker=65536\"\n"
+    },
+    {
+      "at": "2026-06-10T01:54:12.697Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "    \"memorysetup-temp-allocator-size-audio-worker=65536\"\n"
+    },
+    {
+      "at": "2026-06-10T01:54:12.697Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "    \"memorysetup-temp-allocator-size-background-worker=32768\"\n"
+    },
+    {
+      "at": "2026-06-10T01:54:12.697Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "    \"memorysetup-bucket-allocator-granularity=16\"\n"
+    },
+    {
+      "at": "2026-06-10T01:54:12.697Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "    \"memorysetup-bucket-allocator-bucket-count=8\"\n"
+    },
+    {
+      "at": "2026-06-10T01:54:12.697Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "    \"memorysetup-bucket-allocator-block-size=4194304\"\n"
+    },
+    {
+      "at": "2026-06-10T01:54:12.697Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "    \"memorysetup-bucket-allocator-block-count=1\"\n"
+    },
+    {
+      "at": "2026-06-10T01:54:12.697Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "    \"memorysetup-main-allocator-block-size=16777216\"\n"
+    },
+    {
+      "at": "2026-06-10T01:54:12.697Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "    \"memorysetup-thread-allocator-block-size=16777216\"\n"
+    },
+    {
+      "at": "2026-06-10T01:54:12.697Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "    \"memorysetup-gfx-main-allocator-block-size=16777216\"\n"
+    },
+    {
+      "at": "2026-06-10T01:54:12.699Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "    \"memorysetup-gfx-thread-allocator-block-size=16777216\"\n"
+    },
+    {
+      "at": "2026-06-10T01:54:12.699Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "    \"memorysetup-cache-allocator-block-size=4194304\"\n"
+    },
+    {
+      "at": "2026-06-10T01:54:12.699Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "    \"memorysetup-typetree-allocator-block-size=2097152\"\n"
+    },
+    {
+      "at": "2026-06-10T01:54:12.699Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "    \"memorysetup-profiler-bucket-allocator-granularity=16\"\n"
+    },
+    {
+      "at": "2026-06-10T01:54:12.699Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "    \"memorysetup-profiler-bucket-allocator-bucket-count=8\"\n"
+    },
+    {
+      "at": "2026-06-10T01:54:12.699Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "    \"memorysetup-profiler-bucket-allocator-block-size=4194304\"\n"
+    },
+    {
+      "at": "2026-06-10T01:54:12.699Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "    \"memorysetup-profiler-bucket-allocator-block-count=1\"\n"
+    },
+    {
+      "at": "2026-06-10T01:54:12.699Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "    \"memorysetup-profiler-allocator-block-size=16777216\"\n"
+    },
+    {
+      "at": "2026-06-10T01:54:12.699Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "    \"memorysetup-profiler-editor-allocator-block-size=1048576\"\n"
+    },
+    {
+      "at": "2026-06-10T01:54:12.699Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "    \"memorysetup-temp-allocator-size-main=4194304\"\n"
+    },
+    {
+      "at": "2026-06-10T01:54:12.699Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "    \"memorysetup-job-temp-allocator-block-size=2097152\"\n"
+    },
+    {
+      "at": "2026-06-10T01:54:12.699Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "    \"memorysetup-job-temp-allocator-block-size-background=1048576\"\n"
+    },
+    {
+      "at": "2026-06-10T01:54:12.699Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "    \"memorysetup-job-temp-allocator-reduction-small-platforms=262144\"\n"
+    },
+    {
+      "at": "2026-06-10T01:54:12.834Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "[Physics::Module] Initialized fallback backend.\n"
+    },
+    {
+      "at": "2026-06-10T01:54:12.834Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "[Physics::Module] Id: 0xdecafbad\n"
+    },
+    {
+      "at": "2026-06-10T01:54:12.841Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "Loading player data from data.unity3d\n"
+    },
+    {
+      "at": "2026-06-10T01:54:12.851Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "Initialize engine version: 6000.3.7f1 (696ec25a53d1)\n"
+    },
+    {
+      "at": "2026-06-10T01:54:12.856Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "Creating WebGL 2.0 context."
+    },
+    {
+      "at": "2026-06-10T01:54:12.894Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "Renderer: WebKit WebGL\n"
+    },
+    {
+      "at": "2026-06-10T01:54:12.896Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "Vendor:   WebKit\n"
+    },
+    {
+      "at": "2026-06-10T01:54:12.897Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "Version:  OpenGL ES 3.0 (WebGL 2.0 (OpenGL ES 3.0 Chromium))\n"
+    },
+    {
+      "at": "2026-06-10T01:54:12.897Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "GLES:     3\n"
+    },
+    {
+      "at": "2026-06-10T01:54:12.897Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": " EXT_clip_control EXT_color_buffer_float EXT_color_buffer_half_float EXT_conservative_depth EXT_depth_clamp EXT_float_blend EXT_polygon_offset_clamp EXT_texture_compression_bptc EXT_texture_compression_rgtc EXT_texture_filter_anisotropic EXT_texture_mirror_clamp_to_edge NV_shader_noperspective_interpolation OES_draw_buffers_indexed OES_sample_variables OES_shader_multisample_interpolation OES_texture_float_linear OVR_multiview2 WEBGL_clip_cull_distance WEBGL_compressed_texture_astc WEBGL_compressed_texture_etc WEBGL_compressed_texture_etc1 WEBGL_compressed_texture_s3tc WEBGL_compressed_texture_s3tc_srgb WEBGL_debug_renderer_info WEBGL_debug_shaders WEBGL_lose_context WEBGL_multi_draw WEBGL_polygon_mode WEBGL_stencil_texturing GL_EXT_clip_control GL_EXT_color_buffer_float GL_EXT_color_buffer_half_float GL_EXT_conservative_depth GL_EXT_depth_clamp GL_EXT_float_blend GL_EXT_polygon_offset_clamp GL_EXT_texture_compression_bptc GL_EXT_texture_compression_rgtc GL_EXT_texture_filter_anisotropic GL_EXT_texture_mirro\n"
+    },
+    {
+      "at": "2026-06-10T01:54:12.897Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "r_clamp_to_edge GL_NV_shader_noperspective_interpolation GL_OES_draw_buffers_indexed GL_OES_sample_variables GL_OES_shader_multisample_interpolation GL_OES_texture_float_linear GL_OVR_multiview2 GL_WEBGL_clip_cull_distance GL_WEBGL_compressed_texture_astc GL_WEBGL_compressed_texture_etc GL_WEBGL_compressed_texture_etc1 GL_WEBGL_compressed_texture_s3tc GL_WEBGL_compressed_texture_s3tc_srgb GL_WEBGL_debug_renderer_info GL_WEBGL_debug_shaders GL_WEBGL_lose_context GL_WEBGL_multi_draw GL_WEBGL_polygon_mode GL_WEBGL_stencil_texturing\n"
+    },
+    {
+      "at": "2026-06-10T01:54:12.919Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "OPENGL LOG: Creating OpenGL ES 3.0 graphics device ; Context level  <OpenGL ES 3.0> ; Context handle 1\n"
+    },
+    {
+      "at": "2026-06-10T01:54:13.083Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "[Physics::Module] Selected backend.\n"
+    },
+    {
+      "at": "2026-06-10T01:54:13.083Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "[Physics::Module] Name: PhysX\n"
+    },
+    {
+      "at": "2026-06-10T01:54:13.083Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "[Physics::Module] Id: 0xf2b8ea05\n"
+    },
+    {
+      "at": "2026-06-10T01:54:13.083Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "[Physics::Module] SDK Version: 4.1.2\n"
+    },
+    {
+      "at": "2026-06-10T01:54:13.083Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "[Physics::Module] Integration Version: 1.0.0\n"
+    },
+    {
+      "at": "2026-06-10T01:54:13.083Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "[Physics::Module] Threading Mode: Single-Threaded\n"
+    },
+    {
+      "at": "2026-06-10T01:54:13.263Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "Input Manager initialize...\n"
+    },
+    {
+      "at": "2026-06-10T01:54:13.591Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "Trying to get length of sound which is not loaded yet."
+    },
+    {
+      "at": "2026-06-10T01:54:13.593Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "Trying to get length of sound which is not loaded yet."
+    },
+    {
+      "at": "2026-06-10T01:54:13.601Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "Trying to get length of sound which is not loaded yet."
+    },
+    {
+      "at": "2026-06-10T01:54:13.602Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "Trying to get length of sound which is not loaded yet."
+    },
+    {
+      "at": "2026-06-10T01:54:13.603Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "Trying to get length of sound which is not loaded yet."
+    },
+    {
+      "at": "2026-06-10T01:54:13.604Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "Trying to get length of sound which is not loaded yet."
+    },
+    {
+      "at": "2026-06-10T01:54:14.163Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "UnloadTime: 0.700000 ms\n"
+    },
+    {
+      "at": "2026-06-10T01:54:14.325Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "Audio context resumed after 1.367 seconds."
+    },
+    {
+      "at": "2026-06-10T01:54:14.795Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "[UnityCache] 'http://127.0.0.1:5000/static/scripts/Build/WebGL.data?random=ovsqlo' successfully downloaded and stored in the browser cache"
+    },
+    {
+      "at": "2026-06-10T01:54:16.460Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "Init: participantId: 6, assignmentId: TWVS90, uniqueId: 98X1F3:TWVS90\n"
+    },
+    {
+      "at": "2026-06-10T01:54:16.462Z",
+      "event": "browser-console",
+      "type": "log",
+      "text": "GetPage: participantId: 6, assignmentId: TWVS90, uniqueId: 98X1F3:TWVS90\n"
+    },
+    {
+      "at": "2026-06-10T01:54:23.627Z",
+      "event": "press",
+      "key": "Enter",
+      "label": "fallback advance"
+    },
+    {
+      "at": "2026-06-10T01:54:38.570Z",
+      "event": "press",
+      "key": "Enter",
+      "label": "fallback advance"
+    },
+    {
+      "at": "2026-06-10T01:54:39.794Z",
+      "event": "unity-canvas-visible"
+    },
+    {
+      "at": "2026-06-10T01:54:39.794Z",
+      "event": "drive-cycle-start",
+      "cycle": 1,
+      "maxDriveCycles": 9
+    },
+    {
+      "at": "2026-06-10T01:54:46.128Z",
+      "event": "canvas-click",
+      "label": "focus canvas",
+      "x": 0.5,
+      "y": 0.5
+    },
+    {
+      "at": "2026-06-10T02:31:28.998Z",
+      "event": "runner-error",
+      "message": "keyboard.press: Target page, context or browser has been closed\nBrowser logs:\n\n<launching> /usr/local/bin/google-chrome --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-edgeupdater --disable-extensions --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,BoundaryEventDispatchTracksNodeRemoval,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,Translate,AutoDeElevate,RenderDocument,OptimizationHints,msForceBrowserSignIn,msEdgeUpdateLaunchServicesPreferredVersion --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --disable-infobars --disable-search-engine-choice-screen --disable-sync --enable-unsafe-swiftshader --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --no-sandbox --autoplay-policy=no-user-gesture-required --disable-dev-shm-usage --user-data-dir=/tmp/playwright_chromiumdev_profile-iXbXAx --remote-debugging-pipe --no-startup-window\n<launched> pid=66131\n[pid=66131][err] [66131:66152:0610/015359.083870:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are \"tcp\" and on UNIX \"unix\")\n[pid=66131][err] [66131:66152:0610/015359.187759:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are \"tcp\" and on UNIX \"unix\")\n[pid=66131][err] [66131:66152:0610/015359.222491:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are \"tcp\" and on UNIX \"unix\")\n[pid=66131][err] [66131:66194:0610/015359.226945:ERROR:net/socket/socket_posix.cc:173] bind() failed: Address already in use (98)\n[pid=66131][err] [66131:66194:0610/015359.227052:ERROR:net/socket/socket_posix.cc:173] bind() failed: Address already in use (98)\n[pid=66131][err] [66131:66194:0610/015359.227065:ERROR:content/browser/devtools/devtools_http_handler.cc:311] Cannot start http server for devtools.\n[pid=66131][err] [66131:66131:0610/015359.227961:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: \n[pid=66131][err] [66131:66131:0610/015359.229369:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: \n[pid=66131][err] [66131:66152:0610/015359.230663:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are \"tcp\" and on UNIX \"unix\")\n[pid=66131][err] [66131:66131:0610/015359.263244:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: \n[pid=66131][err] [66131:66152:0610/015359.263573:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are \"tcp\" and on UNIX \"unix\")\n[pid=66131][err] [66131:66131:0610/015359.267686:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: \n[pid=66131][err] [66131:66131:0610/015359.268267:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: \n[pid=66131][err] [66131:66152:0610/015359.268372:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are \"tcp\" and on UNIX \"unix\")\n[pid=66131][err] [66131:66131:0610/015359.270528:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.Properties.GetAll: object_path= /org/freedesktop/UPower/devices/DisplayDevice: org.freedesktop.DBus.Error.ServiceUnknown: The name org.freedesktop.UPower was not provided by any .service files\n[pid=66131][err] [66131:66131:0610/015359.272834:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: \n[pid=66131][err] [66131:66152:0610/015359.272984:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are \"tcp\" and on UNIX \"unix\")\n[pid=66131][err] [66131:66131:0610/015359.277782:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: \n[pid=66131][err] [66131:66152:0610/015359.278197:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are \"tcp\" and on UNIX \"unix\")\n[pid=66131][err] [66131:66131:0610/015359.279253:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: \n[pid=66131][err] [66208:66220:0610/015359.584719:ERROR:gpu/ipc/client/command_buffer_proxy_impl.cc:285] ContextResult::kTransientFailure: Failed to send GpuControl.CreateCommandBuffer.\n[pid=66131][err] [66164:66164:0610/015400.112378:ERROR:gpu/command_buffer/service/gl_utils.cc:430] [.WebGL-0x158c000e9400]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels\n[pid=66131][err] [66164:66164:0610/015400.650286:ERROR:gpu/command_buffer/service/gl_utils.cc:430] [.WebGL-0x158c01978000]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels\n[pid=66131][err] [66131:66153:0610/015402.624338:ERROR:google_apis/gcm/engine/registration_request.cc:291] Registration response error message: DEPRECATED_ENDPOINT\n[pid=66131][err] [66164:66164:0610/015404.959415:ERROR:gpu/command_buffer/service/gl_utils.cc:430] [.WebGL-0x158c0197a400]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels\n[pid=66131][err] [66164:66164:0610/015405.023237:ERROR:gpu/command_buffer/service/gl_utils.cc:430] [.WebGL-0x158c0197b000]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)\n[pid=66131][err] [66131:66153:0610/015429.277620:ERROR:google_apis/gcm/engine/registration_request.cc:291] Registration response error message: DEPRECATED_ENDPOINT\n[pid=66131][err] [66131:66153:0610/015523.484587:ERROR:google_apis/gcm/engine/registration_request.cc:291] Registration response error message: DEPRECATED_ENDPOINT\n[pid=66131][err] [66131:66153:0610/015721.737449:ERROR:google_apis/gcm/engine/registration_request.cc:291] Registration response error message: DEPRECATED_ENDPOINT\n[pid=66131][err] [66131:66153:0610/020119.566209:ERROR:google_apis/gcm/engine/registration_request.cc:291] Registration response error message: DEPRECATED_ENDPOINT\n[pid=66131][err] [66131:66153:0610/020655.316874:ERROR:google_apis/gcm/engine/registration_request.cc:291] Registration response error message: DEPRECATED_ENDPOINT\n[pid=66131][err] [66131:66153:0610/020902.688534:ERROR:google_apis/gcm/engine/connection_factory_impl.cc:484] ConnectionHandler failed with net error: -2\n[pid=66131][err] [66131:66153:0610/022402.778206:ERROR:google_apis/gcm/engine/connection_factory_impl.cc:484] ConnectionHandler failed with net error: -2\n[pid=66131] <gracefully close start>\n[pid=66131] <process did exit: exitCode=0, signal=null>\n[pid=66131] starting temporary directories cleanup",
+      "stack": "keyboard.press: Target page, context or browser has been closed\nBrowser logs:\n\n<launching> /usr/local/bin/google-chrome --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-edgeupdater --disable-extensions --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,BoundaryEventDispatchTracksNodeRemoval,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,Translate,AutoDeElevate,RenderDocument,OptimizationHints,msForceBrowserSignIn,msEdgeUpdateLaunchServicesPreferredVersion --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --disable-infobars --disable-search-engine-choice-screen --disable-sync --enable-unsafe-swiftshader --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --no-sandbox --autoplay-policy=no-user-gesture-required --disable-dev-shm-usage --user-data-dir=/tmp/playwright_chromiumdev_profile-iXbXAx --remote-debugging-pipe --no-startup-window\n<launched> pid=66131\n[pid=66131][err] [66131:66152:0610/015359.083870:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are \"tcp\" and on UNIX \"unix\")\n[pid=66131][err] [66131:66152:0610/015359.187759:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are \"tcp\" and on UNIX \"unix\")\n[pid=66131][err] [66131:66152:0610/015359.222491:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are \"tcp\" and on UNIX \"unix\")\n[pid=66131][err] [66131:66194:0610/015359.226945:ERROR:net/socket/socket_posix.cc:173] bind() failed: Address already in use (98)\n[pid=66131][err] [66131:66194:0610/015359.227052:ERROR:net/socket/socket_posix.cc:173] bind() failed: Address already in use (98)\n[pid=66131][err] [66131:66194:0610/015359.227065:ERROR:content/browser/devtools/devtools_http_handler.cc:311] Cannot start http server for devtools.\n[pid=66131][err] [66131:66131:0610/015359.227961:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: \n[pid=66131][err] [66131:66131:0610/015359.229369:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: \n[pid=66131][err] [66131:66152:0610/015359.230663:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are \"tcp\" and on UNIX \"unix\")\n[pid=66131][err] [66131:66131:0610/015359.263244:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: \n[pid=66131][err] [66131:66152:0610/015359.263573:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are \"tcp\" and on UNIX \"unix\")\n[pid=66131][err] [66131:66131:0610/015359.267686:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: \n[pid=66131][err] [66131:66131:0610/015359.268267:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: \n[pid=66131][err] [66131:66152:0610/015359.268372:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are \"tcp\" and on UNIX \"unix\")\n[pid=66131][err] [66131:66131:0610/015359.270528:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.Properties.GetAll: object_path= /org/freedesktop/UPower/devices/DisplayDevice: org.freedesktop.DBus.Error.ServiceUnknown: The name org.freedesktop.UPower was not provided by any .service files\n[pid=66131][err] [66131:66131:0610/015359.272834:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: \n[pid=66131][err] [66131:66152:0610/015359.272984:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are \"tcp\" and on UNIX \"unix\")\n[pid=66131][err] [66131:66131:0610/015359.277782:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: \n[pid=66131][err] [66131:66152:0610/015359.278197:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are \"tcp\" and on UNIX \"unix\")\n[pid=66131][err] [66131:66131:0610/015359.279253:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type: \n[pid=66131][err] [66208:66220:0610/015359.584719:ERROR:gpu/ipc/client/command_buffer_proxy_impl.cc:285] ContextResult::kTransientFailure: Failed to send GpuControl.CreateCommandBuffer.\n[pid=66131][err] [66164:66164:0610/015400.112378:ERROR:gpu/command_buffer/service/gl_utils.cc:430] [.WebGL-0x158c000e9400]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels\n[pid=66131][err] [66164:66164:0610/015400.650286:ERROR:gpu/command_buffer/service/gl_utils.cc:430] [.WebGL-0x158c01978000]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels\n[pid=66131][err] [66131:66153:0610/015402.624338:ERROR:google_apis/gcm/engine/registration_request.cc:291] Registration response error message: DEPRECATED_ENDPOINT\n[pid=66131][err] [66164:66164:0610/015404.959415:ERROR:gpu/command_buffer/service/gl_utils.cc:430] [.WebGL-0x158c0197a400]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels\n[pid=66131][err] [66164:66164:0610/015405.023237:ERROR:gpu/command_buffer/service/gl_utils.cc:430] [.WebGL-0x158c0197b000]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)\n[pid=66131][err] [66131:66153:0610/015429.277620:ERROR:google_apis/gcm/engine/registration_request.cc:291] Registration response error message: DEPRECATED_ENDPOINT\n[pid=66131][err] [66131:66153:0610/015523.484587:ERROR:google_apis/gcm/engine/registration_request.cc:291] Registration response error message: DEPRECATED_ENDPOINT\n[pid=66131][err] [66131:66153:0610/015721.737449:ERROR:google_apis/gcm/engine/registration_request.cc:291] Registration response error message: DEPRECATED_ENDPOINT\n[pid=66131][err] [66131:66153:0610/020119.566209:ERROR:google_apis/gcm/engine/registration_request.cc:291] Registration response error message: DEPRECATED_ENDPOINT\n[pid=66131][err] [66131:66153:0610/020655.316874:ERROR:google_apis/gcm/engine/registration_request.cc:291] Registration response error message: DEPRECATED_ENDPOINT\n[pid=66131][err] [66131:66153:0610/020902.688534:ERROR:google_apis/gcm/engine/connection_factory_impl.cc:484] ConnectionHandler failed with net error: -2\n[pid=66131][err] [66131:66153:0610/022402.778206:ERROR:google_apis/gcm/engine/connection_factory_impl.cc:484] ConnectionHandler failed with net error: -2\n[pid=66131] <gracefully close start>\n[pid=66131] <process did exit: exitCode=0, signal=null>\n[pid=66131] starting temporary directories cleanup\n    at runCanvasActions (/workspace/challenges/ferry-market-unity/attempts/2026-06-09-23-19/code/ferry_market_unity/scripts/participant_flow.js:133:31)\n    at async /workspace/challenges/ferry-market-unity/attempts/2026-06-09-23-19/code/ferry_market_unity/scripts/participant_flow.js:177:7"
+    }
+  ]
+}

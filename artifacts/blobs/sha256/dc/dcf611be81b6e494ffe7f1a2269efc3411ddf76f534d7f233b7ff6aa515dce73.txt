@@ -1,0 +1,8 @@
+[Config]
+title = Continuous music emotion slider demo (local development only)
+description = Listen to short generated audio clips and continuously rate perceived emotion on valence and arousal sliders. This attempt uses only local generated audio and the generic local recruiter.
+contact_email_on_error = researcher@example.invalid
+organization_name = Local PsyNetSkills demo
+recruiter = generic
+currency = $
+wage_per_hour = 12.0

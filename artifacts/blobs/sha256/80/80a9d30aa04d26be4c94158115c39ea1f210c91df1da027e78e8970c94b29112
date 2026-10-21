@@ -1,0 +1,20 @@
+# Standard places to put a virtual environment
+env/
+.venv/
+
+# Automatically generated deployment resources and logs
+.deploy/
+server.log
+static/assets
+source_code.zip
+data/
+
+# Editor and Python cache files
+.idea
+__pycache__
+*.DS_Store
+
+# Node/Playwright local dependencies and reports
+node_modules/
+playwright-report/
+test-results/

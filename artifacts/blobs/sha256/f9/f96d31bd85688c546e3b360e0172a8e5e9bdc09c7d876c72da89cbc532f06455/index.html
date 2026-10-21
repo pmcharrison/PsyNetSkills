@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <base href="./">
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>Experiment Monitoring -  Dashboard</title>
+        
+          <link rel="stylesheet" href="./static/css/bootstrap.min.css" type="text/css">
+          <link rel="stylesheet" href="./static/css/dashboard.css" type="text/css">
+          
+    <script src="https://use.fontawesome.com/ffb1fe552d.js"></script>
+    <link href="./static/vis@4.17.0/dist/vis-network.min.css" rel="stylesheet"
+          type="text/css"/>
+
+        
+        
+        
+    
+        <style>
+          body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            margin: 1rem;
+          }
+          .container { max-width: none; }
+          #dashboard-navigation, #logout { display: none; }
+          #monitor-wrapper { display: flex; gap: 1rem; align-items: flex-start; }
+          #sidebar { flex: 0 0 18rem; }
+          #timeline-wrapper, #timeline, main { flex: 1 1 auto; min-width: 0; }
+          table { border-collapse: collapse; width: 100%; }
+          th, td {
+            border: 1px solid #d0d7de;
+            padding: 0.4rem;
+            text-align: left;
+            vertical-align: top;
+          }
+          button {
+            border: 1px solid #d0d7de;
+            border-radius: 0.35rem;
+            background: #f6f8fa;
+            padding: 0.3rem 0.6rem;
+          }
+        </style>
+    </head>
+    <body>
+      <div class="container">
+        
+          <nav id="dashboard-navigation">
+            <ul class="nav nav-tabs">
+              
+                
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Config</a>
+                  </li>
+                
+              
+                
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Deployments</a>
+                  </li>
+                
+              
+                
+                <li class="nav-item">
+                  <a class="nav-link dropdown-toggle active" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Monitor</a>
+                  <div class="dropdown-menu">
+                    
+                      <a class="dropdown-item" href="#">Monitoring</a>
+                    
+                      <a class="dropdown-item" href="#">Timeline</a>
+                    
+                      <a class="dropdown-item" href="#">Resources</a>
+                    
+                      <a class="dropdown-item" href="#">Participants</a>
+                    
+                      <a class="dropdown-item" href="#">Logger</a>
+                    
+                      <a class="dropdown-item" href="#">Errors</a>
+                    
+                  </div>
+                </li>
+                
+              
+                
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Basic data</a>
+                  </li>
+                
+              
+                
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Export</a>
+                  </li>
+                
+              
+                
+                <li class="nav-item">
+                  <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Database</a>
+                  <div class="dropdown-menu">
+                    
+                      <a class="dropdown-item" href="#">ChainTrialMakerState</a>
+                    
+                      <a class="dropdown-item" href="#">ExperimentConfig</a>
+                    
+                      <a class="dropdown-item" href="#">ExperimentStatus</a>
+                    
+                      <a class="dropdown-item" href="#">ModuleState</a>
+                    
+                      <a class="dropdown-item" href="#">Participant</a>
+                    
+                      <a class="dropdown-item" href="#">PrisonersDilemmaTrial</a>
+                    
+                      <a class="dropdown-item" href="#">Request</a>
+                    
+                      <a class="dropdown-item" href="#">Response</a>
+                    
+                      <a class="dropdown-item" href="#">StaticNetwork</a>
+                    
+                      <a class="dropdown-item" href="#">StaticNode</a>
+                    
+                  </div>
+                </li>
+                
+              
+                
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Development</a>
+                  </li>
+                
+              
+            </ul>
+          </nav>
+          
+        
+        
+          
+          
+        
+        
+        
+    <h1>Experiment Monitoring</h1>
+    <div id="monitor-wrapper" class="d-flex justify-content-between align-items-stretch">
+        <main class="flex-fill">
+            <div style="display: -ms-flexbox; display: flex; -ms-flex-wrap: wrap; flex-wrap: wrap;">
+                    <div class="form-group">
+                        <label for="sortBy">Sort networks by</label>
+                        <div class="input-group mb-3">
+                            <select class="form-control" id="sortBy">
+                                <option value="network_id">Network ID</option>
+                                <option value="n_pending_infos">Number of pending infos</option>
+                                <option value="n_completed_infos">Number of completed infos</option>
+                                <option value="n_failed_infos">Number of failed infos</option>
+                                <option value="n_alive_nodes">Number of completed nodes</option>
+                                <option value="n_failed_nodes">Number of failed nodes</option>
+                            </select>
+                            <div class="input-group-append">
+                                <div class="btn-group btn-group-toggle" id="order" data-toggle="buttons">
+
+                                    <label class="btn btn-secondary active">
+                                        <input type="radio" name="options" checked>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                             fill="currentColor"
+                                             class="bi bi-arrow-down" viewBox="0 0 16 16">
+                                            <path fill-rule="evenodd"
+                                                  d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1z"/>
+                                        </svg>
+                                    </label>
+                                    <label class="btn btn-secondary">
+                                        <input type="radio" name="options">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                             fill="currentColor"
+                                             class="bi bi-arrow-up" viewBox="0 0 16 16">
+                                            <path fill-rule="evenodd"
+                                                  d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z"/>
+                                        </svg>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                <div id="search-container" class="mx-auto row">
+                    <div class="form-group pr-3">
+                        <label for="max-networks">Number of networks</label>
+                        <input type="number" min="1" class="form-control" id="max-networks"
+                               placeholder="Networks to print">
+                    </div>
+                    <div class="form-group">
+                        <label for="search">Freetext search</label>
+                        <input type="text" class="form-control" id="search" placeholder="Search networks">
+                    </div>
+                </div>
+                <div>
+                    <div class="form-group">
+
+                        <label></label>
+                        <div>
+                            <a class="text-primary" data-toggle="collapse" href="#statistics" role="button"
+                               aria-expanded="false" aria-controls="statistics">
+                                Experiment Statistics
+                            </a>
+                            <a class="text-secondary" data-toggle="collapse" href="#advanced-filter"
+                               role="button" aria-expanded="false" aria-controls="advanced-filter">
+                                Advanced Filter
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="collapse p-3 bg-light" id="statistics">
+                <h4>Statistics</h4>
+                <div class="row">
+                    
+                        <div class="col">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Participants</h5>
+                                    <p class="card-text"><span class="nowrap"><span class="statistics-key">working</span>: <span class="statistics-value">1</span></span></p>
+                                </div>
+                            </div>
+                        </div>
+                    
+                        <div class="col">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Networks</h5>
+                                    <p class="card-text"><span class="nowrap"><span class="statistics-key">default</span>: <span class="statistics-value"><span class="statistics-value no-failures">5 total, 0 failed (0.0%)</span></span></span></p>
+                                </div>
+                            </div>
+                        </div>
+                    
+                        <div class="col">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Nodes</h5>
+                                    <p class="card-text"><span class="statistics-value no-failures">5 total, 0 failed (0.0%)</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    
+                        <div class="col">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Trials</h5>
+                                    <p class="card-text"><span class="statistics-value no-failures">5 total, 0 failed (0.0%)</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    
+                </div>
+
+            </div>
+            <div class="collapse p-3  bg-light" id="advanced-filter">
+            <h4>Advanced Filter</h4>
+                <form>
+                    
+                        <fieldset id="network-ids">
+                            <h5>Network IDs</h5>
+                            
+                                <div class="field p-1">
+                                    <input class="network-input" id="val-1" type="checkbox" name="network_ids"
+                                           value="1" checked />
+                                    <label for="val-1">1</label>
+                                </div>
+                            
+                                <div class="field p-1">
+                                    <input class="network-input" id="val-2" type="checkbox" name="network_ids"
+                                           value="2" checked />
+                                    <label for="val-2">2</label>
+                                </div>
+                            
+                                <div class="field p-1">
+                                    <input class="network-input" id="val-3" type="checkbox" name="network_ids"
+                                           value="3" checked />
+                                    <label for="val-3">3</label>
+                                </div>
+                            
+                                <div class="field p-1">
+                                    <input class="network-input" id="val-4" type="checkbox" name="network_ids"
+                                           value="4" checked />
+                                    <label for="val-4">4</label>
+                                </div>
+                            
+                                <div class="field p-1">
+                                    <input class="network-input" id="val-5" type="checkbox" name="network_ids"
+                                           value="5" checked />
+                                    <label for="val-5">5</label>
+                                </div>
+                            
+                        </fieldset>
+                </form>
+                <form method="GET">
+
+                    <div class="reload-onclick">
+                        <input name="collapsed"
+                               type="checkbox" />
+                        <label for="transformations">Collapse (networks and sources only)</label>
+                    </div>
+                    <div class="reload-onclick">
+                        <input name="transformations"
+                               type="checkbox" />
+                        <label for="transformations">Show transformations</label>
+                    </div>
+                </form>
+            </div>
+
+            <section id="mynetwork">
+            </section>
+            <section id="details-pane">
+                <div id="element-details">
+                </div>
+            </section>
+        </main>
+    </div>
+
+        <footer>
+          
+          
+        </footer>
+      </div>
+      
+    
+      <script src="./static/scripts/jquery-3.7.1.min.js"></script>
+      <script src="./static/scripts/popper.min.js"></script>
+      <script src="./static/scripts/bootstrap.min.js"></script>
+      <script src="./static/scripts/clipboard.min.js"></script>
+      
+    <script>
+        $('.reload-onclick').on('change', function () {
+            $(this).parents('form').submit();
+        });
+        window.templateGlobals = function () {
+            // Values inscribed by Jinja2 when this template is rendered.
+            const network_structure = {"networks": [{"vars": "{}", "id": 1, "creation_time": "2026-06-09 16:08:04", "failed": false, "failed_reason": null, "time_of_death": null, "type": "StaticNetwork", "max_size": 1, "full": false, "role": "default", "n_pending_infos": 0, "n_completed_infos": 1, "n_failed_infos": 0, "n_alive_nodes": 1, "n_failed_nodes": 0, "trial_maker_id": "prisoners_dilemma", "module_id": "prisoners_dilemma", "target_n_trials": 1000000, "participant_group": "default", "sync_group_type": null, "sync_group_id": null, "participant_id": null, "async_post_grow_network_required": false, "async_post_grow_network_requested": false, "async_post_grow_network_complete": false, "async_post_grow_network_failed": false, "id_within_participant": null, "n_all_trials": 1, "n_alive_trials": 1, "n_failed_trials": 0, "n_completed_trials": 1, "n_all_nodes": 1, "chain_type": "across", "head_id": 1, "trials_per_node": 1000000, "definition": "{}", "context": null, "block": "01", "class": "StaticNetwork", "object_type": "Network"}, {"vars": "{}", "id": 2, "creation_time": "2026-06-09 16:08:04", "failed": false, "failed_reason": null, "time_of_death": null, "type": "StaticNetwork", "max_size": 1, "full": false, "role": "default", "n_pending_infos": 0, "n_completed_infos": 1, "n_failed_infos": 0, "n_alive_nodes": 1, "n_failed_nodes": 0, "trial_maker_id": "prisoners_dilemma", "module_id": "prisoners_dilemma", "target_n_trials": 1000000, "participant_group": "default", "sync_group_type": null, "sync_group_id": null, "participant_id": null, "async_post_grow_network_required": false, "async_post_grow_network_requested": false, "async_post_grow_network_complete": false, "async_post_grow_network_failed": false, "id_within_participant": null, "n_all_trials": 1, "n_alive_trials": 1, "n_failed_trials": 0, "n_completed_trials": 1, "n_all_nodes": 1, "chain_type": "across", "head_id": 2, "trials_per_node": 1000000, "definition": "{}", "context": null, "block": "02", "class": "StaticNetwork", "object_type": "Network"}, {"vars": "{}", "id": 3, "creation_time": "2026-06-09 16:08:04", "failed": false, "failed_reason": null, "time_of_death": null, "type": "StaticNetwork", "max_size": 1, "full": false, "role": "default", "n_pending_infos": 0, "n_completed_infos": 1, "n_failed_infos": 0, "n_alive_nodes": 1, "n_failed_nodes": 0, "trial_maker_id": "prisoners_dilemma", "module_id": "prisoners_dilemma", "target_n_trials": 1000000, "participant_group": "default", "sync_group_type": null, "sync_group_id": null, "participant_id": null, "async_post_grow_network_required": false, "async_post_grow_network_requested": false, "async_post_grow_network_complete": false, "async_post_grow_network_failed": false, "id_within_participant": null, "n_all_trials": 1, "n_alive_trials": 1, "n_failed_trials": 0, "n_completed_trials": 1, "n_all_nodes": 1, "chain_type": "across", "head_id": 3, "trials_per_node": 1000000, "definition": "{}", "context": null, "block": "03", "class": "StaticNetwork", "object_type": "Network"}, {"vars": "{}", "id": 4, "creation_time": "2026-06-09 16:08:04", "failed": false, "failed_reason": null, "time_of_death": null, "type": "StaticNetwork", "max_size": 1, "full": false, "role": "default", "n_pending_infos": 0, "n_completed_infos": 1, "n_failed_infos": 0, "n_alive_nodes": 1, "n_failed_nodes": 0, "trial_maker_id": "prisoners_dilemma", "module_id": "prisoners_dilemma", "target_n_trials": 1000000, "participant_group": "default", "sync_group_type": null, "sync_group_id": null, "participant_id": null, "async_post_grow_network_required": false, "async_post_grow_network_requested": false, "async_post_grow_network_complete": false, "async_post_grow_network_failed": false, "id_within_participant": null, "n_all_trials": 1, "n_alive_trials": 1, "n_failed_trials": 0, "n_completed_trials": 1, "n_all_nodes": 1, "chain_type": "across", "head_id": 4, "trials_per_node": 1000000, "definition": "{}", "context": null, "block": "04", "class": "StaticNetwork", "object_type": "Network"}, {"vars": "{}", "id": 5, "creation_time": "2026-06-09 16:08:04", "failed": false, "failed_reason": null, "time_of_death": null, "type": "StaticNetwork", "max_size": 1, "full": false, "role": "default", "n_pending_infos": 0, "n_completed_infos": 1, "n_failed_infos": 0, "n_alive_nodes": 1, "n_failed_nodes": 0, "trial_maker_id": "prisoners_dilemma", "module_id": "prisoners_dilemma", "target_n_trials": 1000000, "participant_group": "default", "sync_group_type": null, "sync_group_id": null, "participant_id": null, "async_post_grow_network_required": false, "async_post_grow_network_requested": false, "async_post_grow_network_complete": false, "async_post_grow_network_failed": false, "id_within_participant": null, "n_all_trials": 1, "n_alive_trials": 1, "n_failed_trials": 0, "n_completed_trials": 1, "n_all_nodes": 1, "chain_type": "across", "head_id": 5, "trials_per_node": 1000000, "definition": "{}", "context": null, "block": "05", "class": "StaticNetwork", "object_type": "Network"}], "nodes": [{"vars": "{}", "id": 1, "creation_time": "2026-06-09 16:08:04", "failed": false, "failed_reason": null, "time_of_death": null, "type": "TrialSource", "network_id": 1, "participant_id": null, "trial_maker_id": "prisoners_dilemma", "module_id": "prisoners_dilemma", "module_state_id": null, "is_global": null, "on_deploy_complete": true, "async_on_deploy_required": false, "async_on_deploy_requested": false, "async_on_deploy_complete": false, "async_on_deploy_failed": false, "key": null, "degree": 0, "target_n_trials": 1000000, "can_spawn": false, "child_id": null, "parent_id": null, "seed": "{}", "definition": "{'round': 1, 'partner_choice': 'Cooperate', 'partner_reason': 'Alex starts cooperatively.'}", "context": null, "participant_group": "default", "block": "01", "propagate_failure": false, "n_viable_trials": 1, "class": "StaticNode", "object_type": "Node"}, {"vars": "{}", "id": 2, "creation_time": "2026-06-09 16:08:04", "failed": false, "failed_reason": null, "time_of_death": null, "type": "TrialSource", "network_id": 2, "participant_id": null, "trial_maker_id": "prisoners_dilemma", "module_id": "prisoners_dilemma", "module_state_id": null, "is_global": null, "on_deploy_complete": true, "async_on_deploy_required": false, "async_on_deploy_requested": false, "async_on_deploy_complete": false, "async_on_deploy_failed": false, "key": null, "degree": 0, "target_n_trials": 1000000, "can_spawn": false, "child_id": null, "parent_id": null, "seed": "{}", "definition": "{'round': 2, 'partner_choice': 'Cooperate', 'partner_reason': 'Alex keeps cooperating after a cooperative opening.'}", "context": null, "participant_group": "default", "block": "02", "propagate_failure": false, "n_viable_trials": 1, "class": "StaticNode", "object_type": "Node"}, {"vars": "{}", "id": 3, "creation_time": "2026-06-09 16:08:04", "failed": false, "failed_reason": null, "time_of_death": null, "type": "TrialSource", "network_id": 3, "participant_id": null, "trial_maker_id": "prisoners_dilemma", "module_id": "prisoners_dilemma", "module_state_id": null, "is_global": null, "on_deploy_complete": true, "async_on_deploy_required": false, "async_on_deploy_requested": false, "async_on_deploy_complete": false, "async_on_deploy_failed": false, "key": null, "degree": 0, "target_n_trials": 1000000, "can_spawn": false, "child_id": null, "parent_id": null, "seed": "{}", "definition": "{'round': 3, 'partner_choice': 'Defect', 'partner_reason': 'Alex tests whether defecting improves the outcome.'}", "context": null, "participant_group": "default", "block": "03", "propagate_failure": false, "n_viable_trials": 1, "class": "StaticNode", "object_type": "Node"}, {"vars": "{}", "id": 4, "creation_time": "2026-06-09 16:08:04", "failed": false, "failed_reason": null, "time_of_death": null, "type": "TrialSource", "network_id": 4, "participant_id": null, "trial_maker_id": "prisoners_dilemma", "module_id": "prisoners_dilemma", "module_state_id": null, "is_global": null, "on_deploy_complete": true, "async_on_deploy_required": false, "async_on_deploy_requested": false, "async_on_deploy_complete": false, "async_on_deploy_failed": false, "key": null, "degree": 0, "target_n_trials": 1000000, "can_spawn": false, "child_id": null, "parent_id": null, "seed": "{}", "definition": "{'round': 4, 'partner_choice': 'Cooperate', 'partner_reason': 'Alex returns to cooperation after the test round.'}", "context": null, "participant_group": "default", "block": "04", "propagate_failure": false, "n_viable_trials": 1, "class": "StaticNode", "object_type": "Node"}, {"vars": "{}", "id": 5, "creation_time": "2026-06-09 16:08:04", "failed": false, "failed_reason": null, "time_of_death": null, "type": "TrialSource", "network_id": 5, "participant_id": null, "trial_maker_id": "prisoners_dilemma", "module_id": "prisoners_dilemma", "module_state_id": null, "is_global": null, "on_deploy_complete": true, "async_on_deploy_required": false, "async_on_deploy_requested": false, "async_on_deploy_complete": false, "async_on_deploy_failed": false, "key": null, "degree": 0, "target_n_trials": 1000000, "can_spawn": false, "child_id": null, "parent_id": null, "seed": "{}", "definition": "{'round': 5, 'partner_choice': 'Defect', 'partner_reason': 'Alex defects in the final round.'}", "context": null, "participant_group": "default", "block": "05", "propagate_failure": false, "n_viable_trials": 1, "class": "StaticNode", "object_type": "Node"}], "vectors": [], "infos": [{"_initial_assets": "{}", "vars": "{}", "id": 1, "creation_time": "2026-06-09 16:08:52", "failed": false, "failed_reason": null, "time_of_death": null, "type": "PrisonersDilemmaTrial", "origin_id": 1, "network_id": 1, "contents": null, "complete": true, "node_id": 1, "participant_id": 1, "module_state_id": 2, "trial_maker_id": "prisoners_dilemma", "definition": "{'round': 1, 'partner_choice': 'Cooperate', 'partner_reason': 'Alex starts cooperatively.'}", "finalized": true, "is_repeat_trial": false, "score": 3.0, "performance_reward": 0.06, "parent_trial_id": null, "answer": "Cooperate", "propagate_failure": true, "response_id": 4, "repeat_trial_index": null, "n_repeat_trials": null, "time_taken": 2.599, "time_credit_before_trial": 50.0, "time_credit_after_trial": 62.0, "time_credit_from_trial": 12.0, "progress_before_trial": 0.3968253968253968, "progress_after_trial": 0.49206349206349204, "async_post_trial_required": false, "async_post_trial_requested": false, "async_post_trial_complete": false, "async_post_trial_failed": false, "block_position": 0, "block": "01", "class": "PrisonersDilemmaTrial", "object_type": "Info", "round": 1, "partner_choice": "Cooperate", "partner_reason": "Alex starts cooperatively."}, {"_initial_assets": "{}", "vars": "{}", "id": 2, "creation_time": "2026-06-09 16:08:55", "failed": false, "failed_reason": null, "time_of_death": null, "type": "PrisonersDilemmaTrial", "origin_id": 2, "network_id": 2, "contents": null, "complete": true, "node_id": 2, "participant_id": 1, "module_state_id": 2, "trial_maker_id": "prisoners_dilemma", "definition": "{'round': 2, 'partner_choice': 'Cooperate', 'partner_reason': 'Alex keeps cooperating after a cooperative opening.'}", "finalized": true, "is_repeat_trial": false, "score": 5.0, "performance_reward": 0.1, "parent_trial_id": null, "answer": "Defect", "propagate_failure": true, "response_id": 6, "repeat_trial_index": null, "n_repeat_trials": null, "time_taken": 2.644, "time_credit_before_trial": 62.0, "time_credit_after_trial": 74.0, "time_credit_from_trial": 12.0, "progress_before_trial": 0.49206349206349204, "progress_after_trial": 0.5873015873015872, "async_post_trial_required": false, "async_post_trial_requested": false, "async_post_trial_complete": false, "async_post_trial_failed": false, "block_position": 1, "block": "02", "class": "PrisonersDilemmaTrial", "object_type": "Info", "round": 2, "partner_choice": "Cooperate", "partner_reason": "Alex keeps cooperating after a cooperative opening."}, {"_initial_assets": "{}", "vars": "{}", "id": 3, "creation_time": "2026-06-09 16:08:58", "failed": false, "failed_reason": null, "time_of_death": null, "type": "PrisonersDilemmaTrial", "origin_id": 3, "network_id": 3, "contents": null, "complete": true, "node_id": 3, "participant_id": 1, "module_state_id": 2, "trial_maker_id": "prisoners_dilemma", "definition": "{'round': 3, 'partner_choice': 'Defect', 'partner_reason': 'Alex tests whether defecting improves the outcome.'}", "finalized": true, "is_repeat_trial": false, "score": 0.0, "performance_reward": 0.0, "parent_trial_id": null, "answer": "Cooperate", "propagate_failure": true, "response_id": 8, "repeat_trial_index": null, "n_repeat_trials": null, "time_taken": 2.664, "time_credit_before_trial": 74.0, "time_credit_after_trial": 86.0, "time_credit_from_trial": 12.0, "progress_before_trial": 0.5873015873015872, "progress_after_trial": 0.6825396825396824, "async_post_trial_required": false, "async_post_trial_requested": false, "async_post_trial_complete": false, "async_post_trial_failed": false, "block_position": 2, "block": "03", "class": "PrisonersDilemmaTrial", "object_type": "Info", "round": 3, "partner_choice": "Defect", "partner_reason": "Alex tests whether defecting improves the outcome."}, {"_initial_assets": "{}", "vars": "{}", "id": 4, "creation_time": "2026-06-09 16:09:01", "failed": false, "failed_reason": null, "time_of_death": null, "type": "PrisonersDilemmaTrial", "origin_id": 4, "network_id": 4, "contents": null, "complete": true, "node_id": 4, "participant_id": 1, "module_state_id": 2, "trial_maker_id": "prisoners_dilemma", "definition": "{'round': 4, 'partner_choice': 'Cooperate', 'partner_reason': 'Alex returns to cooperation after the test round.'}", "finalized": true, "is_repeat_trial": false, "score": 5.0, "performance_reward": 0.1, "parent_trial_id": null, "answer": "Defect", "propagate_failure": true, "response_id": 10, "repeat_trial_index": null, "n_repeat_trials": null, "time_taken": 2.665, "time_credit_before_trial": 86.0, "time_credit_after_trial": 98.0, "time_credit_from_trial": 12.0, "progress_before_trial": 0.6825396825396824, "progress_after_trial": 0.7777777777777777, "async_post_trial_required": false, "async_post_trial_requested": false, "async_post_trial_complete": false, "async_post_trial_failed": false, "block_position": 3, "block": "04", "class": "PrisonersDilemmaTrial", "object_type": "Info", "round": 4, "partner_choice": "Cooperate", "partner_reason": "Alex returns to cooperation after the test round."}, {"_initial_assets": "{}", "vars": "{}", "id": 5, "creation_time": "2026-06-09 16:09:04", "failed": false, "failed_reason": null, "time_of_death": null, "type": "PrisonersDilemmaTrial", "origin_id": 5, "network_id": 5, "contents": null, "complete": true, "node_id": 5, "participant_id": 1, "module_state_id": 2, "trial_maker_id": "prisoners_dilemma", "definition": "{'round': 5, 'partner_choice': 'Defect', 'partner_reason': 'Alex defects in the final round.'}", "finalized": true, "is_repeat_trial": false, "score": 0.0, "performance_reward": 0.0, "parent_trial_id": null, "answer": "Cooperate", "propagate_failure": true, "response_id": 12, "repeat_trial_index": null, "n_repeat_trials": null, "time_taken": 2.6479999999999997, "time_credit_before_trial": 98.0, "time_credit_after_trial": 110.0, "time_credit_from_trial": 12.0, "progress_before_trial": 0.7777777777777777, "progress_after_trial": 0.8730158730158729, "async_post_trial_required": false, "async_post_trial_requested": false, "async_post_trial_complete": false, "async_post_trial_failed": false, "block_position": 4, "block": "05", "class": "PrisonersDilemmaTrial", "object_type": "Info", "round": 5, "partner_choice": "Defect", "partner_reason": "Alex defects in the final round."}], "participants": [{"vars": "{'main_consent': True, '__Waiting for trial__loop_start_time__loop_start_time': '2026-06-09T16:09:07.988715', '__prisoners_dilemma__trial_loop__loop_start_time__loop_start_time': '2026-06-09T16:08:52.625785', 'dilemma_total_points': 13, 'dilemma_partner_total_points': 13, 'dilemma_history': [{'round': 1, 'participant_choice': 'Cooperate', 'partner_choice': 'Cooperate', 'participant_points': 3, 'partner_points': 3}, {'round': 2, 'participant_choice': 'Defect', 'partner_choice': 'Cooperate', 'participant_points': 5, 'partner_points': 0}, {'round': 3, 'participant_choice': 'Cooperate', 'partner_choice': 'Defect', 'participant_points': 0, 'partner_points': 5}, {'round': 4, 'participant_choice': 'Defect', 'partner_choice': 'Cooperate', 'participant_points': 5, 'partner_points': 0}, {'round': 5, 'participant_choice': 'Cooperate', 'partner_choice': 'Defect', 'participant_points': 0, 'partner_points': 5}], '__wait_while__loop_start_time__loop_start_time': '2026-06-09T16:09:07.989516'}", "id": 1, "creation_time": "2026-06-09 16:08:48", "failed": false, "failed_reason": null, "time_of_death": null, "type": "Participant", "fingerprint_hash": "4a48ec8659fa4859c7fed03da324cd33", "recruiter_id": "hotair", "worker_id": "ZU6PIU", "assignment_id": "JQB9G4", "unique_id": "ZU6PIU:JQB9G4", "hit_id": "1ZEFKK", "mode": "debug", "end_time": null, "base_pay": null, "bonus": null, "entry_information": "{'recruiter': 'hotair'}", "status": "working", "elt_id": "['successful_end', 1, 1]", "elt_id_max": "[2, 2, 2]", "time_credit": 126.0, "estimated_max_time_credit": 126.0, "progress": 1.0, "time_credit_fixes": "[]", "progress_fixes": "[1.0]", "page_uuid": "8748b1a4-bb2e-931f-08db-073f8722ccb4", "page_count": 14, "aborted": false, "complete": false, "pending_redirect": null, "answer": "Cooperate", "answer_accumulators": "[]", "sequences": "[]", "branch_log": "[['main_consent_conditional', False], ['init_participant', False]]", "for_loops": "{}", "failure_tags": "[]", "base_payment": 0.1, "performance_reward": 0.26, "unpaid_bonus": 0.0, "total_wait_page_time": 0.0, "client_ip_address": "127.0.0.1", "answer_is_fresh": false, "browser_platform": "Chrome 148.0.0.0 on Linux 64-bit", "module_state_id": null, "current_trial_id": null, "trial_status": "exit", "awaited_async_code_block_process_id": null, "class": "Participant", "object_type": "Participant", "aborted_modules": "[]", "started_modules": "['main_consent', 'prisoners_dilemma']", "finished_modules": "['main_consent', 'prisoners_dilemma']", "module_id": null, "main_consent": true, "dilemma_total_points": 13, "dilemma_partner_total_points": 13, "dilemma_history": "[{'round': 1, 'participant_choice': 'Cooperate', 'partner_choice': 'Cooperate', 'participant_points': 3, 'partner_points': 3}, {'round': 2, 'participant_choice': 'Defect', 'partner_choice': 'Cooperate', 'participant_points': 5, 'partner_points': 0}, {'round': 3, 'participant_choice': 'Cooperate', 'partner_choice': 'Defect', 'participant_points': 0, 'partner_points': 5}, {'round': 4, 'participant_choice': 'Defect', 'partner_choice': 'Cooperate', 'participant_points': 5, 'partner_points': 0}, {'round': 5, 'participant_choice': 'Cooperate', 'partner_choice': 'Defect', 'participant_points': 0, 'partner_points': 5}]"}], "trans": []};
+            const vis_options = {};
+            return {
+                network_structure: network_structure,
+                vis_options: vis_options
+            };
+        };
+    </script>
+    <script src="../../../../monitor-static/vis@4.17.0/dist/vis.min.js"></script>
+    <script src="./static/scripts/network-monitor.js"></script>
+
+
+      
+      
+    </body>
+</html>

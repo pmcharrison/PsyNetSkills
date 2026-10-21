@@ -1,0 +1,14 @@
+[Config]
+title = Adaptive memory testing experiment
+description = This local workshop experiment estimates digit-memory ability using ten adaptive number-string recall trials. Please use a Chrome browser.
+contact_email_on_error = example@example.com
+organization_name = PsyNetSkills
+
+recruiter = generic
+currency = $
+wage_per_hour = 12.0
+
+[Prolific]
+auto_recruit = false
+prolific_estimated_completion_minutes = 4
+base_payment = 0.80

@@ -1,0 +1,251 @@
+{% macro shared_vibe_css() %}
+<style>
+  .vibe-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+    align-items: stretch;
+    margin: 12px 0 18px;
+  }
+  .vibe-panel {
+    border: 1px solid #d7dce2;
+    border-radius: 10px;
+    padding: 12px;
+    background: #fff;
+    min-height: 285px;
+  }
+  .vibe-panel h3 {
+    font-size: 1rem;
+    margin: 0 0 8px;
+  }
+  .vibe-panel img,
+  .vibe-svg-box svg {
+    width: 100%;
+    max-height: 235px;
+    object-fit: contain;
+  }
+  .vibe-svg-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 235px;
+    background: #f8fafc;
+    border-radius: 8px;
+  }
+  .vibe-empty {
+    color: #6c757d;
+    font-style: italic;
+    text-align: center;
+    padding: 64px 8px;
+  }
+  .vibe-meta {
+    font-size: 0.9rem;
+    color: #495057;
+    margin-bottom: 8px;
+  }
+  .vibe-code {
+    font-family: monospace;
+    font-size: 0.78rem;
+    max-height: 95px;
+    overflow: auto;
+    white-space: pre-wrap;
+    background: #f1f3f5;
+    border-radius: 6px;
+    padding: 8px;
+  }
+  @media (max-width: 900px) {
+    .vibe-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+{% endmacro %}
+
+{% macro render_svg(svg_code) %}
+  {% if svg_code %}
+    <div class="vibe-svg-box">{{ svg_code | safe }}</div>
+  {% else %}
+    <div class="vibe-empty">No SVG rendition yet. This is the first iteration.</div>
+  {% endif %}
+{% endmacro %}
+
+{% macro vibe_prompt(config) %}
+{{ shared_vibe_css() }}
+<h2>Iteration {{ config.definition.iteration }}: SVG guidance and selection</h2>
+<div class="vibe-meta">
+  Instructor role: <strong>{{ config.definition.instructor_role }}</strong> |
+  Selector role: <strong>{{ config.definition.selector_role }}</strong>
+</div>
+<div class="vibe-grid">
+  <div class="vibe-panel">
+    <h3>Reference image</h3>
+    <img src="{{ config.definition.reference_url }}" alt="Reference {{ config.definition.reference_id }}">
+  </div>
+  <div class="vibe-panel">
+    <h3>Previous best SVG</h3>
+    {{ render_svg(config.definition.best_svg) }}
+  </div>
+  <div class="vibe-panel">
+    <h3>New SVG candidate</h3>
+    <div id="candidate-preview" class="vibe-svg-box">
+      <div class="vibe-empty">Generate a candidate after entering guidance.</div>
+    </div>
+  </div>
+</div>
+<p>
+  Write a high-level instruction for the code generator. The generator receives only
+  its code-generator system prompt and this instruction.
+</p>
+{% endmacro %}
+
+{% macro vibe_control(config) %}
+<textarea id="guidance" class="form-control" rows="4" style="margin-bottom: 12px;"
+  {% if config.definition.instructor_role == "ai" %}readonly{% endif %}
+>{{ config.ai_instruction if config.definition.instructor_role == "ai" else "" }}</textarea>
+
+<div class="mb-3">
+  <button id="generate-svg" type="button" class="btn btn-primary">Generate SVG candidate</button>
+</div>
+
+<div id="selector-block" style="display: none; margin-bottom: 14px;">
+  <p><strong>Which SVG should advance to the next iteration?</strong></p>
+  {% if config.definition.best_svg %}
+  <div class="form-check">
+    <input class="form-check-input" type="radio" name="selector-choice" id="choose-previous" value="previous">
+    <label class="form-check-label" for="choose-previous">Previous best SVG</label>
+  </div>
+  {% endif %}
+  <div class="form-check">
+    <input class="form-check-input" type="radio" name="selector-choice" id="choose-candidate" value="candidate">
+    <label class="form-check-label" for="choose-candidate">New SVG candidate</label>
+  </div>
+  <textarea id="selector-reasoning" class="form-control mt-2" rows="2"
+    placeholder="Optional selector reasoning"></textarea>
+</div>
+
+<details style="margin-bottom: 12px;">
+  <summary>Generated SVG code</summary>
+  <pre id="candidate-code" class="vibe-code"></pre>
+</details>
+
+<button id="submit-vibe" type="button" class="btn btn-success" disabled>Submit iteration</button>
+
+<script>
+  (function() {
+    const systemPrompt = {{ config.system_prompt | tojson }};
+    const previousSvg = {{ config.definition.best_svg | tojson }};
+    const previousSvgId = {{ config.definition.best_svg_id | tojson }};
+    const selectorRole = {{ config.definition.selector_role | tojson }};
+    const aiSelector = selectorRole === "ai";
+    const candidatePreview = document.getElementById("candidate-preview");
+    const candidateCode = document.getElementById("candidate-code");
+    const selectorBlock = document.getElementById("selector-block");
+    const submitButton = document.getElementById("submit-vibe");
+    let candidateSvg = "";
+    let candidateSvgId = "";
+
+    function hashString(value) {
+      let hash = 0;
+      for (let i = 0; i < value.length; i++) {
+        hash = ((hash << 5) - hash) + value.charCodeAt(i);
+        hash = hash & hash;
+      }
+      return Math.abs(hash);
+    }
+
+    function color(value, offset) {
+      const n = (hashString(value + offset) % 0xffffff).toString(16).padStart(6, "0");
+      return "#" + n;
+    }
+
+    function svgIdentifier(svg) {
+      return "svg_browser_" + hashString(svg).toString(16);
+    }
+
+    function mockCodeGenerator(highLevelInstruction) {
+      const lowerInstruction = highLevelInstruction.toLowerCase();
+      const isRefinement = lowerInstruction.includes("refine") || lowerInstruction.includes("sharper") || lowerInstruction.includes("clearer");
+      const body = isRefinement ? "#b9e6ff" : color(highLevelInstruction, "body");
+      const accent = isRefinement ? "#6f5bd8" : color(highLevelInstruction, "accent");
+      const shift = hashString(highLevelInstruction) % 12;
+      return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 220" width="220" height="220">
+  <rect width="220" height="220" rx="24" fill="#f8f3e8"/>
+  <circle cx="110" cy="116" r="58" fill="${body}" stroke="#3d2b20" stroke-width="5"/>
+  <polygon points="${62 + shift},70 84,24 100,82" fill="${accent}" stroke="#3d2b20" stroke-width="5"/>
+  <polygon points="${158 - shift},70 136,24 120,82" fill="${accent}" stroke="#3d2b20" stroke-width="5"/>
+  <circle cx="88" cy="106" r="8" fill="#222222"/>
+  <circle cx="132" cy="106" r="8" fill="#222222"/>
+  <ellipse cx="110" cy="128" rx="10" ry="7" fill="#f3b6ad"/>
+  <path d="M110 136 C104 148 91 150 82 142" fill="none" stroke="#3d2b20" stroke-width="4" stroke-linecap="round"/>
+  <path d="M110 136 C116 148 129 150 138 142" fill="none" stroke="#3d2b20" stroke-width="4" stroke-linecap="round"/>
+  <line x1="72" y1="126" x2="28" y2="114" stroke="#4a3428" stroke-width="3" stroke-linecap="round"/>
+  <line x1="74" y1="138" x2="30" y2="144" stroke="#4a3428" stroke-width="3" stroke-linecap="round"/>
+  <line x1="148" y1="126" x2="192" y2="114" stroke="#4a3428" stroke-width="3" stroke-linecap="round"/>
+  <line x1="146" y1="138" x2="190" y2="144" stroke="#4a3428" stroke-width="3" stroke-linecap="round"/>
+</svg>`;
+    }
+
+    document.getElementById("generate-svg").addEventListener("click", function() {
+      const instruction = document.getElementById("guidance").value.trim();
+      if (!instruction) {
+        alert("Please enter a high-level instruction first.");
+        return;
+      }
+      candidateSvg = mockCodeGenerator(instruction);
+      candidateSvgId = svgIdentifier(candidateSvg);
+      candidatePreview.innerHTML = candidateSvg;
+      candidateCode.textContent = candidateSvg;
+      selectorBlock.style.display = "block";
+      if (!previousSvg || aiSelector) {
+        document.getElementById("choose-candidate").checked = true;
+      }
+      if (aiSelector) {
+        document.getElementById("selector-reasoning").value = "AI selector chose the new candidate in deterministic mock mode.";
+      }
+      submitButton.disabled = false;
+    });
+
+    submitButton.addEventListener("click", function() {
+      const instruction = document.getElementById("guidance").value.trim();
+      const checked = document.querySelector("input[name='selector-choice']:checked");
+      if (!candidateSvg || !checked) {
+        alert("Generate and select an SVG before submitting.");
+        return;
+      }
+      const selectorChoice = checked.value;
+      const selectedSvg = selectorChoice === "previous" ? previousSvg : candidateSvg;
+      const selectedSvgId = selectorChoice === "previous" ? previousSvgId : candidateSvgId;
+      psynet.nextPage({
+        guidance: instruction,
+        generator_prompt: {
+          system: systemPrompt,
+          high_level_instruction: instruction
+        },
+        candidate_svg: candidateSvg,
+        candidate_svg_id: candidateSvgId,
+        candidate_render_status: "rendered",
+        selector_choice: selectorChoice,
+        selector_reasoning: document.getElementById("selector-reasoning").value,
+        selected_svg: selectedSvg,
+        selected_svg_id: selectedSvgId
+      });
+    });
+  })();
+</script>
+{% endmacro %}
+
+{% macro evaluator_prompt(config) %}
+{{ shared_vibe_css() }}
+<h2>Independent similarity rating</h2>
+<p>Rate how visually similar the SVG rendition is to the reference image. Prompt and role information are hidden.</p>
+<div class="vibe-grid" style="grid-template-columns: repeat(2, minmax(0, 1fr));">
+  <div class="vibe-panel">
+    <h3>Reference image</h3>
+    <img src="{{ config.definition.reference_url }}" alt="Reference {{ config.definition.reference_id }}">
+  </div>
+  <div class="vibe-panel">
+    <h3>SVG rendition</h3>
+    {{ render_svg(config.definition.candidate_svg) }}
+  </div>
+</div>
+{% endmacro %}

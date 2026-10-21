@@ -1,0 +1,44 @@
+[
+  {
+    "id": "circle_0",
+    "label": "red",
+    "hue": 0.0,
+    "hex": "#ff0000",
+    "size": 26
+  },
+  {
+    "id": "circle_1",
+    "label": "yellow",
+    "hue": 60.0,
+    "hex": "#ffff00",
+    "size": 26
+  },
+  {
+    "id": "circle_2",
+    "label": "green",
+    "hue": 120.0,
+    "hex": "#00ff00",
+    "size": 26
+  },
+  {
+    "id": "circle_3",
+    "label": "cyan",
+    "hue": 180.0,
+    "hex": "#00ffff",
+    "size": 26
+  },
+  {
+    "id": "circle_4",
+    "label": "blue",
+    "hue": 240.0,
+    "hex": "#0000ff",
+    "size": 26
+  },
+  {
+    "id": "circle_5",
+    "label": "magenta",
+    "hue": 300.0,
+    "hex": "#ff00ff",
+    "size": 26
+  }
+]

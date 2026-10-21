@@ -1,0 +1,8 @@
+{
+  "captions": {
+    "screenshots/01-instructions.png": "Instructions page with the start button disabled until consent is checked.",
+    "screenshots/02-trial-ready.png": "First trial after playback, with contour response buttons enabled.",
+    "screenshots/03-feedback.png": "Feedback after a correct response, with the next button enabled.",
+    "screenshots/04-completion.png": "Completion page showing the final score and saved response data."
+  }
+}

@@ -1,0 +1,396 @@
+{% extends "timeline-page.html" %}
+
+{% block stylesheets %}
+{{ super() }}
+<style>
+    #game-header {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        align-items: flex-start;
+        margin-bottom: 1rem;
+    }
+    #game-layout {
+        display: grid;
+        grid-template-columns: minmax(280px, 1fr) minmax(280px, 1fr);
+        gap: 1.5rem;
+    }
+    .grid {
+        display: grid;
+        gap: 4px;
+        max-width: 430px;
+    }
+    .cell {
+        aspect-ratio: 1 / 1;
+        border: 1px solid #b8c2cc;
+        border-radius: 4px;
+        background: #f7fafc;
+        cursor: pointer;
+        font-weight: 700;
+    }
+    .cell:disabled {
+        cursor: not-allowed;
+        opacity: 0.55;
+    }
+    .cell.own-click {
+        outline: 3px solid #0d6efd;
+    }
+    .cell.reward-win {
+        background: #b7efc5;
+        box-shadow: 0 0 0 3px #2f9e44;
+    }
+    .cell.reward-loss {
+        background: #ffc9c9;
+        box-shadow: 0 0 0 3px #e03131;
+    }
+    .heat-cell {
+        aspect-ratio: 1 / 1;
+        border: 1px solid #d2d6dc;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.8rem;
+        color: #102a43;
+    }
+    #status-list {
+        list-style: none;
+        padding: 0;
+        margin: 0.5rem 0 0;
+    }
+    #status-list li {
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+        margin-bottom: 0.25rem;
+        background: #f1f3f5;
+    }
+    #status-list li.next {
+        background: #fff3bf;
+        font-weight: 700;
+    }
+    #status-list li.done {
+        background: #d3f9d8;
+    }
+    #feedback {
+        min-height: 2rem;
+        font-weight: 700;
+    }
+    #finish-button {
+        display: none;
+        margin-top: 1rem;
+    }
+    .timer-card {
+        border: 1px solid #dee2e6;
+        border-radius: 6px;
+        padding: 0.75rem;
+        background: #fbfbfb;
+    }
+</style>
+{% endblock %}
+
+{% block main_body %}
+<div id="game-header">
+    <div>
+        <h3>Real-time grid game</h3>
+        <p id="turn-message">Connecting to the game...</p>
+        <p id="feedback" class="text-primary"></p>
+    </div>
+    <div class="timer-card">
+        <div>Round: <strong><span id="round-count">1</span>/<span id="round-total"></span></strong></div>
+        <div>Total progress: <strong><span id="turn-count">0</span>/<span id="turn-total"></span> turns</strong></div>
+        <div>Turn countdown: <strong><span id="turn-timer">--</span>s</strong></div>
+        <div>Elapsed game time: <strong><span id="elapsed-timer">0</span>s</strong></div>
+    </div>
+</div>
+
+<div class="mb-3">
+    <h5>Group status</h5>
+    <ul id="status-list"></ul>
+</div>
+
+<div id="game-layout">
+    <section>
+        <h5>Your clickable grid</h5>
+        <p class="small text-muted">Click only when the status says it is your turn. Your reward stays private.</p>
+        <div id="own-grid" class="grid"></div>
+    </section>
+    <section>
+        <h5>Other players' click heatmap</h5>
+        <p class="small text-muted">Darker cells were clicked more often by other players. Rewards are not shown.</p>
+        <div id="heatmap-grid" class="grid"></div>
+    </section>
+</div>
+
+<button id="finish-button" class="btn btn-success">Continue</button>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+(function () {
+    var CHANNEL = psynet.var.pixel_game_channel;
+    var GROUP_ID = psynet.var.pixel_game_group_id;
+    var NODE_ID = psynet.var.pixel_game_node_id;
+    var MY_ID = Number(psynet.var.pixel_game_participant_id);
+    var UNIQUE_ID = psynet.var.pixel_game_unique_id;
+    var GRID_SIZE = Number(psynet.var.pixel_game_grid_size);
+    var N_ROUNDS = Number(psynet.var.pixel_game_n_rounds);
+    var TURN_SECONDS = Number(psynet.var.pixel_game_turn_seconds);
+
+    var socket = null;
+    var lastState = null;
+    var lastOwnTurn = false;
+    var privateEvents = [];
+    var clickedCells = {};
+    var countdownTimer = null;
+    var lastRenderedPrivateEventKey = null;
+
+    document.getElementById("round-total").textContent = N_ROUNDS;
+    document.getElementById("turn-total").textContent = "--";
+
+    buildGrids();
+    openSocket();
+
+    document.getElementById("finish-button").onclick = function () {
+        var answer = {
+            status: "completed",
+            session_id: lastState ? lastState.session_id : null,
+            own_events: privateEvents.length,
+        };
+        psynet.nextPage(JSON.stringify(answer));
+    };
+
+    function buildGrids() {
+        var own = document.getElementById("own-grid");
+        var heat = document.getElementById("heatmap-grid");
+        own.style.gridTemplateColumns = "repeat(" + GRID_SIZE + ", 1fr)";
+        heat.style.gridTemplateColumns = "repeat(" + GRID_SIZE + ", 1fr)";
+        for (var i = 0; i < GRID_SIZE; i++) {
+            for (var j = 0; j < GRID_SIZE; j++) {
+                var btn = document.createElement("button");
+                btn.className = "cell";
+                btn.type = "button";
+                btn.dataset.row = i;
+                btn.dataset.col = j;
+                btn.disabled = true;
+                btn.onclick = function () {
+                    submitClick(Number(this.dataset.row), Number(this.dataset.col));
+                };
+                own.appendChild(btn);
+
+                var h = document.createElement("div");
+                h.className = "heat-cell";
+                h.dataset.row = i;
+                h.dataset.col = j;
+                h.textContent = "0";
+                heat.appendChild(h);
+            }
+        }
+    }
+
+    function openSocket() {
+        var wsScheme = location.protocol === "https:" ? "wss://" : "ws://";
+        socket = new ReconnectingWebSocket(
+            wsScheme + location.host + "/chat?channel=" + CHANNEL
+            + "&worker_id=" + dallinger.identity.workerId
+            + "&participant_id=" + MY_ID
+        );
+
+        socket.onopen = function () {
+            sendMessage({ type: "join" });
+        };
+
+        socket.onmessage = function (event) {
+            if (event.data.indexOf(CHANNEL + ":") !== 0) return;
+            var payload;
+            try {
+                payload = JSON.parse(event.data.slice(CHANNEL.length + 1));
+            } catch (e) {
+                return;
+            }
+            if (payload.type === "public_state" && Number(payload.group_id) === Number(GROUP_ID)) {
+                renderState(payload);
+                fetchPrivateState(payload.session_id);
+            }
+        };
+    }
+
+    function sendMessage(extra) {
+        var payload = Object.assign({
+            channel: CHANNEL,
+            group_id: GROUP_ID,
+            node_id: NODE_ID,
+            sender: MY_ID,
+            participant_id: MY_ID,
+            immediate: true,
+        }, extra);
+        try {
+            socket && socket.send(CHANNEL + ":" + JSON.stringify(payload));
+        } catch (e) {}
+    }
+
+    function submitClick(row, col) {
+        if (!lastState || lastState.current_participant_id !== MY_ID || lastState.complete) return;
+        setGridEnabled(false);
+        document.getElementById("feedback").textContent = "Submitting click...";
+        sendMessage({ type: "click", row: row, col: col });
+    }
+
+    function renderState(state) {
+        lastState = state;
+        var isOwnTurn = state.current_participant_id === MY_ID && !state.complete;
+        if (isOwnTurn && !lastOwnTurn) playTurnSound();
+        lastOwnTurn = isOwnTurn;
+
+        document.getElementById("round-count").textContent =
+            Math.min(state.current_round + 1, state.n_rounds);
+        document.getElementById("turn-count").textContent = state.clicks.length;
+        document.getElementById("turn-total").textContent =
+            state.n_rounds * state.turn_order.length;
+        document.getElementById("turn-message").textContent = state.complete
+            ? "The game is complete. You may continue."
+            : isOwnTurn
+                ? "It is your turn. Choose one grid cell."
+                : "Waiting for " + displayName(state.current_participant_id) + " to choose.";
+
+        renderStatusList(state);
+        renderHeatmap(state);
+        markOwnClicks(state);
+        setGridEnabled(isOwnTurn);
+        updateTimers(state);
+
+        if (state.complete) {
+            setGridEnabled(false);
+            document.getElementById("finish-button").style.display = "inline-block";
+        }
+    }
+
+    function renderStatusList(state) {
+        var list = document.getElementById("status-list");
+        list.innerHTML = "";
+        state.turn_order.forEach(function (participantId) {
+            var li = document.createElement("li");
+            var done = state.completed_ids.indexOf(participantId) !== -1;
+            var next = state.current_participant_id === participantId && !state.complete;
+            li.className = done ? "done" : next ? "next" : "";
+            li.textContent = (done ? "✓ " : next ? "▶ " : "○ ")
+                + displayName(participantId)
+                + (participantId === MY_ID ? " (you)" : "");
+            list.appendChild(li);
+        });
+    }
+
+    function renderHeatmap(state) {
+        var counts = {};
+        var maxCount = 1;
+        state.clicks.forEach(function (click) {
+            if (click.participant_id === MY_ID) return;
+            var key = click.row + "," + click.col;
+            counts[key] = (counts[key] || 0) + 1;
+            maxCount = Math.max(maxCount, counts[key]);
+        });
+        document.querySelectorAll(".heat-cell").forEach(function (cell) {
+            var key = cell.dataset.row + "," + cell.dataset.col;
+            var value = counts[key] || 0;
+            var intensity = value / maxCount;
+            cell.textContent = value;
+            cell.style.backgroundColor = "rgba(255, 111, 0, " + (0.12 + 0.75 * intensity) + ")";
+        });
+    }
+
+    function markOwnClicks(state) {
+        clickedCells = {};
+        state.clicks.forEach(function (click) {
+            if (click.participant_id === MY_ID) {
+                clickedCells[click.row + "," + click.col] = true;
+            }
+        });
+        document.querySelectorAll(".cell").forEach(function (cell) {
+            var key = cell.dataset.row + "," + cell.dataset.col;
+            cell.classList.toggle("own-click", !!clickedCells[key]);
+        });
+    }
+
+    function setGridEnabled(enabled) {
+        document.querySelectorAll(".cell").forEach(function (cell) {
+            cell.disabled = !enabled;
+        });
+    }
+
+    function fetchPrivateState(sessionId) {
+        if (!sessionId) return;
+        fetch("/pixel_game_private_state?participant_id=" + MY_ID
+            + "&unique_id=" + encodeURIComponent(UNIQUE_ID)
+            + "&session_id=" + encodeURIComponent(sessionId))
+            .then(function (response) { return response.json(); })
+            .then(function (payload) {
+                privateEvents = payload.events || [];
+                var accepted = privateEvents.filter(function (event) { return event.accepted; });
+                if (accepted.length > 0) {
+                    var last = accepted[accepted.length - 1];
+                    var key = [last.round_index, last.turn_position, last.row, last.col].join(":");
+                    if (key !== lastRenderedPrivateEventKey) {
+                        lastRenderedPrivateEventKey = key;
+                        flashOwnCell(last.row, last.col, last.reward_y);
+                    }
+                    document.getElementById("feedback").textContent =
+                        "Your reward: y=" + last.reward_y
+                        + (last.bonus_delta > 0 ? " (+$" + last.bonus_delta.toFixed(2) + " bonus)" : " (no bonus)")
+                        + " from cell (" + last.row + ", " + last.col + ")";
+                }
+            })
+            .catch(function () {});
+    }
+
+    function flashOwnCell(row, col, rewardY) {
+        var selector = '.cell[data-row="' + row + '"][data-col="' + col + '"]';
+        var cell = document.querySelector(selector);
+        if (!cell) return;
+        var className = rewardY ? "reward-win" : "reward-loss";
+        cell.classList.remove("reward-win", "reward-loss");
+        cell.classList.add(className);
+        window.setTimeout(function () {
+            cell.classList.remove(className);
+        }, 900);
+    }
+
+    function updateTimers(state) {
+        if (countdownTimer) window.clearInterval(countdownTimer);
+        tickTimers(state);
+        countdownTimer = window.setInterval(function () { tickTimers(state); }, 250);
+    }
+
+    function tickTimers(state) {
+        var now = Date.now();
+        var deadline = Date.parse(state.turn_deadline);
+        var started = Date.parse(state.started_at);
+        var remaining = Math.max(0, Math.ceil((deadline - now) / 1000));
+        var elapsed = Math.max(0, Math.floor((now - started) / 1000));
+        document.getElementById("turn-timer").textContent = state.complete ? "0" : String(remaining);
+        document.getElementById("elapsed-timer").textContent = String(elapsed);
+    }
+
+    function displayName(participantId) {
+        if (!lastState || !lastState.participant_names) return "Player " + participantId;
+        return lastState.participant_names[String(participantId)] || ("Player " + participantId);
+    }
+
+    function playTurnSound() {
+        try {
+            var AudioContext = window.AudioContext || window.webkitAudioContext;
+            var ctx = new AudioContext();
+            var oscillator = ctx.createOscillator();
+            var gain = ctx.createGain();
+            oscillator.type = "sine";
+            oscillator.frequency.value = 880;
+            gain.gain.setValueAtTime(0.08, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.25);
+            oscillator.connect(gain);
+            gain.connect(ctx.destination);
+            oscillator.start();
+            oscillator.stop(ctx.currentTime + 0.25);
+        } catch (e) {}
+    }
+})();
+</script>
+{% endblock %}

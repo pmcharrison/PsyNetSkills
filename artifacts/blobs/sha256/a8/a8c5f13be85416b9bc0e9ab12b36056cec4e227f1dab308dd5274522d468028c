@@ -1,0 +1,20 @@
+# Standard places to put a virtual environment
+env/
+.venv/
+
+# Automatically generated deployment resources and logs
+.deploy/
+server.log
+static/assets
+source_code.zip
+
+# Editor and cache files
+.idea
+__pycache__
+*.pyc
+*.DS_Store
+
+# Legacy PsyNet deployment directories
+develop/
+deploy/
+deploy_logs/

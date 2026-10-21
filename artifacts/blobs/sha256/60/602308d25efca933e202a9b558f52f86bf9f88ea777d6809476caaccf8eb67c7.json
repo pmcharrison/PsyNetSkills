@@ -1,0 +1,9 @@
+{
+  "captions": {
+    "01-instructions.png": "Instructions explain quorum release, productive waiting tasks, recording, and recovery behavior.",
+    "02-personality-pushbuttons.png": "Personality lobby trial uses PsyNet push buttons with the five-point accuracy scale.",
+    "03-guessing-slider-hidden-target.png": "Guessing lobby trial uses a 0-10 slider and does not show the target before submission.",
+    "04-guessing-feedback.png": "Guessing feedback reveals target, guess, difference, and feedback label after submission.",
+    "05-quorate-main-loop.png": "Participant is released into the tutorial-style quorate main loop once the group is quorate."
+  }
+}

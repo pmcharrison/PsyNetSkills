@@ -1,0 +1,8 @@
+{
+  "scripts": {
+    "participant-flow": "node tests/participant-flow.js"
+  },
+  "dependencies": {
+    "@playwright/test": "latest"
+  }
+}

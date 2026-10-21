@@ -1,0 +1,11 @@
+participant_id,bot_profile,n_profiles,n_color_trials,responses_in_range
+1,normal_rgb,1,7,True
+2,normal_rgb,1,7,True
+3,normal_rgb,1,7,True
+4,random,1,7,True
+5,random,1,7,True
+6,random,1,7,True
+7,normal_rgb,1,7,True
+8,random,1,7,True
+9,normal_rgb,1,7,True
+10,random,1,7,True

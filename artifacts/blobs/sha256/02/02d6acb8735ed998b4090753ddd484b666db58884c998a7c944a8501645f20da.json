@@ -1,0 +1,38 @@
+[
+  {
+    "stimulus_id": "red",
+    "label": "Red",
+    "color": "#d73027",
+    "radius": 36
+  },
+  {
+    "stimulus_id": "orange",
+    "label": "Orange",
+    "color": "#fc8d59",
+    "radius": 36
+  },
+  {
+    "stimulus_id": "yellow",
+    "label": "Yellow",
+    "color": "#fee08b",
+    "radius": 36
+  },
+  {
+    "stimulus_id": "green",
+    "label": "Green",
+    "color": "#1a9850",
+    "radius": 36
+  },
+  {
+    "stimulus_id": "blue",
+    "label": "Blue",
+    "color": "#4575b4",
+    "radius": 36
+  },
+  {
+    "stimulus_id": "purple",
+    "label": "Purple",
+    "color": "#7b3294",
+    "radius": 36
+  }
+]

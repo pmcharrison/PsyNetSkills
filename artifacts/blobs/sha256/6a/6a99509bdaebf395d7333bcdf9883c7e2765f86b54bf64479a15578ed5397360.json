@@ -1,0 +1,27 @@
+{
+  "good": {
+    "description": "Plausible near-tempo taps with small deterministic jitter.",
+    "calibration_expected_status": "passed",
+    "workflow_interpretation": "Simulated tapping validates workflow and analysis code only, not human rhythm perception."
+  },
+  "too-few-taps": {
+    "description": "Only two calibration taps, below the minimum-tap threshold.",
+    "calibration_expected_status": "failed",
+    "workflow_interpretation": "Simulated tapping validates workflow and analysis code only, not human rhythm perception."
+  },
+  "off-tempo": {
+    "description": "Stable taps at 135% of the target inter-beat interval.",
+    "calibration_expected_status": "failed",
+    "workflow_interpretation": "Simulated tapping validates workflow and analysis code only, not human rhythm perception."
+  },
+  "noisy": {
+    "description": "Enough taps but high timing variability.",
+    "calibration_expected_status": "failed",
+    "workflow_interpretation": "Simulated tapping validates workflow and analysis code only, not human rhythm perception."
+  },
+  "dropout": {
+    "description": "No calibration taps, explicitly marked as dropout_no_taps.",
+    "calibration_expected_status": "failed",
+    "workflow_interpretation": "Simulated tapping validates workflow and analysis code only, not human rhythm perception."
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "target_ai_percent": 50,
+  "target_n_participants": 2,
+  "actual_ai_percent": 50.0,
+  "human_count": 1,
+  "ai_count": 1,
+  "total_participants": 2,
+  "ai_scheduler_enabled": true,
+  "ai_scheduler_max_running_bots": 1,
+  "openrouter_mock_mode": true,
+  "export_path": "/workspace/challenges/ai-human-hybrid-participants/attempts/2026-06-15-09-19/evidence/live_scheduling/export"
+}

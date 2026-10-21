@@ -1,0 +1,14 @@
+[Config]
+title = Collaborative SVG vibe coding demo
+organization_name = PsyNetSkills
+contact_email_on_error = nobody@example.com
+description = Guide a mock AI code generator to recreate an animal image as SVG, then rate visual similarity.
+recruiter = generic
+currency = $
+wage_per_hour = 12.0
+base_payment = 0.25
+show_reward = false
+
+[Prolific]
+auto_recruit = false
+prolific_estimated_completion_minutes = 4

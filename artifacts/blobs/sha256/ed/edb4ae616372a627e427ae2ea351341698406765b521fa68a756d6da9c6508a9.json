@@ -1,0 +1,15 @@
+{
+  "name": "adaptive_memory_testing",
+  "version": "1.0.0",
+  "description": "This PsyNet experiment administers 10 digit-string recall trials. Sequence lengths are bounded to integers from 2 through 20 inclusive.",
+  "private": true,
+  "scripts": {
+    "participant-flow": "node tests/participant-flow.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.60.0"
+  }
+}

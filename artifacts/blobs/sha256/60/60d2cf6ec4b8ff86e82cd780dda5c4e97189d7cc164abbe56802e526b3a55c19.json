@@ -1,0 +1,15 @@
+{
+  "name": "collaborative_svg_vibe_coding",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "participant-flow": "playwright test tests/participant-flow.spec.js --project=chromium"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@playwright/test": "^1.61.0"
+  }
+}

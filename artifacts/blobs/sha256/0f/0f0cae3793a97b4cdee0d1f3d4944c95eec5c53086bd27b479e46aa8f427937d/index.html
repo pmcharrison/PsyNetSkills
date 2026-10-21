@@ -1,0 +1,29 @@
+{% macro timeout(config) %}
+<div class="ultimatum-topbar">
+  {% if config.show_rounds %}<div class="ultimatum-round-label">Counted round {{ config.round }} / {{ config.num_rounds }}</div>{% endif %}
+  <div class="ultimatum-timer" id="ultimatum-timer">Time left: --</div>
+</div>
+<div class="ultimatum-prompt-copy">{{ config.text|safe }}</div>
+<script>
+(function () {
+  const timeoutSeconds = {{ config.timeoutSeconds }};
+  const serverStartTime = {% if config.currentTime is not none %}{{ config.currentTime }}{% else %}Date.now() / 1000{% endif %};
+  const deadline = serverStartTime + timeoutSeconds;
+  const timeoutAnswer = {{ config.timeoutAnswer|tojson }};
+  function tick() {
+    const remaining = Math.max(0, Math.ceil(deadline - Date.now() / 1000));
+    const timer = document.getElementById('ultimatum-timer');
+    if (timer) timer.textContent = 'Time left: ' + remaining + 's';
+    if (remaining <= 0) {
+      clearInterval(interval);
+      if (window.psynet && psynet.trial && psynet.trial.registerEvent) {
+        psynet.trial.registerEvent('done', {info: 'timeout'});
+      }
+      if (window.psynet) psynet.nextPage(timeoutAnswer);
+    }
+  }
+  tick();
+  const interval = setInterval(tick, 1000);
+})();
+</script>
+{% endmacro %}

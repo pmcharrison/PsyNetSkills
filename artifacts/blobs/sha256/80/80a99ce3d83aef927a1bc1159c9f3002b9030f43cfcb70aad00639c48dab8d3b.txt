@@ -1,0 +1,11 @@
+[Config]
+title = Audio memory sequence experiment
+description = Listen to short low, medium, and high tone sequences, then reproduce each sequence with labeled buttons.
+contact_email_on_error = support@example.com
+organization_name = PsyNetSkills
+
+recruiter = generic
+currency = $
+wage_per_hour = 12.0
+show_reward = false
+show_progress_bar = true

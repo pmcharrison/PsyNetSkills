@@ -1,0 +1,32 @@
+[
+  {
+    "id": "octopus_brain_arms",
+    "condition": "surprising",
+    "text": "Two thirds of an octopus's neurons are in its arms, letting each arm process touch and taste semi-independently."
+  },
+  {
+    "id": "venus_day_year",
+    "condition": "surprising",
+    "text": "A day on Venus lasts longer than a year on Venus because the planet rotates so slowly."
+  },
+  {
+    "id": "shark_older_trees",
+    "condition": "surprising",
+    "text": "Sharks existed before trees; the first sharks appeared hundreds of millions of years ago."
+  },
+  {
+    "id": "honeybees_pollinate",
+    "condition": "ordinary",
+    "text": "Honeybees visit flowers and help pollinate many fruits, nuts, and vegetables."
+  },
+  {
+    "id": "moon_reflects_sunlight",
+    "condition": "ordinary",
+    "text": "The Moon appears bright at night because it reflects light from the Sun."
+  },
+  {
+    "id": "compass_points_north",
+    "condition": "ordinary",
+    "text": "A compass needle points roughly north because it aligns with Earth's magnetic field."
+  }
+]
